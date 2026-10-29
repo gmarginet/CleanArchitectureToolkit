@@ -1,11 +1,11 @@
-<link href="../../resources/styles/style.css" rel="stylesheet"></link>
+<link href="../../resources/styles/style.css" rel="stylesheet" />
 
-# `Clean Architecture Toolkit for .NET` <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 [CAT](../../README.md 'Readme of the CAT project\.')  
 [Module overview](../../README.md#module-overview 'List of all the CAT modules\.')  
 
-# `Cat.Decorators` <!-- omit in toc -->  
+# Cat.Decorators <!-- omit in toc -->  
 
 <!-- Intro start-->
 Cat.Decorators wraps a service in decorators for cross-cutting work like logging, validation or tracing. You register a decorator once for an open generic service, like `ICatQueryHandler<,>`. The factory then wraps every closed version of that service when you ask for it.
@@ -17,7 +17,7 @@ Why does this module exist? Scrutor can't apply decorators to open generic regis
 CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scrutor decorators were not an option. Cat.Decorators works around the limitation. It keeps its own list of decorators and wraps the service by hand when you ask the factory for it.  
 <!-- Intro end-->
 
-## `Table of contents` <!-- omit in toc -->  
+## Table of contents <!-- omit in toc -->  
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)

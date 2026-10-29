@@ -1,11 +1,11 @@
-<link href="../../resources/styles/style.css" rel="stylesheet"></link>
+<link href="../../resources/styles/style.css" rel="stylesheet" />
 
-# `Clean Architecture Toolkit for .NET` <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 [CAT](../../README.md 'Readme of the CAT project\.')  
 [Module overview](../../README.md#module-overview 'List of all the CAT modules\.')  
 
-# `Cat.Validators` <!-- omit in toc -->  
+# Cat.Validators <!-- omit in toc -->  
 
 <!-- Intro start-->
 Cat.Validators checks a model against a set of rules and tells you everything that is wrong with it. You describe the rules for a model in a validator class. The processor runs the rules and returns an `ICatResponse`: Ok when the model is valid, BadRequest with one error per failure when it is not.
@@ -15,7 +15,7 @@ The rules are fluent and read like a sentence. Every rule has a stable error cod
 Rules never stop at the first failure. One call reports every problem.  
 <!-- Intro end-->
 
-## `Table of contents` <!-- omit in toc -->  
+## Table of contents <!-- omit in toc -->  
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)

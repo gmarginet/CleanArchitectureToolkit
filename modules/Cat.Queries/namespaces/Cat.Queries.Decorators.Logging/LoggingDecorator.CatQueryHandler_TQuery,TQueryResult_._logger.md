@@ -1,12 +1,12 @@
-<link href="../../../resources/styles/style.css" rel="stylesheet"></link>  
+<link href="../../../resources/styles/style.css" rel="stylesheet"/>  
   
-# `Clean Architecture Toolkit for .NET`  
+# Clean Architecture Toolkit for .NET  
   
 [CAT](../../../../README.md 'Readme of the CAT project\.')  
 [Module](../../README.md 'Readme of the module\.')  
 [Module overview](../../../../README.md#module-overview 'List of all the CAT modules\.')  
   
-# `Class Reference`  
+# Class Reference  
   
 ##### > [Cat\.Queries\.Decorators\.Logging](index.md 'index') > [Cat\.Queries\.Decorators\.Logging](Cat.Queries.Decorators.Logging.md 'Cat\.Queries\.Decorators\.Logging') > [LoggingDecorator](LoggingDecorator.md 'Cat\.Queries\.Decorators\.Logging\.LoggingDecorator') > [CatQueryHandler&lt;TQuery,TQueryResult&gt;](LoggingDecorator.CatQueryHandler_TQuery,TQueryResult_.md 'Cat\.Queries\.Decorators\.Logging\.LoggingDecorator\.CatQueryHandler\<TQuery,TQueryResult\>')
 

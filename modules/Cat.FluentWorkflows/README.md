@@ -1,11 +1,11 @@
-<link href="../../resources/styles/style.css" rel="stylesheet"></link>
+<link href="../../resources/styles/style.css" rel="stylesheet" />
 
-# `Clean Architecture Toolkit for .NET` <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 [CAT](../../README.md 'Readme of the CAT project\.')  
 [Module overview](../../README.md#module-overview 'List of all the CAT modules\.')  
 
-# `Cat.FluentWorkflows` <!-- omit in toc -->  
+# Cat.FluentWorkflows <!-- omit in toc -->  
 
 <!-- Intro start-->
 Cat.FluentWorkflows lets you describe a business process as a list of steps in plain C#. Each step does one small thing: run some code, set a value, make a decision, loop over a collection, or call a command or a query. You read the workflow from top to bottom like a recipe.
@@ -15,7 +15,7 @@ A workflow works on a state object. Steps read from it and write to it, so the d
 The module ships the common steps for you, and you can write your own.  
 <!-- Intro end-->
 
-## `Table of contents` <!-- omit in toc -->  
+## Table of contents <!-- omit in toc -->  
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)

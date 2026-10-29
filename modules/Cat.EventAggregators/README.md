@@ -1,11 +1,11 @@
-<link href="../../resources/styles/style.css" rel="stylesheet"></link>
+<link href="../../resources/styles/style.css" rel="stylesheet" />
 
-# `Clean Architecture Toolkit for .NET` <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 [CAT](../../README.md 'Readme of the CAT project\.')  
 [Module overview](../../README.md#module-overview 'List of all the CAT modules\.')  
 
-# `Cat.EventAggregators` <!-- omit in toc -->  
+# Cat.EventAggregators <!-- omit in toc -->  
 
 <!-- Intro start-->
 Cat.EventAggregators is a lightweight in-process event aggregator. It lets different parts of your app talk to each other through events, without taking a direct dependency on one another.
@@ -13,7 +13,7 @@ Cat.EventAggregators is a lightweight in-process event aggregator. It lets diffe
 A publisher raises an event, and any subscriber that handles that event type gets notified. Subscribers are tracked through weak references, so you don't have to remember to unsubscribe just to avoid a memory leak.  
 <!-- Intro end-->
 
-## `Table of contents` <!-- omit in toc -->  
+## Table of contents <!-- omit in toc -->  
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)

@@ -1,11 +1,11 @@
-<link href="../../resources/styles/style.css" rel="stylesheet"></link>
+<link href="../../resources/styles/style.css" rel="stylesheet" />
 
-# `Clean Architecture Toolkit for .NET` <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 [CAT](../../README.md 'Readme of the CAT project\.')  
 [Module overview](../../README.md#module-overview 'List of all the CAT modules\.')  
 
-# `Cat.Commands` <!-- omit in toc -->  
+# Cat.Commands <!-- omit in toc -->  
 
 <!-- Intro start-->
 Cat.Commands gives you one entry point for changing state. You describe a change as a command, write one handler for it, and hand the command to the processor. The processor finds the handler for you and returns an `ICatResponse`.
@@ -15,7 +15,7 @@ A command changes state and returns no data, only the outcome. Use Cat.Queries t
 Handlers can be wrapped in decorators for cross-cutting work. The module ships a logging decorator. You switch it on only when you need it.  
 <!-- Intro end-->
 
-## `Table of contents` <!-- omit in toc -->  
+## Table of contents <!-- omit in toc -->  
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)

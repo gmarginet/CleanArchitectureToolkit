@@ -1,11 +1,11 @@
-<link href="../../resources/styles/style.css" rel="stylesheet"></link>
+<link href="../../resources/styles/style.css" rel="stylesheet" />
 
-# `Clean Architecture Toolkit for .NET` <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 [CAT](../../README.md 'Readme of the CAT project\.')  
 [Module overview](../../README.md#module-overview 'List of all the CAT modules\.')  
 
-# `Cat.Minimal.Api` <!-- omit in toc -->  
+# Cat.Minimal.Api <!-- omit in toc -->  
 
 <!-- Intro start-->
 Cat.Minimal.Api turns service requests into ASP.NET Core minimal API endpoints. You map a request type to a route with one line. The endpoint reads the JSON body, runs the request through the service request processor and writes the result.
@@ -13,7 +13,7 @@ Cat.Minimal.Api turns service requests into ASP.NET Core minimal API endpoints. 
 A succeeded response becomes a 200 with the payload. A failed response becomes a problem details object with the right status and the CAT errors, so clients always get one consistent error shape. Unexpected exceptions are caught and reported the same way.  
 <!-- Intro end-->
 
-## `Table of contents` <!-- omit in toc -->  
+## Table of contents <!-- omit in toc -->  
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)

@@ -1,11 +1,11 @@
-<link href="../../resources/styles/style.css" rel="stylesheet"></link>
+<link href="../../resources/styles/style.css" rel="stylesheet" />
 
-# `Clean Architecture Toolkit for .NET` <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 [CAT](../../README.md 'Readme of the CAT project\.')  
 [Module overview](../../README.md#module-overview 'List of all the CAT modules\.')   
 
-# `Cat.Responses` <!-- omit in toc -->  
+# Cat.Responses <!-- omit in toc -->  
 
 <!-- Intro start-->
 Cat.Responses models the outcome of an operation as a response: either succeeded, optionally carrying a value, or failed, carrying one or more errors.
@@ -13,7 +13,7 @@ Cat.Responses models the outcome of an operation as a response: either succeeded
 Handlers across the other CAT modules (commands, queries, service requests) return `ICatResponse` or `ICatResponse<TResponse>`, so callers get one consistent return type instead of exceptions for outcomes the caller is expected to handle, like a missing resource or a failed validation.  
 <!-- Intro end-->
 
-## `Table of contents` <!-- omit in toc -->  
+## Table of contents <!-- omit in toc -->  
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)

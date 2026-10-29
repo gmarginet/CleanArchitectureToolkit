@@ -1,17 +1,17 @@
-<link href="../../resources/styles/style.css" rel="stylesheet"></link>
+<link href="../../resources/styles/style.css" rel="stylesheet" />
 
-# `Clean Architecture Toolkit for .NET` <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 [CAT](../../README.md 'Readme of the CAT project\.')  
 [Module overview](../../README.md#module-overview 'List of all the CAT modules\.')  
 
-# `Cat.Extensions` <!-- omit in toc -->  
+# Cat.Extensions <!-- omit in toc -->  
 
 <!-- Intro start-->
 Cat.Extensions is a collection of small, focused extension method libraries. Each namespace targets one type, IEnumerable, Expression, IServiceCollection, string, or general objects, and has no dependency on any other CAT module, so you can pull in just the ones you need.  
 <!-- Intro end-->
 
-## `Table of contents` <!-- omit in toc -->  
+## Table of contents <!-- omit in toc -->  
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)

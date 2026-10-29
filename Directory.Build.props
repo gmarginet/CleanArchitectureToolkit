@@ -20,7 +20,6 @@
         <DefaultDocumentationFolder>..\namespaces\$(MSBuildProjectName)</DefaultDocumentationFolder>
         <DefaultDocumentationLinksOutputFile>..\..\defaultDocumentation\defaultDocumentationLinks\$(MSBuildProjectName).ddlinks</DefaultDocumentationLinksOutputFile>
         <DefaultDocumentationLinksBaseUrl>..\$(MSBuildProjectName)\</DefaultDocumentationLinksBaseUrl>
-        <DefaultDocumentationExternLinksFiles>..\..\defaultDocumentation\defaultDocumentationLinks\*.ddlinks</DefaultDocumentationExternLinksFiles>
         <DefaultDocumentationConfigurationFile>..\..\defaultDocumentation\DefaultDocumentation.json</DefaultDocumentationConfigurationFile>
         <DefaultDocumentationPlugins>$(SolutionDir)resources\defaultDocumentationPlugins\Cat.DefaultDocumentationPlugin.dll</DefaultDocumentationPlugins>
         <DefaultDocumentationAssemblyPageName>index</DefaultDocumentationAssemblyPageName>

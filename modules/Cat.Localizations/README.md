@@ -1,11 +1,11 @@
-<link href="../../resources/styles/style.css" rel="stylesheet"></link>
+<link href="../../resources/styles/style.css" rel="stylesheet" />
 
-# `Clean Architecture Toolkit for .NET` <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 [CAT](../../README.md 'Readme of the CAT project\.')  
 [Module overview](../../README.md#module-overview 'List of all the CAT modules\.')  
 
-# `Cat.Localizations` <!-- omit in toc -->  
+# Cat.Localizations <!-- omit in toc -->  
 
 > **!!! This module is still under development, wait for final version before you use it !!!**
 <!-- Intro start-->
@@ -14,7 +14,7 @@ Cat.Localizations defines a contract for looking up localized strings by key, so
 The module ships with a no-op implementation that returns the key as-is, with placeholders filled in. It's a safe default, and handy in tests. Plug in your own `ICatLocalizer` backed by resource files, a translation service, or whatever fits your app, when you need real localization.  
 <!-- Intro end-->
 
-## `Table of contents` <!-- omit in toc -->  
+## Table of contents <!-- omit in toc -->  
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)

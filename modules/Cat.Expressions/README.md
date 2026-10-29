@@ -1,11 +1,11 @@
-<link href="../../resources/styles/style.css" rel="stylesheet"></link>
+<link href="../../resources/styles/style.css" rel="stylesheet" />
 
-# `Clean Architecture Toolkit for .NET` <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 [CAT](../../README.md 'Readme of the CAT project\.')  
 [Module overview](../../README.md#module-overview 'List of all the CAT modules\.')  
 
-# `Cat.Expressions` <!-- omit in toc -->  
+# Cat.Expressions <!-- omit in toc -->  
 
 <!-- Intro start-->
 Cat.Expressions caches compiled member access delegates. Compiling a `LambdaExpression` through reflection has a real cost, so this module compiles it once per expression and reuses the result on every later call.
@@ -13,7 +13,7 @@ Cat.Expressions caches compiled member access delegates. Compiling a `LambdaExpr
 Use the caching implementation when the same expression gets called repeatedly, like a property accessor used in a loop. Swap in the no-cache implementation when caching isn't worth it, for example when expressions are built fresh each time anyway.  
 <!-- Intro end-->
 
-## `Table of contents` <!-- omit in toc -->  
+## Table of contents <!-- omit in toc -->  
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)

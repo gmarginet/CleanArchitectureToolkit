@@ -33,14 +33,14 @@ namespace Cat.DefaultDocumentationPlugin
 
             writer
                 .EnsureLineStart()
-                .Append($"<link href=\"{stylesheetUrl}\" rel=\"stylesheet\"></link>")
+                .Append($"<link href=\"{stylesheetUrl}\" rel=\"stylesheet\" />")
                 .AppendLine("  ");
             writer
                 .EnsureLineStart()
                 .AppendLine("  ");
             writer
                 .EnsureLineStart()
-                .Append($"# `{solutionDocumentationTitle}`")
+                .Append($"# {solutionDocumentationTitle}")
                 .AppendLine("  ");
             writer
                 .AppendLine("  ");
@@ -61,7 +61,7 @@ namespace Cat.DefaultDocumentationPlugin
                 .AppendLine("  ");
             writer
                 .EnsureLineStart()
-                .Append($"# `{pageTitle}`")
+                .Append($"# {pageTitle}")
                 .AppendLine("  ");
             writer
                 .AppendLine("  ");

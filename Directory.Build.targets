@@ -29,6 +29,22 @@
         </Task>
     </UsingTask>
 
+    <!-- Projects build in parallel, and each one writes its own links file. Reading every links file in the folder can hit a file another project is still writing. Only read the links files of the referenced projects, including the transitive ones. Those are always built first. -->
+    <Target Name="CatSetDefaultDocumentationExternLinksFiles" BeforeTargets="DefaultDocumentation" Condition="'$(DocumentationFile)' != '' AND '$(DefaultDocumentationLinksOutputFile)' != '' AND '$(DisableDefaultDocumentation)' != 'true'">
+        <PropertyGroup>
+            <_CatDefaultDocumentationLinksFolder>$([System.IO.Path]::GetDirectoryName($(DefaultDocumentationLinksOutputFile)))</_CatDefaultDocumentationLinksFolder>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <_CatReferencedLinksFile Include="@(ProjectReference->'$(_CatDefaultDocumentationLinksFolder)\%(Filename).ddlinks')" />
+            <_CatExistingReferencedLinksFile Include="@(_CatReferencedLinksFile)" Condition="Exists('%(_CatReferencedLinksFile.FullPath)')" />
+        </ItemGroup>
+
+        <PropertyGroup>
+            <DefaultDocumentationExternLinksFiles>@(_CatExistingReferencedLinksFile->Distinct(), '|')</DefaultDocumentationExternLinksFiles>
+        </PropertyGroup>
+    </Target>
+
     <Target Name="CatNormalizeDefaultDocumentationLineEndings" AfterTargets="DefaultDocumentation" Condition="'$(DocumentationFile)' != '' AND '$(DefaultDocumentationFolder)' != '' AND '$(DisableDefaultDocumentation)' != 'true'">
         <ItemGroup>
             <_CatGeneratedDocumentationFile Include="$(DefaultDocumentationFolder)\**\*.md" />

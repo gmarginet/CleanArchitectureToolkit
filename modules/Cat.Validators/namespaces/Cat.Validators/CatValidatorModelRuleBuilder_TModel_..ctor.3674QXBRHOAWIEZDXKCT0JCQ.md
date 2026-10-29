@@ -1,12 +1,12 @@
-<link href="../../../resources/styles/style.css" rel="stylesheet"></link>  
+<link href="../../../resources/styles/style.css" rel="stylesheet"/>  
   
-# `Clean Architecture Toolkit for .NET`  
+# Clean Architecture Toolkit for .NET  
   
 [CAT](../../../../README.md 'Readme of the CAT project\.')  
 [Module](../../README.md 'Readme of the module\.')  
 [Module overview](../../../../README.md#module-overview 'List of all the CAT modules\.')  
   
-# `Class Reference`  
+# Class Reference  
   
 ##### > [Cat\.Validators](index.md 'index') > [Cat\.Validators](Cat.Validators.md 'Cat\.Validators') > [CatValidatorModelRuleBuilder&lt;TModel&gt;](CatValidatorModelRuleBuilder_TModel_.md 'Cat\.Validators\.CatValidatorModelRuleBuilder\<TModel\>')
 

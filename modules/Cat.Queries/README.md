@@ -1,11 +1,11 @@
-<link href="../../resources/styles/style.css" rel="stylesheet"></link>
+<link href="../../resources/styles/style.css" rel="stylesheet" />
 
-# `Clean Architecture Toolkit for .NET` <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 [CAT](../../README.md 'Readme of the CAT project\.')  
 [Module overview](../../README.md#module-overview 'List of all the CAT modules\.')  
 
-# `Cat.Queries` <!-- omit in toc -->  
+# Cat.Queries <!-- omit in toc -->  
 
 <!-- Intro start-->
 Cat.Queries gives you one entry point for reading data. You describe a read as a query, write one handler for it, and hand the query to the processor. The processor finds the handler for you and returns an `ICatResponse<TQueryResult>`.
@@ -15,7 +15,7 @@ A query only reads. It never changes state. Use Cat.Commands for writes.
 Handlers can be wrapped in decorators for cross-cutting work. The module ships a logging decorator. You switch it on only when you need it.  
 <!-- Intro end-->
 
-## `Table of contents` <!-- omit in toc -->  
+## Table of contents <!-- omit in toc -->  
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)

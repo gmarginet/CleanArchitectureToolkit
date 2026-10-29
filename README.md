@@ -1,12 +1,12 @@
-<link href="resources/styles/style.css" rel="stylesheet"></link>
+<link href="resources/styles/style.css" rel="stylesheet" />
 
-# `Clean Architecture Toolkit for .NET` <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 
 <table>
     <tr>
         <td style='padding:0;'>
-            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.</br>
+            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>
             It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>
         <td style='padding:0;' width='220'>
             <img src='./resources/logo/CatLogo-RoundedCorners-320x160.png' alt='' width='200'/>
@@ -17,9 +17,9 @@
 [CAT](README.md 'Readme of the CAT project\.')  
 [Module overview](README.md#module-overview 'List of all the CAT modules\.')  
 
-# `README` <!-- omit in toc -->  
+# README <!-- omit in toc -->  
 
-## `Table of contents` <!-- omit in toc -->  
+## Table of contents <!-- omit in toc -->  
 - [Getting Started](#getting-started)
 - [Application Architecture](#application-architecture)
 - [Service Project structure](#service-project-structure)

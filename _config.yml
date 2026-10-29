@@ -1,6 +1,6 @@
 remote_theme: pages-themes/hacker@v0.2.0
-title: [Clean Architecture Toolkit for .NET]
-description: [Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications. It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.]
+title: Clean Architecture Toolkit for .NET
+description: Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications. It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.
 plugins:
   - jekyll-remote-theme
   - jekyll-relative-links

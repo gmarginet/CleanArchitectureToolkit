@@ -1,12 +1,12 @@
-<link href="../../../resources/styles/style.css" rel="stylesheet"></link>  
+<link href="../../../resources/styles/style.css" rel="stylesheet"/>  
   
-# `Clean Architecture Toolkit for .NET`  
+# Clean Architecture Toolkit for .NET  
   
 [CAT](../../../../README.md 'Readme of the CAT project\.')  
 [Module](../../README.md 'Readme of the module\.')  
 [Module overview](../../../../README.md#module-overview 'List of all the CAT modules\.')  
   
-# `Class Reference`  
+# Class Reference  
   
 ##### > [Cat\.Decorators](index.md 'index') > [Cat\.Decorators\.Extensions](Cat.Decorators.Extensions.md 'Cat\.Decorators\.Extensions') > [ServiceCollectionExtensions](ServiceCollectionExtensions.md 'Cat\.Decorators\.Extensions\.ServiceCollectionExtensions')
 

@@ -1,12 +1,12 @@
-<link href="../../../resources/styles/style.css" rel="stylesheet"></link>  
+<link href="../../../resources/styles/style.css" rel="stylesheet"/>  
   
-# `Clean Architecture Toolkit for .NET`  
+# Clean Architecture Toolkit for .NET  
   
 [CAT](../../../../README.md 'Readme of the CAT project\.')  
 [Module](../../README.md 'Readme of the module\.')  
 [Module overview](../../../../README.md#module-overview 'List of all the CAT modules\.')  
   
-# `Class Reference`  
+# Class Reference  
   
 ##### > [Cat\.FluentWorkflows](index.md 'index') > [Cat\.FluentWorkflows](Cat.FluentWorkflows.md 'Cat\.FluentWorkflows') > [CatStepBody&lt;TWorkflowState&gt;](CatStepBody_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBody\<TWorkflowState\>')
 
