@@ -15,7 +15,7 @@
 | Overloads | |
 | :--- | :--- |
 | [Equals\(CatCompiledMemberExpressionKey\)](CatCompiledMemberExpressionKey.Equals.md#Cat.Expressions.CatCompiledMemberExpressionKey.Equals(Cat.Expressions.CatCompiledMemberExpressionKey) 'Cat\.Expressions\.CatCompiledMemberExpressionKey\.Equals\(Cat\.Expressions\.CatCompiledMemberExpressionKey\)') | Checks whether this key refers to the same member and expression text as [other](CatCompiledMemberExpressionKey.md#Cat.Expressions.CatCompiledMemberExpressionKey.Equals(Cat.Expressions.CatCompiledMemberExpressionKey).other 'Cat\.Expressions\.CatCompiledMemberExpressionKey\.Equals\(Cat\.Expressions\.CatCompiledMemberExpressionKey\)\.other')\. |
-| [Equals\(object\)](CatCompiledMemberExpressionKey.Equals.md#Cat.Expressions.CatCompiledMemberExpressionKey.Equals(object) 'Cat\.Expressions\.CatCompiledMemberExpressionKey\.Equals\(object\)') | Determines whether the specified object is equal to the current object\. |
+| [Equals\(object\)](CatCompiledMemberExpressionKey.Equals.md#Cat.Expressions.CatCompiledMemberExpressionKey.Equals(object) 'Cat\.Expressions\.CatCompiledMemberExpressionKey\.Equals\(object\)') | Checks whether [obj](CatCompiledMemberExpressionKey.md#Cat.Expressions.CatCompiledMemberExpressionKey.Equals(object).obj 'Cat\.Expressions\.CatCompiledMemberExpressionKey\.Equals\(object\)\.obj') is a key that refers to the same member and expression text\. |
 
 <a name='Cat.Expressions.CatCompiledMemberExpressionKey.Equals(Cat.Expressions.CatCompiledMemberExpressionKey)'></a>
 
@@ -42,7 +42,7 @@ The key to compare against\.
 
 ## CatCompiledMemberExpressionKey\.Equals\(object\) Method
 
-Determines whether the specified object is equal to the current object\.
+Checks whether [obj](CatCompiledMemberExpressionKey.md#Cat.Expressions.CatCompiledMemberExpressionKey.Equals(object).obj 'Cat\.Expressions\.CatCompiledMemberExpressionKey\.Equals\(object\)\.obj') is a key that refers to the same member and expression text\.
 
 ```csharp
 public override bool Equals(object? obj);
@@ -53,8 +53,8 @@ public override bool Equals(object? obj);
 
 `obj` [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object')
 
-The object to compare with the current object\.
+The object to compare against\.
 
 #### Returns
 [System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')  
-[true](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs\.microsoft\.com/en\-us/dotnet/csharp/language\-reference/builtin\-types/bool') if the specified object  is equal to the current object; otherwise, [false](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool 'https://docs\.microsoft\.com/en\-us/dotnet/csharp/language\-reference/builtin\-types/bool')\.
+`true` if [obj](CatCompiledMemberExpressionKey.md#Cat.Expressions.CatCompiledMemberExpressionKey.Equals(object).obj 'Cat\.Expressions\.CatCompiledMemberExpressionKey\.Equals\(object\)\.obj') is a key with the same member and expression text\.

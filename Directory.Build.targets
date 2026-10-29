@@ -1,0 +1,40 @@
+<Project>
+    <!-- DefaultDocumentation writes CRLF on Windows. The repo stores text with LF, so convert the generated files after each run. -->
+    <UsingTask TaskName="CatNormalizeLineEndings" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.IO" />
+            <Code Type="Fragment" Language="cs">
+                <![CDATA[
+                foreach (var file in Files)
+                {
+                    var path = file.ItemSpec;
+                    if (!File.Exists(path))
+                    {
+                        continue;
+                    }
+
+                    var text = File.ReadAllText(path);
+                    if (text.IndexOf('\r') < 0)
+                    {
+                        continue;
+                    }
+
+                    File.WriteAllText(path, text.Replace("\r\n", "\n"));
+                }
+                ]]>
+            </Code>
+        </Task>
+    </UsingTask>
+
+    <Target Name="CatNormalizeDefaultDocumentationLineEndings" AfterTargets="DefaultDocumentation" Condition="'$(DocumentationFile)' != '' AND '$(DefaultDocumentationFolder)' != '' AND '$(DisableDefaultDocumentation)' != 'true'">
+        <ItemGroup>
+            <_CatGeneratedDocumentationFile Include="$(DefaultDocumentationFolder)\**\*.md" />
+            <_CatGeneratedDocumentationFile Include="$(DefaultDocumentationLinksOutputFile)" Condition="'$(DefaultDocumentationLinksOutputFile)' != ''" />
+        </ItemGroup>
+
+        <CatNormalizeLineEndings Files="@(_CatGeneratedDocumentationFile)" />
+    </Target>
+</Project>

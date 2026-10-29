@@ -31,9 +31,16 @@ internal class CatCompiledMemberExpressionKey
         return _memberInfo.Equals(other._memberInfo) && _expressionKey.Equals(other._expressionKey);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Checks whether <paramref name="obj"/> is a key that refers to the same member and expression text.
+    /// </summary>
+    /// <param name="obj">The object to compare against.</param>
+    /// <returns><c>true</c> if <paramref name="obj"/> is a key with the same member and expression text.</returns>
     public override bool Equals(object? obj) => obj is CatCompiledMemberExpressionKey other && (other._memberInfo, other._expressionKey).Equals((_memberInfo, _expressionKey));
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Builds a hash code from the member and the expression text, so equal keys land in the same cache bucket.
+    /// </summary>
+    /// <returns>A hash code for this key.</returns>
     public override int GetHashCode() => (_memberInfo, _expressionKey).GetHashCode();
 }

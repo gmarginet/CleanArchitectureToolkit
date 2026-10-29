@@ -12,7 +12,7 @@
 
 ## CatCompiledMemberExpressionKey\.GetHashCode\(\) Method
 
-Serves as the default hash function\.
+Builds a hash code from the member and the expression text, so equal keys land in the same cache bucket\.
 
 ```csharp
 public override int GetHashCode();
@@ -20,4 +20,4 @@ public override int GetHashCode();
 
 #### Returns
 [System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')  
-A hash code for the current object\.
+A hash code for this key\.
