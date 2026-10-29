@@ -12,7 +12,7 @@
 
 ## ExpressionExtensions Class
 
-Extension methods for inspecting [Cat\.Expression](https://learn.microsoft.com/en-us/dotnet/api/cat.expression 'Cat\.Expression') trees\.
+Extension methods for inspecting [System\.Linq\.Expressions\.Expression](https://learn.microsoft.com/en-us/dotnet/api/system.linq.expressions.expression 'System\.Linq\.Expressions\.Expression') trees\.
 
 ```csharp
 public static class ExpressionExtensions

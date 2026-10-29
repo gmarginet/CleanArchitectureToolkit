@@ -5,7 +5,7 @@ using System.Reflection;
 namespace Cat.Expression.Extensions;
 
 /// <summary>
-/// Extension methods for inspecting <see cref="Expression"/> trees.
+/// Extension methods for inspecting <see cref="System.Linq.Expressions.Expression"/> trees.
 /// </summary>
 public static class ExpressionExtensions
 {

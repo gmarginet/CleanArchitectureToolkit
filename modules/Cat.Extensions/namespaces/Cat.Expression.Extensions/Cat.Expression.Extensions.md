@@ -14,4 +14,4 @@
 
 | Classes | |
 | :--- | :--- |
-| [ExpressionExtensions](ExpressionExtensions.md 'Cat\.Expression\.Extensions\.ExpressionExtensions') | Extension methods for inspecting [Cat\.Expression](https://learn.microsoft.com/en-us/dotnet/api/cat.expression 'Cat\.Expression') trees\. |
+| [ExpressionExtensions](ExpressionExtensions.md 'Cat\.Expression\.Extensions\.ExpressionExtensions') | Extension methods for inspecting [System\.Linq\.Expressions\.Expression](https://learn.microsoft.com/en-us/dotnet/api/system.linq.expressions.expression 'System\.Linq\.Expressions\.Expression') trees\. |
