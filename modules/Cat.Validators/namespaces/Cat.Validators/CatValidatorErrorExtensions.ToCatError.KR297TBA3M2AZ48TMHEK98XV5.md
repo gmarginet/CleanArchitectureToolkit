@@ -22,10 +22,10 @@ public static Cat.Responses.Abstractions.ICatError ToCatError(this Cat.Validator
 
 <a name='Cat.Validators.Extensions.CatValidatorErrorExtensions.ToCatError(thisCat.Validators.Abstractions.ICatValidatorError).error'></a>
 
-`error` [ICatValidatorError](../Cat.Validators.Abstractions/ICatValidatorError.md 'Cat\.Validators\.Abstractions\.ICatValidatorError')
+`error` [ICatValidatorError](../../../Cat.Validators/namespaces/Cat.Validators.Abstractions/ICatValidatorError.md 'Cat\.Validators\.Abstractions\.ICatValidatorError')
 
 The error to convert\.
 
 #### Returns
-[ICatError](../Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')  
+[ICatError](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')  
 The response error\.

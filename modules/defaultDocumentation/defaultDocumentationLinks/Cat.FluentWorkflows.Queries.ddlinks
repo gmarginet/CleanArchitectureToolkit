@@ -1,4 +1,4 @@
-../Cat.FluentWorkflows.Queries/
+../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Queries/
 M:Cat.FluentWorkflows.Queries.CatWorkflowBuilderExtensions.ProcessQuery``3(Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder{``0})|CatWorkflowBuilderExtensions.ProcessQuery.6ZRTRPQSKCKEJKVGSI80Y80L7.md|ProcessQuery<TWorkflowState,TQuery,TResult>(this ICatWorkflowBuilder<TWorkflowState>)
 N:Cat.FluentWorkflows.Queries|Cat.FluentWorkflows.Queries.md|Cat.FluentWorkflows.Queries
 T:Cat.FluentWorkflows.Queries.CatWorkflowBuilderExtensions|CatWorkflowBuilderExtensions.md|CatWorkflowBuilderExtensions

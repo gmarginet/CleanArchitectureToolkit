@@ -21,7 +21,7 @@ public CatForeachStep(Cat.FluentWorkflows.Abstractions.ICatStepProcessor catStep
 
 <a name='Cat.FluentWorkflows.Steps.CatForeachStep_TWorkflowState,TCollection,TForeachState_.CatForeachStep(Cat.FluentWorkflows.Abstractions.ICatStepProcessor,Microsoft.Extensions.Logging.ILogger_Cat.FluentWorkflows.Steps.CatForeachStep_TWorkflowState,TCollection,TForeachState__).catStepProcessor'></a>
 
-`catStepProcessor` [ICatStepProcessor](../Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')
+`catStepProcessor` [ICatStepProcessor](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')
 
 Runs the inner steps\.
 

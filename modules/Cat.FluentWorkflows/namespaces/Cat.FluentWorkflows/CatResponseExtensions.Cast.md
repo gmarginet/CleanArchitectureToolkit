@@ -30,18 +30,18 @@ public static Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse Cast(this Ca
 
 <a name='Cat.FluentWorkflows.Extensions.CatResponseExtensions.Cast(thisCat.Responses.Abstractions.ICatResponse,Cat.FluentWorkflows.Abstractions.CatStepExecutionResult).source'></a>
 
-`source` [ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
+`source` [ICatResponse](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
 
 The response to convert\.
 
 <a name='Cat.FluentWorkflows.Extensions.CatResponseExtensions.Cast(thisCat.Responses.Abstractions.ICatResponse,Cat.FluentWorkflows.Abstractions.CatStepExecutionResult).workflowResult'></a>
 
-`workflowResult` [CatStepExecutionResult](../Cat.FluentWorkflows.Abstractions/CatStepExecutionResult.md 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult')
+`workflowResult` [CatStepExecutionResult](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/CatStepExecutionResult.md 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult')
 
 The result for the step processor\. It is used whether the response succeeded or not\.
 
 #### Returns
-[ICatWorkflowResponse](../Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')  
+[ICatWorkflowResponse](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')  
 The workflow response\.
 
 <a name='Cat.FluentWorkflows.Extensions.CatResponseExtensions.Cast_TSource_(thisCat.Responses.Abstractions.ICatResponse_TSource_,Cat.FluentWorkflows.Abstractions.CatStepExecutionResult)'></a>
@@ -64,16 +64,16 @@ The type of the payload\.
 
 <a name='Cat.FluentWorkflows.Extensions.CatResponseExtensions.Cast_TSource_(thisCat.Responses.Abstractions.ICatResponse_TSource_,Cat.FluentWorkflows.Abstractions.CatStepExecutionResult).source'></a>
 
-`source` [Cat\.Responses\.Abstractions\.ICatResponse&lt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TSource](CatResponseExtensions.md#Cat.FluentWorkflows.Extensions.CatResponseExtensions.Cast_TSource_(thisCat.Responses.Abstractions.ICatResponse_TSource_,Cat.FluentWorkflows.Abstractions.CatStepExecutionResult).TSource 'Cat\.FluentWorkflows\.Extensions\.CatResponseExtensions\.Cast\<TSource\>\(this Cat\.Responses\.Abstractions\.ICatResponse\<TSource\>, Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult\)\.TSource')[&gt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')
+`source` [Cat\.Responses\.Abstractions\.ICatResponse&lt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TSource](CatResponseExtensions.md#Cat.FluentWorkflows.Extensions.CatResponseExtensions.Cast_TSource_(thisCat.Responses.Abstractions.ICatResponse_TSource_,Cat.FluentWorkflows.Abstractions.CatStepExecutionResult).TSource 'Cat\.FluentWorkflows\.Extensions\.CatResponseExtensions\.Cast\<TSource\>\(this Cat\.Responses\.Abstractions\.ICatResponse\<TSource\>, Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult\)\.TSource')[&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')
 
 The response to convert\.
 
 <a name='Cat.FluentWorkflows.Extensions.CatResponseExtensions.Cast_TSource_(thisCat.Responses.Abstractions.ICatResponse_TSource_,Cat.FluentWorkflows.Abstractions.CatStepExecutionResult).workflowResult'></a>
 
-`workflowResult` [CatStepExecutionResult](../Cat.FluentWorkflows.Abstractions/CatStepExecutionResult.md 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult')
+`workflowResult` [CatStepExecutionResult](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/CatStepExecutionResult.md 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult')
 
 The result for the step processor\. It is used whether the response succeeded or not\.
 
 #### Returns
-[ICatWorkflowResponse](../Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')  
+[ICatWorkflowResponse](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')  
 The workflow response\.

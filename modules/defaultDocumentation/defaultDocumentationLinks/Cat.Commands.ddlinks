@@ -1,4 +1,4 @@
-../Cat.Commands/
+../../../Cat.Commands/namespaces/Cat.Commands/
 F:Cat.Commands.CatCommandProcessor._serviceProvider|CatCommandProcessor._serviceProvider.md|_serviceProvider
 F:Cat.Commands.CatCommandProcessor._decoratorFactory|CatCommandProcessor._decoratorFactory.md|_decoratorFactory
 M:Cat.Commands.CatCommandProcessor.#ctor(System.IServiceProvider,Cat.Decorators.Abstractions.ICatDecoratorFactory)|CatCommandProcessor..ctor.BHLPZQGGQ8VEVHGD6EIJWX7DC.md|CatCommandProcessor(IServiceProvider, ICatDecoratorFactory)

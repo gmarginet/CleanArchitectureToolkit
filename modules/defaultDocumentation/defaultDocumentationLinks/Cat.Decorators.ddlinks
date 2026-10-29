@@ -1,4 +1,4 @@
-../Cat.Decorators/
+../../../Cat.Decorators/namespaces/Cat.Decorators/
 F:Cat.Decorators.CatDecoratorFactory._serviceTypes|CatDecoratorFactory._serviceTypes.md|_serviceTypes
 M:Cat.Decorators.CatDecoratorFactory.AddDecorator(System.Type,System.Type,System.Collections.Generic.Dictionary{System.String,System.Object})|CatDecoratorFactory.AddDecorator.OCUL9MXI7QENHYDMP9EQKHGZA.md|AddDecorator(Type, Type, Dictionary<string,object>)
 M:Cat.Decorators.CatDecoratorFactory.GetDecoratedService``1(System.IServiceProvider)|CatDecoratorFactory.GetDecoratedService.md#Cat.Decorators.CatDecoratorFactory.GetDecoratedService_TService_(System.IServiceProvider)|GetDecoratedService<TService>(IServiceProvider)

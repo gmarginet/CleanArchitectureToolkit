@@ -1,4 +1,4 @@
-../Cat.Object.Extensions/
+../../../Cat.Extensions/namespaces/Cat.Object.Extensions/
 M:Cat.Object.Extensions.ObjectExtensions.ThrowIfNull``1(``0,System.String)|ObjectExtensions.ThrowIfNull.MYNW4LFAKIED5KYK9Q59F2W41.md|ThrowIfNull<T>(this T, string)
 M:Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo``1(``0,``0,System.String,System.String)|ObjectExtensions.ThrowIfGreaterThanOrEqualTo.md#Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo_T_(thisT,T,string,string)|ThrowIfGreaterThanOrEqualTo<T>(this T, T, string, string)
 M:Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo``1(``0,``0,System.Collections.Generic.IComparer{``0},System.String,System.String)|ObjectExtensions.ThrowIfGreaterThanOrEqualTo.md#Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo_T_(thisT,T,System.Collections.Generic.IComparer_T_,string,string)|ThrowIfGreaterThanOrEqualTo<T>(this T, T, IComparer<T>, string, string)

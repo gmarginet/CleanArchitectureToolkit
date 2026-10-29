@@ -12,7 +12,7 @@
 
 ## CatDecoratorParameter Class
 
-Default [ICatDecoratorParameter](../Cat.Decorators.Abstractions/ICatDecoratorParameter.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorParameter')\.
+Default [ICatDecoratorParameter](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorParameter.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorParameter')\.
 
 ```csharp
 public record CatDecoratorParameter : Cat.Decorators.Abstractions.ICatDecoratorParameter, System.IEquatable<Cat.Decorators.CatDecoratorParameter>
@@ -20,7 +20,7 @@ public record CatDecoratorParameter : Cat.Decorators.Abstractions.ICatDecoratorP
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatDecoratorParameter
 
-Implements [ICatDecoratorParameter](../Cat.Decorators.Abstractions/ICatDecoratorParameter.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorParameter'), [System\.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System\.IEquatable\`1')[CatDecoratorParameter](CatDecoratorParameter.md 'Cat\.Decorators\.CatDecoratorParameter')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System\.IEquatable\`1')
+Implements [ICatDecoratorParameter](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorParameter.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorParameter'), [System\.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System\.IEquatable\`1')[CatDecoratorParameter](CatDecoratorParameter.md 'Cat\.Decorators\.CatDecoratorParameter')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System\.IEquatable\`1')
 
 | Constructors | |
 | :--- | :--- |

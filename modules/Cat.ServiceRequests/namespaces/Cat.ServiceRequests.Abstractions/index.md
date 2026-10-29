@@ -14,4 +14,4 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.ServiceRequests\.Abstractions](Cat.ServiceRequests.Abstractions.md 'Cat\.ServiceRequests\.Abstractions') | Defines the contracts for service requests: the request markers, the handlers that run them, and the processor that finds the right handler and returns an [ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')\. |
+| [Cat\.ServiceRequests\.Abstractions](Cat.ServiceRequests.Abstractions.md 'Cat\.ServiceRequests\.Abstractions') | Defines the contracts for service requests: the request markers, the handlers that run them, and the processor that finds the right handler and returns an [ICatResponse](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')\. |

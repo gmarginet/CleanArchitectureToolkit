@@ -21,7 +21,7 @@ public CatIfStep(Cat.FluentWorkflows.Abstractions.ICatStepProcessor catStepProce
 
 <a name='Cat.FluentWorkflows.Steps.CatIfStep_TWorkflowState_.CatIfStep(Cat.FluentWorkflows.Abstractions.ICatStepProcessor,Microsoft.Extensions.Logging.ILogger_Cat.FluentWorkflows.Steps.CatIfStep_TWorkflowState__).catStepProcessor'></a>
 
-`catStepProcessor` [ICatStepProcessor](../Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')
+`catStepProcessor` [ICatStepProcessor](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')
 
 Runs the inner steps\.
 

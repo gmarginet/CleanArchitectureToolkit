@@ -1,4 +1,4 @@
-../Cat.Localizations/
+../../../Cat.Localizations/namespaces/Cat.Localizations/
 P:Cat.Localizations.NoLocalizationCatLocalizer.Item(System.String)|NoLocalizationCatLocalizer.Item.ZCPDRAO0ITIIKJTVX4KRYDR6B.md|this[string]
 P:Cat.Localizations.NoLocalizationCatLocalizer.Item(System.String,System.Object[])|NoLocalizationCatLocalizer.Item.IHK969183C3VM6YLYNFZK3OF9.md|this[string, object[]]
 N:Cat.Localizations|Cat.Localizations.md|Cat.Localizations

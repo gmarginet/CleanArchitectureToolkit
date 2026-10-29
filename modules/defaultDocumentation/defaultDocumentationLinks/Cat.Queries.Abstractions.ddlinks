@@ -1,4 +1,4 @@
-../Cat.Queries.Abstractions/
+../../../Cat.Queries/namespaces/Cat.Queries.Abstractions/
 M:Cat.Queries.Abstractions.ICatQueryHandler`2.HandleAsync(`0,System.Threading.CancellationToken)|ICatQueryHandler_TQuery,TQueryResult_.HandleAsync.569S9MAD4IYXQV8MCHY5U72UA.md|HandleAsync(TQuery, CancellationToken)
 N:Cat.Queries.Abstractions|Cat.Queries.Abstractions.md|Cat.Queries.Abstractions
 T:Cat.Queries.Abstractions.ICatQueryHandler`2|ICatQueryHandler_TQuery,TQueryResult_.md|ICatQueryHandler<TQuery,TQueryResult>

@@ -18,7 +18,7 @@ The state of the workflow the step runs in\.
 public TWorkflowState WorkflowState { get; set; }
 ```
 
-Implements [WorkflowState](../Cat.FluentWorkflows.Abstractions/ICatStepBodyWithState_TWorkflowState_.WorkflowState.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepBodyWithState\`1\.WorkflowState')
+Implements [WorkflowState](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatStepBodyWithState_TWorkflowState_.WorkflowState.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepBodyWithState\`1\.WorkflowState')
 
 #### Property Value
 [TWorkflowState](CatStepBodyAsync_TWorkflowState_.md#Cat.FluentWorkflows.CatStepBodyAsync_TWorkflowState_.TWorkflowState 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>\.TWorkflowState')

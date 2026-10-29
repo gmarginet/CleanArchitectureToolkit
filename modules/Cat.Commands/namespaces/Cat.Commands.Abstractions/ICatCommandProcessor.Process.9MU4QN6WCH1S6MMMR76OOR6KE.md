@@ -27,5 +27,5 @@ Cat.Responses.Abstractions.ICatResponse Process(Cat.Commands.Abstractions.ICatCo
 The command to run\.
 
 #### Returns
-[ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')  
+[ICatResponse](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')  
 The response of the handler\.

@@ -12,7 +12,7 @@
 
 ## NoLocalizationCatLocalizer Class
 
-Default [ICatLocalizer](../Cat.Localizations.Abstractions/ICatLocalizer.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer') implementation that performs no localization\. It returns the key as\-is,
+Default [ICatLocalizer](../../../Cat.Localizations/namespaces/Cat.Localizations.Abstractions/ICatLocalizer.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer') implementation that performs no localization\. It returns the key as\-is,
 only filling in placeholders for the indexer that takes arguments\.
 
 ```csharp
@@ -21,7 +21,7 @@ internal class NoLocalizationCatLocalizer : Cat.Localizations.Abstractions.ICatL
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; NoLocalizationCatLocalizer
 
-Implements [ICatLocalizer](../Cat.Localizations.Abstractions/ICatLocalizer.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer')
+Implements [ICatLocalizer](../../../Cat.Localizations/namespaces/Cat.Localizations.Abstractions/ICatLocalizer.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer')
 
 | Properties | |
 | :--- | :--- |

@@ -21,6 +21,6 @@ public CatDecoratorFactoryBuilder(Cat.Decorators.Abstractions.ICatDecoratorFacto
 
 <a name='Cat.Decorators.CatDecoratorFactoryBuilder.CatDecoratorFactoryBuilder(Cat.Decorators.Abstractions.ICatDecoratorFactory).decoratorFactory'></a>
 
-`decoratorFactory` [ICatDecoratorFactory](../Cat.Decorators.Abstractions/ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')
+`decoratorFactory` [ICatDecoratorFactory](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')
 
 Must be a [CatDecoratorFactory](CatDecoratorFactory.md 'Cat\.Decorators\.CatDecoratorFactory')\.

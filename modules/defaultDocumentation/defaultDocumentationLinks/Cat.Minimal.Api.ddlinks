@@ -1,4 +1,4 @@
-../Cat.Minimal.Api/
+../../../Cat.Minimal.Api/namespaces/Cat.Minimal.Api/
 M:Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.MapCatServiceRequest``1(Microsoft.AspNetCore.Routing.IEndpointRouteBuilder,System.String)|CatEndpointRouteBuilderExtensions.MapCatServiceRequest.md#Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.MapCatServiceRequest_TRequest_(thisMicrosoft.AspNetCore.Routing.IEndpointRouteBuilder,string)|MapCatServiceRequest<TRequest>(this IEndpointRouteBuilder, string)
 M:Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.MapCatServiceRequest``2(Microsoft.AspNetCore.Routing.IEndpointRouteBuilder,System.String)|CatEndpointRouteBuilderExtensions.MapCatServiceRequest.md#Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.MapCatServiceRequest_TRequest,TResponse_(thisMicrosoft.AspNetCore.Routing.IEndpointRouteBuilder,string)|MapCatServiceRequest<TRequest,TResponse>(this IEndpointRouteBuilder, string)
 M:Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.TryGetRequest``1(``0,``0@)|CatEndpointRouteBuilderExtensions.TryGetRequest.D60HW2G8417SGSPTDUFV5WQ3A.md|TryGetRequest<TRequest>(TRequest, TRequest)

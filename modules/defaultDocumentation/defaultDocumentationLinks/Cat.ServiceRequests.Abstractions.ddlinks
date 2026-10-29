@@ -1,4 +1,4 @@
-../Cat.ServiceRequests.Abstractions/
+../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Abstractions/
 N:Cat.ServiceRequests.Abstractions|Cat.ServiceRequests.Abstractions.md|Cat.ServiceRequests.Abstractions
 T:Cat.ServiceRequests.Abstractions.ICatServiceRequest|ICatServiceRequest.md|ICatServiceRequest
 M:Cat.ServiceRequests.Abstractions.ICatServiceRequestHandler`2.HandleAsync(`0,System.Threading.CancellationToken)|ICatServiceRequestHandler_TRequest,TResponse_.HandleAsync.TZWIOXWSUV7KFO64E34V9YC46.md|HandleAsync(TRequest, CancellationToken)

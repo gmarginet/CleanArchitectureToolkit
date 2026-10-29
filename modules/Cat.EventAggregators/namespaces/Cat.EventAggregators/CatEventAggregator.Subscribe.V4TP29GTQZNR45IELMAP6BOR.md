@@ -12,7 +12,7 @@
 
 ## CatEventAggregator\.Subscribe\(object\) Method
 
-Registers a subscriber so it receives events for every [ICatHandleEvent&lt;TEvent&gt;](../Cat.EventAggregators.Abstractions/ICatHandleEvent_TEvent_.md 'Cat\.EventAggregators\.Abstractions\.ICatHandleEvent\`1') it implements\.
+Registers a subscriber so it receives events for every [ICatHandleEvent&lt;TEvent&gt;](../../../Cat.EventAggregators/namespaces/Cat.EventAggregators.Abstractions/ICatHandleEvent_TEvent_.md 'Cat\.EventAggregators\.Abstractions\.ICatHandleEvent\`1') it implements\.
 
 ```csharp
 public void Subscribe(object subscriber);
@@ -25,4 +25,4 @@ public void Subscribe(object subscriber);
 
 The subscriber instance to register\. It's held by a weak reference, so it won't be kept alive by the aggregator\.
 
-Implements [Subscribe\(object\)](../Cat.EventAggregators.Abstractions/ICatEventAggregator.Subscribe.UAP61SE4Y7K8NH7WZG3YYJWP7.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator\.Subscribe\(System\.Object\)')
+Implements [Subscribe\(object\)](../../../Cat.EventAggregators/namespaces/Cat.EventAggregators.Abstractions/ICatEventAggregator.Subscribe.UAP61SE4Y7K8NH7WZG3YYJWP7.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator\.Subscribe\(System\.Object\)')

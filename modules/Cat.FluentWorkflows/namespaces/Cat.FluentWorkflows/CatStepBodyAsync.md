@@ -25,7 +25,7 @@ Derived
 &#8627; [CatStepBody](CatStepBody.md 'Cat\.FluentWorkflows\.CatStepBody')  
 &#8627; [CatStepBodyAsync&lt;TWorkflowState&gt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>')
 
-Implements [ICatStepBodyAsync](../Cat.FluentWorkflows.Abstractions/ICatStepBodyAsync.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepBodyAsync')
+Implements [ICatStepBodyAsync](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatStepBodyAsync.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepBodyAsync')
 
 | Constructors | |
 | :--- | :--- |

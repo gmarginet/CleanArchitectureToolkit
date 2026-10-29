@@ -14,5 +14,5 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Queries](Cat.Queries.md 'Cat\.Queries') | Provides the default [ICatQueryProcessor](../Cat.Queries.Abstractions/ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor')\. It resolves the matching handler, wraps it in the registered decorators and runs it\. |
+| [Cat\.Queries](Cat.Queries.md 'Cat\.Queries') | Provides the default [ICatQueryProcessor](../../../Cat.Queries/namespaces/Cat.Queries.Abstractions/ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor')\. It resolves the matching handler, wraps it in the registered decorators and runs it\. |
 | [Cat\.Queries\.Extensions](Cat.Queries.Extensions.md 'Cat\.Queries\.Extensions') | |

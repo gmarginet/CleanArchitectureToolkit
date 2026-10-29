@@ -12,7 +12,7 @@
 
 ## ServiceCollectionExtensions\.AddCatEventAggregatorsModule\(this IServiceCollection\) Method
 
-Registers [ICatEventAggregator](../Cat.EventAggregators.Abstractions/ICatEventAggregator.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator') as a singleton, backed by the module's default implementation\.
+Registers [ICatEventAggregator](../../../Cat.EventAggregators/namespaces/Cat.EventAggregators.Abstractions/ICatEventAggregator.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator') as a singleton, backed by the module's default implementation\.
 
 ```csharp
 public static void AddCatEventAggregatorsModule(this Microsoft.Extensions.DependencyInjection.IServiceCollection services);

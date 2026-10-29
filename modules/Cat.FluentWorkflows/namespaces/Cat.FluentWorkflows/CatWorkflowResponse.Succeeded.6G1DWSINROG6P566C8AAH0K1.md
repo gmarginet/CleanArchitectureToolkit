@@ -21,10 +21,10 @@ public static Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse Succeeded(Ca
 
 <a name='Cat.FluentWorkflows.CatWorkflowResponse.Succeeded(Cat.FluentWorkflows.Abstractions.CatStepExecutionResult).workflowResult'></a>
 
-`workflowResult` [CatStepExecutionResult](../Cat.FluentWorkflows.Abstractions/CatStepExecutionResult.md 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult')
+`workflowResult` [CatStepExecutionResult](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/CatStepExecutionResult.md 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult')
 
 What the step processor does next\.
 
 #### Returns
-[ICatWorkflowResponse](../Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')  
+[ICatWorkflowResponse](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')  
 The response, without errors\.

@@ -21,7 +21,7 @@ public CatProcessCommandStep(Cat.Commands.Abstractions.ICatCommandProcessor comm
 
 <a name='Cat.FluentWorkflows.Commands.Steps.CatProcessCommandStep_TCommand_.CatProcessCommandStep(Cat.Commands.Abstractions.ICatCommandProcessor,Microsoft.Extensions.Logging.ILogger_Cat.FluentWorkflows.Commands.Steps.CatProcessCommandStep_TCommand__).commandProcessor'></a>
 
-`commandProcessor` [ICatCommandProcessor](../Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')
+`commandProcessor` [ICatCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')
 
 Processes the command\.
 

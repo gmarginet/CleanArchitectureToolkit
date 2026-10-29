@@ -12,7 +12,7 @@
 
 ## CatErrorDefinition\.Message Property
 
-A human\-readable message describing the error\. Can contain placeholders filled in by [Arguments](../Cat.Responses.Abstractions/ICatError.Arguments.md 'Cat\.Responses\.Abstractions\.ICatError\.Arguments')\.
+A human\-readable message describing the error\. Can contain placeholders filled in by [Arguments](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatError.Arguments.md 'Cat\.Responses\.Abstractions\.ICatError\.Arguments')\.
 
 ```csharp
 public string Message { get; private set; }

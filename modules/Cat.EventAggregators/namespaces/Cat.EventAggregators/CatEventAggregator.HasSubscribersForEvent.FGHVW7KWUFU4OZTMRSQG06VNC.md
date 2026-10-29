@@ -25,7 +25,7 @@ public bool HasSubscribersForEvent(System.Type eventType);
 
 The event type to check for\.
 
-Implements [HasSubscribersForEvent\(Type\)](../Cat.EventAggregators.Abstractions/ICatEventAggregator.HasSubscribersForEvent.N681I1FETEOLJC18VX34L5GE.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator\.HasSubscribersForEvent\(System\.Type\)')
+Implements [HasSubscribersForEvent\(Type\)](../../../Cat.EventAggregators/namespaces/Cat.EventAggregators.Abstractions/ICatEventAggregator.HasSubscribersForEvent.N681I1FETEOLJC18VX34L5GE.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator\.HasSubscribersForEvent\(System\.Type\)')
 
 #### Returns
 [System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')  

@@ -29,7 +29,7 @@ The type the member expression is evaluated against\.
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatCompiledMemberExpressionCache\<T\>
 
-Implements [Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache&lt;](../Cat.Expressions.Abstractions/ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1')[T](CatCompiledMemberExpressionCache_T_.md#Cat.Expressions.CatCompiledMemberExpressionCache_T_.T 'Cat\.Expressions\.CatCompiledMemberExpressionCache\<T\>\.T')[&gt;](../Cat.Expressions.Abstractions/ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1')
+Implements [Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache&lt;](../../../Cat.Expressions/namespaces/Cat.Expressions.Abstractions/ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1')[T](CatCompiledMemberExpressionCache_T_.md#Cat.Expressions.CatCompiledMemberExpressionCache_T_.T 'Cat\.Expressions\.CatCompiledMemberExpressionCache\<T\>\.T')[&gt;](../../../Cat.Expressions/namespaces/Cat.Expressions.Abstractions/ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1')
 
 | Fields | |
 | :--- | :--- |

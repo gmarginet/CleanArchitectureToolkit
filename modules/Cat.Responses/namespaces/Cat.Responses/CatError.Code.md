@@ -18,7 +18,7 @@ A stable code identifying the kind of error, independent of its message text\.
 public string Code { get; private set; }
 ```
 
-Implements [Code](../Cat.Responses.Abstractions/ICatError.Code.md 'Cat\.Responses\.Abstractions\.ICatError\.Code')
+Implements [Code](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatError.Code.md 'Cat\.Responses\.Abstractions\.ICatError\.Code')
 
 #### Property Value
 [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')

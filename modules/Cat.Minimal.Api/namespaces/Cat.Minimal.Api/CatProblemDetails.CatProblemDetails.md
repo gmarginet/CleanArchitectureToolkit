@@ -42,7 +42,7 @@ public CatProblemDetails(Cat.Responses.Abstractions.ICatResponse catResponse, st
 
 <a name='Cat.Minimal.Api.CatProblemDetails.CatProblemDetails(Cat.Responses.Abstractions.ICatResponse,string,string).catResponse'></a>
 
-`catResponse` [ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
+`catResponse` [ICatResponse](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
 
 The failed response\.
 

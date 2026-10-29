@@ -1,4 +1,4 @@
-../Cat.Responses/
+../../../Cat.Responses/namespaces/Cat.Responses/
 P:Cat.Responses.CatError.Code|CatError.Code.md|Code
 P:Cat.Responses.CatError.Message|CatError.Message.md|Message
 P:Cat.Responses.CatError.Arguments|CatError.Arguments.md|Arguments

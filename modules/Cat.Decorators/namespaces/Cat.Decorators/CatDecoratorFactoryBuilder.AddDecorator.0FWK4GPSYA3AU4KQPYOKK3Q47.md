@@ -34,11 +34,11 @@ The open generic decorator type\. It needs exactly one public constructor\.
 
 <a name='Cat.Decorators.CatDecoratorFactoryBuilder.AddDecorator(System.Type,System.Type,Cat.Decorators.Abstractions.ICatDecoratorParameter[]).decoratorParameters'></a>
 
-`decoratorParameters` [ICatDecoratorParameter](../Cat.Decorators.Abstractions/ICatDecoratorParameter.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorParameter')[\[\]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System\.Array')
+`decoratorParameters` [ICatDecoratorParameter](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorParameter.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorParameter')[\[\]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System\.Array')
 
 Values for constructor parameters, matched by parameter name\.
 
-Implements [AddDecorator\(Type, Type, ICatDecoratorParameter\[\]\)](../Cat.Decorators.Abstractions/ICatDecoratorFactoryBuilder.AddDecorator.U7RFRRWBEQRWWXAQT8CHUXGO.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactoryBuilder\.AddDecorator\(System\.Type,System\.Type,Cat\.Decorators\.Abstractions\.ICatDecoratorParameter\[\]\)')
+Implements [AddDecorator\(Type, Type, ICatDecoratorParameter\[\]\)](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorFactoryBuilder.AddDecorator.U7RFRRWBEQRWWXAQT8CHUXGO.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactoryBuilder\.AddDecorator\(System\.Type,System\.Type,Cat\.Decorators\.Abstractions\.ICatDecoratorParameter\[\]\)')
 
 #### Exceptions
 

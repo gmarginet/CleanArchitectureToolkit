@@ -14,4 +14,4 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Commands\.Abstractions](Cat.Commands.Abstractions.md 'Cat\.Commands\.Abstractions') | Defines the contracts for commands: the command marker, the handlers that run them, and the processor that finds the right handler and returns an [ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')\. |
+| [Cat\.Commands\.Abstractions](Cat.Commands.Abstractions.md 'Cat\.Commands\.Abstractions') | Defines the contracts for commands: the command marker, the handlers that run them, and the processor that finds the right handler and returns an [ICatResponse](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')\. |

@@ -1,4 +1,4 @@
-../Cat.EventAggregators.Abstractions/
+../../../Cat.EventAggregators/namespaces/Cat.EventAggregators.Abstractions/
 M:Cat.EventAggregators.Abstractions.ICatEventAggregator.HasSubscribersForEvent(System.Type)|ICatEventAggregator.HasSubscribersForEvent.N681I1FETEOLJC18VX34L5GE.md|HasSubscribersForEvent(Type)
 M:Cat.EventAggregators.Abstractions.ICatEventAggregator.Subscribe(System.Object)|ICatEventAggregator.Subscribe.UAP61SE4Y7K8NH7WZG3YYJWP7.md|Subscribe(object)
 M:Cat.EventAggregators.Abstractions.ICatEventAggregator.Unsubscribe(System.Object)|ICatEventAggregator.Unsubscribe.QFMFC33IRLO9WQRQ5Z7JO71H1.md|Unsubscribe(object)

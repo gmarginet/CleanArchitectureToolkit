@@ -18,7 +18,7 @@ The name of the constructor parameter\.
 public string Name { get; }
 ```
 
-Implements [Name](../Cat.Decorators.Abstractions/ICatDecoratorParameter.Name.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorParameter\.Name')
+Implements [Name](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorParameter.Name.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorParameter\.Name')
 
 #### Property Value
 [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')

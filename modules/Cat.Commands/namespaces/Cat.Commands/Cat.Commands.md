@@ -12,9 +12,9 @@
 
 ## Cat\.Commands Namespace
 
-Provides the default [ICatCommandProcessor](../Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')\.
+Provides the default [ICatCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')\.
 It resolves the matching handler, wraps it in the registered decorators and runs it\.
 
 | Classes | |
 | :--- | :--- |
-| [CatCommandProcessor](CatCommandProcessor.md 'Cat\.Commands\.CatCommandProcessor') | Default [ICatCommandProcessor](../Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')\. Opens a new scope per command, gets the decorated handler from it and invokes the handler\. |
+| [CatCommandProcessor](CatCommandProcessor.md 'Cat\.Commands\.CatCommandProcessor') | Default [ICatCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')\. Opens a new scope per command, gets the decorated handler from it and invokes the handler\. |

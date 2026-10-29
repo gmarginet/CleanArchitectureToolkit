@@ -12,7 +12,7 @@
 
 ## CatCommandProcessor Class
 
-Default [ICatCommandProcessor](../Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')\.
+Default [ICatCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')\.
 Opens a new scope per command, gets the decorated handler from it and invokes the handler\.
 
 ```csharp
@@ -21,7 +21,7 @@ internal class CatCommandProcessor : Cat.Commands.Abstractions.ICatCommandProces
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatCommandProcessor
 
-Implements [ICatCommandProcessor](../Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')
+Implements [ICatCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')
 
 | Constructors | |
 | :--- | :--- |
@@ -39,4 +39,4 @@ Implements [ICatCommandProcessor](../Cat.Commands.Abstractions/ICatCommandProces
 
 | Explicit Interface Implementations | |
 | :--- | :--- |
-| [Cat\.Commands\.Abstractions\.ICatCommandProcessor\.Process\(ICatCommand\)](CatCommandProcessor.Cat.Commands.Abstractions.ICatCommandProcessor.Process.7XX41PCOJIPB2H5F7CISV1BMC.md 'Cat\.Commands\.CatCommandProcessor\.Cat\.Commands\.Abstractions\.ICatCommandProcessor\.Process\(Cat\.Commands\.Abstractions\.ICatCommand\)') | Runs a command and blocks until it finishes\. Prefer [ProcessAsync\(ICatCommand, CancellationToken\)](../Cat.Commands.Abstractions/ICatCommandProcessor.ProcessAsync.VVA0QGJV7BSKJ1729JAXLLQT8.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor\.ProcessAsync\(Cat\.Commands\.Abstractions\.ICatCommand,System\.Threading\.CancellationToken\)') when you can\. |
+| [Cat\.Commands\.Abstractions\.ICatCommandProcessor\.Process\(ICatCommand\)](CatCommandProcessor.Cat.Commands.Abstractions.ICatCommandProcessor.Process.7XX41PCOJIPB2H5F7CISV1BMC.md 'Cat\.Commands\.CatCommandProcessor\.Cat\.Commands\.Abstractions\.ICatCommandProcessor\.Process\(Cat\.Commands\.Abstractions\.ICatCommand\)') | Runs a command and blocks until it finishes\. Prefer [ProcessAsync\(ICatCommand, CancellationToken\)](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandProcessor.ProcessAsync.VVA0QGJV7BSKJ1729JAXLLQT8.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor\.ProcessAsync\(Cat\.Commands\.Abstractions\.ICatCommand,System\.Threading\.CancellationToken\)') when you can\. |

@@ -12,7 +12,7 @@
 
 ## CatStepProcessor Class
 
-Default [ICatStepProcessor](../Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')\.
+Default [ICatStepProcessor](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')\.
 For each step it gets the step body from the service provider, fills the inputs, runs the step and copies the outputs\.
 It stops after a step that returns BreakCascade, BreakFromCurrentFlowOnly or BreakFromLoop\.
 The result is the one of the last step that ran\. The errors of every step that ran are kept\.
@@ -23,7 +23,7 @@ public class CatStepProcessor : Cat.FluentWorkflows.Abstractions.ICatStepProcess
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatStepProcessor
 
-Implements [ICatStepProcessor](../Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')
+Implements [ICatStepProcessor](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')
 
 | Constructors | |
 | :--- | :--- |

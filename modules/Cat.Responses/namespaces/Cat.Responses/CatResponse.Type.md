@@ -12,13 +12,13 @@
 
 ## CatResponse\.Type Property
 
-The specific outcome of the operation, such as [Ok](../Cat.Responses.Abstractions/CatResponseType.Ok.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Ok') or [NotFound](../Cat.Responses.Abstractions/CatResponseType.NotFound.md 'Cat\.Responses\.Abstractions\.CatResponseType\.NotFound')\.
+The specific outcome of the operation, such as [Ok](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/CatResponseType.Ok.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Ok') or [NotFound](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/CatResponseType.NotFound.md 'Cat\.Responses\.Abstractions\.CatResponseType\.NotFound')\.
 
 ```csharp
 public Cat.Responses.Abstractions.CatResponseType Type { get; private set; }
 ```
 
-Implements [Type](../Cat.Responses.Abstractions/ICatResponse.Type.md 'Cat\.Responses\.Abstractions\.ICatResponse\.Type')
+Implements [Type](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.Type.md 'Cat\.Responses\.Abstractions\.ICatResponse\.Type')
 
 #### Property Value
-[CatResponseType](../Cat.Responses.Abstractions/CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType')
+[CatResponseType](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType')

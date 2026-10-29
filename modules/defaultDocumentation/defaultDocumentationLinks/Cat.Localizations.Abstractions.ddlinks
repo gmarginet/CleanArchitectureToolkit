@@ -1,4 +1,4 @@
-../Cat.Localizations.Abstractions/
+../../../Cat.Localizations/namespaces/Cat.Localizations.Abstractions/
 P:Cat.Localizations.Abstractions.ICatLocalizer.Item(System.String)|ICatLocalizer.Item.Q0AA7MM5YYX5RXC0Q87LKPW13.md|this[string]
 P:Cat.Localizations.Abstractions.ICatLocalizer.Item(System.String,System.Object[])|ICatLocalizer.Item.SP0BGHDYQU87JBN8QJGTH1HL2.md|this[string, object[]]
 N:Cat.Localizations.Abstractions|Cat.Localizations.Abstractions.md|Cat.Localizations.Abstractions

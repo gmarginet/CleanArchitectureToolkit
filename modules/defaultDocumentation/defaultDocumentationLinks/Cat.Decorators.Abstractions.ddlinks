@@ -1,4 +1,4 @@
-../Cat.Decorators.Abstractions/
+../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/
 M:Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService``1(System.IServiceProvider)|ICatDecoratorFactory.GetRequiredDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService_TService_(System.IServiceProvider)|GetRequiredDecoratedService<TService>(IServiceProvider)
 M:Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService(System.IServiceProvider,System.Type)|ICatDecoratorFactory.GetRequiredDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService(System.IServiceProvider,System.Type)|GetRequiredDecoratedService(IServiceProvider, Type)
 M:Cat.Decorators.Abstractions.ICatDecoratorFactory.GetDecoratedService``1(System.IServiceProvider)|ICatDecoratorFactory.GetDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetDecoratedService_TService_(System.IServiceProvider)|GetDecoratedService<TService>(IServiceProvider)

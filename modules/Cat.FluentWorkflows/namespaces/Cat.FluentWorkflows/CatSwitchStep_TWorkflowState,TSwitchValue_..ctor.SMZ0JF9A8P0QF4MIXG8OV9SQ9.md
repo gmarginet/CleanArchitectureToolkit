@@ -21,7 +21,7 @@ public CatSwitchStep(Cat.FluentWorkflows.Abstractions.ICatStepProcessor catStepP
 
 <a name='Cat.FluentWorkflows.Steps.CatSwitchStep_TWorkflowState,TSwitchValue_.CatSwitchStep(Cat.FluentWorkflows.Abstractions.ICatStepProcessor,Microsoft.Extensions.Logging.ILogger_Cat.FluentWorkflows.Steps.CatSwitchStep_TWorkflowState,TSwitchValue__).catStepProcessor'></a>
 
-`catStepProcessor` [ICatStepProcessor](../Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')
+`catStepProcessor` [ICatStepProcessor](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')
 
 Runs the steps of a case\.
 

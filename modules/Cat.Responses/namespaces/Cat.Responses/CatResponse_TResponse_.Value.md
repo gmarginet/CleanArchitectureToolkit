@@ -12,13 +12,13 @@
 
 ## CatResponse\<TResponse\>\.Value Property
 
-The value the operation produced\. Only meaningful when [IsSucceeded](../Cat.Responses.Abstractions/ICatResponse.IsSucceeded.md 'Cat\.Responses\.Abstractions\.ICatResponse\.IsSucceeded') is `true`\.
+The value the operation produced\. Only meaningful when [IsSucceeded](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.IsSucceeded.md 'Cat\.Responses\.Abstractions\.ICatResponse\.IsSucceeded') is `true`\.
 
 ```csharp
 public TResponse Value { get; }
 ```
 
-Implements [Value](../Cat.Responses.Abstractions/ICatResponse_TResponse_.Value.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1\.Value')
+Implements [Value](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.Value.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1\.Value')
 
 #### Property Value
 [TResponse](CatResponse_TResponse_.md#Cat.Responses.CatResponse_TResponse_.TResponse 'Cat\.Responses\.CatResponse\<TResponse\>\.TResponse')

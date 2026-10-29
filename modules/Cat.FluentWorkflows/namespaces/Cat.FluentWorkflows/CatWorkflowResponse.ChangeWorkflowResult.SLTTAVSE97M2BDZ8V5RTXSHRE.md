@@ -21,12 +21,12 @@ public Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse ChangeWorkflowResul
 
 <a name='Cat.FluentWorkflows.CatWorkflowResponse.ChangeWorkflowResult(Cat.FluentWorkflows.Abstractions.CatStepExecutionResult).workflowResult'></a>
 
-`workflowResult` [CatStepExecutionResult](../Cat.FluentWorkflows.Abstractions/CatStepExecutionResult.md 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult')
+`workflowResult` [CatStepExecutionResult](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/CatStepExecutionResult.md 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult')
 
 The new result\.
 
-Implements [ChangeWorkflowResult\(CatStepExecutionResult\)](../Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.ChangeWorkflowResult.WRWZKQICCH7W93PNSHP2XK1SE.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse\.ChangeWorkflowResult\(Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult\)')
+Implements [ChangeWorkflowResult\(CatStepExecutionResult\)](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.ChangeWorkflowResult.WRWZKQICCH7W93PNSHP2XK1SE.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse\.ChangeWorkflowResult\(Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult\)')
 
 #### Returns
-[ICatWorkflowResponse](../Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')  
+[ICatWorkflowResponse](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')  
 The same response\.

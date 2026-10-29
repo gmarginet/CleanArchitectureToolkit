@@ -12,7 +12,7 @@
 
 ## CatValidatorModelRuleBuilder\<TModel\> Class
 
-Default [ICatValidatorModelRuleBuilder&lt;TModel&gt;](../Cat.Validators.Abstractions/ICatValidatorModelRuleBuilder_TModel_.md 'Cat\.Validators\.Abstractions\.ICatValidatorModelRuleBuilder\`1')\.
+Default [ICatValidatorModelRuleBuilder&lt;TModel&gt;](../../../Cat.Validators/namespaces/Cat.Validators.Abstractions/ICatValidatorModelRuleBuilder_TModel_.md 'Cat\.Validators\.Abstractions\.ICatValidatorModelRuleBuilder\`1')\.
 
 ```csharp
 public class CatValidatorModelRuleBuilder<TModel> : Cat.Validators.Abstractions.ICatValidatorModelRuleBuilder<TModel>
@@ -28,11 +28,11 @@ The type being validated\.
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatValidatorModelRuleBuilder\<TModel\>
 
-Implements [Cat\.Validators\.Abstractions\.ICatValidatorModelRuleBuilder&lt;](../Cat.Validators.Abstractions/ICatValidatorModelRuleBuilder_TModel_.md 'Cat\.Validators\.Abstractions\.ICatValidatorModelRuleBuilder\`1')[TModel](CatValidatorModelRuleBuilder_TModel_.md#Cat.Validators.CatValidatorModelRuleBuilder_TModel_.TModel 'Cat\.Validators\.CatValidatorModelRuleBuilder\<TModel\>\.TModel')[&gt;](../Cat.Validators.Abstractions/ICatValidatorModelRuleBuilder_TModel_.md 'Cat\.Validators\.Abstractions\.ICatValidatorModelRuleBuilder\`1')
+Implements [Cat\.Validators\.Abstractions\.ICatValidatorModelRuleBuilder&lt;](../../../Cat.Validators/namespaces/Cat.Validators.Abstractions/ICatValidatorModelRuleBuilder_TModel_.md 'Cat\.Validators\.Abstractions\.ICatValidatorModelRuleBuilder\`1')[TModel](CatValidatorModelRuleBuilder_TModel_.md#Cat.Validators.CatValidatorModelRuleBuilder_TModel_.TModel 'Cat\.Validators\.CatValidatorModelRuleBuilder\<TModel\>\.TModel')[&gt;](../../../Cat.Validators/namespaces/Cat.Validators.Abstractions/ICatValidatorModelRuleBuilder_TModel_.md 'Cat\.Validators\.Abstractions\.ICatValidatorModelRuleBuilder\`1')
 
 | Constructors | |
 | :--- | :--- |
-| [CatValidatorModelRuleBuilder\(ConcurrentQueue&lt;ICatValidatorModelRule&lt;TModel&gt;&gt;\)](CatValidatorModelRuleBuilder_TModel_..ctor.3674QXBRHOAWIEZDXKCT0JCQ.md 'Cat\.Validators\.CatValidatorModelRuleBuilder\<TModel\>\.CatValidatorModelRuleBuilder\(System\.Collections\.Concurrent\.ConcurrentQueue\<Cat\.Validators\.Abstractions\.ICatValidatorModelRule\<TModel\>\>\)') | Default [ICatValidatorModelRuleBuilder&lt;TModel&gt;](../Cat.Validators.Abstractions/ICatValidatorModelRuleBuilder_TModel_.md 'Cat\.Validators\.Abstractions\.ICatValidatorModelRuleBuilder\`1')\. |
+| [CatValidatorModelRuleBuilder\(ConcurrentQueue&lt;ICatValidatorModelRule&lt;TModel&gt;&gt;\)](CatValidatorModelRuleBuilder_TModel_..ctor.3674QXBRHOAWIEZDXKCT0JCQ.md 'Cat\.Validators\.CatValidatorModelRuleBuilder\<TModel\>\.CatValidatorModelRuleBuilder\(System\.Collections\.Concurrent\.ConcurrentQueue\<Cat\.Validators\.Abstractions\.ICatValidatorModelRule\<TModel\>\>\)') | Default [ICatValidatorModelRuleBuilder&lt;TModel&gt;](../../../Cat.Validators/namespaces/Cat.Validators.Abstractions/ICatValidatorModelRuleBuilder_TModel_.md 'Cat\.Validators\.Abstractions\.ICatValidatorModelRuleBuilder\`1')\. |
 
 | Methods | |
 | :--- | :--- |

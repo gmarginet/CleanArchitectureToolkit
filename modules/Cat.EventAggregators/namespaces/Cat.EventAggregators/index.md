@@ -14,5 +14,5 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.EventAggregators](Cat.EventAggregators.md 'Cat\.EventAggregators') | Provides the default in\-memory implementation of [ICatEventAggregator](../Cat.EventAggregators.Abstractions/ICatEventAggregator.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator'), along with the extension method to register it in a dependency injection container\. |
+| [Cat\.EventAggregators](Cat.EventAggregators.md 'Cat\.EventAggregators') | Provides the default in\-memory implementation of [ICatEventAggregator](../../../Cat.EventAggregators/namespaces/Cat.EventAggregators.Abstractions/ICatEventAggregator.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator'), along with the extension method to register it in a dependency injection container\. |
 | [Cat\.EventAggregators\.Extensions](Cat.EventAggregators.Extensions.md 'Cat\.EventAggregators\.Extensions') | |

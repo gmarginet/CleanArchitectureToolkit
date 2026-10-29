@@ -13,7 +13,7 @@
 ## CatValidatorProcessor\.Validate\<T\>\(T, bool\) Method
 
 Validates a model and blocks until it finishes\.
-Prefer [ValidateAsync&lt;TModel&gt;\(TModel, bool, CancellationToken\)](../Cat.Validators.Abstractions/ICatValidatorProcessor.ValidateAsync.YX1OQX8RMH8LA0B43AUVR45T5.md 'Cat\.Validators\.Abstractions\.ICatValidatorProcessor\.ValidateAsync\`\`1\(\`\`0,System\.Boolean,System\.Threading\.CancellationToken\)') when you can\.
+Prefer [ValidateAsync&lt;TModel&gt;\(TModel, bool, CancellationToken\)](../../../Cat.Validators/namespaces/Cat.Validators.Abstractions/ICatValidatorProcessor.ValidateAsync.YX1OQX8RMH8LA0B43AUVR45T5.md 'Cat\.Validators\.Abstractions\.ICatValidatorProcessor\.ValidateAsync\`\`1\(\`\`0,System\.Boolean,System\.Threading\.CancellationToken\)') when you can\.
 
 ```csharp
 public Cat.Responses.Abstractions.ICatResponse Validate<T>(T model, bool validatorRequired=true)
@@ -38,8 +38,8 @@ The model to validate\.
 
 When `true`, a missing validator throws\. When `false`, the model counts as valid\.
 
-Implements [Validate&lt;TModel&gt;\(TModel, bool\)](../Cat.Validators.Abstractions/ICatValidatorProcessor.Validate.52NC1J5TS1ISOCK1DV4W8K0P2.md 'Cat\.Validators\.Abstractions\.ICatValidatorProcessor\.Validate\`\`1\(\`\`0,System\.Boolean\)')
+Implements [Validate&lt;TModel&gt;\(TModel, bool\)](../../../Cat.Validators/namespaces/Cat.Validators.Abstractions/ICatValidatorProcessor.Validate.52NC1J5TS1ISOCK1DV4W8K0P2.md 'Cat\.Validators\.Abstractions\.ICatValidatorProcessor\.Validate\`\`1\(\`\`0,System\.Boolean\)')
 
 #### Returns
-[ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')  
+[ICatResponse](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')  
 An Ok response when the model is valid, or a BadRequest response with one error per failure\.

@@ -12,7 +12,7 @@
 
 ## ServiceCollectionExtensions\.AddCatNoLocalizationLocalizer\(this IServiceCollection\) Method
 
-Registers [ICatLocalizer](../Cat.Localizations.Abstractions/ICatLocalizer.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer') as a singleton, backed by the no\-op implementation that returns keys as\-is\.
+Registers [ICatLocalizer](../../../Cat.Localizations/namespaces/Cat.Localizations.Abstractions/ICatLocalizer.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer') as a singleton, backed by the no\-op implementation that returns keys as\-is\.
 
 ```csharp
 public static void AddCatNoLocalizationLocalizer(this Microsoft.Extensions.DependencyInjection.IServiceCollection services);

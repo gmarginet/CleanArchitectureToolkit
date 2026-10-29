@@ -27,6 +27,6 @@ Used to open a scope for each query\.
 
 <a name='Cat.Queries.CatQueryProcessor.CatQueryProcessor(System.IServiceProvider,Cat.Decorators.Abstractions.ICatDecoratorFactory).decoratorFactory'></a>
 
-`decoratorFactory` [ICatDecoratorFactory](../Cat.Decorators.Abstractions/ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')
+`decoratorFactory` [ICatDecoratorFactory](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')
 
 Builds the handler together with its registered decorators\.

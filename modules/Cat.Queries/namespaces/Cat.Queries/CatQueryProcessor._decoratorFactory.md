@@ -17,4 +17,4 @@ private readonly ICatDecoratorFactory _decoratorFactory;
 ```
 
 #### Field Value
-[ICatDecoratorFactory](../Cat.Decorators.Abstractions/ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')
+[ICatDecoratorFactory](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')

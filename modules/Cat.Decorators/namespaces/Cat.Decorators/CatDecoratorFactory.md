@@ -12,7 +12,7 @@
 
 ## CatDecoratorFactory Class
 
-Default [ICatDecoratorFactory](../Cat.Decorators.Abstractions/ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')\.
+Default [ICatDecoratorFactory](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')\.
 Gets the service from the service provider, then wraps it in each registered decorator in registration order\.
 
 ```csharp
@@ -21,7 +21,7 @@ public class CatDecoratorFactory : Cat.Decorators.Abstractions.ICatDecoratorFact
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatDecoratorFactory
 
-Implements [ICatDecoratorFactory](../Cat.Decorators.Abstractions/ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')
+Implements [ICatDecoratorFactory](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')
 
 | Fields | |
 | :--- | :--- |

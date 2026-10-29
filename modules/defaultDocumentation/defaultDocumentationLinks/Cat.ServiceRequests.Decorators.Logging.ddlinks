@@ -1,4 +1,4 @@
-../Cat.ServiceRequests.Decorators.Logging/
+../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Decorators.Logging/
 N:Cat.ServiceRequests.Decorators.Logging|Cat.ServiceRequests.Decorators.Logging.md|Cat.ServiceRequests.Decorators.Logging
 T:Cat.ServiceRequests.Decorators.Logging.LoggingDecorator|LoggingDecorator.md|LoggingDecorator
 M:Cat.ServiceRequests.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatServiceRequestsModuleLoggingDecorator(System.IServiceProvider)|ServiceCollectionExtensions.AddCatServiceRequestsModuleLoggingDecorator.ASTEGMP817ISXMNRQ0RK8E3GD.md|AddCatServiceRequestsModuleLoggingDecorator(this IServiceProvider)

@@ -12,13 +12,13 @@
 
 ## CatError\.Message Property
 
-A human\-readable message describing the error\. Can contain placeholders filled in by [Arguments](../Cat.Responses.Abstractions/ICatError.Arguments.md 'Cat\.Responses\.Abstractions\.ICatError\.Arguments')\.
+A human\-readable message describing the error\. Can contain placeholders filled in by [Arguments](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatError.Arguments.md 'Cat\.Responses\.Abstractions\.ICatError\.Arguments')\.
 
 ```csharp
 public string Message { get; private set; }
 ```
 
-Implements [Message](../Cat.Responses.Abstractions/ICatError.Message.md 'Cat\.Responses\.Abstractions\.ICatError\.Message')
+Implements [Message](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatError.Message.md 'Cat\.Responses\.Abstractions\.ICatError\.Message')
 
 #### Property Value
 [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')

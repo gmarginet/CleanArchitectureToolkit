@@ -18,7 +18,7 @@ What the step processor does next\.
 public Cat.FluentWorkflows.Abstractions.CatStepExecutionResult WorkflowResult { get; private set; }
 ```
 
-Implements [WorkflowResult](../Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.WorkflowResult.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse\.WorkflowResult')
+Implements [WorkflowResult](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.WorkflowResult.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse\.WorkflowResult')
 
 #### Property Value
-[CatStepExecutionResult](../Cat.FluentWorkflows.Abstractions/CatStepExecutionResult.md 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult')
+[CatStepExecutionResult](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/CatStepExecutionResult.md 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult')

@@ -12,7 +12,7 @@
 
 ## ServiceCollectionExtensions\.AddCatCompiledMemberExpressionCache\(this IServiceCollection\) Method
 
-Registers [ICatCompiledMemberExpressionCache&lt;T&gt;](../Cat.Expressions.Abstractions/ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1') as a singleton, backed by the caching implementation\.
+Registers [ICatCompiledMemberExpressionCache&lt;T&gt;](../../../Cat.Expressions/namespaces/Cat.Expressions.Abstractions/ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1') as a singleton, backed by the caching implementation\.
 
 ```csharp
 public static void AddCatCompiledMemberExpressionCache(this Microsoft.Extensions.DependencyInjection.IServiceCollection services);

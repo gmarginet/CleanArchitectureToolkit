@@ -12,7 +12,7 @@
 
 ## Subscription\(object\) Constructor
 
-Inspects the subscriber's implemented interfaces and caches its [ICatHandleEvent&lt;TEvent&gt;](../Cat.EventAggregators.Abstractions/ICatHandleEvent_TEvent_.md 'Cat\.EventAggregators\.Abstractions\.ICatHandleEvent\`1') handler methods, keyed by event type\.
+Inspects the subscriber's implemented interfaces and caches its [ICatHandleEvent&lt;TEvent&gt;](../../../Cat.EventAggregators/namespaces/Cat.EventAggregators.Abstractions/ICatHandleEvent_TEvent_.md 'Cat\.EventAggregators\.Abstractions\.ICatHandleEvent\`1') handler methods, keyed by event type\.
 
 ```csharp
 public Subscription(object subscriber);

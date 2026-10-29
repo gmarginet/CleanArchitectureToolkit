@@ -27,7 +27,7 @@ public class CatProcessCommandStep<TCommand> : Cat.FluentWorkflows.CatStepBodyAs
 
 The command to process\.
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [CatStepBodyAsync](../Cat.FluentWorkflows/CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') &#129106; CatProcessCommandStep\<TCommand\>
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [CatStepBodyAsync](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows/CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') &#129106; CatProcessCommandStep\<TCommand\>
 
 | Constructors | |
 | :--- | :--- |

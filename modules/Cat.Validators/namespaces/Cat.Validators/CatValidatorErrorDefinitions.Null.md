@@ -19,4 +19,4 @@ public static readonly CatErrorDefinition Null;
 ```
 
 #### Field Value
-[CatErrorDefinition](../Cat.Responses/CatErrorDefinition.md 'Cat\.Responses\.CatErrorDefinition')
+[CatErrorDefinition](../../../Cat.Responses/namespaces/Cat.Responses/CatErrorDefinition.md 'Cat\.Responses\.CatErrorDefinition')

@@ -18,7 +18,7 @@
 public bool IsFailed { get; }
 ```
 
-Implements [IsFailed](../Cat.Responses.Abstractions/ICatResponse.IsFailed.md 'Cat\.Responses\.Abstractions\.ICatResponse\.IsFailed')
+Implements [IsFailed](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.IsFailed.md 'Cat\.Responses\.Abstractions\.ICatResponse\.IsFailed')
 
 #### Property Value
 [System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')

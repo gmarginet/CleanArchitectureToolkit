@@ -14,27 +14,27 @@
 
 | Overloads | |
 | :--- | :--- |
-| [Created\(\)](CatResponse.Created.md#Cat.Responses.CatResponse.Created() 'Cat\.Responses\.CatResponse\.Created\(\)') | Creates a succeeded response with the [Created](../Cat.Responses.Abstractions/CatResponseType.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Created') outcome and no value\. |
-| [Created&lt;TResponse&gt;\(TResponse\)](CatResponse.Created.md#Cat.Responses.CatResponse.Created_TResponse_(TResponse) 'Cat\.Responses\.CatResponse\.Created\<TResponse\>\(TResponse\)') | Creates a succeeded response with the [Created](../Cat.Responses.Abstractions/CatResponseType.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Created') outcome, carrying the given value\. |
+| [Created\(\)](CatResponse.Created.md#Cat.Responses.CatResponse.Created() 'Cat\.Responses\.CatResponse\.Created\(\)') | Creates a succeeded response with the [Created](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/CatResponseType.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Created') outcome and no value\. |
+| [Created&lt;TResponse&gt;\(TResponse\)](CatResponse.Created.md#Cat.Responses.CatResponse.Created_TResponse_(TResponse) 'Cat\.Responses\.CatResponse\.Created\<TResponse\>\(TResponse\)') | Creates a succeeded response with the [Created](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/CatResponseType.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Created') outcome, carrying the given value\. |
 
 <a name='Cat.Responses.CatResponse.Created()'></a>
 
 ## CatResponse\.Created\(\) Method
 
-Creates a succeeded response with the [Created](../Cat.Responses.Abstractions/CatResponseType.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Created') outcome and no value\.
+Creates a succeeded response with the [Created](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/CatResponseType.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Created') outcome and no value\.
 
 ```csharp
 public static Cat.Responses.Abstractions.ICatResponse Created();
 ```
 
 #### Returns
-[ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
+[ICatResponse](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
 
 <a name='Cat.Responses.CatResponse.Created_TResponse_(TResponse)'></a>
 
 ## CatResponse\.Created\<TResponse\>\(TResponse\) Method
 
-Creates a succeeded response with the [Created](../Cat.Responses.Abstractions/CatResponseType.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Created') outcome, carrying the given value\.
+Creates a succeeded response with the [Created](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/CatResponseType.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Created') outcome, carrying the given value\.
 
 ```csharp
 public static Cat.Responses.Abstractions.ICatResponse<TResponse> Created<TResponse>(TResponse value);
@@ -55,4 +55,4 @@ The type of value the response carries\.
 The value the response carries\.
 
 #### Returns
-[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.md#Cat.Responses.CatResponse.Created_TResponse_(TResponse).TResponse 'Cat\.Responses\.CatResponse\.Created\<TResponse\>\(TResponse\)\.TResponse')[&gt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')
+[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.md#Cat.Responses.CatResponse.Created_TResponse_(TResponse).TResponse 'Cat\.Responses\.CatResponse\.Created\<TResponse\>\(TResponse\)\.TResponse')[&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')

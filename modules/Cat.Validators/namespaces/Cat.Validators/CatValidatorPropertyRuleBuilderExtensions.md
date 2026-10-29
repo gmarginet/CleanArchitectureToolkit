@@ -12,7 +12,7 @@
 
 ## CatValidatorPropertyRuleBuilderExtensions Class
 
-The built\-in property rules\. Use them inside [AddPropertyRules&lt;TProperty&gt;\(Expression&lt;Func&lt;TModel,TProperty&gt;&gt;, Action&lt;ICatValidatorPropertyRuleBuilder&lt;TModel,TProperty&gt;&gt;\)](../Cat.Validators.Abstractions/ICatValidatorBuilder_TModel_.AddPropertyRules.4SGJLPHSDC95BLHV1D531FAK5.md 'Cat\.Validators\.Abstractions\.ICatValidatorBuilder\`1\.AddPropertyRules\`\`1\(System\.Linq\.Expressions\.Expression\{System\.Func\{\`0,\`\`0\}\},System\.Action\{Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\{\`0,\`\`0\}\}\)')\.
+The built\-in property rules\. Use them inside [AddPropertyRules&lt;TProperty&gt;\(Expression&lt;Func&lt;TModel,TProperty&gt;&gt;, Action&lt;ICatValidatorPropertyRuleBuilder&lt;TModel,TProperty&gt;&gt;\)](../../../Cat.Validators/namespaces/Cat.Validators.Abstractions/ICatValidatorBuilder_TModel_.AddPropertyRules.4SGJLPHSDC95BLHV1D531FAK5.md 'Cat\.Validators\.Abstractions\.ICatValidatorBuilder\`1\.AddPropertyRules\`\`1\(System\.Linq\.Expressions\.Expression\{System\.Func\{\`0,\`\`0\}\},System\.Action\{Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\{\`0,\`\`0\}\}\)')\.
 Each rule returns an options builder, so you can chain `When`, `WithFieldName`, `WithMessage` and `WithCode`\.
 
 ```csharp

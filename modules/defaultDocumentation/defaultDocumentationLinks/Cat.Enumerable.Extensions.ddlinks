@@ -1,4 +1,4 @@
-../Cat.Enumerable.Extensions/
+../../../Cat.Extensions/namespaces/Cat.Enumerable.Extensions/
 M:Cat.Enumerable.Extensions.EnumerableExtensions.IsEmpty(System.Collections.IEnumerable)|EnumerableExtensions.IsEmpty.WHJ31XTEFKNNQET9CII5587MD.md|IsEmpty(this IEnumerable)
 N:Cat.Enumerable.Extensions|Cat.Enumerable.Extensions.md|Cat.Enumerable.Extensions
 T:Cat.Enumerable.Extensions.EnumerableExtensions|EnumerableExtensions.md|EnumerableExtensions

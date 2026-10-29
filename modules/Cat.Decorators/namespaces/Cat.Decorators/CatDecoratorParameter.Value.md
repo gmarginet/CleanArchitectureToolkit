@@ -18,7 +18,7 @@ The value to pass\. Its type must fit the parameter type\.
 public object Value { get; }
 ```
 
-Implements [Value](../Cat.Decorators.Abstractions/ICatDecoratorParameter.Value.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorParameter\.Value')
+Implements [Value](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorParameter.Value.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorParameter\.Value')
 
 #### Property Value
 [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object')

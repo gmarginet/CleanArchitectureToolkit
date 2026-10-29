@@ -30,9 +30,9 @@ Implements [System\.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api
 | Properties | |
 | :--- | :--- |
 | [Code](CatErrorDefinition.Code.md 'Cat\.Responses\.CatErrorDefinition\.Code') | A stable code identifying the kind of error, independent of its message text\. |
-| [Message](CatErrorDefinition.Message.md 'Cat\.Responses\.CatErrorDefinition\.Message') | A human\-readable message describing the error\. Can contain placeholders filled in by [Arguments](../Cat.Responses.Abstractions/ICatError.Arguments.md 'Cat\.Responses\.Abstractions\.ICatError\.Arguments')\. |
+| [Message](CatErrorDefinition.Message.md 'Cat\.Responses\.CatErrorDefinition\.Message') | A human\-readable message describing the error\. Can contain placeholders filled in by [Arguments](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatError.Arguments.md 'Cat\.Responses\.Abstractions\.ICatError\.Arguments')\. |
 
 | Methods | |
 | :--- | :--- |
 | [Create\(string, string\)](CatErrorDefinition.Create.Y0S1RWZVWY7EIAVA1URQ5FOD8.md 'Cat\.Responses\.CatErrorDefinition\.Create\(string, string\)') | Creates a new error definition\. |
-| [CreateCatError\(object\[\]\)](CatErrorDefinition.CreateCatError.5WX0CKR3WJOIDHOM83UIBF54.md 'Cat\.Responses\.CatErrorDefinition\.CreateCatError\(object\[\]\)') | Creates an [ICatError](../Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError') from this definition, with the given values filled into the message's placeholders\. |
+| [CreateCatError\(object\[\]\)](CatErrorDefinition.CreateCatError.5WX0CKR3WJOIDHOM83UIBF54.md 'Cat\.Responses\.CatErrorDefinition\.CreateCatError\(object\[\]\)') | Creates an [ICatError](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError') from this definition, with the given values filled into the message's placeholders\. |

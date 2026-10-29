@@ -14,5 +14,5 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Localizations](Cat.Localizations.md 'Cat\.Localizations') | Provides the default no\-op implementation of [ICatLocalizer](../Cat.Localizations.Abstractions/ICatLocalizer.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer'), along with the extension method to register it in a dependency injection container\. |
+| [Cat\.Localizations](Cat.Localizations.md 'Cat\.Localizations') | Provides the default no\-op implementation of [ICatLocalizer](../../../Cat.Localizations/namespaces/Cat.Localizations.Abstractions/ICatLocalizer.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer'), along with the extension method to register it in a dependency injection container\. |
 | [Cat\.Localizations\.Extensions](Cat.Localizations.Extensions.md 'Cat\.Localizations\.Extensions') | |

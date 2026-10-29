@@ -31,7 +31,7 @@ The event instance to publish\.
 
 A token to cancel the publish operation\.
 
-Implements [PublishAsync\(object, CancellationToken\)](../Cat.EventAggregators.Abstractions/ICatEventAggregator.PublishAsync.255NNT0CTQLR4IZT88LNX6BZ7.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator\.PublishAsync\(System\.Object,System\.Threading\.CancellationToken\)')
+Implements [PublishAsync\(object, CancellationToken\)](../../../Cat.EventAggregators/namespaces/Cat.EventAggregators.Abstractions/ICatEventAggregator.PublishAsync.255NNT0CTQLR4IZT88LNX6BZ7.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator\.PublishAsync\(System\.Object,System\.Threading\.CancellationToken\)')
 
 #### Returns
 [System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task')

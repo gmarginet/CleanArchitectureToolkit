@@ -14,5 +14,5 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Expressions](Cat.Expressions.md 'Cat\.Expressions') | Provides caching and non\-caching implementations of [ICatCompiledMemberExpressionCache&lt;T&gt;](../Cat.Expressions.Abstractions/ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1'), along with the extension methods to register them in a dependency injection container\. |
+| [Cat\.Expressions](Cat.Expressions.md 'Cat\.Expressions') | Provides caching and non\-caching implementations of [ICatCompiledMemberExpressionCache&lt;T&gt;](../../../Cat.Expressions/namespaces/Cat.Expressions.Abstractions/ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1'), along with the extension methods to register them in a dependency injection container\. |
 | [Cat\.Expressions\.Extensions](Cat.Expressions.Extensions.md 'Cat\.Expressions\.Extensions') | Provides extension methods for inspecting [System\.Linq\.Expressions\.Expression](https://learn.microsoft.com/en-us/dotnet/api/system.linq.expressions.expression 'System\.Linq\.Expressions\.Expression') trees, such as resolving the member a lambda expression points to\. |

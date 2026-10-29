@@ -1,4 +1,4 @@
-../Cat.ServiceRequests.Decorators.ActivitySource/
+../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Decorators.ActivitySource/
 N:Cat.ServiceRequests.Decorators.ActivitySource|Cat.ServiceRequests.Decorators.ActivitySource.md|Cat.ServiceRequests.Decorators.ActivitySource
 T:Cat.ServiceRequests.Decorators.ActivitySource.ActivitySourceDecorator|ActivitySourceDecorator.md|ActivitySourceDecorator
 M:Cat.ServiceRequests.Decorators.ActivitySource.Extensions.ServiceCollectionExtensions.AddCatServiceRequestsModuleActivitySourceDecorator(System.IServiceProvider)|ServiceCollectionExtensions.AddCatServiceRequestsModuleActivitySourceDecorator.7ZCAOEB1KRNMK86JYYB0BVIA9.md|AddCatServiceRequestsModuleActivitySourceDecorator(this IServiceProvider)
