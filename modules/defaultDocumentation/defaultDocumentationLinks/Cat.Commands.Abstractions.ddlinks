@@ -1,0 +1,8 @@
+..\Cat.Commands.Abstractions\
+N:Cat.Commands.Abstractions|Cat.Commands.Abstractions.md|Cat.Commands.Abstractions
+T:Cat.Commands.Abstractions.ICatCommand|ICatCommand.md|ICatCommand
+M:Cat.Commands.Abstractions.ICatCommandHandler`1.HandleAsync(`0,System.Threading.CancellationToken)|ICatCommandHandler_TCommand_.HandleAsync.DOGO4I1C9KLZNF43493MH80JB.md|HandleAsync(TCommand, CancellationToken)
+T:Cat.Commands.Abstractions.ICatCommandHandler`1|ICatCommandHandler_TCommand_.md|ICatCommandHandler<TCommand>
+M:Cat.Commands.Abstractions.ICatCommandProcessor.ProcessAsync(Cat.Commands.Abstractions.ICatCommand,System.Threading.CancellationToken)|ICatCommandProcessor.ProcessAsync.VVA0QGJV7BSKJ1729JAXLLQT8.md|ProcessAsync(ICatCommand, CancellationToken)
+M:Cat.Commands.Abstractions.ICatCommandProcessor.Process(Cat.Commands.Abstractions.ICatCommand)|ICatCommandProcessor.Process.9MU4QN6WCH1S6MMMR76OOR6KE.md|Process(ICatCommand)
+T:Cat.Commands.Abstractions.ICatCommandProcessor|ICatCommandProcessor.md|ICatCommandProcessor

@@ -1,0 +1,9 @@
+..\Cat.EventAggregators.Abstractions\
+M:Cat.EventAggregators.Abstractions.ICatEventAggregator.HasSubscribersForEvent(System.Type)|ICatEventAggregator.HasSubscribersForEvent.N681I1FETEOLJC18VX34L5GE.md|HasSubscribersForEvent(Type)
+M:Cat.EventAggregators.Abstractions.ICatEventAggregator.Subscribe(System.Object)|ICatEventAggregator.Subscribe.UAP61SE4Y7K8NH7WZG3YYJWP7.md|Subscribe(object)
+M:Cat.EventAggregators.Abstractions.ICatEventAggregator.Unsubscribe(System.Object)|ICatEventAggregator.Unsubscribe.QFMFC33IRLO9WQRQ5Z7JO71H1.md|Unsubscribe(object)
+M:Cat.EventAggregators.Abstractions.ICatEventAggregator.PublishAsync(System.Object,System.Threading.CancellationToken)|ICatEventAggregator.PublishAsync.255NNT0CTQLR4IZT88LNX6BZ7.md|PublishAsync(object, CancellationToken)
+N:Cat.EventAggregators.Abstractions|Cat.EventAggregators.Abstractions.md|Cat.EventAggregators.Abstractions
+T:Cat.EventAggregators.Abstractions.ICatEventAggregator|ICatEventAggregator.md|ICatEventAggregator
+M:Cat.EventAggregators.Abstractions.ICatHandleEvent`1.HandleEventAsync(`0,System.Threading.CancellationToken)|ICatHandleEvent_TEvent_.HandleEventAsync.NMZ3DXDP6PB8OWDL74UKQ2F8A.md|HandleEventAsync(TEvent, CancellationToken)
+T:Cat.EventAggregators.Abstractions.ICatHandleEvent`1|ICatHandleEvent_TEvent_.md|ICatHandleEvent<TEvent>

@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="NUnit"/>
+        <PackageReference Include="NUnit.Analyzers"/>
+        <PackageReference Include="NUnit3TestAdapter"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="NUnit.Framework"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\modules\Cat.Minimal.Api\Cat.Minimal.Api\Cat.Minimal.Api.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Abstractions\Cat.ServiceRequests.Abstractions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests\Cat.ServiceRequests.csproj" />
+      <ProjectReference Include="..\Cat.NUnit\Cat.NUnit.csproj" />
+    </ItemGroup>
+
+</Project>

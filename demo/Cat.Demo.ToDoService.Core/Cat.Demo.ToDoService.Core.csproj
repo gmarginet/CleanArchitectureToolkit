@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\modules\Cat.Commands\Cat.Commands.Abstractions\Cat.Commands.Abstractions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Queries\Cat.Queries.Abstractions\Cat.Queries.Abstractions.csproj" />
+      <ProjectReference Include="..\Cat.Demo.TodoService.Events\Cat.Demo.TodoService.Events.csproj" />
+      <ProjectReference Include="..\Cat.Demo.TodoService.Models\Cat.Demo.TodoService.Models.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Riok.Mapperly" />
+    </ItemGroup>
+
+</Project>

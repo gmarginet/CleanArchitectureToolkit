@@ -1,0 +1,8 @@
+..\Cat.Localizations\
+P:Cat.Localizations.NoLocalizationCatLocalizer.Item(System.String)|NoLocalizationCatLocalizer.Item.ZCPDRAO0ITIIKJTVX4KRYDR6B.md|this[string]
+P:Cat.Localizations.NoLocalizationCatLocalizer.Item(System.String,System.Object[])|NoLocalizationCatLocalizer.Item.IHK969183C3VM6YLYNFZK3OF9.md|this[string, object[]]
+N:Cat.Localizations|Cat.Localizations.md|Cat.Localizations
+T:Cat.Localizations.NoLocalizationCatLocalizer|NoLocalizationCatLocalizer.md|NoLocalizationCatLocalizer
+M:Cat.Localizations.Extensions.ServiceCollectionExtensions.AddCatNoLocalizationLocalizer(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatNoLocalizationLocalizer.G27C8AMJF01RXRO1MRIJ4I0VD.md|AddCatNoLocalizationLocalizer(this IServiceCollection)
+N:Cat.Localizations.Extensions|Cat.Localizations.Extensions.md|Cat.Localizations.Extensions
+T:Cat.Localizations.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

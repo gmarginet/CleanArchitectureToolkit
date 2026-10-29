@@ -1,0 +1,115 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/.solution items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/demo/">
+    <File Path="demo/Directory.Build.props" />
+  </Folder>
+  <Folder Name="/demo/Todo/" />
+  <Folder Name="/demo/Todo/Service/">
+    <Project Path="demo/Cat.Demo.TodoService.Api/Cat.Demo.TodoService.Api.csproj" />
+    <Project Path="demo/Cat.Demo.ToDoService.Core/Cat.Demo.ToDoService.Core.csproj" />
+    <Project Path="demo/Cat.Demo.TodoService.Events/Cat.Demo.TodoService.Events.csproj" />
+    <Project Path="demo/Cat.Demo.TodoService.Infrastructure/Cat.Demo.TodoService.Infrastructure.csproj" />
+    <Project Path="demo/Cat.Demo.TodoService.Models/Cat.Demo.TodoService.Models.csproj" />
+  </Folder>
+  <Folder Name="/modules/" />
+  <Folder Name="/modules/Cat.Commands/">
+    <File Path="modules/Cat.Commands/README.md" />
+    <Project Path="modules/Cat.Commands/Cat.Commands.Abstractions/Cat.Commands.Abstractions.csproj" />
+    <Project Path="modules/Cat.Commands/Cat.Commands.Decorators.Logging/Cat.Commands.Decorators.Logging.csproj" />
+    <Project Path="modules/Cat.Commands/Cat.Commands/Cat.Commands.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.Decorators/">
+    <File Path="modules/Cat.Decorators/README.md" />
+    <Project Path="modules/Cat.Decorators/Cat.Decorators.Abstractions/Cat.Decorators.Abstractions.csproj" />
+    <Project Path="modules/Cat.Decorators/Cat.Decorators/Cat.Decorators.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.EventAggregators/">
+    <File Path="modules/Cat.EventAggregators/README.md" />
+    <Project Path="modules/Cat.EventAggregators/Cat.EventAggregators.Abstractions/Cat.EventAggregators.Abstractions.csproj" />
+    <Project Path="modules/Cat.EventAggregators/Cat.EventAggregators/Cat.EventAggregators.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.Expressions/">
+    <File Path="modules/Cat.Expressions/README.md" />
+    <Project Path="modules/Cat.Expressions/Cat.Expressions.Abstractions/Cat.Expressions.Abstractions.csproj" />
+    <Project Path="modules/Cat.Expressions/Cat.Expressions/Cat.Expressions.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.Extensions/">
+    <File Path="modules/Cat.Extensions/README.md" />
+    <Project Path="modules/Cat.Extensions/Cat.Enumerable.Extensions/Cat.Enumerable.Extensions.csproj" />
+    <Project Path="modules/Cat.Extensions/Cat.Expression.Extensions/Cat.Expression.Extensions.csproj" />
+    <Project Path="modules/Cat.Extensions/Cat.Object.Extensions/Cat.Object.Extensions.csproj" />
+    <Project Path="modules/Cat.Extensions/Cat.ServiceCollection.Extensions/Cat.ServiceCollection.Extensions.csproj" />
+    <Project Path="modules/Cat.Extensions/Cat.String.Extensions/Cat.String.Extensions.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.FluentWorkflows/">
+    <File Path="modules/Cat.FluentWorkflows/README.md" />
+    <Project Path="modules/Cat.FluentWorkflows/Cat.FluentWorkflows.Abstractions/Cat.FluentWorkflows.Abstractions.csproj" />
+    <Project Path="modules/Cat.FluentWorkflows/Cat.FluentWorkflows.Commands/Cat.FluentWorkflows.Commands.csproj" />
+    <Project Path="modules/Cat.FluentWorkflows/Cat.FluentWorkflows.Queries/Cat.FluentWorkflows.Queries.csproj" />
+    <Project Path="modules/Cat.FluentWorkflows/Cat.FluentWorkflows/Cat.FluentWorkflows.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.Localizations/">
+    <File Path="modules/Cat.Localizations/README.md" />
+    <Project Path="modules/Cat.Localizations/Cat.Localizations.Abstractions/Cat.Localizations.Abstractions.csproj" />
+    <Project Path="modules/Cat.Localizations/Cat.Localizations/Cat.Localizations.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.Minimal.Api/">
+    <File Path="modules/Cat.Minimal.Api/README.md" />
+    <Project Path="modules/Cat.Minimal.Api/Cat.Minimal.Api/Cat.Minimal.Api.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.Queries/">
+    <File Path="modules/Cat.Queries/README.md" />
+    <Project Path="modules/Cat.Queries/Cat.Queries.Abstractions/Cat.Queries.Abstractions.csproj" />
+    <Project Path="modules/Cat.Queries/Cat.Queries.Decorators.Logging/Cat.Queries.Decorators.Logging.csproj" />
+    <Project Path="modules/Cat.Queries/Cat.Queries/Cat.Queries.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.Responses/">
+    <File Path="modules/Cat.Responses/README.md" />
+    <Project Path="modules/Cat.Responses/Cat.Responses.Abstractions/Cat.Responses.Abstractions.csproj" />
+    <Project Path="modules/Cat.Responses/Cat.Responses/Cat.Responses.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.ServiceRequests/">
+    <File Path="modules/Cat.ServiceRequests/README.md" />
+    <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests.Abstractions/Cat.ServiceRequests.Abstractions.csproj" />
+    <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests.Decorators.ActivitySource/Cat.ServiceRequests.Decorators.ActivitySource.csproj" />
+    <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests.Decorators.Logging/Cat.ServiceRequests.Decorators.Logging.csproj" />
+    <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests.Decorators.Validation/Cat.ServiceRequests.Decorators.Validation.csproj" />
+    <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests/Cat.ServiceRequests.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.Validators/">
+    <File Path="modules/Cat.Validators/README.md" />
+    <Project Path="modules/Cat.Validators/Cat.Validators.Abstractions/Cat.Validators.Abstractions.csproj" />
+    <Project Path="modules/Cat.Validators/Cat.Validators/Cat.Validators.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests/Directory.Build.props" />
+    <Project Path="tests/Cat.Commands.Tests/Cat.Commands.Tests.csproj" />
+    <Project Path="tests/Cat.Decorators.Tests/Cat.Decorators.Tests.csproj" />
+    <Project Path="tests/Cat.EventAggregators.Tests/Cat.EventAggregators.Tests.csproj" />
+    <Project Path="tests/Cat.Expressions.Tests/Cat.Expressions.Tests.csproj" />
+    <Project Path="tests/Cat.Extensions.Tests/Cat.Extensions.Tests.csproj" />
+    <Project Path="tests/Cat.FluentWorkflows.Tests/Cat.FluentWorkflows.Tests.csproj" />
+    <Project Path="tests/Cat.Localizations.Tests/Cat.Localizations.Tests.csproj" />
+    <Project Path="tests/Cat.Minimal.Api.Tests/Cat.Minimal.Api.Tests.csproj" />
+    <Project Path="tests/Cat.NUnit/Cat.NUnit.csproj" />
+    <Project Path="tests/Cat.Queries.Tests/Cat.Queries.Tests.csproj" />
+    <Project Path="tests/Cat.Responses.Tests/Cat.Responses.Tests.csproj" />
+    <Project Path="tests/Cat.ServiceRequests.Tests/Cat.ServiceRequests.Tests.csproj" />
+    <Project Path="tests/Cat.Validators.Tests/Cat.Validators.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <File Path="tools/Directory.Build.props" />
+    <Project Path="tools/Cat.DefaultDocumentationPlugin/Cat.DefaultDocumentationPlugin.csproj">
+      <Build Solution="Release|Any CPU" Project="false" />
+    </Project>
+  </Folder>
+</Solution>

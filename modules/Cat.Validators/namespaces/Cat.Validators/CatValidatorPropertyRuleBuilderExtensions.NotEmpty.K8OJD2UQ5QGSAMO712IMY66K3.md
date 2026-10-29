@@ -1,0 +1,45 @@
+<link href="../../../resources/styles/style.css" rel="stylesheet"></link>  
+  
+# `Clean Architecture Toolkit for .NET`  
+  
+[CAT](../../../../README.md 'Readme of the CAT project\.')  
+[Module](../../README.md 'Readme of the module\.')  
+[Module overview](../../../../README.md#module-overview 'List of all the CAT modules\.')  
+  
+# `Class Reference`  
+  
+##### > [Cat\.Validators](index.md 'index') > [Cat\.Validators\.Extensions](Cat.Validators.Extensions.md 'Cat\.Validators\.Extensions') > [CatValidatorPropertyRuleBuilderExtensions](CatValidatorPropertyRuleBuilderExtensions.md 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions')
+
+## CatValidatorPropertyRuleBuilderExtensions\.NotEmpty\<TModel,TProperty\>\(this ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>\) Method
+
+The value must not be empty\. Code `CAT-VAL-1003`\.
+`null`, a blank string, an empty collection and the default value of a type all count as empty\.
+
+```csharp
+public static Cat.Validators.Abstractions.ICatValidatorPropertyRuleOptionsBuilder<TModel,TProperty> NotEmpty<TModel,TProperty>(this Cat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder<TModel,TProperty> builder)
+    where TModel : class;
+```
+#### Type parameters
+
+<a name='Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.NotEmpty_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).TModel'></a>
+
+`TModel`
+
+The type being validated\.
+
+<a name='Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.NotEmpty_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).TProperty'></a>
+
+`TProperty`
+
+The type of the property\.
+#### Parameters
+
+<a name='Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.NotEmpty_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).builder'></a>
+
+`builder` [Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder&lt;](..\Cat.Validators.Abstractions\ICatValidatorPropertyRuleBuilder_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\`2')[TModel](CatValidatorPropertyRuleBuilderExtensions.NotEmpty.K8OJD2UQ5QGSAMO712IMY66K3.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.NotEmpty_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).TModel 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.NotEmpty\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>\)\.TModel')[,](..\Cat.Validators.Abstractions\ICatValidatorPropertyRuleBuilder_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\`2')[TProperty](CatValidatorPropertyRuleBuilderExtensions.NotEmpty.K8OJD2UQ5QGSAMO712IMY66K3.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.NotEmpty_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).TProperty 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.NotEmpty\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>\)\.TProperty')[&gt;](..\Cat.Validators.Abstractions\ICatValidatorPropertyRuleBuilder_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\`2')
+
+The builder to add the rule to\.
+
+#### Returns
+[Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleOptionsBuilder&lt;](..\Cat.Validators.Abstractions\ICatValidatorPropertyRuleOptionsBuilder_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleOptionsBuilder\`2')[TModel](CatValidatorPropertyRuleBuilderExtensions.NotEmpty.K8OJD2UQ5QGSAMO712IMY66K3.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.NotEmpty_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).TModel 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.NotEmpty\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>\)\.TModel')[,](..\Cat.Validators.Abstractions\ICatValidatorPropertyRuleOptionsBuilder_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleOptionsBuilder\`2')[TProperty](CatValidatorPropertyRuleBuilderExtensions.NotEmpty.K8OJD2UQ5QGSAMO712IMY66K3.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.NotEmpty_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).TProperty 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.NotEmpty\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>\)\.TProperty')[&gt;](..\Cat.Validators.Abstractions\ICatValidatorPropertyRuleOptionsBuilder_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleOptionsBuilder\`2')  
+The options of the rule\.

@@ -1,0 +1,11 @@
+..\Cat.Queries.Decorators.Logging\
+N:Cat.Queries.Decorators.Logging|Cat.Queries.Decorators.Logging.md|Cat.Queries.Decorators.Logging
+T:Cat.Queries.Decorators.Logging.LoggingDecorator|LoggingDecorator.md|LoggingDecorator
+M:Cat.Queries.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatQueriesModuleLoggingDecorator(System.IServiceProvider)|ServiceCollectionExtensions.AddCatQueriesModuleLoggingDecorator.UDX00CWZ9O6EWJZIO2BK5PZC5.md|AddCatQueriesModuleLoggingDecorator(this IServiceProvider)
+N:Cat.Queries.Decorators.Logging.Extensions|Cat.Queries.Decorators.Logging.Extensions.md|Cat.Queries.Decorators.Logging.Extensions
+T:Cat.Queries.Decorators.Logging.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+F:Cat.Queries.Decorators.Logging.LoggingDecorator.CatQueryHandler`2._innerHandler|LoggingDecorator.CatQueryHandler_TQuery,TQueryResult_._innerHandler.md|_innerHandler
+F:Cat.Queries.Decorators.Logging.LoggingDecorator.CatQueryHandler`2._logger|LoggingDecorator.CatQueryHandler_TQuery,TQueryResult_._logger.md|_logger
+M:Cat.Queries.Decorators.Logging.LoggingDecorator.CatQueryHandler`2.#ctor(Cat.Queries.Abstractions.ICatQueryHandler{`0,`1},Microsoft.Extensions.Logging.ILogger{Cat.Queries.Decorators.Logging.LoggingDecorator.CatQueryHandler{`0,`1}})|LoggingDecorator.CatQueryHandler_TQuery,TQueryResult_..ctor.9M5XUGW1X6MPKOZCA81KUTOPA.md|CatQueryHandler(ICatQueryHandler<TQuery,TQueryResult>, ILogger<CatQueryHandler<TQuery,TQueryResult>>)
+M:Cat.Queries.Decorators.Logging.LoggingDecorator.CatQueryHandler`2.HandleAsync(`0,System.Threading.CancellationToken)|LoggingDecorator.CatQueryHandler_TQuery,TQueryResult_.HandleAsync.08VGCEV1K8OLGBMZTNL5IWWM8.md|HandleAsync(TQuery, CancellationToken)
+T:Cat.Queries.Decorators.Logging.LoggingDecorator.CatQueryHandler`2|LoggingDecorator.CatQueryHandler_TQuery,TQueryResult_.md|CatQueryHandler<TQuery,TQueryResult>

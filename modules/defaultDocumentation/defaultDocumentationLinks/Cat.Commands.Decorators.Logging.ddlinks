@@ -1,0 +1,11 @@
+..\Cat.Commands.Decorators.Logging\
+N:Cat.Commands.Decorators.Logging|Cat.Commands.Decorators.Logging.md|Cat.Commands.Decorators.Logging
+T:Cat.Commands.Decorators.Logging.LoggingDecorator|LoggingDecorator.md|LoggingDecorator
+M:Cat.Commands.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatCommandsModuleLoggingDecorator(System.IServiceProvider)|ServiceCollectionExtensions.AddCatCommandsModuleLoggingDecorator.UKETB5C345O0609V5YADR9Q25.md|AddCatCommandsModuleLoggingDecorator(this IServiceProvider)
+N:Cat.Commands.Decorators.Logging.Extensions|Cat.Commands.Decorators.Logging.Extensions.md|Cat.Commands.Decorators.Logging.Extensions
+T:Cat.Commands.Decorators.Logging.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+F:Cat.Commands.Decorators.Logging.LoggingDecorator.CatCommandHandler`1._innerHandler|LoggingDecorator.CatCommandHandler_TCommand_._innerHandler.md|_innerHandler
+F:Cat.Commands.Decorators.Logging.LoggingDecorator.CatCommandHandler`1._logger|LoggingDecorator.CatCommandHandler_TCommand_._logger.md|_logger
+M:Cat.Commands.Decorators.Logging.LoggingDecorator.CatCommandHandler`1.#ctor(Cat.Commands.Abstractions.ICatCommandHandler{`0},Microsoft.Extensions.Logging.ILogger{Cat.Commands.Decorators.Logging.LoggingDecorator.CatCommandHandler{`0}})|LoggingDecorator.CatCommandHandler_TCommand_..ctor.AVTZ7WGEBJ7Z153K0DTVHEVNC.md|CatCommandHandler(ICatCommandHandler<TCommand>, ILogger<CatCommandHandler<TCommand>>)
+M:Cat.Commands.Decorators.Logging.LoggingDecorator.CatCommandHandler`1.HandleAsync(`0,System.Threading.CancellationToken)|LoggingDecorator.CatCommandHandler_TCommand_.HandleAsync.CBT0B0F3QAWO93YN8WOVYH7W8.md|HandleAsync(TCommand, CancellationToken)
+T:Cat.Commands.Decorators.Logging.LoggingDecorator.CatCommandHandler`1|LoggingDecorator.CatCommandHandler_TCommand_.md|CatCommandHandler<TCommand>

@@ -1,0 +1,5 @@
+..\Cat.Expression.Extensions\
+M:Cat.Expression.Extensions.ExpressionExtensions.GetMemberInfo``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})|ExpressionExtensions.GetMemberInfo.SL3Z04KEI38E0AB9IM8W24VY4.md|GetMemberInfo<T,TProperty>(this Expression<Func<T,TProperty>>)
+M:Cat.Expression.Extensions.ExpressionExtensions.RemoveUnary(System.Linq.Expressions.Expression)|ExpressionExtensions.RemoveUnary.KQZPWSU4BFZVWS9S5R986BYU.md|RemoveUnary(Expression)
+N:Cat.Expression.Extensions|Cat.Expression.Extensions.md|Cat.Expression.Extensions
+T:Cat.Expression.Extensions.ExpressionExtensions|ExpressionExtensions.md|ExpressionExtensions

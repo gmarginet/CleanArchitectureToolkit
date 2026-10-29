@@ -1,0 +1,21 @@
+..\Cat.EventAggregators\
+F:Cat.EventAggregators.CatEventAggregator._subscriptions|CatEventAggregator._subscriptions.md|_subscriptions
+M:Cat.EventAggregators.CatEventAggregator.HasSubscribersForEvent(System.Type)|CatEventAggregator.HasSubscribersForEvent.FGHVW7KWUFU4OZTMRSQG06VNC.md|HasSubscribersForEvent(Type)
+M:Cat.EventAggregators.CatEventAggregator.Subscribe(System.Object)|CatEventAggregator.Subscribe.V4TP29GTQZNR45IELMAP6BOR.md|Subscribe(object)
+M:Cat.EventAggregators.CatEventAggregator.Unsubscribe(System.Object)|CatEventAggregator.Unsubscribe.WGQJPBS9GISZ4Z2T7IJ2ANN33.md|Unsubscribe(object)
+M:Cat.EventAggregators.CatEventAggregator.PublishAsync(System.Object,System.Threading.CancellationToken)|CatEventAggregator.PublishAsync.3E76WOMKYET3G0CDCKZIN1B83.md|PublishAsync(object, CancellationToken)
+N:Cat.EventAggregators|Cat.EventAggregators.md|Cat.EventAggregators
+T:Cat.EventAggregators.CatEventAggregator|CatEventAggregator.md|CatEventAggregator
+M:Cat.EventAggregators.Extensions.ServiceCollectionExtensions.AddCatEventAggregatorsModule(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatEventAggregatorsModule.59Z792S5B98CTA1K54OTCSOH7.md|AddCatEventAggregatorsModule(this IServiceCollection)
+N:Cat.EventAggregators.Extensions|Cat.EventAggregators.Extensions.md|Cat.EventAggregators.Extensions
+T:Cat.EventAggregators.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+F:Cat.EventAggregators.CatEventAggregator.Subscription._subscriberReference|CatEventAggregator.Subscription._subscriberReference.md|_subscriberReference
+F:Cat.EventAggregators.CatEventAggregator.Subscription._eventHandlers|CatEventAggregator.Subscription._eventHandlers.md|_eventHandlers
+P:Cat.EventAggregators.CatEventAggregator.Subscription.IsDead|CatEventAggregator.Subscription.IsDead.md|IsDead
+P:Cat.EventAggregators.CatEventAggregator.Subscription.HasEventHandlers|CatEventAggregator.Subscription.HasEventHandlers.md|HasEventHandlers
+M:Cat.EventAggregators.CatEventAggregator.Subscription.#ctor(System.Object)|CatEventAggregator.Subscription..ctor.OLDQSNEVBBMCFWBC4DG754BJA.md|Subscription(object)
+M:Cat.EventAggregators.CatEventAggregator.Subscription.Matches(System.Object)|CatEventAggregator.Subscription.Matches.OJGHYEN1YIW6ADPONXAOV49C.md|Matches(object)
+M:Cat.EventAggregators.CatEventAggregator.Subscription.Handles(System.Type)|CatEventAggregator.Subscription.Handles.HBPWNJZ79GHODPNBXWVN1AKI5.md|Handles(Type)
+M:Cat.EventAggregators.CatEventAggregator.Subscription.HandleEvent(System.Object,System.Threading.CancellationToken)|CatEventAggregator.Subscription.HandleEvent.TRR3LPB4K98E8XG4CJPS9MIW.md|HandleEvent(object, CancellationToken)
+M:Cat.EventAggregators.CatEventAggregator.Subscription.InvokeHandler(System.Reflection.MethodInfo,System.Object,System.Object,System.Threading.CancellationToken)|CatEventAggregator.Subscription.InvokeHandler.9MJZ8SAOV1SFV0FRJ12EON5XE.md|InvokeHandler(MethodInfo, object, object, CancellationToken)
+T:Cat.EventAggregators.CatEventAggregator.Subscription|CatEventAggregator.Subscription.md|Subscription

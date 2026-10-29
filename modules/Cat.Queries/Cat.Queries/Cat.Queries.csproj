@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Cat.Decorators\Cat.Decorators\Cat.Decorators.csproj" />
+    <ProjectReference Include="..\..\Cat.Decorators\Cat.Decorators.Abstractions\Cat.Decorators.Abstractions.csproj" />
+    <ProjectReference Include="..\Cat.Queries.Abstractions\Cat.Queries.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DefaultDocumentation">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Nito.AsyncEx.Context" />
+    <PackageReference Include="Scrutor" />
+  </ItemGroup>
+
+</Project>

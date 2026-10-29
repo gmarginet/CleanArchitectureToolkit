@@ -1,0 +1,14 @@
+..\Cat.FluentWorkflows.Queries\
+M:Cat.FluentWorkflows.Queries.CatWorkflowBuilderExtensions.ProcessQuery``3(Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder{``0})|CatWorkflowBuilderExtensions.ProcessQuery.6ZRTRPQSKCKEJKVGSI80Y80L7.md|ProcessQuery<TWorkflowState,TQuery,TResult>(this ICatWorkflowBuilder<TWorkflowState>)
+N:Cat.FluentWorkflows.Queries|Cat.FluentWorkflows.Queries.md|Cat.FluentWorkflows.Queries
+T:Cat.FluentWorkflows.Queries.CatWorkflowBuilderExtensions|CatWorkflowBuilderExtensions.md|CatWorkflowBuilderExtensions
+F:Cat.FluentWorkflows.Queries.Steps.CatProcessQueryStep`2._queryProcessor|CatProcessQueryStep_TQuery,TResult_._queryProcessor.md|_queryProcessor
+P:Cat.FluentWorkflows.Queries.Steps.CatProcessQueryStep`2.Query|CatProcessQueryStep_TQuery,TResult_.Query.md|Query
+P:Cat.FluentWorkflows.Queries.Steps.CatProcessQueryStep`2.Response|CatProcessQueryStep_TQuery,TResult_.Response.md|Response
+M:Cat.FluentWorkflows.Queries.Steps.CatProcessQueryStep`2.#ctor(Cat.Queries.Abstractions.ICatQueryProcessor,Microsoft.Extensions.Logging.ILogger{Cat.FluentWorkflows.Queries.Steps.CatProcessQueryStep{`0,`1}})|CatProcessQueryStep_TQuery,TResult_..ctor.S1ZP809HZME140VRVUHNT3K17.md|CatProcessQueryStep(ICatQueryProcessor, ILogger<CatProcessQueryStep<TQuery,TResult>>)
+M:Cat.FluentWorkflows.Queries.Steps.CatProcessQueryStep`2.RunAsync(System.Threading.CancellationToken)|CatProcessQueryStep_TQuery,TResult_.RunAsync.H6NR5NC8VYYIJ2M5DCA4498Q6.md|RunAsync(CancellationToken)
+N:Cat.FluentWorkflows.Queries.Steps|Cat.FluentWorkflows.Queries.Steps.md|Cat.FluentWorkflows.Queries.Steps
+T:Cat.FluentWorkflows.Queries.Steps.CatProcessQueryStep`2|CatProcessQueryStep_TQuery,TResult_.md|CatProcessQueryStep<TQuery,TResult>
+M:Cat.FluentWorkflows.Queries.Extensions.ServiceCollectionExtensions.AddCatBuildInQueryWorkflowStep(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatBuildInQueryWorkflowStep.GRS31Q0YCBBLFBGU64G79GHMA.md|AddCatBuildInQueryWorkflowStep(this IServiceCollection)
+N:Cat.FluentWorkflows.Queries.Extensions|Cat.FluentWorkflows.Queries.Extensions.md|Cat.FluentWorkflows.Queries.Extensions
+T:Cat.FluentWorkflows.Queries.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

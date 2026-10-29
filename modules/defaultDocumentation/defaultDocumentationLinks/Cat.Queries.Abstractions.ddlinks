@@ -1,0 +1,8 @@
+..\Cat.Queries.Abstractions\
+M:Cat.Queries.Abstractions.ICatQueryHandler`2.HandleAsync(`0,System.Threading.CancellationToken)|ICatQueryHandler_TQuery,TQueryResult_.HandleAsync.569S9MAD4IYXQV8MCHY5U72UA.md|HandleAsync(TQuery, CancellationToken)
+N:Cat.Queries.Abstractions|Cat.Queries.Abstractions.md|Cat.Queries.Abstractions
+T:Cat.Queries.Abstractions.ICatQueryHandler`2|ICatQueryHandler_TQuery,TQueryResult_.md|ICatQueryHandler<TQuery,TQueryResult>
+M:Cat.Queries.Abstractions.ICatQueryProcessor.ProcessAsync``1(Cat.Queries.Abstractions.ICatQuery{``0},System.Threading.CancellationToken)|ICatQueryProcessor.ProcessAsync.NXU8C22PI206ZIXUL4SR6VC55.md|ProcessAsync<TQueryResult>(ICatQuery<TQueryResult>, CancellationToken)
+M:Cat.Queries.Abstractions.ICatQueryProcessor.Process``1(Cat.Queries.Abstractions.ICatQuery{``0})|ICatQueryProcessor.Process.GLOZN4ERRH7J39W67F8ZXLTH6.md|Process<TQueryResult>(ICatQuery<TQueryResult>)
+T:Cat.Queries.Abstractions.ICatQueryProcessor|ICatQueryProcessor.md|ICatQueryProcessor
+T:Cat.Queries.Abstractions.ICatQuery`1|ICatQuery_TQueryResult_.md|ICatQuery<TQueryResult>

@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="DefaultDocumentation">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Expression.Extensions\Cat.Expression.Extensions.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Object.Extensions\Cat.Object.Extensions.csproj" />
+      <ProjectReference Include="..\Cat.Expressions.Abstractions\Cat.Expressions.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

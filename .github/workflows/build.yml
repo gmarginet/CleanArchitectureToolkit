@@ -1,0 +1,60 @@
+name: Publish CAT nuget packages
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  release:
+    name: Publish CAT nuget packages
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: codebeltnet/git-checkout@v1
+
+      - name: Install .NET
+        uses: codebeltnet/install-dotnet@v1
+
+      - name: Install MinVer
+        uses: codebeltnet/dotnet-tool-install-minver@v1
+
+      - name: Run MinVer
+        id: minver
+        uses: codebeltnet/minver-calculate@v2
+        with:
+          options: -t v
+
+      - name: NuGet login (OIDC → temp API key)
+        if: "github.event_name == 'push' && !contains(github.event.head_commit.message, 'skip-pub')"
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Run Cake build - Test
+        if: "github.event_name == 'pull_request' || contains(github.event.head_commit.message, 'skip-pub')"
+        uses: cake-build/cake-action@v3
+        with:
+          target: Test
+          #verbosity: Diagnostic
+          arguments: |
+            semanticversion: ${{ steps.minver.outputs.version }}
+
+      - name: Run Cake build - Publish
+        if: "github.event_name == 'push' && !contains(github.event.head_commit.message, 'skip-pub')"
+        uses: cake-build/cake-action@v3
+        env:
+            NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+        with:
+          target: Publish
+          #verbosity: Diagnostic
+          arguments: |
+            semanticversion: ${{ steps.minver.outputs.version }}

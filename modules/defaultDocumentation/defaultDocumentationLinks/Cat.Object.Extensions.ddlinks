@@ -1,0 +1,41 @@
+..\Cat.Object.Extensions\
+M:Cat.Object.Extensions.ObjectExtensions.ThrowIfNull``1(``0,System.String)|ObjectExtensions.ThrowIfNull.MYNW4LFAKIED5KYK9Q59F2W41.md|ThrowIfNull<T>(this T, string)
+M:Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo``1(``0,``0,System.String,System.String)|ObjectExtensions.ThrowIfGreaterThanOrEqualTo.md#Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo_T_(thisT,T,string,string)|ThrowIfGreaterThanOrEqualTo<T>(this T, T, string, string)
+M:Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo``1(``0,``0,System.Collections.Generic.IComparer{``0},System.String,System.String)|ObjectExtensions.ThrowIfGreaterThanOrEqualTo.md#Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo_T_(thisT,T,System.Collections.Generic.IComparer_T_,string,string)|ThrowIfGreaterThanOrEqualTo<T>(this T, T, IComparer<T>, string, string)
+N:Cat.Object.Extensions|Cat.Object.Extensions.md|Cat.Object.Extensions
+T:Cat.Object.Extensions.ObjectExtensions|ObjectExtensions.md|ObjectExtensions
+M:System.Diagnostics.CodeAnalysis.AllowNullAttribute.#ctor|AllowNullAttribute.AllowNullAttribute().md|AllowNullAttribute()
+N:System.Diagnostics.CodeAnalysis|System.Diagnostics.CodeAnalysis.md|System.Diagnostics.CodeAnalysis
+T:System.Diagnostics.CodeAnalysis.AllowNullAttribute|AllowNullAttribute.md|AllowNullAttribute
+M:System.Diagnostics.CodeAnalysis.DisallowNullAttribute.#ctor|DisallowNullAttribute.DisallowNullAttribute().md|DisallowNullAttribute()
+T:System.Diagnostics.CodeAnalysis.DisallowNullAttribute|DisallowNullAttribute.md|DisallowNullAttribute
+M:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute.#ctor|DoesNotReturnAttribute.DoesNotReturnAttribute().md|DoesNotReturnAttribute()
+T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|DoesNotReturnAttribute.md|DoesNotReturnAttribute
+P:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.ParameterValue|DoesNotReturnIfAttribute.ParameterValue.md|ParameterValue
+M:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.#ctor(System.Boolean)|DoesNotReturnIfAttribute..ctor.STT6CM3QMK941KXOUDQFJUVQE.md|DoesNotReturnIfAttribute(bool)
+T:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute|DoesNotReturnIfAttribute.md|DoesNotReturnIfAttribute
+M:System.Diagnostics.CodeAnalysis.MaybeNullAttribute.#ctor|MaybeNullAttribute.MaybeNullAttribute().md|MaybeNullAttribute()
+T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute|MaybeNullAttribute.md|MaybeNullAttribute
+P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue|MaybeNullWhenAttribute.ReturnValue.md|ReturnValue
+M:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.#ctor(System.Boolean)|MaybeNullWhenAttribute..ctor.N8N78SEHT8ORVH68KBYX870IB.md|MaybeNullWhenAttribute(bool)
+T:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute|MaybeNullWhenAttribute.md|MaybeNullWhenAttribute
+P:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.Members|MemberNotNullAttribute.Members.md|Members
+M:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.#ctor(System.String)|MemberNotNullAttribute.MemberNotNullAttribute.md#System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.MemberNotNullAttribute(string)|MemberNotNullAttribute(string)
+M:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.#ctor(System.String[])|MemberNotNullAttribute.MemberNotNullAttribute.md#System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.MemberNotNullAttribute(string[])|MemberNotNullAttribute(string[])
+T:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute|MemberNotNullAttribute.md|MemberNotNullAttribute
+P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.ReturnValue|MemberNotNullWhenAttribute.ReturnValue.md|ReturnValue
+P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.Members|MemberNotNullWhenAttribute.Members.md|Members
+M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String)|MemberNotNullWhenAttribute.MemberNotNullWhenAttribute.md#System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.MemberNotNullWhenAttribute(bool,string)|MemberNotNullWhenAttribute(bool, string)
+M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String[])|MemberNotNullWhenAttribute.MemberNotNullWhenAttribute.md#System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.MemberNotNullWhenAttribute(bool,string[])|MemberNotNullWhenAttribute(bool, string[])
+T:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute|MemberNotNullWhenAttribute.md|MemberNotNullWhenAttribute
+M:System.Diagnostics.CodeAnalysis.NotNullAttribute.#ctor|NotNullAttribute.NotNullAttribute().md|NotNullAttribute()
+T:System.Diagnostics.CodeAnalysis.NotNullAttribute|NotNullAttribute.md|NotNullAttribute
+P:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.ParameterName|NotNullIfNotNullAttribute.ParameterName.md|ParameterName
+M:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.#ctor(System.String)|NotNullIfNotNullAttribute..ctor.4ZAETD8WVEXTUJAAM549BCUY3.md|NotNullIfNotNullAttribute(string)
+T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute|NotNullIfNotNullAttribute.md|NotNullIfNotNullAttribute
+P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue|NotNullWhenAttribute.ReturnValue.md|ReturnValue
+M:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.#ctor(System.Boolean)|NotNullWhenAttribute..ctor.NO02ZHAF7MM27QU6WH7RDQR31.md|NotNullWhenAttribute(bool)
+T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|NotNullWhenAttribute.md|NotNullWhenAttribute
+?:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.#ctor|MemberNotNullAttribute.MemberNotNullAttribute.md|MemberNotNullAttribute
+?:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor|MemberNotNullWhenAttribute.MemberNotNullWhenAttribute.md|MemberNotNullWhenAttribute
+?:Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo|ObjectExtensions.ThrowIfGreaterThanOrEqualTo.md|ThrowIfGreaterThanOrEqualTo

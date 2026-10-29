@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="DefaultDocumentation.Api" />
+      <PackageReference Include="DefaultDocumentation.Markdown" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\modules\Cat.Extensions\Cat.Object.Extensions\Cat.Object.Extensions.csproj" />
+    </ItemGroup>
+
+</Project>

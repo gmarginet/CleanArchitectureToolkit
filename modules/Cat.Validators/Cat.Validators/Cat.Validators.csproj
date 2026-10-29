@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="DefaultDocumentation">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+        <PackageReference Include="Scrutor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Nito.AsyncEx.Context" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Cat.Expressions\Cat.Expressions.Abstractions\Cat.Expressions.Abstractions.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Enumerable.Extensions\Cat.Enumerable.Extensions.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Expression.Extensions\Cat.Expression.Extensions.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Object.Extensions\Cat.Object.Extensions.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.String.Extensions\Cat.String.Extensions.csproj" />
+      <ProjectReference Include="..\..\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
+      <ProjectReference Include="..\Cat.Validators.Abstractions\Cat.Validators.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

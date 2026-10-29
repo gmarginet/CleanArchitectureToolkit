@@ -1,0 +1,19 @@
+..\Cat.Expressions\
+F:Cat.Expressions.CatCompiledMemberExpressionCache`1._cache|CatCompiledMemberExpressionCache_T_._cache.md|_cache
+M:Cat.Expressions.CatCompiledMemberExpressionCache`1.GetOrAdd``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Reflection.MemberInfo)|CatCompiledMemberExpressionCache_T_.GetOrAdd.A4EPRTY1L2ENRU10C6Y3UUVA6.md|GetOrAdd<TProperty>(Expression<Func<T,TProperty>>, MemberInfo)
+N:Cat.Expressions|Cat.Expressions.md|Cat.Expressions
+T:Cat.Expressions.CatCompiledMemberExpressionCache`1|CatCompiledMemberExpressionCache_T_.md|CatCompiledMemberExpressionCache<T>
+F:Cat.Expressions.CatCompiledMemberExpressionKey._memberInfo|CatCompiledMemberExpressionKey._memberInfo.md|_memberInfo
+F:Cat.Expressions.CatCompiledMemberExpressionKey._expressionKey|CatCompiledMemberExpressionKey._expressionKey.md|_expressionKey
+M:Cat.Expressions.CatCompiledMemberExpressionKey.#ctor(System.Reflection.MemberInfo,System.Linq.Expressions.Expression)|CatCompiledMemberExpressionKey..ctor.2MT4S8DKD3ICHY8XPI3VJOY1B.md|CatCompiledMemberExpressionKey(MemberInfo, Expression)
+M:Cat.Expressions.CatCompiledMemberExpressionKey.Equals(Cat.Expressions.CatCompiledMemberExpressionKey)|CatCompiledMemberExpressionKey.Equals.md#Cat.Expressions.CatCompiledMemberExpressionKey.Equals(Cat.Expressions.CatCompiledMemberExpressionKey)|Equals(CatCompiledMemberExpressionKey)
+M:Cat.Expressions.CatCompiledMemberExpressionKey.Equals(System.Object)|CatCompiledMemberExpressionKey.Equals.md#Cat.Expressions.CatCompiledMemberExpressionKey.Equals(object)|Equals(object)
+M:Cat.Expressions.CatCompiledMemberExpressionKey.GetHashCode|CatCompiledMemberExpressionKey.GetHashCode().md|GetHashCode()
+T:Cat.Expressions.CatCompiledMemberExpressionKey|CatCompiledMemberExpressionKey.md|CatCompiledMemberExpressionKey
+M:Cat.Expressions.CatNoCacheCompiledMemberExpressionCache`1.GetOrAdd``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Reflection.MemberInfo)|CatNoCacheCompiledMemberExpressionCache_T_.GetOrAdd.CS9HXHV3BAZEYBNJZ5ZNV4I5A.md|GetOrAdd<TProperty>(Expression<Func<T,TProperty>>, MemberInfo)
+T:Cat.Expressions.CatNoCacheCompiledMemberExpressionCache`1|CatNoCacheCompiledMemberExpressionCache_T_.md|CatNoCacheCompiledMemberExpressionCache<T>
+M:Cat.Expressions.Extensions.ServiceCollectionExtensions.AddCatCompiledMemberExpressionCache(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatCompiledMemberExpressionCache.GYBU1MOV5DI835Y09JUFS3EFB.md|AddCatCompiledMemberExpressionCache(this IServiceCollection)
+M:Cat.Expressions.Extensions.ServiceCollectionExtensions.AddCatNoCacheCompiledMemberExpressionCache(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatNoCacheCompiledMemberExpressionCache.C0WMGE0B6WGIKD9NC0M4M8JK6.md|AddCatNoCacheCompiledMemberExpressionCache(this IServiceCollection)
+N:Cat.Expressions.Extensions|Cat.Expressions.Extensions.md|Cat.Expressions.Extensions
+T:Cat.Expressions.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+?:Cat.Expressions.CatCompiledMemberExpressionKey.Equals|CatCompiledMemberExpressionKey.Equals.md|Equals

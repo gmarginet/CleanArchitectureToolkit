@@ -1,0 +1,28 @@
+..\Cat.Validators.Abstractions\
+M:Cat.Validators.Abstractions.ICatValidatorBuilder`1.AddRules(System.Action{Cat.Validators.Abstractions.ICatValidatorModelRuleBuilder{`0}})|ICatValidatorBuilder_TModel_.AddRules.7LVEP6J7EA1YDLNO2MIA8L6N1.md|AddRules(Action<ICatValidatorModelRuleBuilder<TModel>>)
+M:Cat.Validators.Abstractions.ICatValidatorBuilder`1.AddPropertyRules``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Action{Cat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder{`0,``0}})|ICatValidatorBuilder_TModel_.AddPropertyRules.4SGJLPHSDC95BLHV1D531FAK5.md|AddPropertyRules<TProperty>(Expression<Func<TModel,TProperty>>, Action<ICatValidatorPropertyRuleBuilder<TModel,TProperty>>)
+N:Cat.Validators.Abstractions|Cat.Validators.Abstractions.md|Cat.Validators.Abstractions
+T:Cat.Validators.Abstractions.ICatValidatorBuilder`1|ICatValidatorBuilder_TModel_.md|ICatValidatorBuilder<TModel>
+P:Cat.Validators.Abstractions.ICatValidatorError.Code|ICatValidatorError.Code.md|Code
+P:Cat.Validators.Abstractions.ICatValidatorError.FieldName|ICatValidatorError.FieldName.md|FieldName
+P:Cat.Validators.Abstractions.ICatValidatorError.Message|ICatValidatorError.Message.md|Message
+P:Cat.Validators.Abstractions.ICatValidatorError.Arguments|ICatValidatorError.Arguments.md|Arguments
+T:Cat.Validators.Abstractions.ICatValidatorError|ICatValidatorError.md|ICatValidatorError
+M:Cat.Validators.Abstractions.ICatValidatorModelRuleBuilder`1.AddRule``1(``0)|ICatValidatorModelRuleBuilder_TModel_.AddRule.NTZUA8M66NHJI05PHAP0R47G7.md|AddRule<TRule>(TRule)
+T:Cat.Validators.Abstractions.ICatValidatorModelRuleBuilder`1|ICatValidatorModelRuleBuilder_TModel_.md|ICatValidatorModelRuleBuilder<TModel>
+P:Cat.Validators.Abstractions.ICatValidatorModelRule`1.RulesConditionFuncAsyncList|ICatValidatorModelRule_TModel_.RulesConditionFuncAsyncList.md|RulesConditionFuncAsyncList
+M:Cat.Validators.Abstractions.ICatValidatorModelRule`1.ValidateAsync(`0,System.Threading.CancellationToken)|ICatValidatorModelRule_TModel_.ValidateAsync.OP5PLME0CZWG5EGZ8QRKTRTC6.md|ValidateAsync(TModel, CancellationToken)
+T:Cat.Validators.Abstractions.ICatValidatorModelRule`1|ICatValidatorModelRule_TModel_.md|ICatValidatorModelRule<TModel>
+M:Cat.Validators.Abstractions.ICatValidatorProcessor.ValidateAsync``1(``0,System.Boolean,System.Threading.CancellationToken)|ICatValidatorProcessor.ValidateAsync.YX1OQX8RMH8LA0B43AUVR45T5.md|ValidateAsync<TModel>(TModel, bool, CancellationToken)
+M:Cat.Validators.Abstractions.ICatValidatorProcessor.Validate``1(``0,System.Boolean)|ICatValidatorProcessor.Validate.52NC1J5TS1ISOCK1DV4W8K0P2.md|Validate<TModel>(TModel, bool)
+T:Cat.Validators.Abstractions.ICatValidatorProcessor|ICatValidatorProcessor.md|ICatValidatorProcessor
+M:Cat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder`2.AddPropertyRule``1(``0)|ICatValidatorPropertyRuleBuilder_TModel,TProperty_.AddPropertyRule.92X4EQSWUEP0Q3JRVU99M1Z89.md|AddPropertyRule<TRule>(TRule)
+T:Cat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder`2|ICatValidatorPropertyRuleBuilder_TModel,TProperty_.md|ICatValidatorPropertyRuleBuilder<TModel,TProperty>
+P:Cat.Validators.Abstractions.ICatValidatorPropertyRuleOptionsBuilder`2.Rule|ICatValidatorPropertyRuleOptionsBuilder_TModel,TProperty_.Rule.md|Rule
+T:Cat.Validators.Abstractions.ICatValidatorPropertyRuleOptionsBuilder`2|ICatValidatorPropertyRuleOptionsBuilder_TModel,TProperty_.md|ICatValidatorPropertyRuleOptionsBuilder<TModel,TProperty>
+P:Cat.Validators.Abstractions.ICatValidatorPropertyRule`2.FieldName|ICatValidatorPropertyRule_TModel,TProperty_.FieldName.md|FieldName
+P:Cat.Validators.Abstractions.ICatValidatorPropertyRule`2.ErrorCode|ICatValidatorPropertyRule_TModel,TProperty_.ErrorCode.md|ErrorCode
+P:Cat.Validators.Abstractions.ICatValidatorPropertyRule`2.ErrorMessage|ICatValidatorPropertyRule_TModel,TProperty_.ErrorMessage.md|ErrorMessage
+T:Cat.Validators.Abstractions.ICatValidatorPropertyRule`2|ICatValidatorPropertyRule_TModel,TProperty_.md|ICatValidatorPropertyRule<TModel,TProperty>
+M:Cat.Validators.Abstractions.ICatValidator`1.Build(Cat.Validators.Abstractions.ICatValidatorBuilder{`0})|ICatValidator_TModel_.Build.KH5JMOMCH87CLWU32S59B0UE1.md|Build(ICatValidatorBuilder<TModel>)
+T:Cat.Validators.Abstractions.ICatValidator`1|ICatValidator_TModel_.md|ICatValidator<TModel>

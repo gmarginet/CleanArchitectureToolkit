@@ -1,0 +1,44 @@
+..\Cat.FluentWorkflows.Abstractions\
+F:Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.Continue|CatStepExecutionResult.md#Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.Continue|Continue
+F:Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.BreakCascade|CatStepExecutionResult.md#Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.BreakCascade|BreakCascade
+F:Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.BreakFromCurrentFlowOnly|CatStepExecutionResult.md#Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.BreakFromCurrentFlowOnly|BreakFromCurrentFlowOnly
+F:Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.BreakFromLoop|CatStepExecutionResult.md#Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.BreakFromLoop|BreakFromLoop
+F:Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.ContinueLoop|CatStepExecutionResult.md#Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.ContinueLoop|ContinueLoop
+N:Cat.FluentWorkflows.Abstractions|Cat.FluentWorkflows.Abstractions.md|Cat.FluentWorkflows.Abstractions
+T:Cat.FluentWorkflows.Abstractions.CatStepExecutionResult|CatStepExecutionResult.md|CatStepExecutionResult
+P:Cat.FluentWorkflows.Abstractions.ICatForeachState`2.CurrentItem|ICatForeachState_TCollection,TWorkflowState_.CurrentItem.md|CurrentItem
+P:Cat.FluentWorkflows.Abstractions.ICatForeachState`2.ParentWorkflowState|ICatForeachState_TCollection,TWorkflowState_.ParentWorkflowState.md|ParentWorkflowState
+T:Cat.FluentWorkflows.Abstractions.ICatForeachState`2|ICatForeachState_TCollection,TWorkflowState_.md|ICatForeachState<TCollection,TWorkflowState>
+P:Cat.FluentWorkflows.Abstractions.ICatHasSubWorkflowState`1.WorkflowState|ICatHasSubWorkflowState_TSubWorkflowState_.WorkflowState.md|WorkflowState
+T:Cat.FluentWorkflows.Abstractions.ICatHasSubWorkflowState`1|ICatHasSubWorkflowState_TSubWorkflowState_.md|ICatHasSubWorkflowState<TSubWorkflowState>
+M:Cat.FluentWorkflows.Abstractions.ICatStepBodyAsync.RunAsync(System.Threading.CancellationToken)|ICatStepBodyAsync.RunAsync.ZWAKQ1MI96PZE0Z0G8PFD9ZUD.md|RunAsync(CancellationToken)
+T:Cat.FluentWorkflows.Abstractions.ICatStepBodyAsync|ICatStepBodyAsync.md|ICatStepBodyAsync
+P:Cat.FluentWorkflows.Abstractions.ICatStepBodyWithState`1.WorkflowState|ICatStepBodyWithState_TWorkflowState_.WorkflowState.md|WorkflowState
+T:Cat.FluentWorkflows.Abstractions.ICatStepBodyWithState`1|ICatStepBodyWithState_TWorkflowState_.md|ICatStepBodyWithState<TWorkflowState>
+M:Cat.FluentWorkflows.Abstractions.ICatStepBuilder`2.Input``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`1,``0}})|ICatStepBuilder_TWorkflowState,TStepBody_.Input.UIKFPDN2N33G1RLIGKEATQGF5.md|Input<TInput>(Expression<Func<TWorkflowState,TInput>>, Expression<Func<TStepBody,TInput>>)
+M:Cat.FluentWorkflows.Abstractions.ICatStepBuilder`2.Output``1(System.Linq.Expressions.Expression{System.Func{`1,``0}},System.Linq.Expressions.Expression{System.Func{`0,``0}})|ICatStepBuilder_TWorkflowState,TStepBody_.Output.GL4EJ5MHMHDQM7R47T76EDI69.md|Output<TOutput>(Expression<Func<TStepBody,TOutput>>, Expression<Func<TWorkflowState,TOutput>>)
+T:Cat.FluentWorkflows.Abstractions.ICatStepBuilder`2|ICatStepBuilder_TWorkflowState,TStepBody_.md|ICatStepBuilder<TWorkflowState,TStepBody>
+M:Cat.FluentWorkflows.Abstractions.ICatStepParameter.Assign(System.Object,System.Object)|ICatStepParameter.Assign.IEVV6T2H1ALIRLWUNX9IGC4DD.md|Assign(object, object)
+T:Cat.FluentWorkflows.Abstractions.ICatStepParameter|ICatStepParameter.md|ICatStepParameter
+M:Cat.FluentWorkflows.Abstractions.ICatStepProcessor.RunStepsAsync``1(Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder{``0},``0,System.Threading.CancellationToken)|ICatStepProcessor.RunStepsAsync.5L6M6S533ILIRH2SAWC31DG37.md|RunStepsAsync<TWorkflowState>(ICatWorkflowBuilder<TWorkflowState>, TWorkflowState, CancellationToken)
+T:Cat.FluentWorkflows.Abstractions.ICatStepProcessor|ICatStepProcessor.md|ICatStepProcessor
+M:Cat.FluentWorkflows.Abstractions.ICatSwitchCaseBuilder`2.Default(System.Action{Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder{`0}})|ICatSwitchCaseBuilder_TWorkflowState,TSwitchValue_.Default.RQTMMYBVC4TIU3P75LQHNIYZ3.md|Default(Action<ICatWorkflowBuilder<TWorkflowState>>)
+M:Cat.FluentWorkflows.Abstractions.ICatSwitchCaseBuilder`2.Case(`1)|ICatSwitchCaseBuilder_TWorkflowState,TSwitchValue_.Case.md#Cat.FluentWorkflows.Abstractions.ICatSwitchCaseBuilder_TWorkflowState,TSwitchValue_.Case(TSwitchValue)|Case(TSwitchValue)
+M:Cat.FluentWorkflows.Abstractions.ICatSwitchCaseBuilder`2.Case(`1,System.Action{Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder{`0}})|ICatSwitchCaseBuilder_TWorkflowState,TSwitchValue_.Case.md#Cat.FluentWorkflows.Abstractions.ICatSwitchCaseBuilder_TWorkflowState,TSwitchValue_.Case(TSwitchValue,System.Action_Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder_TWorkflowState__)|Case(TSwitchValue, Action<ICatWorkflowBuilder<TWorkflowState>>)
+T:Cat.FluentWorkflows.Abstractions.ICatSwitchCaseBuilder`2|ICatSwitchCaseBuilder_TWorkflowState,TSwitchValue_.md|ICatSwitchCaseBuilder<TWorkflowState,TSwitchValue>
+P:Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder`1.WorkflowSteps|ICatWorkflowBuilder_TWorkflowState_.WorkflowSteps.md|WorkflowSteps
+T:Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder`1|ICatWorkflowBuilder_TWorkflowState_.md|ICatWorkflowBuilder<TWorkflowState>
+M:Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor.RunAsync``2(``1,System.Threading.CancellationToken)|ICatWorkflowProcessor.RunAsync.R1HS9NJ8EQXVXKZLXHU6G4NG5.md|RunAsync<TWorkflow,TWorkflowState>(TWorkflowState, CancellationToken)
+T:Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor|ICatWorkflowProcessor.md|ICatWorkflowProcessor
+P:Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse.WorkflowResult|ICatWorkflowResponse.WorkflowResult.md|WorkflowResult
+P:Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse.ErrorList|ICatWorkflowResponse.ErrorList.md|ErrorList
+M:Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse.ChangeWorkflowResult(Cat.FluentWorkflows.Abstractions.CatStepExecutionResult)|ICatWorkflowResponse.ChangeWorkflowResult.WRWZKQICCH7W93PNSHP2XK1SE.md|ChangeWorkflowResult(CatStepExecutionResult)
+T:Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse|ICatWorkflowResponse.md|ICatWorkflowResponse
+T:Cat.FluentWorkflows.Abstractions.ICatWorkflowState`1|ICatWorkflowState_TWorkflowState_.md|ICatWorkflowState<TWorkflowState>
+P:Cat.FluentWorkflows.Abstractions.ICatWorkflowStep.BodyType|ICatWorkflowStep.BodyType.md|BodyType
+P:Cat.FluentWorkflows.Abstractions.ICatWorkflowStep.Inputs|ICatWorkflowStep.Inputs.md|Inputs
+P:Cat.FluentWorkflows.Abstractions.ICatWorkflowStep.Outputs|ICatWorkflowStep.Outputs.md|Outputs
+T:Cat.FluentWorkflows.Abstractions.ICatWorkflowStep|ICatWorkflowStep.md|ICatWorkflowStep
+M:Cat.FluentWorkflows.Abstractions.ICatWorkflow`1.Build(Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder{`0})|ICatWorkflow_TWorkflowState_.Build.7RYNT7LWF2VVKIZWAO62GD9R6.md|Build(ICatWorkflowBuilder<TWorkflowState>)
+T:Cat.FluentWorkflows.Abstractions.ICatWorkflow`1|ICatWorkflow_TWorkflowState_.md|ICatWorkflow<TWorkflowState>
+?:Cat.FluentWorkflows.Abstractions.ICatSwitchCaseBuilder`2.Case|ICatSwitchCaseBuilder_TWorkflowState,TSwitchValue_.Case.md|Case

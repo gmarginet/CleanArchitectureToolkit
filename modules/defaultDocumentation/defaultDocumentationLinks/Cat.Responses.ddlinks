@@ -1,0 +1,64 @@
+..\Cat.Responses\
+P:Cat.Responses.CatError.Code|CatError.Code.md|Code
+P:Cat.Responses.CatError.Message|CatError.Message.md|Message
+P:Cat.Responses.CatError.Arguments|CatError.Arguments.md|Arguments
+M:Cat.Responses.CatError.#ctor(System.String,System.String,System.Object[])|CatError..ctor.6388ROMK40MNSHIGSSKKVZTIE.md|CatError(string, string, object[])
+M:Cat.Responses.CatError.Create(System.String,System.String,System.Object[])|CatError.Create.md#Cat.Responses.CatError.Create(string,string,object[])|Create(string, string, object[])
+M:Cat.Responses.CatError.Create(System.String,System.String,System.Collections.Generic.List{System.Object})|CatError.Create.md#Cat.Responses.CatError.Create(string,string,System.Collections.Generic.List_object_)|Create(string, string, List<object>)
+N:Cat.Responses|Cat.Responses.md|Cat.Responses
+T:Cat.Responses.CatError|CatError.md|CatError
+P:Cat.Responses.CatErrorDefinition.Code|CatErrorDefinition.Code.md|Code
+P:Cat.Responses.CatErrorDefinition.Message|CatErrorDefinition.Message.md|Message
+M:Cat.Responses.CatErrorDefinition.#ctor(System.String,System.String)|CatErrorDefinition..ctor.IGMLEK3XRV75B8Y09313OXAO6.md|CatErrorDefinition(string, string)
+M:Cat.Responses.CatErrorDefinition.CreateCatError(System.Object[])|CatErrorDefinition.CreateCatError.5WX0CKR3WJOIDHOM83UIBF54.md|CreateCatError(object[])
+M:Cat.Responses.CatErrorDefinition.Create(System.String,System.String)|CatErrorDefinition.Create.Y0S1RWZVWY7EIAVA1URQ5FOD8.md|Create(string, string)
+T:Cat.Responses.CatErrorDefinition|CatErrorDefinition.md|CatErrorDefinition
+F:Cat.Responses.CatGeneralErrorDefinitions.GeneralErrorCodePrefix|CatGeneralErrorDefinitions.GeneralErrorCodePrefix.md|GeneralErrorCodePrefix
+F:Cat.Responses.CatGeneralErrorDefinitions.Unknown|CatGeneralErrorDefinitions.Unknown.md|Unknown
+F:Cat.Responses.CatGeneralErrorDefinitions.UnexpectedResponse|CatGeneralErrorDefinitions.UnexpectedResponse.md|UnexpectedResponse
+F:Cat.Responses.CatGeneralErrorDefinitions.ResourceNotFound|CatGeneralErrorDefinitions.ResourceNotFound.md|ResourceNotFound
+M:Cat.Responses.CatGeneralErrorDefinitions.#cctor|CatGeneralErrorDefinitions.CatGeneralErrorDefinitions().md|CatGeneralErrorDefinitions()
+T:Cat.Responses.CatGeneralErrorDefinitions|CatGeneralErrorDefinitions.md|CatGeneralErrorDefinitions
+P:Cat.Responses.CatResponse.Type|CatResponse.Type.md|Type
+P:Cat.Responses.CatResponse.ErrorList|CatResponse.ErrorList.md|ErrorList
+P:Cat.Responses.CatResponse.IsSucceeded|CatResponse.IsSucceeded.md|IsSucceeded
+P:Cat.Responses.CatResponse.IsFailed|CatResponse.IsFailed.md|IsFailed
+M:Cat.Responses.CatResponse.#ctor(Cat.Responses.Abstractions.CatResponseType.Succeeded)|CatResponse.CatResponse.md#Cat.Responses.CatResponse.CatResponse(Cat.Responses.Abstractions.CatResponseType.Succeeded)|CatResponse(Succeeded)
+M:Cat.Responses.CatResponse.#ctor(Cat.Responses.Abstractions.CatResponseType.Failed,System.Collections.Generic.IReadOnlyList{Cat.Responses.Abstractions.ICatError})|CatResponse.CatResponse.md#Cat.Responses.CatResponse.CatResponse(Cat.Responses.Abstractions.CatResponseType.Failed,System.Collections.Generic.IReadOnlyList_Cat.Responses.Abstractions.ICatError_)|CatResponse(Failed, IReadOnlyList<ICatError>)
+M:Cat.Responses.CatResponse.Cast``1|CatResponse.Cast.md#Cat.Responses.CatResponse.Cast_TResponse_()|Cast<TResponse>()
+M:Cat.Responses.CatResponse.Cast``1(``0)|CatResponse.Cast.md#Cat.Responses.CatResponse.Cast_TResponse_(TResponse)|Cast<TResponse>(TResponse)
+M:Cat.Responses.CatResponse.Ok|CatResponse.Ok.md#Cat.Responses.CatResponse.Ok()|Ok()
+M:Cat.Responses.CatResponse.Created|CatResponse.Created.md#Cat.Responses.CatResponse.Created()|Created()
+M:Cat.Responses.CatResponse.NoContent|CatResponse.NoContent.md#Cat.Responses.CatResponse.NoContent()|NoContent()
+M:Cat.Responses.CatResponse.BadRequest(Cat.Responses.Abstractions.ICatError[])|CatResponse.BadRequest.md#Cat.Responses.CatResponse.BadRequest(Cat.Responses.Abstractions.ICatError[])|BadRequest(ICatError[])
+M:Cat.Responses.CatResponse.NotFound(Cat.Responses.Abstractions.ICatError[])|CatResponse.NotFound.md#Cat.Responses.CatResponse.NotFound(Cat.Responses.Abstractions.ICatError[])|NotFound(ICatError[])
+M:Cat.Responses.CatResponse.Unauthorized(Cat.Responses.Abstractions.ICatError[])|CatResponse.Unauthorized.md#Cat.Responses.CatResponse.Unauthorized(Cat.Responses.Abstractions.ICatError[])|Unauthorized(ICatError[])
+M:Cat.Responses.CatResponse.InternalServerError(Cat.Responses.Abstractions.ICatError[])|CatResponse.InternalServerError.md#Cat.Responses.CatResponse.InternalServerError(Cat.Responses.Abstractions.ICatError[])|InternalServerError(ICatError[])
+M:Cat.Responses.CatResponse.Ok``1(``0)|CatResponse.Ok.md#Cat.Responses.CatResponse.Ok_TResponse_(TResponse)|Ok<TResponse>(TResponse)
+M:Cat.Responses.CatResponse.Created``1(``0)|CatResponse.Created.md#Cat.Responses.CatResponse.Created_TResponse_(TResponse)|Created<TResponse>(TResponse)
+M:Cat.Responses.CatResponse.NoContent``1|CatResponse.NoContent.md#Cat.Responses.CatResponse.NoContent_TResponse_()|NoContent<TResponse>()
+M:Cat.Responses.CatResponse.BadRequest``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.BadRequest.md#Cat.Responses.CatResponse.BadRequest_TResponse_(Cat.Responses.Abstractions.ICatError[])|BadRequest<TResponse>(ICatError[])
+M:Cat.Responses.CatResponse.NotFound``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.NotFound.md#Cat.Responses.CatResponse.NotFound_TResponse_(Cat.Responses.Abstractions.ICatError[])|NotFound<TResponse>(ICatError[])
+M:Cat.Responses.CatResponse.Unauthorized``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.Unauthorized.md#Cat.Responses.CatResponse.Unauthorized_TResponse_(Cat.Responses.Abstractions.ICatError[])|Unauthorized<TResponse>(ICatError[])
+M:Cat.Responses.CatResponse.InternalServerError``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.InternalServerError.md#Cat.Responses.CatResponse.InternalServerError_TResponse_(Cat.Responses.Abstractions.ICatError[])|InternalServerError<TResponse>(ICatError[])
+T:Cat.Responses.CatResponse|CatResponse.md|CatResponse
+F:Cat.Responses.CatResponseStatus.Succeeded|CatResponseStatus.md#Cat.Responses.CatResponseStatus.Succeeded|Succeeded
+F:Cat.Responses.CatResponseStatus.Failed|CatResponseStatus.md#Cat.Responses.CatResponseStatus.Failed|Failed
+T:Cat.Responses.CatResponseStatus|CatResponseStatus.md|CatResponseStatus
+P:Cat.Responses.CatResponse`1.Value|CatResponse_TResponse_.Value.md|Value
+M:Cat.Responses.CatResponse`1.#ctor(Cat.Responses.Abstractions.CatResponseType.Succeeded)|CatResponse_TResponse_.CatResponse_TResponse_.md#Cat.Responses.CatResponse_TResponse_.CatResponse(Cat.Responses.Abstractions.CatResponseType.Succeeded)|CatResponse(Succeeded)
+M:Cat.Responses.CatResponse`1.#ctor(Cat.Responses.Abstractions.CatResponseType.Succeeded,`0)|CatResponse_TResponse_.CatResponse_TResponse_.md#Cat.Responses.CatResponse_TResponse_.CatResponse(Cat.Responses.Abstractions.CatResponseType.Succeeded,TResponse)|CatResponse(Succeeded, TResponse)
+M:Cat.Responses.CatResponse`1.#ctor(Cat.Responses.Abstractions.CatResponseType.Failed,System.Collections.Generic.IReadOnlyList{Cat.Responses.Abstractions.ICatError})|CatResponse_TResponse_.CatResponse_TResponse_.md#Cat.Responses.CatResponse_TResponse_.CatResponse(Cat.Responses.Abstractions.CatResponseType.Failed,System.Collections.Generic.IReadOnlyList_Cat.Responses.Abstractions.ICatError_)|CatResponse(Failed, IReadOnlyList<ICatError>)
+M:Cat.Responses.CatResponse`1.Cast``1(System.Func{`0,``0})|CatResponse_TResponse_.Cast.O0BCBT5ZSHDFOS9QZNX8CTSE4.md|Cast<TTargetResponse>(Func<TResponse,TTargetResponse>)
+T:Cat.Responses.CatResponse`1|CatResponse_TResponse_.md|CatResponse<TResponse>
+?:Cat.Responses.CatResponse.#ctor|CatResponse.CatResponse.md|CatResponse
+?:Cat.Responses.CatResponse`1.#ctor|CatResponse_TResponse_.CatResponse_TResponse_.md|CatResponse<TResponse>
+?:Cat.Responses.CatError.Create|CatError.Create.md|Create
+?:Cat.Responses.CatResponse.Cast|CatResponse.Cast.md|Cast
+?:Cat.Responses.CatResponse.Ok|CatResponse.Ok.md|Ok
+?:Cat.Responses.CatResponse.Created|CatResponse.Created.md|Created
+?:Cat.Responses.CatResponse.NoContent|CatResponse.NoContent.md|NoContent
+?:Cat.Responses.CatResponse.BadRequest|CatResponse.BadRequest.md|BadRequest
+?:Cat.Responses.CatResponse.NotFound|CatResponse.NotFound.md|NotFound
+?:Cat.Responses.CatResponse.Unauthorized|CatResponse.Unauthorized.md|Unauthorized
+?:Cat.Responses.CatResponse.InternalServerError|CatResponse.InternalServerError.md|InternalServerError

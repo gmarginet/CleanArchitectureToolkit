@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="NUnit"/>
+        <PackageReference Include="NUnit.Analyzers"/>
+        <PackageReference Include="NUnit3TestAdapter"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="NUnit.Framework"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\modules\Cat.Expressions\Cat.Expressions\Cat.Expressions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Abstractions\Cat.ServiceRequests.Abstractions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.ActivitySource\Cat.ServiceRequests.Decorators.ActivitySource.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.Logging\Cat.ServiceRequests.Decorators.Logging.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.Validation\Cat.ServiceRequests.Decorators.Validation.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests\Cat.ServiceRequests.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Validators\Cat.Validators\Cat.Validators.csproj" />
+      <ProjectReference Include="..\Cat.NUnit\Cat.NUnit.csproj" />
+    </ItemGroup>
+
+</Project>

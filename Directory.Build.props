@@ -1,0 +1,33 @@
+<Project>
+    <PropertyGroup>
+        <LangVersion>14.0</LangVersion>
+        <Nullable>enable</Nullable>
+        <PackageId>gmarginet.$(MSBuildProjectName)</PackageId>
+        <Authors>Gert Marginet</Authors>
+        <PackageIcon>CatIcon-128x128.png</PackageIcon>
+        <Copyright>MIT</Copyright>
+        <PackageProjectUrl>https://gmarginet.github.io/CleanArchitectureToolkit/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/gmarginet/CleanArchitectureToolkit</RepositoryUrl>
+        <RepositoryType>GitHub</RepositoryType>
+        <PackageReadmeFile>README_NUGET.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DocumentationFile>bin\Debug\$(MSBuildProjectName).xml</DocumentationFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DefaultDocumentationFileNameFactory>NameAndMd5Mix</DefaultDocumentationFileNameFactory>
+        <DefaultDocumentationIncludeUndocumentedItems>true</DefaultDocumentationIncludeUndocumentedItems>
+        <DefaultDocumentationFolder>..\namespaces\$(MSBuildProjectName)</DefaultDocumentationFolder>
+        <DefaultDocumentationLinksOutputFile>..\..\defaultDocumentation\defaultDocumentationLinks\$(MSBuildProjectName).ddlinks</DefaultDocumentationLinksOutputFile>
+        <DefaultDocumentationLinksBaseUrl>..\$(MSBuildProjectName)\</DefaultDocumentationLinksBaseUrl>
+        <DefaultDocumentationExternLinksFiles>..\..\defaultDocumentation\defaultDocumentationLinks\*.ddlinks</DefaultDocumentationExternLinksFiles>
+        <DefaultDocumentationConfigurationFile>..\..\defaultDocumentation\DefaultDocumentation.json</DefaultDocumentationConfigurationFile>
+        <DefaultDocumentationPlugins>$(SolutionDir)resources\defaultDocumentationPlugins\Cat.DefaultDocumentationPlugin.dll</DefaultDocumentationPlugins>
+        <DefaultDocumentationAssemblyPageName>index</DefaultDocumentationAssemblyPageName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\..\resources\icon\CatIcon-128x128.png" Pack="true" PackagePath="\"/>
+        <None Include="..\..\..\README_NUGET.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+</Project>

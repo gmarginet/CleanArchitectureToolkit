@@ -1,0 +1,12 @@
+..\Cat.Commands\
+F:Cat.Commands.CatCommandProcessor._serviceProvider|CatCommandProcessor._serviceProvider.md|_serviceProvider
+F:Cat.Commands.CatCommandProcessor._decoratorFactory|CatCommandProcessor._decoratorFactory.md|_decoratorFactory
+M:Cat.Commands.CatCommandProcessor.#ctor(System.IServiceProvider,Cat.Decorators.Abstractions.ICatDecoratorFactory)|CatCommandProcessor..ctor.BHLPZQGGQ8VEVHGD6EIJWX7DC.md|CatCommandProcessor(IServiceProvider, ICatDecoratorFactory)
+M:Cat.Commands.CatCommandProcessor.ProcessAsync(Cat.Commands.Abstractions.ICatCommand,System.Threading.CancellationToken)|CatCommandProcessor.ProcessAsync.I25DKPK8QD9F4OW1YGDUV0HM.md|ProcessAsync(ICatCommand, CancellationToken)
+M:Cat.Commands.CatCommandProcessor.InvokeHandler(System.Reflection.MethodInfo,System.Object,System.Object,System.Threading.CancellationToken)|CatCommandProcessor.InvokeHandler.BZRUWKGR5XGF9THSZES441X68.md|InvokeHandler(MethodInfo, object, object, CancellationToken)
+M:Cat.Commands.CatCommandProcessor.Cat#Commands#Abstractions#ICatCommandProcessor#Process(Cat.Commands.Abstractions.ICatCommand)|CatCommandProcessor.Cat.Commands.Abstractions.ICatCommandProcessor.Process.7XX41PCOJIPB2H5F7CISV1BMC.md|Cat.Commands.Abstractions.ICatCommandProcessor.Process(ICatCommand)
+N:Cat.Commands|Cat.Commands.md|Cat.Commands
+T:Cat.Commands.CatCommandProcessor|CatCommandProcessor.md|CatCommandProcessor
+M:Cat.Commands.Extensions.ServiceCollectionExtensions.AddCatCommandsModule(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type[])|ServiceCollectionExtensions.AddCatCommandsModule.8NML136E5SKGWLMYG3VLYKK47.md|AddCatCommandsModule(this IServiceCollection, Type[])
+N:Cat.Commands.Extensions|Cat.Commands.Extensions.md|Cat.Commands.Extensions
+T:Cat.Commands.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

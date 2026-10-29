@@ -1,0 +1,14 @@
+..\Cat.FluentWorkflows.Commands\
+M:Cat.FluentWorkflows.Commands.CatWorkflowBuilderExtensions.ProcessCommand``2(Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder{``0})|CatWorkflowBuilderExtensions.ProcessCommand.YVCWTB1LSV2HRZEERHRLDI6OD.md|ProcessCommand<TWorkflowState,TCommand>(this ICatWorkflowBuilder<TWorkflowState>)
+N:Cat.FluentWorkflows.Commands|Cat.FluentWorkflows.Commands.md|Cat.FluentWorkflows.Commands
+T:Cat.FluentWorkflows.Commands.CatWorkflowBuilderExtensions|CatWorkflowBuilderExtensions.md|CatWorkflowBuilderExtensions
+F:Cat.FluentWorkflows.Commands.Steps.CatProcessCommandStep`1._commandProcessor|CatProcessCommandStep_TCommand_._commandProcessor.md|_commandProcessor
+P:Cat.FluentWorkflows.Commands.Steps.CatProcessCommandStep`1.Command|CatProcessCommandStep_TCommand_.Command.md|Command
+P:Cat.FluentWorkflows.Commands.Steps.CatProcessCommandStep`1.Response|CatProcessCommandStep_TCommand_.Response.md|Response
+M:Cat.FluentWorkflows.Commands.Steps.CatProcessCommandStep`1.#ctor(Cat.Commands.Abstractions.ICatCommandProcessor,Microsoft.Extensions.Logging.ILogger{Cat.FluentWorkflows.Commands.Steps.CatProcessCommandStep{`0}})|CatProcessCommandStep_TCommand_..ctor.6Q3ONWDV49CNNOFIGX4QLYCQ1.md|CatProcessCommandStep(ICatCommandProcessor, ILogger<CatProcessCommandStep<TCommand>>)
+M:Cat.FluentWorkflows.Commands.Steps.CatProcessCommandStep`1.RunAsync(System.Threading.CancellationToken)|CatProcessCommandStep_TCommand_.RunAsync.S01NTQHBKUJ7O8U3USSOSA8K.md|RunAsync(CancellationToken)
+N:Cat.FluentWorkflows.Commands.Steps|Cat.FluentWorkflows.Commands.Steps.md|Cat.FluentWorkflows.Commands.Steps
+T:Cat.FluentWorkflows.Commands.Steps.CatProcessCommandStep`1|CatProcessCommandStep_TCommand_.md|CatProcessCommandStep<TCommand>
+M:Cat.FluentWorkflows.Commands.Extensions.ServiceCollectionExtensions.AddCatBuildInCommandWorkflowStep(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatBuildInCommandWorkflowStep.YZYRTULE1GRCU0GQF7NC2QY64.md|AddCatBuildInCommandWorkflowStep(this IServiceCollection)
+N:Cat.FluentWorkflows.Commands.Extensions|Cat.FluentWorkflows.Commands.Extensions.md|Cat.FluentWorkflows.Commands.Extensions
+T:Cat.FluentWorkflows.Commands.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

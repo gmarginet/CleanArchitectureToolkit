@@ -1,0 +1,23 @@
+..\Cat.Minimal.Api\
+M:Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.MapCatServiceRequest``1(Microsoft.AspNetCore.Routing.IEndpointRouteBuilder,System.String)|CatEndpointRouteBuilderExtensions.MapCatServiceRequest.md#Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.MapCatServiceRequest_TRequest_(thisMicrosoft.AspNetCore.Routing.IEndpointRouteBuilder,string)|MapCatServiceRequest<TRequest>(this IEndpointRouteBuilder, string)
+M:Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.MapCatServiceRequest``2(Microsoft.AspNetCore.Routing.IEndpointRouteBuilder,System.String)|CatEndpointRouteBuilderExtensions.MapCatServiceRequest.md#Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.MapCatServiceRequest_TRequest,TResponse_(thisMicrosoft.AspNetCore.Routing.IEndpointRouteBuilder,string)|MapCatServiceRequest<TRequest,TResponse>(this IEndpointRouteBuilder, string)
+M:Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.TryGetRequest``1(``0,``0@)|CatEndpointRouteBuilderExtensions.TryGetRequest.D60HW2G8417SGSPTDUFV5WQ3A.md|TryGetRequest<TRequest>(TRequest, TRequest)
+M:Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.CreateMissingBodyProblem(Microsoft.AspNetCore.Http.HttpContext)|CatEndpointRouteBuilderExtensions.CreateMissingBodyProblem.XVZLWJH4YCIEV8SAFZEBBDX03.md|CreateMissingBodyProblem(HttpContext)
+M:Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.CreateFailedResponseProblem``1(Cat.Responses.Abstractions.ICatResponse,Microsoft.Extensions.Logging.ILogger,Microsoft.AspNetCore.Http.HttpContext)|CatEndpointRouteBuilderExtensions.CreateFailedResponseProblem.WKC8QP0IVJNWEHC5VMXSTCR8.md|CreateFailedResponseProblem<TRequest>(ICatResponse, ILogger, HttpContext)
+N:Cat.Minimal.Api|Cat.Minimal.Api.md|Cat.Minimal.Api
+T:Cat.Minimal.Api.CatEndpointRouteBuilderExtensions|CatEndpointRouteBuilderExtensions.md|CatEndpointRouteBuilderExtensions
+F:Cat.Minimal.Api.CatExceptionHandler._logger|CatExceptionHandler._logger.md|_logger
+F:Cat.Minimal.Api.CatExceptionHandler._environment|CatExceptionHandler._environment.md|_environment
+M:Cat.Minimal.Api.CatExceptionHandler.#ctor(Microsoft.Extensions.Logging.ILogger{Cat.Minimal.Api.CatExceptionHandler},Microsoft.Extensions.Hosting.IHostEnvironment)|CatExceptionHandler..ctor.UIXM1YD3HJXXK4WDF9NDNJC8C.md|CatExceptionHandler(ILogger<CatExceptionHandler>, IHostEnvironment)
+M:Cat.Minimal.Api.CatExceptionHandler.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)|CatExceptionHandler.TryHandleAsync.PRW9CVKMMZEKMTMTVEGMDDXDE.md|TryHandleAsync(HttpContext, Exception, CancellationToken)
+T:Cat.Minimal.Api.CatExceptionHandler|CatExceptionHandler.md|CatExceptionHandler
+P:Cat.Minimal.Api.CatProblemDetails.CatErrors|CatProblemDetails.CatErrors.md|CatErrors
+P:Cat.Minimal.Api.CatProblemDetails.CatTraceId|CatProblemDetails.CatTraceId.md|CatTraceId
+M:Cat.Minimal.Api.CatProblemDetails.#ctor|CatProblemDetails.CatProblemDetails.md#Cat.Minimal.Api.CatProblemDetails.CatProblemDetails()|CatProblemDetails()
+M:Cat.Minimal.Api.CatProblemDetails.#ctor(Cat.Responses.Abstractions.ICatResponse,System.String,System.String)|CatProblemDetails.CatProblemDetails.md#Cat.Minimal.Api.CatProblemDetails.CatProblemDetails(Cat.Responses.Abstractions.ICatResponse,string,string)|CatProblemDetails(ICatResponse, string, string)
+T:Cat.Minimal.Api.CatProblemDetails|CatProblemDetails.md|CatProblemDetails
+M:Cat.Minimal.Api.Extensions.ServiceCollectionExtensions.AddCatMinimalApiModule(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatMinimalApiModule.4811PPQZSL6V1S38EHIEL1957.md|AddCatMinimalApiModule(this IServiceCollection)
+N:Cat.Minimal.Api.Extensions|Cat.Minimal.Api.Extensions.md|Cat.Minimal.Api.Extensions
+T:Cat.Minimal.Api.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+?:Cat.Minimal.Api.CatProblemDetails.#ctor|CatProblemDetails.CatProblemDetails.md|CatProblemDetails
+?:Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.MapCatServiceRequest|CatEndpointRouteBuilderExtensions.MapCatServiceRequest.md|MapCatServiceRequest

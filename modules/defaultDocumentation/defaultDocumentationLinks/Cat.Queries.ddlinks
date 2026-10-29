@@ -1,0 +1,12 @@
+..\Cat.Queries\
+F:Cat.Queries.CatQueryProcessor._serviceProvider|CatQueryProcessor._serviceProvider.md|_serviceProvider
+F:Cat.Queries.CatQueryProcessor._decoratorFactory|CatQueryProcessor._decoratorFactory.md|_decoratorFactory
+M:Cat.Queries.CatQueryProcessor.#ctor(System.IServiceProvider,Cat.Decorators.Abstractions.ICatDecoratorFactory)|CatQueryProcessor..ctor.ZYV1NSBUVKFC4AJ4TLQSNFX15.md|CatQueryProcessor(IServiceProvider, ICatDecoratorFactory)
+M:Cat.Queries.CatQueryProcessor.ProcessAsync``1(Cat.Queries.Abstractions.ICatQuery{``0},System.Threading.CancellationToken)|CatQueryProcessor.ProcessAsync.E5H8OCSZSVOTZYUV492SO54Y6.md|ProcessAsync<TQueryResult>(ICatQuery<TQueryResult>, CancellationToken)
+M:Cat.Queries.CatQueryProcessor.InvokeHandler(System.Reflection.MethodInfo,System.Object,System.Object,System.Threading.CancellationToken)|CatQueryProcessor.InvokeHandler.M6W68CIA01HAMNW1HJY9QNHX4.md|InvokeHandler(MethodInfo, object, object, CancellationToken)
+M:Cat.Queries.CatQueryProcessor.Process``1(Cat.Queries.Abstractions.ICatQuery{``0})|CatQueryProcessor.Process.PRKXML2YZUDYVAVA1P70I8YH7.md|Process<TQueryResult>(ICatQuery<TQueryResult>)
+N:Cat.Queries|Cat.Queries.md|Cat.Queries
+T:Cat.Queries.CatQueryProcessor|CatQueryProcessor.md|CatQueryProcessor
+M:Cat.Queries.Extensions.ServiceCollectionExtensions.AddCatQueriesModule(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type[])|ServiceCollectionExtensions.AddCatQueriesModule.EGAUYYCEBKEII7GBRFYEG0MYB.md|AddCatQueriesModule(this IServiceCollection, Type[])
+N:Cat.Queries.Extensions|Cat.Queries.Extensions.md|Cat.Queries.Extensions
+T:Cat.Queries.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

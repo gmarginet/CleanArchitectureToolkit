@@ -1,0 +1,6 @@
+@Cat.Demo.Todo.Service.Api_HostAddress = http://localhost:5093
+
+GET {{Cat.Demo.Todo.Service.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

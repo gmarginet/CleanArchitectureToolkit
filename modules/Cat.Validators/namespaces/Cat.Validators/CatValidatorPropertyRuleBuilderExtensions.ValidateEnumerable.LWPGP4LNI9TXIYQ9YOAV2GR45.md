@@ -1,0 +1,49 @@
+<link href="../../../resources/styles/style.css" rel="stylesheet"></link>  
+  
+# `Clean Architecture Toolkit for .NET`  
+  
+[CAT](../../../../README.md 'Readme of the CAT project\.')  
+[Module](../../README.md 'Readme of the module\.')  
+[Module overview](../../../../README.md#module-overview 'List of all the CAT modules\.')  
+  
+# `Class Reference`  
+  
+##### > [Cat\.Validators](index.md 'index') > [Cat\.Validators\.Extensions](Cat.Validators.Extensions.md 'Cat\.Validators\.Extensions') > [CatValidatorPropertyRuleBuilderExtensions](CatValidatorPropertyRuleBuilderExtensions.md 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions')
+
+## CatValidatorPropertyRuleBuilderExtensions\.ValidateEnumerable\<TModel,TProperty\>\(this ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>\) Method
+
+Validates each item of the collection with its own validator\.
+Errors get the property name and the item index as a prefix, like `Items[0].Title`\.
+A `null` collection passes\. A `null` item is skipped but still counts for the index\.
+An item without a registered validator is skipped only when the top level call
+has `validatorRequired` set to `false`\. Otherwise it throws\.
+
+```csharp
+public static Cat.Validators.Abstractions.ICatValidatorPropertyRuleOptionsBuilder<TModel,TProperty> ValidateEnumerable<TModel,TProperty>(this Cat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder<TModel,TProperty> builder)
+    where TModel : class
+    where TProperty : System.Collections.IEnumerable?;
+```
+#### Type parameters
+
+<a name='Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.ValidateEnumerable_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).TModel'></a>
+
+`TModel`
+
+The type being validated\.
+
+<a name='Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.ValidateEnumerable_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).TProperty'></a>
+
+`TProperty`
+
+The type of the collection\.
+#### Parameters
+
+<a name='Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.ValidateEnumerable_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).builder'></a>
+
+`builder` [Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder&lt;](..\Cat.Validators.Abstractions\ICatValidatorPropertyRuleBuilder_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\`2')[TModel](CatValidatorPropertyRuleBuilderExtensions.ValidateEnumerable.LWPGP4LNI9TXIYQ9YOAV2GR45.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.ValidateEnumerable_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).TModel 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.ValidateEnumerable\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>\)\.TModel')[,](..\Cat.Validators.Abstractions\ICatValidatorPropertyRuleBuilder_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\`2')[TProperty](CatValidatorPropertyRuleBuilderExtensions.ValidateEnumerable.LWPGP4LNI9TXIYQ9YOAV2GR45.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.ValidateEnumerable_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).TProperty 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.ValidateEnumerable\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>\)\.TProperty')[&gt;](..\Cat.Validators.Abstractions\ICatValidatorPropertyRuleBuilder_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\`2')
+
+The builder to add the rule to\.
+
+#### Returns
+[Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleOptionsBuilder&lt;](..\Cat.Validators.Abstractions\ICatValidatorPropertyRuleOptionsBuilder_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleOptionsBuilder\`2')[TModel](CatValidatorPropertyRuleBuilderExtensions.ValidateEnumerable.LWPGP4LNI9TXIYQ9YOAV2GR45.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.ValidateEnumerable_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).TModel 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.ValidateEnumerable\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>\)\.TModel')[,](..\Cat.Validators.Abstractions\ICatValidatorPropertyRuleOptionsBuilder_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleOptionsBuilder\`2')[TProperty](CatValidatorPropertyRuleBuilderExtensions.ValidateEnumerable.LWPGP4LNI9TXIYQ9YOAV2GR45.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.ValidateEnumerable_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_).TProperty 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.ValidateEnumerable\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>\)\.TProperty')[&gt;](..\Cat.Validators.Abstractions\ICatValidatorPropertyRuleOptionsBuilder_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleOptionsBuilder\`2')  
+The options of the rule\.

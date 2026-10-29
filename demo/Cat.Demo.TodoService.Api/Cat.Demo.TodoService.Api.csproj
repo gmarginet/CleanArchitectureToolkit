@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+        <PackageReference Include="Scalar.AspNetCore" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\modules\Cat.Commands\Cat.Commands.Decorators.Logging\Cat.Commands.Decorators.Logging.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Commands\Cat.Commands\Cat.Commands.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Expressions\Cat.Expressions\Cat.Expressions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Minimal.Api\Cat.Minimal.Api\Cat.Minimal.Api.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Queries\Cat.Queries.Decorators.Logging\Cat.Queries.Decorators.Logging.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Queries\Cat.Queries\Cat.Queries.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.Logging\Cat.ServiceRequests.Decorators.Logging.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.Validation\Cat.ServiceRequests.Decorators.Validation.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests\Cat.ServiceRequests.csproj" />
+      <ProjectReference Include="..\Cat.Demo.ToDoService.Core\Cat.Demo.ToDoService.Core.csproj" />
+      <ProjectReference Include="..\Cat.Demo.TodoService.Events\Cat.Demo.TodoService.Events.csproj" />
+      <ProjectReference Include="..\Cat.Demo.TodoService.Infrastructure\Cat.Demo.TodoService.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

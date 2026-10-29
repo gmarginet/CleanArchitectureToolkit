@@ -1,0 +1,27 @@
+..\Cat.Decorators\
+F:Cat.Decorators.CatDecoratorFactory._serviceTypes|CatDecoratorFactory._serviceTypes.md|_serviceTypes
+M:Cat.Decorators.CatDecoratorFactory.AddDecorator(System.Type,System.Type,System.Collections.Generic.Dictionary{System.String,System.Object})|CatDecoratorFactory.AddDecorator.OCUL9MXI7QENHYDMP9EQKHGZA.md|AddDecorator(Type, Type, Dictionary<string,object>)
+M:Cat.Decorators.CatDecoratorFactory.GetDecoratedService``1(System.IServiceProvider)|CatDecoratorFactory.GetDecoratedService.md#Cat.Decorators.CatDecoratorFactory.GetDecoratedService_TService_(System.IServiceProvider)|GetDecoratedService<TService>(IServiceProvider)
+M:Cat.Decorators.CatDecoratorFactory.GetRequiredDecoratedService``1(System.IServiceProvider)|CatDecoratorFactory.GetRequiredDecoratedService.md#Cat.Decorators.CatDecoratorFactory.GetRequiredDecoratedService_TService_(System.IServiceProvider)|GetRequiredDecoratedService<TService>(IServiceProvider)
+M:Cat.Decorators.CatDecoratorFactory.GetRequiredDecoratedService(System.IServiceProvider,System.Type)|CatDecoratorFactory.GetRequiredDecoratedService.md#Cat.Decorators.CatDecoratorFactory.GetRequiredDecoratedService(System.IServiceProvider,System.Type)|GetRequiredDecoratedService(IServiceProvider, Type)
+M:Cat.Decorators.CatDecoratorFactory.GetDecoratedService(System.IServiceProvider,System.Type)|CatDecoratorFactory.GetDecoratedService.md#Cat.Decorators.CatDecoratorFactory.GetDecoratedService(System.IServiceProvider,System.Type)|GetDecoratedService(IServiceProvider, Type)
+M:Cat.Decorators.CatDecoratorFactory.GetConstructorParameterArray(System.IServiceProvider,System.Object,System.Type,System.Collections.Generic.IDictionary{System.String,System.Object})|CatDecoratorFactory.GetConstructorParameterArray.US7JJIIHVZG76CDKG9CJNZI53.md|GetConstructorParameterArray(IServiceProvider, object, Type, IDictionary<string,object>)
+N:Cat.Decorators|Cat.Decorators.md|Cat.Decorators
+T:Cat.Decorators.CatDecoratorFactory|CatDecoratorFactory.md|CatDecoratorFactory
+F:Cat.Decorators.CatDecoratorFactoryBuilder._catDecoratorFactory|CatDecoratorFactoryBuilder._catDecoratorFactory.md|_catDecoratorFactory
+M:Cat.Decorators.CatDecoratorFactoryBuilder.#ctor(Cat.Decorators.Abstractions.ICatDecoratorFactory)|CatDecoratorFactoryBuilder..ctor.NCL4FYVPSYHI37DGQYOWQDRT6.md|CatDecoratorFactoryBuilder(ICatDecoratorFactory)
+M:Cat.Decorators.CatDecoratorFactoryBuilder.AddDecorator(System.Type,System.Type,Cat.Decorators.Abstractions.ICatDecoratorParameter[])|CatDecoratorFactoryBuilder.AddDecorator.0FWK4GPSYA3AU4KQPYOKK3Q47.md|AddDecorator(Type, Type, ICatDecoratorParameter[])
+T:Cat.Decorators.CatDecoratorFactoryBuilder|CatDecoratorFactoryBuilder.md|CatDecoratorFactoryBuilder
+P:Cat.Decorators.CatDecoratorInfo.DecoratorGenericTypeDefinition|CatDecoratorInfo.DecoratorGenericTypeDefinition.md|DecoratorGenericTypeDefinition
+P:Cat.Decorators.CatDecoratorInfo.DecoratorParameterDictionary|CatDecoratorInfo.DecoratorParameterDictionary.md|DecoratorParameterDictionary
+M:Cat.Decorators.CatDecoratorInfo.#ctor(System.Type,System.Collections.Generic.IDictionary{System.String,System.Object})|CatDecoratorInfo..ctor.7N6RUQYPU2QAFERC8RWFG9II1.md|CatDecoratorInfo(Type, IDictionary<string,object>)
+T:Cat.Decorators.CatDecoratorInfo|CatDecoratorInfo.md|CatDecoratorInfo
+P:Cat.Decorators.CatDecoratorParameter.Name|CatDecoratorParameter.Name.md|Name
+P:Cat.Decorators.CatDecoratorParameter.Value|CatDecoratorParameter.Value.md|Value
+M:Cat.Decorators.CatDecoratorParameter.#ctor(System.String,System.Object)|CatDecoratorParameter..ctor.GSF504BV2LLXS4FC3L5HUPYO1.md|CatDecoratorParameter(string, object)
+T:Cat.Decorators.CatDecoratorParameter|CatDecoratorParameter.md|CatDecoratorParameter
+M:Cat.Decorators.Extensions.ServiceCollectionExtensions.AddCatDecoratorsModule(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatDecoratorsModule.4TRRN4ZH0DBHLHIEVPNCREYQD.md|AddCatDecoratorsModule(this IServiceCollection)
+N:Cat.Decorators.Extensions|Cat.Decorators.Extensions.md|Cat.Decorators.Extensions
+T:Cat.Decorators.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+?:Cat.Decorators.CatDecoratorFactory.GetDecoratedService|CatDecoratorFactory.GetDecoratedService.md|GetDecoratedService
+?:Cat.Decorators.CatDecoratorFactory.GetRequiredDecoratedService|CatDecoratorFactory.GetRequiredDecoratedService.md|GetRequiredDecoratedService

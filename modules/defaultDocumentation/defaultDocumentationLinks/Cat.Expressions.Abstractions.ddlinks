@@ -1,0 +1,4 @@
+..\Cat.Expressions.Abstractions\
+M:Cat.Expressions.Abstractions.ICatCompiledMemberExpressionCache`1.GetOrAdd``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Reflection.MemberInfo)|ICatCompiledMemberExpressionCache_T_.GetOrAdd.2M631FS7ODY5KGI1ED0YSU77A.md|GetOrAdd<TProperty>(Expression<Func<T,TProperty>>, MemberInfo)
+N:Cat.Expressions.Abstractions|Cat.Expressions.Abstractions.md|Cat.Expressions.Abstractions
+T:Cat.Expressions.Abstractions.ICatCompiledMemberExpressionCache`1|ICatCompiledMemberExpressionCache_T_.md|ICatCompiledMemberExpressionCache<T>
