@@ -18,7 +18,7 @@ namespace Cat.DefaultDocumentationPlugin
                 return;
             }
 
-            var stylesheetUrl = "../../../resources/styles/style.css";
+            var stylesheetUrl = "../../../../resources/styles/style.css";
             var solutionDocumentationTitle = "Clean Architecture Toolkit for .NET";
             var solutionCatReadMeUrl = "../../../../README.md";
             var solutionCatReadMeLinkName = "CAT";

@@ -1,4 +1,4 @@
-<link href="../../../resources/styles/style.css" rel="stylesheet"/>  
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>  
   
 # Clean Architecture Toolkit for .NET  
   
@@ -48,4 +48,4 @@ public static Cat.Responses.Abstractions.ICatResponse<TResponse> NoContent<TResp
 The value type the response is typed to\.
 
 #### Returns
-[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.md#Cat.Responses.CatResponse.NoContent_TResponse_().TResponse 'Cat\.Responses\.CatResponse\.NoContent\<TResponse\>\(\)\.TResponse')[&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')
+[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.NoContent.md#Cat.Responses.CatResponse.NoContent_TResponse_().TResponse 'Cat\.Responses\.CatResponse\.NoContent\<TResponse\>\(\)\.TResponse')[&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')

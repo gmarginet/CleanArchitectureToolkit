@@ -1,4 +1,4 @@
-<link href="../../../resources/styles/style.css" rel="stylesheet"/>  
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>  
   
 # Clean Architecture Toolkit for .NET  
   
@@ -73,5 +73,5 @@ Resolves the service and the dependencies of the decorators\.
 Implements [GetDecoratedService&lt;TService&gt;\(IServiceProvider\)](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorFactory.GetDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetDecoratedService_TService_(System.IServiceProvider) 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory\.GetDecoratedService\`\`1\(System\.IServiceProvider\)')
 
 #### Returns
-[TService](CatDecoratorFactory.md#Cat.Decorators.CatDecoratorFactory.GetDecoratedService_TService_(System.IServiceProvider).TService 'Cat\.Decorators\.CatDecoratorFactory\.GetDecoratedService\<TService\>\(System\.IServiceProvider\)\.TService')  
+[TService](CatDecoratorFactory.GetDecoratedService.md#Cat.Decorators.CatDecoratorFactory.GetDecoratedService_TService_(System.IServiceProvider).TService 'Cat\.Decorators\.CatDecoratorFactory\.GetDecoratedService\<TService\>\(System\.IServiceProvider\)\.TService')  
 The service, wrapped in its decorators, or `null`\.

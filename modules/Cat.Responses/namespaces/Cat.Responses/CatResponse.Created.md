@@ -1,4 +1,4 @@
-<link href="../../../resources/styles/style.css" rel="stylesheet"/>  
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>  
   
 # Clean Architecture Toolkit for .NET  
   
@@ -50,9 +50,9 @@ The type of value the response carries\.
 
 <a name='Cat.Responses.CatResponse.Created_TResponse_(TResponse).value'></a>
 
-`value` [TResponse](CatResponse.md#Cat.Responses.CatResponse.Created_TResponse_(TResponse).TResponse 'Cat\.Responses\.CatResponse\.Created\<TResponse\>\(TResponse\)\.TResponse')
+`value` [TResponse](CatResponse.Created.md#Cat.Responses.CatResponse.Created_TResponse_(TResponse).TResponse 'Cat\.Responses\.CatResponse\.Created\<TResponse\>\(TResponse\)\.TResponse')
 
 The value the response carries\.
 
 #### Returns
-[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.md#Cat.Responses.CatResponse.Created_TResponse_(TResponse).TResponse 'Cat\.Responses\.CatResponse\.Created\<TResponse\>\(TResponse\)\.TResponse')[&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')
+[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.Created.md#Cat.Responses.CatResponse.Created_TResponse_(TResponse).TResponse 'Cat\.Responses\.CatResponse\.Created\<TResponse\>\(TResponse\)\.TResponse')[&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')

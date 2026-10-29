@@ -23,6 +23,7 @@
         <DefaultDocumentationConfigurationFile>..\..\defaultDocumentation\DefaultDocumentation.json</DefaultDocumentationConfigurationFile>
         <DefaultDocumentationPlugins>$(SolutionDir)resources\defaultDocumentationPlugins\Cat.DefaultDocumentationPlugin.dll</DefaultDocumentationPlugins>
         <DefaultDocumentationAssemblyPageName>index</DefaultDocumentationAssemblyPageName>
+        <DefaultDocumentationUrlFactories>CatMemberParameter|DocItem|DotnetApi</DefaultDocumentationUrlFactories>
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,4 +1,4 @@
-<link href="../../../resources/styles/style.css" rel="stylesheet"/>  
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>  
   
 # Clean Architecture Toolkit for .NET  
   
@@ -38,7 +38,7 @@ The value type of the resulting response\.
 Implements [Cast&lt;TResponse&gt;\(\)](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.Cast.md#Cat.Responses.Abstractions.ICatResponse.Cast_TResponse_() 'Cat\.Responses\.Abstractions\.ICatResponse\.Cast\`\`1')
 
 #### Returns
-[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.md#Cat.Responses.CatResponse.Cast_TResponse_().TResponse 'Cat\.Responses\.CatResponse\.Cast\<TResponse\>\(\)\.TResponse')[&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')  
+[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.Cast.md#Cat.Responses.CatResponse.Cast_TResponse_().TResponse 'Cat\.Responses\.CatResponse\.Cast\<TResponse\>\(\)\.TResponse')[&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')  
 A failed response with the same type and errors\.
 
 <a name='Cat.Responses.CatResponse.Cast_TResponse_(TResponse)'></a>
@@ -61,12 +61,12 @@ The value type of the resulting response\.
 
 <a name='Cat.Responses.CatResponse.Cast_TResponse_(TResponse).value'></a>
 
-`value` [TResponse](CatResponse.md#Cat.Responses.CatResponse.Cast_TResponse_(TResponse).TResponse 'Cat\.Responses\.CatResponse\.Cast\<TResponse\>\(TResponse\)\.TResponse')
+`value` [TResponse](CatResponse.Cast.md#Cat.Responses.CatResponse.Cast_TResponse_(TResponse).TResponse 'Cat\.Responses\.CatResponse\.Cast\<TResponse\>\(TResponse\)\.TResponse')
 
 The value to carry on the resulting response\. Only used when [IsSucceeded](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.IsSucceeded.md 'Cat\.Responses\.Abstractions\.ICatResponse\.IsSucceeded') is `true`\.
 
 Implements [Cast&lt;TResponse&gt;\(TResponse\)](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.Cast.md#Cat.Responses.Abstractions.ICatResponse.Cast_TResponse_(TResponse) 'Cat\.Responses\.Abstractions\.ICatResponse\.Cast\`\`1\(\`\`0\)')
 
 #### Returns
-[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.md#Cat.Responses.CatResponse.Cast_TResponse_(TResponse).TResponse 'Cat\.Responses\.CatResponse\.Cast\<TResponse\>\(TResponse\)\.TResponse')[&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')  
-A response with the same type, carrying [value](CatResponse.md#Cat.Responses.CatResponse.Cast_TResponse_(TResponse).value 'Cat\.Responses\.CatResponse\.Cast\<TResponse\>\(TResponse\)\.value') if it succeeded\.
+[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.Cast.md#Cat.Responses.CatResponse.Cast_TResponse_(TResponse).TResponse 'Cat\.Responses\.CatResponse\.Cast\<TResponse\>\(TResponse\)\.TResponse')[&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')  
+A response with the same type, carrying [value](CatResponse.Cast.md#Cat.Responses.CatResponse.Cast_TResponse_(TResponse).value 'Cat\.Responses\.CatResponse\.Cast\<TResponse\>\(TResponse\)\.value') if it succeeded\.

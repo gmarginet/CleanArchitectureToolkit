@@ -1,4 +1,4 @@
-<link href="../../../resources/styles/style.css" rel="stylesheet"/>  
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>  
   
 # Clean Architecture Toolkit for .NET  
   
@@ -15,7 +15,7 @@
 | Overloads | |
 | :--- | :--- |
 | [HasRegistrationFor\(this IServiceCollection, Type\)](ServiceCollectionExtensions.HasRegistrationFor.md#Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection,System.Type) 'Cat\.ServiceCollection\.Extensions\.ServiceCollectionExtensions\.HasRegistrationFor\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection, System\.Type\)') | Checks whether the given service type is already registered in the service collection\. An open generic type \(such as `typeof(IRepository<>)`\) matches any registration for that generic definition\. |
-| [HasRegistrationFor&lt;TService&gt;\(this IServiceCollection\)](ServiceCollectionExtensions.HasRegistrationFor.md#Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor_TService_(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection) 'Cat\.ServiceCollection\.Extensions\.ServiceCollectionExtensions\.HasRegistrationFor\<TService\>\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)') | Checks whether [TService](ServiceCollectionExtensions.md#Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor_TService_(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection).TService 'Cat\.ServiceCollection\.Extensions\.ServiceCollectionExtensions\.HasRegistrationFor\<TService\>\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)\.TService') is already registered in the service collection\. |
+| [HasRegistrationFor&lt;TService&gt;\(this IServiceCollection\)](ServiceCollectionExtensions.HasRegistrationFor.md#Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor_TService_(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection) 'Cat\.ServiceCollection\.Extensions\.ServiceCollectionExtensions\.HasRegistrationFor\<TService\>\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)') | Checks whether [TService](ServiceCollectionExtensions.HasRegistrationFor.md#Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor_TService_(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection).TService 'Cat\.ServiceCollection\.Extensions\.ServiceCollectionExtensions\.HasRegistrationFor\<TService\>\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)\.TService') is already registered in the service collection\. |
 
 <a name='Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection,System.Type)'></a>
 
@@ -49,7 +49,7 @@ The service type to look for\.
 
 ## ServiceCollectionExtensions\.HasRegistrationFor\<TService\>\(this IServiceCollection\) Method
 
-Checks whether [TService](ServiceCollectionExtensions.md#Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor_TService_(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection).TService 'Cat\.ServiceCollection\.Extensions\.ServiceCollectionExtensions\.HasRegistrationFor\<TService\>\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)\.TService') is already registered in the service collection\.
+Checks whether [TService](ServiceCollectionExtensions.HasRegistrationFor.md#Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor_TService_(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection).TService 'Cat\.ServiceCollection\.Extensions\.ServiceCollectionExtensions\.HasRegistrationFor\<TService\>\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)\.TService') is already registered in the service collection\.
 
 ```csharp
 public static bool HasRegistrationFor<TService>(this Microsoft.Extensions.DependencyInjection.IServiceCollection services);
@@ -71,4 +71,4 @@ The service collection to check\.
 
 #### Returns
 [System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')  
-`true` if a registration for [TService](ServiceCollectionExtensions.md#Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor_TService_(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection).TService 'Cat\.ServiceCollection\.Extensions\.ServiceCollectionExtensions\.HasRegistrationFor\<TService\>\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)\.TService') exists\.
+`true` if a registration for [TService](ServiceCollectionExtensions.HasRegistrationFor.md#Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor_TService_(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection).TService 'Cat\.ServiceCollection\.Extensions\.ServiceCollectionExtensions\.HasRegistrationFor\<TService\>\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)\.TService') exists\.

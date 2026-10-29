@@ -1,4 +1,4 @@
-<link href="../../../resources/styles/style.css" rel="stylesheet"/>  
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>  
   
 # Clean Architecture Toolkit for .NET  
   
@@ -38,7 +38,7 @@ The stable code identifying this kind of error\.
 
 `message` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
 
-The error message\. Can contain placeholders filled in by [arguments](CatError.md#Cat.Responses.CatError.Create(string,string,object[]).arguments 'Cat\.Responses\.CatError\.Create\(string, string, object\[\]\)\.arguments')\.
+The error message\. Can contain placeholders filled in by [arguments](CatError.Create.md#Cat.Responses.CatError.Create(string,string,object[]).arguments 'Cat\.Responses\.CatError\.Create\(string, string, object\[\]\)\.arguments')\.
 
 <a name='Cat.Responses.CatError.Create(string,string,object[]).arguments'></a>
 
@@ -71,7 +71,7 @@ The stable code identifying this kind of error\.
 
 `message` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
 
-The error message\. Can contain placeholders filled in by [argumentList](CatError.md#Cat.Responses.CatError.Create(string,string,System.Collections.Generic.List_object_).argumentList 'Cat\.Responses\.CatError\.Create\(string, string, System\.Collections\.Generic\.List\<object\>\)\.argumentList')\.
+The error message\. Can contain placeholders filled in by [argumentList](CatError.Create.md#Cat.Responses.CatError.Create(string,string,System.Collections.Generic.List_object_).argumentList 'Cat\.Responses\.CatError\.Create\(string, string, System\.Collections\.Generic\.List\<object\>\)\.argumentList')\.
 
 <a name='Cat.Responses.CatError.Create(string,string,System.Collections.Generic.List_object_).argumentList'></a>
 

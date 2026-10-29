@@ -1,4 +1,4 @@
-<link href="../../../resources/styles/style.css" rel="stylesheet"/>  
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>  
   
 # Clean Architecture Toolkit for .NET  
   
@@ -74,7 +74,7 @@ The closed generic service type\.
 Resolves the service and the dependencies of the decorators\.
 
 #### Returns
-[TService](ICatDecoratorFactory.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService_TService_(System.IServiceProvider).TService 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory\.GetRequiredDecoratedService\<TService\>\(System\.IServiceProvider\)\.TService')  
+[TService](ICatDecoratorFactory.GetRequiredDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService_TService_(System.IServiceProvider).TService 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory\.GetRequiredDecoratedService\<TService\>\(System\.IServiceProvider\)\.TService')  
 The service, wrapped in its decorators\.
 
 #### Exceptions
