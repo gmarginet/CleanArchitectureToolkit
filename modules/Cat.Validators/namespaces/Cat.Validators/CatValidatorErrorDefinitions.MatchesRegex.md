@@ -19,4 +19,4 @@ public static readonly CatErrorDefinition MatchesRegex;
 ```
 
 #### Field Value
-[CatErrorDefinition](..\Cat.Responses\CatErrorDefinition.md 'Cat\.Responses\.CatErrorDefinition')
+[CatErrorDefinition](../Cat.Responses/CatErrorDefinition.md 'Cat\.Responses\.CatErrorDefinition')

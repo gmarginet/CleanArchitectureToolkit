@@ -30,13 +30,13 @@ internal CatResponse(Cat.Responses.Abstractions.CatResponseType.Failed type, Sys
 
 <a name='Cat.Responses.CatResponse.CatResponse(Cat.Responses.Abstractions.CatResponseType.Failed,System.Collections.Generic.IReadOnlyList_Cat.Responses.Abstractions.ICatError_).type'></a>
 
-`type` [Failed](..\Cat.Responses.Abstractions\CatResponseType.Failed.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed')
+`type` [Failed](../Cat.Responses.Abstractions/CatResponseType.Failed.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed')
 
 The specific failed outcome\.
 
 <a name='Cat.Responses.CatResponse.CatResponse(Cat.Responses.Abstractions.CatResponseType.Failed,System.Collections.Generic.IReadOnlyList_Cat.Responses.Abstractions.ICatError_).errorList'></a>
 
-`errorList` [System\.Collections\.Generic\.IReadOnlyList&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1 'System\.Collections\.Generic\.IReadOnlyList\`1')[ICatError](..\Cat.Responses.Abstractions\ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1 'System\.Collections\.Generic\.IReadOnlyList\`1')
+`errorList` [System\.Collections\.Generic\.IReadOnlyList&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1 'System\.Collections\.Generic\.IReadOnlyList\`1')[ICatError](../Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1 'System\.Collections\.Generic\.IReadOnlyList\`1')
 
 The errors that caused the operation to fail\.
 
@@ -53,6 +53,6 @@ internal CatResponse(Cat.Responses.Abstractions.CatResponseType.Succeeded type);
 
 <a name='Cat.Responses.CatResponse.CatResponse(Cat.Responses.Abstractions.CatResponseType.Succeeded).type'></a>
 
-`type` [Succeeded](..\Cat.Responses.Abstractions\CatResponseType.Succeeded.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded')
+`type` [Succeeded](../Cat.Responses.Abstractions/CatResponseType.Succeeded.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded')
 
 The specific succeeded outcome\.

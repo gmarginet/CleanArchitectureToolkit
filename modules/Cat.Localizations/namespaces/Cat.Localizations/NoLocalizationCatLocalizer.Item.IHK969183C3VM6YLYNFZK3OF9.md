@@ -31,7 +31,7 @@ The key to look up\. Its localized value can contain placeholders, filled in ord
 
 The values to substitute into the localized string's placeholders, in order\.
 
-Implements [this\[string, object\[\]\]](..\Cat.Localizations.Abstractions\ICatLocalizer.Item.SP0BGHDYQU87JBN8QJGTH1HL2.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer\.Item\(System\.String,System\.Object\[\]\)')
+Implements [this\[string, object\[\]\]](../Cat.Localizations.Abstractions/ICatLocalizer.Item.SP0BGHDYQU87JBN8QJGTH1HL2.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer\.Item\(System\.String,System\.Object\[\]\)')
 
 #### Property Value
 [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')

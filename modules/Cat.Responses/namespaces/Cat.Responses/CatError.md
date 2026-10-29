@@ -12,7 +12,7 @@
 
 ## CatError Class
 
-The default [ICatError](..\Cat.Responses.Abstractions\ICatError.md 'Cat\.Responses\.Abstractions\.ICatError') implementation\. Create instances through its static `Create` overloads,
+The default [ICatError](../Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError') implementation\. Create instances through its static `Create` overloads,
 or build one from a reusable [CatErrorDefinition](CatErrorDefinition.md 'Cat\.Responses\.CatErrorDefinition') instead\.
 
 ```csharp
@@ -21,7 +21,7 @@ public record CatError : Cat.Responses.Abstractions.ICatError, System.IEquatable
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatError
 
-Implements [ICatError](..\Cat.Responses.Abstractions\ICatError.md 'Cat\.Responses\.Abstractions\.ICatError'), [System\.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System\.IEquatable\`1')[CatError](CatError.md 'Cat\.Responses\.CatError')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System\.IEquatable\`1')
+Implements [ICatError](../Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError'), [System\.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System\.IEquatable\`1')[CatError](CatError.md 'Cat\.Responses\.CatError')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System\.IEquatable\`1')
 
 | Constructors | |
 | :--- | :--- |
@@ -31,7 +31,7 @@ Implements [ICatError](..\Cat.Responses.Abstractions\ICatError.md 'Cat\.Response
 | :--- | :--- |
 | [Arguments](CatError.Arguments.md 'Cat\.Responses\.CatError\.Arguments') | The values to substitute into the message's placeholders, in order\. |
 | [Code](CatError.Code.md 'Cat\.Responses\.CatError\.Code') | A stable code identifying the kind of error, independent of its message text\. |
-| [Message](CatError.Message.md 'Cat\.Responses\.CatError\.Message') | A human\-readable message describing the error\. Can contain placeholders filled in by [Arguments](..\Cat.Responses.Abstractions\ICatError.Arguments.md 'Cat\.Responses\.Abstractions\.ICatError\.Arguments')\. |
+| [Message](CatError.Message.md 'Cat\.Responses\.CatError\.Message') | A human\-readable message describing the error\. Can contain placeholders filled in by [Arguments](../Cat.Responses.Abstractions/ICatError.Arguments.md 'Cat\.Responses\.Abstractions\.ICatError\.Arguments')\. |
 
 | Methods | |
 | :--- | :--- |

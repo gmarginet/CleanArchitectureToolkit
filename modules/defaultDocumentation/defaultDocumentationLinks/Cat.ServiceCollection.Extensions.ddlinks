@@ -1,4 +1,4 @@
-..\Cat.ServiceCollection.Extensions\
+../Cat.ServiceCollection.Extensions/
 M:Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.HasRegistrationFor.md#Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor_TService_(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection)|HasRegistrationFor<TService>(this IServiceCollection)
 M:Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type)|ServiceCollectionExtensions.HasRegistrationFor.md#Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection,System.Type)|HasRegistrationFor(this IServiceCollection, Type)
 N:Cat.ServiceCollection.Extensions|Cat.ServiceCollection.Extensions.md|Cat.ServiceCollection.Extensions

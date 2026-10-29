@@ -19,4 +19,4 @@ public Cat.Responses.Abstractions.ICatResponse<TResult>? Response { get; private
 ```
 
 #### Property Value
-[Cat\.Responses\.Abstractions\.ICatResponse&lt;](..\Cat.Responses.Abstractions\ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResult](CatProcessQueryStep_TQuery,TResult_.md#Cat.FluentWorkflows.Queries.Steps.CatProcessQueryStep_TQuery,TResult_.TResult 'Cat\.FluentWorkflows\.Queries\.Steps\.CatProcessQueryStep\<TQuery,TResult\>\.TResult')[&gt;](..\Cat.Responses.Abstractions\ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')
+[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResult](CatProcessQueryStep_TQuery,TResult_.md#Cat.FluentWorkflows.Queries.Steps.CatProcessQueryStep_TQuery,TResult_.TResult 'Cat\.FluentWorkflows\.Queries\.Steps\.CatProcessQueryStep\<TQuery,TResult\>\.TResult')[&gt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')

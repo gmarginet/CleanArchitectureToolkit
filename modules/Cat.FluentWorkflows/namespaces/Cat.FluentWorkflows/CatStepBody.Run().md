@@ -19,5 +19,5 @@ protected abstract Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse Run();
 ```
 
 #### Returns
-[ICatWorkflowResponse](..\Cat.FluentWorkflows.Abstractions\ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')  
+[ICatWorkflowResponse](../Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')  
 A response with the result for the step processor and the errors, if any\.

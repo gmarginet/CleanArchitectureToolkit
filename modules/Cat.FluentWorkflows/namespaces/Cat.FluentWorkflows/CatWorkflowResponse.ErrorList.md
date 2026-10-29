@@ -18,7 +18,7 @@ The errors\. The list is empty when nothing failed\.
 public System.Collections.Generic.IReadOnlyList<Cat.Responses.Abstractions.ICatError> ErrorList { get; private set; }
 ```
 
-Implements [ErrorList](..\Cat.FluentWorkflows.Abstractions\ICatWorkflowResponse.ErrorList.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse\.ErrorList')
+Implements [ErrorList](../Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.ErrorList.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse\.ErrorList')
 
 #### Property Value
-[System\.Collections\.Generic\.IReadOnlyList&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1 'System\.Collections\.Generic\.IReadOnlyList\`1')[ICatError](..\Cat.Responses.Abstractions\ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1 'System\.Collections\.Generic\.IReadOnlyList\`1')
+[System\.Collections\.Generic\.IReadOnlyList&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1 'System\.Collections\.Generic\.IReadOnlyList\`1')[ICatError](../Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1 'System\.Collections\.Generic\.IReadOnlyList\`1')

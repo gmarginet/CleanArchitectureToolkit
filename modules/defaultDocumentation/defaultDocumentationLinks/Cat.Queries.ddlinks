@@ -1,4 +1,4 @@
-..\Cat.Queries\
+../Cat.Queries/
 F:Cat.Queries.CatQueryProcessor._serviceProvider|CatQueryProcessor._serviceProvider.md|_serviceProvider
 F:Cat.Queries.CatQueryProcessor._decoratorFactory|CatQueryProcessor._decoratorFactory.md|_decoratorFactory
 M:Cat.Queries.CatQueryProcessor.#ctor(System.IServiceProvider,Cat.Decorators.Abstractions.ICatDecoratorFactory)|CatQueryProcessor..ctor.ZYV1NSBUVKFC4AJ4TLQSNFX15.md|CatQueryProcessor(IServiceProvider, ICatDecoratorFactory)

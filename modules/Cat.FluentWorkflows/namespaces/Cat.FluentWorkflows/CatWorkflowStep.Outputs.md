@@ -18,7 +18,7 @@ The values copied from the step into the state after it ran\.
 public System.Collections.Generic.List<Cat.FluentWorkflows.Abstractions.ICatStepParameter> Outputs { get; }
 ```
 
-Implements [Outputs](..\Cat.FluentWorkflows.Abstractions\ICatWorkflowStep.Outputs.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowStep\.Outputs')
+Implements [Outputs](../Cat.FluentWorkflows.Abstractions/ICatWorkflowStep.Outputs.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowStep\.Outputs')
 
 #### Property Value
-[System\.Collections\.Generic\.List&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')[ICatStepParameter](..\Cat.FluentWorkflows.Abstractions\ICatStepParameter.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepParameter')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')
+[System\.Collections\.Generic\.List&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')[ICatStepParameter](../Cat.FluentWorkflows.Abstractions/ICatStepParameter.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepParameter')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')

@@ -17,4 +17,4 @@ private readonly ICatWorkflowProcessor _workflowProcessor;
 ```
 
 #### Field Value
-[ICatWorkflowProcessor](..\Cat.FluentWorkflows.Abstractions\ICatWorkflowProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowProcessor')
+[ICatWorkflowProcessor](../Cat.FluentWorkflows.Abstractions/ICatWorkflowProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowProcessor')

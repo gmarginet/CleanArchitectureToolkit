@@ -12,7 +12,7 @@
 
 ## CatValidatorBuilder\(ICatCompiledMemberExpressionCache\<TModel\>, CatValidatorProcessor, bool\) Constructor
 
-Default [ICatValidatorBuilder&lt;TModel&gt;](..\Cat.Validators.Abstractions\ICatValidatorBuilder_TModel_.md 'Cat\.Validators\.Abstractions\.ICatValidatorBuilder\`1')\.
+Default [ICatValidatorBuilder&lt;TModel&gt;](../Cat.Validators.Abstractions/ICatValidatorBuilder_TModel_.md 'Cat\.Validators\.Abstractions\.ICatValidatorBuilder\`1')\.
 Gathers the rules of one validator run\.
 
 ```csharp
@@ -22,7 +22,7 @@ public CatValidatorBuilder(Cat.Expressions.Abstractions.ICatCompiledMemberExpres
 
 <a name='Cat.Validators.CatValidatorBuilder_TModel_.CatValidatorBuilder(Cat.Expressions.Abstractions.ICatCompiledMemberExpressionCache_TModel_,Cat.Validators.CatValidatorProcessor,bool).compiledMemberExpressionCache'></a>
 
-`compiledMemberExpressionCache` [Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache&lt;](..\Cat.Expressions.Abstractions\ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1')[TModel](CatValidatorBuilder_TModel_.md#Cat.Validators.CatValidatorBuilder_TModel_.TModel 'Cat\.Validators\.CatValidatorBuilder\<TModel\>\.TModel')[&gt;](..\Cat.Expressions.Abstractions\ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1')
+`compiledMemberExpressionCache` [Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache&lt;](../Cat.Expressions.Abstractions/ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1')[TModel](CatValidatorBuilder_TModel_.md#Cat.Validators.CatValidatorBuilder_TModel_.TModel 'Cat\.Validators\.CatValidatorBuilder\<TModel\>\.TModel')[&gt;](../Cat.Expressions.Abstractions/ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1')
 
 <a name='Cat.Validators.CatValidatorBuilder_TModel_.CatValidatorBuilder(Cat.Expressions.Abstractions.ICatCompiledMemberExpressionCache_TModel_,Cat.Validators.CatValidatorProcessor,bool).validatorProcessor'></a>
 

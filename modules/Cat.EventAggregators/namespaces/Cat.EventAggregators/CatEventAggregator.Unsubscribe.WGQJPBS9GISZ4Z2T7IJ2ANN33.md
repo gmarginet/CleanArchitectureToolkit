@@ -25,4 +25,4 @@ public void Unsubscribe(object subscriber);
 
 The subscriber instance to remove\.
 
-Implements [Unsubscribe\(object\)](..\Cat.EventAggregators.Abstractions\ICatEventAggregator.Unsubscribe.QFMFC33IRLO9WQRQ5Z7JO71H1.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator\.Unsubscribe\(System\.Object\)')
+Implements [Unsubscribe\(object\)](../Cat.EventAggregators.Abstractions/ICatEventAggregator.Unsubscribe.QFMFC33IRLO9WQRQ5Z7JO71H1.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator\.Unsubscribe\(System\.Object\)')

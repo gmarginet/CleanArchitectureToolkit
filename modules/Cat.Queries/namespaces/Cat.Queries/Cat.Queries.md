@@ -12,9 +12,9 @@
 
 ## Cat\.Queries Namespace
 
-Provides the default [ICatQueryProcessor](..\Cat.Queries.Abstractions\ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor')\.
+Provides the default [ICatQueryProcessor](../Cat.Queries.Abstractions/ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor')\.
 It resolves the matching handler, wraps it in the registered decorators and runs it\.
 
 | Classes | |
 | :--- | :--- |
-| [CatQueryProcessor](CatQueryProcessor.md 'Cat\.Queries\.CatQueryProcessor') | Default [ICatQueryProcessor](..\Cat.Queries.Abstractions\ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor')\. Opens a new scope per query, gets the decorated handler from it and invokes the handler\. |
+| [CatQueryProcessor](CatQueryProcessor.md 'Cat\.Queries\.CatQueryProcessor') | Default [ICatQueryProcessor](../Cat.Queries.Abstractions/ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor')\. Opens a new scope per query, gets the decorated handler from it and invokes the handler\. |

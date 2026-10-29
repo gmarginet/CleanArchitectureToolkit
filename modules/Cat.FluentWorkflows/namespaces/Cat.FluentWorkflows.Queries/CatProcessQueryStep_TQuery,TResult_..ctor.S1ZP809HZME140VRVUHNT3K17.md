@@ -21,7 +21,7 @@ public CatProcessQueryStep(Cat.Queries.Abstractions.ICatQueryProcessor queryProc
 
 <a name='Cat.FluentWorkflows.Queries.Steps.CatProcessQueryStep_TQuery,TResult_.CatProcessQueryStep(Cat.Queries.Abstractions.ICatQueryProcessor,Microsoft.Extensions.Logging.ILogger_Cat.FluentWorkflows.Queries.Steps.CatProcessQueryStep_TQuery,TResult__).queryProcessor'></a>
 
-`queryProcessor` [ICatQueryProcessor](..\Cat.Queries.Abstractions\ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor')
+`queryProcessor` [ICatQueryProcessor](../Cat.Queries.Abstractions/ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor')
 
 Processes the query\.
 

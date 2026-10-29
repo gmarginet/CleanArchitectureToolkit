@@ -14,5 +14,5 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Commands](Cat.Commands.md 'Cat\.Commands') | Provides the default [ICatCommandProcessor](..\Cat.Commands.Abstractions\ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')\. It resolves the matching handler, wraps it in the registered decorators and runs it\. |
+| [Cat\.Commands](Cat.Commands.md 'Cat\.Commands') | Provides the default [ICatCommandProcessor](../Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')\. It resolves the matching handler, wraps it in the registered decorators and runs it\. |
 | [Cat\.Commands\.Extensions](Cat.Commands.Extensions.md 'Cat\.Commands\.Extensions') | |

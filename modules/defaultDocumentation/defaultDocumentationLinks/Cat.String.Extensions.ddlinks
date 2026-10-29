@@ -1,4 +1,4 @@
-..\Cat.String.Extensions\
+../Cat.String.Extensions/
 M:Cat.String.Extensions.StringExtensions.NamedFormat(System.String,System.Object[])|StringExtensions.NamedFormat.4YCGFV7T1TMWUZ1NXK09MDXVE.md|NamedFormat(this string, object[])
 M:Cat.String.Extensions.StringExtensions.FindBraceIndex(System.String,System.Char,System.Int32,System.Int32)|StringExtensions.FindBraceIndex.AYNNCTTLRLKMAMT9V0W5HDR0C.md|FindBraceIndex(string, char, int, int)
 M:Cat.String.Extensions.StringExtensions.CreateRegex(System.String,System.Text.RegularExpressions.RegexOptions)|StringExtensions.CreateRegex.SG6E26717GKX12GNUTYBZKPBC.md|CreateRegex(this string, RegexOptions)

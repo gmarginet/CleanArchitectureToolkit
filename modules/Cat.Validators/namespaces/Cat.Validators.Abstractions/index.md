@@ -14,4 +14,4 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Validators\.Abstractions](Cat.Validators.Abstractions.md 'Cat\.Validators\.Abstractions') | Defines the contracts for validation: validators, the builders you describe rules with, the rules themselves, and the processor that runs them and returns an [ICatResponse](..\Cat.Responses.Abstractions\ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')\. |
+| [Cat\.Validators\.Abstractions](Cat.Validators.Abstractions.md 'Cat\.Validators\.Abstractions') | Defines the contracts for validation: validators, the builders you describe rules with, the rules themselves, and the processor that runs them and returns an [ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')\. |

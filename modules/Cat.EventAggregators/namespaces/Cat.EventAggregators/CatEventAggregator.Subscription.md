@@ -12,7 +12,7 @@
 
 ## CatEventAggregator\.Subscription Class
 
-Tracks one subscriber's live reference and the [ICatHandleEvent&lt;TEvent&gt;](..\Cat.EventAggregators.Abstractions\ICatHandleEvent_TEvent_.md 'Cat\.EventAggregators\.Abstractions\.ICatHandleEvent\`1') handler methods it implements\.
+Tracks one subscriber's live reference and the [ICatHandleEvent&lt;TEvent&gt;](../Cat.EventAggregators.Abstractions/ICatHandleEvent_TEvent_.md 'Cat\.EventAggregators\.Abstractions\.ICatHandleEvent\`1') handler methods it implements\.
 
 ```csharp
 private class CatEventAggregator.Subscription
@@ -22,7 +22,7 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Constructors | |
 | :--- | :--- |
-| [Subscription\(object\)](CatEventAggregator.Subscription..ctor.OLDQSNEVBBMCFWBC4DG754BJA.md 'Cat\.EventAggregators\.CatEventAggregator\.Subscription\.Subscription\(object\)') | Inspects the subscriber's implemented interfaces and caches its [ICatHandleEvent&lt;TEvent&gt;](..\Cat.EventAggregators.Abstractions\ICatHandleEvent_TEvent_.md 'Cat\.EventAggregators\.Abstractions\.ICatHandleEvent\`1') handler methods, keyed by event type\. |
+| [Subscription\(object\)](CatEventAggregator.Subscription..ctor.OLDQSNEVBBMCFWBC4DG754BJA.md 'Cat\.EventAggregators\.CatEventAggregator\.Subscription\.Subscription\(object\)') | Inspects the subscriber's implemented interfaces and caches its [ICatHandleEvent&lt;TEvent&gt;](../Cat.EventAggregators.Abstractions/ICatHandleEvent_TEvent_.md 'Cat\.EventAggregators\.Abstractions\.ICatHandleEvent\`1') handler methods, keyed by event type\. |
 
 | Fields | |
 | :--- | :--- |
@@ -31,7 +31,7 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Properties | |
 | :--- | :--- |
-| [HasEventHandlers](CatEventAggregator.Subscription.HasEventHandlers.md 'Cat\.EventAggregators\.CatEventAggregator\.Subscription\.HasEventHandlers') | `true` if the subscriber implements at least one [ICatHandleEvent&lt;TEvent&gt;](..\Cat.EventAggregators.Abstractions\ICatHandleEvent_TEvent_.md 'Cat\.EventAggregators\.Abstractions\.ICatHandleEvent\`1') handler\. |
+| [HasEventHandlers](CatEventAggregator.Subscription.HasEventHandlers.md 'Cat\.EventAggregators\.CatEventAggregator\.Subscription\.HasEventHandlers') | `true` if the subscriber implements at least one [ICatHandleEvent&lt;TEvent&gt;](../Cat.EventAggregators.Abstractions/ICatHandleEvent_TEvent_.md 'Cat\.EventAggregators\.Abstractions\.ICatHandleEvent\`1') handler\. |
 | [IsDead](CatEventAggregator.Subscription.IsDead.md 'Cat\.EventAggregators\.CatEventAggregator\.Subscription\.IsDead') | `true` if the subscriber has been garbage collected\. |
 
 | Methods | |

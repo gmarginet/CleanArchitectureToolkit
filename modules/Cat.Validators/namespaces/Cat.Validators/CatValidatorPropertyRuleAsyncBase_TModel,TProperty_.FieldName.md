@@ -18,7 +18,7 @@ Replaces the field name in the errors\. Leave it `null` to use the property name
 public string? FieldName { get; set; }
 ```
 
-Implements [FieldName](..\Cat.Validators.Abstractions\ICatValidatorPropertyRule_TModel,TProperty_.FieldName.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRule\`2\.FieldName')
+Implements [FieldName](../Cat.Validators.Abstractions/ICatValidatorPropertyRule_TModel,TProperty_.FieldName.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRule\`2\.FieldName')
 
 #### Property Value
 [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')

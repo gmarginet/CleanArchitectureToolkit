@@ -31,4 +31,4 @@ The object to read from\.
 
 The object to write to\.
 
-Implements [Assign\(object, object\)](..\Cat.FluentWorkflows.Abstractions\ICatStepParameter.Assign.IEVV6T2H1ALIRLWUNX9IGC4DD.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepParameter\.Assign\(System\.Object,System\.Object\)')
+Implements [Assign\(object, object\)](../Cat.FluentWorkflows.Abstractions/ICatStepParameter.Assign.IEVV6T2H1ALIRLWUNX9IGC4DD.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepParameter\.Assign\(System\.Object,System\.Object\)')

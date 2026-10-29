@@ -1,4 +1,4 @@
-..\Cat.Responses.Abstractions\
+../Cat.Responses.Abstractions/
 P:Cat.Responses.Abstractions.CatResponseType.Ok|CatResponseType.Ok.md|Ok
 P:Cat.Responses.Abstractions.CatResponseType.Created|CatResponseType.Created.md|Created
 P:Cat.Responses.Abstractions.CatResponseType.NoContent|CatResponseType.NoContent.md|NoContent

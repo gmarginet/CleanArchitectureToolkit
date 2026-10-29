@@ -12,7 +12,7 @@
 
 ## CatEventAggregator\.Subscription\.HasEventHandlers Property
 
-`true` if the subscriber implements at least one [ICatHandleEvent&lt;TEvent&gt;](..\Cat.EventAggregators.Abstractions\ICatHandleEvent_TEvent_.md 'Cat\.EventAggregators\.Abstractions\.ICatHandleEvent\`1') handler\.
+`true` if the subscriber implements at least one [ICatHandleEvent&lt;TEvent&gt;](../Cat.EventAggregators.Abstractions/ICatHandleEvent_TEvent_.md 'Cat\.EventAggregators\.Abstractions\.ICatHandleEvent\`1') handler\.
 
 ```csharp
 public bool HasEventHandlers { get; }

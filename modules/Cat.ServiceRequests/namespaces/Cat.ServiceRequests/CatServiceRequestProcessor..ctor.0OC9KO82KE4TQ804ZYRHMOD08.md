@@ -27,6 +27,6 @@ Used to open a scope for each request\.
 
 <a name='Cat.ServiceRequests.CatServiceRequestProcessor.CatServiceRequestProcessor(System.IServiceProvider,Cat.Decorators.Abstractions.ICatDecoratorFactory).decoratorFactory'></a>
 
-`decoratorFactory` [ICatDecoratorFactory](..\Cat.Decorators.Abstractions\ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')
+`decoratorFactory` [ICatDecoratorFactory](../Cat.Decorators.Abstractions/ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')
 
 Builds the handler together with its registered decorators\.

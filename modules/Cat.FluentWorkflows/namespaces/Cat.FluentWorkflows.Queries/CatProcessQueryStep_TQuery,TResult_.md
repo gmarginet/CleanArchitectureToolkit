@@ -33,7 +33,7 @@ The query to process\.
 
 The type of the data the query returns\.
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [CatStepBodyAsync](..\Cat.FluentWorkflows\CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') &#129106; CatProcessQueryStep\<TQuery,TResult\>
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [CatStepBodyAsync](../Cat.FluentWorkflows/CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') &#129106; CatProcessQueryStep\<TQuery,TResult\>
 
 | Constructors | |
 | :--- | :--- |

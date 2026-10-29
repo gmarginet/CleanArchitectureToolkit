@@ -33,7 +33,7 @@ The type of the rule\.
 
 The rule to add\. It must derive from [CatValidatorModelRuleAsyncBase&lt;TModel&gt;](CatValidatorModelRuleAsyncBase_TModel_.md 'Cat\.Validators\.CatValidatorModelRuleAsyncBase\<TModel\>')\.
 
-Implements [AddRule&lt;TRule&gt;\(TRule\)](..\Cat.Validators.Abstractions\ICatValidatorModelRuleBuilder_TModel_.AddRule.NTZUA8M66NHJI05PHAP0R47G7.md 'Cat\.Validators\.Abstractions\.ICatValidatorModelRuleBuilder\`1\.AddRule\`\`1\(\`\`0\)')
+Implements [AddRule&lt;TRule&gt;\(TRule\)](../Cat.Validators.Abstractions/ICatValidatorModelRuleBuilder_TModel_.AddRule.NTZUA8M66NHJI05PHAP0R47G7.md 'Cat\.Validators\.Abstractions\.ICatValidatorModelRuleBuilder\`1\.AddRule\`\`1\(\`\`0\)')
 
 #### Exceptions
 

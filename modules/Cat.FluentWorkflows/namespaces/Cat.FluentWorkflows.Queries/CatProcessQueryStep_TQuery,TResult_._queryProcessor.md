@@ -17,4 +17,4 @@ private readonly ICatQueryProcessor _queryProcessor;
 ```
 
 #### Field Value
-[ICatQueryProcessor](..\Cat.Queries.Abstractions\ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor')
+[ICatQueryProcessor](../Cat.Queries.Abstractions/ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor')

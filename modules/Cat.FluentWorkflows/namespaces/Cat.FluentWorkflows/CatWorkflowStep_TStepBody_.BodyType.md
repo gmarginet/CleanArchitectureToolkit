@@ -18,7 +18,7 @@ The type of the step body\. The step processor gets it from the service provider
 public override System.Type BodyType { get; }
 ```
 
-Implements [BodyType](..\Cat.FluentWorkflows.Abstractions\ICatWorkflowStep.BodyType.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowStep\.BodyType')
+Implements [BodyType](../Cat.FluentWorkflows.Abstractions/ICatWorkflowStep.BodyType.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowStep\.BodyType')
 
 #### Property Value
 [System\.Type](https://learn.microsoft.com/en-us/dotnet/api/system.type 'System\.Type')

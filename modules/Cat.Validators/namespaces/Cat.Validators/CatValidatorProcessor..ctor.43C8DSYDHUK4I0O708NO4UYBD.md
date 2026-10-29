@@ -12,7 +12,7 @@
 
 ## CatValidatorProcessor\(IServiceProvider\) Constructor
 
-Default [ICatValidatorProcessor](..\Cat.Validators.Abstractions\ICatValidatorProcessor.md 'Cat\.Validators\.Abstractions\.ICatValidatorProcessor')\.
+Default [ICatValidatorProcessor](../Cat.Validators.Abstractions/ICatValidatorProcessor.md 'Cat\.Validators\.Abstractions\.ICatValidatorProcessor')\.
 Gets the validator for a model, builds its rules and runs each one whose conditions allow it\.
 Every rule runs, so one call reports all the failures\.
 

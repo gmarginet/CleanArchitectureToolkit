@@ -18,7 +18,7 @@ The state of the workflow around the loop\.
 public TWorkflowState ParentWorkflowState { get; set; }
 ```
 
-Implements [ParentWorkflowState](..\Cat.FluentWorkflows.Abstractions\ICatForeachState_TCollection,TWorkflowState_.ParentWorkflowState.md 'Cat\.FluentWorkflows\.Abstractions\.ICatForeachState\`2\.ParentWorkflowState')
+Implements [ParentWorkflowState](../Cat.FluentWorkflows.Abstractions/ICatForeachState_TCollection,TWorkflowState_.ParentWorkflowState.md 'Cat\.FluentWorkflows\.Abstractions\.ICatForeachState\`2\.ParentWorkflowState')
 
 #### Property Value
 [TWorkflowState](CatForeachState_TCollection,TWorkflowState_.md#Cat.FluentWorkflows.Steps.CatForeachState_TCollection,TWorkflowState_.TWorkflowState 'Cat\.FluentWorkflows\.Steps\.CatForeachState\<TCollection,TWorkflowState\>\.TWorkflowState')

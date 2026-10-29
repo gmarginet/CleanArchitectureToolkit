@@ -12,9 +12,9 @@
 
 ## Cat\.ServiceRequests Namespace
 
-Provides the default [ICatServiceRequestProcessor](..\Cat.ServiceRequests.Abstractions\ICatServiceRequestProcessor.md 'Cat\.ServiceRequests\.Abstractions\.ICatServiceRequestProcessor')\.
+Provides the default [ICatServiceRequestProcessor](../Cat.ServiceRequests.Abstractions/ICatServiceRequestProcessor.md 'Cat\.ServiceRequests\.Abstractions\.ICatServiceRequestProcessor')\.
 It resolves the matching handler, wraps it in the registered decorators and runs it\.
 
 | Classes | |
 | :--- | :--- |
-| [CatServiceRequestProcessor](CatServiceRequestProcessor.md 'Cat\.ServiceRequests\.CatServiceRequestProcessor') | Default [ICatServiceRequestProcessor](..\Cat.ServiceRequests.Abstractions\ICatServiceRequestProcessor.md 'Cat\.ServiceRequests\.Abstractions\.ICatServiceRequestProcessor')\. Opens a new scope per request, gets the decorated handler from it and invokes the handler\. |
+| [CatServiceRequestProcessor](CatServiceRequestProcessor.md 'Cat\.ServiceRequests\.CatServiceRequestProcessor') | Default [ICatServiceRequestProcessor](../Cat.ServiceRequests.Abstractions/ICatServiceRequestProcessor.md 'Cat\.ServiceRequests\.Abstractions\.ICatServiceRequestProcessor')\. Opens a new scope per request, gets the decorated handler from it and invokes the handler\. |

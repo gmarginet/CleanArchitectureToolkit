@@ -27,6 +27,6 @@ Gives the workflow\.
 
 <a name='Cat.FluentWorkflows.CatWorkflowProcessor.CatWorkflowProcessor(System.IServiceProvider,Cat.FluentWorkflows.Abstractions.ICatStepProcessor).stepProcessor'></a>
 
-`stepProcessor` [ICatStepProcessor](..\Cat.FluentWorkflows.Abstractions\ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')
+`stepProcessor` [ICatStepProcessor](../Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')
 
 Runs the steps\.

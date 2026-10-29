@@ -18,7 +18,7 @@ Replaces the error code\. Leave it `null` to use the code of the rule\.
 public string? ErrorCode { get; set; }
 ```
 
-Implements [ErrorCode](..\Cat.Validators.Abstractions\ICatValidatorPropertyRule_TModel,TProperty_.ErrorCode.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRule\`2\.ErrorCode')
+Implements [ErrorCode](../Cat.Validators.Abstractions/ICatValidatorPropertyRule_TModel,TProperty_.ErrorCode.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRule\`2\.ErrorCode')
 
 #### Property Value
 [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')

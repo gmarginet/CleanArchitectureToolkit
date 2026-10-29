@@ -25,7 +25,7 @@ public string this[string key] { get; }
 
 The key to look up\.
 
-Implements [this\[string\]](..\Cat.Localizations.Abstractions\ICatLocalizer.Item.Q0AA7MM5YYX5RXC0Q87LKPW13.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer\.Item\(System\.String\)')
+Implements [this\[string\]](../Cat.Localizations.Abstractions/ICatLocalizer.Item.Q0AA7MM5YYX5RXC0Q87LKPW13.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer\.Item\(System\.String\)')
 
 #### Property Value
 [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')

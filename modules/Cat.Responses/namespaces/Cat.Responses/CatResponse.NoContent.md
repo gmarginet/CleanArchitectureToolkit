@@ -14,27 +14,27 @@
 
 | Overloads | |
 | :--- | :--- |
-| [NoContent\(\)](CatResponse.NoContent.md#Cat.Responses.CatResponse.NoContent() 'Cat\.Responses\.CatResponse\.NoContent\(\)') | Creates a succeeded response with the [NoContent](..\Cat.Responses.Abstractions\CatResponseType.NoContent.md 'Cat\.Responses\.Abstractions\.CatResponseType\.NoContent') outcome\. |
-| [NoContent&lt;TResponse&gt;\(\)](CatResponse.NoContent.md#Cat.Responses.CatResponse.NoContent_TResponse_() 'Cat\.Responses\.CatResponse\.NoContent\<TResponse\>\(\)') | Creates a succeeded response with the [NoContent](..\Cat.Responses.Abstractions\CatResponseType.NoContent.md 'Cat\.Responses\.Abstractions\.CatResponseType\.NoContent') outcome and no value\. |
+| [NoContent\(\)](CatResponse.NoContent.md#Cat.Responses.CatResponse.NoContent() 'Cat\.Responses\.CatResponse\.NoContent\(\)') | Creates a succeeded response with the [NoContent](../Cat.Responses.Abstractions/CatResponseType.NoContent.md 'Cat\.Responses\.Abstractions\.CatResponseType\.NoContent') outcome\. |
+| [NoContent&lt;TResponse&gt;\(\)](CatResponse.NoContent.md#Cat.Responses.CatResponse.NoContent_TResponse_() 'Cat\.Responses\.CatResponse\.NoContent\<TResponse\>\(\)') | Creates a succeeded response with the [NoContent](../Cat.Responses.Abstractions/CatResponseType.NoContent.md 'Cat\.Responses\.Abstractions\.CatResponseType\.NoContent') outcome and no value\. |
 
 <a name='Cat.Responses.CatResponse.NoContent()'></a>
 
 ## CatResponse\.NoContent\(\) Method
 
-Creates a succeeded response with the [NoContent](..\Cat.Responses.Abstractions\CatResponseType.NoContent.md 'Cat\.Responses\.Abstractions\.CatResponseType\.NoContent') outcome\.
+Creates a succeeded response with the [NoContent](../Cat.Responses.Abstractions/CatResponseType.NoContent.md 'Cat\.Responses\.Abstractions\.CatResponseType\.NoContent') outcome\.
 
 ```csharp
 public static Cat.Responses.Abstractions.ICatResponse NoContent();
 ```
 
 #### Returns
-[ICatResponse](..\Cat.Responses.Abstractions\ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
+[ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
 
 <a name='Cat.Responses.CatResponse.NoContent_TResponse_()'></a>
 
 ## CatResponse\.NoContent\<TResponse\>\(\) Method
 
-Creates a succeeded response with the [NoContent](..\Cat.Responses.Abstractions\CatResponseType.NoContent.md 'Cat\.Responses\.Abstractions\.CatResponseType\.NoContent') outcome and no value\.
+Creates a succeeded response with the [NoContent](../Cat.Responses.Abstractions/CatResponseType.NoContent.md 'Cat\.Responses\.Abstractions\.CatResponseType\.NoContent') outcome and no value\.
 
 ```csharp
 public static Cat.Responses.Abstractions.ICatResponse<TResponse> NoContent<TResponse>();
@@ -48,4 +48,4 @@ public static Cat.Responses.Abstractions.ICatResponse<TResponse> NoContent<TResp
 The value type the response is typed to\.
 
 #### Returns
-[Cat\.Responses\.Abstractions\.ICatResponse&lt;](..\Cat.Responses.Abstractions\ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.md#Cat.Responses.CatResponse.NoContent_TResponse_().TResponse 'Cat\.Responses\.CatResponse\.NoContent\<TResponse\>\(\)\.TResponse')[&gt;](..\Cat.Responses.Abstractions\ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')
+[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.md#Cat.Responses.CatResponse.NoContent_TResponse_().TResponse 'Cat\.Responses\.CatResponse\.NoContent\<TResponse\>\(\)\.TResponse')[&gt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')

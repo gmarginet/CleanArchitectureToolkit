@@ -22,4 +22,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Methods | |
 | :--- | :--- |
-| [AddCatNoLocalizationLocalizer\(this IServiceCollection\)](ServiceCollectionExtensions.AddCatNoLocalizationLocalizer.G27C8AMJF01RXRO1MRIJ4I0VD.md 'Cat\.Localizations\.Extensions\.ServiceCollectionExtensions\.AddCatNoLocalizationLocalizer\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)') | Registers [ICatLocalizer](..\Cat.Localizations.Abstractions\ICatLocalizer.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer') as a singleton, backed by the no\-op implementation that returns keys as\-is\. |
+| [AddCatNoLocalizationLocalizer\(this IServiceCollection\)](ServiceCollectionExtensions.AddCatNoLocalizationLocalizer.G27C8AMJF01RXRO1MRIJ4I0VD.md 'Cat\.Localizations\.Extensions\.ServiceCollectionExtensions\.AddCatNoLocalizationLocalizer\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)') | Registers [ICatLocalizer](../Cat.Localizations.Abstractions/ICatLocalizer.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer') as a singleton, backed by the no\-op implementation that returns keys as\-is\. |

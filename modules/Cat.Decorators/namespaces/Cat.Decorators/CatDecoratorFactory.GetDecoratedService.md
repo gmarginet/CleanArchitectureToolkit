@@ -40,7 +40,7 @@ Resolves the service and the dependencies of the decorators\.
 
 The closed generic service type\.
 
-Implements [GetDecoratedService\(IServiceProvider, Type\)](..\Cat.Decorators.Abstractions\ICatDecoratorFactory.GetDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetDecoratedService(System.IServiceProvider,System.Type) 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory\.GetDecoratedService\(System\.IServiceProvider,System\.Type\)')
+Implements [GetDecoratedService\(IServiceProvider, Type\)](../Cat.Decorators.Abstractions/ICatDecoratorFactory.GetDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetDecoratedService(System.IServiceProvider,System.Type) 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory\.GetDecoratedService\(System\.IServiceProvider,System\.Type\)')
 
 #### Returns
 [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object')  
@@ -70,7 +70,7 @@ The closed generic service type\.
 
 Resolves the service and the dependencies of the decorators\.
 
-Implements [GetDecoratedService&lt;TService&gt;\(IServiceProvider\)](..\Cat.Decorators.Abstractions\ICatDecoratorFactory.GetDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetDecoratedService_TService_(System.IServiceProvider) 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory\.GetDecoratedService\`\`1\(System\.IServiceProvider\)')
+Implements [GetDecoratedService&lt;TService&gt;\(IServiceProvider\)](../Cat.Decorators.Abstractions/ICatDecoratorFactory.GetDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetDecoratedService_TService_(System.IServiceProvider) 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory\.GetDecoratedService\`\`1\(System\.IServiceProvider\)')
 
 #### Returns
 [TService](CatDecoratorFactory.md#Cat.Decorators.CatDecoratorFactory.GetDecoratedService_TService_(System.IServiceProvider).TService 'Cat\.Decorators\.CatDecoratorFactory\.GetDecoratedService\<TService\>\(System\.IServiceProvider\)\.TService')  

@@ -18,7 +18,7 @@ The stable code of this kind of failure, like `CAT-VAL-1001`\.
 public string Code { get; }
 ```
 
-Implements [Code](..\Cat.Validators.Abstractions\ICatValidatorError.Code.md 'Cat\.Validators\.Abstractions\.ICatValidatorError\.Code')
+Implements [Code](../Cat.Validators.Abstractions/ICatValidatorError.Code.md 'Cat\.Validators\.Abstractions\.ICatValidatorError\.Code')
 
 #### Property Value
 [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')

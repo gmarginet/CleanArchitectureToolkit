@@ -21,7 +21,7 @@ public CatCommandHandler(Cat.Commands.Abstractions.ICatCommandHandler<TCommand> 
 
 <a name='Cat.Commands.Decorators.Logging.LoggingDecorator.CatCommandHandler_TCommand_.CatCommandHandler(Cat.Commands.Abstractions.ICatCommandHandler_TCommand_,Microsoft.Extensions.Logging.ILogger_Cat.Commands.Decorators.Logging.LoggingDecorator.CatCommandHandler_TCommand__).innerHandler'></a>
 
-`innerHandler` [Cat\.Commands\.Abstractions\.ICatCommandHandler&lt;](..\Cat.Commands.Abstractions\ICatCommandHandler_TCommand_.md 'Cat\.Commands\.Abstractions\.ICatCommandHandler\`1')[TCommand](LoggingDecorator.CatCommandHandler_TCommand_.md#Cat.Commands.Decorators.Logging.LoggingDecorator.CatCommandHandler_TCommand_.TCommand 'Cat\.Commands\.Decorators\.Logging\.LoggingDecorator\.CatCommandHandler\<TCommand\>\.TCommand')[&gt;](..\Cat.Commands.Abstractions\ICatCommandHandler_TCommand_.md 'Cat\.Commands\.Abstractions\.ICatCommandHandler\`1')
+`innerHandler` [Cat\.Commands\.Abstractions\.ICatCommandHandler&lt;](../Cat.Commands.Abstractions/ICatCommandHandler_TCommand_.md 'Cat\.Commands\.Abstractions\.ICatCommandHandler\`1')[TCommand](LoggingDecorator.CatCommandHandler_TCommand_.md#Cat.Commands.Decorators.Logging.LoggingDecorator.CatCommandHandler_TCommand_.TCommand 'Cat\.Commands\.Decorators\.Logging\.LoggingDecorator\.CatCommandHandler\<TCommand\>\.TCommand')[&gt;](../Cat.Commands.Abstractions/ICatCommandHandler_TCommand_.md 'Cat\.Commands\.Abstractions\.ICatCommandHandler\`1')
 
 The handler to wrap\.
 

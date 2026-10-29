@@ -12,7 +12,7 @@
 
 ## CatErrorDefinition\.CreateCatError\(object\[\]\) Method
 
-Creates an [ICatError](..\Cat.Responses.Abstractions\ICatError.md 'Cat\.Responses\.Abstractions\.ICatError') from this definition, with the given values filled into the message's placeholders\.
+Creates an [ICatError](../Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError') from this definition, with the given values filled into the message's placeholders\.
 
 ```csharp
 public Cat.Responses.Abstractions.ICatError CreateCatError(params object?[] arguments);
@@ -26,5 +26,5 @@ public Cat.Responses.Abstractions.ICatError CreateCatError(params object?[] argu
 The values to substitute into the message's placeholders, in order\.
 
 #### Returns
-[ICatError](..\Cat.Responses.Abstractions\ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')  
+[ICatError](../Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')  
 An error carrying this definition's code and message, with [arguments](CatErrorDefinition.CreateCatError.5WX0CKR3WJOIDHOM83UIBF54.md#Cat.Responses.CatErrorDefinition.CreateCatError(object[]).arguments 'Cat\.Responses\.CatErrorDefinition\.CreateCatError\(object\[\]\)\.arguments') attached\.

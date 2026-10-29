@@ -26,7 +26,7 @@ private static Microsoft.AspNetCore.Http.HttpResults.ProblemHttpResult CreateFai
 
 <a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.CreateFailedResponseProblem_TRequest_(Cat.Responses.Abstractions.ICatResponse,Microsoft.Extensions.Logging.ILogger,Microsoft.AspNetCore.Http.HttpContext).response'></a>
 
-`response` [ICatResponse](..\Cat.Responses.Abstractions\ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
+`response` [ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
 
 <a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.CreateFailedResponseProblem_TRequest_(Cat.Responses.Abstractions.ICatResponse,Microsoft.Extensions.Logging.ILogger,Microsoft.AspNetCore.Http.HttpContext).logger'></a>
 

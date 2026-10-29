@@ -1,4 +1,4 @@
-..\Cat.Queries.Decorators.Logging\
+../Cat.Queries.Decorators.Logging/
 N:Cat.Queries.Decorators.Logging|Cat.Queries.Decorators.Logging.md|Cat.Queries.Decorators.Logging
 T:Cat.Queries.Decorators.Logging.LoggingDecorator|LoggingDecorator.md|LoggingDecorator
 M:Cat.Queries.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatQueriesModuleLoggingDecorator(System.IServiceProvider)|ServiceCollectionExtensions.AddCatQueriesModuleLoggingDecorator.UDX00CWZ9O6EWJZIO2BK5PZC5.md|AddCatQueriesModuleLoggingDecorator(this IServiceProvider)

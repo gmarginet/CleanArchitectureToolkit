@@ -41,5 +41,5 @@ The model to validate\.
 When `true`, a missing validator throws\. When `false`, the model counts as valid\.
 
 #### Returns
-[ICatResponse](..\Cat.Responses.Abstractions\ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')  
+[ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')  
 An Ok response when the model is valid, or a BadRequest response with one error per failure\.

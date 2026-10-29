@@ -1,4 +1,4 @@
-..\Cat.FluentWorkflows.Commands\
+../Cat.FluentWorkflows.Commands/
 M:Cat.FluentWorkflows.Commands.CatWorkflowBuilderExtensions.ProcessCommand``2(Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder{``0})|CatWorkflowBuilderExtensions.ProcessCommand.YVCWTB1LSV2HRZEERHRLDI6OD.md|ProcessCommand<TWorkflowState,TCommand>(this ICatWorkflowBuilder<TWorkflowState>)
 N:Cat.FluentWorkflows.Commands|Cat.FluentWorkflows.Commands.md|Cat.FluentWorkflows.Commands
 T:Cat.FluentWorkflows.Commands.CatWorkflowBuilderExtensions|CatWorkflowBuilderExtensions.md|CatWorkflowBuilderExtensions

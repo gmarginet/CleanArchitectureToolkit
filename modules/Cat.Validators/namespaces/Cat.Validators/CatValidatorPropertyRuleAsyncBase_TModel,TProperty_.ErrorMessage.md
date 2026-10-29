@@ -18,7 +18,7 @@ Replaces the error message\. Leave it `null` to use the message of the rule\.
 public string? ErrorMessage { get; set; }
 ```
 
-Implements [ErrorMessage](..\Cat.Validators.Abstractions\ICatValidatorPropertyRule_TModel,TProperty_.ErrorMessage.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRule\`2\.ErrorMessage')
+Implements [ErrorMessage](../Cat.Validators.Abstractions/ICatValidatorPropertyRule_TModel,TProperty_.ErrorMessage.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRule\`2\.ErrorMessage')
 
 #### Property Value
 [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')

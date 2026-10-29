@@ -12,7 +12,7 @@
 
 ## CatWorkflowBuilder\<TWorkflowState\> Class
 
-Default [ICatWorkflowBuilder&lt;TWorkflowState&gt;](..\Cat.FluentWorkflows.Abstractions\ICatWorkflowBuilder_TWorkflowState_.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder\`1')\.
+Default [ICatWorkflowBuilder&lt;TWorkflowState&gt;](../Cat.FluentWorkflows.Abstractions/ICatWorkflowBuilder_TWorkflowState_.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder\`1')\.
 It only holds the steps\. The extension methods in `Cat.FluentWorkflows.Extensions` add them\.
 
 ```csharp
@@ -29,7 +29,7 @@ The state of the workflow\.
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatWorkflowBuilder\<TWorkflowState\>
 
-Implements [Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder&lt;](..\Cat.FluentWorkflows.Abstractions\ICatWorkflowBuilder_TWorkflowState_.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder\`1')[TWorkflowState](CatWorkflowBuilder_TWorkflowState_.md#Cat.FluentWorkflows.CatWorkflowBuilder_TWorkflowState_.TWorkflowState 'Cat\.FluentWorkflows\.CatWorkflowBuilder\<TWorkflowState\>\.TWorkflowState')[&gt;](..\Cat.FluentWorkflows.Abstractions\ICatWorkflowBuilder_TWorkflowState_.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder\`1')
+Implements [Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder&lt;](../Cat.FluentWorkflows.Abstractions/ICatWorkflowBuilder_TWorkflowState_.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder\`1')[TWorkflowState](CatWorkflowBuilder_TWorkflowState_.md#Cat.FluentWorkflows.CatWorkflowBuilder_TWorkflowState_.TWorkflowState 'Cat\.FluentWorkflows\.CatWorkflowBuilder\<TWorkflowState\>\.TWorkflowState')[&gt;](../Cat.FluentWorkflows.Abstractions/ICatWorkflowBuilder_TWorkflowState_.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder\`1')
 
 | Properties | |
 | :--- | :--- |

@@ -21,16 +21,16 @@ internal static Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse WithErrors
 
 <a name='Cat.FluentWorkflows.CatWorkflowResponse.WithErrors(Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse,System.Collections.Generic.List_Cat.Responses.Abstractions.ICatError_).last'></a>
 
-`last` [ICatWorkflowResponse](..\Cat.FluentWorkflows.Abstractions\ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')
+`last` [ICatWorkflowResponse](../Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')
 
 The response of the last step\. Its result is kept\.
 
 <a name='Cat.FluentWorkflows.CatWorkflowResponse.WithErrors(Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse,System.Collections.Generic.List_Cat.Responses.Abstractions.ICatError_).allErrors'></a>
 
-`allErrors` [System\.Collections\.Generic\.List&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')[ICatError](..\Cat.Responses.Abstractions\ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')
+`allErrors` [System\.Collections\.Generic\.List&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')[ICatError](../Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')
 
 Every error collected, including the ones of [last](CatWorkflowResponse.WithErrors.W0QND61FGE6VG26Y26FGZBUIA.md#Cat.FluentWorkflows.CatWorkflowResponse.WithErrors(Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse,System.Collections.Generic.List_Cat.Responses.Abstractions.ICatError_).last 'Cat\.FluentWorkflows\.CatWorkflowResponse\.WithErrors\(Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse, System\.Collections\.Generic\.List\<Cat\.Responses\.Abstractions\.ICatError\>\)\.last')\.
 
 #### Returns
-[ICatWorkflowResponse](..\Cat.FluentWorkflows.Abstractions\ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')  
+[ICatWorkflowResponse](../Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')  
 [last](CatWorkflowResponse.WithErrors.W0QND61FGE6VG26Y26FGZBUIA.md#Cat.FluentWorkflows.CatWorkflowResponse.WithErrors(Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse,System.Collections.Generic.List_Cat.Responses.Abstractions.ICatError_).last 'Cat\.FluentWorkflows\.CatWorkflowResponse\.WithErrors\(Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse, System\.Collections\.Generic\.List\<Cat\.Responses\.Abstractions\.ICatError\>\)\.last') when it already holds all the errors, otherwise a response with all of them\.

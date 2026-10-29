@@ -12,7 +12,7 @@
 
 ## Cat\.Expressions Namespace
 
-Provides caching and non\-caching implementations of [ICatCompiledMemberExpressionCache&lt;T&gt;](..\Cat.Expressions.Abstractions\ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1'),
+Provides caching and non\-caching implementations of [ICatCompiledMemberExpressionCache&lt;T&gt;](../Cat.Expressions.Abstractions/ICatCompiledMemberExpressionCache_T_.md 'Cat\.Expressions\.Abstractions\.ICatCompiledMemberExpressionCache\`1'),
 along with the extension methods to register them in a dependency injection container\.
 
 | Classes | |

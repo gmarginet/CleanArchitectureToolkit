@@ -18,7 +18,7 @@ The item the loop is working on\.
 public TCollection CurrentItem { get; set; }
 ```
 
-Implements [CurrentItem](..\Cat.FluentWorkflows.Abstractions\ICatForeachState_TCollection,TWorkflowState_.CurrentItem.md 'Cat\.FluentWorkflows\.Abstractions\.ICatForeachState\`2\.CurrentItem')
+Implements [CurrentItem](../Cat.FluentWorkflows.Abstractions/ICatForeachState_TCollection,TWorkflowState_.CurrentItem.md 'Cat\.FluentWorkflows\.Abstractions\.ICatForeachState\`2\.CurrentItem')
 
 #### Property Value
 [TCollection](CatForeachState_TCollection,TWorkflowState_.md#Cat.FluentWorkflows.Steps.CatForeachState_TCollection,TWorkflowState_.TCollection 'Cat\.FluentWorkflows\.Steps\.CatForeachState\<TCollection,TWorkflowState\>\.TCollection')

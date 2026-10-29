@@ -14,14 +14,14 @@
 
 | Overloads | |
 | :--- | :--- |
-| [InternalServerError\(ICatError\[\]\)](CatResponse.InternalServerError.md#Cat.Responses.CatResponse.InternalServerError(Cat.Responses.Abstractions.ICatError[]) 'Cat\.Responses\.CatResponse\.InternalServerError\(Cat\.Responses\.Abstractions\.ICatError\[\]\)') | Creates a failed response with the [InternalServerError](..\Cat.Responses.Abstractions\CatResponseType.InternalServerError.md 'Cat\.Responses\.Abstractions\.CatResponseType\.InternalServerError') outcome\. |
-| [InternalServerError&lt;TResponse&gt;\(ICatError\[\]\)](CatResponse.InternalServerError.md#Cat.Responses.CatResponse.InternalServerError_TResponse_(Cat.Responses.Abstractions.ICatError[]) 'Cat\.Responses\.CatResponse\.InternalServerError\<TResponse\>\(Cat\.Responses\.Abstractions\.ICatError\[\]\)') | Creates a failed response with the [InternalServerError](..\Cat.Responses.Abstractions\CatResponseType.InternalServerError.md 'Cat\.Responses\.Abstractions\.CatResponseType\.InternalServerError') outcome\. |
+| [InternalServerError\(ICatError\[\]\)](CatResponse.InternalServerError.md#Cat.Responses.CatResponse.InternalServerError(Cat.Responses.Abstractions.ICatError[]) 'Cat\.Responses\.CatResponse\.InternalServerError\(Cat\.Responses\.Abstractions\.ICatError\[\]\)') | Creates a failed response with the [InternalServerError](../Cat.Responses.Abstractions/CatResponseType.InternalServerError.md 'Cat\.Responses\.Abstractions\.CatResponseType\.InternalServerError') outcome\. |
+| [InternalServerError&lt;TResponse&gt;\(ICatError\[\]\)](CatResponse.InternalServerError.md#Cat.Responses.CatResponse.InternalServerError_TResponse_(Cat.Responses.Abstractions.ICatError[]) 'Cat\.Responses\.CatResponse\.InternalServerError\<TResponse\>\(Cat\.Responses\.Abstractions\.ICatError\[\]\)') | Creates a failed response with the [InternalServerError](../Cat.Responses.Abstractions/CatResponseType.InternalServerError.md 'Cat\.Responses\.Abstractions\.CatResponseType\.InternalServerError') outcome\. |
 
 <a name='Cat.Responses.CatResponse.InternalServerError(Cat.Responses.Abstractions.ICatError[])'></a>
 
 ## CatResponse\.InternalServerError\(ICatError\[\]\) Method
 
-Creates a failed response with the [InternalServerError](..\Cat.Responses.Abstractions\CatResponseType.InternalServerError.md 'Cat\.Responses\.Abstractions\.CatResponseType\.InternalServerError') outcome\.
+Creates a failed response with the [InternalServerError](../Cat.Responses.Abstractions/CatResponseType.InternalServerError.md 'Cat\.Responses\.Abstractions\.CatResponseType\.InternalServerError') outcome\.
 
 ```csharp
 public static Cat.Responses.Abstractions.ICatResponse InternalServerError(params Cat.Responses.Abstractions.ICatError[] errors);
@@ -30,18 +30,18 @@ public static Cat.Responses.Abstractions.ICatResponse InternalServerError(params
 
 <a name='Cat.Responses.CatResponse.InternalServerError(Cat.Responses.Abstractions.ICatError[]).errors'></a>
 
-`errors` [ICatError](..\Cat.Responses.Abstractions\ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')[\[\]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System\.Array')
+`errors` [ICatError](../Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')[\[\]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System\.Array')
 
 The errors describing what went wrong\.
 
 #### Returns
-[ICatResponse](..\Cat.Responses.Abstractions\ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
+[ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
 
 <a name='Cat.Responses.CatResponse.InternalServerError_TResponse_(Cat.Responses.Abstractions.ICatError[])'></a>
 
 ## CatResponse\.InternalServerError\<TResponse\>\(ICatError\[\]\) Method
 
-Creates a failed response with the [InternalServerError](..\Cat.Responses.Abstractions\CatResponseType.InternalServerError.md 'Cat\.Responses\.Abstractions\.CatResponseType\.InternalServerError') outcome\.
+Creates a failed response with the [InternalServerError](../Cat.Responses.Abstractions/CatResponseType.InternalServerError.md 'Cat\.Responses\.Abstractions\.CatResponseType\.InternalServerError') outcome\.
 
 ```csharp
 public static Cat.Responses.Abstractions.ICatResponse<TResponse> InternalServerError<TResponse>(params Cat.Responses.Abstractions.ICatError[] errors);
@@ -57,9 +57,9 @@ The value type the response is typed to\.
 
 <a name='Cat.Responses.CatResponse.InternalServerError_TResponse_(Cat.Responses.Abstractions.ICatError[]).errors'></a>
 
-`errors` [ICatError](..\Cat.Responses.Abstractions\ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')[\[\]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System\.Array')
+`errors` [ICatError](../Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError')[\[\]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System\.Array')
 
 The errors describing what went wrong\.
 
 #### Returns
-[Cat\.Responses\.Abstractions\.ICatResponse&lt;](..\Cat.Responses.Abstractions\ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.md#Cat.Responses.CatResponse.InternalServerError_TResponse_(Cat.Responses.Abstractions.ICatError[]).TResponse 'Cat\.Responses\.CatResponse\.InternalServerError\<TResponse\>\(Cat\.Responses\.Abstractions\.ICatError\[\]\)\.TResponse')[&gt;](..\Cat.Responses.Abstractions\ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')
+[Cat\.Responses\.Abstractions\.ICatResponse&lt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse.md#Cat.Responses.CatResponse.InternalServerError_TResponse_(Cat.Responses.Abstractions.ICatError[]).TResponse 'Cat\.Responses\.CatResponse\.InternalServerError\<TResponse\>\(Cat\.Responses\.Abstractions\.ICatError\[\]\)\.TResponse')[&gt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')

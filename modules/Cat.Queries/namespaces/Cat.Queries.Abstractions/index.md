@@ -14,4 +14,4 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Queries\.Abstractions](Cat.Queries.Abstractions.md 'Cat\.Queries\.Abstractions') | Defines the contracts for queries: the query marker, the handlers that answer them, and the processor that finds the right handler and returns an [ICatResponse&lt;TResponse&gt;](..\Cat.Responses.Abstractions\ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')\. |
+| [Cat\.Queries\.Abstractions](Cat.Queries.Abstractions.md 'Cat\.Queries\.Abstractions') | Defines the contracts for queries: the query marker, the handlers that answer them, and the processor that finds the right handler and returns an [ICatResponse&lt;TResponse&gt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')\. |

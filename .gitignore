@@ -420,3 +420,9 @@ FodyWeavers.xsd
 artifacts/
 desktop.ini
 .idea/
+
+# Jekyll
+_site/
+.jekyll-cache/
+vendor/
+Gemfile.lock

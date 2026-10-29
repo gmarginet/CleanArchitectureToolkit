@@ -1,4 +1,4 @@
-..\Cat.EventAggregators\
+../Cat.EventAggregators/
 F:Cat.EventAggregators.CatEventAggregator._subscriptions|CatEventAggregator._subscriptions.md|_subscriptions
 M:Cat.EventAggregators.CatEventAggregator.HasSubscribersForEvent(System.Type)|CatEventAggregator.HasSubscribersForEvent.FGHVW7KWUFU4OZTMRSQG06VNC.md|HasSubscribersForEvent(Type)
 M:Cat.EventAggregators.CatEventAggregator.Subscribe(System.Object)|CatEventAggregator.Subscribe.V4TP29GTQZNR45IELMAP6BOR.md|Subscribe(object)

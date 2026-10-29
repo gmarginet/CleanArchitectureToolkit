@@ -1,4 +1,4 @@
-..\Cat.Validators.Abstractions\
+../Cat.Validators.Abstractions/
 M:Cat.Validators.Abstractions.ICatValidatorBuilder`1.AddRules(System.Action{Cat.Validators.Abstractions.ICatValidatorModelRuleBuilder{`0}})|ICatValidatorBuilder_TModel_.AddRules.7LVEP6J7EA1YDLNO2MIA8L6N1.md|AddRules(Action<ICatValidatorModelRuleBuilder<TModel>>)
 M:Cat.Validators.Abstractions.ICatValidatorBuilder`1.AddPropertyRules``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Action{Cat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder{`0,``0}})|ICatValidatorBuilder_TModel_.AddPropertyRules.4SGJLPHSDC95BLHV1D531FAK5.md|AddPropertyRules<TProperty>(Expression<Func<TModel,TProperty>>, Action<ICatValidatorPropertyRuleBuilder<TModel,TProperty>>)
 N:Cat.Validators.Abstractions|Cat.Validators.Abstractions.md|Cat.Validators.Abstractions

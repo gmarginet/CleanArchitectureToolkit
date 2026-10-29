@@ -17,4 +17,4 @@ private readonly ICatStepProcessor _stepProcessor;
 ```
 
 #### Field Value
-[ICatStepProcessor](..\Cat.FluentWorkflows.Abstractions\ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')
+[ICatStepProcessor](../Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')

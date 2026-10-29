@@ -40,7 +40,7 @@ Resolves the service and the dependencies of the decorators\.
 
 The closed generic service type\.
 
-Implements [GetRequiredDecoratedService\(IServiceProvider, Type\)](..\Cat.Decorators.Abstractions\ICatDecoratorFactory.GetRequiredDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService(System.IServiceProvider,System.Type) 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory\.GetRequiredDecoratedService\(System\.IServiceProvider,System\.Type\)')
+Implements [GetRequiredDecoratedService\(IServiceProvider, Type\)](../Cat.Decorators.Abstractions/ICatDecoratorFactory.GetRequiredDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService(System.IServiceProvider,System.Type) 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory\.GetRequiredDecoratedService\(System\.IServiceProvider,System\.Type\)')
 
 #### Returns
 [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object')  
@@ -75,7 +75,7 @@ The closed generic service type\.
 
 Resolves the service and the dependencies of the decorators\.
 
-Implements [GetRequiredDecoratedService&lt;TService&gt;\(IServiceProvider\)](..\Cat.Decorators.Abstractions\ICatDecoratorFactory.GetRequiredDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService_TService_(System.IServiceProvider) 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory\.GetRequiredDecoratedService\`\`1\(System\.IServiceProvider\)')
+Implements [GetRequiredDecoratedService&lt;TService&gt;\(IServiceProvider\)](../Cat.Decorators.Abstractions/ICatDecoratorFactory.GetRequiredDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService_TService_(System.IServiceProvider) 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory\.GetRequiredDecoratedService\`\`1\(System\.IServiceProvider\)')
 
 #### Returns
 [TService](CatDecoratorFactory.md#Cat.Decorators.CatDecoratorFactory.GetRequiredDecoratedService_TService_(System.IServiceProvider).TService 'Cat\.Decorators\.CatDecoratorFactory\.GetRequiredDecoratedService\<TService\>\(System\.IServiceProvider\)\.TService')  

@@ -19,7 +19,7 @@
         <DefaultDocumentationIncludeUndocumentedItems>true</DefaultDocumentationIncludeUndocumentedItems>
         <DefaultDocumentationFolder>..\namespaces\$(MSBuildProjectName)</DefaultDocumentationFolder>
         <DefaultDocumentationLinksOutputFile>..\..\defaultDocumentation\defaultDocumentationLinks\$(MSBuildProjectName).ddlinks</DefaultDocumentationLinksOutputFile>
-        <DefaultDocumentationLinksBaseUrl>..\$(MSBuildProjectName)\</DefaultDocumentationLinksBaseUrl>
+        <DefaultDocumentationLinksBaseUrl>../$(MSBuildProjectName)/</DefaultDocumentationLinksBaseUrl>
         <DefaultDocumentationConfigurationFile>..\..\defaultDocumentation\DefaultDocumentation.json</DefaultDocumentationConfigurationFile>
         <DefaultDocumentationPlugins>$(SolutionDir)resources\defaultDocumentationPlugins\Cat.DefaultDocumentationPlugin.dll</DefaultDocumentationPlugins>
         <DefaultDocumentationAssemblyPageName>index</DefaultDocumentationAssemblyPageName>

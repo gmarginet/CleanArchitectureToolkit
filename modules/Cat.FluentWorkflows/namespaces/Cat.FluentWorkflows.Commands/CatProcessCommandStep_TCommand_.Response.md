@@ -19,4 +19,4 @@ public Cat.Responses.Abstractions.ICatResponse? Response { get; private set; }
 ```
 
 #### Property Value
-[ICatResponse](..\Cat.Responses.Abstractions\ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
+[ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')

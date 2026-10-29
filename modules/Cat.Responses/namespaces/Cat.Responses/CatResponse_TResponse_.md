@@ -12,7 +12,7 @@
 
 ## CatResponse\<TResponse\> Class
 
-An [ICatResponse&lt;TResponse&gt;](..\Cat.Responses.Abstractions\ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1') implementation\. Created through the static factory methods on
+An [ICatResponse&lt;TResponse&gt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1') implementation\. Created through the static factory methods on
 [CatResponse](CatResponse.md 'Cat\.Responses\.CatResponse') rather than its constructors directly\.
 
 ```csharp
@@ -28,7 +28,7 @@ The type of value the response carries\.
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [CatResponse](CatResponse.md 'Cat\.Responses\.CatResponse') &#129106; CatResponse\<TResponse\>
 
-Implements [Cat\.Responses\.Abstractions\.ICatResponse&lt;](..\Cat.Responses.Abstractions\ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse_TResponse_.md#Cat.Responses.CatResponse_TResponse_.TResponse 'Cat\.Responses\.CatResponse\<TResponse\>\.TResponse')[&gt;](..\Cat.Responses.Abstractions\ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1'), [ICatResponse](..\Cat.Responses.Abstractions\ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
+Implements [Cat\.Responses\.Abstractions\.ICatResponse&lt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')[TResponse](CatResponse_TResponse_.md#Cat.Responses.CatResponse_TResponse_.TResponse 'Cat\.Responses\.CatResponse\<TResponse\>\.TResponse')[&gt;](../Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1'), [ICatResponse](../Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
 
 | Constructors | |
 | :--- | :--- |
@@ -38,7 +38,7 @@ Implements [Cat\.Responses\.Abstractions\.ICatResponse&lt;](..\Cat.Responses.Abs
 
 | Properties | |
 | :--- | :--- |
-| [Value](CatResponse_TResponse_.Value.md 'Cat\.Responses\.CatResponse\<TResponse\>\.Value') | The value the operation produced\. Only meaningful when [IsSucceeded](..\Cat.Responses.Abstractions\ICatResponse.IsSucceeded.md 'Cat\.Responses\.Abstractions\.ICatResponse\.IsSucceeded') is `true`\. |
+| [Value](CatResponse_TResponse_.Value.md 'Cat\.Responses\.CatResponse\<TResponse\>\.Value') | The value the operation produced\. Only meaningful when [IsSucceeded](../Cat.Responses.Abstractions/ICatResponse.IsSucceeded.md 'Cat\.Responses\.Abstractions\.ICatResponse\.IsSucceeded') is `true`\. |
 
 | Methods | |
 | :--- | :--- |
