@@ -16,6 +16,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 <!-- Intro end-->
 
 ## Table of contents <!-- omit in toc -->  
+- [NuGet packages](#nuget-packages)
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)
@@ -26,17 +27,32 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
   - [Add decorators](#add-decorators)
   - [Errors and exceptions](#errors-and-exceptions)
 
+## NuGet packages
+<!-- NuGet start -->
+![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Queries)
+
+| Package | Role | Install | Downloads |
+|---------|------|---------|-----------|
+| [Cat.Queries.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Queries.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Queries.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Abstractions) |
+| [Cat.Queries](https://www.nuget.org/packages/gmarginet.Cat.Queries/) | Implementation | `dotnet add package gmarginet.Cat.Queries` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries) |
+| [Cat.Queries.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Queries.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.Queries.Decorators.Logging` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Decorators.Logging) |
+<!-- NuGet end -->
+
 ## Namespaces
 <!-- Namespaces start-->
-- [Cat.Queries.Abstractions](namespaces/Cat.Queries.Abstractions/index.md)  
-- [Cat.Queries](namespaces/Cat.Queries/index.md)  
-- [Cat.Queries.Decorators.Logging](namespaces/Cat.Queries.Decorators.Logging/index.md)  
+| Namespace | What it holds |
+|-----------|---------------|
+| [Cat.Queries.Abstractions](namespaces/Cat.Queries.Abstractions/index.md) | Query, handler and processor interfaces. |
+| [Cat.Queries](namespaces/Cat.Queries/index.md) | The processor and the module registration. |
+| [Cat.Queries.Decorators.Logging](namespaces/Cat.Queries.Decorators.Logging/index.md) | The logging decorator for handlers. |
 <!-- Namespaces end-->
 
 ## Dependencies
 <!-- Dependencies start-->
-- [Cat.Responses](../Cat.Responses/README.md)  
-- [Cat.Decorators](../Cat.Decorators/README.md)  
+| Module | Why Cat.Queries needs it |
+|--------|-------------------------|
+| [Cat.Responses](../Cat.Responses/README.md) | Handlers return an `ICatResponse<TQueryResult>`. |
+| [Cat.Decorators](../Cat.Decorators/README.md) | Builds the handlers and runs their decorators. |
 <!-- Dependencies end-->
 
 ## Usage

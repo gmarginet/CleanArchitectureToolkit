@@ -14,6 +14,7 @@ A succeeded response becomes a 200 with the payload. A failed response becomes a
 <!-- Intro end-->
 
 ## Table of contents <!-- omit in toc -->  
+- [NuGet packages](#nuget-packages)
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)
@@ -24,15 +25,28 @@ A succeeded response becomes a 200 with the payload. A failed response becomes a
   - [Errors and exceptions](#errors-and-exceptions)
     - [Unexpected exceptions](#unexpected-exceptions)
 
+## NuGet packages
+<!-- NuGet start -->
+![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Minimal.Api)
+
+| Package | Role | Install | Downloads |
+|---------|------|---------|-----------|
+| [Cat.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.Minimal.Api/) | Implementation | `dotnet add package gmarginet.Cat.Minimal.Api` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Minimal.Api) |
+<!-- NuGet end -->
+
 ## Namespaces
 <!-- Namespaces start-->
-- [Cat.Minimal.Api](namespaces/Cat.Minimal.Api/index.md)  
+| Namespace | What it holds |
+|-----------|---------------|
+| [Cat.Minimal.Api](namespaces/Cat.Minimal.Api/index.md) | Maps service requests to minimal API endpoints. |
 <!-- Namespaces end-->
 
 ## Dependencies
 <!-- Dependencies start-->
-- [Cat.Responses](../Cat.Responses/README.md)  
-- [Cat.ServiceRequests](../Cat.ServiceRequests/README.md)  
+| Module | Why Cat.Minimal.Api needs it |
+|--------|-----------------------------|
+| [Cat.Responses](../Cat.Responses/README.md) | Endpoints turn responses into results and problem details. |
+| [Cat.ServiceRequests](../Cat.ServiceRequests/README.md) | Endpoints run requests through the service request processor. |
 <!-- Dependencies end-->
 
 ## Usage

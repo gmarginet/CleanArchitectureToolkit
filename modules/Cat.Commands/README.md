@@ -16,6 +16,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 <!-- Intro end-->
 
 ## Table of contents <!-- omit in toc -->  
+- [NuGet packages](#nuget-packages)
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)
@@ -26,17 +27,32 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
   - [Add decorators](#add-decorators)
   - [Errors and exceptions](#errors-and-exceptions)
 
+## NuGet packages  
+<!-- NuGet start -->
+![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Commands)
+
+| Package | Role | Install | Downloads |
+|---------|------|---------|-----------|
+| [Cat.Commands.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Commands.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Commands.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands.Abstractions) |
+| [Cat.Commands](https://www.nuget.org/packages/gmarginet.Cat.Commands/) | Implementation | `dotnet add package gmarginet.Cat.Commands` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands) |
+| [Cat.Commands.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Commands.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.Commands.Decorators.Logging` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands.Decorators.Logging) |
+<!-- NuGet end -->
+
 ## Namespaces
 <!-- Namespaces start-->
-- [Cat.Commands.Abstractions](namespaces/Cat.Commands.Abstractions/index.md)  
-- [Cat.Commands](namespaces/Cat.Commands/index.md)  
-- [Cat.Commands.Decorators.Logging](namespaces/Cat.Commands.Decorators.Logging/index.md)  
+| Namespace | What it holds |
+|-----------|---------------|
+| [Cat.Commands.Abstractions](namespaces/Cat.Commands.Abstractions/index.md) | Command, handler and processor interfaces. |
+| [Cat.Commands](namespaces/Cat.Commands/index.md) | The processor and the module registration. |
+| [Cat.Commands.Decorators.Logging](namespaces/Cat.Commands.Decorators.Logging/index.md) | The logging decorator for handlers. |
 <!-- Namespaces end-->
 
 ## Dependencies
 <!-- Dependencies start-->
-- [Cat.Responses](../Cat.Responses/README.md)  
-- [Cat.Decorators](../Cat.Decorators/README.md)  
+| Module | Why Cat.Commands needs it |
+|--------|---------------------------|
+| [Cat.Responses](../Cat.Responses/README.md) | Handlers return an `ICatResponse`. |
+| [Cat.Decorators](../Cat.Decorators/README.md) | Builds the handlers and runs their decorators. |
 <!-- Dependencies end-->
 
 ## Usage

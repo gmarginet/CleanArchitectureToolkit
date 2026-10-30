@@ -14,6 +14,7 @@ A publisher raises an event, and any subscriber that handles that event type get
 <!-- Intro end-->
 
 ## Table of contents <!-- omit in toc -->  
+- [NuGet packages](#nuget-packages)
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)
@@ -26,15 +27,29 @@ A publisher raises an event, and any subscriber that handles that event type get
   - [Weak references](#weak-references)
   - [Errors and exceptions](#errors-and-exceptions)
 
+## NuGet packages
+<!-- NuGet start -->
+![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.EventAggregators)
+
+| Package | Role | Install | Downloads |
+|---------|------|---------|-----------|
+| [Cat.EventAggregators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.EventAggregators.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators.Abstractions) |
+| [Cat.EventAggregators](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators/) | Implementation | `dotnet add package gmarginet.Cat.EventAggregators` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators) |
+<!-- NuGet end -->
+
 ## Namespaces
 <!-- Namespaces start-->
-- [Cat.EventAggregators.Abstractions](namespaces/Cat.EventAggregators.Abstractions/index.md)  
-- [Cat.EventAggregators](namespaces/Cat.EventAggregators/index.md)  
+| Namespace | What it holds |
+|-----------|---------------|
+| [Cat.EventAggregators.Abstractions](namespaces/Cat.EventAggregators.Abstractions/index.md) | Interfaces for publishers and subscribers. |
+| [Cat.EventAggregators](namespaces/Cat.EventAggregators/index.md) | The event aggregator and the module registration. |
 <!-- Namespaces end-->
 
 ## Dependencies
 <!-- Dependencies start-->
-- [Cat.Extensions](../Cat.Extensions/README.md)  
+| Module | Why Cat.EventAggregators needs it |
+|--------|----------------------------------|
+| [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
 <!-- Dependencies end-->
 
 ## Usage

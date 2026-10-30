@@ -30,11 +30,21 @@ When creating or updating a module readme, use `modules/CatModuleReadmeTemplate.
 
 1. **`[[ModuleName]]`**: The name of the module-folder.
 2. **Intro Block**: `<!-- Intro start -->[[Intro]]<!-- Intro end -->` (Brief overview).
-3. **Namespaces Block**: `<!-- Namespaces start -->` / `<!-- Namespaces end -->`
-   - Insert one line per project using format: `- [[[NamespaceName]]](namespaces/[[NamespaceName]]/index.md)`
-4. **Dependencies Block**: `<!-- Dependencies start -->` / `<!-- Dependencies end -->`
-   - Insert one line per dependency using format: `- [[[DependentModuleName]]](../[[DependentModuleName]]/README.md)`
-5. **Usage Block**: `<!-- Usage start -->[[Usage]]<!-- Usage end -->` (Code examples).
+3. **NuGet Block**: `<!-- NuGet start -->` / `<!-- NuGet end -->`
+   - Every project in the module has a package named `gmarginet.` followed by the root namespace of the project.
+   - Start with one version badge for the main package (the package named like the module). If no project is named like the module, use the first project instead. All packages of a module share the same version.
+   - Add a table with the columns `Package`, `Role`, `Install` and `Downloads`, and one row per project.
+   - Row format: `| [[[NamespaceName]]](https://www.nuget.org/packages/gmarginet.[[NamespaceName]]/) | [[PackageRole]] | `dotnet add package gmarginet.[[NamespaceName]]` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.[[NamespaceName]]) |`
+   - `[[PackageRole]]` is a short label such as `Contracts`, `Implementation` or `Optional decorator`.
+4. **Namespaces Block**: `<!-- Namespaces start -->` / `<!-- Namespaces end -->`
+   - Add a table with the columns `Namespace` and `What it holds`, and one row per project.
+   - Row format: `| [[[NamespaceName]]](namespaces/[[NamespaceName]]/index.md) | [[NamespaceDescription]] |`
+   - `[[NamespaceDescription]]` is one short sentence, based on the namespace summary.
+5. **Dependencies Block**: `<!-- Dependencies start -->` / `<!-- Dependencies end -->`
+   - Add a table with the columns `Module` and `Why [[ModuleName]] needs it`, and one row per dependency.
+   - Row format: `| [[[DependentModuleName]]](../[[DependentModuleName]]/README.md) | [[DependencyReason]] |`
+   - No dependencies? Skip the table and write `[[ModuleName]] has no dependencies on other CAT modules.` followed by two trailing spaces.
+6. **Usage Block**: `<!-- Usage start -->[[Usage]]<!-- Usage end -->` (Code examples).
 
 Also keep the table of contents up-to-date with the chapters that exist in the readme, ignore the chapters marked with `<!-- omit in toc -->`
 

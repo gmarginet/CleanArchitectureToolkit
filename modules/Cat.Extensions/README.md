@@ -12,6 +12,7 @@ Cat.Extensions is a collection of small, focused extension method libraries. Eac
 <!-- Intro end-->
 
 ## Table of contents <!-- omit in toc -->  
+- [NuGet packages](#nuget-packages)
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)
@@ -23,17 +24,33 @@ Cat.Extensions is a collection of small, focused extension method libraries. Eac
   - [String](#string)
   - [Errors and exceptions](#errors-and-exceptions)
 
+## NuGet packages
+<!-- NuGet start -->
+![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Enumerable.Extensions)
+
+| Package | Role | Install | Downloads |
+|---------|------|---------|-----------|
+| [Cat.Enumerable.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Enumerable.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Enumerable.Extensions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Enumerable.Extensions) |
+| [Cat.Expression.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Expression.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Expression.Extensions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expression.Extensions) |
+| [Cat.Object.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Object.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Object.Extensions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Object.Extensions) |
+| [Cat.ServiceCollection.Extensions](https://www.nuget.org/packages/gmarginet.Cat.ServiceCollection.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.ServiceCollection.Extensions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceCollection.Extensions) |
+| [Cat.String.Extensions](https://www.nuget.org/packages/gmarginet.Cat.String.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.String.Extensions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.String.Extensions) |
+<!-- NuGet end -->
+
 ## Namespaces
 <!-- Namespaces start-->
-- [Cat.Enumerable.Extensions](namespaces/Cat.Enumerable.Extensions/index.md)  
-- [Cat.Expression.Extensions](namespaces/Cat.Expression.Extensions/index.md)  
-- [Cat.Object.Extensions](namespaces/Cat.Object.Extensions/index.md)  
-- [Cat.ServiceCollection.Extensions](namespaces/Cat.ServiceCollection.Extensions/index.md)  
-- [Cat.String.Extensions](namespaces/Cat.String.Extensions/index.md)  
+| Namespace | What it holds |
+|-----------|---------------|
+| [Cat.Enumerable.Extensions](namespaces/Cat.Enumerable.Extensions/index.md) | Extension methods for `IEnumerable`. |
+| [Cat.Expression.Extensions](namespaces/Cat.Expression.Extensions/index.md) | Extension methods for expressions. |
+| [Cat.Object.Extensions](namespaces/Cat.Object.Extensions/index.md) | Extension methods for any object. |
+| [Cat.ServiceCollection.Extensions](namespaces/Cat.ServiceCollection.Extensions/index.md) | Extension methods for `IServiceCollection`. |
+| [Cat.String.Extensions](namespaces/Cat.String.Extensions/index.md) | Extension methods for strings. |
 <!-- Namespaces end-->
 
 ## Dependencies
 <!-- Dependencies start-->
+Cat.Extensions has no dependencies on other CAT modules.  
 <!-- Dependencies end-->
 
 ## Usage

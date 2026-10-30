@@ -16,6 +16,7 @@ The module ships the common steps for you, and you can write your own.
 <!-- Intro end-->
 
 ## Table of contents <!-- omit in toc -->  
+- [NuGet packages](#nuget-packages)
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)
@@ -45,20 +46,36 @@ The module ships the common steps for you, and you can write your own.
   - [Errors and exceptions](#errors-and-exceptions)
   - [Tracing](#tracing)
 
+## NuGet packages
+<!-- NuGet start -->
+![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.FluentWorkflows)
+
+| Package | Role | Install | Downloads |
+|---------|------|---------|-----------|
+| [Cat.FluentWorkflows.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.FluentWorkflows.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Abstractions) |
+| [Cat.FluentWorkflows](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows/) | Implementation | `dotnet add package gmarginet.Cat.FluentWorkflows` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows) |
+| [Cat.FluentWorkflows.Commands](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Commands/) | Optional steps | `dotnet add package gmarginet.Cat.FluentWorkflows.Commands` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Commands) |
+| [Cat.FluentWorkflows.Queries](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Queries/) | Optional steps | `dotnet add package gmarginet.Cat.FluentWorkflows.Queries` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Queries) |
+<!-- NuGet end -->
+
 ## Namespaces
 <!-- Namespaces start-->
-- [Cat.FluentWorkflows.Abstractions](namespaces/Cat.FluentWorkflows.Abstractions/index.md)  
-- [Cat.FluentWorkflows](namespaces/Cat.FluentWorkflows/index.md)  
-- [Cat.FluentWorkflows.Commands](namespaces/Cat.FluentWorkflows.Commands/index.md)  
-- [Cat.FluentWorkflows.Queries](namespaces/Cat.FluentWorkflows.Queries/index.md)  
+| Namespace | What it holds |
+|-----------|---------------|
+| [Cat.FluentWorkflows.Abstractions](namespaces/Cat.FluentWorkflows.Abstractions/index.md) | Interfaces for workflows, steps and the workflow state. |
+| [Cat.FluentWorkflows](namespaces/Cat.FluentWorkflows/index.md) | The workflow engine, the built-in steps and the module registration. |
+| [Cat.FluentWorkflows.Commands](namespaces/Cat.FluentWorkflows.Commands/index.md) | A step that processes a command. |
+| [Cat.FluentWorkflows.Queries](namespaces/Cat.FluentWorkflows.Queries/index.md) | A step that processes a query. |
 <!-- Namespaces end-->
 
 ## Dependencies
 <!-- Dependencies start-->
-- [Cat.Responses](../Cat.Responses/README.md)  
-- [Cat.Commands](../Cat.Commands/README.md)  
-- [Cat.Queries](../Cat.Queries/README.md)  
-- [Cat.Extensions](../Cat.Extensions/README.md)  
+| Module | Why Cat.FluentWorkflows needs it |
+|--------|---------------------------------|
+| [Cat.Responses](../Cat.Responses/README.md) | Workflows and steps report their outcome as a response. |
+| [Cat.Commands](../Cat.Commands/README.md) | The command step hands commands to the command processor. |
+| [Cat.Queries](../Cat.Queries/README.md) | The query step hands queries to the query processor. |
+| [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
 <!-- Dependencies end-->
 
 ## Usage

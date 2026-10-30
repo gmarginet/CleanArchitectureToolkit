@@ -14,6 +14,7 @@ Use the caching implementation when the same expression gets called repeatedly, 
 <!-- Intro end-->
 
 ## Table of contents <!-- omit in toc -->  
+- [NuGet packages](#nuget-packages)
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)
@@ -23,15 +24,29 @@ Use the caching implementation when the same expression gets called repeatedly, 
   - [Choose between the cache and no cache](#choose-between-the-cache-and-no-cache)
   - [Errors and exceptions](#errors-and-exceptions)
 
+## NuGet packages
+<!-- NuGet start -->
+![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Expressions)
+
+| Package | Role | Install | Downloads |
+|---------|------|---------|-----------|
+| [Cat.Expressions.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Expressions.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Expressions.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions.Abstractions) |
+| [Cat.Expressions](https://www.nuget.org/packages/gmarginet.Cat.Expressions/) | Implementation | `dotnet add package gmarginet.Cat.Expressions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions) |
+<!-- NuGet end -->
+
 ## Namespaces
 <!-- Namespaces start-->
-- [Cat.Expressions.Abstractions](namespaces/Cat.Expressions.Abstractions/index.md)  
-- [Cat.Expressions](namespaces/Cat.Expressions/index.md)  
+| Namespace | What it holds |
+|-----------|---------------|
+| [Cat.Expressions.Abstractions](namespaces/Cat.Expressions.Abstractions/index.md) | Interfaces for compiling member expressions. |
+| [Cat.Expressions](namespaces/Cat.Expressions/index.md) | The caching and no-cache compilers, and the module registration. |
 <!-- Namespaces end-->
 
 ## Dependencies
 <!-- Dependencies start-->
-- [Cat.Extensions](../Cat.Extensions/README.md)  
+| Module | Why Cat.Expressions needs it |
+|--------|-----------------------------|
+| [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
 <!-- Dependencies end-->
 
 ## Usage

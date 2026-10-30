@@ -18,6 +18,7 @@ CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scru
 <!-- Intro end-->
 
 ## Table of contents <!-- omit in toc -->  
+- [NuGet packages](#nuget-packages)
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)
@@ -29,15 +30,29 @@ CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scru
   - [Decorator order](#decorator-order)
   - [Errors and exceptions](#errors-and-exceptions)
 
+## NuGet packages
+<!-- NuGet start -->
+![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Decorators)
+
+| Package | Role | Install | Downloads |
+|---------|------|---------|-----------|
+| [Cat.Decorators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Decorators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Decorators.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators.Abstractions) |
+| [Cat.Decorators](https://www.nuget.org/packages/gmarginet.Cat.Decorators/) | Implementation | `dotnet add package gmarginet.Cat.Decorators` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators) |
+<!-- NuGet end -->
+
 ## Namespaces
 <!-- Namespaces start-->
-- [Cat.Decorators.Abstractions](namespaces/Cat.Decorators.Abstractions/index.md)  
-- [Cat.Decorators](namespaces/Cat.Decorators/index.md)  
+| Namespace | What it holds |
+|-----------|---------------|
+| [Cat.Decorators.Abstractions](namespaces/Cat.Decorators.Abstractions/index.md) | Interfaces for decorators and the decorated service factory. |
+| [Cat.Decorators](namespaces/Cat.Decorators/index.md) | The factory that wraps services in decorators, and the module registration. |
 <!-- Namespaces end-->
 
 ## Dependencies
 <!-- Dependencies start-->
-- [Cat.Extensions](../Cat.Extensions/README.md)  
+| Module | Why Cat.Decorators needs it |
+|--------|----------------------------|
+| [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
 <!-- Dependencies end-->
 
 ## Usage

@@ -15,6 +15,7 @@ The module ships with a no-op implementation that returns the key as-is, with pl
 <!-- Intro end-->
 
 ## Table of contents <!-- omit in toc -->  
+- [NuGet packages](#nuget-packages)
 - [Namespaces](#namespaces)
 - [Dependencies](#dependencies)
 - [Usage](#usage)
@@ -23,15 +24,29 @@ The module ships with a no-op implementation that returns the key as-is, with pl
   - [Write your own localizer](#write-your-own-localizer)
   - [Errors and exceptions](#errors-and-exceptions)
 
+## NuGet packages
+<!-- NuGet start -->
+![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Localizations)
+
+| Package | Role | Install | Downloads |
+|---------|------|---------|-----------|
+| [Cat.Localizations.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Localizations.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Localizations.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Localizations.Abstractions) |
+| [Cat.Localizations](https://www.nuget.org/packages/gmarginet.Cat.Localizations/) | Implementation | `dotnet add package gmarginet.Cat.Localizations` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Localizations) |
+<!-- NuGet end -->
+
 ## Namespaces
 <!-- Namespaces start-->
-- [Cat.Localizations.Abstractions](namespaces/Cat.Localizations.Abstractions/index.md)  
-- [Cat.Localizations](namespaces/Cat.Localizations/index.md)  
+| Namespace | What it holds |
+|-----------|---------------|
+| [Cat.Localizations.Abstractions](namespaces/Cat.Localizations.Abstractions/index.md) | The `ICatLocalizer` interface. |
+| [Cat.Localizations](namespaces/Cat.Localizations/index.md) | The no-op localizer and the module registration. |
 <!-- Namespaces end-->
 
 ## Dependencies
 <!-- Dependencies start-->
-- [Cat.Extensions](../Cat.Extensions/README.md)  
+| Module | Why Cat.Localizations needs it |
+|--------|-------------------------------|
+| [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
 <!-- Dependencies end-->
 
 ## Usage
