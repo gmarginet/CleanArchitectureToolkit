@@ -17,7 +17,7 @@ Describes the cases of a switch step\.
 ```csharp
 public interface ICatSwitchCaseBuilder<TWorkflowState,TSwitchValue>
     where TWorkflowState : class, Cat.FluentWorkflows.Abstractions.ICatWorkflowState<TWorkflowState>
-    where TSwitchValue : struct, System.ValueType, System.ValueType
+    where TSwitchValue : struct
 ```
 #### Type parameters
 

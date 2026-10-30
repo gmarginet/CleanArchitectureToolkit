@@ -20,7 +20,7 @@ public interface ICatResponse
 ```
 
 Derived  
-&#8627; [ICatResponse&lt;TResponse&gt;](ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\<TResponse\>')
+↳ [ICatResponse&lt;TResponse&gt;](ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\<TResponse\>')
 
 | Properties | |
 | :--- | :--- |

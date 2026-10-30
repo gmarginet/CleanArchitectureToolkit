@@ -19,7 +19,7 @@ named parameter is non\-[null](https://docs.microsoft.com/en-us/dotnet/csharp/la
 internal sealed class NotNullIfNotNullAttribute : System.Attribute
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [System\.Attribute](https://learn.microsoft.com/en-us/dotnet/api/system.attribute 'System\.Attribute') &#129106; NotNullIfNotNullAttribute
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [System\.Attribute](https://learn.microsoft.com/en-us/dotnet/api/system.attribute 'System\.Attribute') → NotNullIfNotNullAttribute
 
 | Constructors | |
 | :--- | :--- |

@@ -19,7 +19,7 @@ Each rule returns an options builder, so you can chain `When`, `WithFieldName`, 
 public static class CatValidatorPropertyRuleBuilderExtensions
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatValidatorPropertyRuleBuilderExtensions
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatValidatorPropertyRuleBuilderExtensions
 
 | Methods | |
 | :--- | :--- |

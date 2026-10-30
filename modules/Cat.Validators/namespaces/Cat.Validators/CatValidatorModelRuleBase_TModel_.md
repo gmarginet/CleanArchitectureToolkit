@@ -27,10 +27,10 @@ public abstract class CatValidatorModelRuleBase<TModel> : Cat.Validators.CatVali
 
 The type being validated\.
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [Cat\.Validators\.CatValidatorModelRuleAsyncBase&lt;](CatValidatorModelRuleAsyncBase_TModel_.md 'Cat\.Validators\.CatValidatorModelRuleAsyncBase\<TModel\>')[TModel](CatValidatorModelRuleBase_TModel_.md#Cat.Validators.CatValidatorModelRuleBase_TModel_.TModel 'Cat\.Validators\.CatValidatorModelRuleBase\<TModel\>\.TModel')[&gt;](CatValidatorModelRuleAsyncBase_TModel_.md 'Cat\.Validators\.CatValidatorModelRuleAsyncBase\<TModel\>') &#129106; CatValidatorModelRuleBase\<TModel\>
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [Cat\.Validators\.CatValidatorModelRuleAsyncBase&lt;](CatValidatorModelRuleAsyncBase_TModel_.md 'Cat\.Validators\.CatValidatorModelRuleAsyncBase\<TModel\>')[TModel](CatValidatorModelRuleBase_TModel_.md#Cat.Validators.CatValidatorModelRuleBase_TModel_.TModel 'Cat\.Validators\.CatValidatorModelRuleBase\<TModel\>\.TModel')[&gt;](CatValidatorModelRuleAsyncBase_TModel_.md 'Cat\.Validators\.CatValidatorModelRuleAsyncBase\<TModel\>') → CatValidatorModelRuleBase\<TModel\>
 
 Derived  
-&#8627; [ModelMustValidatorRule&lt;TModel&gt;](ModelMustValidatorRule_TModel_.md 'Cat\.Validators\.Rules\.ModelMustValidatorRule\<TModel\>')
+↳ [ModelMustValidatorRule&lt;TModel&gt;](ModelMustValidatorRule_TModel_.md 'Cat\.Validators\.Rules\.ModelMustValidatorRule\<TModel\>')
 
 | Methods | |
 | :--- | :--- |

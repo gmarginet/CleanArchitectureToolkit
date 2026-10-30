@@ -18,4 +18,4 @@ The response type for [Created](CatResponseType.Created.md 'Cat\.Responses\.Abst
 public class CatResponseType.Succeeded.Created : Cat.Responses.Abstractions.CatResponseType.Succeeded
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [CatResponseType](CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType') &#129106; [Succeeded](CatResponseType.Succeeded.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded') &#129106; Created
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatResponseType](CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType') → [Succeeded](CatResponseType.Succeeded.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded') → Created

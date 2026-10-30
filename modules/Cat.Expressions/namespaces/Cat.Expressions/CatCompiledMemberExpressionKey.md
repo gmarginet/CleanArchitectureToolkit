@@ -18,7 +18,7 @@ Identifies a compiled member expression by its member and the expression's text,
 internal class CatCompiledMemberExpressionKey
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatCompiledMemberExpressionKey
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatCompiledMemberExpressionKey
 
 | Constructors | |
 | :--- | :--- |

@@ -18,4 +18,4 @@ Wraps service request handlers with request validation\.
 internal static class ValidationDecorator
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; ValidationDecorator
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → ValidationDecorator

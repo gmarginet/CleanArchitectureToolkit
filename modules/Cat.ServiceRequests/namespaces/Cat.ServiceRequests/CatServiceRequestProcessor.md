@@ -19,7 +19,7 @@ Opens a new scope per request, gets the decorated handler from it and invokes th
 internal class CatServiceRequestProcessor : Cat.ServiceRequests.Abstractions.ICatServiceRequestProcessor
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatServiceRequestProcessor
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatServiceRequestProcessor
 
 Implements [ICatServiceRequestProcessor](../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Abstractions/ICatServiceRequestProcessor.md 'Cat\.ServiceRequests\.Abstractions\.ICatServiceRequestProcessor')
 

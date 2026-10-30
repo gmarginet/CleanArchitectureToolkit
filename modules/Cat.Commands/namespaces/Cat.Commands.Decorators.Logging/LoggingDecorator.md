@@ -18,4 +18,4 @@ Wraps command handlers with debug logging and error logging\.
 internal static class LoggingDecorator
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; LoggingDecorator
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → LoggingDecorator

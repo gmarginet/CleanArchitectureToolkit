@@ -18,4 +18,4 @@ The response type for [Unauthorized](CatResponseType.Unauthorized.md 'Cat\.Respo
 public class CatResponseType.Failed.Unauthorized : Cat.Responses.Abstractions.CatResponseType.Failed
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [CatResponseType](CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType') &#129106; [Failed](CatResponseType.Failed.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed') &#129106; Unauthorized
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatResponseType](CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType') → [Failed](CatResponseType.Failed.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed') → Unauthorized

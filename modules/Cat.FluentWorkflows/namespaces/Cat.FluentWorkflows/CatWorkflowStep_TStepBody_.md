@@ -26,7 +26,7 @@ public class CatWorkflowStep<TStepBody> : Cat.FluentWorkflows.CatWorkflowStep
 
 The step body to run\.
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [CatWorkflowStep](CatWorkflowStep.md 'Cat\.FluentWorkflows\.CatWorkflowStep') &#129106; CatWorkflowStep\<TStepBody\>
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatWorkflowStep](CatWorkflowStep.md 'Cat\.FluentWorkflows\.CatWorkflowStep') → CatWorkflowStep\<TStepBody\>
 
 | Properties | |
 | :--- | :--- |

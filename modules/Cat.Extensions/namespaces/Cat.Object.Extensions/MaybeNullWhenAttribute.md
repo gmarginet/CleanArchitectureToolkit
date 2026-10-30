@@ -19,7 +19,7 @@ the parameter may be [null](https://docs.microsoft.com/en-us/dotnet/csharp/langu
 internal sealed class MaybeNullWhenAttribute : System.Attribute
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [System\.Attribute](https://learn.microsoft.com/en-us/dotnet/api/system.attribute 'System\.Attribute') &#129106; MaybeNullWhenAttribute
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [System\.Attribute](https://learn.microsoft.com/en-us/dotnet/api/system.attribute 'System\.Attribute') → MaybeNullWhenAttribute
 
 | Constructors | |
 | :--- | :--- |

@@ -18,7 +18,7 @@ Rules that look at the whole model\. Use them inside [AddRules\(Action&lt;ICatVa
 public static class CatValidatorModelRuleBuilderExtensions
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatValidatorModelRuleBuilderExtensions
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatValidatorModelRuleBuilderExtensions
 
 | Methods | |
 | :--- | :--- |

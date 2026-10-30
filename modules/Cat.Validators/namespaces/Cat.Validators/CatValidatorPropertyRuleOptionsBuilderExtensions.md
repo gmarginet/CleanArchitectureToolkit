@@ -19,7 +19,7 @@ Each option applies only to the rule right before it\.
 public static class CatValidatorPropertyRuleOptionsBuilderExtensions
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatValidatorPropertyRuleOptionsBuilderExtensions
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatValidatorPropertyRuleOptionsBuilderExtensions
 
 | Methods | |
 | :--- | :--- |

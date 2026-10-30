@@ -19,11 +19,11 @@ Get its data through `Input` and hand results back through `Output`\. Implement 
 public abstract class CatStepBodyAsync : Cat.FluentWorkflows.Abstractions.ICatStepBodyAsync
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatStepBodyAsync
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatStepBodyAsync
 
 Derived  
-&#8627; [CatStepBody](CatStepBody.md 'Cat\.FluentWorkflows\.CatStepBody')  
-&#8627; [CatStepBodyAsync&lt;TWorkflowState&gt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>')
+↳ [CatStepBody](CatStepBody.md 'Cat\.FluentWorkflows\.CatStepBody')  
+↳ [CatStepBodyAsync&lt;TWorkflowState&gt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>')
 
 Implements [ICatStepBodyAsync](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatStepBodyAsync.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepBodyAsync')
 

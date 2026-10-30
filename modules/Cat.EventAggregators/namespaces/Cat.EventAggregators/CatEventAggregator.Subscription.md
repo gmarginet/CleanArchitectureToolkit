@@ -18,7 +18,7 @@ Tracks one subscriber's live reference and the [ICatHandleEvent&lt;TEvent&gt;](.
 private class CatEventAggregator.Subscription
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; Subscription
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → Subscription
 
 | Constructors | |
 | :--- | :--- |

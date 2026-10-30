@@ -27,7 +27,7 @@ public interface ICatValidatorModelRule<TModel>
 The type being validated\.
 
 Derived  
-&#8627; [ICatValidatorPropertyRule&lt;TModel,TProperty&gt;](ICatValidatorPropertyRule_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRule\<TModel,TProperty\>')
+↳ [ICatValidatorPropertyRule&lt;TModel,TProperty&gt;](ICatValidatorPropertyRule_TModel,TProperty_.md 'Cat\.Validators\.Abstractions\.ICatValidatorPropertyRule\<TModel,TProperty\>')
 
 | Properties | |
 | :--- | :--- |

@@ -18,7 +18,7 @@ Default [ICatValidatorError](../../../Cat.Validators/namespaces/Cat.Validators.A
 public class CatValidatorError : Cat.Validators.Abstractions.ICatValidatorError
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatValidatorError
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatValidatorError
 
 Implements [ICatValidatorError](../../../Cat.Validators/namespaces/Cat.Validators.Abstractions/ICatValidatorError.md 'Cat\.Validators\.Abstractions\.ICatValidatorError')
 

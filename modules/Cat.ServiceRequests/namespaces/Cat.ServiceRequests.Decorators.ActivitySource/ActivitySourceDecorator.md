@@ -18,4 +18,4 @@ Wraps service request handlers in an [System\.Diagnostics\.Activity](https://lea
 internal static class ActivitySourceDecorator
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; ActivitySourceDecorator
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → ActivitySourceDecorator

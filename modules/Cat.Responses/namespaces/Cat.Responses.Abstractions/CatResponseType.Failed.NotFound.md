@@ -18,4 +18,4 @@ The response type for [NotFound](CatResponseType.NotFound.md 'Cat\.Responses\.Ab
 public class CatResponseType.Failed.NotFound : Cat.Responses.Abstractions.CatResponseType.Failed
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [CatResponseType](CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType') &#129106; [Failed](CatResponseType.Failed.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed') &#129106; NotFound
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatResponseType](CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType') → [Failed](CatResponseType.Failed.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed') → NotFound

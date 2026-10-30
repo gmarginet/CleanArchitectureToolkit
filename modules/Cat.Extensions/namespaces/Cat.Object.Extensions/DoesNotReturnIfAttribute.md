@@ -19,7 +19,7 @@ parameter is passed the specified value\.
 internal sealed class DoesNotReturnIfAttribute : System.Attribute
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [System\.Attribute](https://learn.microsoft.com/en-us/dotnet/api/system.attribute 'System\.Attribute') &#129106; DoesNotReturnIfAttribute
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [System\.Attribute](https://learn.microsoft.com/en-us/dotnet/api/system.attribute 'System\.Attribute') → DoesNotReturnIfAttribute
 
 | Constructors | |
 | :--- | :--- |

@@ -28,4 +28,4 @@ public interface ICatWorkflowState<out TWorkflowState>
 The state class itself\.
 
 Derived  
-&#8627; [ICatForeachState&lt;TCollection,TWorkflowState&gt;](ICatForeachState_TCollection,TWorkflowState_.md 'Cat\.FluentWorkflows\.Abstractions\.ICatForeachState\<TCollection,TWorkflowState\>')
+↳ [ICatForeachState&lt;TCollection,TWorkflowState&gt;](ICatForeachState_TCollection,TWorkflowState_.md 'Cat\.FluentWorkflows\.Abstractions\.ICatForeachState\<TCollection,TWorkflowState\>')

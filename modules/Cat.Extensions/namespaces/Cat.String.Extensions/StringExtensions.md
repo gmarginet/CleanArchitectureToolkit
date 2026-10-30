@@ -18,7 +18,7 @@ Extension methods for [System\.String](https://learn.microsoft.com/en-us/dotnet/
 public static class StringExtensions
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; StringExtensions
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → StringExtensions
 
 | Methods | |
 | :--- | :--- |

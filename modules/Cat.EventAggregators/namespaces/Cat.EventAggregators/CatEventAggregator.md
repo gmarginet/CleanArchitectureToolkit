@@ -19,7 +19,7 @@ references, so a subscriber doesn't need to unsubscribe to be garbage collected\
 internal class CatEventAggregator : Cat.EventAggregators.Abstractions.ICatEventAggregator
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatEventAggregator
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatEventAggregator
 
 Implements [ICatEventAggregator](../../../Cat.EventAggregators/namespaces/Cat.EventAggregators.Abstractions/ICatEventAggregator.md 'Cat\.EventAggregators\.Abstractions\.ICatEventAggregator')
 

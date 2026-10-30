@@ -19,7 +19,7 @@ A message template has named placeholders\. The values come in order, with the f
 public static class CatValidatorErrorDefinitions
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatValidatorErrorDefinitions
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatValidatorErrorDefinitions
 
 | Constructors | |
 | :--- | :--- |

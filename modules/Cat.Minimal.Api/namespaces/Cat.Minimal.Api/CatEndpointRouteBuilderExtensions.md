@@ -18,7 +18,7 @@ Maps service requests to minimal API endpoints\.
 public static class CatEndpointRouteBuilderExtensions
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatEndpointRouteBuilderExtensions
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatEndpointRouteBuilderExtensions
 
 | Methods | |
 | :--- | :--- |

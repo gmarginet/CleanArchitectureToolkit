@@ -19,7 +19,7 @@ Opens a new scope per query, gets the decorated handler from it and invokes the 
 internal class CatQueryProcessor : Cat.Queries.Abstractions.ICatQueryProcessor
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatQueryProcessor
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatQueryProcessor
 
 Implements [ICatQueryProcessor](../../../Cat.Queries/namespaces/Cat.Queries.Abstractions/ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor')
 

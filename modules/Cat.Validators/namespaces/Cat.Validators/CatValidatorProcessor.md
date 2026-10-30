@@ -20,7 +20,7 @@ Every rule runs, so one call reports all the failures\.
 public class CatValidatorProcessor : Cat.Validators.Abstractions.ICatValidatorProcessor
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatValidatorProcessor
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatValidatorProcessor
 
 Implements [ICatValidatorProcessor](../../../Cat.Validators/namespaces/Cat.Validators.Abstractions/ICatValidatorProcessor.md 'Cat\.Validators\.Abstractions\.ICatValidatorProcessor')
 

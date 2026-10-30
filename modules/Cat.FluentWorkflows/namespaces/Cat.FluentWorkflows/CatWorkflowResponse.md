@@ -18,7 +18,7 @@ Default [ICatWorkflowResponse](../../../Cat.FluentWorkflows/namespaces/Cat.Fluen
 public class CatWorkflowResponse : Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatWorkflowResponse
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatWorkflowResponse
 
 Implements [ICatWorkflowResponse](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')
 

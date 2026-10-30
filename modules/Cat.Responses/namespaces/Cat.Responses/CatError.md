@@ -19,7 +19,7 @@ or build one from a reusable [CatErrorDefinition](CatErrorDefinition.md 'Cat\.Re
 public record CatError : Cat.Responses.Abstractions.ICatError, System.IEquatable<Cat.Responses.CatError>
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatError
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatError
 
 Implements [ICatError](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError'), [System\.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System\.IEquatable\`1')[CatError](CatError.md 'Cat\.Responses\.CatError')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System\.IEquatable\`1')
 

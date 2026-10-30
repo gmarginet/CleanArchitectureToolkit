@@ -18,7 +18,7 @@ Extension methods for logging [ICatResponse](ICatResponse.md 'Cat\.Responses\.Ab
 public static class LoggerExtensions
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; LoggerExtensions
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → LoggerExtensions
 
 | Methods | |
 | :--- | :--- |

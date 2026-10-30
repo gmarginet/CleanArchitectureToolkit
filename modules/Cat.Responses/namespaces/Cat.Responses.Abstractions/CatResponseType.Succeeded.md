@@ -18,9 +18,9 @@ Base type for every outcome that represents a successful operation\.
 public abstract class CatResponseType.Succeeded : Cat.Responses.Abstractions.CatResponseType
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [CatResponseType](CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType') &#129106; Succeeded
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatResponseType](CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType') → Succeeded
 
 Derived  
-&#8627; [Created](CatResponseType.Succeeded.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded\.Created')  
-&#8627; [NoContent](CatResponseType.Succeeded.NoContent.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded\.NoContent')  
-&#8627; [Ok](CatResponseType.Succeeded.Ok.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded\.Ok')
+↳ [Created](CatResponseType.Succeeded.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded\.Created')  
+↳ [NoContent](CatResponseType.Succeeded.NoContent.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded\.NoContent')  
+↳ [Ok](CatResponseType.Succeeded.Ok.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded\.Ok')

@@ -19,7 +19,7 @@ Gets the workflow from the service provider, builds its steps, and runs them ins
 public class CatWorkflowProcessor : Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatWorkflowProcessor
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatWorkflowProcessor
 
 Implements [ICatWorkflowProcessor](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowProcessor')
 

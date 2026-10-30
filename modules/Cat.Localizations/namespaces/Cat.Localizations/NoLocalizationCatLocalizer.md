@@ -19,7 +19,7 @@ only filling in placeholders for the indexer that takes arguments\.
 internal class NoLocalizationCatLocalizer : Cat.Localizations.Abstractions.ICatLocalizer
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; NoLocalizationCatLocalizer
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → NoLocalizationCatLocalizer
 
 Implements [ICatLocalizer](../../../Cat.Localizations/namespaces/Cat.Localizations.Abstractions/ICatLocalizer.md 'Cat\.Localizations\.Abstractions\.ICatLocalizer')
 

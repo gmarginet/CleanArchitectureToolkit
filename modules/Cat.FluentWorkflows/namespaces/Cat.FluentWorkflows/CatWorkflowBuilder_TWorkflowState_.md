@@ -27,7 +27,7 @@ public class CatWorkflowBuilder<TWorkflowState> : Cat.FluentWorkflows.Abstractio
 
 The state of the workflow\.
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatWorkflowBuilder\<TWorkflowState\>
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatWorkflowBuilder\<TWorkflowState\>
 
 Implements [Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder&lt;](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowBuilder_TWorkflowState_.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder\`1')[TWorkflowState](CatWorkflowBuilder_TWorkflowState_.md#Cat.FluentWorkflows.CatWorkflowBuilder_TWorkflowState_.TWorkflowState 'Cat\.FluentWorkflows\.CatWorkflowBuilder\<TWorkflowState\>\.TWorkflowState')[&gt;](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowBuilder_TWorkflowState_.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder\`1')
 

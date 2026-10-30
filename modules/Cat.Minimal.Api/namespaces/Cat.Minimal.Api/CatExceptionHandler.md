@@ -18,7 +18,7 @@ Catches unexpected exceptions, logs them and answers with a 500 [CatProblemDetai
 internal sealed class CatExceptionHandler : Microsoft.AspNetCore.Diagnostics.IExceptionHandler
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatExceptionHandler
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatExceptionHandler
 
 Implements [Microsoft\.AspNetCore\.Diagnostics\.IExceptionHandler](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.diagnostics.iexceptionhandler 'Microsoft\.AspNetCore\.Diagnostics\.IExceptionHandler')
 

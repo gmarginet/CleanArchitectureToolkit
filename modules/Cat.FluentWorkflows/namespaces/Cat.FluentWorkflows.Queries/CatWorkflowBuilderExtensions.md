@@ -18,7 +18,7 @@ The query step for the workflow builder\.
 public static class CatWorkflowBuilderExtensions
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatWorkflowBuilderExtensions
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatWorkflowBuilderExtensions
 
 | Methods | |
 | :--- | :--- |

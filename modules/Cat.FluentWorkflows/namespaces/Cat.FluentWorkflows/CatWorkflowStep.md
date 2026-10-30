@@ -18,10 +18,10 @@ Base class of a workflow step\.
 public abstract class CatWorkflowStep : Cat.FluentWorkflows.Abstractions.ICatWorkflowStep
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatWorkflowStep
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatWorkflowStep
 
 Derived  
-&#8627; [CatWorkflowStep&lt;TStepBody&gt;](CatWorkflowStep_TStepBody_.md 'Cat\.FluentWorkflows\.CatWorkflowStep\<TStepBody\>')
+↳ [CatWorkflowStep&lt;TStepBody&gt;](CatWorkflowStep_TStepBody_.md 'Cat\.FluentWorkflows\.CatWorkflowStep\<TStepBody\>')
 
 Implements [ICatWorkflowStep](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowStep.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowStep')
 

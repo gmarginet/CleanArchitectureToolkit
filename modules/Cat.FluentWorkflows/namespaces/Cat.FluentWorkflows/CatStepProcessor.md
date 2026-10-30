@@ -21,7 +21,7 @@ The result is the one of the last step that ran\. The errors of every step that 
 public class CatStepProcessor : Cat.FluentWorkflows.Abstractions.ICatStepProcessor
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatStepProcessor
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatStepProcessor
 
 Implements [ICatStepProcessor](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')
 

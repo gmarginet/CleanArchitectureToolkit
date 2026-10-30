@@ -19,7 +19,7 @@ Gets the service from the service provider, then wraps it in each registered dec
 public class CatDecoratorFactory : Cat.Decorators.Abstractions.ICatDecoratorFactory
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatDecoratorFactory
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatDecoratorFactory
 
 Implements [ICatDecoratorFactory](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory')
 

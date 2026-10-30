@@ -19,7 +19,7 @@ Hands the decorators over to the [CatDecoratorFactory](CatDecoratorFactory.md 'C
 public class CatDecoratorFactoryBuilder : Cat.Decorators.Abstractions.ICatDecoratorFactoryBuilder
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatDecoratorFactoryBuilder
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatDecoratorFactoryBuilder
 
 Implements [ICatDecoratorFactoryBuilder](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorFactoryBuilder.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactoryBuilder')
 

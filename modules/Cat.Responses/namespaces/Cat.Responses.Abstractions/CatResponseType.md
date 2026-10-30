@@ -20,11 +20,11 @@ whether a response succeeded without inspecting the concrete outcome\.
 public abstract class CatResponseType
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatResponseType
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatResponseType
 
 Derived  
-&#8627; [Failed](CatResponseType.Failed.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed')  
-&#8627; [Succeeded](CatResponseType.Succeeded.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded')
+↳ [Failed](CatResponseType.Failed.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed')  
+↳ [Succeeded](CatResponseType.Succeeded.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded')
 
 | Properties | |
 | :--- | :--- |

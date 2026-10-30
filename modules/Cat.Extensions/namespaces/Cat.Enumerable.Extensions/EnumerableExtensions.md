@@ -18,7 +18,7 @@ Extension methods for [System\.Collections\.IEnumerable](https://learn.microsoft
 public static class EnumerableExtensions
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; EnumerableExtensions
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → EnumerableExtensions
 
 | Methods | |
 | :--- | :--- |

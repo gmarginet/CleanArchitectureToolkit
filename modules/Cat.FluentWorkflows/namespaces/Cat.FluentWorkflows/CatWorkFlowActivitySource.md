@@ -18,7 +18,7 @@ The activity source for tracing workflows\. Add [ActivitySourceName](CatWorkFlow
 public class CatWorkFlowActivitySource
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatWorkFlowActivitySource
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatWorkFlowActivitySource
 
 | Fields | |
 | :--- | :--- |

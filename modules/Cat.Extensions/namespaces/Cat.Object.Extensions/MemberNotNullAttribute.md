@@ -19,7 +19,7 @@ not\-[null](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/ke
 internal sealed class MemberNotNullAttribute : System.Attribute
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [System\.Attribute](https://learn.microsoft.com/en-us/dotnet/api/system.attribute 'System\.Attribute') &#129106; MemberNotNullAttribute
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [System\.Attribute](https://learn.microsoft.com/en-us/dotnet/api/system.attribute 'System\.Attribute') → MemberNotNullAttribute
 
 | Constructors | |
 | :--- | :--- |

@@ -19,7 +19,7 @@ It always breaks the way [BreakType](CatBreakStep.BreakType.md 'Cat\.FluentWorkf
 public class CatBreakStep : Cat.FluentWorkflows.CatStepBody
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [CatStepBodyAsync](CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') &#129106; [CatStepBody](CatStepBody.md 'Cat\.FluentWorkflows\.CatStepBody') &#129106; CatBreakStep
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatStepBodyAsync](CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') → [CatStepBody](CatStepBody.md 'Cat\.FluentWorkflows\.CatStepBody') → CatBreakStep
 
 | Constructors | |
 | :--- | :--- |

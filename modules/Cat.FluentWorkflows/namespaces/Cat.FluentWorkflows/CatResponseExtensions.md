@@ -18,7 +18,7 @@ Turns a response of a command, a query or a service request into a workflow resp
 public static class CatResponseExtensions
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatResponseExtensions
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatResponseExtensions
 
 | Methods | |
 | :--- | :--- |

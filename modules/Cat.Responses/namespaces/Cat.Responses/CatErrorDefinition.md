@@ -19,7 +19,7 @@ fields, and call [CreateCatError\(object\[\]\)](CatErrorDefinition.CreateCatErro
 public record CatErrorDefinition : System.IEquatable<Cat.Responses.CatErrorDefinition>
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatErrorDefinition
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatErrorDefinition
 
 Implements [System\.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System\.IEquatable\`1')[CatErrorDefinition](CatErrorDefinition.md 'Cat\.Responses\.CatErrorDefinition')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1 'System\.IEquatable\`1')
 

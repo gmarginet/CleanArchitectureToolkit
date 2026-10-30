@@ -18,7 +18,7 @@ The body of every failed response\. It is a standard problem details object plus
 public class CatProblemDetails : Microsoft.AspNetCore.Mvc.ProblemDetails
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [Microsoft\.AspNetCore\.Mvc\.ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails 'Microsoft\.AspNetCore\.Mvc\.ProblemDetails') &#129106; CatProblemDetails
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [Microsoft\.AspNetCore\.Mvc\.ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails 'Microsoft\.AspNetCore\.Mvc\.ProblemDetails') → CatProblemDetails
 
 | Constructors | |
 | :--- | :--- |

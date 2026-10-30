@@ -18,7 +18,7 @@ Extension methods for inspecting [System\.Linq\.Expressions\.Expression](https:/
 public static class ExpressionExtensions
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; ExpressionExtensions
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → ExpressionExtensions
 
 | Methods | |
 | :--- | :--- |

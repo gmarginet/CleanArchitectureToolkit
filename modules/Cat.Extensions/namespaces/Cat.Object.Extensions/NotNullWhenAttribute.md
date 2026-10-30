@@ -19,7 +19,7 @@ the parameter will not be [null](https://docs.microsoft.com/en-us/dotnet/csharp/
 internal sealed class NotNullWhenAttribute : System.Attribute
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [System\.Attribute](https://learn.microsoft.com/en-us/dotnet/api/system.attribute 'System\.Attribute') &#129106; NotNullWhenAttribute
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [System\.Attribute](https://learn.microsoft.com/en-us/dotnet/api/system.attribute 'System\.Attribute') → NotNullWhenAttribute
 
 | Constructors | |
 | :--- | :--- |

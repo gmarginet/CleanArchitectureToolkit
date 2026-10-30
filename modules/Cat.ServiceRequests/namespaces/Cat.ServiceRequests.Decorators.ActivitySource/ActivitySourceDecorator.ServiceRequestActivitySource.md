@@ -18,7 +18,7 @@ Owns the shared [System\.Diagnostics\.ActivitySource](https://learn.microsoft.co
 private static class ActivitySourceDecorator.ServiceRequestActivitySource
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; ServiceRequestActivitySource
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → ServiceRequestActivitySource
 
 | Constructors | |
 | :--- | :--- |

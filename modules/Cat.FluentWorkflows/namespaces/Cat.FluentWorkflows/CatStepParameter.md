@@ -19,7 +19,7 @@ Reads a value with one expression and writes it with another\. A `null` value wr
 public class CatStepParameter : Cat.FluentWorkflows.Abstractions.ICatStepParameter
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatStepParameter
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatStepParameter
 
 Implements [ICatStepParameter](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatStepParameter.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepParameter')
 

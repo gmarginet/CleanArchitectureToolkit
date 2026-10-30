@@ -18,10 +18,10 @@ Base type for every outcome that represents a failed operation\.
 public abstract class CatResponseType.Failed : Cat.Responses.Abstractions.CatResponseType
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; [CatResponseType](CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType') &#129106; Failed
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatResponseType](CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType') → Failed
 
 Derived  
-&#8627; [BadRequest](CatResponseType.Failed.BadRequest.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.BadRequest')  
-&#8627; [InternalServerError](CatResponseType.Failed.InternalServerError.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.InternalServerError')  
-&#8627; [NotFound](CatResponseType.Failed.NotFound.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.NotFound')  
-&#8627; [Unauthorized](CatResponseType.Failed.Unauthorized.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.Unauthorized')
+↳ [BadRequest](CatResponseType.Failed.BadRequest.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.BadRequest')  
+↳ [InternalServerError](CatResponseType.Failed.InternalServerError.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.InternalServerError')  
+↳ [NotFound](CatResponseType.Failed.NotFound.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.NotFound')  
+↳ [Unauthorized](CatResponseType.Failed.Unauthorized.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.Unauthorized')

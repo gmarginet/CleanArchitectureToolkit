@@ -19,10 +19,10 @@ such as [Ok\(\)](CatResponse.Ok.md#Cat.Responses.CatResponse.Ok() 'Cat\.Response
 public class CatResponse : Cat.Responses.Abstractions.ICatResponse
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; CatResponse
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatResponse
 
 Derived  
-&#8627; [CatResponse&lt;TResponse&gt;](CatResponse_TResponse_.md 'Cat\.Responses\.CatResponse\<TResponse\>')
+↳ [CatResponse&lt;TResponse&gt;](CatResponse_TResponse_.md 'Cat\.Responses\.CatResponse\<TResponse\>')
 
 Implements [ICatResponse](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')
 

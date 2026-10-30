@@ -17,7 +17,7 @@ Adds a step that runs the list of steps of the case that matches a value\.
 ```csharp
 public static void Switch<TWorkflowState,TSwitchValue>(this Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder<TWorkflowState> builder, System.Func<TWorkflowState,TSwitchValue> switchValue, System.Action<Cat.FluentWorkflows.Abstractions.ICatSwitchCaseBuilder<TWorkflowState,TSwitchValue>> buildSwitchCase)
     where TWorkflowState : class, Cat.FluentWorkflows.Abstractions.ICatWorkflowState<TWorkflowState>
-    where TSwitchValue : struct, System.ValueType, System.ValueType;
+    where TSwitchValue : struct;
 ```
 #### Type parameters
 
