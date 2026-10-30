@@ -4,11 +4,11 @@ source "https://rubygems.org"
 gem "jekyll", "~> 3.10"
 gem "kramdown-parser-gfm", "~> 1.1"
 gem "webrick", "~> 1.8"
+gem "cat-theme", path: "jekyll-theme"
 
 group :jekyll_plugins do
   # 0.7 and up understand link titles. The classic GitHub Pages build is stuck on 0.6.1.
   gem "jekyll-relative-links", "~> 0.7"
-  gem "jekyll-remote-theme", "~> 0.4"
 
   # The classic GitHub Pages build turns these on by default.
   gem "jekyll-default-layout", "~> 0.1"
