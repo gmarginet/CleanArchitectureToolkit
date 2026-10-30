@@ -24,6 +24,18 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
 - Acts as the documentation entry point.
 - The module list section is strictly enclosed within:
   `<!-- Modules start -->` and `<!-- Modules end -->`
+- The module list is a table with the columns `Module`, an unnamed status column and `Description`, and one row per folder in `modules/`, sorted by name.
+  - The header row is `| Module | | Description |`. The status column has no header text.
+  - Row format: `| [[[ModuleName]]](./modules/[[ModuleName]]/README.md) | [[StatusBadge]] | [[ModuleDescription]] |`
+  - `[[StatusBadge]]` is empty for a stable module.
+  - `[[ModuleDescription]]` is one short sentence about what the module is used for, based on the intro of the module readme.
+  - The link always points to the module readme, also for modules that are still in development.
+- A module that is still in development gets this badge in the status column of its row:
+  `![In development](https://img.shields.io/badge/status-in%20development-orange)`
+  - A blockquote above the table says modules with the status in development will probably have breaking changes. It uses those words, not the badge. Keep that note.
+  - A comment with the badge snippet sits right after `<!-- Modules start-->`, so it can be copied. Keep it.
+  - To put a module in development, put the badge in the status cell of its row. To make it stable, empty that cell.
+  - Stable modules have no badge.
 
 ### Module `README.md` & Template Rules
 When creating or updating a module readme, use `modules/CatModuleReadmeTemplate.md`. Inject data into these exact block/placeholder markers:

@@ -1,23 +1,28 @@
 <link href="resources/styles/style.css" rel="stylesheet" />
-
-# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
-
-
 <table>
     <tr>
-        <td style='padding:0;'>
-            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>
-            It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>
-        <td style='padding:0;' width='220'>
-            <img src='./resources/logo/CatLogo-RoundedCorners-320x160.png' alt='' width='200'/>
+        <td colspan='6' style='text-align: center; font-weight: bold; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+             Clean Architecture Toolkit for .NET
         </td>
     </tr>
+    <tr>
+        <td colspan='5' style='padding: 0; vertical-align: middle; border: none;'>
+            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>
+            It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>
+        <td style='padding: 0; border: none;' width='220'>
+            <img src='./resources/logo/CatLogo-RoundedCorners-320x160.png' alt='' width='200' style='float: right;'/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+
+|&nbsp;&nbsp;&nbsp;[HOME](README.md)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](README.md#module-overview)&nbsp;&nbsp;&nbsp;|
+
+</td>
+</tr>
 </table>
 
-[CAT](README.md 'Readme of the CAT project\.')  
-[Module overview](README.md#module-overview 'List of all the CAT modules\.')  
-
-# README <!-- omit in toc -->  
+# Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 ## Table of contents <!-- omit in toc -->  
 - [Getting Started](#getting-started)
@@ -55,19 +60,26 @@ Most of the modules can be used independently.
 Some modules depend on other modules, in the documentation of each module you can find the list of the dependencies.  
 
 ## Module overview
+
+> Modules with the status in development are still being built.  
+> Expect breaking changes in them before they are stable.  
+
 <!-- Modules start-->
-- [Cat.Commands](./modules/Cat.Commands/README.md)  
-- [Cat.Decorators](./modules/Cat.Decorators/README.md)  
-- [Cat.EventAggregators](./modules/Cat.EventAggregators/README.md)  
-- [Cat.Expressions](./modules/Cat.Expressions/README.md)  
-- [Cat.Extensions](./modules/Cat.Extensions/README.md)  
-- [Cat.FluentWorkflows](./modules/Cat.FluentWorkflows/README.md)  
-- Cat.Localizations `Still in Development`<!--[Cat.Localizations](./modules/Cat.Localizations/README.md)-->  
-- Cat.Minimal.Api `Still in Development`<!--[Cat.Minimal.Api](./modules/Cat.Minimal.Api/README.md)-->  
-- [Cat.Queries](./modules/Cat.Queries/README.md)  
-- [Cat.Responses](./modules/Cat.Responses/README.md)  
-- [Cat.ServiceRequests](./modules/Cat.ServiceRequests/README.md)  
-- [Cat.Validators](./modules/Cat.Validators/README.md)  
+<!-- In development badge: ![In development](https://img.shields.io/badge/status-in%20development-orange) -->
+| Module | | Description |
+|--------|--------|-------------|
+| [Cat.Commands](./modules/Cat.Commands/README.md) | | Change state through one entry point. Describe a change as a command, write one handler for it, and let the processor find the handler. |
+| [Cat.Decorators](./modules/Cat.Decorators/README.md) | | Wrap handlers in decorators for cross-cutting work like logging, validation or tracing. |
+| [Cat.EventAggregators](./modules/Cat.EventAggregators/README.md) | | Let parts of your app talk to each other through in-process events, without direct dependencies. |
+| [Cat.Expressions](./modules/Cat.Expressions/README.md) | | Compile member access expressions once and reuse them, so repeated calls stay fast. |
+| [Cat.Extensions](./modules/Cat.Extensions/README.md) | | Small extension method libraries for enumerables, expressions, objects, service collections and strings. |
+| [Cat.FluentWorkflows](./modules/Cat.FluentWorkflows/README.md) | | Describe a business process as a list of steps in plain C#. |
+| [Cat.Localizations](./modules/Cat.Localizations/README.md) | ![In development](https://img.shields.io/badge/status-in%20development-orange) | Look up localized strings by key, without tying your app to one localization provider. |
+| [Cat.Minimal.Api](./modules/Cat.Minimal.Api/README.md) | ![In development](https://img.shields.io/badge/status-in%20development-orange) | Turn service requests into ASP.NET Core minimal API endpoints with one consistent error shape. |
+| [Cat.Queries](./modules/Cat.Queries/README.md) | | Read data through one entry point. Describe a read as a query, write one handler for it, and let the processor find the handler. |
+| [Cat.Responses](./modules/Cat.Responses/README.md) | | Return the outcome of an operation as a response, either succeeded with a value or failed with errors. |
+| [Cat.ServiceRequests](./modules/Cat.ServiceRequests/README.md) | | Run application use cases through one entry point, with validation, logging and tracing decorators. |
+| [Cat.Validators](./modules/Cat.Validators/README.md) | | Check a model against fluent rules and get every problem back in one response. |
 <!-- Modules end-->
 
 ## Application Architecture

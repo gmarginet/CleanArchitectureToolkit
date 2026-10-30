@@ -3,16 +3,20 @@
 # - jekyll-relative-links 0.7.0 only understands titles in double quotes, so these links keep pointing at .md files.
 # Rewrite the titles as soon as a page is read, so the generators and kramdown see 'Cat.Commands' as "Cat.Commands".
 #
-# The stylesheet link at the top of each page is relative to the markdown file.
-# Jekyll publishes some pages one folder deeper, like "Type..ctor.md" as "Type/ctor.html", so make that link absolute.
+# The stylesheet link and the logo in the header table of each page are relative to the markdown file.
+# Jekyll publishes some pages one folder deeper, like "Type..ctor.md" as "Type/ctor.html", so make those paths absolute.
+# Markdown links in the header are fine. jekyll-relative-links rewrites them.
 module CatLinkTitles
   # A link target may contain balanced parentheses, like "Type.md#Method(System.String)".
   LINK_TITLE_REGEX = %r{(\]\((?:[^()\s]|\([^()\s]*\))+\s+)'((?:\\.|[^'\\])*)'}.freeze
   ESCAPED_PUNCTUATION_REGEX = %r{\\([!"\#$%&'()*+,\-./:;<=>?@\[\]^_`{|}~\\])}.freeze
-  STYLESHEET_REGEX = %r{(<link\s+href=")(?:\.\./)*(resources/styles/style\.css")}.freeze
+  # The stylesheet link and the logo image, with single or double quotes, like <img src='../../resources/logo/Cat.png'>.
+  RESOURCE_REGEX = %r{(<(?:link\s+href|img\s+src)=)(["'])(?:\.{1,2}/)*(resources/[^"']+)\2}.freeze
 
   def self.rewrite(content, baseurl)
-    content = content.sub(STYLESHEET_REGEX) { "#{Regexp.last_match(1)}#{baseurl}/#{Regexp.last_match(2)}" }
+    content = content.gsub(RESOURCE_REGEX) do
+      "#{Regexp.last_match(1)}#{Regexp.last_match(2)}#{baseurl}/#{Regexp.last_match(3)}#{Regexp.last_match(2)}"
+    end
 
     content.gsub(LINK_TITLE_REGEX) do
       # Read the groups first. The inner gsub below resets Regexp.last_match.
