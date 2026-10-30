@@ -41,7 +41,7 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
   - `[[ModuleDescription]]` is one short sentence about what the module is used for, based on the intro of the module readme.
   - The link always points to the module readme, also for modules that are still in development.
 - A module that is still in development gets this badge in the status column of its row:
-  `[![In development](https://img.shields.io/badge/status-in%20development-orange)](./modules/[[ModuleName]]/README.md)`
+  `[![In development](https://img.shields.io/badge/status-in%20development-orange)](#module-overview)`
   - A blockquote above the table says modules with the status in development will probably have breaking changes. It uses those words, not the badge. Keep that note.
   - A comment with the badge snippet sits right after `<!-- Modules start-->`, so it can be copied. Keep it.
   - Keep a blank line between that comment and the table. Without it Jekyll treats the table as part of the HTML comment block and shows it as plain text.
@@ -57,9 +57,9 @@ When creating or updating a module readme, use `modules/CatModuleReadmeTemplate.
 2. **Intro Block**: `<!-- Intro start -->[[Intro]]<!-- Intro end -->` (Brief overview).
 3. **NuGet Block**: `<!-- NuGet start -->` / `<!-- NuGet end -->`
    - Every project in the module has a package named `gmarginet.` followed by the root namespace of the project.
-   - Start with one version badge for the main package (the package named like the module), wrapped in a link to its NuGet page. If no project is named like the module, use the first project instead. All packages of a module share the same version.
+   - Start with one version badge for the main package (the package named like the module), wrapped in a link to the `#nuget-packages` anchor. If no project is named like the module, use the first project instead. All packages of a module share the same version.
    - Add a table with the columns `Package`, `Role`, `Install` and `Downloads`, and one row per project.
-   - Row format: `| [[[NamespaceName]]](https://www.nuget.org/packages/gmarginet.[[NamespaceName]]/) | [[PackageRole]] | `dotnet add package gmarginet.[[NamespaceName]]` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.[[NamespaceName]])](https://www.nuget.org/packages/gmarginet.[[NamespaceName]]/) |`
+   - Row format: `| [[[NamespaceName]]](https://www.nuget.org/packages/gmarginet.[[NamespaceName]]/) | [[PackageRole]] | `dotnet add package gmarginet.[[NamespaceName]]` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.[[NamespaceName]])](#nuget-packages) |`
    - `[[PackageRole]]` is a short label such as `Contracts`, `Implementation` or `Optional decorator`.
 4. **Namespaces Block**: `<!-- Namespaces start -->` / `<!-- Namespaces end -->`
    - Add a table with the columns `Namespace` and `What it holds`, and one row per project.

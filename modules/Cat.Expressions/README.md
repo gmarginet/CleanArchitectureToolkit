@@ -43,12 +43,12 @@ Use the caching implementation when the same expression gets called repeatedly, 
 
 ## NuGet packages
 <!-- NuGet start -->
-[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Expressions)](https://www.nuget.org/packages/gmarginet.Cat.Expressions/)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Expressions)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.Expressions.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Expressions.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Expressions.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Expressions.Abstractions/) |
-| [Cat.Expressions](https://www.nuget.org/packages/gmarginet.Cat.Expressions/) | Implementation | `dotnet add package gmarginet.Cat.Expressions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions)](https://www.nuget.org/packages/gmarginet.Cat.Expressions/) |
+| [Cat.Expressions.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Expressions.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Expressions.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions.Abstractions)](#nuget-packages) |
+| [Cat.Expressions](https://www.nuget.org/packages/gmarginet.Cat.Expressions/) | Implementation | `dotnet add package gmarginet.Cat.Expressions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions)](#nuget-packages) |
 
 <!-- NuGet end -->
 

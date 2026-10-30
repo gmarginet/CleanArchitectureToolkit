@@ -46,12 +46,12 @@ Handlers across the other CAT modules (commands, queries, service requests) retu
 
 ## NuGet packages
 <!-- NuGet start -->
-[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Responses)](https://www.nuget.org/packages/gmarginet.Cat.Responses/)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Responses)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.Responses.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Responses.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Responses.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Responses.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Responses.Abstractions/) |
-| [Cat.Responses](https://www.nuget.org/packages/gmarginet.Cat.Responses/) | Implementation | `dotnet add package gmarginet.Cat.Responses` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Responses)](https://www.nuget.org/packages/gmarginet.Cat.Responses/) |
+| [Cat.Responses.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Responses.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Responses.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Responses.Abstractions)](#nuget-packages) |
+| [Cat.Responses](https://www.nuget.org/packages/gmarginet.Cat.Responses/) | Implementation | `dotnet add package gmarginet.Cat.Responses` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Responses)](#nuget-packages) |
 
 <!-- NuGet end -->
 

@@ -44,11 +44,11 @@ A succeeded response becomes a 200 with the payload. A failed response becomes a
 
 ## NuGet packages
 <!-- NuGet start -->
-[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Minimal.Api)](https://www.nuget.org/packages/gmarginet.Cat.Minimal.Api/)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Minimal.Api)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.Minimal.Api/) | Implementation | `dotnet add package gmarginet.Cat.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Minimal.Api)](https://www.nuget.org/packages/gmarginet.Cat.Minimal.Api/) |
+| [Cat.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.Minimal.Api/) | Implementation | `dotnet add package gmarginet.Cat.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Minimal.Api)](#nuget-packages) |
 
 <!-- NuGet end -->
 

@@ -43,12 +43,12 @@ The module ships with a no-op implementation that returns the key as-is, with pl
 
 ## NuGet packages
 <!-- NuGet start -->
-[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Localizations)](https://www.nuget.org/packages/gmarginet.Cat.Localizations/)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Localizations)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.Localizations.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Localizations.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Localizations.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Localizations.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Localizations.Abstractions/) |
-| [Cat.Localizations](https://www.nuget.org/packages/gmarginet.Cat.Localizations/) | Implementation | `dotnet add package gmarginet.Cat.Localizations` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Localizations)](https://www.nuget.org/packages/gmarginet.Cat.Localizations/) |
+| [Cat.Localizations.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Localizations.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Localizations.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Localizations.Abstractions)](#nuget-packages) |
+| [Cat.Localizations](https://www.nuget.org/packages/gmarginet.Cat.Localizations/) | Implementation | `dotnet add package gmarginet.Cat.Localizations` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Localizations)](#nuget-packages) |
 
 <!-- NuGet end -->
 

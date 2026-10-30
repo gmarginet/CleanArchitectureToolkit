@@ -65,14 +65,14 @@ The module ships the common steps for you, and you can write your own.
 
 ## NuGet packages
 <!-- NuGet start -->
-[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.FluentWorkflows)](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows/)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.FluentWorkflows)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.FluentWorkflows.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.FluentWorkflows.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Abstractions/) |
-| [Cat.FluentWorkflows](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows/) | Implementation | `dotnet add package gmarginet.Cat.FluentWorkflows` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows)](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows/) |
-| [Cat.FluentWorkflows.Commands](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Commands/) | Optional steps | `dotnet add package gmarginet.Cat.FluentWorkflows.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Commands)](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Commands/) |
-| [Cat.FluentWorkflows.Queries](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Queries/) | Optional steps | `dotnet add package gmarginet.Cat.FluentWorkflows.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Queries)](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Queries/) |
+| [Cat.FluentWorkflows.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.FluentWorkflows.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Abstractions)](#nuget-packages) |
+| [Cat.FluentWorkflows](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows/) | Implementation | `dotnet add package gmarginet.Cat.FluentWorkflows` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows)](#nuget-packages) |
+| [Cat.FluentWorkflows.Commands](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Commands/) | Optional steps | `dotnet add package gmarginet.Cat.FluentWorkflows.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Commands)](#nuget-packages) |
+| [Cat.FluentWorkflows.Queries](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Queries/) | Optional steps | `dotnet add package gmarginet.Cat.FluentWorkflows.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Queries)](#nuget-packages) |
 
 <!-- NuGet end -->
 

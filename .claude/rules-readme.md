@@ -7,7 +7,7 @@
 - Copy the header table from the template unchanged. Its links and image path already fit the module folder depth.
 - In the header table, keep the Markdown menu line and the closing `</td>`, `</tr>` and `</table>` tags at column 0. Indented tags show up as text in some previewers.
 - The NuGet, Namespaces, and Dependencies blocks are tables. Fill one row per project or dependency.
-- Always wrap a badge in a link (NuGet page, workflow page or module readme). GitHub turns an unlinked image into a link to a blank page with only the badge.
+- Always wrap a badge in a link to a heading anchor on the same page (`#nuget-packages`, `#getting-started` or `#module-overview`). GitHub turns an unlinked image into a link to a blank page with only the badge, and a same-page anchor keeps the reader where they are.
 - The NuGet version badge uses the package named like the module. If there is none, use the first project.
 - A module without dependencies gets the sentence `[[ModuleName]] has no dependencies on other CAT modules.` instead of the Dependencies table.
 - Enforce the precise comment boundaries (`<!-- Start -->` / `<!-- End -->`) and use the exact markdown link formats specified in CLAUDE.md.

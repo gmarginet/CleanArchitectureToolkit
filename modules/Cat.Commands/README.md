@@ -46,13 +46,13 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 
 ## NuGet packages  
 <!-- NuGet start -->
-[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Commands)](https://www.nuget.org/packages/gmarginet.Cat.Commands/)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Commands)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.Commands.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Commands.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Commands.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Commands.Abstractions/) |
-| [Cat.Commands](https://www.nuget.org/packages/gmarginet.Cat.Commands/) | Implementation | `dotnet add package gmarginet.Cat.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands)](https://www.nuget.org/packages/gmarginet.Cat.Commands/) |
-| [Cat.Commands.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Commands.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.Commands.Decorators.Logging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands.Decorators.Logging)](https://www.nuget.org/packages/gmarginet.Cat.Commands.Decorators.Logging/) |
+| [Cat.Commands.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Commands.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Commands.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands.Abstractions)](#nuget-packages) |
+| [Cat.Commands](https://www.nuget.org/packages/gmarginet.Cat.Commands/) | Implementation | `dotnet add package gmarginet.Cat.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands)](#nuget-packages) |
+| [Cat.Commands.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Commands.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.Commands.Decorators.Logging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands.Decorators.Logging)](#nuget-packages) |
 
 <!-- NuGet end -->
 

@@ -43,15 +43,15 @@ Cat.Extensions is a collection of small, focused extension method libraries. Eac
 
 ## NuGet packages
 <!-- NuGet start -->
-[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Enumerable.Extensions)](https://www.nuget.org/packages/gmarginet.Cat.Enumerable.Extensions/)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Enumerable.Extensions)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.Enumerable.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Enumerable.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Enumerable.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Enumerable.Extensions)](https://www.nuget.org/packages/gmarginet.Cat.Enumerable.Extensions/) |
-| [Cat.Expression.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Expression.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Expression.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expression.Extensions)](https://www.nuget.org/packages/gmarginet.Cat.Expression.Extensions/) |
-| [Cat.Object.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Object.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Object.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Object.Extensions)](https://www.nuget.org/packages/gmarginet.Cat.Object.Extensions/) |
-| [Cat.ServiceCollection.Extensions](https://www.nuget.org/packages/gmarginet.Cat.ServiceCollection.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.ServiceCollection.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceCollection.Extensions)](https://www.nuget.org/packages/gmarginet.Cat.ServiceCollection.Extensions/) |
-| [Cat.String.Extensions](https://www.nuget.org/packages/gmarginet.Cat.String.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.String.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.String.Extensions)](https://www.nuget.org/packages/gmarginet.Cat.String.Extensions/) |
+| [Cat.Enumerable.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Enumerable.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Enumerable.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Enumerable.Extensions)](#nuget-packages) |
+| [Cat.Expression.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Expression.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Expression.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expression.Extensions)](#nuget-packages) |
+| [Cat.Object.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Object.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Object.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Object.Extensions)](#nuget-packages) |
+| [Cat.ServiceCollection.Extensions](https://www.nuget.org/packages/gmarginet.Cat.ServiceCollection.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.ServiceCollection.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceCollection.Extensions)](#nuget-packages) |
+| [Cat.String.Extensions](https://www.nuget.org/packages/gmarginet.Cat.String.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.String.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.String.Extensions)](#nuget-packages) |
 
 <!-- NuGet end -->
 
