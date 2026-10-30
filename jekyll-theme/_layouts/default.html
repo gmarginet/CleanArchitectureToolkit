@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% seo %}
-    <link rel="stylesheet" href="{{ '/assets/css/cat-theme.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/cat-theme.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   </head>
   <body>
     {% assign github_url = site.github.repository_url | default: site.github_url %}
@@ -20,6 +20,8 @@
       {{ content }}
     </main>
     <script>
+      var saveIcon = '<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M2.5 1h9.2L15 4.3v9.2a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 13.5v-11A1.5 1.5 0 0 1 2.5 1zM2 2.5v11a.5.5 0 0 0 .5.5H3V9.5A1.5 1.5 0 0 1 4.5 8h7A1.5 1.5 0 0 1 13 9.5V14h.5a.5.5 0 0 0 .5-.5V4.7L11.3 2H11v2.5A1.5 1.5 0 0 1 9.5 6h-4A1.5 1.5 0 0 1 4 4.5V2h-1.5a.5.5 0 0 0-.5.5zM12 14V9.5a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0-.5.5V14h8zM5 2v2.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V2H5z"/></svg>';
+      var checkIcon = '<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M13.65 3.65a.5.5 0 0 1 0 .7l-7 7a.5.5 0 0 1-.7 0l-3.5-3.5a.5.5 0 1 1 .7-.7L6.3 10.3l6.65-6.65a.5.5 0 0 1 .7 0z"/></svg>';
       document.querySelectorAll('pre').forEach(function (pre) {
         var wrapper = document.createElement('div');
         wrapper.className = 'code-block';
@@ -29,11 +31,17 @@
         var button = document.createElement('button');
         button.type = 'button';
         button.className = 'copy-button';
-        button.textContent = 'Copy';
+        button.title = 'Copy code';
+        button.setAttribute('aria-label', 'Copy code');
+        button.innerHTML = saveIcon;
         button.addEventListener('click', function () {
           navigator.clipboard.writeText(pre.innerText).then(function () {
-            button.textContent = 'Copied';
-            setTimeout(function () { button.textContent = 'Copy'; }, 1500);
+            button.innerHTML = checkIcon;
+            button.classList.add('copied');
+            setTimeout(function () {
+              button.innerHTML = saveIcon;
+              button.classList.remove('copied');
+            }, 1500);
           });
         });
         wrapper.appendChild(button);

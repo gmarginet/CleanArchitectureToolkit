@@ -1,7 +1,8 @@
 /* Colors and sizes follow the dark mode markdown preview of Visual Studio Code. */
 :root {
     color-scheme: dark;
-    --scroll-thumb: rgba(121, 121, 121, 0.4);
+    --success: #89d185;
+    --scroll-thumb:rgba(121, 121, 121, 0.4);
     --scroll-thumb-hover: rgba(121, 121, 121, 0.7);
     --bg: #121314;
     --bar-bg: #121314;
@@ -200,16 +201,28 @@ pre::-webkit-scrollbar-thumb:hover {
     position: absolute;
     top: 8px;
     right: 8px;
-    padding: 2px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
     border: 1px solid var(--line);
     border-radius: 3px;
     background: var(--bg);
     color: var(--text);
-    font: inherit;
-    font-size: 0.8em;
     cursor: pointer;
     opacity: 0;
     transition: opacity 0.15s;
+}
+
+.copy-button svg {
+    width: 16px;
+    height: 16px;
+}
+
+.copy-button.copied {
+    color: var(--success);
 }
 
 .code-block:hover .copy-button,
@@ -218,9 +231,8 @@ pre::-webkit-scrollbar-thumb:hover {
 }
 
 .copy-button:hover {
-    background: var(--button-hover);
-    border-color: var(--button-hover);
-    color: #fff;
+    background: var(--quote-bg);
+    border-color: var(--line-strong);
 }
 
 @media (hover: none) {
