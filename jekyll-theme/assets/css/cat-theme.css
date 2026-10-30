@@ -1,5 +1,8 @@
 /* Colors and sizes follow the dark mode markdown preview of Visual Studio Code. */
 :root {
+    color-scheme: dark;
+    --scroll-thumb: rgba(121, 121, 121, 0.4);
+    --scroll-thumb-hover: rgba(121, 121, 121, 0.7);
     --bg: #121314;
     --bar-bg: #121314;
     --bar-border: #494949;
@@ -165,6 +168,65 @@ pre {
     background: var(--pre-bg);
     border-radius: 3px;
     line-height: 1.45;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) transparent;
+}
+
+pre::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+}
+
+pre::-webkit-scrollbar-track,
+pre::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    border-radius: 5px;
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+    background: var(--scroll-thumb-hover);
+}
+
+/* Copy button, added by the script in the default layout */
+.code-block {
+    position: relative;
+}
+
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 2px 8px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.8em;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.code-block:hover .copy-button,
+.copy-button:focus-visible {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: var(--button-hover);
+    border-color: var(--button-hover);
+    color: #fff;
+}
+
+@media (hover: none) {
+    .copy-button {
+        opacity: 1;
+    }
 }
 
 pre code {
