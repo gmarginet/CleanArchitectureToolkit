@@ -56,6 +56,7 @@ Cat.Extensions is a collection of small, focused extension method libraries. Eac
 
 ## Namespaces
 <!-- Namespaces start-->
+
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Enumerable.Extensions](namespaces/Cat.Enumerable.Extensions/index.md) | Extension methods for `IEnumerable`. |
@@ -67,6 +68,7 @@ Cat.Extensions is a collection of small, focused extension method libraries. Eac
 
 ## Dependencies
 <!-- Dependencies start-->
+
 Cat.Extensions has no dependencies on other CAT modules.  
 <!-- Dependencies end-->
 

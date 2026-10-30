@@ -57,6 +57,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 
 ## Namespaces
 <!-- Namespaces start-->
+
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Commands.Abstractions](namespaces/Cat.Commands.Abstractions/index.md) | Command, handler and processor interfaces. |
@@ -66,6 +67,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 
 ## Dependencies
 <!-- Dependencies start-->
+
 | Module | Why Cat.Commands needs it |
 |--------|---------------------------|
 | [Cat.Responses](../Cat.Responses/README.md) | Handlers return an `ICatResponse`. |

@@ -77,6 +77,7 @@ The module ships the common steps for you, and you can write your own.
 
 ## Namespaces
 <!-- Namespaces start-->
+
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.FluentWorkflows.Abstractions](namespaces/Cat.FluentWorkflows.Abstractions/index.md) | Interfaces for workflows, steps and the workflow state. |
@@ -87,6 +88,7 @@ The module ships the common steps for you, and you can write your own.
 
 ## Dependencies
 <!-- Dependencies start-->
+
 | Module | Why Cat.FluentWorkflows needs it |
 |--------|---------------------------------|
 | [Cat.Responses](../Cat.Responses/README.md) | Workflows and steps report their outcome as a response. |

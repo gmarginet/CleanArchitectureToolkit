@@ -53,6 +53,7 @@ Use the caching implementation when the same expression gets called repeatedly, 
 
 ## Namespaces
 <!-- Namespaces start-->
+
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Expressions.Abstractions](namespaces/Cat.Expressions.Abstractions/index.md) | Interfaces for compiling member expressions. |
@@ -61,6 +62,7 @@ Use the caching implementation when the same expression gets called repeatedly, 
 
 ## Dependencies
 <!-- Dependencies start-->
+
 | Module | Why Cat.Expressions needs it |
 |--------|-----------------------------|
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |

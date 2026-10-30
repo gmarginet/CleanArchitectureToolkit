@@ -56,6 +56,7 @@ A publisher raises an event, and any subscriber that handles that event type get
 
 ## Namespaces
 <!-- Namespaces start-->
+
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.EventAggregators.Abstractions](namespaces/Cat.EventAggregators.Abstractions/index.md) | Interfaces for publishers and subscribers. |
@@ -64,6 +65,7 @@ A publisher raises an event, and any subscriber that handles that event type get
 
 ## Dependencies
 <!-- Dependencies start-->
+
 | Module | Why Cat.EventAggregators needs it |
 |--------|----------------------------------|
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |

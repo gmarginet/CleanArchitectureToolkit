@@ -69,6 +69,7 @@ Rules never stop at the first failure. One call reports every problem.
 
 ## Namespaces
 <!-- Namespaces start-->
+
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Validators.Abstractions](namespaces/Cat.Validators.Abstractions/index.md) | Validator and rule interfaces. |
@@ -77,6 +78,7 @@ Rules never stop at the first failure. One call reports every problem.
 
 ## Dependencies
 <!-- Dependencies start-->
+
 | Module | Why Cat.Validators needs it |
 |--------|----------------------------|
 | [Cat.Responses](../Cat.Responses/README.md) | Validation returns an `ICatResponse` with one error per failure. |

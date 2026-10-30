@@ -53,6 +53,7 @@ A succeeded response becomes a 200 with the payload. A failed response becomes a
 
 ## Namespaces
 <!-- Namespaces start-->
+
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Minimal.Api](namespaces/Cat.Minimal.Api/index.md) | Maps service requests to minimal API endpoints. |
@@ -60,6 +61,7 @@ A succeeded response becomes a 200 with the payload. A failed response becomes a
 
 ## Dependencies
 <!-- Dependencies start-->
+
 | Module | Why Cat.Minimal.Api needs it |
 |--------|-----------------------------|
 | [Cat.Responses](../Cat.Responses/README.md) | Endpoints turn responses into results and problem details. |

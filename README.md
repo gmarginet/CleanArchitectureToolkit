@@ -66,6 +66,7 @@ Some modules depend on other modules, in the documentation of each module you ca
 
 <!-- Modules start-->
 <!-- In development badge: ![In development](https://img.shields.io/badge/status-in%20development-orange) -->
+
 | Module | | Description |
 |--------|--------|-------------|
 | [Cat.Commands](./modules/Cat.Commands/README.md) | | Change state through one entry point. Describe a change as a command, write one handler for it, and let the processor find the handler. |

@@ -46,6 +46,7 @@
 
 ## Namespaces
 <!-- Namespaces start-->
+
 | Namespace | What it holds |
 |-----------|---------------|
 | [[[NamespaceName]]](namespaces/[[NamespaceName]]/index.md) | [[NamespaceDescription]] |
@@ -54,6 +55,7 @@
 ## Dependencies
 <!-- Dependencies start-->
 <!-- No dependencies: replace the table with "[[ModuleName]] has no dependencies on other CAT modules." -->
+
 | Module | Why [[ModuleName]] needs it |
 |--------|-----------------------------|
 | [[[DependentModuleName]]](../[[DependentModuleName]]/README.md) | [[DependencyReason]] |

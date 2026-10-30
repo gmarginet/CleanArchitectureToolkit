@@ -44,6 +44,8 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
   `![In development](https://img.shields.io/badge/status-in%20development-orange)`
   - A blockquote above the table says modules with the status in development will probably have breaking changes. It uses those words, not the badge. Keep that note.
   - A comment with the badge snippet sits right after `<!-- Modules start-->`, so it can be copied. Keep it.
+  - Keep a blank line between that comment and the table. Without it Jekyll treats the table as part of the HTML comment block and shows it as plain text.
+  - The same goes for every block marker comment in module readmes (Namespaces, Dependencies and so on). Always leave a blank line between a comment and the table or text below it.
   - To put a module in development, put the badge in the status cell of its row. To make it stable, empty that cell.
   - Stable modules have no badge.
 

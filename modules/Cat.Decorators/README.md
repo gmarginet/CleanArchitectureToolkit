@@ -59,6 +59,7 @@ CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scru
 
 ## Namespaces
 <!-- Namespaces start-->
+
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Decorators.Abstractions](namespaces/Cat.Decorators.Abstractions/index.md) | Interfaces for decorators and the decorated service factory. |
@@ -67,6 +68,7 @@ CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scru
 
 ## Dependencies
 <!-- Dependencies start-->
+
 | Module | Why Cat.Decorators needs it |
 |--------|----------------------------|
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |

@@ -60,6 +60,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
 
 ## Namespaces
 <!-- Namespaces start-->
+
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.ServiceRequests.Abstractions](namespaces/Cat.ServiceRequests.Abstractions/index.md) | Request, handler and processor interfaces. |
@@ -71,6 +72,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
 
 ## Dependencies
 <!-- Dependencies start-->
+
 | Module | Why Cat.ServiceRequests needs it |
 |--------|---------------------------------|
 | [Cat.Responses](../Cat.Responses/README.md) | Handlers return an `ICatResponse`. |

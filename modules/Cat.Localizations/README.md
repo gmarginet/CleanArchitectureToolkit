@@ -53,6 +53,7 @@ The module ships with a no-op implementation that returns the key as-is, with pl
 
 ## Namespaces
 <!-- Namespaces start-->
+
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Localizations.Abstractions](namespaces/Cat.Localizations.Abstractions/index.md) | The `ICatLocalizer` interface. |
@@ -61,6 +62,7 @@ The module ships with a no-op implementation that returns the key as-is, with pl
 
 ## Dependencies
 <!-- Dependencies start-->
+
 | Module | Why Cat.Localizations needs it |
 |--------|-------------------------------|
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |

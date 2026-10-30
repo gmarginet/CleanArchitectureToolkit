@@ -56,6 +56,7 @@ Handlers across the other CAT modules (commands, queries, service requests) retu
 
 ## Namespaces
 <!-- Namespaces start-->
+
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Responses.Abstractions](namespaces/Cat.Responses.Abstractions/index.md) | Response and error interfaces. |
@@ -64,6 +65,7 @@ Handlers across the other CAT modules (commands, queries, service requests) retu
 
 ## Dependencies
 <!-- Dependencies start-->
+
 Cat.Responses has no dependencies on other CAT modules.  
 <!-- Dependencies end-->
 
