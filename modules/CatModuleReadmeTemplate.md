@@ -37,11 +37,11 @@
 ## NuGet packages
 <!-- NuGet start -->
 <!-- Badge: use the package named like the module, or the first project if there is none -->
-![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.[[ModuleName]])
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.[[ModuleName]])](https://www.nuget.org/packages/gmarginet.[[ModuleName]]/)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [[[NamespaceName]]](https://www.nuget.org/packages/gmarginet.[[NamespaceName]]/) | [[PackageRole]] | `dotnet add package gmarginet.[[NamespaceName]]` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.[[NamespaceName]]) |
+| [[[NamespaceName]]](https://www.nuget.org/packages/gmarginet.[[NamespaceName]]/) | [[PackageRole]] | `dotnet add package gmarginet.[[NamespaceName]]` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.[[NamespaceName]])](https://www.nuget.org/packages/gmarginet.[[NamespaceName]]/) |
 
 <!-- NuGet end -->
 

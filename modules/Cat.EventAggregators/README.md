@@ -46,12 +46,12 @@ A publisher raises an event, and any subscriber that handles that event type get
 
 ## NuGet packages
 <!-- NuGet start -->
-![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.EventAggregators)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.EventAggregators)](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators/)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.EventAggregators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.EventAggregators.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators.Abstractions) |
-| [Cat.EventAggregators](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators/) | Implementation | `dotnet add package gmarginet.Cat.EventAggregators` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators) |
+| [Cat.EventAggregators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.EventAggregators.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators.Abstractions/) |
+| [Cat.EventAggregators](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators/) | Implementation | `dotnet add package gmarginet.Cat.EventAggregators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators)](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators/) |
 
 <!-- NuGet end -->
 

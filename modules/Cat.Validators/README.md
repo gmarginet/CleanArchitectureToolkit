@@ -59,12 +59,12 @@ Rules never stop at the first failure. One call reports every problem.
 
 ## NuGet packages
 <!-- NuGet start -->
-![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Validators)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Validators)](https://www.nuget.org/packages/gmarginet.Cat.Validators/)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.Validators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Validators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Validators.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Validators.Abstractions) |
-| [Cat.Validators](https://www.nuget.org/packages/gmarginet.Cat.Validators/) | Implementation | `dotnet add package gmarginet.Cat.Validators` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Validators) |
+| [Cat.Validators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Validators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Validators.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Validators.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Validators.Abstractions/) |
+| [Cat.Validators](https://www.nuget.org/packages/gmarginet.Cat.Validators/) | Implementation | `dotnet add package gmarginet.Cat.Validators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Validators)](https://www.nuget.org/packages/gmarginet.Cat.Validators/) |
 
 <!-- NuGet end -->
 

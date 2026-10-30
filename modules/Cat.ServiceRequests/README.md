@@ -47,15 +47,15 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
 
 ## NuGet packages
 <!-- NuGet start -->
-![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.ServiceRequests)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.ServiceRequests)](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests/)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.ServiceRequests.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.ServiceRequests.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Abstractions) |
-| [Cat.ServiceRequests](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests/) | Implementation | `dotnet add package gmarginet.Cat.ServiceRequests` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests) |
-| [Cat.ServiceRequests.Decorators.ActivitySource](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.ActivitySource` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource) |
-| [Cat.ServiceRequests.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Logging` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Logging) |
-| [Cat.ServiceRequests.Decorators.Validation](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Validation/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Validation` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Validation) |
+| [Cat.ServiceRequests.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.ServiceRequests.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Abstractions/) |
+| [Cat.ServiceRequests](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests/) | Implementation | `dotnet add package gmarginet.Cat.ServiceRequests` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests)](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests/) |
+| [Cat.ServiceRequests.Decorators.ActivitySource](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.ActivitySource` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource)](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource/) |
+| [Cat.ServiceRequests.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Logging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Logging)](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Logging/) |
+| [Cat.ServiceRequests.Decorators.Validation](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Validation/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Validation` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Validation)](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Validation/) |
 
 <!-- NuGet end -->
 

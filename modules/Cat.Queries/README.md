@@ -46,13 +46,13 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 
 ## NuGet packages
 <!-- NuGet start -->
-![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Queries)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Queries)](https://www.nuget.org/packages/gmarginet.Cat.Queries/)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.Queries.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Queries.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Queries.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Abstractions) |
-| [Cat.Queries](https://www.nuget.org/packages/gmarginet.Cat.Queries/) | Implementation | `dotnet add package gmarginet.Cat.Queries` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries) |
-| [Cat.Queries.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Queries.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.Queries.Decorators.Logging` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Decorators.Logging) |
+| [Cat.Queries.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Queries.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Queries.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Queries.Abstractions/) |
+| [Cat.Queries](https://www.nuget.org/packages/gmarginet.Cat.Queries/) | Implementation | `dotnet add package gmarginet.Cat.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries)](https://www.nuget.org/packages/gmarginet.Cat.Queries/) |
+| [Cat.Queries.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Queries.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.Queries.Decorators.Logging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Decorators.Logging)](https://www.nuget.org/packages/gmarginet.Cat.Queries.Decorators.Logging/) |
 
 <!-- NuGet end -->
 

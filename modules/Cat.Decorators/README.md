@@ -49,12 +49,12 @@ CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scru
 
 ## NuGet packages
 <!-- NuGet start -->
-![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Decorators)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Decorators)](https://www.nuget.org/packages/gmarginet.Cat.Decorators/)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.Decorators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Decorators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Decorators.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators.Abstractions) |
-| [Cat.Decorators](https://www.nuget.org/packages/gmarginet.Cat.Decorators/) | Implementation | `dotnet add package gmarginet.Cat.Decorators` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators) |
+| [Cat.Decorators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Decorators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Decorators.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Decorators.Abstractions/) |
+| [Cat.Decorators](https://www.nuget.org/packages/gmarginet.Cat.Decorators/) | Implementation | `dotnet add package gmarginet.Cat.Decorators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators)](https://www.nuget.org/packages/gmarginet.Cat.Decorators/) |
 
 <!-- NuGet end -->
 
