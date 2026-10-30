@@ -1,2 +1,0 @@
- copy .\bin\Release\netstandard2.0\Cat.DefaultDocumentationPlugin.dll ..\..\resources\defaultDocumentationPlugins\ /y
- copy .\bin\Release\netstandard2.0\Cat.Object.Extensions.dll ..\..\resources\defaultDocumentationPlugins\ /y
