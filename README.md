@@ -26,6 +26,7 @@
 
 ## Table of contents <!-- omit in toc -->  
 - [Getting Started](#getting-started)
+- [About this project](#about-this-project)
 - [Module overview](#module-overview)
 - [Application Architecture](#application-architecture)
   - [Clients](#clients)
@@ -58,6 +59,25 @@
 The `Clean Architecture Toolkit for .NET` contains a set of modules.  
 Most of the modules can be used independently.  
 Some modules depend on other modules, in the documentation of each module you can find the list of the dependencies.  
+
+## About this project
+
+> <img src="https://github.com/gmarginet.png?size=120" alt="Gert Marginet" width="120" align="right" style="border-radius: 50%; margin: 13px 0 10px 15px;" />
+> <div style="height: 16px;"></div>
+>
+> **A note from the author**  
+> I build the Clean Architecture Toolkit in my free time.  
+> Did you find an issue? Please [create an issue](https://github.com/gmarginet/CleanArchitectureToolkit/issues) on GitHub.  
+> I will do my best to fix it as soon as possible, but I can not guarantee a due date.  
+>
+> **About me**  
+> I'm Gert Marginet, a .NET software architect from Geraardsbergen, Belgium.  
+> I have over twenty years of experience in software development, architecture and team leading.  
+> I studied electronics and started out as a software engineer in 1997. Since then I have designed custom architectures and application frameworks for .NET.  
+> Outside of work you find me hiking, building with Lego, doing DIY projects or enjoying good food and wine with my family.  
+>
+> [Website](https://gert.marginet.be/) &#124; [LinkedIn](https://www.linkedin.com/in/gertmarginet/) &#124; [GitHub](https://github.com/gmarginet)
+> <div style="height: 1px;"></div>
 
 ## Module overview
 
