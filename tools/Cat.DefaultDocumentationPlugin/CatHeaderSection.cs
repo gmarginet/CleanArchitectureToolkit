@@ -44,7 +44,7 @@ namespace Cat.DefaultDocumentationPlugin
                 "            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>",
                 "            It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>",
                 "        <td style='padding: 0; border: none;' width='220'>",
-                $"            <img src='{RootPath}resources/logo/CatLogo-RoundedCorners-320x160.png' alt='' width='200' style='float: right;'/>",
+                $"            <img src='{RootPath}resources/logo/CatLogo.svg' alt='' width='200' style='padding: 15px; float: right; background: #121314; border-radius: 10px'/>",
                 "        </td>",
                 "    </tr>",
                 "    <tr>",

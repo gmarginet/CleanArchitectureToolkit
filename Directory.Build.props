@@ -4,7 +4,7 @@
         <Nullable>enable</Nullable>
         <PackageId>gmarginet.$(MSBuildProjectName)</PackageId>
         <Authors>Gert Marginet</Authors>
-        <PackageIcon>CatIcon-128x128.png</PackageIcon>
+        <PackageIcon>CatIcon.png</PackageIcon>
         <Copyright>MIT</Copyright>
         <PackageProjectUrl>https://gmarginet.github.io/CleanArchitectureToolkit/</PackageProjectUrl>
         <RepositoryUrl>https://github.com/gmarginet/CleanArchitectureToolkit</RepositoryUrl>
@@ -27,7 +27,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\..\..\resources\icon\CatIcon-128x128.png" Pack="true" PackagePath="\"/>
+        <None Include="..\..\..\resources\icon\CatIcon.png" Pack="true" PackagePath="\"/>
         <None Include="..\..\..\README_NUGET.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 </Project>

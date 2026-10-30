@@ -25,6 +25,11 @@ All workflows utilize Cake. Execute via the root `./build.sh` or `.\build.ps1`:
 ## 📦 Module Folder Blueprint
 Each module directory contains its C# projects, an auto-generated `namespaces/` markdown folder, and a local `README.md`.
 
+### Generated Files
+- Never edit the files in `modules/*/namespaces/` by hand or with a script (sed and the like). They are generated.
+- To change them, change the generator (`tools/Cat.DefaultDocumentationPlugin/`) or the template, then run `dotnet cake --target=Build`.
+- After the build, check the diff of the regenerated pages to confirm the change is what you expect.
+
 ### Root `README.md` Rules
 - Acts as the documentation entry point.
 - The module list section is strictly enclosed within:

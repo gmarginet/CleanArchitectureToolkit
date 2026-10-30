@@ -1,10 +1,10 @@
 /* Colors and sizes follow the dark mode markdown preview of Visual Studio Code. */
 :root {
-    --bg: #1e1e1e;
-    --bar-bg: #252526;
-    --bar-border: #3c3c3c;
-    --text: #cccccc;
-    --link: #3794ff;
+    --bg: #121314;
+    --bar-bg: #121314;
+    --bar-border: #494949;
+    --text: #bbbebf;
+    --link: #48a0c7;
     --code: #d7ba7d;
     --pre-code: #d4d4d4;
     --pre-bg: rgba(10, 10, 10, 0.4);
