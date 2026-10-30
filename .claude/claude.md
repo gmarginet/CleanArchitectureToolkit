@@ -73,6 +73,11 @@ When creating or updating a module readme, use `modules/CatModuleReadmeTemplate.
 
 Also keep the table of contents up-to-date with the chapters that exist in the readme, ignore the chapters marked with `<!-- omit in toc -->`
 
+## 🔗 Link Check
+- Script: `.claude/scripts/check-links.mjs`. Run it with `node .claude/scripts/check-links.mjs` (add `--external` to check external links too).
+- It crawls the published GitHub Pages (https://gmarginet.github.io/CleanArchitectureToolkit/) and reports broken pages, files and anchors.
+- Only run it when the owner asks for it. It sends thousands of requests, and it needs the latest push to be published first.
+
 ## 🤖 Automation Rules
 @.claude/rules-readme.md
 
