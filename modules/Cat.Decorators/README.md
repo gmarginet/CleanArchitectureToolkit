@@ -55,6 +55,7 @@ CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scru
 |---------|------|---------|-----------|
 | [Cat.Decorators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Decorators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Decorators.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators.Abstractions) |
 | [Cat.Decorators](https://www.nuget.org/packages/gmarginet.Cat.Decorators/) | Implementation | `dotnet add package gmarginet.Cat.Decorators` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators) |
+
 <!-- NuGet end -->
 
 ## Namespaces
@@ -64,6 +65,7 @@ CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scru
 |-----------|---------------|
 | [Cat.Decorators.Abstractions](namespaces/Cat.Decorators.Abstractions/index.md) | Interfaces for decorators and the decorated service factory. |
 | [Cat.Decorators](namespaces/Cat.Decorators/index.md) | The factory that wraps services in decorators, and the module registration. |
+
 <!-- Namespaces end-->
 
 ## Dependencies
@@ -72,6 +74,7 @@ CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scru
 | Module | Why Cat.Decorators needs it |
 |--------|----------------------------|
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
+
 <!-- Dependencies end-->
 
 ## Usage

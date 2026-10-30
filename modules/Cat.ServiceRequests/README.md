@@ -56,6 +56,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
 | [Cat.ServiceRequests.Decorators.ActivitySource](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.ActivitySource` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource) |
 | [Cat.ServiceRequests.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Logging` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Logging) |
 | [Cat.ServiceRequests.Decorators.Validation](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Validation/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Validation` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Validation) |
+
 <!-- NuGet end -->
 
 ## Namespaces
@@ -68,6 +69,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
 | [Cat.ServiceRequests.Decorators.ActivitySource](namespaces/Cat.ServiceRequests.Decorators.ActivitySource/index.md) | The activity tracing decorator for handlers. |
 | [Cat.ServiceRequests.Decorators.Logging](namespaces/Cat.ServiceRequests.Decorators.Logging/index.md) | The logging decorator for handlers. |
 | [Cat.ServiceRequests.Decorators.Validation](namespaces/Cat.ServiceRequests.Decorators.Validation/index.md) | The validation decorator for handlers. |
+
 <!-- Namespaces end-->
 
 ## Dependencies
@@ -78,6 +80,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
 | [Cat.Responses](../Cat.Responses/README.md) | Handlers return an `ICatResponse`. |
 | [Cat.Decorators](../Cat.Decorators/README.md) | Builds the handlers and runs their decorators. |
 | [Cat.Validators](../Cat.Validators/README.md) | The validation decorator checks requests with validators. |
+
 <!-- Dependencies end-->
 
 ## Usage

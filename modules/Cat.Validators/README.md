@@ -65,6 +65,7 @@ Rules never stop at the first failure. One call reports every problem.
 |---------|------|---------|-----------|
 | [Cat.Validators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Validators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Validators.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Validators.Abstractions) |
 | [Cat.Validators](https://www.nuget.org/packages/gmarginet.Cat.Validators/) | Implementation | `dotnet add package gmarginet.Cat.Validators` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Validators) |
+
 <!-- NuGet end -->
 
 ## Namespaces
@@ -74,6 +75,7 @@ Rules never stop at the first failure. One call reports every problem.
 |-----------|---------------|
 | [Cat.Validators.Abstractions](namespaces/Cat.Validators.Abstractions/index.md) | Validator and rule interfaces. |
 | [Cat.Validators](namespaces/Cat.Validators/index.md) | The fluent rules, the processor and the module registration. |
+
 <!-- Namespaces end-->
 
 ## Dependencies
@@ -84,6 +86,7 @@ Rules never stop at the first failure. One call reports every problem.
 | [Cat.Responses](../Cat.Responses/README.md) | Validation returns an `ICatResponse` with one error per failure. |
 | [Cat.Expressions](../Cat.Expressions/README.md) | Rules read property values through compiled expressions. |
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
+
 <!-- Dependencies end-->
 
 ## Usage

@@ -52,6 +52,7 @@ Cat.Extensions is a collection of small, focused extension method libraries. Eac
 | [Cat.Object.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Object.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Object.Extensions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Object.Extensions) |
 | [Cat.ServiceCollection.Extensions](https://www.nuget.org/packages/gmarginet.Cat.ServiceCollection.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.ServiceCollection.Extensions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceCollection.Extensions) |
 | [Cat.String.Extensions](https://www.nuget.org/packages/gmarginet.Cat.String.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.String.Extensions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.String.Extensions) |
+
 <!-- NuGet end -->
 
 ## Namespaces
@@ -64,6 +65,7 @@ Cat.Extensions is a collection of small, focused extension method libraries. Eac
 | [Cat.Object.Extensions](namespaces/Cat.Object.Extensions/index.md) | Extension methods for any object. |
 | [Cat.ServiceCollection.Extensions](namespaces/Cat.ServiceCollection.Extensions/index.md) | Extension methods for `IServiceCollection`. |
 | [Cat.String.Extensions](namespaces/Cat.String.Extensions/index.md) | Extension methods for strings. |
+
 <!-- Namespaces end-->
 
 ## Dependencies
@@ -175,4 +177,5 @@ These methods throw exceptions. They don't return responses.
 | `NamedFormat` | There are fewer values than placeholders | A `FormatException` from `string.Format`. |
 | `GetMemberInfo` | The expression isn't a direct member access | `null`. No exception. |
 | `IsEmpty`, `HasRegistrationFor` | Never | These don't throw for valid input. |
+
 <!-- Usage end-->

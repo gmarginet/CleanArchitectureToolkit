@@ -42,6 +42,7 @@
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
 | [[[NamespaceName]]](https://www.nuget.org/packages/gmarginet.[[NamespaceName]]/) | [[PackageRole]] | `dotnet add package gmarginet.[[NamespaceName]]` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.[[NamespaceName]]) |
+
 <!-- NuGet end -->
 
 ## Namespaces
@@ -50,6 +51,7 @@
 | Namespace | What it holds |
 |-----------|---------------|
 | [[[NamespaceName]]](namespaces/[[NamespaceName]]/index.md) | [[NamespaceDescription]] |
+
 <!-- Namespaces end-->
 
 ## Dependencies
@@ -59,6 +61,7 @@
 | Module | Why [[ModuleName]] needs it |
 |--------|-----------------------------|
 | [[[DependentModuleName]]](../[[DependentModuleName]]/README.md) | [[DependencyReason]] |
+
 <!-- Dependencies end-->
 
 ## Usage

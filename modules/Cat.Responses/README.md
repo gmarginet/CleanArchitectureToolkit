@@ -52,6 +52,7 @@ Handlers across the other CAT modules (commands, queries, service requests) retu
 |---------|------|---------|-----------|
 | [Cat.Responses.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Responses.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Responses.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Responses.Abstractions) |
 | [Cat.Responses](https://www.nuget.org/packages/gmarginet.Cat.Responses/) | Implementation | `dotnet add package gmarginet.Cat.Responses` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Responses) |
+
 <!-- NuGet end -->
 
 ## Namespaces
@@ -61,6 +62,7 @@ Handlers across the other CAT modules (commands, queries, service requests) retu
 |-----------|---------------|
 | [Cat.Responses.Abstractions](namespaces/Cat.Responses.Abstractions/index.md) | Response and error interfaces. |
 | [Cat.Responses](namespaces/Cat.Responses/index.md) | The response types and error definitions. |
+
 <!-- Namespaces end-->
 
 ## Dependencies

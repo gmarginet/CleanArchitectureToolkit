@@ -53,6 +53,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 | [Cat.Queries.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Queries.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Queries.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Abstractions) |
 | [Cat.Queries](https://www.nuget.org/packages/gmarginet.Cat.Queries/) | Implementation | `dotnet add package gmarginet.Cat.Queries` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries) |
 | [Cat.Queries.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Queries.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.Queries.Decorators.Logging` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Decorators.Logging) |
+
 <!-- NuGet end -->
 
 ## Namespaces
@@ -63,6 +64,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 | [Cat.Queries.Abstractions](namespaces/Cat.Queries.Abstractions/index.md) | Query, handler and processor interfaces. |
 | [Cat.Queries](namespaces/Cat.Queries/index.md) | The processor and the module registration. |
 | [Cat.Queries.Decorators.Logging](namespaces/Cat.Queries.Decorators.Logging/index.md) | The logging decorator for handlers. |
+
 <!-- Namespaces end-->
 
 ## Dependencies
@@ -72,6 +74,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 |--------|-------------------------|
 | [Cat.Responses](../Cat.Responses/README.md) | Handlers return an `ICatResponse<TQueryResult>`. |
 | [Cat.Decorators](../Cat.Decorators/README.md) | Builds the handlers and runs their decorators. |
+
 <!-- Dependencies end-->
 
 ## Usage

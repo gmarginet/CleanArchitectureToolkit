@@ -49,6 +49,7 @@ A succeeded response becomes a 200 with the payload. A failed response becomes a
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
 | [Cat.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.Minimal.Api/) | Implementation | `dotnet add package gmarginet.Cat.Minimal.Api` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Minimal.Api) |
+
 <!-- NuGet end -->
 
 ## Namespaces
@@ -57,6 +58,7 @@ A succeeded response becomes a 200 with the payload. A failed response becomes a
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Minimal.Api](namespaces/Cat.Minimal.Api/index.md) | Maps service requests to minimal API endpoints. |
+
 <!-- Namespaces end-->
 
 ## Dependencies
@@ -66,6 +68,7 @@ A succeeded response becomes a 200 with the payload. A failed response becomes a
 |--------|-----------------------------|
 | [Cat.Responses](../Cat.Responses/README.md) | Endpoints turn responses into results and problem details. |
 | [Cat.ServiceRequests](../Cat.ServiceRequests/README.md) | Endpoints run requests through the service request processor. |
+
 <!-- Dependencies end-->
 
 ## Usage

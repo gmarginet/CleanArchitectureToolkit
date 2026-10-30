@@ -52,6 +52,7 @@ A publisher raises an event, and any subscriber that handles that event type get
 |---------|------|---------|-----------|
 | [Cat.EventAggregators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.EventAggregators.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators.Abstractions) |
 | [Cat.EventAggregators](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators/) | Implementation | `dotnet add package gmarginet.Cat.EventAggregators` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators) |
+
 <!-- NuGet end -->
 
 ## Namespaces
@@ -61,6 +62,7 @@ A publisher raises an event, and any subscriber that handles that event type get
 |-----------|---------------|
 | [Cat.EventAggregators.Abstractions](namespaces/Cat.EventAggregators.Abstractions/index.md) | Interfaces for publishers and subscribers. |
 | [Cat.EventAggregators](namespaces/Cat.EventAggregators/index.md) | The event aggregator and the module registration. |
+
 <!-- Namespaces end-->
 
 ## Dependencies
@@ -69,6 +71,7 @@ A publisher raises an event, and any subscriber that handles that event type get
 | Module | Why Cat.EventAggregators needs it |
 |--------|----------------------------------|
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
+
 <!-- Dependencies end-->
 
 ## Usage

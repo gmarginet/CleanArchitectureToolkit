@@ -53,6 +53,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 | [Cat.Commands.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Commands.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Commands.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands.Abstractions) |
 | [Cat.Commands](https://www.nuget.org/packages/gmarginet.Cat.Commands/) | Implementation | `dotnet add package gmarginet.Cat.Commands` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands) |
 | [Cat.Commands.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Commands.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.Commands.Decorators.Logging` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands.Decorators.Logging) |
+
 <!-- NuGet end -->
 
 ## Namespaces
@@ -63,6 +64,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 | [Cat.Commands.Abstractions](namespaces/Cat.Commands.Abstractions/index.md) | Command, handler and processor interfaces. |
 | [Cat.Commands](namespaces/Cat.Commands/index.md) | The processor and the module registration. |
 | [Cat.Commands.Decorators.Logging](namespaces/Cat.Commands.Decorators.Logging/index.md) | The logging decorator for handlers. |
+
 <!-- Namespaces end-->
 
 ## Dependencies
@@ -72,6 +74,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 |--------|---------------------------|
 | [Cat.Responses](../Cat.Responses/README.md) | Handlers return an `ICatResponse`. |
 | [Cat.Decorators](../Cat.Decorators/README.md) | Builds the handlers and runs their decorators. |
+
 <!-- Dependencies end-->
 
 ## Usage

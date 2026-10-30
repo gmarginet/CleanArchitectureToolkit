@@ -49,6 +49,7 @@ Use the caching implementation when the same expression gets called repeatedly, 
 |---------|------|---------|-----------|
 | [Cat.Expressions.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Expressions.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Expressions.Abstractions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions.Abstractions) |
 | [Cat.Expressions](https://www.nuget.org/packages/gmarginet.Cat.Expressions/) | Implementation | `dotnet add package gmarginet.Cat.Expressions` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions) |
+
 <!-- NuGet end -->
 
 ## Namespaces
@@ -58,6 +59,7 @@ Use the caching implementation when the same expression gets called repeatedly, 
 |-----------|---------------|
 | [Cat.Expressions.Abstractions](namespaces/Cat.Expressions.Abstractions/index.md) | Interfaces for compiling member expressions. |
 | [Cat.Expressions](namespaces/Cat.Expressions/index.md) | The caching and no-cache compilers, and the module registration. |
+
 <!-- Namespaces end-->
 
 ## Dependencies
@@ -66,6 +68,7 @@ Use the caching implementation when the same expression gets called repeatedly, 
 | Module | Why Cat.Expressions needs it |
 |--------|-----------------------------|
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
+
 <!-- Dependencies end-->
 
 ## Usage

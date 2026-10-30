@@ -73,6 +73,7 @@ The module ships the common steps for you, and you can write your own.
 | [Cat.FluentWorkflows](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows/) | Implementation | `dotnet add package gmarginet.Cat.FluentWorkflows` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows) |
 | [Cat.FluentWorkflows.Commands](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Commands/) | Optional steps | `dotnet add package gmarginet.Cat.FluentWorkflows.Commands` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Commands) |
 | [Cat.FluentWorkflows.Queries](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Queries/) | Optional steps | `dotnet add package gmarginet.Cat.FluentWorkflows.Queries` | ![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Queries) |
+
 <!-- NuGet end -->
 
 ## Namespaces
@@ -84,6 +85,7 @@ The module ships the common steps for you, and you can write your own.
 | [Cat.FluentWorkflows](namespaces/Cat.FluentWorkflows/index.md) | The workflow engine, the built-in steps and the module registration. |
 | [Cat.FluentWorkflows.Commands](namespaces/Cat.FluentWorkflows.Commands/index.md) | A step that processes a command. |
 | [Cat.FluentWorkflows.Queries](namespaces/Cat.FluentWorkflows.Queries/index.md) | A step that processes a query. |
+
 <!-- Namespaces end-->
 
 ## Dependencies
@@ -95,6 +97,7 @@ The module ships the common steps for you, and you can write your own.
 | [Cat.Commands](../Cat.Commands/README.md) | The command step hands commands to the command processor. |
 | [Cat.Queries](../Cat.Queries/README.md) | The query step hands queries to the query processor. |
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
+
 <!-- Dependencies end-->
 
 ## Usage

@@ -81,6 +81,7 @@ Some modules depend on other modules, in the documentation of each module you ca
 | [Cat.Responses](./modules/Cat.Responses/README.md) | | Return the outcome of an operation as a response, either succeeded with a value or failed with errors. |
 | [Cat.ServiceRequests](./modules/Cat.ServiceRequests/README.md) | | Run application use cases through one entry point, with validation, logging and tracing decorators. |
 | [Cat.Validators](./modules/Cat.Validators/README.md) | | Check a model against fluent rules and get every problem back in one response. |
+
 <!-- Modules end-->
 
 ## Application Architecture
