@@ -30,6 +30,7 @@ namespace Cat.DefaultDocumentationPlugin
 
             // The header is the same table as in the module readme's. The menu line and the closing tags must start at column 0.
             // Otherwise Markdown treats them as code, and some previewers show them as text.
+            // The menu separators are the &#124; entity. A literal pipe makes Jekyll (kramdown) render the line as a table.
             var headerLines = new[]
             {
                 $"<link href=\"{RootPath}resources/styles/style.css\" rel=\"stylesheet\" />",
@@ -50,7 +51,7 @@ namespace Cat.DefaultDocumentationPlugin
                 "    <tr>",
                 "        <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>",
                 "",
-                $"|&nbsp;&nbsp;&nbsp;[HOME]({RootPath}README.md)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW]({RootPath}README.md#module-overview)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[{moduleLinkName}]({ModuleReadMeUrl})&nbsp;&nbsp;&nbsp;|",
+                $"&#124;&nbsp;&nbsp;&nbsp;[HOME]({RootPath}README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW]({RootPath}README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[{moduleLinkName}]({ModuleReadMeUrl})&nbsp;&nbsp;&nbsp;&#124;",
                 "",
                 "</td>",
                 "</tr>",
