@@ -10,6 +10,11 @@ All workflows utilize Cake. Execute via the root `./build.sh` or `.\build.ps1`:
 - **Pack:** `dotnet cake --target=Pack`
 - **Publish:** `dotnet cake --target=Publish`
 
+## 🌿 Git Workflow
+- Commit directly to the branch that is currently checked out, even when it is `master`.
+- Never create a branch on your own. The owner creates feature branches before starting work when they want one.
+- Do not push unless asked.
+
 ## 📁 Repository Structure
 - `demo/`: Showcases module usage examples.
 - `resources/`: Assets (logos, icons, schemas, styles).
