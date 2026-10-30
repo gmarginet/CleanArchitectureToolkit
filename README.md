@@ -74,9 +74,9 @@ Some modules depend on other modules, in the documentation of each module you ca
 > I'm Gert Marginet, a .NET software architect from Geraardsbergen, Belgium.  
 > I have over twenty years of experience in software development, architecture and team leading.  
 > I studied electronics and started out as a software engineer in 1997. Since then I have designed custom architectures and application frameworks for .NET.  
-> Outside of work you find me hiking, building with Lego, doing DIY projects or enjoying good food and wine with my family.  
+> Outside of work you find me hiking in nature or keeping ants, where I design and 3D-print their nests and outworlds myself.  
 >
-> [Website](https://gert.marginet.be/) &#124; [LinkedIn](https://www.linkedin.com/in/gertmarginet/) &#124; [GitHub](https://github.com/gmarginet)
+> [Project Website](https://gmarginet.github.io/CleanArchitectureToolkit/) &#124; [Personal Website](https://gert.marginet.be/) &#124; [LinkedIn](https://www.linkedin.com/in/gertmarginet/) &#124; [GitHub](https://github.com/gmarginet)
 > <div style="height: 1px;"></div>
 
 ## Module overview
