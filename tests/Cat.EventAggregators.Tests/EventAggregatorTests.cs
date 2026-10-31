@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Cat.EventAggregators.Abstractions;
 using Cat.EventAggregators.Extensions;

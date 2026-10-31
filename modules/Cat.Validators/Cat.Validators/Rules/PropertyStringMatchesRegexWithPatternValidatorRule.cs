@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Cat.String.Extensions;
 using Cat.Strings.Extensions;

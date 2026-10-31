@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Cat.Expressions.Extensions;
 using Cat.NUnit;
 using Cat.Validators.Abstractions;

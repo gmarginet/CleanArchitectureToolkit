@@ -1,4 +1,4 @@
-﻿using Cat.Validators.Abstractions;
+using Cat.Validators.Abstractions;
 using Cat.Validators.Extensions;
 
 namespace Cat.Validators.Tests.Validators;

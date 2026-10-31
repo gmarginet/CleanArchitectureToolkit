@@ -1,4 +1,4 @@
-﻿namespace Cat.Commands.Abstractions;
+namespace Cat.Commands.Abstractions;
 
 /// <summary>
 /// Marks a command that changes state and returns a response without a payload.

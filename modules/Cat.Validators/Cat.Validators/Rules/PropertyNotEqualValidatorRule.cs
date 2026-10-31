@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantBoolCompare
+// ReSharper disable RedundantBoolCompare
 
 using System;
 using System.Collections.Generic;

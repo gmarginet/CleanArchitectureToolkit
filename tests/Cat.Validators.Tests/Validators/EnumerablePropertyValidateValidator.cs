@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Cat.Validators.Abstractions;
 using Cat.Validators.Extensions;
 

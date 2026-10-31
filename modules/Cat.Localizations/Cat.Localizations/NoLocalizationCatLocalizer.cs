@@ -1,4 +1,4 @@
-﻿using Cat.Localizations.Abstractions;
+using Cat.Localizations.Abstractions;
 using Cat.String.Extensions;
 using Cat.Strings.Extensions;
 

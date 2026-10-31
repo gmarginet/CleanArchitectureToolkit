@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Cat.Object.Extensions;
 using Cat.Objects.Extensions;
