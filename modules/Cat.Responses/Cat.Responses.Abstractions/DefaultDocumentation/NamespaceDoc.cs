@@ -6,7 +6,7 @@ namespace Cat.Responses.Abstractions;
 // The XML documentation of this class can be used for a general description of the namespace.
 
 /// <summary>
-/// Defines the contracts for representing an operation's outcome, its possible response types, and the errors
-/// behind a failure, without depending on any concrete implementation.
+/// Defines the contracts for representing an operation's outcome, its possible response types, the errors
+/// behind a failure, and a page of a larger list, without depending on any concrete implementation.
 /// </summary>
 internal static class NamespaceDoc { }

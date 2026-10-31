@@ -38,6 +38,8 @@ Handlers across the other CAT modules (commands, queries, service requests) retu
   - [Register the module](#register-the-module)
   - [Response types](#response-types)
   - [Create a response](#create-a-response)
+  - [Create a list response](#create-a-list-response)
+  - [Create a paged list response](#create-a-paged-list-response)
   - [Read a response](#read-a-response)
   - [Cast a response](#cast-a-response)
   - [Define and raise errors](#define-and-raise-errors)
@@ -60,15 +62,18 @@ Handlers across the other CAT modules (commands, queries, service requests) retu
 
 | Namespace | What it holds |
 |-----------|---------------|
-| [Cat.Responses.Abstractions](namespaces/Cat.Responses.Abstractions/index.md) | Response and error interfaces. |
-| [Cat.Responses](namespaces/Cat.Responses/index.md) | The response types and error definitions. |
+| [Cat.Responses.Abstractions](namespaces/Cat.Responses.Abstractions/index.md) | Response, paged list and error interfaces. |
+| [Cat.Responses](namespaces/Cat.Responses/index.md) | The response types, the paged list and error definitions. |
 
 <!-- Namespaces end-->
 
 ## Dependencies
 <!-- Dependencies start-->
 
-Cat.Responses has no dependencies on other CAT modules.  
+| Module | Why Cat.Responses needs it |
+|--------|---------------------------|
+| [Cat.Extensions](../Cat.Extensions/README.md) | `CatPagedList` checks its values with `ThrowIfNull` and `ThrowIfLessThan`. |
+
 <!-- Dependencies end-->
 
 ## Usage
@@ -134,6 +139,64 @@ public async Task<ICatResponse<Todo>> HandleAsync(TodoGetQuery query, Cancellati
         : CatResponse.Ok(todo);
 }
 ```
+
+### Create a list response
+
+Use `CatResponse.List` for a response that carries a list of items. It returns `ICatResponse<IReadOnlyList<TResponse>>`, and it has the same outcomes as the other factories.
+
+```csharp
+using Cat.Responses;
+using Cat.Responses.Abstractions;
+
+// Succeeded. Pass any IReadOnlyList<T>, such as an array or a List<T>.
+ICatResponse<IReadOnlyList<Todo>> ok = CatResponse.List.Ok(todos);
+ICatResponse<IReadOnlyList<Todo>> created = CatResponse.List.Created(todos);
+ICatResponse<IReadOnlyList<Todo>> noContent = CatResponse.List.NoContent<Todo>();
+
+// Failed. Pass one or more errors.
+ICatResponse<IReadOnlyList<Todo>> badRequest = CatResponse.List.BadRequest<Todo>(error);
+ICatResponse<IReadOnlyList<Todo>> notFound = CatResponse.List.NotFound<Todo>(error);
+ICatResponse<IReadOnlyList<Todo>> unauthorized = CatResponse.List.Unauthorized<Todo>(error);
+ICatResponse<IReadOnlyList<Todo>> serverError = CatResponse.List.InternalServerError<Todo>(error);
+```
+
+### Create a paged list response
+
+Use `CatResponse.PagedList` for one page of a larger list. It returns `ICatResponse<ICatPagedList<TResponse>>`. Build the page from values, or pass a page you already have.
+
+```csharp
+// Build the page from values
+ICatResponse<ICatPagedList<Todo>> ok = CatResponse.PagedList.Ok(
+    todos, pageNumber: 2, pageSize: 10, totalItemCount: 25);
+
+// Or pass an existing page
+var page = new CatPagedList<Todo>(todos, 2, 10, 25);
+ICatResponse<ICatPagedList<Todo>> created = CatResponse.PagedList.Created(page);
+
+// No page, or a failure
+ICatResponse<ICatPagedList<Todo>> noContent = CatResponse.PagedList.NoContent<Todo>();
+ICatResponse<ICatPagedList<Todo>> notFound = CatResponse.PagedList.NotFound<Todo>(error);
+```
+
+`BadRequest`, `Unauthorized` and `InternalServerError` work the same way as `NotFound`.
+
+A page (`ICatPagedList<T>`) holds these values:
+
+| Property | Meaning |
+|----------|---------|
+| `List` | The items on this page. |
+| `PageNumber` | The number of this page. The first page is 1. |
+| `PageSize` | The maximum number of items on a page. |
+| `TotalItemCount` | The number of items across all pages. |
+| `TotalPages` | The number of pages needed to hold all items. It is calculated for you. |
+
+`CatPagedList<T>` checks its values when you set them. The list can't be `null`, the page number and page size must be 1 or higher, and the total item count can't be negative. Copy a page with a different value using `with`. The new value is checked too:
+
+```csharp
+var nextPage = page with { PageNumber = page.PageNumber + 1 };
+```
+
+Two pages are equal when their numbers and their items are equal. The list is compared item by item, not by reference.
 
 ### Read a response
 
@@ -245,12 +308,17 @@ if (response.IsFailed)
 
 ### Errors and exceptions
 
-Responses exist so expected failures don't become exceptions. The only exceptions this module throws come from `Cast`.
+Responses exist so expected failures don't become exceptions. The only exceptions this module throws come from `Cast` and from `CatPagedList` when you give it invalid values.
 
 | Situation | What you get |
 |-----------|--------------|
 | `Cast<TResponse>()` on a succeeded response | An `InvalidOperationException` with the message `Cannot cast a succeeded response to a failed response.` |
 | `Cast<TResponse>(value)` or `Cast(convertValue)` on a failed response | An `InvalidOperationException` with the message `Cannot cast a failed response to a succeeded response.` |
+| A paged list gets a `null` list | An `ArgumentNullException` for `List`. |
+| A paged list gets a page number or page size below 1 | An `ArgumentOutOfRangeException` for `PageNumber` or `PageSize`, with the message `<name> must be 1 or higher.` |
+| A paged list gets a negative total item count | An `ArgumentOutOfRangeException` for `TotalItemCount`, with the message `TotalItemCount must be 0 or higher.` |
+
+The paged list exceptions also come from `CatResponse.PagedList.Ok` and `Created` when you build the page from values, and from a `with` copy.
 
 Check `IsFailed` or `IsSucceeded` before you cast, as in the cast example above.
 

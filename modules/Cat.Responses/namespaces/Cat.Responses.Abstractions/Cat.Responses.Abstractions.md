@@ -28,8 +28,8 @@
 
 ## Cat\.Responses\.Abstractions Namespace
 
-Defines the contracts for representing an operation's outcome, its possible response types, and the errors
-behind a failure, without depending on any concrete implementation\.
+Defines the contracts for representing an operation's outcome, its possible response types, the errors
+behind a failure, and a page of a larger list, without depending on any concrete implementation\.
 
 | Classes | |
 | :--- | :--- |
@@ -47,5 +47,6 @@ behind a failure, without depending on any concrete implementation\.
 | Interfaces | |
 | :--- | :--- |
 | [ICatError](ICatError.md 'Cat\.Responses\.Abstractions\.ICatError') | Describes one error that caused a response to fail\. |
+| [ICatPagedList&lt;TList&gt;](ICatPagedList_TList_.md 'Cat\.Responses\.Abstractions\.ICatPagedList\<TList\>') | One page of a larger list, with the numbers needed to page through the rest\. |
 | [ICatResponse](ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse') | Represents the outcome of an operation: whether it succeeded or failed, its specific [CatResponseType](CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType'), and any errors that caused it to fail\. |
 | [ICatResponse&lt;TResponse&gt;](ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\<TResponse\>') | An [ICatResponse](ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse') that carries a value when it succeeds\. |

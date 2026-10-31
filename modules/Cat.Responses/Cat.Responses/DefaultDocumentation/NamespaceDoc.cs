@@ -7,6 +7,7 @@ namespace Cat.Responses;
 
 /// <summary>
 /// Provides the default <see cref="Cat.Responses.Abstractions.ICatResponse"/> implementation and its response
-/// factory methods, along with the error and error-definition types used to describe why a response failed.
+/// factory methods, including list and paged list responses, along with the paged list implementation and the
+/// error and error-definition types used to describe why a response failed.
 /// </summary>
 internal static class NamespaceDoc { }

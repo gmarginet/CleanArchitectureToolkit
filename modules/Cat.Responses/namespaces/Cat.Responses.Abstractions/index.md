@@ -30,5 +30,5 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Responses\.Abstractions](Cat.Responses.Abstractions.md 'Cat\.Responses\.Abstractions') | Defines the contracts for representing an operation's outcome, its possible response types, and the errors behind a failure, without depending on any concrete implementation\. |
+| [Cat\.Responses\.Abstractions](Cat.Responses.Abstractions.md 'Cat\.Responses\.Abstractions') | Defines the contracts for representing an operation's outcome, its possible response types, the errors behind a failure, and a page of a larger list, without depending on any concrete implementation\. |
 | [Cat\.Responses\.Abstractions\.Extensions](Cat.Responses.Abstractions.Extensions.md 'Cat\.Responses\.Abstractions\.Extensions') | |

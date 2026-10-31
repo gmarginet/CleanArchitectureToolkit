@@ -30,4 +30,5 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Responses](Cat.Responses.md 'Cat\.Responses') | Provides the default [ICatResponse](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse') implementation and its response factory methods, along with the error and error\-definition types used to describe why a response failed\. |
+| [Cat\.Responses](Cat.Responses.md 'Cat\.Responses') | Provides the default [ICatResponse](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse') implementation and its response factory methods, including list and paged list responses, along with the paged list implementation and the error and error\-definition types used to describe why a response failed\. |
+| [System\.Runtime\.CompilerServices](System.Runtime.CompilerServices.md 'System\.Runtime\.CompilerServices') | |

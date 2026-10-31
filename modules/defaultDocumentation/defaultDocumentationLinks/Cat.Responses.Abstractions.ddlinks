@@ -12,6 +12,12 @@ P:Cat.Responses.Abstractions.ICatError.Code|ICatError.Code.md|Code
 P:Cat.Responses.Abstractions.ICatError.Message|ICatError.Message.md|Message
 P:Cat.Responses.Abstractions.ICatError.Arguments|ICatError.Arguments.md|Arguments
 T:Cat.Responses.Abstractions.ICatError|ICatError.md|ICatError
+P:Cat.Responses.Abstractions.ICatPagedList`1.List|ICatPagedList_TList_.List.md|List
+P:Cat.Responses.Abstractions.ICatPagedList`1.PageNumber|ICatPagedList_TList_.PageNumber.md|PageNumber
+P:Cat.Responses.Abstractions.ICatPagedList`1.PageSize|ICatPagedList_TList_.PageSize.md|PageSize
+P:Cat.Responses.Abstractions.ICatPagedList`1.TotalItemCount|ICatPagedList_TList_.TotalItemCount.md|TotalItemCount
+P:Cat.Responses.Abstractions.ICatPagedList`1.TotalPages|ICatPagedList_TList_.TotalPages.md|TotalPages
+T:Cat.Responses.Abstractions.ICatPagedList`1|ICatPagedList_TList_.md|ICatPagedList<TList>
 P:Cat.Responses.Abstractions.ICatResponse.Type|ICatResponse.Type.md|Type
 P:Cat.Responses.Abstractions.ICatResponse.ErrorList|ICatResponse.ErrorList.md|ErrorList
 P:Cat.Responses.Abstractions.ICatResponse.IsSucceeded|ICatResponse.IsSucceeded.md|IsSucceeded

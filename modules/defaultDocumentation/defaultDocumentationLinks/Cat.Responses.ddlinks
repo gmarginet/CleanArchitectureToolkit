@@ -1,4 +1,6 @@
 ../../../Cat.Responses/namespaces/Cat.Responses/
+N:System.Runtime.CompilerServices|System.Runtime.CompilerServices.md|System.Runtime.CompilerServices
+T:System.Runtime.CompilerServices.IsExternalInit|IsExternalInit.md|IsExternalInit
 P:Cat.Responses.CatError.Code|CatError.Code.md|Code
 P:Cat.Responses.CatError.Message|CatError.Message.md|Message
 P:Cat.Responses.CatError.Arguments|CatError.Arguments.md|Arguments
@@ -19,6 +21,15 @@ F:Cat.Responses.CatGeneralErrorDefinitions.UnexpectedResponse|CatGeneralErrorDef
 F:Cat.Responses.CatGeneralErrorDefinitions.ResourceNotFound|CatGeneralErrorDefinitions.ResourceNotFound.md|ResourceNotFound
 M:Cat.Responses.CatGeneralErrorDefinitions.#cctor|CatGeneralErrorDefinitions.CatGeneralErrorDefinitions().md|CatGeneralErrorDefinitions()
 T:Cat.Responses.CatGeneralErrorDefinitions|CatGeneralErrorDefinitions.md|CatGeneralErrorDefinitions
+P:Cat.Responses.CatPagedList`1.List|CatPagedList_TList_.List.md|List
+P:Cat.Responses.CatPagedList`1.PageNumber|CatPagedList_TList_.PageNumber.md|PageNumber
+P:Cat.Responses.CatPagedList`1.PageSize|CatPagedList_TList_.PageSize.md|PageSize
+P:Cat.Responses.CatPagedList`1.TotalItemCount|CatPagedList_TList_.TotalItemCount.md|TotalItemCount
+P:Cat.Responses.CatPagedList`1.TotalPages|CatPagedList_TList_.TotalPages.md|TotalPages
+M:Cat.Responses.CatPagedList`1.#ctor(System.Collections.Generic.IReadOnlyList{`0},System.Int32,System.Int32,System.Int32)|CatPagedList_TList_..ctor.ZMOZAKU4GWPKLFVMA9I019BJB.md|CatPagedList(IReadOnlyList<TList>, int, int, int)
+M:Cat.Responses.CatPagedList`1.Equals(Cat.Responses.CatPagedList{`0})|CatPagedList_TList_.Equals.DI5H5O3Z5RWC6SN3CGJO0LY38.md|Equals(CatPagedList<TList>)
+M:Cat.Responses.CatPagedList`1.GetHashCode|CatPagedList_TList_.GetHashCode().md|GetHashCode()
+T:Cat.Responses.CatPagedList`1|CatPagedList_TList_.md|CatPagedList<TList>
 P:Cat.Responses.CatResponse.Type|CatResponse.Type.md|Type
 P:Cat.Responses.CatResponse.ErrorList|CatResponse.ErrorList.md|ErrorList
 P:Cat.Responses.CatResponse.IsSucceeded|CatResponse.IsSucceeded.md|IsSucceeded
@@ -51,6 +62,24 @@ M:Cat.Responses.CatResponse`1.#ctor(Cat.Responses.Abstractions.CatResponseType.S
 M:Cat.Responses.CatResponse`1.#ctor(Cat.Responses.Abstractions.CatResponseType.Failed,System.Collections.Generic.IReadOnlyList{Cat.Responses.Abstractions.ICatError})|CatResponse_TResponse_.CatResponse_TResponse_.md#Cat.Responses.CatResponse_TResponse_.CatResponse(Cat.Responses.Abstractions.CatResponseType.Failed,System.Collections.Generic.IReadOnlyList_Cat.Responses.Abstractions.ICatError_)|CatResponse(Failed, IReadOnlyList<ICatError>)
 M:Cat.Responses.CatResponse`1.Cast``1(System.Func{`0,``0})|CatResponse_TResponse_.Cast.O0BCBT5ZSHDFOS9QZNX8CTSE4.md|Cast<TTargetResponse>(Func<TResponse,TTargetResponse>)
 T:Cat.Responses.CatResponse`1|CatResponse_TResponse_.md|CatResponse<TResponse>
+M:Cat.Responses.CatResponse.List.Ok``1(System.Collections.Generic.IReadOnlyList{``0})|CatResponse.List.Ok.LNQXCXSNFD6AHN88KPJ2GMP56.md|Ok<TResponse>(IReadOnlyList<TResponse>)
+M:Cat.Responses.CatResponse.List.Created``1(System.Collections.Generic.IReadOnlyList{``0})|CatResponse.List.Created.78BGAF2PH01BZ5WYOXHVLQJH6.md|Created<TResponse>(IReadOnlyList<TResponse>)
+M:Cat.Responses.CatResponse.List.NoContent``1|CatResponse.List.NoContent_TResponse_().md|NoContent<TResponse>()
+M:Cat.Responses.CatResponse.List.BadRequest``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.List.BadRequest.PNIPORT8GM5C3P6OK3RC43AQB.md|BadRequest<TResponse>(ICatError[])
+M:Cat.Responses.CatResponse.List.NotFound``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.List.NotFound.L07O7V5DH1KOLUOATAA9BZD8C.md|NotFound<TResponse>(ICatError[])
+M:Cat.Responses.CatResponse.List.Unauthorized``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.List.Unauthorized.HGOAOFOB3QZ9FJ88LFOCIHFT9.md|Unauthorized<TResponse>(ICatError[])
+M:Cat.Responses.CatResponse.List.InternalServerError``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.List.InternalServerError.U4WX6P2XYC2JX8YH774B7C7BC.md|InternalServerError<TResponse>(ICatError[])
+T:Cat.Responses.CatResponse.List|CatResponse.List.md|List
+M:Cat.Responses.CatResponse.PagedList.Ok``1(Cat.Responses.Abstractions.ICatPagedList{``0})|CatResponse.PagedList.Ok.md#Cat.Responses.CatResponse.PagedList.Ok_TResponse_(Cat.Responses.Abstractions.ICatPagedList_TResponse_)|Ok<TResponse>(ICatPagedList<TResponse>)
+M:Cat.Responses.CatResponse.PagedList.Ok``1(System.Collections.Generic.IReadOnlyList{``0},System.Int32,System.Int32,System.Int32)|CatResponse.PagedList.Ok.md#Cat.Responses.CatResponse.PagedList.Ok_TResponse_(System.Collections.Generic.IReadOnlyList_TResponse_,int,int,int)|Ok<TResponse>(IReadOnlyList<TResponse>, int, int, int)
+M:Cat.Responses.CatResponse.PagedList.Created``1(Cat.Responses.Abstractions.ICatPagedList{``0})|CatResponse.PagedList.Created.md#Cat.Responses.CatResponse.PagedList.Created_TResponse_(Cat.Responses.Abstractions.ICatPagedList_TResponse_)|Created<TResponse>(ICatPagedList<TResponse>)
+M:Cat.Responses.CatResponse.PagedList.Created``1(System.Collections.Generic.IReadOnlyList{``0},System.Int32,System.Int32,System.Int32)|CatResponse.PagedList.Created.md#Cat.Responses.CatResponse.PagedList.Created_TResponse_(System.Collections.Generic.IReadOnlyList_TResponse_,int,int,int)|Created<TResponse>(IReadOnlyList<TResponse>, int, int, int)
+M:Cat.Responses.CatResponse.PagedList.NoContent``1|CatResponse.PagedList.NoContent_TResponse_().md|NoContent<TResponse>()
+M:Cat.Responses.CatResponse.PagedList.BadRequest``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.PagedList.BadRequest.H3PYHN5SN2J9LM3TVJGHXNQQC.md|BadRequest<TResponse>(ICatError[])
+M:Cat.Responses.CatResponse.PagedList.NotFound``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.PagedList.NotFound.8F88M2NUU3SI04ZYVP3O07QW1.md|NotFound<TResponse>(ICatError[])
+M:Cat.Responses.CatResponse.PagedList.Unauthorized``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.PagedList.Unauthorized.FCV6FHSJ3ATQ3D5PFESB96O7A.md|Unauthorized<TResponse>(ICatError[])
+M:Cat.Responses.CatResponse.PagedList.InternalServerError``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.PagedList.InternalServerError.S8042UHRMMATEBBRCP4Z4V686.md|InternalServerError<TResponse>(ICatError[])
+T:Cat.Responses.CatResponse.PagedList|CatResponse.PagedList.md|PagedList
 ?:Cat.Responses.CatResponse.#ctor|CatResponse.CatResponse.md|CatResponse
 ?:Cat.Responses.CatResponse`1.#ctor|CatResponse_TResponse_.CatResponse_TResponse_.md|CatResponse<TResponse>
 ?:Cat.Responses.CatError.Create|CatError.Create.md|Create
@@ -62,3 +91,5 @@ T:Cat.Responses.CatResponse`1|CatResponse_TResponse_.md|CatResponse<TResponse>
 ?:Cat.Responses.CatResponse.NotFound|CatResponse.NotFound.md|NotFound
 ?:Cat.Responses.CatResponse.Unauthorized|CatResponse.Unauthorized.md|Unauthorized
 ?:Cat.Responses.CatResponse.InternalServerError|CatResponse.InternalServerError.md|InternalServerError
+?:Cat.Responses.CatResponse.PagedList.Ok|CatResponse.PagedList.Ok.md|Ok
+?:Cat.Responses.CatResponse.PagedList.Created|CatResponse.PagedList.Created.md|Created
