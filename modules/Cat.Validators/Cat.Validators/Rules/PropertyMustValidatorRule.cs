@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Cat.Object.Extensions;
 using Cat.Objects.Extensions;
@@ -18,8 +18,6 @@ internal class PropertyMustValidatorRule<TModel, TProperty>(
 {
     protected override List<ICatValidatorError> Validate(TProperty value, string fieldName, TModel model)
     {
-        predicate.ThrowIfNull(nameof(predicate));
-
-        return predicate(value, fieldName);
+        return predicate.ThrowIfNull(nameof(predicate))(value, fieldName);
     }
 }

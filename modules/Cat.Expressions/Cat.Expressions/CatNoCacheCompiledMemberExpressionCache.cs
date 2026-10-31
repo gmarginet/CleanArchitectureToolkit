@@ -18,7 +18,6 @@ public class CatNoCacheCompiledMemberExpressionCache<T> : ICatCompiledMemberExpr
     /// <inheritdoc />
     public Func<T, TProperty> GetOrAdd<TProperty>(Expression<Func<T, TProperty>> expression, MemberInfo? memberInfo = null)
     {
-        expression.ThrowIfNull(nameof(expression));
-        return expression.Compile();
+        return expression.ThrowIfNull(nameof(expression)).Compile();
     }
 }

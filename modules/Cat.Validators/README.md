@@ -447,7 +447,7 @@ A broken model never throws. The processor returns a response. Mistakes in how y
 | No validator is registered for the model | An `InvalidOperationException` from the service provider. Pass `validatorRequired: false` to treat the model as valid instead. |
 | A nested type used with `Validate()` or `ValidateEnumerable()` has no validator | The same exception, or a pass with `validatorRequired: false`. |
 | `ICatCompiledMemberExpressionCache<T>` isn't registered | An `InvalidOperationException` from the service provider when the rules run. Register the Cat.Expressions cache. |
-| `Length` gets a minimum that isn't less than the maximum | An `ArgumentOutOfRangeException` with the message `<lowerBoundName> must be less than <upperBoundName>.` when the rule runs. |
+| `Length` gets a minimum that isn't less than the maximum | An `ArgumentOutOfRangeException` with the message `<valueName> must be less than <limitName>.` when the rule runs. |
 | `InclusiveBetween` or `ExclusiveBetween` gets a lower bound that isn't less than the upper bound | The same `ArgumentOutOfRangeException`. |
 | `MatchesRegex` gets an invalid pattern | An `ArgumentException` with the message `Invalid regex expression: <pattern>`. |
 | A rule class isn't a property rule or a model rule | An `ArgumentException` with the message `Rule <name> is not a valid property rule` or `Rule <name> is not a valid model rule`. |

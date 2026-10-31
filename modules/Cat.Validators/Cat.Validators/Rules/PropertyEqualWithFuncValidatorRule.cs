@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Cat.Object.Extensions;
@@ -23,10 +23,7 @@ internal class PropertyEqualWithFuncValidatorRule<TModel, TProperty>(
 
     protected override List<ICatValidatorError> Validate(TProperty value, string fieldName, TModel model)
     {
-        CompiledMemberExpressionCache.ThrowIfNull(nameof(CompiledMemberExpressionCache));
-        expression.ThrowIfNull(nameof(expression));
-
-        var valueToCompareFunc = CompiledMemberExpressionCache.GetOrAdd(expression);
+        var valueToCompareFunc = CompiledMemberExpressionCache.ThrowIfNull(nameof(CompiledMemberExpressionCache)).GetOrAdd(expression.ThrowIfNull(nameof(expression)));
         
         _comparer ??= value switch
         {

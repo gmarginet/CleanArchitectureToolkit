@@ -62,9 +62,7 @@ internal class CatEventAggregator : ICatEventAggregator
     /// <inheritdoc />
     public async Task PublishAsync(object @event, CancellationToken cancellationToken = default)
     {
-        @event.ThrowIfNull(nameof(@event));
-        
-        var eventType = @event.GetType();
+        var eventType = @event.ThrowIfNull(nameof(@event)).GetType();
         
         Subscription[] subscriptions;
         lock (_subscriptions)

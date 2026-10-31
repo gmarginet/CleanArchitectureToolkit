@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,8 +20,6 @@ internal class PropertyMustAsyncValidatorRule<TModel, TProperty>(
 {
     protected override async Task<List<ICatValidatorError>> ValidateAsync(TProperty value, string fieldName, TModel model, CancellationToken ct)
     {
-        predicate.ThrowIfNull(nameof(predicate));
-
-        return await predicate(value, fieldName, ct);
+        return await predicate.ThrowIfNull(nameof(predicate))(value, fieldName, ct);
     }
 }

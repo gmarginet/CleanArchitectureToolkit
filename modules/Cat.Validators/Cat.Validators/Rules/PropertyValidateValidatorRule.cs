@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,11 +26,9 @@ internal class PropertyValidateValidatorRule<TModel, TProperty>
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (value is null) return CatValidatorResult.Valid();
 
-        ValidatorProcessor.ThrowIfNull(nameof(ValidatorProcessor));
-
-        // TProperty may be nullable, but value is known to be non-null here.
+                // TProperty may be nullable, but value is known to be non-null here.
 #pragma warning disable CS8634
-        var validationErrorDetailsList = await ValidatorProcessor.InternalValidateAsync(value, ValidatorRequired, ct);
+        var validationErrorDetailsList = await ValidatorProcessor.ThrowIfNull(nameof(ValidatorProcessor)).InternalValidateAsync(value, ValidatorRequired, ct);
 #pragma warning restore CS8634
 
         var parentFieldName = FieldName ?? fieldName;

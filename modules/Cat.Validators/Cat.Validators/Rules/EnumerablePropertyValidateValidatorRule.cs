@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -29,8 +29,7 @@ internal class EnumerablePropertyValidateValidatorRule<TModel, TProperty>
     {
         var validatorProcessorType = typeof(CatValidatorProcessor);
         var internalValidateAsyncMethod = validatorProcessorType.GetMethod("InternalValidateAsync", BindingFlags.NonPublic | BindingFlags.Instance);
-        internalValidateAsyncMethod.ThrowIfNull(nameof(internalValidateAsyncMethod));
-        _internalValidateAsyncMethod = internalValidateAsyncMethod!;
+        _internalValidateAsyncMethod = internalValidateAsyncMethod.ThrowIfNull(nameof(internalValidateAsyncMethod));
     }
     
     protected override async Task<List<ICatValidatorError>> ValidateAsync(TProperty enumerableValue, string fieldName, TModel model, CancellationToken ct)

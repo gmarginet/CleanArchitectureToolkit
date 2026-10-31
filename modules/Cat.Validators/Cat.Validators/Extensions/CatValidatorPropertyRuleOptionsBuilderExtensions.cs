@@ -28,9 +28,7 @@ public static class CatValidatorPropertyRuleOptionsBuilderExtensions
         Expression<Func<TModel, CancellationToken, Task<bool>>> condition)
         where TModel : class
     {
-        condition.ThrowIfNull(nameof(condition));
-
-        var compiledCondition = condition.Compile();
+        var compiledCondition = condition.ThrowIfNull(nameof(condition)).Compile();
 
         builder.Rule.RulesConditionFuncAsyncList.Add(compiledCondition);
         return builder;
@@ -50,9 +48,7 @@ public static class CatValidatorPropertyRuleOptionsBuilderExtensions
         Expression<Func<TModel, bool>> condition)
         where TModel : class
     {
-        condition.ThrowIfNull(nameof(condition));
-
-        var compiledCondition = condition.Compile();
+        var compiledCondition = condition.ThrowIfNull(nameof(condition)).Compile();
 
         builder.Rule.RulesConditionFuncAsyncList.Add((m,_) => Task.FromResult(compiledCondition(m)));
         return builder;

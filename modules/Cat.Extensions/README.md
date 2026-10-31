@@ -109,25 +109,35 @@ MemberInfo? none = calculation.GetMemberInfo();             // null
 
 ### Object
 
-Validate arguments without hand-written null and range checks.
+Validate arguments without hand-written null and range checks. Every method returns the value when it passes, so you can use it inline.
 
-- **`ThrowIfNull`:** Returns the argument when it isn't `null`, so you can use it inline.
-- **`ThrowIfGreaterThanOrEqualTo`:** Checks that a lower bound is less than an upper bound. It uses the default comparison of the type, or a comparer you pass.
+| Method | The value must be | Throws when |
+|--------|-------------------|-------------|
+| `ThrowIfNull` | Not `null` | The value is `null`. |
+| `ThrowIfLessThan` | At least the minimum | The value is less than the minimum. |
+| `ThrowIfLessThanOrEqualTo` | Higher than the limit | The value is less than or equal to the limit. |
+| `ThrowIfGreaterThan` | At most the maximum | The value is greater than the maximum. |
+| `ThrowIfGreaterThanOrEqualTo` | Less than the limit | The value is greater than or equal to the limit. |
+
+The four comparison methods use the default comparison of the type. Each also has an overload that takes your own `IComparer<T>`, placed right after the limit.
 
 ```csharp
 using Cat.Object.Extensions;
 
-public Order(Customer customer, int minQuantity, int maxQuantity)
+public Order(Customer customer, int quantity, int minQuantity, int maxQuantity)
 {
     _customer = customer.ThrowIfNull(nameof(customer));
+    _quantity = quantity.ThrowIfLessThan(1, nameof(quantity));
     minQuantity.ThrowIfGreaterThanOrEqualTo(maxQuantity, nameof(minQuantity), nameof(maxQuantity));
 }
 ```
 
+`ThrowIfLessThan`, `ThrowIfLessThanOrEqualTo` and `ThrowIfGreaterThan` take the name of the parameter to report. `ThrowIfGreaterThanOrEqualTo` compares two values, so it takes the name of both.
+
 With your own comparer:
 
 ```csharp
-start.ThrowIfGreaterThanOrEqualTo(end, StringComparer.OrdinalIgnoreCase, nameof(start), nameof(end));
+_start = start.ThrowIfGreaterThanOrEqualTo(end, StringComparer.OrdinalIgnoreCase, nameof(start), nameof(end));
 ```
 
 ### ServiceCollection
@@ -171,8 +181,11 @@ These methods throw exceptions. They don't return responses.
 | Method | Situation | What you get |
 |--------|-----------|--------------|
 | `ThrowIfNull` | The argument is `null` | An `ArgumentNullException` with the parameter name you passed. |
-| `ThrowIfGreaterThanOrEqualTo` | The lower bound is greater than or equal to the upper bound | An `ArgumentOutOfRangeException` with the message `<lowerBoundName> must be less than <upperBoundName>.` |
-| `ThrowIfGreaterThanOrEqualTo` without a comparer | `T` doesn't implement `IComparable<T>` | An `ArgumentException` with the message `TProperty is not IComparable<TProperty>`. |
+| `ThrowIfLessThan` | The value is less than the minimum | An `ArgumentOutOfRangeException` for the parameter you passed, with the actual value and the message `<paramName> must be <minimum> or higher.` |
+| `ThrowIfLessThanOrEqualTo` | The value is less than or equal to the limit | An `ArgumentOutOfRangeException` for the parameter you passed, with the actual value and the message `<paramName> must be higher than <limit>.` |
+| `ThrowIfGreaterThan` | The value is greater than the maximum | An `ArgumentOutOfRangeException` for the parameter you passed, with the actual value and the message `<paramName> must be <maximum> or lower.` |
+| `ThrowIfGreaterThanOrEqualTo` | The value is greater than or equal to the limit | An `ArgumentOutOfRangeException` for the value name you passed, with the actual value and the message `<valueName> must be less than <limitName>.` |
+| The four comparison methods without a comparer | `T` doesn't implement `IComparable<T>` | An `ArgumentException` with the message `T is not IComparable<T>`. |
 | `CreateRegex` | The pattern isn't a valid regular expression | An `ArgumentException` with the message `Invalid regex expression: <pattern>`. The original exception is the inner exception. |
 | `NamedFormat` | There are fewer values than placeholders | A `FormatException` from `string.Format`. |
 | `GetMemberInfo` | The expression isn't a direct member access | `null`. No exception. |

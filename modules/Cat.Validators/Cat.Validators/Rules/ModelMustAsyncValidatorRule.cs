@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,8 +19,6 @@ internal class ModelMustAsyncValidatorRule<TModel>(
 {
     public override async Task<List<ICatValidatorError>> ValidateAsync(TModel model, CancellationToken ct)
     {
-        predicate.ThrowIfNull(nameof(predicate));
-
-        return await predicate(model, ct);
+        return await predicate.ThrowIfNull(nameof(predicate))(model, ct);
     }
 }

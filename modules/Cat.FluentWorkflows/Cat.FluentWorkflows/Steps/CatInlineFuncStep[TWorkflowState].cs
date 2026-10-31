@@ -33,9 +33,7 @@ public class CatInlineFuncStep<TWorkflowState> : CatStepBody<TWorkflowState>
     /// <inheritdoc />
     protected override ICatWorkflowResponse Run()
     {
-        Body.ThrowIfNull(nameof(Body));
-
-        var response = Body(Logger, WorkflowState);
+        var response = Body.ThrowIfNull(nameof(Body))(Logger, WorkflowState);
 
         return response.IsSucceeded
             ? CatWorkflowResponse.Succeeded(response.Value)

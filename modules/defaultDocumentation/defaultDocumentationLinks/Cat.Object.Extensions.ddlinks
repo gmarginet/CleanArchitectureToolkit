@@ -1,7 +1,14 @@
 ../../../Cat.Extensions/namespaces/Cat.Object.Extensions/
 M:Cat.Object.Extensions.ObjectExtensions.ThrowIfNull``1(``0,System.String)|ObjectExtensions.ThrowIfNull.MYNW4LFAKIED5KYK9Q59F2W41.md|ThrowIfNull<T>(this T, string)
+M:Cat.Object.Extensions.ObjectExtensions.ThrowIfLessThan``1(``0,``0,System.String)|ObjectExtensions.ThrowIfLessThan.md#Cat.Object.Extensions.ObjectExtensions.ThrowIfLessThan_T_(thisT,T,string)|ThrowIfLessThan<T>(this T, T, string)
+M:Cat.Object.Extensions.ObjectExtensions.ThrowIfLessThan``1(``0,``0,System.Collections.Generic.IComparer{``0},System.String)|ObjectExtensions.ThrowIfLessThan.md#Cat.Object.Extensions.ObjectExtensions.ThrowIfLessThan_T_(thisT,T,System.Collections.Generic.IComparer_T_,string)|ThrowIfLessThan<T>(this T, T, IComparer<T>, string)
+M:Cat.Object.Extensions.ObjectExtensions.ThrowIfLessThanOrEqualTo``1(``0,``0,System.String)|ObjectExtensions.ThrowIfLessThanOrEqualTo.md#Cat.Object.Extensions.ObjectExtensions.ThrowIfLessThanOrEqualTo_T_(thisT,T,string)|ThrowIfLessThanOrEqualTo<T>(this T, T, string)
+M:Cat.Object.Extensions.ObjectExtensions.ThrowIfLessThanOrEqualTo``1(``0,``0,System.Collections.Generic.IComparer{``0},System.String)|ObjectExtensions.ThrowIfLessThanOrEqualTo.md#Cat.Object.Extensions.ObjectExtensions.ThrowIfLessThanOrEqualTo_T_(thisT,T,System.Collections.Generic.IComparer_T_,string)|ThrowIfLessThanOrEqualTo<T>(this T, T, IComparer<T>, string)
+M:Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThan``1(``0,``0,System.String)|ObjectExtensions.ThrowIfGreaterThan.md#Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThan_T_(thisT,T,string)|ThrowIfGreaterThan<T>(this T, T, string)
+M:Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThan``1(``0,``0,System.Collections.Generic.IComparer{``0},System.String)|ObjectExtensions.ThrowIfGreaterThan.md#Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThan_T_(thisT,T,System.Collections.Generic.IComparer_T_,string)|ThrowIfGreaterThan<T>(this T, T, IComparer<T>, string)
 M:Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo``1(``0,``0,System.String,System.String)|ObjectExtensions.ThrowIfGreaterThanOrEqualTo.md#Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo_T_(thisT,T,string,string)|ThrowIfGreaterThanOrEqualTo<T>(this T, T, string, string)
 M:Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo``1(``0,``0,System.Collections.Generic.IComparer{``0},System.String,System.String)|ObjectExtensions.ThrowIfGreaterThanOrEqualTo.md#Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo_T_(thisT,T,System.Collections.Generic.IComparer_T_,string,string)|ThrowIfGreaterThanOrEqualTo<T>(this T, T, IComparer<T>, string, string)
+M:Cat.Object.Extensions.ObjectExtensions.CompareDefault``1(``0,``0)|ObjectExtensions.CompareDefault.Y1OZYS98CPNWW2Y5QYRJ2WNOD.md|CompareDefault<T>(T, T)
 N:Cat.Object.Extensions|Cat.Object.Extensions.md|Cat.Object.Extensions
 T:Cat.Object.Extensions.ObjectExtensions|ObjectExtensions.md|ObjectExtensions
 M:System.Diagnostics.CodeAnalysis.AllowNullAttribute.#ctor|AllowNullAttribute.AllowNullAttribute().md|AllowNullAttribute()
@@ -38,4 +45,7 @@ M:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.#ctor(System.Boolean)|Not
 T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|NotNullWhenAttribute.md|NotNullWhenAttribute
 ?:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.#ctor|MemberNotNullAttribute.MemberNotNullAttribute.md|MemberNotNullAttribute
 ?:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor|MemberNotNullWhenAttribute.MemberNotNullWhenAttribute.md|MemberNotNullWhenAttribute
+?:Cat.Object.Extensions.ObjectExtensions.ThrowIfLessThan|ObjectExtensions.ThrowIfLessThan.md|ThrowIfLessThan
+?:Cat.Object.Extensions.ObjectExtensions.ThrowIfLessThanOrEqualTo|ObjectExtensions.ThrowIfLessThanOrEqualTo.md|ThrowIfLessThanOrEqualTo
+?:Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThan|ObjectExtensions.ThrowIfGreaterThan.md|ThrowIfGreaterThan
 ?:Cat.Object.Extensions.ObjectExtensions.ThrowIfGreaterThanOrEqualTo|ObjectExtensions.ThrowIfGreaterThanOrEqualTo.md|ThrowIfGreaterThanOrEqualTo

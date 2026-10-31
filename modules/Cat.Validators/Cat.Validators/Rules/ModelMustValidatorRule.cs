@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Cat.Object.Extensions;
 using Cat.Objects.Extensions;
@@ -17,8 +17,6 @@ internal class ModelMustValidatorRule<TModel>(
 {
     protected override List<ICatValidatorError> Validate(TModel model)
     {
-        predicate.ThrowIfNull(nameof(predicate));
-
-        return predicate(model);
+        return predicate.ThrowIfNull(nameof(predicate))(model);
     }
 }

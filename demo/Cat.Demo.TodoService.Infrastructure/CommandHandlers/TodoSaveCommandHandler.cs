@@ -21,9 +21,7 @@ public class TodoSaveCommandHandler : ICatCommandHandler<TodoSaveCommand>
 
     public async Task<ICatResponse> HandleAsync(TodoSaveCommand command, CancellationToken cancellationToken = default)
     {
-        command.Todo.ThrowIfNull(nameof(command.Todo));
-
-        await _demoDatabase.SaveAsync(command.Todo, cancellationToken);
+        await _demoDatabase.SaveAsync(command.Todo.ThrowIfNull(nameof(command.Todo)), cancellationToken);
         return CatResponse.Ok();
     }
 }
