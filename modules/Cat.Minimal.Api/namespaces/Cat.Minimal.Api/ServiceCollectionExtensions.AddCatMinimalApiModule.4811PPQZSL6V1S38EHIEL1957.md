@@ -29,10 +29,14 @@
 ## ServiceCollectionExtensions\.AddCatMinimalApiModule\(this IServiceCollection\) Method
 
 Registers the exception handler and the problem details services\.
-Call `app.UseExceptionHandler()` as well, so the handler catches unexpected exceptions\.
+- Request binding failures throw in every environment, so they get a [CatProblemDetails](CatProblemDetails.md 'Cat\.Minimal\.Api\.CatProblemDetails') body everywhere, not only in Development.
+- Problem details the framework creates itself, such as for an unknown route, get the `catErrors` and `catTraceId` fields. Clients then see one error shape.
+- The framework's own `traceId` field is removed, because `catTraceId` holds the same value.
+
+Call [UseCatMinimalApiModule\(this IApplicationBuilder\)](ApplicationBuilderExtensions.UseCatMinimalApiModule.NNUENH8QT5GUOZC0Y83RLKDYE.md 'Cat\.Minimal\.Api\.Extensions\.ApplicationBuilderExtensions\.UseCatMinimalApiModule\(this Microsoft\.AspNetCore\.Builder\.IApplicationBuilder\)') as well, so the handler catches the exceptions\.
 
 ```csharp
-public static void AddCatMinimalApiModule(this Microsoft.Extensions.DependencyInjection.IServiceCollection services);
+public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddCatMinimalApiModule(this Microsoft.Extensions.DependencyInjection.IServiceCollection services);
 ```
 #### Parameters
 
@@ -41,3 +45,7 @@ public static void AddCatMinimalApiModule(this Microsoft.Extensions.DependencyIn
 `services` [Microsoft\.Extensions\.DependencyInjection\.IServiceCollection](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection 'Microsoft\.Extensions\.DependencyInjection\.IServiceCollection')
 
 The service collection to add to\.
+
+#### Returns
+[Microsoft\.Extensions\.DependencyInjection\.IServiceCollection](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection 'Microsoft\.Extensions\.DependencyInjection\.IServiceCollection')  
+The same service collection, to chain more calls\.

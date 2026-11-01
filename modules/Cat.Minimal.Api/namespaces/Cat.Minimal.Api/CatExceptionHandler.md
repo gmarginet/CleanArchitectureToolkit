@@ -28,7 +28,9 @@
 
 ## CatExceptionHandler Class
 
-Catches unexpected exceptions, logs them and answers with a 500 [CatProblemDetails](CatProblemDetails.md 'Cat\.Minimal\.Api\.CatProblemDetails')\.
+Catches exceptions that escape an endpoint and answers with a [CatProblemDetails](CatProblemDetails.md 'Cat\.Minimal\.Api\.CatProblemDetails')\.
+Unexpected exceptions become a 500\. Request binding failures keep their own status code, usually a 400\.
+A client that closed the request gets no body\.
 
 ```csharp
 internal sealed class CatExceptionHandler : Microsoft.AspNetCore.Diagnostics.IExceptionHandler
@@ -40,13 +42,17 @@ Implements [Microsoft\.AspNetCore\.Diagnostics\.IExceptionHandler](https://learn
 
 | Constructors | |
 | :--- | :--- |
-| [CatExceptionHandler\(ILogger&lt;CatExceptionHandler&gt;, IHostEnvironment\)](CatExceptionHandler..ctor.UIXM1YD3HJXXK4WDF9NDNJC8C.md 'Cat\.Minimal\.Api\.CatExceptionHandler\.CatExceptionHandler\(Microsoft\.Extensions\.Logging\.ILogger\<Cat\.Minimal\.Api\.CatExceptionHandler\>, Microsoft\.Extensions\.Hosting\.IHostEnvironment\)') | Creates the handler\. |
+| [CatExceptionHandler\(ILogger&lt;CatExceptionHandler&gt;, IHostEnvironment, IProblemDetailsService\)](CatExceptionHandler..ctor.LUZKQF320U2BVGH3TCMU4O9M5.md 'Cat\.Minimal\.Api\.CatExceptionHandler\.CatExceptionHandler\(Microsoft\.Extensions\.Logging\.ILogger\<Cat\.Minimal\.Api\.CatExceptionHandler\>, Microsoft\.Extensions\.Hosting\.IHostEnvironment, Microsoft\.AspNetCore\.Http\.IProblemDetailsService\)') | Creates the handler\. |
 
 | Fields | |
 | :--- | :--- |
+| [ProblemJsonContentType](CatExceptionHandler.ProblemJsonContentType.md 'Cat\.Minimal\.Api\.CatExceptionHandler\.ProblemJsonContentType') | |
+| [Status499ClientClosedRequest](CatExceptionHandler.Status499ClientClosedRequest.md 'Cat\.Minimal\.Api\.CatExceptionHandler\.Status499ClientClosedRequest') | |
 | [\_environment](CatExceptionHandler._environment.md 'Cat\.Minimal\.Api\.CatExceptionHandler\.\_environment') | |
 | [\_logger](CatExceptionHandler._logger.md 'Cat\.Minimal\.Api\.CatExceptionHandler\.\_logger') | |
+| [\_problemDetailsService](CatExceptionHandler._problemDetailsService.md 'Cat\.Minimal\.Api\.CatExceptionHandler\.\_problemDetailsService') | |
 
 | Methods | |
 | :--- | :--- |
-| [TryHandleAsync\(HttpContext, Exception, CancellationToken\)](CatExceptionHandler.TryHandleAsync.PRW9CVKMMZEKMTMTVEGMDDXDE.md 'Cat\.Minimal\.Api\.CatExceptionHandler\.TryHandleAsync\(Microsoft\.AspNetCore\.Http\.HttpContext, System\.Exception, System\.Threading\.CancellationToken\)') | Logs the exception and writes a 500 problem details response\. In the Development environment the type holds the exception type name and the detail holds the exception message\. In every other environment the client gets a generic detail and the trace id to find the exception in the logs\. |
+| [TryHandleAsync\(HttpContext, Exception, CancellationToken\)](CatExceptionHandler.TryHandleAsync.PRW9CVKMMZEKMTMTVEGMDDXDE.md 'Cat\.Minimal\.Api\.CatExceptionHandler\.TryHandleAsync\(Microsoft\.AspNetCore\.Http\.HttpContext, System\.Exception, System\.Threading\.CancellationToken\)') | Logs the exception and writes a problem details response\. \.\.\. |
+| [WriteProblemAsync\(HttpContext, CatProblemDetails, CancellationToken\)](CatExceptionHandler.WriteProblemAsync.5CPV1G1JRMOVWNW80KOIFTFZ.md 'Cat\.Minimal\.Api\.CatExceptionHandler\.WriteProblemAsync\(Microsoft\.AspNetCore\.Http\.HttpContext, Cat\.Minimal\.Api\.CatProblemDetails, System\.Threading\.CancellationToken\)') | Writes the problem details as the response, with the status code of the problem\. |

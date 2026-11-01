@@ -24,20 +24,19 @@
 
 # Code Reference  
   
-##### >> [Cat\.Minimal\.Api Assembly](index.md 'index') >> [Cat\.Minimal\.Api Namespace](Cat.Minimal.Api.md 'Cat\.Minimal\.Api') >> [CatEndpointRouteBuilderExtensions Class](CatEndpointRouteBuilderExtensions.md 'Cat\.Minimal\.Api\.CatEndpointRouteBuilderExtensions')
+##### >> [Cat\.Minimal\.Api Assembly](index.md 'index') >> [Cat\.Minimal\.Api\.Extensions Namespace](Cat.Minimal.Api.Extensions.md 'Cat\.Minimal\.Api\.Extensions')
 
-## CatEndpointRouteBuilderExtensions\.CreateMissingBodyProblem\(HttpContext\) Method
+## CatResponseTypeExtensions Class
 
-Creates the 400 answer for an empty body that can't be turned into a request\.
+Converts response types to their http representation\.
 
 ```csharp
-private static Microsoft.AspNetCore.Http.HttpResults.ProblemHttpResult CreateMissingBodyProblem(Microsoft.AspNetCore.Http.HttpContext httpContext);
+internal static class CatResponseTypeExtensions
 ```
-#### Parameters
 
-<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.CreateMissingBodyProblem(Microsoft.AspNetCore.Http.HttpContext).httpContext'></a>
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatResponseTypeExtensions
 
-`httpContext` [Microsoft\.AspNetCore\.Http\.HttpContext](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.httpcontext 'Microsoft\.AspNetCore\.Http\.HttpContext')
-
-#### Returns
-[Microsoft\.AspNetCore\.Http\.HttpResults\.ProblemHttpResult](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.httpresults.problemhttpresult 'Microsoft\.AspNetCore\.Http\.HttpResults\.ProblemHttpResult')
+| Methods | |
+| :--- | :--- |
+| [ToHttpStatusCode\(this CatResponseType\)](CatResponseTypeExtensions.ToHttpStatusCode.BVP9K35VVIU9RD1M2OA2DIW54.md 'Cat\.Minimal\.Api\.Extensions\.CatResponseTypeExtensions\.ToHttpStatusCode\(this Cat\.Responses\.Abstractions\.CatResponseType\)') | Gets the http status code of a response type\. |
+| [ToTitle\(this CatResponseType\)](CatResponseTypeExtensions.ToTitle.2TK9UPTHQU4P88KVDUW6HNY58.md 'Cat\.Minimal\.Api\.Extensions\.CatResponseTypeExtensions\.ToTitle\(this Cat\.Responses\.Abstractions\.CatResponseType\)') | Gets the problem details title of a failed response type\. Succeeded types have no problem details body, so they have no title\. |

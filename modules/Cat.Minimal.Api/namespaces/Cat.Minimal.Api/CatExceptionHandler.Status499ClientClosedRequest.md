@@ -26,23 +26,11 @@
   
 ##### >> [Cat\.Minimal\.Api Assembly](index.md 'index') >> [Cat\.Minimal\.Api Namespace](Cat.Minimal.Api.md 'Cat\.Minimal\.Api') >> [CatExceptionHandler Class](CatExceptionHandler.md 'Cat\.Minimal\.Api\.CatExceptionHandler')
 
-## CatExceptionHandler\(ILogger\<CatExceptionHandler\>, IHostEnvironment\) Constructor
-
-Creates the handler\.
+## CatExceptionHandler\.Status499ClientClosedRequest Field
 
 ```csharp
-public CatExceptionHandler(Microsoft.Extensions.Logging.ILogger<Cat.Minimal.Api.CatExceptionHandler> logger, Microsoft.Extensions.Hosting.IHostEnvironment environment);
+private const int Status499ClientClosedRequest = 499;
 ```
-#### Parameters
 
-<a name='Cat.Minimal.Api.CatExceptionHandler.CatExceptionHandler(Microsoft.Extensions.Logging.ILogger_Cat.Minimal.Api.CatExceptionHandler_,Microsoft.Extensions.Hosting.IHostEnvironment).logger'></a>
-
-`logger` [Microsoft\.Extensions\.Logging\.ILogger&lt;](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger-1 'Microsoft\.Extensions\.Logging\.ILogger\`1')[CatExceptionHandler](CatExceptionHandler.md 'Cat\.Minimal\.Api\.CatExceptionHandler')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger-1 'Microsoft\.Extensions\.Logging\.ILogger\`1')
-
-Receives the exception\.
-
-<a name='Cat.Minimal.Api.CatExceptionHandler.CatExceptionHandler(Microsoft.Extensions.Logging.ILogger_Cat.Minimal.Api.CatExceptionHandler_,Microsoft.Extensions.Hosting.IHostEnvironment).environment'></a>
-
-`environment` [Microsoft\.Extensions\.Hosting\.IHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.hosting.ihostenvironment 'Microsoft\.Extensions\.Hosting\.IHostEnvironment')
-
-Decides whether the exception details may go to the client\.
+#### Field Value
+[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')

@@ -30,4 +30,7 @@
 
 | Classes | |
 | :--- | :--- |
+| [ApplicationBuilderExtensions](ApplicationBuilderExtensions.md 'Cat\.Minimal\.Api\.Extensions\.ApplicationBuilderExtensions') | Pipeline helpers for the minimal API module\. |
+| [CatResponseExtensions](CatResponseExtensions.md 'Cat\.Minimal\.Api\.Extensions\.CatResponseExtensions') | Converts responses to their http representation\. |
+| [CatResponseTypeExtensions](CatResponseTypeExtensions.md 'Cat\.Minimal\.Api\.Extensions\.CatResponseTypeExtensions') | Converts response types to their http representation\. |
 | [ServiceCollectionExtensions](ServiceCollectionExtensions.md 'Cat\.Minimal\.Api\.Extensions\.ServiceCollectionExtensions') | Registration helpers for the minimal API module\. |

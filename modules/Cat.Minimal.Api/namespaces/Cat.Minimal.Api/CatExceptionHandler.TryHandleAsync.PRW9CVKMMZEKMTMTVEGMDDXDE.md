@@ -28,9 +28,12 @@
 
 ## CatExceptionHandler\.TryHandleAsync\(HttpContext, Exception, CancellationToken\) Method
 
-Logs the exception and writes a 500 problem details response\.
-In the Development environment the type holds the exception type name and the detail holds the exception message\.
-In every other environment the client gets a generic detail and the trace id to find the exception in the logs\.
+Logs the exception and writes a problem details response\.
+- A [Microsoft\.AspNetCore\.Http\.BadHttpRequestException](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.badhttprequestexception 'Microsoft\.AspNetCore\.Http\.BadHttpRequestException') keeps its status code and message, and is logged as information.
+- An [System\.OperationCanceledException](https://learn.microsoft.com/en-us/dotnet/api/system.operationcanceledexception 'System\.OperationCanceledException') from a client that closed the request gets status 499, no body, and is logged as debug.
+- Any other exception becomes a 500 and is logged as an error.
+              In the Development environment the detail holds the exception type name and message.
+              In every other environment the detail points to the trace id to find the exception in the logs.
 
 ```csharp
 public System.Threading.Tasks.ValueTask<bool> TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext httpContext, System.Exception exception, System.Threading.CancellationToken cancellationToken);
@@ -59,4 +62,4 @@ Implements [TryHandleAsync\(HttpContext, Exception, CancellationToken\)](https:/
 
 #### Returns
 [System\.Threading\.Tasks\.ValueTask&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.valuetask-1 'System\.Threading\.Tasks\.ValueTask\`1')[System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.valuetask-1 'System\.Threading\.Tasks\.ValueTask\`1')  
-Always `true`, because the handler always writes the response\.
+`true` when the handler handled the exception\. `false` when the response has already started, so no body can be written\.

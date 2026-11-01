@@ -26,29 +26,8 @@
   
 ##### >> [Cat\.Minimal\.Api Assembly](index.md 'index') >> [Cat\.Minimal\.Api Namespace](Cat.Minimal.Api.md 'Cat\.Minimal\.Api') >> [CatEndpointRouteBuilderExtensions Class](CatEndpointRouteBuilderExtensions.md 'Cat\.Minimal\.Api\.CatEndpointRouteBuilderExtensions')
 
-## CatEndpointRouteBuilderExtensions\.TryGetRequest\<TRequest\>\(TRequest, TRequest\) Method
-
-Uses the request from the body\. An empty body falls back to the parameterless constructor\.
+## CatEndpointRouteBuilderExtensions\(\) Constructor
 
 ```csharp
-private static bool TryGetRequest<TRequest>(TRequest? body, out TRequest request)
-    where TRequest : class;
+static CatEndpointRouteBuilderExtensions();
 ```
-#### Type parameters
-
-<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.TryGetRequest_TRequest_(TRequest,TRequest).TRequest'></a>
-
-`TRequest`
-#### Parameters
-
-<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.TryGetRequest_TRequest_(TRequest,TRequest).body'></a>
-
-`body` [TRequest](CatEndpointRouteBuilderExtensions.TryGetRequest.D60HW2G8417SGSPTDUFV5WQ3A.md#Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.TryGetRequest_TRequest_(TRequest,TRequest).TRequest 'Cat\.Minimal\.Api\.CatEndpointRouteBuilderExtensions\.TryGetRequest\<TRequest\>\(TRequest, TRequest\)\.TRequest')
-
-<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.TryGetRequest_TRequest_(TRequest,TRequest).request'></a>
-
-`request` [TRequest](CatEndpointRouteBuilderExtensions.TryGetRequest.D60HW2G8417SGSPTDUFV5WQ3A.md#Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.TryGetRequest_TRequest_(TRequest,TRequest).TRequest 'Cat\.Minimal\.Api\.CatEndpointRouteBuilderExtensions\.TryGetRequest\<TRequest\>\(TRequest, TRequest\)\.TRequest')
-
-#### Returns
-[System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')  
-`false` when the body is empty and the request type has no parameterless constructor\.

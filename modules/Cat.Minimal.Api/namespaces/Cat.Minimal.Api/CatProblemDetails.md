@@ -36,12 +36,12 @@ public class CatProblemDetails : Microsoft.AspNetCore.Mvc.ProblemDetails
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [Microsoft\.AspNetCore\.Mvc\.ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails 'Microsoft\.AspNetCore\.Mvc\.ProblemDetails') → CatProblemDetails
 
-| Constructors | |
-| :--- | :--- |
-| [CatProblemDetails\(\)](CatProblemDetails.CatProblemDetails.md#Cat.Minimal.Api.CatProblemDetails.CatProblemDetails() 'Cat\.Minimal\.Api\.CatProblemDetails\.CatProblemDetails\(\)') | Creates an empty instance\. Use it when you fill in the properties yourself\. |
-| [CatProblemDetails\(ICatResponse, string, string\)](CatProblemDetails.CatProblemDetails.md#Cat.Minimal.Api.CatProblemDetails.CatProblemDetails(Cat.Responses.Abstractions.ICatResponse,string,string) 'Cat\.Minimal\.Api\.CatProblemDetails\.CatProblemDetails\(Cat\.Responses\.Abstractions\.ICatResponse, string, string\)') | Creates problem details from a failed response\. The status follows the response type: BadRequest gives 400, NotFound gives 404, Unauthorized gives 401\. Every other failure gives 500\. |
-
 | Properties | |
 | :--- | :--- |
 | [CatErrors](CatProblemDetails.CatErrors.md 'Cat\.Minimal\.Api\.CatProblemDetails\.CatErrors') | The errors of the failed response, each with a code, a message template and arguments\. |
 | [CatTraceId](CatProblemDetails.CatTraceId.md 'Cat\.Minimal\.Api\.CatProblemDetails\.CatTraceId') | The id to find this request in the logs\. |
+
+| Methods | |
+| :--- | :--- |
+| [Create\(HttpContext, int, string, string, IReadOnlyList&lt;ICatError&gt;\)](CatProblemDetails.Create.PXVTJ0B7B433M57RRFG9HZ6M8.md 'Cat\.Minimal\.Api\.CatProblemDetails\.Create\(Microsoft\.AspNetCore\.Http\.HttpContext, int, string, string, System\.Collections\.Generic\.IReadOnlyList\<Cat\.Responses\.Abstractions\.ICatError\>\)') | Creates problem details for the current request, with the trace id filled in\. |
+| [GetTraceId\(HttpContext\)](CatProblemDetails.GetTraceId.BWFSWZGY6JQWNRAMOVBP388W2.md 'Cat\.Minimal\.Api\.CatProblemDetails\.GetTraceId\(Microsoft\.AspNetCore\.Http\.HttpContext\)') | Gets the id to find the request in the logs\. |

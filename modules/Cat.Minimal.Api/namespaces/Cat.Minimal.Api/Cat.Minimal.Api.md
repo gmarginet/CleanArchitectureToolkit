@@ -33,6 +33,6 @@ Failed responses become problem details, and unexpected exceptions are caught an
 
 | Classes | |
 | :--- | :--- |
-| [CatEndpointRouteBuilderExtensions](CatEndpointRouteBuilderExtensions.md 'Cat\.Minimal\.Api\.CatEndpointRouteBuilderExtensions') | Maps service requests to minimal API endpoints\. |
-| [CatExceptionHandler](CatExceptionHandler.md 'Cat\.Minimal\.Api\.CatExceptionHandler') | Catches unexpected exceptions, logs them and answers with a 500 [CatProblemDetails](CatProblemDetails.md 'Cat\.Minimal\.Api\.CatProblemDetails')\. |
+| [CatEndpointRouteBuilderExtensions](CatEndpointRouteBuilderExtensions.md 'Cat\.Minimal\.Api\.CatEndpointRouteBuilderExtensions') | Maps a [ICatServiceRequest](../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Abstractions/ICatServiceRequest.md 'Cat\.ServiceRequests\.Abstractions\.ICatServiceRequest') to a minimal API endpoint for each http method\. |
+| [CatExceptionHandler](CatExceptionHandler.md 'Cat\.Minimal\.Api\.CatExceptionHandler') | Catches exceptions that escape an endpoint and answers with a [CatProblemDetails](CatProblemDetails.md 'Cat\.Minimal\.Api\.CatProblemDetails')\. Unexpected exceptions become a 500\. Request binding failures keep their own status code, usually a 400\. A client that closed the request gets no body\. |
 | [CatProblemDetails](CatProblemDetails.md 'Cat\.Minimal\.Api\.CatProblemDetails') | The body of every failed response\. It is a standard problem details object plus the CAT errors and a trace id\. |

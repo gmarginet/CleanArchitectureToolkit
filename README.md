@@ -96,7 +96,7 @@ Some modules depend on other modules, in the documentation of each module you ca
 | [Cat.Extensions](./modules/Cat.Extensions/README.md) | | Small extension method libraries for enumerables, expressions, objects, service collections and strings. |
 | [Cat.FluentWorkflows](./modules/Cat.FluentWorkflows/README.md) | | Describe a business process as a list of steps in plain C#. |
 | [Cat.Localizations](./modules/Cat.Localizations/README.md) | [![In development](https://img.shields.io/badge/status-in%20development-orange)](#module-overview) | Look up localized strings by key, without tying your app to one localization provider. |
-| [Cat.Minimal.Api](./modules/Cat.Minimal.Api/README.md) | [![In development](https://img.shields.io/badge/status-in%20development-orange)](#module-overview) | Turn service requests into ASP.NET Core minimal API endpoints with one consistent error shape. |
+| [Cat.Minimal.Api](./modules/Cat.Minimal.Api/README.md) | | Map service requests to minimal API endpoints that document the responses they return and share one error shape. |
 | [Cat.Queries](./modules/Cat.Queries/README.md) | | Read data through one entry point. Describe a read as a query, write one handler for it, and let the processor find the handler. |
 | [Cat.Responses](./modules/Cat.Responses/README.md) | | Return the outcome of an operation as a response, either succeeded with a value or failed with errors. |
 | [Cat.ServiceRequests](./modules/Cat.ServiceRequests/README.md) | | Run application use cases through one entry point, with validation, logging and tracing decorators. |
