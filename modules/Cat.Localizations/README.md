@@ -24,7 +24,6 @@
 
 # Cat.Localizations <!-- omit in toc -->  
 
-> **!!! This module is still under development, wait for final version before you use it !!!**
 <!-- Intro start-->
 Cat.Localizations defines a contract for looking up localized strings by key, so the rest of your app doesn't need to know which localization provider sits behind it.
 
