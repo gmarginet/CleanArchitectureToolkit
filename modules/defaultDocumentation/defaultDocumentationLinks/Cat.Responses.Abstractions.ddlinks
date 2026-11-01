@@ -4,7 +4,9 @@ P:Cat.Responses.Abstractions.CatResponseType.Created|CatResponseType.Created.md|
 P:Cat.Responses.Abstractions.CatResponseType.NoContent|CatResponseType.NoContent.md|NoContent
 P:Cat.Responses.Abstractions.CatResponseType.BadRequest|CatResponseType.BadRequest.md|BadRequest
 P:Cat.Responses.Abstractions.CatResponseType.NotFound|CatResponseType.NotFound.md|NotFound
+P:Cat.Responses.Abstractions.CatResponseType.Conflict|CatResponseType.Conflict.md|Conflict
 P:Cat.Responses.Abstractions.CatResponseType.Unauthorized|CatResponseType.Unauthorized.md|Unauthorized
+P:Cat.Responses.Abstractions.CatResponseType.Forbidden|CatResponseType.Forbidden.md|Forbidden
 P:Cat.Responses.Abstractions.CatResponseType.InternalServerError|CatResponseType.InternalServerError.md|InternalServerError
 N:Cat.Responses.Abstractions|Cat.Responses.Abstractions.md|Cat.Responses.Abstractions
 T:Cat.Responses.Abstractions.CatResponseType|CatResponseType.md|CatResponseType
@@ -38,6 +40,8 @@ T:Cat.Responses.Abstractions.CatResponseType.Succeeded.Created|CatResponseType.S
 T:Cat.Responses.Abstractions.CatResponseType.Succeeded.NoContent|CatResponseType.Succeeded.NoContent.md|NoContent
 T:Cat.Responses.Abstractions.CatResponseType.Failed.BadRequest|CatResponseType.Failed.BadRequest.md|BadRequest
 T:Cat.Responses.Abstractions.CatResponseType.Failed.NotFound|CatResponseType.Failed.NotFound.md|NotFound
+T:Cat.Responses.Abstractions.CatResponseType.Failed.Conflict|CatResponseType.Failed.Conflict.md|Conflict
 T:Cat.Responses.Abstractions.CatResponseType.Failed.Unauthorized|CatResponseType.Failed.Unauthorized.md|Unauthorized
+T:Cat.Responses.Abstractions.CatResponseType.Failed.Forbidden|CatResponseType.Failed.Forbidden.md|Forbidden
 T:Cat.Responses.Abstractions.CatResponseType.Failed.InternalServerError|CatResponseType.Failed.InternalServerError.md|InternalServerError
 ?:Cat.Responses.Abstractions.ICatResponse.Cast|ICatResponse.Cast.md|Cast

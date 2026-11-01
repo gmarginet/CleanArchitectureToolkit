@@ -228,7 +228,7 @@ The processor never turns a failure into an exception for you. What you get back
 | Situation | What you get |
 |-----------|--------------|
 | The handler returns `Ok`, `Created` or `NoContent` | A succeeded response. |
-| The handler returns `BadRequest`, `NotFound`, `Unauthorized` or `InternalServerError` | A failed response with the errors the handler passed. The processor hands it back untouched. |
+| The handler returns `BadRequest`, `NotFound`, `Unauthorized`, `Forbidden`, `Conflict` or `InternalServerError` | A failed response with the errors the handler passed. The processor hands it back untouched. |
 | No handler is registered for the command | An `InvalidOperationException` with the message `No decorated service found for service type ICatCommandHandler<YourCommand>`. Check that `AddCatCommandsModule` got a type from the handler's assembly. |
 | The handler throws | The original exception reaches the caller as it is. It isn't wrapped in a `TargetInvocationException`. |
 

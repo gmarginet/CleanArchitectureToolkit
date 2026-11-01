@@ -93,7 +93,9 @@ Every response has a `Type` of `CatResponseType`. Each type is either a `Succeed
 | `NoContent` | Succeeded | The operation worked and has nothing to return. | None | None |
 | `BadRequest` | Failed | The request was invalid, for example a failed validation. | One or more | None |
 | `NotFound` | Failed | The requested resource doesn't exist. | One or more | None |
-| `Unauthorized` | Failed | The caller isn't allowed to do this. | One or more | None |
+| `Unauthorized` | Failed | The caller isn't authenticated. | One or more | None |
+| `Forbidden` | Failed | The caller is authenticated but isn't allowed to do this. | One or more | None |
+| `Conflict` | Failed | The request conflicts with the current state of the resource. | One or more | None |
 | `InternalServerError` | Failed | Something unexpected went wrong. | One or more | None |
 
 ### Create a response
@@ -121,6 +123,8 @@ ICatResponse<Todo> noContentTyped = CatResponse.NoContent<Todo>();
 ICatResponse badRequest = CatResponse.BadRequest(error1, error2);
 ICatResponse notFound = CatResponse.NotFound(error);
 ICatResponse unauthorized = CatResponse.Unauthorized(error);
+ICatResponse forbidden = CatResponse.Forbidden(error);
+ICatResponse conflict = CatResponse.Conflict(error);
 ICatResponse serverError = CatResponse.InternalServerError(error);
 
 // Failed, typed to a value so it fits a handler that returns ICatResponse<Todo>
@@ -157,6 +161,8 @@ ICatResponse<IReadOnlyList<Todo>> noContent = CatResponse.List.NoContent<Todo>()
 ICatResponse<IReadOnlyList<Todo>> badRequest = CatResponse.List.BadRequest<Todo>(error);
 ICatResponse<IReadOnlyList<Todo>> notFound = CatResponse.List.NotFound<Todo>(error);
 ICatResponse<IReadOnlyList<Todo>> unauthorized = CatResponse.List.Unauthorized<Todo>(error);
+ICatResponse<IReadOnlyList<Todo>> forbidden = CatResponse.List.Forbidden<Todo>(error);
+ICatResponse<IReadOnlyList<Todo>> conflict = CatResponse.List.Conflict<Todo>(error);
 ICatResponse<IReadOnlyList<Todo>> serverError = CatResponse.List.InternalServerError<Todo>(error);
 ```
 
@@ -178,7 +184,7 @@ ICatResponse<ICatPagedList<Todo>> noContent = CatResponse.PagedList.NoContent<To
 ICatResponse<ICatPagedList<Todo>> notFound = CatResponse.PagedList.NotFound<Todo>(error);
 ```
 
-`BadRequest`, `Unauthorized` and `InternalServerError` work the same way as `NotFound`.
+`BadRequest`, `Unauthorized`, `Forbidden`, `Conflict` and `InternalServerError` work the same way as `NotFound`.
 
 A page (`ICatPagedList<T>`) holds these values:
 
@@ -236,13 +242,11 @@ Order the more specific patterns first, as in the example. The base types `Succe
 - **Failed to failed:** `Cast<TResponse>()` keeps the type and errors, and drops the value. Use it to pass a failure up through a handler with a different return type.
 - **Succeeded to succeeded:** `Cast<TResponse>(value)` on `ICatResponse`, or `Cast(convertValue)` on `ICatResponse<TResponse>`, keeps the type and swaps in a new value.
 
-Crossing the line throws an `InvalidOperationException`. See [Errors and exceptions](#errors-and-exceptions).
+`Cast(convertValue)` on a failed `ICatResponse<TResponse>` is safe. It keeps the type and errors and doesn't call the converter. The other casts throw an `InvalidOperationException` when they cross the line. See [Errors and exceptions](#errors-and-exceptions).
 
 ```csharp
-// Pass a failure up as a different value type, or convert the value of a success
-ICatResponse<TodoModel> modelResponse = todoResponse.IsFailed
-    ? todoResponse.Cast<TodoModel>()
-    : todoResponse.Cast(todo => todo.ToModel());
+// Convert the value of a success. A failure passes through unchanged.
+ICatResponse<TodoModel> modelResponse = todoResponse.Cast(todo => todo.ToModel());
 ```
 
 Cast a failed response through to a different value type, for example when a decorator's own check fails before it calls the inner handler:
@@ -313,7 +317,7 @@ Responses exist so expected failures don't become exceptions. The only exception
 | Situation | What you get |
 |-----------|--------------|
 | `Cast<TResponse>()` on a succeeded response | An `InvalidOperationException` with the message `Cannot cast a succeeded response to a failed response.` |
-| `Cast<TResponse>(value)` or `Cast(convertValue)` on a failed response | An `InvalidOperationException` with the message `Cannot cast a failed response to a succeeded response.` |
+| `Cast<TResponse>(value)` on a failed `ICatResponse` | An `InvalidOperationException` with the message `Cannot cast a failed response to a succeeded response.` |
 | A paged list gets a `null` list | An `ArgumentNullException` for `List`. |
 | A paged list gets a page number or page size below 1 | An `ArgumentOutOfRangeException` for `PageNumber` or `PageSize`, with the message `<name> must be 1 or higher.` |
 | A paged list gets a negative total item count | An `ArgumentOutOfRangeException` for `TotalItemCount`, with the message `TotalItemCount must be 0 or higher.` |

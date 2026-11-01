@@ -49,7 +49,7 @@ public class CatResponse<TResponse> : CatResponse, ICatResponse<TResponse>
         return Type switch
         {
             CatResponseType.Succeeded typeSucceeded => new CatResponse<TTargetResponse>(typeSucceeded, convertValue(Value)),
-            CatResponseType.Failed => throw new InvalidOperationException("Cannot cast a failed response to a succeeded response."),
+            CatResponseType.Failed typeFailed => new CatResponse<TTargetResponse>(typeFailed, ErrorList),
             _ => throw new NotImplementedException()
         };
     }

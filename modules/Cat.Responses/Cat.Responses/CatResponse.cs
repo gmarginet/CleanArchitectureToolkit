@@ -90,11 +90,23 @@ public class CatResponse : ICatResponse
         params ICatError[] errors)
         => new CatResponse(CatResponseType.NotFound, errors);
     
+    /// <summary>Creates a failed response with the <see cref="CatResponseType.Conflict"/> outcome.</summary>
+    /// <param name="errors">The errors describing the conflict.</param>
+    public static ICatResponse Conflict(
+        params ICatError[] errors)
+        => new CatResponse(CatResponseType.Conflict, errors);
+    
     /// <summary>Creates a failed response with the <see cref="CatResponseType.Unauthorized"/> outcome.</summary>
-    /// <param name="errors">The errors describing why the caller isn't authorized.</param>
+    /// <param name="errors">The errors describing why the caller isn't authenticated.</param>
     public static ICatResponse Unauthorized(
         params ICatError[] errors)
         => new CatResponse(CatResponseType.Unauthorized, errors);
+
+    /// <summary>Creates a failed response with the <see cref="CatResponseType.Forbidden"/> outcome.</summary>
+    /// <param name="errors">The errors describing why the caller isn't allowed.</param>
+    public static ICatResponse Forbidden(
+        params ICatError[] errors)
+        => new CatResponse(CatResponseType.Forbidden, errors);
     
     /// <summary>Creates a failed response with the <see cref="CatResponseType.InternalServerError"/> outcome.</summary>
     /// <param name="errors">The errors describing what went wrong.</param>
@@ -137,12 +149,26 @@ public class CatResponse : ICatResponse
         params ICatError[] errors)
         => new CatResponse<TResponse>(CatResponseType.NotFound, errors);
     
+    /// <summary>Creates a failed response with the <see cref="CatResponseType.Conflict"/> outcome.</summary>
+    /// <typeparam name="TResponse">The value type the response is typed to.</typeparam>
+    /// <param name="errors">The errors describing the conflict.</param>
+    public static ICatResponse<TResponse> Conflict<TResponse>(
+        params ICatError[] errors)
+        => new CatResponse<TResponse>(CatResponseType.Conflict, errors);
+    
     /// <summary>Creates a failed response with the <see cref="CatResponseType.Unauthorized"/> outcome.</summary>
     /// <typeparam name="TResponse">The value type the response is typed to.</typeparam>
-    /// <param name="errors">The errors describing why the caller isn't authorized.</param>
+    /// <param name="errors">The errors describing why the caller isn't authenticated.</param>
     public static ICatResponse<TResponse> Unauthorized<TResponse>(
         params ICatError[] errors)
         => new CatResponse<TResponse>(CatResponseType.Unauthorized, errors);
+
+    /// <summary>Creates a failed response with the <see cref="CatResponseType.Forbidden"/> outcome.</summary>
+    /// <typeparam name="TResponse">The value type the response is typed to.</typeparam>
+    /// <param name="errors">The errors describing why the caller isn't allowed.</param>
+    public static ICatResponse<TResponse> Forbidden<TResponse>(
+        params ICatError[] errors)
+        => new CatResponse<TResponse>(CatResponseType.Forbidden, errors);
     
     /// <summary>Creates a failed response with the <see cref="CatResponseType.InternalServerError"/> outcome.</summary>
     /// <typeparam name="TResponse">The value type the response is typed to.</typeparam>
@@ -191,12 +217,26 @@ public class CatResponse : ICatResponse
             params ICatError[] errors)
             => new CatResponse<IReadOnlyList<TResponse>>(CatResponseType.NotFound, errors);
 
+        /// <summary>Creates a failed response with the <see cref="CatResponseType.Conflict"/> outcome.</summary>
+        /// <typeparam name="TResponse">The type of the items the response is typed to.</typeparam>
+        /// <param name="errors">The errors describing the conflict.</param>
+        public static ICatResponse<IReadOnlyList<TResponse>> Conflict<TResponse>(
+            params ICatError[] errors)
+            => new CatResponse<IReadOnlyList<TResponse>>(CatResponseType.Conflict, errors);
+
         /// <summary>Creates a failed response with the <see cref="CatResponseType.Unauthorized"/> outcome.</summary>
         /// <typeparam name="TResponse">The type of the items the response is typed to.</typeparam>
-        /// <param name="errors">The errors describing why the caller isn't authorized.</param>
+        /// <param name="errors">The errors describing why the caller isn't authenticated.</param>
         public static ICatResponse<IReadOnlyList<TResponse>> Unauthorized<TResponse>(
             params ICatError[] errors)
             => new CatResponse<IReadOnlyList<TResponse>>(CatResponseType.Unauthorized, errors);
+
+        /// <summary>Creates a failed response with the <see cref="CatResponseType.Forbidden"/> outcome.</summary>
+        /// <typeparam name="TResponse">The type of the items the response is typed to.</typeparam>
+        /// <param name="errors">The errors describing why the caller isn't allowed.</param>
+        public static ICatResponse<IReadOnlyList<TResponse>> Forbidden<TResponse>(
+            params ICatError[] errors)
+            => new CatResponse<IReadOnlyList<TResponse>>(CatResponseType.Forbidden, errors);
 
         /// <summary>Creates a failed response with the <see cref="CatResponseType.InternalServerError"/> outcome.</summary>
         /// <typeparam name="TResponse">The type of the items the response is typed to.</typeparam>
@@ -280,12 +320,26 @@ public class CatResponse : ICatResponse
             params ICatError[] errors)
             => new CatResponse<ICatPagedList<TResponse>>(CatResponseType.NotFound, errors);
 
+        /// <summary>Creates a failed response with the <see cref="CatResponseType.Conflict"/> outcome.</summary>
+        /// <typeparam name="TResponse">The type of the items the response is typed to.</typeparam>
+        /// <param name="errors">The errors describing the conflict.</param>
+        public static ICatResponse<ICatPagedList<TResponse>> Conflict<TResponse>(
+            params ICatError[] errors)
+            => new CatResponse<ICatPagedList<TResponse>>(CatResponseType.Conflict, errors);
+
         /// <summary>Creates a failed response with the <see cref="CatResponseType.Unauthorized"/> outcome.</summary>
         /// <typeparam name="TResponse">The type of the items the response is typed to.</typeparam>
-        /// <param name="errors">The errors describing why the caller isn't authorized.</param>
+        /// <param name="errors">The errors describing why the caller isn't authenticated.</param>
         public static ICatResponse<ICatPagedList<TResponse>> Unauthorized<TResponse>(
             params ICatError[] errors)
             => new CatResponse<ICatPagedList<TResponse>>(CatResponseType.Unauthorized, errors);
+
+        /// <summary>Creates a failed response with the <see cref="CatResponseType.Forbidden"/> outcome.</summary>
+        /// <typeparam name="TResponse">The type of the items the response is typed to.</typeparam>
+        /// <param name="errors">The errors describing why the caller isn't allowed.</param>
+        public static ICatResponse<ICatPagedList<TResponse>> Forbidden<TResponse>(
+            params ICatError[] errors)
+            => new CatResponse<ICatPagedList<TResponse>>(CatResponseType.Forbidden, errors);
 
         /// <summary>Creates a failed response with the <see cref="CatResponseType.InternalServerError"/> outcome.</summary>
         /// <typeparam name="TResponse">The type of the items the response is typed to.</typeparam>

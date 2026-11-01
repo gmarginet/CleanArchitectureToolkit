@@ -14,7 +14,9 @@ public class CatListResponseTests
     {
         yield return new TestCaseData(new Func<ICatError[], ICatResponse<IReadOnlyList<int>>>(e => CatResponse.List.BadRequest<int>(e)), typeof(CatResponseType.Failed.BadRequest)).SetName("List.BadRequest");
         yield return new TestCaseData(new Func<ICatError[], ICatResponse<IReadOnlyList<int>>>(e => CatResponse.List.NotFound<int>(e)), typeof(CatResponseType.Failed.NotFound)).SetName("List.NotFound");
+        yield return new TestCaseData(new Func<ICatError[], ICatResponse<IReadOnlyList<int>>>(e => CatResponse.List.Conflict<int>(e)), typeof(CatResponseType.Failed.Conflict)).SetName("List.Conflict");
         yield return new TestCaseData(new Func<ICatError[], ICatResponse<IReadOnlyList<int>>>(e => CatResponse.List.Unauthorized<int>(e)), typeof(CatResponseType.Failed.Unauthorized)).SetName("List.Unauthorized");
+        yield return new TestCaseData(new Func<ICatError[], ICatResponse<IReadOnlyList<int>>>(e => CatResponse.List.Forbidden<int>(e)), typeof(CatResponseType.Failed.Forbidden)).SetName("List.Forbidden");
         yield return new TestCaseData(new Func<ICatError[], ICatResponse<IReadOnlyList<int>>>(e => CatResponse.List.InternalServerError<int>(e)), typeof(CatResponseType.Failed.InternalServerError)).SetName("List.InternalServerError");
     }
 
@@ -22,7 +24,9 @@ public class CatListResponseTests
     {
         yield return new TestCaseData(new Func<ICatError[], ICatResponse<ICatPagedList<int>>>(e => CatResponse.PagedList.BadRequest<int>(e)), typeof(CatResponseType.Failed.BadRequest)).SetName("PagedList.BadRequest");
         yield return new TestCaseData(new Func<ICatError[], ICatResponse<ICatPagedList<int>>>(e => CatResponse.PagedList.NotFound<int>(e)), typeof(CatResponseType.Failed.NotFound)).SetName("PagedList.NotFound");
+        yield return new TestCaseData(new Func<ICatError[], ICatResponse<ICatPagedList<int>>>(e => CatResponse.PagedList.Conflict<int>(e)), typeof(CatResponseType.Failed.Conflict)).SetName("PagedList.Conflict");
         yield return new TestCaseData(new Func<ICatError[], ICatResponse<ICatPagedList<int>>>(e => CatResponse.PagedList.Unauthorized<int>(e)), typeof(CatResponseType.Failed.Unauthorized)).SetName("PagedList.Unauthorized");
+        yield return new TestCaseData(new Func<ICatError[], ICatResponse<ICatPagedList<int>>>(e => CatResponse.PagedList.Forbidden<int>(e)), typeof(CatResponseType.Failed.Forbidden)).SetName("PagedList.Forbidden");
         yield return new TestCaseData(new Func<ICatError[], ICatResponse<ICatPagedList<int>>>(e => CatResponse.PagedList.InternalServerError<int>(e)), typeof(CatResponseType.Failed.InternalServerError)).SetName("PagedList.InternalServerError");
     }
 

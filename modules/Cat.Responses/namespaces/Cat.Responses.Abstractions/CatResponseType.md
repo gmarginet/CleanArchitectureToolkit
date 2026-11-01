@@ -45,9 +45,11 @@ Derived
 | Properties | |
 | :--- | :--- |
 | [BadRequest](CatResponseType.BadRequest.md 'Cat\.Responses\.Abstractions\.CatResponseType\.BadRequest') | The operation failed because the request was invalid\. |
+| [Conflict](CatResponseType.Conflict.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Conflict') | The operation failed because it conflicts with the current state of the resource\. |
 | [Created](CatResponseType.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Created') | The operation succeeded and created a new resource\. |
+| [Forbidden](CatResponseType.Forbidden.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Forbidden') | The operation failed because the caller isn't allowed to perform it\. |
 | [InternalServerError](CatResponseType.InternalServerError.md 'Cat\.Responses\.Abstractions\.CatResponseType\.InternalServerError') | The operation failed because of an unexpected error\. |
 | [NoContent](CatResponseType.NoContent.md 'Cat\.Responses\.Abstractions\.CatResponseType\.NoContent') | The operation succeeded and has nothing to return\. |
 | [NotFound](CatResponseType.NotFound.md 'Cat\.Responses\.Abstractions\.CatResponseType\.NotFound') | The operation failed because the requested resource doesn't exist\. |
 | [Ok](CatResponseType.Ok.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Ok') | The operation succeeded\. |
-| [Unauthorized](CatResponseType.Unauthorized.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Unauthorized') | The operation failed because the caller isn't authorized to perform it\. |
+| [Unauthorized](CatResponseType.Unauthorized.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Unauthorized') | The operation failed because the caller isn't authenticated\. |

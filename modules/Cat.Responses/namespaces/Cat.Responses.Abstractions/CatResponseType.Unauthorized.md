@@ -28,7 +28,7 @@
 
 ## CatResponseType\.Unauthorized Property
 
-The operation failed because the caller isn't authorized to perform it\.
+The operation failed because the caller isn't authenticated\.
 
 ```csharp
 public static Cat.Responses.Abstractions.CatResponseType.Failed.Unauthorized Unauthorized { get; }

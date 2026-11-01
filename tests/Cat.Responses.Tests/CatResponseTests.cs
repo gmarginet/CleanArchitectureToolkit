@@ -67,11 +67,31 @@ public class CatResponseTests
     }
 
     [Test]
+    public void Conflict_IsFailedWithTheErrors()
+    {
+        var response = CatResponse.Conflict(ErrorOne);
+
+        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.Conflict>());
+        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response.ErrorList, Is.EqualTo(new[] { ErrorOne }));
+    }
+
+    [Test]
     public void Unauthorized_IsFailedWithTheErrors()
     {
         var response = CatResponse.Unauthorized(ErrorOne);
 
         Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.Unauthorized>());
+        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response.ErrorList, Is.EqualTo(new[] { ErrorOne }));
+    }
+
+    [Test]
+    public void Forbidden_IsFailedWithTheErrors()
+    {
+        var response = CatResponse.Forbidden(ErrorOne);
+
+        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.Forbidden>());
         Assert.That(response.IsFailed, Is.True);
         Assert.That(response.ErrorList, Is.EqualTo(new[] { ErrorOne }));
     }
@@ -133,15 +153,19 @@ public class CatResponseTests
     {
         var badRequest = CatResponse.BadRequest<string>(ErrorOne);
         var notFound = CatResponse.NotFound<string>(ErrorOne);
+        var conflict = CatResponse.Conflict<string>(ErrorOne);
         var unauthorized = CatResponse.Unauthorized<string>(ErrorOne);
+        var forbidden = CatResponse.Forbidden<string>(ErrorOne);
         var serverError = CatResponse.InternalServerError<string>(ErrorOne);
 
         Assert.That(badRequest.Type, Is.InstanceOf<CatResponseType.Failed.BadRequest>());
         Assert.That(notFound.Type, Is.InstanceOf<CatResponseType.Failed.NotFound>());
+        Assert.That(conflict.Type, Is.InstanceOf<CatResponseType.Failed.Conflict>());
         Assert.That(unauthorized.Type, Is.InstanceOf<CatResponseType.Failed.Unauthorized>());
+        Assert.That(forbidden.Type, Is.InstanceOf<CatResponseType.Failed.Forbidden>());
         Assert.That(serverError.Type, Is.InstanceOf<CatResponseType.Failed.InternalServerError>());
 
-        foreach (var response in new[] { badRequest, notFound, unauthorized, serverError })
+        foreach (var response in new[] { badRequest, notFound, conflict, unauthorized, forbidden, serverError })
         {
             Assert.That(response.IsFailed, Is.True);
             Assert.That(response.ErrorList, Is.EqualTo(new[] { ErrorOne }));
@@ -204,11 +228,21 @@ public class CatResponseTests
     }
 
     [Test]
-    public void CastWithConverter_FailedResponse_Throws()
+    public void CastWithConverter_FailedResponse_KeepsTheTypeAndTheErrorsWithoutConverting()
     {
         var response = CatResponse.BadRequest<int>(ErrorOne);
+        var converterCalled = false;
 
-        Assert.Throws<InvalidOperationException>(() => response.Cast(x => x.ToString()));
+        var cast = response.Cast(x =>
+        {
+            converterCalled = true;
+            return x.ToString();
+        });
+
+        Assert.That(cast.Type, Is.InstanceOf<CatResponseType.Failed.BadRequest>());
+        Assert.That(cast.ErrorList, Is.EqualTo(new[] { ErrorOne }));
+        Assert.That(cast.Value, Is.Null);
+        Assert.That(converterCalled, Is.False);
     }
 
     [Test]

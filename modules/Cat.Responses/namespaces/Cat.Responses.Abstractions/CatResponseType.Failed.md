@@ -38,6 +38,8 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 Derived  
 ↳ [BadRequest](CatResponseType.Failed.BadRequest.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.BadRequest')  
+↳ [Conflict](CatResponseType.Failed.Conflict.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.Conflict')  
+↳ [Forbidden](CatResponseType.Failed.Forbidden.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.Forbidden')  
 ↳ [InternalServerError](CatResponseType.Failed.InternalServerError.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.InternalServerError')  
 ↳ [NotFound](CatResponseType.Failed.NotFound.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.NotFound')  
 ↳ [Unauthorized](CatResponseType.Failed.Unauthorized.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Failed\.Unauthorized')

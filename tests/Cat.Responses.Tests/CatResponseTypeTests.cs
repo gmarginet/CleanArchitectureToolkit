@@ -22,12 +22,16 @@ public class CatResponseTypeTests
     {
         Assert.That(CatResponseType.BadRequest, Is.InstanceOf<CatResponseType.Failed>());
         Assert.That(CatResponseType.NotFound, Is.InstanceOf<CatResponseType.Failed>());
+        Assert.That(CatResponseType.Conflict, Is.InstanceOf<CatResponseType.Failed>());
         Assert.That(CatResponseType.Unauthorized, Is.InstanceOf<CatResponseType.Failed>());
+        Assert.That(CatResponseType.Forbidden, Is.InstanceOf<CatResponseType.Failed>());
         Assert.That(CatResponseType.InternalServerError, Is.InstanceOf<CatResponseType.Failed>());
 
         Assert.That(CatResponseType.BadRequest, Is.Not.InstanceOf<CatResponseType.Succeeded>());
         Assert.That(CatResponseType.NotFound, Is.Not.InstanceOf<CatResponseType.Succeeded>());
+        Assert.That(CatResponseType.Conflict, Is.Not.InstanceOf<CatResponseType.Succeeded>());
         Assert.That(CatResponseType.Unauthorized, Is.Not.InstanceOf<CatResponseType.Succeeded>());
+        Assert.That(CatResponseType.Forbidden, Is.Not.InstanceOf<CatResponseType.Succeeded>());
         Assert.That(CatResponseType.InternalServerError, Is.Not.InstanceOf<CatResponseType.Succeeded>());
     }
 
@@ -39,7 +43,9 @@ public class CatResponseTypeTests
         Assert.That(CatResponseType.NoContent, Is.TypeOf<CatResponseType.Succeeded.NoContent>());
         Assert.That(CatResponseType.BadRequest, Is.TypeOf<CatResponseType.Failed.BadRequest>());
         Assert.That(CatResponseType.NotFound, Is.TypeOf<CatResponseType.Failed.NotFound>());
+        Assert.That(CatResponseType.Conflict, Is.TypeOf<CatResponseType.Failed.Conflict>());
         Assert.That(CatResponseType.Unauthorized, Is.TypeOf<CatResponseType.Failed.Unauthorized>());
+        Assert.That(CatResponseType.Forbidden, Is.TypeOf<CatResponseType.Failed.Forbidden>());
         Assert.That(CatResponseType.InternalServerError, Is.TypeOf<CatResponseType.Failed.InternalServerError>());
     }
 

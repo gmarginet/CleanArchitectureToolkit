@@ -236,7 +236,7 @@ The processor never turns a failure into an exception for you. What you get back
 | Situation | What you get |
 |-----------|--------------|
 | The handler returns `Ok`, `Created` or `NoContent` | A succeeded response. |
-| The handler returns `BadRequest`, `NotFound`, `Unauthorized` or `InternalServerError` | A failed response with the errors the handler passed. It has no value. |
+| The handler returns `BadRequest`, `NotFound`, `Unauthorized`, `Forbidden`, `Conflict` or `InternalServerError` | A failed response with the errors the handler passed. It has no value. |
 | No handler is registered for the query | An `InvalidOperationException` with the message `No decorated service found for service type ICatQueryHandler<YourQuery, YourResult>`. Check that `AddCatQueriesModule` got a type from the handler's assembly. |
 | The handler throws | The original exception reaches the caller as it is. It isn't wrapped in a `TargetInvocationException`. |
 

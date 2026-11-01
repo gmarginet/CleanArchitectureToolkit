@@ -21,8 +21,14 @@ public abstract class CatResponseType
     /// <summary>The operation failed because the requested resource doesn't exist.</summary>
     public static Failed.NotFound NotFound => new();
 
-    /// <summary>The operation failed because the caller isn't authorized to perform it.</summary>
+    /// <summary>The operation failed because it conflicts with the current state of the resource.</summary>
+    public static Failed.Conflict Conflict => new();
+
+    /// <summary>The operation failed because the caller isn't authenticated.</summary>
     public static Failed.Unauthorized Unauthorized => new();
+
+    /// <summary>The operation failed because the caller isn't allowed to perform it.</summary>
+    public static Failed.Forbidden Forbidden => new();
 
     /// <summary>The operation failed because of an unexpected error.</summary>
     public static Failed.InternalServerError InternalServerError => new();
@@ -53,8 +59,14 @@ public abstract class CatResponseType
         /// <summary>The response type for <see cref="CatResponseType.NotFound"/>.</summary>
         public new class NotFound : Failed { }
 
+        /// <summary>The response type for <see cref="CatResponseType.Conflict"/>.</summary>
+        public new class Conflict : Failed { }
+
         /// <summary>The response type for <see cref="CatResponseType.Unauthorized"/>.</summary>
         public new class Unauthorized : Failed { }
+
+        /// <summary>The response type for <see cref="CatResponseType.Forbidden"/>.</summary>
+        public new class Forbidden : Failed { }
 
         /// <summary>The response type for <see cref="CatResponseType.InternalServerError"/>.</summary>
         public new class InternalServerError : Failed { }
