@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cat.Demo.TodoService.Events.Models;
 using Cat.Demo.TodoService.Events.ServiceRequests;
 using Cat.Minimal.Api;
+using Cat.Responses.Abstractions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 
@@ -13,17 +14,10 @@ public static class ToDoEndpoints
     {
         var groupBuilder = builder.MapGroup("/todo");
 
-        groupBuilder.MapCatServiceRequest<TodoGetListRequest, IList<TodoModel>>("/list");
-        groupBuilder.MapCatServiceRequest<TodoGetRequest, TodoModel>("/get");
-        groupBuilder.MapCatServiceRequest<TodoSaveRequest>("/create-update");
-            
+        groupBuilder.MapCatGetList<TodoGetListRequest, TodoModel>("/");
+        groupBuilder.MapCatGet<TodoGetRequest, TodoModel>("/{todoId:int}", CatResponseType.Ok, CatResponseType.NotFound);
+        groupBuilder.MapCatPost<TodoSaveRequest>("/", CatResponseType.Ok);
+
         return builder;
     }
 }
-
-
-
-
-
-
-

@@ -40,7 +40,7 @@ builder.Services.AddCatCommandsModule(typeof(TodoSaveCommandHandler));
 builder.Services.AddCatDemoDatabase();
 
 var app = builder.Build();
-app.UseExceptionHandler();
+app.UseCatMinimalApiModule();
 
 if (app.Environment.IsDevelopment())
 {
