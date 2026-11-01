@@ -39,6 +39,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
   - [Define a request](#define-a-request)
   - [Write a handler](#write-a-handler)
   - [Process a request](#process-a-request)
+  - [Handle a JSON Patch document](#handle-a-json-patch-document)
   - [Add decorators](#add-decorators)
     - [Validation](#validation)
     - [Logging](#logging)
@@ -56,6 +57,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
 | [Cat.ServiceRequests.Decorators.ActivitySource](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.ActivitySource` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource)](#nuget-packages) |
 | [Cat.ServiceRequests.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Logging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Logging)](#nuget-packages) |
 | [Cat.ServiceRequests.Decorators.Validation](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Validation/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Validation` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Validation)](#nuget-packages) |
+| [Cat.ServiceRequests.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Minimal.Api/) | Optional integration | `dotnet add package gmarginet.Cat.ServiceRequests.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Minimal.Api)](#nuget-packages) |
 
 <!-- NuGet end -->
 
@@ -69,6 +71,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
 | [Cat.ServiceRequests.Decorators.ActivitySource](namespaces/Cat.ServiceRequests.Decorators.ActivitySource/index.md) | The activity tracing decorator for handlers. |
 | [Cat.ServiceRequests.Decorators.Logging](namespaces/Cat.ServiceRequests.Decorators.Logging/index.md) | The logging decorator for handlers. |
 | [Cat.ServiceRequests.Decorators.Validation](namespaces/Cat.ServiceRequests.Decorators.Validation/index.md) | The validation decorator for handlers. |
+| [Cat.ServiceRequests.Minimal.Api](namespaces/Cat.ServiceRequests.Minimal.Api/index.md) | The service request for a JSON Patch document. |
 
 <!-- Namespaces end-->
 
@@ -206,6 +209,45 @@ var response = _processor.Process(new TodoGetRequest(id));
 
 To expose a request as an HTTP endpoint, see [Cat.Minimal.Api](../Cat.Minimal.Api/README.md).
 
+### Handle a JSON Patch document
+
+The `Cat.ServiceRequests.Minimal.Api` package holds `PatchDocumentRequest<TRouteParameters, TModel>`. It is a request that carries a JSON Patch document and the route values that identify the resource. [Cat.Minimal.Api](../Cat.Minimal.Api/README.md#patch-with-a-json-patch-document) maps it with `MapCatPatchDocument`.
+
+The package targets `net10.0`, because the patch types come from `Microsoft.AspNetCore.JsonPatch.SystemTextJson`.
+
+Write a handler for the request like any other. Apply the patch to the model you loaded, then save it:
+
+```csharp
+using Cat.ServiceRequests.Minimal.Api;
+
+public record TodoRouteParameters(int TodoId);
+
+public class TodoPatchRequestHandler : ICatServiceRequestHandler<PatchDocumentRequest<TodoRouteParameters, TodoModel>>
+{
+    private readonly ITodoStore _todoStore;
+
+    public TodoPatchRequestHandler(ITodoStore todoStore)
+    {
+        _todoStore = todoStore;
+    }
+
+    public async Task<ICatResponse> HandleAsync(PatchDocumentRequest<TodoRouteParameters, TodoModel> serviceRequest, CancellationToken cancellationToken = default)
+    {
+        var todo = await _todoStore.GetAsync(serviceRequest.RouteParameters.TodoId, cancellationToken);
+
+        if (todo is null)
+        {
+            return CatResponse.NotFound(CatDemoErrorDefinitions.NotFound.CreateCatError("Todo", serviceRequest.RouteParameters.TodoId));
+        }
+
+        serviceRequest.PatchDocument.ApplyTo(todo);
+        await _todoStore.SaveAsync(todo, cancellationToken);
+
+        return CatResponse.NoContent();
+    }
+}
+```
+
 ### Add decorators
 
 Decorators run through the `Cat.Decorators` module. `AddCatServiceRequestsModule` already registers it, so you don't have to.
@@ -262,7 +304,7 @@ The processor never turns a failure into an exception for you. What you get back
 | Situation | What you get |
 |-----------|--------------|
 | The handler returns `Ok`, `Created` or `NoContent` | A succeeded response. |
-| The handler returns `BadRequest`, `NotFound`, `Unauthorized` or `InternalServerError` | A failed response with the errors the handler passed. It has no payload. |
+| The handler returns `BadRequest`, `NotFound`, `Unauthorized`, `Forbidden`, `Conflict` or `InternalServerError` | A failed response with the errors the handler passed. It has no payload. |
 | The validation decorator finds an invalid request | A `BadRequest` response with one error for each failed rule. The handler never runs. See the rule codes in [Cat.Validators](../Cat.Validators/README.md#rules). |
 | The validation decorator is on with `validationRequired: true` and the request has no validator | An `InvalidOperationException` from the service provider, because the validator for the request isn't registered. |
 | The validator processor returns a response that is neither succeeded nor failed | An `InternalServerError` with `CAT-GEN-1001` and the message `An unexpected response was returned. ({Service})`. This should not happen with the built-in processor. |

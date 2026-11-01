@@ -1,0 +1,6 @@
+../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Minimal.Api/
+P:Cat.ServiceRequests.Minimal.Api.PatchDocumentRequest`2.RouteParameters|PatchDocumentRequest_TRouteParameters,TModel_.RouteParameters.md|RouteParameters
+P:Cat.ServiceRequests.Minimal.Api.PatchDocumentRequest`2.PatchDocument|PatchDocumentRequest_TRouteParameters,TModel_.PatchDocument.md|PatchDocument
+M:Cat.ServiceRequests.Minimal.Api.PatchDocumentRequest`2.#ctor(`0,Microsoft.AspNetCore.JsonPatch.SystemTextJson.JsonPatchDocument{`1})|PatchDocumentRequest_TRouteParameters,TModel_..ctor.BCG3MW1JTERKXQ23T48BUU4W9.md|PatchDocumentRequest(TRouteParameters, JsonPatchDocument<TModel>)
+N:Cat.ServiceRequests.Minimal.Api|Cat.ServiceRequests.Minimal.Api.md|Cat.ServiceRequests.Minimal.Api
+T:Cat.ServiceRequests.Minimal.Api.PatchDocumentRequest`2|PatchDocumentRequest_TRouteParameters,TModel_.md|PatchDocumentRequest<TRouteParameters,TModel>

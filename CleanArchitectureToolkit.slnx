@@ -83,6 +83,7 @@
     <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests.Decorators.ActivitySource/Cat.ServiceRequests.Decorators.ActivitySource.csproj" />
     <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests.Decorators.Logging/Cat.ServiceRequests.Decorators.Logging.csproj" />
     <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests.Decorators.Validation/Cat.ServiceRequests.Decorators.Validation.csproj" />
+    <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests.Minimal.Api/Cat.ServiceRequests.Minimal.Api.csproj" />
     <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests/Cat.ServiceRequests.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.Validators/">
