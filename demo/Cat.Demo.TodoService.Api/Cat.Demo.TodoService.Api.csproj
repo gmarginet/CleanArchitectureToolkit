@@ -21,7 +21,7 @@
       <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.Validation\Cat.ServiceRequests.Decorators.Validation.csproj" />
       <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests\Cat.ServiceRequests.csproj" />
       <ProjectReference Include="..\Cat.Demo.ToDoService.Core\Cat.Demo.ToDoService.Core.csproj" />
-      <ProjectReference Include="..\Cat.Demo.TodoService.Events\Cat.Demo.TodoService.Events.csproj" />
+      <ProjectReference Include="..\Cat.Demo.TodoService.Contracts\Cat.Demo.TodoService.Contracts.csproj" />
       <ProjectReference Include="..\Cat.Demo.TodoService.Infrastructure\Cat.Demo.TodoService.Infrastructure.csproj" />
     </ItemGroup>
 

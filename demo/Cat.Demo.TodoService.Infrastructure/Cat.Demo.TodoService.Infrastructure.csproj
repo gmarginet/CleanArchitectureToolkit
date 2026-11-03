@@ -7,7 +7,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\modules\Cat.Commands\Cat.Commands.Abstractions\Cat.Commands.Abstractions.csproj" />
       <ProjectReference Include="..\Cat.Demo.ToDoService.Core\Cat.Demo.ToDoService.Core.csproj" />
-      <ProjectReference Include="..\Cat.Demo.TodoService.Models\Cat.Demo.TodoService.Models.csproj" />
+      <ProjectReference Include="..\Cat.Demo.TodoService.DataModels\Cat.Demo.TodoService.DataModels.csproj" />
     </ItemGroup>
 
     <ItemGroup>

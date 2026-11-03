@@ -16,9 +16,9 @@
   <Folder Name="/demo/Todo/Service/">
     <Project Path="demo/Cat.Demo.TodoService.Api/Cat.Demo.TodoService.Api.csproj" />
     <Project Path="demo/Cat.Demo.ToDoService.Core/Cat.Demo.ToDoService.Core.csproj" />
-    <Project Path="demo/Cat.Demo.TodoService.Events/Cat.Demo.TodoService.Events.csproj" />
+    <Project Path="demo/Cat.Demo.TodoService.Contracts/Cat.Demo.TodoService.Contracts.csproj" />
     <Project Path="demo/Cat.Demo.TodoService.Infrastructure/Cat.Demo.TodoService.Infrastructure.csproj" />
-    <Project Path="demo/Cat.Demo.TodoService.Models/Cat.Demo.TodoService.Models.csproj" />
+    <Project Path="demo/Cat.Demo.TodoService.DataModels/Cat.Demo.TodoService.DataModels.csproj" />
   </Folder>
   <Folder Name="/modules/" />
   <Folder Name="/modules/Cat.Commands/">

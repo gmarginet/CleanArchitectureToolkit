@@ -7,7 +7,6 @@
     <ItemGroup>
       <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Abstractions\Cat.ServiceRequests.Abstractions.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Validators\Cat.Validators.Abstractions\Cat.Validators.Abstractions.csproj" />
-      <ProjectReference Include="..\..\modules\Cat.Validators\Cat.Validators\Cat.Validators.csproj" />
     </ItemGroup>
 
 </Project>

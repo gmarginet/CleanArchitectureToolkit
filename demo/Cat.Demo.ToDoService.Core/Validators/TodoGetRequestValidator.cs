@@ -1,7 +1,8 @@
+using Cat.Demo.TodoService.Contracts.ServiceRequests;
 using Cat.Validators.Abstractions;
 using Cat.Validators.Extensions;
 
-namespace Cat.Demo.TodoService.Events.ServiceRequests;
+namespace Cat.Demo.ToDoService.Core.Validators;
 
 public class TodoGetRequestValidator : ICatValidator<TodoGetRequest>
 {

@@ -1,4 +1,4 @@
-namespace Cat.Demo.TodoService.Events.Models;
+namespace Cat.Demo.TodoService.Contracts.Models;
 
 public class TodoModel
 {

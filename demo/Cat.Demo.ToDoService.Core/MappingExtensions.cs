@@ -1,8 +1,8 @@
 using Cat.Demo.ToDoService.Core.Commands;
 using Cat.Demo.ToDoService.Core.Queries;
-using Cat.Demo.TodoService.Events.Models;
-using Cat.Demo.TodoService.Events.ServiceRequests;
-using Cat.Demo.TodoService.Models.Entities;
+using Cat.Demo.TodoService.Contracts.Models;
+using Cat.Demo.TodoService.Contracts.ServiceRequests;
+using Cat.Demo.TodoService.DataModels.Entities;
 using Riok.Mapperly.Abstractions;
 
 namespace Cat.Demo.ToDoService.Core;

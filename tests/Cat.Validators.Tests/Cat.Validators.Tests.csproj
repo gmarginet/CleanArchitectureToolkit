@@ -24,7 +24,6 @@
     <ItemGroup>
       <ProjectReference Include="..\..\modules\Cat.Expressions\Cat.Expressions\Cat.Expressions.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Validators\Cat.Validators\Cat.Validators.csproj" />
-      <ProjectReference Include="..\Cat.EventAggregators.Tests\Cat.EventAggregators.Tests.csproj" />
       <ProjectReference Include="..\Cat.NUnit\Cat.NUnit.csproj" />
     </ItemGroup>
 

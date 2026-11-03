@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Cat.Demo.TodoService.Events.Models;
-using Cat.Demo.TodoService.Events.ServiceRequests;
+using Cat.Demo.TodoService.Contracts.Models;
+using Cat.Demo.TodoService.Contracts.ServiceRequests;
 using Cat.Minimal.Api;
 using Cat.Responses.Abstractions;
 using Microsoft.AspNetCore.Builder;

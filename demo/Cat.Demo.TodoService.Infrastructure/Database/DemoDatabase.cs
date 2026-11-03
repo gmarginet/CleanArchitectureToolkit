@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Cat.Demo.TodoService.Models.Entities;
+using Cat.Demo.TodoService.DataModels.Entities;
 
 namespace Cat.Demo.TodoService.Infrastructure.Database;
 

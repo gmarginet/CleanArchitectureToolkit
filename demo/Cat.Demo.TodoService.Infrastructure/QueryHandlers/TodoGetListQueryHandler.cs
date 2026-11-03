@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cat.Demo.ToDoService.Core.Queries;
 using Cat.Demo.TodoService.Infrastructure.Database;
-using Cat.Demo.TodoService.Models.Entities;
+using Cat.Demo.TodoService.DataModels.Entities;
 using Cat.Queries.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;

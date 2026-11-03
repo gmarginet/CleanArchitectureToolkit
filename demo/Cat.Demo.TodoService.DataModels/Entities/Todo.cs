@@ -1,4 +1,4 @@
-namespace Cat.Demo.TodoService.Models.Entities;
+namespace Cat.Demo.TodoService.DataModels.Entities;
 
 public class Todo
 {

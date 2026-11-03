@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Cat.Demo.TodoService.Models.Entities;
+using Cat.Demo.TodoService.DataModels.Entities;
 using Cat.Queries.Abstractions;
 
 namespace Cat.Demo.ToDoService.Core.Queries;

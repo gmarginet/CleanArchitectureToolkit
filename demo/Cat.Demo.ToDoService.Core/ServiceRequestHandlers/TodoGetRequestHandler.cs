@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Cat.Demo.TodoService.Events.Models;
-using Cat.Demo.TodoService.Events.ServiceRequests;
+using Cat.Demo.TodoService.Contracts.Models;
+using Cat.Demo.TodoService.Contracts.ServiceRequests;
 using Cat.Queries.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;

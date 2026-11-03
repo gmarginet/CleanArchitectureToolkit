@@ -43,8 +43,8 @@
   - [Background workers](#background-workers)
   - [ServiceName.CoreService](#servicenamecoreservice)
   - [ServiceName.Infrastructure](#servicenameinfrastructure)
-  - [ServiceName.Events](#servicenameevents)
-  - [ServiceName.Models](#servicenamemodels)
+  - [ServiceName.Contracts](#servicenamecontracts)
+  - [ServiceName.DataModels](#servicenamedatamodels)
   - [ServiceName.Infrastructure.DataAccessTooling](#servicenameinfrastructuredataaccesstooling)
   - [ServiceName.CoreService.Tests](#servicenamecoreservicetests)
   - [Reference rules](#reference-rules)
@@ -233,8 +233,8 @@ The diagram uses `ServiceName` as a placeholder for the name of your service.
 | `ServiceName.EventProcessor`                  | Background worker that handles incoming messages     | Optional |
 | `ServiceName.CoreService`                     | Business logic                                       | Yes      |
 | `ServiceName.Infrastructure`                  | Database and external integrations                   | Yes      |
-| `ServiceName.Events`                          | Service requests, validators and contract models     | Yes      |
-| `ServiceName.Models`                          | Entities and query result models                     | Yes      |
+| `ServiceName.Contracts`                       | Service requests, contract models and enums          | Yes      |
+| `ServiceName.DataModels`                      | Entities and query result models                     | Yes      |
 | `ServiceName.Infrastructure.DataAccessTooling`| Generates the entities from an existing database     | Optional |
 | `ServiceName.CoreService.Tests`               | Unit tests of the business logic                     | Optional |
 
@@ -252,7 +252,7 @@ It sets up the application, registers the modules in the DI container and passes
 - Runs the background workers, when the service has them.  
 - Registers the `Infrastructure` project in the DI container at startup. That is the only reason it references it.  
 
-The API references the `CoreService`, `Events` and `Infrastructure` projects, and the worker projects it runs.  
+The API references the `CoreService`, `Contracts` and `Infrastructure` projects, and the worker projects it runs.  
 
 **Development endpoints**  
 In debug mode the API has an extra development endpoint group.  
@@ -290,14 +290,15 @@ The core is the heart of the service. It holds the business logic.
 
 - Contains the service request handlers.  
 - Contains the definitions of the queries and commands the handlers use.  
+- Contains the validators of the service requests, built with the [Cat.Validators](./modules/Cat.Validators/README.md) module. They are server side, so clients that reference the contracts do not need the validation code.  
 - Maps the entities and query result models to the contract models. We suggest the [Mapperly](https://mapperly.riok.app/) NuGet package for this. It is a good mapper, so CAT has no module for mapping.  
-- Knows nothing about the database or any other technology. It only references the abstractions of the [Cat.Queries](./modules/Cat.Queries/README.md) and [Cat.Commands](./modules/Cat.Commands/README.md) modules.  
+- Knows nothing about the database or any other technology. It only references the abstractions of the [Cat.Queries](./modules/Cat.Queries/README.md) and [Cat.Commands](./modules/Cat.Commands/README.md) modules, and the [Cat.Validators](./modules/Cat.Validators/README.md) module for the validators.  
 - Is the only project the unit tests need to reference.  
 
 A handler never talks to the database itself.  
 It sends a query or a command to its processor, and the infrastructure does the rest.  
 
-The core references the `Events` and `Models` projects.  
+The core references the `Contracts` and `DataModels` projects.  
 
 ### ServiceName.Infrastructure
 
@@ -311,25 +312,26 @@ The infrastructure is everything the core should not know about.
 External integrations, like an email provider or a storage account, live here too.  
 Treat them like a database. The core never calls them directly. It sends a query or a command and a handler talks to the integration.  
 
-The infrastructure references the `CoreService` and `Models` projects.  
+The infrastructure references the `CoreService` and `DataModels` projects.  
 That way the dependency points inwards. The core defines the queries and commands, the infrastructure implements the handlers.  
 
-### ServiceName.Events
+### ServiceName.Contracts
 
-The events project holds the contract of the service, the way the outside world talks to it.  
+The contracts project holds the contract of the service, the way the outside world talks to it.  
 
-- Contains the service requests.  
-- Contains the validators of those service requests.  
-- Contains the contract models that the requests and responses use.  
+- **ServiceRequests:** The requests that callers send to the service, and the responses they get back.  
+- **Models:** The contract models that the requests and responses use. They are the public shape of your data, not the entities from the `DataModels` project.  
+- **Enums:** Enumerations that the requests and the contract models use. Callers need them, so they live in the contract.  
 
 It has almost no dependencies, so other services and clients can reference it without pulling in the rest of the service.  
 
-### ServiceName.Models
+### ServiceName.DataModels
 
-The models project holds the data classes that come out of the database.  
+The data models project holds the data classes that come out of the database.  
 
 - **Entities:** Classes that map to a table or another store. The infrastructure reads and writes them.  
-- **Models:** Classes that represent the result of a query when that result does not match an entity.  
+- **Results:** Classes that hold the result of a query when that result does not match an entity, for example an overview that combines fields from several entities.  
+- **Enums:** Enumerations used by the entities and the results. Keeping them here means the entities and the results share one definition.  
 
 Both the `CoreService` and the `Infrastructure` project use them.  
 They are internal to the service. Never hand them out through the API. Map them to a contract model first. We suggest the [Mapperly](https://mapperly.riok.app/) NuGet package for this.  
@@ -339,12 +341,12 @@ They are internal to the service. Never hand them out through the API. Map them 
 This project is only needed when the service uses a database first approach.  
 It generates the entities and the database context from an existing database, for example with the Entity Framework Core scaffold command.  
 
-- The generated entities go to the `Models` project.  
+- The generated entities go to the `DataModels` project.  
 - The generated database context goes to the `Infrastructure` project.  
 - It references the `Infrastructure` project.  
 
 Does the service use a code first approach? Then skip this project.  
-The entities are written by hand in the `Models` project, and the migrations live in the `Infrastructure` project.  
+The entities are written by hand in the `DataModels` project, and the migrations live in the `Infrastructure` project.  
 
 ### ServiceName.CoreService.Tests
 
@@ -359,7 +361,7 @@ This project holds the unit tests of the business logic.
 - Dependencies point inwards. The API, the workers and the infrastructure depend on the core. The core depends on neither of them.  
 - The core only references the abstractions of the CAT modules.  
 - The API is the only place where everything is wired together.  
-- The `Events` project stays small and free of service internals.  
+- The `Contracts` project stays small and free of service internals.  
 
 ## Future modules
 

@@ -1,5 +1,5 @@
 using Cat.Commands.Abstractions;
-using Cat.Demo.TodoService.Models.Entities;
+using Cat.Demo.TodoService.DataModels.Entities;
 
 namespace Cat.Demo.ToDoService.Core.Commands;
 
