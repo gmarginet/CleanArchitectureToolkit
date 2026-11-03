@@ -91,7 +91,7 @@ Some modules depend on other modules, in the documentation of each module you ca
 |--------|--------|-------------|
 | [Cat.Commands](./modules/Cat.Commands/README.md) | | Change state through one entry point. Describe a change as a command, write one handler for it, and let the processor find the handler. |
 | [Cat.Decorators](./modules/Cat.Decorators/README.md) | | Wrap handlers in decorators for cross-cutting work like logging, validation or tracing. |
-| [Cat.EFCore](./modules/Cat.EFCore/README.md) | [![In development](https://img.shields.io/badge/status-in%20development-orange)](#module-overview) | Configure Entity Framework Core entities the same way every time, with base classes for regular, temporal and reference data. |
+| [Cat.EFCore](./modules/Cat.EFCore/README.md) | | Configure Entity Framework Core entities the same way every time, with base classes for regular, temporal and reference data. |
 | [Cat.EventAggregators](./modules/Cat.EventAggregators/README.md) | | Let parts of your app talk to each other through in-process events, without direct dependencies. |
 | [Cat.Expressions](./modules/Cat.Expressions/README.md) | | Compile member access expressions once and reuse them, so repeated calls stay fast. |
 | [Cat.Extensions](./modules/Cat.Extensions/README.md) | | Small extension method libraries for enumerables, expressions, objects, service collections and strings. |
