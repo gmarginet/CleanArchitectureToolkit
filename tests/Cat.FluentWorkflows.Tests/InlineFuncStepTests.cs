@@ -26,11 +26,11 @@ public class InlineFuncStepTests
         };
 
     [Test]
-    public void RunAsync_WithoutABody_Throws()
+    public async Task RunAsync_WithoutABody_Throws()
     {
         var step = CreateStep(null);
 
-        var exception = Assert.ThrowsAsync<ArgumentNullException>(() => step.RunAsync());
+        var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => step.RunAsync());
 
         Assert.That(exception!.ParamName, Is.EqualTo("Body"));
     }

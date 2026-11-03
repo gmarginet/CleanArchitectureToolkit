@@ -49,7 +49,7 @@ public class EventAggregatorTests : UnitTestBase
     }
     
     [Test]
-    public void EventAggregator_WithoutSubscribers_PublishingAnEventShouldNotThrowException()
+    public async Task EventAggregator_WithoutSubscribers_PublishingAnEventShouldNotThrowException()
     {
         // arrange
 
@@ -60,7 +60,7 @@ public class EventAggregatorTests : UnitTestBase
         };
 
         // assert
-        Assert.DoesNotThrowAsync(() => act());
+        await Assert.DoesNotThrowAsync(() => act());
     }
 
     [Test]
@@ -116,7 +116,7 @@ public class EventAggregatorTests : UnitTestBase
     }
 
     [Test]
-    public void EventAggregator_PublishingAVehicleEventShouldOnlyIncreaseTheVehicleCounter()
+    public async Task EventAggregator_PublishingAVehicleEventShouldOnlyIncreaseTheVehicleCounter()
     {
         // arrange
         var vehicleProcessedCounter = ServiceProvider.GetRequiredService<IVehicleProcessedCounter>();
@@ -139,7 +139,7 @@ public class EventAggregatorTests : UnitTestBase
         };
 
         // assert
-        Assert.DoesNotThrowAsync(() => act());
+        await Assert.DoesNotThrowAsync(() => act());
         Assert.That(vehicleCount, Is.EqualTo(1));
         Assert.That(carCount, Is.EqualTo(0));
         
@@ -149,7 +149,7 @@ public class EventAggregatorTests : UnitTestBase
     }
 
     [Test]
-    public void EventAggregator_PublishingACarEventShouldIncreaseTheCarCounterAndVehicleCounter()
+    public async Task EventAggregator_PublishingACarEventShouldIncreaseTheCarCounterAndVehicleCounter()
     {
         // arrange
         var vehicleProcessedCounter = ServiceProvider.GetRequiredService<IVehicleProcessedCounter>();
@@ -172,7 +172,7 @@ public class EventAggregatorTests : UnitTestBase
         };
 
         // assert
-        Assert.DoesNotThrowAsync(() => act());
+        await Assert.DoesNotThrowAsync(() => act());
         Assert.That(vehicleCount, Is.EqualTo(1));
         Assert.That(carCount, Is.EqualTo(1));
         

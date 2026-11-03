@@ -164,9 +164,9 @@ public class ValidationRequiredDecoratorTests : UnitTestBase
     }
 
     [Test]
-    public void RequestWithPayloadWithoutAValidator_Throws()
+    public async Task RequestWithPayloadWithoutAValidator_Throws()
     {
-        Assert.ThrowsAsync<InvalidOperationException>(async () => await Processor.ProcessAsync(new NoValidatorTypedRequest()));
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await Processor.ProcessAsync(new NoValidatorTypedRequest()));
     }
 
     [Test]

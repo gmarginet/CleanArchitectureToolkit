@@ -99,9 +99,9 @@ public class ActivitySourceDecoratorTests : UnitTestBase
     }
 
     [Test]
-    public void TheHandlerThrows_TheActivityIsStillStopped()
+    public async Task TheHandlerThrows_TheActivityIsStillStopped()
     {
-        Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await Processor.ProcessAsync(new CreateOrderRequest("throw")));
 
         Assert.That(_stopped, Has.Count.EqualTo(1));

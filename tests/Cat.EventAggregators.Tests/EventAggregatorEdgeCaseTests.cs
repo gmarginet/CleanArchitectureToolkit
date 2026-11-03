@@ -42,9 +42,9 @@ public class EventAggregatorEdgeCaseTests
     }
 
     [Test]
-    public void PublishAsync_Null_Throws()
+    public async Task PublishAsync_Null_Throws()
     {
-        Assert.ThrowsAsync<ArgumentNullException>(async () => await Aggregator.PublishAsync(null!));
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await Aggregator.PublishAsync(null!));
     }
 
     #endregion Arguments
@@ -85,8 +85,7 @@ public class EventAggregatorEdgeCaseTests
         Aggregator.Subscribe(subscriber);
 
         Assert.That(Aggregator.HasSubscribersForEvent(typeof(OrderPlacedEvent)), Is.False);
-        Assert.DoesNotThrowAsync(async () => await Aggregator.PublishAsync(new OrderPlacedEvent("1")));
-        await Task.CompletedTask;
+        await Assert.DoesNotThrowAsync(async () => await Aggregator.PublishAsync(new OrderPlacedEvent("1")));
     }
 
     [Test]
@@ -204,11 +203,10 @@ public class EventAggregatorEdgeCaseTests
     {
         Aggregator.Subscribe(new ThrowingSubscriber());
 
-        var exception = Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        var exception =await  Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await Aggregator.PublishAsync(new OrderPlacedEvent("1")));
 
         Assert.That(exception!.Message, Is.EqualTo("handler failed"));
-        await Task.CompletedTask;
     }
 
     [Test]
@@ -218,10 +216,9 @@ public class EventAggregatorEdgeCaseTests
         Aggregator.Subscribe(new ThrowingSubscriber());
         Aggregator.Subscribe(counting);
 
-        Assert.ThrowsAsync<InvalidOperationException>(async () => await Aggregator.PublishAsync(new OrderPlacedEvent("1")));
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await Aggregator.PublishAsync(new OrderPlacedEvent("1")));
 
         Assert.That(counting.Count, Is.EqualTo(1));
-        await Task.CompletedTask;
     }
 
     [Test]
@@ -275,8 +272,7 @@ public class EventAggregatorEdgeCaseTests
 
         if (reference.IsAlive) Assert.Inconclusive("The garbage collector did not collect the subscriber.");
 
-        Assert.DoesNotThrowAsync(async () => await Aggregator.PublishAsync(new OrderPlacedEvent("1")));
-        await Task.CompletedTask;
+        await Assert.DoesNotThrowAsync(async () => await Aggregator.PublishAsync(new OrderPlacedEvent("1")));
     }
 
     #endregion Subscribers that are gone

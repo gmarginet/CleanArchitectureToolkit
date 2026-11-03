@@ -124,24 +124,24 @@ public class WorkflowGapTests : UnitTestBase
     }
 
     [Test]
-    public void Switch_DuplicateCase_Throws()
+    public async Task Switch_DuplicateCase_Throws()
     {
-        var exception = Assert.CatchAsync<Exception>(async () =>
+        var exception = await Assert.CatchAsync<Exception>(async () =>
             await RunAsync<SwitchDuplicateCaseFlow, SwitchDuplicateCaseFlowState>(new SwitchDuplicateCaseFlowState()));
         Assert.That(exception!.ToString(), Does.Contain("already defined"));
     }
 
     [Test]
-    public void UnregisteredWorkflow_Throws()
+    public async Task UnregisteredWorkflow_Throws()
     {
-        Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await RunAsync<UnregisteredFlow, UnregisteredFlowState>(new UnregisteredFlowState()));
     }
 
     [Test]
-    public void UnregisteredStep_Throws()
+    public async Task UnregisteredStep_Throws()
     {
-        Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await RunAsync<UnregisteredStepFlow, UnregisteredStepFlowState>(new UnregisteredStepFlowState()));
     }
 }

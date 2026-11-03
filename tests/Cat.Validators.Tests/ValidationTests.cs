@@ -3601,12 +3601,12 @@ public partial class ValidationTests : UnitTestBase
     #region Processor Contract
 
     [Test]
-    public void ValidateAsync_ValidatorRequiredDefault_NoValidatorRegistered_ShouldThrow()
+    public async Task ValidateAsync_ValidatorRequiredDefault_NoValidatorRegistered_ShouldThrow()
     {
         // arrange
         var model = new TestModelFor_NoValidatorRegistered("John Doe");
         // act & assert
-        Assert.ThrowsAsync<InvalidOperationException>(async () => await _validatorProcessor.ValidateAsync(model));
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await _validatorProcessor.ValidateAsync(model));
     }
 
     [Test]
@@ -3663,48 +3663,48 @@ public partial class ValidationTests : UnitTestBase
     #region Argument Guards
 
     [Test]
-    public void InclusiveBetweenValidator_InvalidBounds_ShouldThrow()
+    public async Task InclusiveBetweenValidator_InvalidBounds_ShouldThrow()
     {
         // arrange
         var model = new TestModelFor_PropertyInclusiveBetweenInvalidValidator(5);
         // act & assert
-        Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await _validatorProcessor.ValidateAsync(model));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await _validatorProcessor.ValidateAsync(model));
     }
 
     [Test]
-    public void ExclusiveBetweenValidator_InvalidBounds_ShouldThrow()
+    public async Task ExclusiveBetweenValidator_InvalidBounds_ShouldThrow()
     {
         // arrange
         var model = new TestModelFor_PropertyExclusiveBetweenInvalidValidator(5);
         // act & assert
-        Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await _validatorProcessor.ValidateAsync(model));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await _validatorProcessor.ValidateAsync(model));
     }
 
     [Test]
-    public void LengthValidator_InvalidBounds_ShouldThrow()
+    public async Task LengthValidator_InvalidBounds_ShouldThrow()
     {
         // arrange
         var model = new TestModelFor_PropertyStringLengthInvalidValidator("John Doe");
         // act & assert
-        Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await _validatorProcessor.ValidateAsync(model));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await _validatorProcessor.ValidateAsync(model));
     }
 
     [Test]
-    public void InclusiveBetweenWithComparerValidator_NullLowerBound_ShouldThrow()
+    public async Task InclusiveBetweenWithComparerValidator_NullLowerBound_ShouldThrow()
     {
         // arrange
         var model = new TestModelFor_PropertyInclusiveBetweenWithComparerNullBoundValidator("m");
         // act & assert
-        Assert.ThrowsAsync<ArgumentNullException>(async () => await _validatorProcessor.ValidateAsync(model));
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _validatorProcessor.ValidateAsync(model));
     }
 
     [Test]
-    public void MatchesRegexValidator_InvalidPattern_ShouldThrow()
+    public async Task MatchesRegexValidator_InvalidPattern_ShouldThrow()
     {
         // arrange
         var model = new TestModelFor_PropertyStringRegexPatternInvalidValidator("John");
         // act & assert
-        Assert.ThrowsAsync<ArgumentException>(async () => await _validatorProcessor.ValidateAsync(model));
+        await Assert.ThrowsAsync<ArgumentException>(async () => await _validatorProcessor.ValidateAsync(model));
     }
 
     #endregion Argument Guards
@@ -3740,13 +3740,13 @@ public partial class ValidationTests : UnitTestBase
     }
 
     [Test]
-    public void PropertyValidateValidator_NoRegisteredNestedValidator_ValidatorRequired_ShouldThrow()
+    public async Task PropertyValidateValidator_NoRegisteredNestedValidator_ValidatorRequired_ShouldThrow()
     {
         // arrange
         var subModel = new TestSubModelFor_PropertyValidateValidator_NoValidator("Street");
         var model = new TestModelFor_PropertyValidateValidator_NoNestedValidator("John Doe", subModel);
         // act & assert
-        Assert.ThrowsAsync<InvalidOperationException>(async () => await _validatorProcessor.ValidateAsync(model));
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await _validatorProcessor.ValidateAsync(model));
     }
 
     [Test]

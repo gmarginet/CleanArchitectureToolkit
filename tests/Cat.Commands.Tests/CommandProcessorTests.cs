@@ -63,18 +63,18 @@ public class CommandProcessorTests : UnitTestBase
     }
 
     [Test]
-    public void ProcessAsync_TheHandlerThrows_TheExceptionReachesTheCaller()
+    public async Task ProcessAsync_TheHandlerThrows_TheExceptionReachesTheCaller()
     {
-        var exception = Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await Processor.ProcessAsync(new RegisterUserCommand("throw")));
 
         Assert.That(exception!.Message, Is.EqualTo("boom"));
     }
 
     [Test]
-    public void ProcessAsync_NoHandlerIsRegistered_Throws()
+    public async Task ProcessAsync_NoHandlerIsRegistered_Throws()
     {
-        Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await Processor.ProcessAsync(new UnhandledCommand()));
     }
 

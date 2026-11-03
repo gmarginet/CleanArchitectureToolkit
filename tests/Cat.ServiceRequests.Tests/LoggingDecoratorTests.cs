@@ -95,9 +95,9 @@ public class LoggingDecoratorTests : UnitTestBase
     }
 
     [Test]
-    public void TheHandlerThrows_TheExceptionIsNotSwallowed()
+    public async Task TheHandlerThrows_TheExceptionIsNotSwallowed()
     {
-        Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await Processor.ProcessAsync(new CreateOrderRequest("throw")));
     }
 }
