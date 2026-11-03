@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -8,7 +9,7 @@ namespace Cat.Demo.TodoService.Infrastructure.Database;
 
 public class DemoDatabase : IDemoDatabase
 {
-    private readonly IDictionary<int, Todo> _todoTable = new Dictionary<int, Todo>();
+    private readonly IDictionary<Guid, Todo> _todoTable = new Dictionary<Guid, Todo>();
     private readonly SemaphoreSlim _todoSemaphoreSlim = new(1, 1);
 
     public DemoDatabase()
@@ -17,10 +18,10 @@ public class DemoDatabase : IDemoDatabase
 
         try
         {
-            _todoTable.Add(TodoHelper.Todo1.Id!.Value, TodoHelper.Todo1);
-            _todoTable.Add(TodoHelper.Todo2.Id!.Value, TodoHelper.Todo2);
-            _todoTable.Add(TodoHelper.Todo3.Id!.Value, TodoHelper.Todo3);
-            _todoTable.Add(TodoHelper.Todo4.Id!.Value, TodoHelper.Todo4);
+            _todoTable.Add(TodoHelper.Todo1.Id, TodoHelper.Todo1);
+            _todoTable.Add(TodoHelper.Todo2.Id, TodoHelper.Todo2);
+            _todoTable.Add(TodoHelper.Todo3.Id, TodoHelper.Todo3);
+            _todoTable.Add(TodoHelper.Todo4.Id, TodoHelper.Todo4);
         }
         finally
         {
@@ -29,7 +30,7 @@ public class DemoDatabase : IDemoDatabase
         }
     }
 
-    public Task<IList<Todo>> GetTodoListAsync(int? todoCategoryId, CancellationToken cancellationToken = default)
+    public Task<IList<Todo>> GetTodoListAsync(Guid? todoCategoryId, CancellationToken ct = default)
     {
         var query = _todoTable.Values.AsQueryable();
 
@@ -42,34 +43,30 @@ public class DemoDatabase : IDemoDatabase
         return Task.FromResult<IList<Todo>>(result);
     }
 
-    public Task<Todo?> GetTodoAsync(int id, CancellationToken cancellationToken = default)
+    public Task<Todo?> GetTodoAsync(Guid id, CancellationToken ct = default)
     {
         _todoTable.TryGetValue(id, out var todo); 
         return Task.FromResult(todo);
     }
 
-    public Task<int> SaveAsync(Todo todo, CancellationToken cancellationToken = default)
+    public Task<Guid> SaveAsync(Todo todo, CancellationToken ct = default)
     {
-        _todoSemaphoreSlim.Wait(cancellationToken);
+        _todoSemaphoreSlim.Wait(ct);
 
         try
         {
-            if (todo.Id is not null && _todoTable.TryGetValue(todo.Id.Value, out var existingTodo))
+            if (_todoTable.TryGetValue(todo.Id, out var existingTodo))
             {
                 existingTodo.CategoryId = todo.CategoryId;
                 existingTodo.Title = todo.Title;
                 existingTodo.Description = todo.Description;
                 
-                return Task.FromResult(todo.Id.Value);
+                return Task.FromResult(todo.Id);
             }
 
-            var maxId = _todoTable.Keys.Max();
-            var newId = maxId + 1;
+            _todoTable.Add(todo.Id, todo);
             
-            todo.Id = newId;
-            _todoTable.Add(newId, todo);
-            
-            return Task.FromResult(newId);
+            return Task.FromResult(todo.Id);
         }
         finally
         {

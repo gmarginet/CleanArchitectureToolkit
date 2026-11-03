@@ -1,9 +1,11 @@
+using System;
+
 namespace Cat.Demo.TodoService.Contracts.Models;
 
 public class TodoModel
 {
-    public int? Id { get; set; }
-    public int? CategoryId { get; set; }
-    public string? Title { get; set; }
+    public Guid Id { get; set; }
+    public Guid CategoryId { get; set; }
+    public required string Title { get; set; }
     public string? Description { get; set; }
 }

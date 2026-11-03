@@ -23,16 +23,14 @@ public class TodoGetQueryHandler : ICatQueryHandler<TodoGetQuery, Todo>
     
     public async Task<ICatResponse<Todo>> HandleAsync(TodoGetQuery query, CancellationToken cancellationToken = default)
     {
-        query.TodoId.ThrowIfNull(nameof(query.TodoId));
-        
-        var result = await _demoDatabase.GetTodoAsync(query.TodoId!.Value, cancellationToken);
+        var result = await _demoDatabase.GetTodoAsync(query.TodoId, cancellationToken);
         return result is null
             ? CatResponse.NotFound<Todo>(
                 CatError.Create(
                     code: CatDemoErrorDefinitions.NotFound.Code,
                     message: CatDemoErrorDefinitions.NotFound.Message,
                     "Todo",
-                    query.TodoId!.Value
+                    query.TodoId
                     )
               )
             : CatResponse.Ok(result);

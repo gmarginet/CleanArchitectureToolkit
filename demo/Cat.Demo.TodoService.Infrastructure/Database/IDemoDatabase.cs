@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace Cat.Demo.TodoService.Infrastructure.Database;
 
 public interface IDemoDatabase
 {
-    Task<IList<Todo>> GetTodoListAsync(int? todoCategoryId, CancellationToken cancellationToken = default);
-    Task<Todo?> GetTodoAsync(int id, CancellationToken cancellationToken = default);
-    Task<int> SaveAsync(Todo todo, CancellationToken cancellationToken = default);
+    Task<IList<Todo>> GetTodoListAsync(Guid? todoCategoryId, CancellationToken cancellationToken = default);
+    Task<Todo?> GetTodoAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Guid> SaveAsync(Todo todo, CancellationToken cancellationToken = default);
 }

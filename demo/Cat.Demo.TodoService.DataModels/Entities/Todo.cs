@@ -1,9 +1,11 @@
+using System;
+using Cat.EFCore.Entities;
+
 namespace Cat.Demo.TodoService.DataModels.Entities;
 
-public class Todo
+public class Todo : CatTemporalEntityBase
 {
-    public int? Id { get; set; }
-    public int? CategoryId { get; set; }
-    public string? Title { get; set; }
+    public Guid CategoryId { get; set; }
+    public required string Title { get; set; }
     public string? Description { get; set; }
 }
