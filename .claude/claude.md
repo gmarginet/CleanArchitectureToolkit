@@ -15,6 +15,15 @@ All workflows utilize Cake. Execute via the root `./build.sh` or `.\build.ps1`:
 - Never create a branch on your own. The owner creates feature branches before starting work when they want one.
 - Do not push unless asked.
 
+## Tools & Capabilities
+- **Roslyn MCP Connected:** Use `cwm-roslyn=navigator` tools for deep codebase indexing, finding references, tracking hierarchies, and listing symbols.
+- Avoid reading entire large source files directly via standard shell tools; query the Roslyn MCP server instead to optimize token usage.
+
+## Environment Constraints
+- Do NOT use Python scripts or bash utilities for file manipulation or automation.
+- Use native PowerShell commands or the .NET CLI for all tasks.
+- If you need to search or parse files, prefer native `dotnet` tools, PowerShell, or Roslyn MCP capabilities over third-party scripts.
+
 ## 📁 Repository Structure
 - `demo/`: Showcases module usage examples.
 - `resources/`: Assets (logos, icons, schemas, styles).

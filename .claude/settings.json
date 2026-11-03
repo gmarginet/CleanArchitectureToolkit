@@ -3,6 +3,9 @@
     "allow": [
       "Bash(dotnet cake:*)",
       "PowerShell(dotnet cake:*)"
+    ],
+    "deny": [
+      "Read(./.gma/**)"
     ]
   }
 }
