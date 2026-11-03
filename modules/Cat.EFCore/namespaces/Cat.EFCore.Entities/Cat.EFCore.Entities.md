@@ -1,0 +1,38 @@
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>
+<table>
+    <tr>
+        <td colspan='6' style='text-align: center; font-weight: bold; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+             Clean Architecture Toolkit for .NET
+        </td>
+    </tr>
+    <tr>
+        <td colspan='5' style='padding: 0; vertical-align: middle; border: none;'>
+            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>
+            It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>
+        <td style='padding: 0; border: none;' width='220'>
+            <img src='../../../../resources/logo/CatLogo.svg' alt='' width='200' style='padding: 15px; float: right; background: #121314; border-radius: 10px'/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../../../../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](../../../../README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[CAT.EFCORE](../../README.md)&nbsp;&nbsp;&nbsp;&#124;
+
+</td>
+</tr>
+</table>
+
+# Code Reference  
+  
+##### >> [Cat\.EFCore\.Entities Assembly](index.md 'index')
+
+## Cat\.EFCore\.Entities Namespace
+
+Provides the base classes for Entity Framework Core entities:
+regular entities, temporal entities and reference data\.
+
+| Classes | |
+| :--- | :--- |
+| [CatEntityBase](CatEntityBase.md 'Cat\.EFCore\.Entities\.CatEntityBase') | Base class for entities that live in a regular table\. It gives every entity a unique id and a database generated sequence number\. |
+| [CatReferenceEntityBase](CatReferenceEntityBase.md 'Cat\.EFCore\.Entities\.CatReferenceEntityBase') | Base class for read\-only reference data\. The table is excluded from migrations, so something else owns its schema\. |
+| [CatTemporalEntityBase](CatTemporalEntityBase.md 'Cat\.EFCore\.Entities\.CatTemporalEntityBase') | Base class for entities that live in a temporal table\. The database keeps the history of every change in a separate history table\. |

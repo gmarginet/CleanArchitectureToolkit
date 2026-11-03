@@ -1,0 +1,8 @@
+../../../Cat.EFCore/namespaces/Cat.EFCore.Entities/
+P:Cat.EFCore.Entities.CatEntityBase.Id|CatEntityBase.Id.md|Id
+P:Cat.EFCore.Entities.CatEntityBase.SequenceId|CatEntityBase.SequenceId.md|SequenceId
+N:Cat.EFCore.Entities|Cat.EFCore.Entities.md|Cat.EFCore.Entities
+T:Cat.EFCore.Entities.CatEntityBase|CatEntityBase.md|CatEntityBase
+P:Cat.EFCore.Entities.CatReferenceEntityBase.Id|CatReferenceEntityBase.Id.md|Id
+T:Cat.EFCore.Entities.CatReferenceEntityBase|CatReferenceEntityBase.md|CatReferenceEntityBase
+T:Cat.EFCore.Entities.CatTemporalEntityBase|CatTemporalEntityBase.md|CatTemporalEntityBase

@@ -32,6 +32,10 @@
     <Project Path="modules/Cat.Decorators/Cat.Decorators.Abstractions/Cat.Decorators.Abstractions.csproj" />
     <Project Path="modules/Cat.Decorators/Cat.Decorators/Cat.Decorators.csproj" />
   </Folder>
+  <Folder Name="/modules/Cat.EFCore/">
+    <Project Path="modules/Cat.EFCore/Cat.EFCore.Entities/Cat.EFCore.Entities.csproj" />
+    <Project Path="modules/Cat.EFCore/Cat.EFCore.Extensions/Cat.EFCore.Extensions.csproj" />
+  </Folder>
   <Folder Name="/modules/Cat.EventAggregators/">
     <File Path="modules/Cat.EventAggregators/README.md" />
     <Project Path="modules/Cat.EventAggregators/Cat.EventAggregators.Abstractions/Cat.EventAggregators.Abstractions.csproj" />
