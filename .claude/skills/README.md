@@ -50,7 +50,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **When:** When a demo project is added, moved or renamed.
 
 ### cat-verify
-- **What it does:** Runs the Cake build and tests, then checks the diff of the regenerated `namespaces/` pages. It reports passed and failed items and unexpected changes. It never edits generated files and never commits.
+- **What it does:** Runs the Cake `Debug` build, which regenerates the namespaces pages, and the tests, then checks the diff of the regenerated `namespaces/` pages. It reports passed and failed items and unexpected changes. It never edits generated files and never commits.
 - **How to use it:** Run it without arguments at the end of a task.
 - **When:** After changing code, XML docs, the documentation generator or a readme.
 

@@ -45,7 +45,8 @@ Task("Test")
          NoBuild = true
      };
 
-     var projectFiles = GetFiles("./tests/**/*.Tests.csproj");
+     var projectFiles = GetFiles("./tests/**/*.Tests.csproj")
+         .Concat(GetFiles("./demo/**/*.Tests.csproj"));
      foreach (var file in projectFiles)
      {
         context.Information("Testing {0}", file.FullPath);

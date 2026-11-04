@@ -9,6 +9,9 @@ All workflows utilize Cake. Execute via the root `./build.sh` or `.\build.ps1`:
 - **Test:** `dotnet cake --target=Test`
 - **Pack:** `dotnet cake --target=Pack`
 - **Publish:** `dotnet cake --target=Publish`
+- **Namespace docs:** `dotnet cake --target=Build --configuration=Debug`. The default configuration is `Release`, and the namespace pages are only generated in `Debug`. Use this when you change code, XML docs, the generator or the template.
+
+The `Test` target always runs the `Release` build, so `--configuration=Debug` only makes sense for `Build`. A `dotnet build` of a single project in `Debug` fails in the documentation step, so build through Cake or the solution.
 
 ## 🌿 Git Workflow
 - Commit directly to the branch that is currently checked out, even when it is `master`.
@@ -28,6 +31,7 @@ All workflows utilize Cake. Execute via the root `./build.sh` or `.\build.ps1`:
 - `demo/`: Showcases module usage examples.
 - `resources/`: Assets (logos, icons, schemas, styles).
 - `tests/`: Module unit tests (one project per module).
+- Demo service tests live in the service folder in `demo/`, as `ServiceName.CoreService.Tests`. `dotnet cake --target=Test` runs every `*.Tests.csproj` under `tests/` and `demo/`.
 - `tools/`: Tooling projects (e.g., XML doc markdown generators).
 - `modules/`: Contains `CatModuleReadmeTemplate.md`, and individual module-folders.
 
@@ -40,7 +44,7 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
 
 ### Generated Files
 - Never edit the files in `modules/*/namespaces/` by hand or with a script (sed and the like). They are generated.
-- To change them, change the generator (`tools/Cat.DefaultDocumentationPlugin/`) or the template, then run `dotnet cake --target=Build`.
+- To change them, change the XML docs, the generator (`tools/Cat.DefaultDocumentationPlugin/`) or the template, then run `dotnet cake --target=Build --configuration=Debug`. A plain `dotnet cake --target=Build` builds `Release` and does not regenerate them.
 - After the build, check the diff of the regenerated pages to confirm the change is what you expect.
 
 ### Readmes

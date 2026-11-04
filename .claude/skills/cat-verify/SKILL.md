@@ -9,8 +9,8 @@ allowed-tools: Bash(dotnet cake:*), PowerShell(dotnet cake:*), PowerShell(git st
 Run the standard checks and report what you find. Do not commit.
 
 ## Steps
-1. Run `dotnet cake --target=Build`. The build regenerates the markdown in `modules/*/namespaces/`.
-2. Run `dotnet cake --target=Test`.
+1. Run `dotnet cake --target=Build --configuration=Debug`. The `Debug` build regenerates the markdown in `modules/*/namespaces/`. The default `Release` build does not.
+2. Run `dotnet cake --target=Test`. It builds and tests `Release`, so it also checks that the `Release` build passes.
 3. Check what the build regenerated: `git status --short modules` and `git diff --stat -- modules`.
 4. For each changed page in `modules/*/namespaces/`, read the diff and decide if it matches the change you made.
 5. Report the result.
