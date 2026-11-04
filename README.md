@@ -219,7 +219,7 @@ Every service in the [application architecture](#application-architecture) is bu
 Each project has one job, and the references between them keep the business logic free of technology.  
 
 Again you are not obliged to follow this structure to use the modules!  
-The `Cat.Demo.TodoService` projects in the `demo` folder are a small working example of it.  
+The `Cat.Demo.CatalogService` projects in the `demo` folder are a small working example of it.  
 
 ![Service Project structure](./resources/schemas/CatServiceProjectStructure.excalidraw.svg)
 

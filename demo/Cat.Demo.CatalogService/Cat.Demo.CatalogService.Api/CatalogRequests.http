@@ -1,0 +1,108 @@
+@CatalogApi_HostAddress = http://localhost:5101
+
+### Run the requests from top to bottom. Later requests use ids from earlier responses.
+### The database is seeded in Development with 4 categories and 7 books.
+
+### CategoryGetListRequest => OK (4 categories)
+# @name categories
+GET {{CatalogApi_HostAddress}}/catalog/categories
+
+### BookSearchRequest => OK (all books, sorted by title)
+GET {{CatalogApi_HostAddress}}/catalog/books
+
+### BookSearchRequest => OK (title, author or ISBN contains the text)
+# @name search
+GET {{CatalogApi_HostAddress}}/catalog/books?text=clean
+
+### BookSearchRequest => OK (books of the first category)
+GET {{CatalogApi_HostAddress}}/catalog/books?categoryId={{categories.response.body.$[0].id}}
+
+### BookSearchRequest => OK (text and category together)
+GET {{CatalogApi_HostAddress}}/catalog/books?text=history&categoryId={{categories.response.body.$[2].id}}
+
+### BookGetRequest => OK (the first book of the search above)
+GET {{CatalogApi_HostAddress}}/catalog/books/{{search.response.body.$[0].id}}
+
+### BookGetRequest => Not Found (CAT-GEN-1002)
+GET {{CatalogApi_HostAddress}}/catalog/books/00000000-0000-0000-0000-000000000001
+
+### BookGetRequest => Route does not match the guid constraint, so 404
+GET {{CatalogApi_HostAddress}}/catalog/books/abc
+
+### BookSaveRequest => OK (no id, so a new book is added)
+POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "isbn": "9780596007126",
+  "categoryId": "{{categories.response.body.$[3].id}}",
+  "title": "Head First Design Patterns",
+  "author": "Eric Freeman",
+  "price": 44.50
+}
+
+### BookSaveRequest => OK (the id of an existing book, so it is updated)
+### The old price moves to the History.BookPrice table.
+POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "id": "{{search.response.body.$[0].id}}",
+  "isbn": "{{search.response.body.$[0].isbn}}",
+  "categoryId": "{{search.response.body.$[0].categoryId}}",
+  "title": "{{search.response.body.$[0].title}}",
+  "author": "{{search.response.body.$[0].author}}",
+  "price": 29.95
+}
+
+### BookSaveRequest => OK (no price, so the current price stays)
+POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "id": "{{search.response.body.$[0].id}}",
+  "isbn": "{{search.response.body.$[0].isbn}}",
+  "categoryId": "{{search.response.body.$[0].categoryId}}",
+  "title": "{{search.response.body.$[0].title}}",
+  "author": "{{search.response.body.$[0].author}}"
+}
+
+### BookSaveRequest => Bad request, the ISBN is already used by another book (CAT-CTL-1000)
+POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "isbn": "9780141036144",
+  "categoryId": "{{categories.response.body.$[0].id}}",
+  "title": "Another 1984",
+  "author": "George Orwell",
+  "price": 9.99
+}
+
+### BookSaveRequest => Bad request, several rules fail (ISBN length, title, author, category, price)
+POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "isbn": "123",
+  "categoryId": "00000000-0000-0000-0000-000000000000",
+  "title": "",
+  "author": "",
+  "price": -1
+}
+
+### BookSaveRequest => Bad request, the book is missing from the body
+POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Content-Type: application/json
+
+### BookSaveRequest => Bad request, the body is not valid json
+POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Content-Type: application/json
+
+{bad json
+
+### BookSaveRequest => Unsupported media type
+POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Content-Type: text/plain
+
+hello

@@ -40,11 +40,11 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 | Currency | One currency, euro, to keep the demo simple. |
 | API gateway | It is the API gateway from the Application Architecture chapter of the root readme. How it looks is clear once it is built. It could become a new module. |
 | Notifications storage | Decided once the Scheduling module is designed. |
-| Todo demo | `Cat.Demo.TodoService` is removed once the first service of this plan exists. |
+| Todo demo | `Cat.Demo.TodoService` is removed. Catalog is the first service of this plan. |
+| First service | Catalog is built first, then Orders. |
 
 ### Open
 
-- **Which service first?** Suggestion: Catalog, then Orders.
 - **How does Orders hand out the daily order number counter without duplicates?** Suggestion: a counter row per day, increased in the same transaction as the order. The unique key on `OrderNumber` stays as the safety net.
 - **Where do customers come from?** Orders has a `Customer` table, but there is no login or user service yet. Suggestion: keep a simple `Customer` in Orders until the Authorization module arrives.
 
@@ -73,14 +73,14 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 
 | Module | Demonstrated by |
 |---|---|
-| Commands, Queries, ServiceRequests | `PlaceOrder`, `CancelOrder`, `GetOrder`, `SearchProducts` |
+| Commands, Queries, ServiceRequests | `PlaceOrder`, `CancelOrder`, `GetOrder`, `BookSearch` |
 | Responses, Validators | Validating an order. Stock and payment failures come back as error responses. |
-| Decorators | Logging, validation and tracing on every request. |
+| Decorators | Logging, validation and tracing on every request. Catalog does not use the tracing decorator yet. |
 | Minimal.Api | The endpoints of each service. |
 | FluentWorkflows | The place order process: validate, reserve stock, take payment, confirm. It has an `if` for out of stock and a `foreach` over the order lines. |
 | EventAggregators | In-process events inside Orders, such as `OrderConfirmed` triggering a status update. |
 | EFCore | Books, categories and orders as regular entities, price history as temporal data in Catalog. Every service has its own database, so the reference entity for tables of another service is not demonstrated. |
-| Localizations | Categories, order statuses and email texts in a few languages. |
+| Localizations | Categories, order statuses and email texts in a few languages. Catalog does not use it yet, so category names are plain text. |
 | Expressions, Extensions | Used inside the services. |
 
 ### Future modules
@@ -318,10 +318,24 @@ Inventory uses commands, queries, responses and decorators, but not the entity b
 
 ## Next steps
 
+Done:
+
+- Catalog service built, with tests for the core service.
+- `Cat.Demo.TodoService` removed.
+- Readme of the demo added.
+
+To do:
+
 1. Close the open questions above.
-2. Build the first service.
-3. Remove `Cat.Demo.TodoService` once the first service of this plan exists.
-4. Update the readme of the demo.
+2. Build Orders.
+3. Handle the known gaps of Catalog below.
+
+### Known gaps in Catalog
+
+- **Tracing.** Add the `Cat.ServiceRequests.Decorators.ActivitySource` decorator to the Catalog requests.
+- **Localizations.** Show category names in several languages with `Cat.Localizations`.
+- **OpenAPI price type.** The nullable `decimal? Price` is documented as `null`, `number` or `string`, with a regex pattern. That is awkward for the generated React client. Change the OpenAPI or JSON options so `price` is a plain nullable number.
+- **Duplicate ISBN race.** Two saves with the same new ISBN at the same moment can both pass the validator. The second one hits the unique index and returns a 500. Catch that database error and return the same `CAT-CTL-1000` response.
 
 ## Interesting documentation
 

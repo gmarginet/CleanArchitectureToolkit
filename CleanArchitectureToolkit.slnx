@@ -11,13 +11,15 @@
   </Folder>
   <Folder Name="/demo/">
     <File Path="demo/Directory.Build.props" />
+    <File Path="demo/README.md" />
   </Folder>
-  <Folder Name="/demo/Cat.Demo.TodoService/">
-    <Project Path="demo/Cat.Demo.TodoService/Cat.Demo.TodoService.Api/Cat.Demo.TodoService.Api.csproj" />
-    <Project Path="demo/Cat.Demo.TodoService/Cat.Demo.TodoService.Contracts/Cat.Demo.TodoService.Contracts.csproj" />
-    <Project Path="demo/Cat.Demo.TodoService/Cat.Demo.ToDoService.Core/Cat.Demo.ToDoService.Core.csproj" />
-    <Project Path="demo/Cat.Demo.TodoService/Cat.Demo.TodoService.DataModels/Cat.Demo.TodoService.DataModels.csproj" />
-    <Project Path="demo/Cat.Demo.TodoService/Cat.Demo.TodoService.Infrastructure/Cat.Demo.TodoService.Infrastructure.csproj" />
+  <Folder Name="/demo/Cat.Demo.CatalogService/">
+    <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api/Cat.Demo.CatalogService.Api.csproj" />
+    <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Contracts/Cat.Demo.CatalogService.Contracts.csproj" />
+    <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.CoreService/Cat.Demo.CatalogService.CoreService.csproj" />
+    <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.CoreService.Tests/Cat.Demo.CatalogService.CoreService.Tests.csproj" />
+    <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.DataModels/Cat.Demo.CatalogService.DataModels.csproj" />
+    <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Infrastructure/Cat.Demo.CatalogService.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/modules/" />
   <Folder Name="/modules/Cat.Commands/">
