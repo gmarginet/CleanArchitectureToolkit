@@ -49,6 +49,10 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
 - Never remove the `<!-- Modules start-->` and `<!-- Modules end-->` markers in the root `README.md`.
 - Use the `new-module` skill to start a new module.
 
+## 📐 Drawings
+- Architecture and flow drawings are Excalidraw. Use the `excalidraw-svg` skill.
+- ERD, UML class and sequence diagrams are Mermaid, inline in markdown. Use the `mermaid-diagram` skill.
+
 ## 🔗 Link Check
 - Use the `link-check` skill, and only when the owner asks for it. It sends thousands of requests.
 

@@ -15,6 +15,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 | [module-readme](module-readme/SKILL.md) | Create or update a module readme from the template. | `/module-readme Cat.EFCore` |
 | [root-module-table](root-module-table/SKILL.md) | Keep the module table in the root README in sync. | `/root-module-table Cat.EFCore stable` |
 | [excalidraw-svg](excalidraw-svg/SKILL.md) | Create or edit an editable Excalidraw drawing in `resources/schemas`. | `/excalidraw-svg add a drawing of the demo security setup` |
+| [mermaid-diagram](mermaid-diagram/SKILL.md) | Write or update an ERD, class or sequence diagram as inline Mermaid. | `/mermaid-diagram ERD for the Catalog service` |
 | [demo-structure](demo-structure/SKILL.md) | Add or restructure a service, client or Aspire project in `demo/`. | `/demo-structure service Orders` |
 | [cat-verify](cat-verify/SKILL.md) | Build, test and check the regenerated namespaces pages. | `/cat-verify` |
 | [link-check](link-check/SKILL.md) | Crawl the published site for broken links. Only on request. | `/link-check --external` |
@@ -37,6 +38,11 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **How to use it:** Describe what the drawing should show. Name an existing drawing to change it.
 - **When:** When a diagram is added or changed.
 - **Note:** `excalidraw-svg/excalidraw-payload.ps1` reads and writes the embedded scene. Claude runs it from the repo, and keeps its own generator scripts in the scratchpad.
+
+### mermaid-diagram
+- **What it does:** Writes or updates a Mermaid ERD, class or sequence diagram as a fenced block inside the markdown file that needs it. It applies the house rules: no custom colors or themes, C# style names and types, foreign key columns named after the full table name plus `Id`, and no foreign keys between services unless they share a database.
+- **How to use it:** Describe the diagram and name the file or service it belongs to.
+- **When:** When a data model, class or sequence diagram is added or changed. Architecture and flow drawings use `excalidraw-svg`.
 
 ### demo-structure
 - **What it does:** Applies the demo folder rules: one folder per deployable unit, one subfolder per project, and a matching solution folder in `CleanArchitectureToolkit.slnx`.
