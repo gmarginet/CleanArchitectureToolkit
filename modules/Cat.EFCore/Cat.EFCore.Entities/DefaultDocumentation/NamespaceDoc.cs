@@ -7,6 +7,6 @@ namespace Cat.EFCore.Entities;
 
 /// <summary>
 /// Provides the base classes for Entity Framework Core entities:
-/// regular entities, temporal entities and reference data.
+/// regular entities, temporal entities and entities that map tables owned by someone else.
 /// </summary>
 internal static class NamespaceDoc { }

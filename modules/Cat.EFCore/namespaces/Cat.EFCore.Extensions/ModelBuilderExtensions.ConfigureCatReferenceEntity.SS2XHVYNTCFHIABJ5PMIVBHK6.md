@@ -28,8 +28,9 @@
 
 ## ModelBuilderExtensions\.ConfigureCatReferenceEntity\<TEntity\>\(this ModelBuilder, string, string\) Method
 
-Configures a reference data entity\.
+Configures an entity that maps a table owned by someone else\.
 Sets a non\-clustered primary key and excludes the table from migrations\.
+Use it to define foreign keys to a table of another service in a shared database\.
 
 ```csharp
 public static void ConfigureCatReferenceEntity<TEntity>(this Microsoft.EntityFrameworkCore.ModelBuilder modelBuilder, string tableName, string schemaName="dbo")

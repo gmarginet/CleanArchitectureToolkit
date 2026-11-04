@@ -30,4 +30,4 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.EFCore\.Entities](Cat.EFCore.Entities.md 'Cat\.EFCore\.Entities') | Provides the base classes for Entity Framework Core entities: regular entities, temporal entities and reference data\. |
+| [Cat\.EFCore\.Entities](Cat.EFCore.Entities.md 'Cat\.EFCore\.Entities') | Provides the base classes for Entity Framework Core entities: regular entities, temporal entities and entities that map tables owned by someone else\. |

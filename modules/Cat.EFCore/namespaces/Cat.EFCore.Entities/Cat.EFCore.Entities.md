@@ -29,10 +29,10 @@
 ## Cat\.EFCore\.Entities Namespace
 
 Provides the base classes for Entity Framework Core entities:
-regular entities, temporal entities and reference data\.
+regular entities, temporal entities and entities that map tables owned by someone else\.
 
 | Classes | |
 | :--- | :--- |
 | [CatEntityBase](CatEntityBase.md 'Cat\.EFCore\.Entities\.CatEntityBase') | Base class for entities that live in a regular table\. It gives every entity a unique id and a database generated sequence number\. |
-| [CatReferenceEntityBase](CatReferenceEntityBase.md 'Cat\.EFCore\.Entities\.CatReferenceEntityBase') | Base class for read\-only reference data\. The table is excluded from migrations, so something else owns its schema\. |
+| [CatReferenceEntityBase](CatReferenceEntityBase.md 'Cat\.EFCore\.Entities\.CatReferenceEntityBase') | Base class for entities that map a table owned by someone else\. Use it when the table belongs to another service, or to another part of the system, in a database you share\. Map the entity in your own `DbContext` so you can define foreign keys and navigations to it\. The table is excluded from migrations, so the owner keeps control of the schema\. Treat the entity as read\-only, and do not use it for your own tables\. Use [CatEntityBase](CatEntityBase.md 'Cat\.EFCore\.Entities\.CatEntityBase') for those\. |
 | [CatTemporalEntityBase](CatTemporalEntityBase.md 'Cat\.EFCore\.Entities\.CatTemporalEntityBase') | Base class for entities that live in a temporal table\. The database keeps the history of every change in a separate history table\. |

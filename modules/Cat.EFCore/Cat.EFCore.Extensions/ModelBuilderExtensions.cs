@@ -174,8 +174,9 @@ public static class ModelBuilderExtensions
     }
     
     /// <summary>
-    /// Configures a reference data entity.
+    /// Configures an entity that maps a table owned by someone else.
     /// Sets a non-clustered primary key and excludes the table from migrations.
+    /// Use it to define foreign keys to a table of another service in a shared database.
     /// </summary>
     /// <typeparam name="TEntity">The entity type.</typeparam>
     /// <param name="modelBuilder">The model builder to configure.</param>

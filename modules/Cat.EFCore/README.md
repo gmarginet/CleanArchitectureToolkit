@@ -71,6 +71,8 @@ Inherit your entities from the Cat base classes.
 public class Todo : CatEntityBase
 {
     public string Title { get; set; } = string.Empty;
+    public Guid TodoOwnerId { get; set; }
+    public TodoOwner? TodoOwner { get; set; }
 }
 
 public class TodoHistoryItem : CatTemporalEntityBase
@@ -78,7 +80,8 @@ public class TodoHistoryItem : CatTemporalEntityBase
     public string Title { get; set; } = string.Empty;
 }
 
-public class TodoStatus : CatReferenceEntityBase
+// The table belongs to another service that shares the database.
+public class TodoOwner : CatReferenceEntityBase
 {
     public string Name { get; set; } = string.Empty;
 }
@@ -91,7 +94,12 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
     modelBuilder.ConfigureCatEntity<Todo>("Todo", "todo");
     modelBuilder.ConfigureCatTemporalEntity<TodoHistoryItem>("TodoHistoryItem", "todo");
-    modelBuilder.ConfigureCatReferenceEntity<TodoStatus>("TodoStatus", "todo");
+    modelBuilder.ConfigureCatReferenceEntity<TodoOwner>("TodoOwner", "identity");
+
+    modelBuilder.Entity<Todo>()
+        .HasOne(t => t.TodoOwner)
+        .WithMany()
+        .HasForeignKey(t => t.TodoOwnerId);
 }
 ```
 
@@ -99,4 +107,14 @@ What you get:
 - `CatEntityBase`: a non-clustered Guid primary key on `Id` and a unique clustered index on the identity column `SequenceId`.
 - `CatTemporalEntityBase`: the same as above, in a temporal table with a history table in the `History` schema.
 - `CatReferenceEntityBase`: a non-clustered primary key, and the table is excluded from migrations.
+
+### When to use `CatReferenceEntityBase`
+Use it for a table that someone else owns, so you can point a foreign key at it.
+
+- Several services share one database. Each service owns some of the tables.
+- Your service needs a foreign key or navigation to a table of another service.
+- You map that table in your own `DbContext` with `CatReferenceEntityBase`. Migrations never touch it, so the owner keeps control of the schema.
+- Treat the entity as read-only. Only the owner changes the data.
+
+Do not use it for your own tables. Use `CatEntityBase` for those, even when the data is a short list of fixed values.
 <!-- Usage end-->
