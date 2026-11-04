@@ -1,6 +1,6 @@
 // Crawls the published GitHub Pages and reports broken links.
 //
-// Usage: node .claude/scripts/check-links.mjs [baseUrl] [--external]
+// Usage: node .claude/skills/link-check/check-links.mjs [baseUrl] [--external]
 //
 // - Follows every internal page, and checks pages, images, styles and #anchors.
 // - Anchors count both id="..." and name="..." (the code reference pages use <a name>).
