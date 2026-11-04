@@ -12,13 +12,12 @@
   <Folder Name="/demo/">
     <File Path="demo/Directory.Build.props" />
   </Folder>
-  <Folder Name="/demo/Todo/" />
-  <Folder Name="/demo/Todo/Service/">
-    <Project Path="demo/Cat.Demo.TodoService.Api/Cat.Demo.TodoService.Api.csproj" />
-    <Project Path="demo/Cat.Demo.ToDoService.Core/Cat.Demo.ToDoService.Core.csproj" />
-    <Project Path="demo/Cat.Demo.TodoService.Contracts/Cat.Demo.TodoService.Contracts.csproj" />
-    <Project Path="demo/Cat.Demo.TodoService.Infrastructure/Cat.Demo.TodoService.Infrastructure.csproj" />
-    <Project Path="demo/Cat.Demo.TodoService.DataModels/Cat.Demo.TodoService.DataModels.csproj" />
+  <Folder Name="/demo/Cat.Demo.TodoService/">
+    <Project Path="demo/Cat.Demo.TodoService/Cat.Demo.TodoService.Api/Cat.Demo.TodoService.Api.csproj" />
+    <Project Path="demo/Cat.Demo.TodoService/Cat.Demo.TodoService.Contracts/Cat.Demo.TodoService.Contracts.csproj" />
+    <Project Path="demo/Cat.Demo.TodoService/Cat.Demo.ToDoService.Core/Cat.Demo.ToDoService.Core.csproj" />
+    <Project Path="demo/Cat.Demo.TodoService/Cat.Demo.TodoService.DataModels/Cat.Demo.TodoService.DataModels.csproj" />
+    <Project Path="demo/Cat.Demo.TodoService/Cat.Demo.TodoService.Infrastructure/Cat.Demo.TodoService.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/modules/" />
   <Folder Name="/modules/Cat.Commands/">

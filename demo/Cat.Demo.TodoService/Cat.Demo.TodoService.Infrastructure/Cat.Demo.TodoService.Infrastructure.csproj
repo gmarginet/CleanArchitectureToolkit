@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\modules\Cat.Commands\Cat.Commands.Abstractions\Cat.Commands.Abstractions.csproj" />
-      <ProjectReference Include="..\..\modules\Cat.EFCore\Cat.EFCore.Extensions\Cat.EFCore.Extensions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Commands\Cat.Commands.Abstractions\Cat.Commands.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Extensions\Cat.EFCore.Extensions.csproj" />
       <ProjectReference Include="..\Cat.Demo.ToDoService.Core\Cat.Demo.ToDoService.Core.csproj" />
       <ProjectReference Include="..\Cat.Demo.TodoService.DataModels\Cat.Demo.TodoService.DataModels.csproj" />
     </ItemGroup>

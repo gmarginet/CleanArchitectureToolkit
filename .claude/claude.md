@@ -31,6 +31,16 @@ All workflows utilize Cake. Execute via the root `./build.sh` or `.\build.ps1`:
 - `tools/`: Tooling projects (e.g., XML doc markdown generators).
 - `modules/`: Contains `CatModuleReadmeTemplate.md`, and individual module-folders.
 
+### Demo Folder Structure
+Every deployable unit in `demo/` gets its own folder. Never put project folders directly in `demo/`.
+- **Services:** One folder per service. It holds all projects of that service, as described in the Service Project structure chapter of the root `README.md` (Api, CoreService, Infrastructure, Contracts, DataModels and the optional ones).
+- **Clients:** One folder per client.
+- **Aspire AppHosts:** One folder per AppHost.
+- **Aspire ServiceDefaults:** One folder per ServiceDefaults project.
+- Each project sits in its own subfolder inside the folder of its service, client or Aspire project.
+- Mirror this structure in `CleanArchitectureToolkit.slnx`. Each folder is a solution folder. Keep the project paths in the solution file in sync when you move or add projects.
+- `demo/` itself only holds shared files like `Directory.Build.props` and `README.md`.
+
 ## 📦 Module Folder Blueprint
 Each module directory contains its C# projects, an auto-generated `namespaces/` markdown folder, and a local `README.md`.
 
