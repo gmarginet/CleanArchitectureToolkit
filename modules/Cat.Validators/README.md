@@ -45,6 +45,7 @@ Rules never stop at the first failure. One call reports every problem.
     - [Null and empty rules](#null-and-empty-rules)
     - [Comparison rules](#comparison-rules)
     - [Between rules](#between-rules)
+    - [Rules for nullable values](#rules-for-nullable-values)
     - [String rules](#string-rules)
     - [Nested validation rules](#nested-validation-rules)
     - [Custom rules with Must](#custom-rules-with-must)
@@ -235,6 +236,29 @@ Each rule has four forms:
 ```csharp
 validator.AddPropertyRules(m => m.Rating, b => b.InclusiveBetween(1, 5));
 validator.AddPropertyRules(m => m.Price, b => b.ExclusiveBetween(m => m.MinPrice, m => m.MaxPrice));
+```
+
+#### Rules for nullable values
+
+The comparison and between rules also work on nullable value types, like `decimal?`, `int?` and `DateTime?`. `Equal` and `NotEqual` already accept them.
+
+These rules have the same names, codes, messages and arguments as the rules above:
+
+- `LessThan`, `LessThanOrEqualTo`, `GreaterThan` and `GreaterThanOrEqualTo`, with a fixed value or a lambda.
+- `InclusiveBetween` and `ExclusiveBetween`, in all four forms.
+
+A `null` passes, like it does for the string rules. Pair the rule with `NotNull` when a value is required.
+
+When you compare with another property, or take a bound from the model, a `null` there passes too. There is nothing to compare with.
+
+```csharp
+validator.AddPropertyRules(m => m.Price, b => b.GreaterThanOrEqualTo(0m));
+
+validator.AddPropertyRules(m => m.Discount, b =>
+{
+    b.NotNull();
+    b.InclusiveBetween(0, 50);
+});
 ```
 
 #### String rules
@@ -448,7 +472,7 @@ A broken model never throws. The processor returns a response. Mistakes in how y
 | A nested type used with `Validate()` or `ValidateEnumerable()` has no validator | The same exception, or a pass with `validatorRequired: false`. |
 | `ICatCompiledMemberExpressionCache<T>` isn't registered | An `InvalidOperationException` from the service provider when the rules run. Register the Cat.Expressions cache. |
 | `Length` gets a minimum that isn't less than the maximum | An `ArgumentOutOfRangeException` with the message `<valueName> must be less than <limitName>.` when the rule runs. |
-| `InclusiveBetween` or `ExclusiveBetween` gets a lower bound that isn't less than the upper bound | The same `ArgumentOutOfRangeException`. |
+| `InclusiveBetween` or `ExclusiveBetween` gets a lower bound that isn't less than the upper bound | The same `ArgumentOutOfRangeException`. The nullable forms only check the bounds when the property has a value. |
 | `MatchesRegex` gets an invalid pattern | An `ArgumentException` with the message `Invalid regex expression: <pattern>`. |
 | A rule class isn't a property rule or a model rule | An `ArgumentException` with the message `Rule <name> is not a valid property rule` or `Rule <name> is not a valid model rule`. |
 
