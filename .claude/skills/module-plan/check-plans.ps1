@@ -9,6 +9,7 @@ Errors
 - A module that exists in modules/ is still in the Future modules table.
 - A plan of a module that does not exist yet is missing from the Future modules table.
 - A plan of an existing module is missing from the Plans column of the module overview, or the Plans cell points to a missing file.
+- The file does not start with the header of the root README (the link and table elements).
 - The title is not "Plans for <ModuleName>".
 - A required chapter is missing: The idea, Decisions and open questions (with Decided and Open), Questions before building.
 - A table of contents entry points to a heading that does not exist.
@@ -82,7 +83,9 @@ foreach ($file in $planFiles) {
         $errors.Add("$($file.Name): $name does not exist yet and is not in the Future modules table of the root README.")
     }
 
-    if ($lines[0] -ne "# Plans for $name") { $errors.Add("$($file.Name): the title must be '# Plans for $name'.") }
+    if ($lines[0] -notlike '<link href="../resources/styles/style.css"*') { $errors.Add("$($file.Name): the file must start with the header of the root README, with paths for the plans folder.") }
+    $title = $lines | Where-Object { $_ -like '# *' } | Select-Object -First 1
+    if ($title -ne "# Plans for $name") { $errors.Add("$($file.Name): the title must be '# Plans for $name'.") }
 
     $headings = @($lines | Where-Object { $_ -match '^#{2,4} ' } | ForEach-Object { ($_ -replace '^#+ ', '').Trim() })
     foreach ($required in 'The idea', 'Decisions and open questions', 'Questions before building') {

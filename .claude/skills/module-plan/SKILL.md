@@ -10,7 +10,8 @@ A module plan collects what we know about a module before it is built. It holds 
 
 ## Rules for a plan
 - File: `plans/<ModuleName>.md`, named exactly like the module. An existing module gets a plan too when it has future work.
-- Main title: `Plans for <ModuleName>`.
+- Header: the file starts with the header of the root `README.md` (the `link` and `table` elements), with the paths for the `plans/` folder. It is the same in every plan, so copy it from the template. It gives the navigation links.
+- Main title, right below the header: `Plans for <ModuleName>`.
 - Start from [ModulePlanTemplate.md](ModulePlanTemplate.md).
 - Required chapters: `The idea`, `Decisions and open questions` with `### Decided` and `### Open`, and `Questions before building`. `What we already know` is expected. Keep the `Contents` list in step with the headings.
 - `Decided` holds only what the owner decided, or what the existing docs state. Name the document when it comes from one. Everything else is `Open`. Never invent a decision.
@@ -55,7 +56,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/module-pl
 It reports errors for:
 - wrong or missing links in the Future modules table and the Plans column,
 - a module that is in both places,
-- a wrong title, a missing required chapter, or a table of contents entry without a heading.
+- a missing header, a wrong title, a missing required chapter, or a table of contents entry without a heading.
 
 It reports warnings for:
 - a Cat module name that is not a module folder, a plan or a known name,
