@@ -1,7 +1,7 @@
 # Aspire plan
 
 This plan covers the first Aspire AppHost of the demo.  
-It is part of [DemoPlan.md](DemoPlan.md). The demo plan says what Aspire hosts. This plan says how we build it, in which order.
+It is part of [Demo.md](Demo.md). The demo plan says what Aspire hosts. This plan says how we build it, in which order.
 
 ## Contents
 
@@ -36,6 +36,7 @@ React, the gateway, Keycloak, the Service Bus and Inventory are not part of this
 | Standalone start | Every service still starts with `dotnet run` and its own `appsettings`. The AppHost is a convenience, not a requirement. |
 | Price provider | The first version is a plain `HttpClient` implementation in `Orders.Infrastructure`. `Cat.Api.Client` replaces it in the future. See [Swapping the price provider](#swapping-the-price-provider). |
 | Service to service calls | Orders calls Catalog directly for now, because the gateway does not exist yet. |
+| Contracts | Orders keeps its own small model of the price response and does not reference `Catalog.Contracts`. This is a choice, not a rule: Orders needs only the price, so it stays independent of the rest of the Catalog contract. A later service to service call shares contracts, so the demo shows both. See [Sharing contracts](Demo.md#sharing-contracts). |
 | Aspire version | The latest stable Aspire that supports .NET 10. Pin it in `Directory.Packages.props` when the projects are created. |
 
 ## Starting point
@@ -99,7 +100,7 @@ Under the AppHost the ports come from Aspire. The `.http` files still point at 5
 - A new class `CatalogPriceProvider` in `Orders.Infrastructure`, using a typed `HttpClient`.
 - The base address comes from Aspire service discovery. The AppHost gives Orders a reference to Catalog.
 - It calls `GET /catalog/books/prices?bookIds=<id>` with one `bookIds` value per book.
-- It reads the response into a small model that belongs to Orders. Orders does not reference `Catalog.Contracts`, because services do not share contracts.
+- It reads the response into a small model that belongs to Orders. Orders does not reference `Catalog.Contracts`. That is a choice for this call, see [Sharing contracts](Demo.md#sharing-contracts).
 - Responses map as follows:
 
 | Catalog answers | `IPriceProvider` returns |
@@ -127,7 +128,7 @@ Under the AppHost the ports come from Aspire. The `.http` files still point at 5
 2. **AppHost, `Existing` mode.** Create the AppHost with Catalog and Orders. Both show up in the dashboard with logs, traces and health. Run every request of both `.http` files against the AppHost.
 3. **Price provider.** Add `CatalogPriceProvider` and its tests. Place an order through the AppHost and check in the dashboard that the Catalog call is part of the trace.
 4. **AppHost, `Container` mode.** Needs Docker on the machine. Add the SQL Server container, the data volume and the databases. Check a fresh start from an empty volume and a restart that keeps the data.
-5. **Documents.** Update `demo/README.md` with the run steps for both modes and the Docker memory notes. Update [DemoPlan.md](DemoPlan.md).
+5. **Documents.** Update `demo/README.md` with the run steps for both modes and the Docker memory notes. Update [Demo.md](Demo.md).
 
 Phase 4 can wait. Phases 1 to 3 do not need Docker.
 

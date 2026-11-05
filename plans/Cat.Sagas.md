@@ -1,4 +1,4 @@
-# Saga plan
+# Plans for Cat.Sagas
 
 This plan looks at long running workflows.  
 A workflow sends a message, waits for the answer and goes on when the answer arrives, maybe hours later.
@@ -7,7 +7,7 @@ It answers one question: what do we add to `Cat.FluentWorkflows`, and what goes 
 
 ## Contents
 
-- [The goal](#the-goal)
+- [The idea](#the-idea)
 - [Findings](#findings)
 - [What is missing](#what-is-missing)
 - [Options](#options)
@@ -15,9 +15,10 @@ It answers one question: what do we add to `Cat.FluentWorkflows`, and what goes 
 - [What goes where](#what-goes-where)
 - [Hard problems](#hard-problems)
 - [Phases](#phases)
-- [Open questions](#open-questions)
+- [Decisions and open questions](#decisions-and-open-questions)
+- [Questions before building](#questions-before-building)
 
-## The goal
+## The idea
 
 The place order workflow of the demo takes a payment. The idea:
 
@@ -83,7 +84,7 @@ I read the engine in `modules/Cat.FluentWorkflows`.
 | Matching an incoming message to a stored instance | New module |
 | Timeouts, such as cancel after 24 hours without payment | New module, with Scheduling |
 | Safe handling of two messages for the same instance | New module |
-| Sending a message and saving the state as one unit | New module, with Messaging and Transactions |
+| Sending a message and saving the state as one unit | New module, with Messaging and the transactions of `Cat.EFCore` |
 | Handling a workflow that changed while instances were stored | Both |
 
 ## Options
@@ -164,7 +165,7 @@ The instance record holds: instance id, workflow type name, workflow version, st
 | `Cat.Messaging` (future) | The wait step sends the request message through it. |
 | `Cat.EventProcessor` (future) | Incoming answers come in through it. |
 | `Cat.Scheduling` (future) | Looks for instances whose wait timed out. |
-| `Cat.Transactions` (future) | Saves the state and the outgoing message together. |
+| `Cat.EFCore` (new transaction project) | Saves the state and the outgoing message together. |
 | `Cat.EFCore` | The store. |
 
 ### A note on EventAggregators
@@ -181,7 +182,7 @@ These must be solved in the design, not afterwards.
 - **Two messages at the same moment.** Lock the instance with a row version. The loser retries and sees the new state.
 - **A message that arrives twice.** Service Bus delivers at least once. Keep the ids of handled messages per instance and ignore repeats.
 - **An answer that arrives before the instance is saved.** Send the request message only after the save, or in one outbox transaction with it.
-- **A crash between the save and the send.** The outbox pattern in `Cat.Transactions` solves it. Without it the saga can hang, and the timeout is the safety net.
+- **A crash between the save and the send.** The outbox pattern in the transactions of `Cat.EFCore` solves it. Without it the saga can hang, and the timeout is the safety net.
 - **Timeouts.** Save the moment next to the instance. The Scheduler looks for instances past it and resumes them with a timeout result.
 - **Compensation.** When payment fails after stock was reserved, the reservation must be released. First version: the failure branch of the workflow has explicit steps for it. A dedicated compensation feature can come later.
 - **State that cannot be serialized.** Interfaces, delegates and services do not belong in the state. Document it and fail on save with a clear error.
@@ -203,7 +204,18 @@ These must be solved in the design, not afterwards.
 
 Phases 1 to 3 do not depend on the other future modules, so they can start before Messaging exists.
 
-## Open questions
+## Decisions and open questions
+
+### Decided
+
+| Topic | Decision |
+|---|---|
+| Approach | Option C is recommended, with Option A as the first step. The owner has not confirmed it yet. |
+| Orders now | Orders keeps its state in the order status. The payment is an interface with a fake. |
+| Messaging | The wait step goes through the messaging abstractions, not through `Cat.EventAggregators`. |
+| Order of work | The engine change comes first and needs no other future module. The module itself follows `Cat.Messaging` and `Cat.EventProcessor`. |
+
+### Open
 
 - **Name.** `Cat.Sagas` or `Cat.WorkflowPersistence`?
 - **Addresses.** Index paths only, or explicit step names, or both? Explicit names are safer but more typing.
@@ -211,3 +223,17 @@ Phases 1 to 3 do not depend on the other future modules, so they can start befor
 - **Serializer.** `System.Text.Json` only, or pluggable from day one?
 - **Parallel branches.** The engine has none today. A saga waiting for two answers at once (payment and stock) needs either a wait for several messages or parallel branches. Out of scope for the first version?
 - **Phase 0 or wait.** Is it fine to build Orders with Option A now?
+
+## Questions before building
+
+1. Do you confirm Option C, with Option A first? Or do you want another option?
+2. Name: `Cat.Sagas` or `Cat.WorkflowPersistence`?
+3. Do you accept an engine change in `Cat.FluentWorkflows` that touches every container step?
+4. Step addresses: index paths, explicit names or both?
+5. May we fail on a workflow version mismatch, or must two versions run side by side?
+6. Which serializer: `System.Text.Json` only, or pluggable?
+7. Do we need to wait for more than one answer at the same time in the first version?
+8. Who owns the outbox: this module, `Cat.EFCore` or `Cat.Messaging`?
+9. Compensation: explicit steps in the failure branch for now, and a dedicated feature later?
+10. Is Orders with Option A now fine, or must it wait for the saga work?
+11. Do timeouts wait for `Cat.Scheduling`, or does the first version go without them?

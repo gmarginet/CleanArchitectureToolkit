@@ -5,7 +5,7 @@ namespace Cat.Demo.OrderService.CoreService.Abstractions;
 
 /// <summary>
 /// Takes the payment of an order. A fake implements it for now.
-/// Later the call may go over the Service Bus, see plans/SagaPlan.md.
+/// Later the call may go over the Service Bus, see plans/Cat.Sagas.md.
 /// </summary>
 public interface IPaymentProvider
 {

@@ -43,12 +43,13 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 | Authentication | OpenID Connect with Keycloak, started by the AppHost with an imported realm and seeded users. See [Authentication and authorization](#authentication-and-authorization). |
 | Authorization | The gateway and the services validate the same JWT. Services authorize on the claims. Catalog reads are public, Orders needs a login. |
 | Customers | `Customer` stays in Orders, with an `ExternalId` that holds the `sub` claim of the token. No customer endpoints. `PlaceOrder` finds or creates the customer from the token. |
-| Current user | The business logic only knows `ICurrentUser`. Orders is built against it first, with a development stub. Keycloak and the real implementation come with the gateway. |
-| Scope of the first Orders build | Core plus FluentWorkflows and EventAggregators. The place order workflow runs with `IStockReservation` and `IPaymentProvider`, both with a fake behind them. Orders keeps its state in the order status. A saga style payment over messages comes later, see [SagaPlan.md](SagaPlan.md). |
-| Unit price | The client sends only `BookId` and `Quantity`. Orders asks `IPriceProvider` for the current price of each book and stores it in `OrderLine.UnitPrice`. A fake sits behind the interface now. Once Aspire runs the services, a plain `HttpClient` implementation calls the price endpoint of Catalog. The `Cat.Api.Client` module replaces it in the future. See [AspirePlan.md](AspirePlan.md). |
-| SQL Server mode | The AppHost supports two modes, switched by a setting: a SQL Server container, or an existing instance through connection strings. Docker is not required to run the demo. The `Existing` mode is built first. See [AspirePlan.md](AspirePlan.md). |
+| Current user | The business logic only knows `ICurrentUser`. Orders is built against it first, with a development stub. Keycloak and the real implementation come with the gateway. The interface moves to `Cat.Authorization.Abstractions` and is renamed `ICatUser` when that project exists. Until then the demo keeps `ICurrentUser`. See [Cat.Authorization.md](Cat.Authorization.md). |
+| Scope of the first Orders build | Core plus FluentWorkflows and EventAggregators. The place order workflow runs with `IStockReservation` and `IPaymentProvider`, both with a fake behind them. Orders keeps its state in the order status. A saga style payment over messages comes later, see [Cat.Sagas.md](Cat.Sagas.md). |
+| Unit price | The client sends only `BookId` and `Quantity`. Orders asks `IPriceProvider` for the current price of each book and stores it in `OrderLine.UnitPrice`. A fake sits behind the interface now. Once Aspire runs the services, a plain `HttpClient` implementation calls the price endpoint of Catalog. The `Cat.Api.Client` module replaces it in the future. See [DemoAspire.md](DemoAspire.md). |
+| SQL Server mode | The AppHost supports two modes, switched by a setting: a SQL Server container, or an existing instance through connection strings. Docker is not required to run the demo. The `Existing` mode is built first. See [DemoAspire.md](DemoAspire.md). |
 | Counter cleanup | The `CleanUpOrderCounters` service request deletes the rows of earlier days and creates the row of today. The Scheduler will run it nightly. Until the Scheduler exists, a development only endpoint triggers it. |
 | Currency | One currency, euro, to keep the demo simple. |
+| Sharing contracts | A choice per connection, as the root readme describes. React client to gateway: not shared. Orders to Catalog: not shared. A later service to service call: shared, so the demo shows both. See [Sharing contracts](#sharing-contracts). |
 | API gateway | It is the API gateway from the Application Architecture chapter of the root readme. How it looks is clear once it is built. It could become a new module. |
 | Notifications storage | Decided once the Scheduling module is designed. |
 | Todo demo | `Cat.Demo.TodoService` is removed. Catalog is the first service of this plan. |
@@ -102,11 +103,11 @@ None at the moment.
 | Api.Client | Orders asks Catalog for current prices through the gateway. It starts as a plain `HttpClient` in Orders, and the module replaces that once the shape is clear. |
 | Dapper | Fast read-only order overview queries, next to EF Core for writes. |
 | Caching | Cached catalog queries. |
-| Transactions | Saving an order and its lines in one go. |
+| EFCore transactions | Saving an order and its lines in one go. |
 | Auditing | Who changed a price or cancelled an order. |
 | Authorization | Customers see their own orders. Admins edit the catalog. Until the module exists, the demo uses `ICurrentUser` and an owner filter in the queries. |
 | Resilience | Retry and circuit breaker on the payment call, which uses a fake provider. |
-| Telemetry, Testing | Tracing one order across all services. The unit tests. |
+| Telemetry, UnitTesting | Tracing one order across all services. The unit tests. |
 
 ## Technology
 
@@ -116,10 +117,27 @@ React with TypeScript, built with Vite.
 
 - Keeps the demo client-agnostic. The services expose a normal HTTP API.
 - Most widely known option.
-- No shared contracts with the services. The client comes from the OpenAPI documentation that `Cat.Minimal.Api` produces.
+- No shared contracts with the services, by choice. The client comes from the OpenAPI documentation that `Cat.Minimal.Api` produces. See [Sharing contracts](#sharing-contracts).
 - Keep it thin: a book list, a basket and an order overview.
 
 Blazor WebAssembly was the alternative. It would share the `Contracts` projects, but it makes the demo look .NET only.
+
+### Sharing contracts
+
+The root readme says that sharing the `Contracts` project of a service is a choice of the developer. The demo makes a choice per connection, and shows both options.
+
+| Connection | Choice | Why |
+|---|---|---|
+| React client to gateway | Not shared | The client is TypeScript, so there is nothing to reference. It also keeps the demo client-agnostic. The client comes from the OpenAPI documents. |
+| Orders to Catalog (prices) | Not shared | Orders needs a price per book and nothing else. It reads the response into a small model of its own, so it does not depend on the rest of the Catalog contract. That also makes the call easy to replace by `Cat.Api.Client` later. |
+| A later service to service call | Shared | To show the other option. The service that calls references the `Contracts` project of the other one and reuses its types. The call is chosen when it is built. A candidate is a service that reads a whole order from Orders. |
+
+What it costs:
+
+- Not shared: duplicate types, and a change in the other service only shows up at runtime.
+- Shared: coupling to the types and the release rhythm of the other service.
+
+The choice is made per connection. Another application can choose differently.
 
 ### Aspire and the database
 
@@ -131,7 +149,7 @@ Aspire and Docker are also a good way for the owner to learn both.
 
 #### What the AppHost does
 
-One `AppHost` project in `demo/` describes the whole system. [AspirePlan.md](AspirePlan.md) has the build order.
+One `AppHost` project in `demo/` describes the whole system. [DemoAspire.md](DemoAspire.md) has the build order.
 
 - A SQL Server container with a volume, so data survives restarts.
 - One database per service: `catalog`, `orders` and `inventory`.
@@ -213,7 +231,7 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 - Events cannot drive the process. `PublishAsync` returns no answer and rethrows the exception of a failing handler.
 - Calls whose answer decides the next step go through an interface. A fake sits behind it now. `Api.Client` and a resilient payment client replace the fakes later.
 - Subscribers are long lived singletons, because the aggregator holds them with weak references. A subscriber that needs a scoped service such as the `DbContext` opens its own scope.
-- Later the payment may move to a message flow, where the workflow sends a message and waits for the answer. That needs a saga capability. See [SagaPlan.md](SagaPlan.md). Until then the payment is an interface with a fake, and Orders keeps its state in the order status.
+- Later the payment may move to a message flow, where the workflow sends a message and waits for the answer. That needs a saga capability. See [Cat.Sagas.md](Cat.Sagas.md). Until then the payment is an interface with a fake, and Orders keeps its state in the order status.
 
 ### Messaging
 
@@ -224,12 +242,10 @@ When `Cat.Messaging` arrives, the AppHost starts the emulator next to SQL Server
 
 The demo uses the Aspire ServiceDefaults project.
 
-It sets up telemetry, health checks and resilience, which overlaps with the future `Cat.Telemetry` and `Cat.Resilience` modules. That is fine, because CAT is a toolbox.
+It sets up telemetry, health checks and resilience. The demo uses Aspire, so ServiceDefaults covers the basics and the demo does not use `Cat.Telemetry` or `Cat.Resilience`.
 
-- Use only what you need. The more modules you use, the more dependencies you get.
-- The future `Cat.Telemetry` and `Cat.Resilience` modules must work in projects that do not use Aspire.
+- The CAT modules add what ServiceDefaults does not cover, such as the decorators on service requests.
 - The modules must not depend on Aspire or on ServiceDefaults.
-- Both can live side by side. In the demo, ServiceDefaults covers the basics and the CAT modules add what it does not cover, such as the decorators on service requests.
 
 ## Data models
 
@@ -434,12 +450,12 @@ Done:
 
 To do:
 
-1. Build the Aspire AppHost in the phases of [AspirePlan.md](AspirePlan.md): ServiceDefaults, the AppHost in `Existing` mode, the `HttpClient` price provider, then the `Container` mode.
+1. Build the Aspire AppHost in the phases of [DemoAspire.md](DemoAspire.md): ServiceDefaults, the AppHost in `Existing` mode, the `HttpClient` price provider, then the `Container` mode.
 2. Handle the known gaps of Orders and Catalog below. The remaining ones wait for the authentication phase, `Cat.Localizations` or the saga work.
 
 ### Known gaps in Orders
 
-- **No refund for a cancelled order.** A cancelled order keeps its `Approved` payment, because there is no refund step yet. This shows after a user cancels a confirmed order: the order is `Cancelled` and the `Payment` row still says `Approved`. Add a refund when payment becomes a message flow (see `SagaPlan.md`):
+- **No refund for a cancelled order.** A cancelled order keeps its `Approved` payment, because there is no refund step yet. This shows after a user cancels a confirmed order: the order is `Cancelled` and the `Payment` row still says `Approved`. Add a refund when payment becomes a message flow (see `Cat.Sagas.md`):
   - A `Refunded` payment status, and an `IPaymentProvider` refund call.
   - `OrderCancelledEvent` gets a subscriber that refunds an approved payment.
   - Cancelling a confirmed order is then only done when the refund succeeded or is on its way.
