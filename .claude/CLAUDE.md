@@ -70,6 +70,7 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
 ### Generated Files
 - Never edit the files in `modules/*/namespaces/` by hand or with a script (sed and the like). They are generated.
 - To change them, change the XML docs, the generator (`tools/Cat.DefaultDocumentationPlugin/`) or the template, then run `dotnet cake --target=Build --configuration=Debug`. A plain `dotnet cake --target=Build` builds `Release` and does not regenerate them.
+- The build loads the generator as a committed binary from `resources/defaultDocumentationPlugins/`. A change in `tools/Cat.DefaultDocumentationPlugin/` only takes effect after you run `tools\Cat.DefaultDocumentationPlugin\BuildAndDeployPlugin.cmd`. Run it before the Debug build, and commit the updated DLLs with the change.
 - After the build, check the diff of the regenerated pages to confirm the change is what you expect.
 
 ### Readmes

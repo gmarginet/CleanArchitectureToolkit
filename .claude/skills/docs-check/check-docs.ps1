@@ -7,7 +7,7 @@ Exit code 1 when there is an error. Warnings do not change the exit code.
 Scope
 - Every markdown file that git knows, tracked or new, except the generated pages in modules/*/namespaces,
   the Jekyll theme, vendor, artifacts and node_modules. Use -IncludeGenerated to add the generated pages.
-- The module readme template is skipped, because its links are written for the folder of a module.
+- The module readme template and the module plan template are skipped, because their links are written for the folder where the copy goes.
 - CLAUDE.md is skipped for the style warning, because it quotes the forbidden punctuation as examples.
 
 Errors
@@ -39,7 +39,7 @@ try {
 } finally { Pop-Location }
 
 $files = $files | Where-Object {
-    $_ -ne 'modules\CatModuleReadmeTemplate.md' -and
+    $_ -ne 'modules\CatModuleReadmeTemplate.md' -and $_ -ne '.claude\skills\module-plan\ModulePlanTemplate.md' -and
     $_ -notmatch '^(jekyll-theme|vendor|artifacts)\\' -and $_ -notmatch '(^|\\)node_modules\\' -and
     ($IncludeGenerated -or $_ -notmatch '^modules\\[^\\]+\\namespaces\\')
 }
@@ -160,7 +160,8 @@ foreach ($file in $files) {
             $warnings.Add("${file}:$n long dash or ellipsis")
         }
 
-        foreach ($m in [regex]::Matches($text, '!?\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)')) { Test-Link $file $n $m.Groups[1].Value }
+        # The target may hold balanced parentheses, like the method signatures in the generated pages. The title may use " or '.
+        foreach ($m in [regex]::Matches($text, '!?\[(?:\\.|[^\]\\])*\]\(((?:[^()\s]|\([^()]*\))+)(?:\s+(?:"[^"]*"|''[^'']*''))?\)')) { Test-Link $file $n $m.Groups[1].Value }
         foreach ($m in [regex]::Matches($text, '(?:src|href)\s*=\s*["'']([^"'']+)["'']')) { Test-Link $file $n $m.Groups[1].Value }
         if ($text -match '^\s{0,3}\[[^\]]+\]:\s*(\S+)') { Test-Link $file $n $Matches[1] }
     }
