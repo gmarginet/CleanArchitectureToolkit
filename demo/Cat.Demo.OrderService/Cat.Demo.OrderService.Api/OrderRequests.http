@@ -1,11 +1,18 @@
 @OrderApi_HostAddress = http://localhost:5102
+@CatalogApi_HostAddress = http://localhost:5101
 
 ### Run the requests from top to bottom. Later requests use ids from earlier responses.
+### Start Catalog and Orders together, for example with the AppHost. The first request reads the book ids from Catalog,
+### because Catalog creates them when it seeds the database and they differ on every machine.
 ### There is no login yet. The X-Demo-User header picks the user: alice (the default), bob or admin.
-### Prices, stock and payment come from fakes:
-###   the price of a book is made from its id (between 5.95 and 44.95 euro),
+### Stock and payment come from fakes:
 ###   a line of more than 50 copies is out of stock,
 ###   a total above 500 euro is declined.
+### Prices come from Catalog when Orders runs under the AppHost. Without the AppHost a fake makes the price from the book id.
+
+### BookSearchRequest (Catalog) => OK (the seeded books, whose ids the orders below use)
+# @name books
+GET {{CatalogApi_HostAddress}}/catalog/books
 
 ### PlaceOrderRequest => Created (alice orders 2 copies of a book)
 # @name placed
@@ -14,8 +21,8 @@ Content-Type: application/json
 
 {
   "lines": [
-    { "bookId": "6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0001", "quantity": 2 },
-    { "bookId": "6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0002", "quantity": 1 }
+    { "bookId": "{{books.response.body.$[0].id}}", "quantity": 2 },
+    { "bookId": "{{books.response.body.$[1].id}}", "quantity": 1 }
   ]
 }
 
@@ -43,19 +50,19 @@ Content-Type: application/json
 
 {
   "lines": [
-    { "bookId": "6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0003", "quantity": 51 }
+    { "bookId": "{{books.response.body.$[2].id}}", "quantity": 51 }
   ]
 }
 
 ### PlaceOrderRequest => Bad request, the payment is declined (CAT-ORD-1003). The order is saved with status Cancelled.
-### 100 copies cost at least 595 euro, whatever the books cost, which is above the 500 euro limit of the fake.
+### 100 copies cost far more than the 500 euro limit of the fake, whatever the books cost.
 POST {{OrderApi_HostAddress}}/orders HTTP/1.1
 Content-Type: application/json
 
 {
   "lines": [
-    { "bookId": "6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0004", "quantity": 50 },
-    { "bookId": "6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0005", "quantity": 50 }
+    { "bookId": "{{books.response.body.$[3].id}}", "quantity": 50 },
+    { "bookId": "{{books.response.body.$[4].id}}", "quantity": 50 }
   ]
 }
 
@@ -74,7 +81,7 @@ Content-Type: application/json
 {
   "lines": [
     { "bookId": "00000000-0000-0000-0000-000000000000", "quantity": 0 },
-    { "bookId": "6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0001", "quantity": 100 }
+    { "bookId": "{{books.response.body.$[0].id}}", "quantity": 100 }
   ]
 }
 
