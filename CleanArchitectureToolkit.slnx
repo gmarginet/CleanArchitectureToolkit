@@ -21,6 +21,14 @@
     <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.DataModels/Cat.Demo.CatalogService.DataModels.csproj" />
     <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Infrastructure/Cat.Demo.CatalogService.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/demo/Cat.Demo.OrderService/">
+    <Project Path="demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Api/Cat.Demo.OrderService.Api.csproj" />
+    <Project Path="demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Contracts/Cat.Demo.OrderService.Contracts.csproj" />
+    <Project Path="demo/Cat.Demo.OrderService/Cat.Demo.OrderService.CoreService/Cat.Demo.OrderService.CoreService.csproj" />
+    <Project Path="demo/Cat.Demo.OrderService/Cat.Demo.OrderService.CoreService.Tests/Cat.Demo.OrderService.CoreService.Tests.csproj" />
+    <Project Path="demo/Cat.Demo.OrderService/Cat.Demo.OrderService.DataModels/Cat.Demo.OrderService.DataModels.csproj" />
+    <Project Path="demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Infrastructure/Cat.Demo.OrderService.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/modules/" />
   <Folder Name="/modules/Cat.Commands/">
     <File Path="modules/Cat.Commands/README.md" />

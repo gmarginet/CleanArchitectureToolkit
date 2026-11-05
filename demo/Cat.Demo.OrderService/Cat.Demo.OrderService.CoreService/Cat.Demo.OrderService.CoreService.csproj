@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\modules\Cat.Commands\Cat.Commands.Abstractions\Cat.Commands.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.EventAggregators\Cat.EventAggregators.Abstractions\Cat.EventAggregators.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.FluentWorkflows\Cat.FluentWorkflows.Commands\Cat.FluentWorkflows.Commands.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.FluentWorkflows\Cat.FluentWorkflows\Cat.FluentWorkflows.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Queries\Cat.Queries.Abstractions\Cat.Queries.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Validators\Cat.Validators\Cat.Validators.csproj" />
+      <ProjectReference Include="..\Cat.Demo.OrderService.Contracts\Cat.Demo.OrderService.Contracts.csproj" />
+      <ProjectReference Include="..\Cat.Demo.OrderService.DataModels\Cat.Demo.OrderService.DataModels.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+      <PackageReference Include="Riok.Mapperly" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,94 @@
+@OrderApi_HostAddress = http://localhost:5102
+
+### Run the requests from top to bottom. Later requests use ids from earlier responses.
+### There is no login yet. The X-Demo-User header picks the user: alice (the default), bob or admin.
+### Prices, stock and payment come from fakes:
+###   the price of a book is made from its id (between 5.95 and 44.95 euro),
+###   a line of more than 50 copies is out of stock,
+###   a total above 500 euro is declined.
+
+### PlaceOrderRequest => Created (alice orders 2 copies of a book)
+# @name placed
+POST {{OrderApi_HostAddress}}/orders HTTP/1.1
+Content-Type: application/json
+
+{
+  "lines": [
+    { "bookId": "6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0001", "quantity": 2 },
+    { "bookId": "6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0002", "quantity": 1 }
+  ]
+}
+
+### OrderGetListRequest => OK (alice sees her own orders, newest first)
+GET {{OrderApi_HostAddress}}/orders
+
+### OrderGetRequest => OK (the order that was just placed)
+GET {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}
+
+### OrderGetRequest => Not Found, because the order belongs to alice (CAT-GEN-1002)
+GET {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}
+X-Demo-User: bob
+
+### OrderGetListRequest => OK (bob has no orders yet)
+GET {{OrderApi_HostAddress}}/orders
+X-Demo-User: bob
+
+### OrderGetRequest => OK (an admin sees every order)
+GET {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}
+X-Demo-User: admin
+
+### PlaceOrderRequest => Bad request, out of stock (CAT-ORD-1002). The order is saved with status Cancelled.
+POST {{OrderApi_HostAddress}}/orders HTTP/1.1
+Content-Type: application/json
+
+{
+  "lines": [
+    { "bookId": "6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0003", "quantity": 51 }
+  ]
+}
+
+### PlaceOrderRequest => Bad request, the payment is declined (CAT-ORD-1003). The order is saved with status Cancelled.
+### 100 copies cost at least 595 euro, whatever the books cost, which is above the 500 euro limit of the fake.
+POST {{OrderApi_HostAddress}}/orders HTTP/1.1
+Content-Type: application/json
+
+{
+  "lines": [
+    { "bookId": "6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0004", "quantity": 50 },
+    { "bookId": "6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0005", "quantity": 50 }
+  ]
+}
+
+### PlaceOrderRequest => Bad request, no lines
+POST {{OrderApi_HostAddress}}/orders HTTP/1.1
+Content-Type: application/json
+
+{
+  "lines": []
+}
+
+### PlaceOrderRequest => Bad request, several rules fail (book id and quantity)
+POST {{OrderApi_HostAddress}}/orders HTTP/1.1
+Content-Type: application/json
+
+{
+  "lines": [
+    { "bookId": "00000000-0000-0000-0000-000000000000", "quantity": 0 },
+    { "bookId": "6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0001", "quantity": 100 }
+  ]
+}
+
+### CancelOrderRequest => No Content (alice cancels her order)
+POST {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}/cancel
+
+### CancelOrderRequest => Conflict, the order is already cancelled (CAT-ORD-1004)
+POST {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}/cancel
+
+### CancelOrderRequest => Not Found, bob cannot cancel the order of alice
+POST {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}/cancel
+X-Demo-User: bob
+
+### CleanUpOrderCountersRequest => No Content
+### Development only. It simulates the nightly run of the scheduler.
+### Deletes the counters of earlier days and creates the counter of today.
+POST {{OrderApi_HostAddress}}/development/scheduler/clean-up-order-counters
