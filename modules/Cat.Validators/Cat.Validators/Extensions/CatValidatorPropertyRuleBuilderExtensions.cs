@@ -617,6 +617,115 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     }
 
     /// <summary>
+    /// The collection must have at least the minimum number of items. Code <c>CAT-VAL-1018</c>.
+    /// A <c>null</c> collection passes. Use <c>NotEmpty</c> when the collection is required.
+    /// </summary>
+    /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the collection.</typeparam>
+    /// <param name="builder">The builder to add the rule to.</param>
+    /// <param name="minimumCount">The smallest allowed number of items.</param>
+    /// <returns>The options of the rule.</returns>
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> MinimumCount<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
+        int minimumCount)
+        where TModel : class
+        where TProperty : IEnumerable?
+        => builder.MinimumCount(_ => minimumCount);
+
+    /// <summary>
+    /// The collection must have at least the minimum number of items, taken from the model. Code <c>CAT-VAL-1018</c>.
+    /// A <c>null</c> collection passes.
+    /// </summary>
+    /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the collection.</typeparam>
+    /// <param name="builder">The builder to add the rule to.</param>
+    /// <param name="minimumCountFunc">Gets the smallest allowed number of items from the model.</param>
+    /// <returns>The options of the rule.</returns>
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> MinimumCount<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
+        Func<TModel, int> minimumCountFunc)
+        where TModel : class
+        where TProperty : IEnumerable?
+    {
+        var newRule = new PropertyMinimumCountValidatorRule<TModel, TProperty>(minimumCountFunc);
+        return builder.AddPropertyRule(newRule);
+    }
+
+    /// <summary>
+    /// The collection must not have more than the maximum number of items. Code <c>CAT-VAL-1019</c>.
+    /// A <c>null</c> collection passes.
+    /// </summary>
+    /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the collection.</typeparam>
+    /// <param name="builder">The builder to add the rule to.</param>
+    /// <param name="maximumCount">The largest allowed number of items.</param>
+    /// <returns>The options of the rule.</returns>
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> MaximumCount<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
+        int maximumCount)
+        where TModel : class
+        where TProperty : IEnumerable?
+        => builder.MaximumCount(_ => maximumCount);
+
+    /// <summary>
+    /// The collection must not have more than the maximum number of items, taken from the model. Code <c>CAT-VAL-1019</c>.
+    /// A <c>null</c> collection passes.
+    /// </summary>
+    /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the collection.</typeparam>
+    /// <param name="builder">The builder to add the rule to.</param>
+    /// <param name="maximumCountFunc">Gets the largest allowed number of items from the model.</param>
+    /// <returns>The options of the rule.</returns>
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> MaximumCount<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
+        Func<TModel, int> maximumCountFunc)
+        where TModel : class
+        where TProperty : IEnumerable?
+    {
+        var newRule = new PropertyMaximumCountValidatorRule<TModel, TProperty>(maximumCountFunc);
+        return builder.AddPropertyRule(newRule);
+    }
+
+    /// <summary>
+    /// The number of items must be between the minimum and the maximum, both included. Code <c>CAT-VAL-1020</c>.
+    /// A <c>null</c> collection passes. The rule throws when it runs and <paramref name="min"/> is greater than <paramref name="max"/>.
+    /// </summary>
+    /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the collection.</typeparam>
+    /// <param name="builder">The builder to add the rule to.</param>
+    /// <param name="min">The smallest allowed number of items.</param>
+    /// <param name="max">The largest allowed number of items.</param>
+    /// <returns>The options of the rule.</returns>
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> CountBetween<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
+        int min,
+        int max)
+        where TModel : class
+        where TProperty : IEnumerable?
+        => builder.CountBetween(_ => min, _ => max);
+
+    /// <summary>
+    /// The number of items must be between a minimum and a maximum taken from the model, both included. Code <c>CAT-VAL-1020</c>.
+    /// A <c>null</c> collection passes. The rule throws when it runs and the minimum is greater than the maximum.
+    /// </summary>
+    /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the collection.</typeparam>
+    /// <param name="builder">The builder to add the rule to.</param>
+    /// <param name="minFunc">Gets the smallest allowed number of items from the model.</param>
+    /// <param name="maxFunc">Gets the largest allowed number of items from the model.</param>
+    /// <returns>The options of the rule.</returns>
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> CountBetween<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
+        Func<TModel, int> minFunc,
+        Func<TModel, int> maxFunc)
+        where TModel : class
+        where TProperty : IEnumerable?
+    {
+        var newRule = new PropertyCountBetweenValidatorRule<TModel, TProperty>(minFunc, maxFunc);
+        return builder.AddPropertyRule(newRule);
+    }
+
+    /// <summary>
     /// The text must match the regular expression pattern. Code <c>CAT-VAL-1009</c>.
     /// A <c>null</c> string passes.
     /// </summary>

@@ -43,6 +43,7 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Fields | |
 | :--- | :--- |
+| [CountBetween](CatValidatorErrorDefinitions.CountBetween.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.CountBetween') | The number of items is outside the range\. Code `CAT-VAL-1020`\. |
 | [Empty](CatValidatorErrorDefinitions.Empty.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.Empty') | The value should be empty but isn't\. Code `CAT-VAL-1004`\. |
 | [Equal](CatValidatorErrorDefinitions.Equal.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.Equal') | The value doesn't equal the comparison value\. Code `CAT-VAL-1011`\. |
 | [ExactLength](CatValidatorErrorDefinitions.ExactLength.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.ExactLength') | The text length isn't the exact length\. Code `CAT-VAL-1006`\. |
@@ -54,7 +55,9 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 | [LessThan](CatValidatorErrorDefinitions.LessThan.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.LessThan') | The value isn't less than the comparison value\. Code `CAT-VAL-1012`\. |
 | [LessThanOrEqualTo](CatValidatorErrorDefinitions.LessThanOrEqualTo.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.LessThanOrEqualTo') | The value isn't less than or equal to the comparison value\. Code `CAT-VAL-1013`\. |
 | [MatchesRegex](CatValidatorErrorDefinitions.MatchesRegex.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.MatchesRegex') | The text doesn't match the regular expression\. Code `CAT-VAL-1009`\. |
+| [MaximumCount](CatValidatorErrorDefinitions.MaximumCount.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.MaximumCount') | The collection has more items than the maximum\. Code `CAT-VAL-1019`\. |
 | [MaximumLength](CatValidatorErrorDefinitions.MaximumLength.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.MaximumLength') | The text is longer than the maximum\. Code `CAT-VAL-1007`\. |
+| [MinimumCount](CatValidatorErrorDefinitions.MinimumCount.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.MinimumCount') | The collection has fewer items than the minimum\. Code `CAT-VAL-1018`\. |
 | [MinimumLength](CatValidatorErrorDefinitions.MinimumLength.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.MinimumLength') | The text is shorter than the minimum\. Code `CAT-VAL-1008`\. |
 | [NotEmpty](CatValidatorErrorDefinitions.NotEmpty.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.NotEmpty') | The value is empty but shouldn't be\. Code `CAT-VAL-1003`\. |
 | [NotEqual](CatValidatorErrorDefinitions.NotEqual.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.NotEqual') | The value equals the comparison value but shouldn't\. Code `CAT-VAL-1010`\. |

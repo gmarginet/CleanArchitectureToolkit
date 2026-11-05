@@ -99,4 +99,19 @@ public static class CatValidatorErrorDefinitions
     /// The value isn't between the bounds, bounds excluded. Code <c>CAT-VAL-1017</c>.
     /// </summary>
     public static readonly CatErrorDefinition ExclusiveBetween = CatErrorDefinition.Create($"{ValidatorErrorCodePrefix}1017", "'{propertyName}' should be between '{lowerBound}' and '{upperBound}' (exclusive). You entered '{propertyValue}'.");
+
+    /// <summary>
+    /// The collection has fewer items than the minimum. Code <c>CAT-VAL-1018</c>.
+    /// </summary>
+    public static readonly CatErrorDefinition MinimumCount = CatErrorDefinition.Create($"{ValidatorErrorCodePrefix}1018", "'{propertyName}' should have at least '{minCount}' items. It has '{count}' items.");
+
+    /// <summary>
+    /// The collection has more items than the maximum. Code <c>CAT-VAL-1019</c>.
+    /// </summary>
+    public static readonly CatErrorDefinition MaximumCount = CatErrorDefinition.Create($"{ValidatorErrorCodePrefix}1019", "'{propertyName}' should have '{maxCount}' items or fewer. It has '{count}' items.");
+
+    /// <summary>
+    /// The number of items is outside the range. Code <c>CAT-VAL-1020</c>.
+    /// </summary>
+    public static readonly CatErrorDefinition CountBetween = CatErrorDefinition.Create($"{ValidatorErrorCodePrefix}1020", "'{propertyName}' should have between '{minCount}' and '{maxCount}' items. It has '{count}' items.");
 }

@@ -47,6 +47,7 @@ Rules never stop at the first failure. One call reports every problem.
     - [Between rules](#between-rules)
     - [Rules for nullable values](#rules-for-nullable-values)
     - [String rules](#string-rules)
+    - [Collection rules](#collection-rules)
     - [Nested validation rules](#nested-validation-rules)
     - [Custom rules with Must](#custom-rules-with-must)
   - [Rule options](#rule-options)
@@ -295,6 +296,26 @@ validator.AddPropertyRules(m => m.PostalCode, b =>
 {
     b.NotEmpty();
     b.MatchesRegex(@"^\d{4}[A-Z]{2}$");
+});
+```
+
+#### Collection rules
+
+Collection rules compile on any `IEnumerable` property, like arrays, lists and `IEnumerable<T>`. They all let a `null` collection pass, so pair them with `NotEmpty` when the collection is required. They count the items without loading more than needed. A plain `ICollection` is not enumerated.
+
+| Rule | Passes when | Code | Message | Extra arguments |
+|------|-------------|------|---------|-----------------|
+| `MinimumCount(n)` | The collection has at least `n` items. | `CAT-VAL-1018` | `'{propertyName}' should have at least '{minCount}' items. It has '{count}' items.` | `minCount`, `count` |
+| `MaximumCount(n)` | The collection has at most `n` items. | `CAT-VAL-1019` | `'{propertyName}' should have '{maxCount}' items or fewer. It has '{count}' items.` | `maxCount`, `count` |
+| `CountBetween(min, max)` | The number of items is between `min` and `max`, both included. | `CAT-VAL-1020` | `'{propertyName}' should have between '{minCount}' and '{maxCount}' items. It has '{count}' items.` | `minCount`, `maxCount`, `count` |
+
+`CountBetween` needs `min` to be at most `max`, or the rule throws when it runs. Every collection rule also takes lambdas instead of numbers, so the limits can come from the model: `MaximumCount(m => m.MaxLines)` and `CountBetween(m => m.MinLines, m => m.MaxLines)`.
+
+```csharp
+validator.AddPropertyRules(m => m.BookIds, b =>
+{
+    b.NotEmpty();
+    b.MaximumCount(100);
 });
 ```
 
