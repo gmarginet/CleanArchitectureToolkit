@@ -45,7 +45,8 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 | Customers | `Customer` stays in Orders, with an `ExternalId` that holds the `sub` claim of the token. No customer endpoints. `PlaceOrder` finds or creates the customer from the token. |
 | Current user | The business logic only knows `ICurrentUser`. Orders is built against it first, with a development stub. Keycloak and the real implementation come with the gateway. |
 | Scope of the first Orders build | Core plus FluentWorkflows and EventAggregators. The place order workflow runs with `IStockReservation` and `IPaymentProvider`, both with a fake behind them. Orders keeps its state in the order status. A saga style payment over messages comes later, see [SagaPlan.md](SagaPlan.md). |
-| Unit price | The client sends only `BookId` and `Quantity`. Orders asks `IPriceProvider` for the current price of each book and stores it in `OrderLine.UnitPrice`. A fake sits behind the interface now. Once Aspire runs the services, an `Api.Client` call to Catalog replaces the fake. Catalog needs a price endpoint for it, see the known gaps of Catalog. |
+| Unit price | The client sends only `BookId` and `Quantity`. Orders asks `IPriceProvider` for the current price of each book and stores it in `OrderLine.UnitPrice`. A fake sits behind the interface now. Once Aspire runs the services, a plain `HttpClient` implementation calls the price endpoint of Catalog. The `Cat.Api.Client` module replaces it in the future. See [AspirePlan.md](AspirePlan.md). |
+| SQL Server mode | The AppHost supports two modes, switched by a setting: a SQL Server container, or an existing instance through connection strings. Docker is not required to run the demo. The `Existing` mode is built first. See [AspirePlan.md](AspirePlan.md). |
 | Counter cleanup | The `CleanUpOrderCounters` service request deletes the rows of earlier days and creates the row of today. The Scheduler will run it nightly. Until the Scheduler exists, a development only endpoint triggers it. |
 | Currency | One currency, euro, to keep the demo simple. |
 | API gateway | It is the API gateway from the Application Architecture chapter of the root readme. How it looks is clear once it is built. It could become a new module. |
@@ -98,7 +99,7 @@ None at the moment.
 |---|---|
 | Messaging, EventProcessor | Orders publishes `OrderPlaced`. Inventory and Notifications consume it. |
 | Scheduling | Clean up the daily order counters every night. Cancel unpaid orders after 24 hours. A nightly low stock report. |
-| Api.Client | Orders asks Catalog for current prices through the gateway. |
+| Api.Client | Orders asks Catalog for current prices through the gateway. It starts as a plain `HttpClient` in Orders, and the module replaces that once the shape is clear. |
 | Dapper | Fast read-only order overview queries, next to EF Core for writes. |
 | Caching | Cached catalog queries. |
 | Transactions | Saving an order and its lines in one go. |
@@ -130,7 +131,7 @@ Aspire and Docker are also a good way for the owner to learn both.
 
 #### What the AppHost does
 
-One `AppHost` project in `demo/` describes the whole system:
+One `AppHost` project in `demo/` describes the whole system. [AspirePlan.md](AspirePlan.md) has the build order.
 
 - A SQL Server container with a volume, so data survives restarts.
 - One database per service: `catalog`, `orders` and `inventory`.
@@ -142,8 +143,8 @@ Aspire passes connection strings and service URLs to each project. Nobody edits 
 
 #### What a user does after cloning
 
-1. Install the .NET SDK, Node and Docker Desktop.
-2. Run `dotnet run --project demo/Demo.AppHost`.
+1. Install the .NET SDK, Node and Docker Desktop. Without Docker, set the AppHost to the `Existing` mode and point it at your own SQL Server.
+2. Run `dotnet run --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost`.
 3. Open the Aspire dashboard, which links to the React app.
 
 #### Schema and seed data
@@ -433,7 +434,8 @@ Done:
 
 To do:
 
-1. Handle the known gaps of Orders and Catalog below.
+1. Build the Aspire AppHost in the phases of [AspirePlan.md](AspirePlan.md): ServiceDefaults, the AppHost in `Existing` mode, the `HttpClient` price provider, then the `Container` mode.
+2. Handle the known gaps of Orders and Catalog below. The remaining ones wait for the authentication phase, `Cat.Localizations` or the saga work.
 
 ### Known gaps in Orders
 
