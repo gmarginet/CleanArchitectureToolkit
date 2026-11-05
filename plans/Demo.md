@@ -70,7 +70,8 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 | Current user | The business logic only knows `ICurrentUser`. Orders is built against it first, with a development stub. Keycloak and the real implementation come with the gateway. The interface moves to `Cat.Authorization.Abstractions` and is renamed `ICatUser` when that project exists. Until then the demo keeps `ICurrentUser`. See [Cat.Authorization.md](Cat.Authorization.md). |
 | Scope of the first Orders build | Core plus FluentWorkflows and EventAggregators. The place order workflow runs with `IStockReservation` and `IPaymentProvider`, both with a fake behind them. Orders keeps its state in the order status. A saga style payment over messages comes later, see [Cat.Sagas.md](Cat.Sagas.md). |
 | Unit price | The client sends only `BookId` and `Quantity`. Orders asks `IPriceProvider` for the current price of each book and stores it in `OrderLine.UnitPrice`. Under the AppHost, `CatalogPriceProvider`, a plain `HttpClient` implementation, calls the price endpoint of Catalog. Without the AppHost a fake answers. The `Cat.Api.Client` module replaces it in the future. See [DemoAspire.md](DemoAspire.md). |
-| SQL Server mode | The AppHost supports two modes, switched by a setting: a SQL Server container, or an existing instance through connection strings. Docker is not required to run the demo. The `Existing` mode is built first. See [DemoAspire.md](DemoAspire.md). |
+| Payment provider | A separate demo service, `Cat.Demo.PaymentService`, with no database. Orders connects to it over HTTP, so retry and circuit breaker have a real call to protect. The service takes payments by the same rules as `FakePaymentProvider` and can be made to fail on purpose. A setting of the service switches the failures on, not a header or a query value of the call. The in-process `FakePaymentProvider` stays for a plain `dotnet run`, the way `FakePriceProvider` does. The box in the architecture drawing stays hatched until the service exists. |
+| SQL Server mode | The AppHost supports two modes, switched by a setting: a SQL Server container, or an existing instance through connection strings. Docker is not required to run the demo. Both modes are built, `Existing` first. See [DemoAspire.md](DemoAspire.md). |
 | Counter cleanup | The `CleanUpOrderCounters` service request deletes the rows of earlier days and creates the row of today. The Scheduler will run it nightly. Until the Scheduler exists, a development only endpoint triggers it. |
 | Currency | One currency, euro, to keep the demo simple. |
 | Sharing contracts | A choice per connection, as the root readme describes. React client to gateway: not shared. Orders to Catalog: not shared. A later service to service call: shared, so the demo shows both. See [Sharing contracts](#sharing-contracts). |
@@ -81,7 +82,10 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 
 ### Open
 
-None at the moment.
+- **Payment service failures.** Which failures can the setting switch on: latency, a share of random errors, a full outage? Which values does it take?
+- **Unreachable payment service.** What does the place order step do when the payment service times out or the circuit is open? A failed order with its own error code, or something else?
+- **Double charge.** A retried payment call may charge twice. Does the call carry an idempotency key, for example the order number, and does the service remember the keys?
+- **Port and wiring.** Which fixed port does the payment service get, and how does Orders learn its address? The price provider uses service discovery, `services:catalog:*`.
 
 ## Services
 
@@ -130,7 +134,7 @@ None at the moment.
 | EFCore transactions | Saving an order and its lines in one go. |
 | Auditing | Who changed a price or cancelled an order. |
 | Authorization | Customers see their own orders. Admins edit the catalog. Until the module exists, the demo uses `ICurrentUser` and an owner filter in the queries. |
-| Resilience | Retry and circuit breaker on the payment call, which uses a fake provider. |
+| Resilience | Retry and circuit breaker on the call from Orders to the separate payment service, which can fail on purpose. |
 | Telemetry, UnitTesting | Tracing one order across all services. The unit tests. |
 
 ## Technology
@@ -253,7 +257,7 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 - The workflow publishes `OrderConfirmed` and `OrderCancelled`. It knows only the aggregator, not the subscribers.
 - Subscribers: a status updater, an audit logger and later the message bridge for `OrderPlaced`.
 - Events cannot drive the process. `PublishAsync` returns no answer and rethrows the exception of a failing handler.
-- Calls whose answer decides the next step go through an interface. A fake sits behind it now. `Api.Client` and a resilient payment client replace the fakes later.
+- Calls whose answer decides the next step go through an interface. A fake sits behind it now. `Api.Client` replaces the price call later. The payment fake is replaced by a client for the separate payment service, see the decision on the payment provider.
 - Subscribers are long lived singletons, because the aggregator holds them with weak references. A subscriber that needs a scoped service such as the `DbContext` opens its own scope.
 - Later the payment may move to a message flow, where the workflow sends a message and waits for the answer. That needs a saga capability. See [Cat.Sagas.md](Cat.Sagas.md). Until then the payment is an interface with a fake, and Orders keeps its state in the order status.
 
@@ -471,11 +475,13 @@ Done:
 - Catalog tracing: the `ActivitySource` decorator runs on the Catalog requests.
 - Catalog OpenAPI price type: `price` is a plain nullable number, because the JSON options no longer read numbers from strings.
 - Catalog duplicate ISBN race: `BookSaveCommandHandler` catches the unique index error and returns the `CAT-CTL-1000` response. Tried with 12 parallel saves of the same new ISBN on a local SQL Server: one saved, eleven bad requests, no 500. There is no automated test for it, because the unit tests do not use a database.
+- Aspire AppHost built in the phases of [DemoAspire.md](DemoAspire.md): ServiceDefaults, the AppHost in `Existing` mode, the `HttpClient` price provider and the `Container` mode. A fresh start from an empty volume and a restart that keeps the data were tried. The readme of the demo has the run steps for both modes and the Docker memory notes.
 
 To do:
 
-1. Build the Aspire AppHost in the phases of [DemoAspire.md](DemoAspire.md): ServiceDefaults, the AppHost in `Existing` mode, the `HttpClient` price provider, then the `Container` mode.
-2. Handle the known gaps of Orders and Catalog below. The remaining ones wait for the authentication phase, `Cat.Localizations` or the saga work.
+1. Build `Cat.Demo.PaymentService` and a client for it in Orders. Answer the open questions about it first. This also gives [Cat.Resilience.md](Cat.Resilience.md) a call to protect.
+2. Add the next block of the demo architecture. The order is in the sections above, and the open points of the AppHost are in [DemoAspire.md](DemoAspire.md#open-questions).
+3. Handle the known gaps of Orders and Catalog below. The remaining ones wait for the authentication phase, `Cat.Localizations` or the saga work.
 
 ### Known gaps in Orders
 

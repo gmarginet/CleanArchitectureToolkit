@@ -56,7 +56,7 @@ React, the gateway, Keycloak, the Service Bus and Inventory are not part of this
 |---|---|
 | Names | `Cat.Demo.AppHost` and `Cat.Demo.ServiceDefaults`, each in its own folder in `demo/`. |
 | SQL Server | Two modes, switched by one AppHost setting: `Container` and `Existing`. See [How the AppHost works](#how-the-apphost-works). |
-| First mode to build | `Existing`, because Docker and WSL are not installed on the owner's machine. `Container` follows in its own phase. |
+| First mode to build | `Existing`, because Docker and WSL were not installed on the owner's machine at the start. `Container` followed in its own phase. |
 | Standalone start | Every service still starts with `dotnet run` and its own `appsettings`. The AppHost is a convenience, not a requirement. |
 | Price provider | The first version is a plain `HttpClient` implementation in `Orders.Infrastructure`. `Cat.Api.Client` replaces it in the future. See [Swapping the price provider](#swapping-the-price-provider). |
 | Service to service calls | Orders calls Catalog directly for now, because the gateway does not exist yet. |
@@ -70,7 +70,7 @@ React, the gateway, Keycloak, the Service Bus and Inventory are not part of this
 - Both have an `IsDevelopment` seeder and fixed launch profile ports: Catalog 5101, Orders 5102.
 - The `.http` files use those ports.
 - Orders registers `FakePriceProvider` in `Orders.Infrastructure`.
-- This machine has no Docker and no WSL. `Container` mode cannot run here until the owner installs them.
+- Docker Desktop and WSL2 are installed on the owner's machine, so both modes run here. WSL2 is limited by `.wslconfig` to 8 GB, 4 processors and 2 GB swap.
 
 ## Projects
 
@@ -101,9 +101,12 @@ A setting in the AppHost configuration, `Sql:Mode`, picks one of two modes.
 | `Container` | The AppHost starts a SQL Server container with a data volume, creates the databases `catalog` and `orders` and passes their connection strings. | Docker. |
 
 - In `Existing` mode the AppHost reads `ConnectionStrings:catalog` and `ConnectionStrings:orders`. The defaults are the strings that sit in the `appsettings.Development.json` of the services.
-- The default mode is `Container`, because a clone should need one command. The owner sets `Existing` in the user secrets of the AppHost until Docker is installed.
+- The default mode is `Container`, because a clone should need one command. A developer without Docker sets `Sql:Mode` to `Existing` in the user secrets of the AppHost.
 - The services see no difference. They always read `GetConnectionString("catalog")` and `GetConnectionString("orders")`.
-- In `Container` mode the AppHost limits the memory of SQL Server with `MSSQL_MEMORY_LIMIT_MB`, as described in the demo plan.
+- In `Container` mode the AppHost limits the memory of SQL Server with `MSSQL_MEMORY_LIMIT_MB`, as described in the demo plan. Decided: 2048. An idle container uses about 620 MiB.
+- Decided: the container uses a named data volume, `cat-demo-sql-data`, and the default lifetime, so it stops with the AppHost. Aspire generates the `sa` password and keeps it in the user secrets.
+- The database resources are called `catalog-db` and `orders-db`, because a resource name must differ from the project names `catalog` and `orders`. The databases themselves and the connection names stay `catalog` and `orders`.
+- Reset is `docker volume rm cat-demo-sql-data` with the AppHost stopped.
 
 ### Start order
 
@@ -151,16 +154,17 @@ Decided: the AppHost keeps the fixed ports 5101 and 5102, with `WithHttpEndpoint
 1. **ServiceDefaults.** Create the project. Both Api projects call it. Build and run both services standalone to check that nothing broke.
 2. **AppHost, `Existing` mode.** (Built. The `.http` requests pass and the traces show in the dashboard.) Create the AppHost with Catalog and Orders. Both show up in the dashboard with logs, traces and health. Run every request of both `.http` files against the AppHost.
 3. **Price provider.** (Built. A `POST /orders` trace shows the call to Catalog and the `GET /catalog/books/prices` span.) Add `CatalogPriceProvider` and its tests. Place an order through the AppHost and check in the dashboard that the Catalog call is part of the trace.
-4. **AppHost, `Container` mode.** Needs Docker on the machine. Add the SQL Server container, the data volume and the databases. Check a fresh start from an empty volume and a restart that keeps the data.
-5. **Documents.** Update `demo/README.md` with the run steps for both modes and the Docker memory notes. Update [Demo.md](Demo.md).
+4. **AppHost, `Container` mode.** (Built. A fresh start from an empty volume gives empty orders and seeded books. A restart keeps a placed order.) Needs Docker on the machine. Add the SQL Server container, the data volume and the databases. Check a fresh start from an empty volume and a restart that keeps the data.
+5. **Documents.** (Built. `demo/README.md` has the run steps for both modes, the Docker memory notes and the AppHost chapter. The drawing shows the dashboard box as built.) Update `demo/README.md` with the run steps for both modes and the Docker memory notes. Update [Demo.md](Demo.md).
 
-Phase 4 can wait. Phases 1 to 3 do not need Docker.
+Phases 1 to 3 do not need Docker. Phase 4 does.
 
 ## Later
 
 These come after the first AppHost build, in the order of the demo plan.
 
 - The `Cat.Api.Client` module, replacing `CatalogPriceProvider`.
+- `Cat.Demo.PaymentService`, a separate fake payment service that the AppHost starts and that can fail on purpose. See the payment provider decision in [Demo.md](Demo.md#decided).
 - The API gateway, Keycloak, JWT validation in the services and the real `ICurrentUser`.
 - The React client, started by the AppHost.
 - The Service Bus emulator, with `Cat.Messaging`.
