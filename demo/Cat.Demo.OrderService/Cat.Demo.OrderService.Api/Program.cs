@@ -11,6 +11,7 @@ using Cat.Demo.OrderService.CoreService.Workflows.Steps;
 using Cat.Demo.OrderService.Infrastructure.CommandHandlers;
 using Cat.Demo.OrderService.Infrastructure.Extensions;
 using Cat.Demo.OrderService.Infrastructure.QueryHandlers;
+using Cat.Demo.ServiceDefaults;
 using Cat.EventAggregators.Extensions;
 using Cat.Expressions.Extensions;
 using Cat.FluentWorkflows.Commands.Extensions;
@@ -30,6 +31,8 @@ using Microsoft.Extensions.Hosting;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 builder.Services.AddOpenApi();
 
@@ -69,6 +72,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapDefaultEndpoints();
 app.MapOrderServiceEndpoints();
 
 if (app.Environment.IsDevelopment())

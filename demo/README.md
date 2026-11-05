@@ -9,6 +9,7 @@ The full plan is in [DemoPlan.md](../plans/DemoPlan.md).
 - [Run the Catalog service](#run-the-catalog-service)
 - [Try the endpoints](#try-the-endpoints)
 - [Run the Order service](#run-the-order-service)
+- [Health checks and telemetry](#health-checks-and-telemetry)
 - [Run the tests](#run-the-tests)
 
 ## What is here
@@ -17,6 +18,7 @@ The full plan is in [DemoPlan.md](../plans/DemoPlan.md).
 |---|---|
 | `Cat.Demo.CatalogService` | Books, categories and prices. The first service of the plan. |
 | `Cat.Demo.OrderService` | Customers place and track orders. The place order process is a workflow. |
+| `Cat.Demo.ServiceDefaults` | Shared defaults of the services: telemetry, health checks, service discovery and resilient HTTP clients. Only the demo uses it, never the CAT modules. |
 
 More services, the Aspire AppHost and the React client follow. See the plan.
 
@@ -68,6 +70,15 @@ Things to know:
 - **Order numbers** look like `20261105-0001`. The counter restarts every UTC day. The development endpoint `POST /development/scheduler/clean-up-order-counters` removes the counters of earlier days. The scheduler will do that every night.
 
 Open `Cat.Demo.OrderService/Cat.Demo.OrderService.Api/OrderRequests.http` in Visual Studio or Rider and run the requests from top to bottom.
+
+## Health checks and telemetry
+
+Both services use `Cat.Demo.ServiceDefaults`.
+
+- **Health checks.** `/health` is the readiness check and `/alive` the liveness check. Both are available in every environment and answer with a plain `Healthy` or `Unhealthy`.
+- **Telemetry.** Logs, metrics and traces go through OpenTelemetry. They are exported when `OTEL_EXPORTER_OTLP_ENDPOINT` is set, which the Aspire AppHost will do. Without it nothing leaves the process.
+- **Traces of the CAT modules.** The wildcard source `Cat.*` covers the service request decorator and the workflows.
+- **HTTP clients.** Every `HttpClient` gets service discovery and the standard resilience handler: retries, timeouts and a circuit breaker.
 
 ## Run the tests
 

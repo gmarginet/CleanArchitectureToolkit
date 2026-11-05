@@ -143,6 +143,6 @@ These come after the first AppHost build, in the order of the demo plan.
 
 ## Open questions
 
-- **Tracing sources.** ServiceDefaults sets up OpenTelemetry. The `ActivitySource` decorator needs its source name added there, or its activities do not reach the dashboard. Find the name while building phase 1.
+- **Tracing sources.** Settled in phase 1. ServiceDefaults adds the wildcard source `Cat.*`, which covers `Cat.ServiceRequests` and `Cat.FluentWorkFlows`. Check in phase 2 that the activities show up in the dashboard.
 - **Ports.** Fixed ports or Aspire ports. See [Ports](#ports).
 - **Existing mode and Trusted_Connection.** The default strings use Windows authentication. That works for a local process but not for a container. Fine for `Existing` mode, since nothing runs in a container there.

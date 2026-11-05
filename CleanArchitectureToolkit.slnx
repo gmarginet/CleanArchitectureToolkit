@@ -29,6 +29,9 @@
     <Project Path="demo/Cat.Demo.OrderService/Cat.Demo.OrderService.DataModels/Cat.Demo.OrderService.DataModels.csproj" />
     <Project Path="demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Infrastructure/Cat.Demo.OrderService.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/demo/Cat.Demo.ServiceDefaults/">
+    <Project Path="demo/Cat.Demo.ServiceDefaults/Cat.Demo.ServiceDefaults/Cat.Demo.ServiceDefaults.csproj" />
+  </Folder>
   <Folder Name="/modules/" />
   <Folder Name="/modules/Cat.Commands/">
     <File Path="modules/Cat.Commands/README.md" />

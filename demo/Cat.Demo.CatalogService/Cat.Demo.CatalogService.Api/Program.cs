@@ -8,6 +8,7 @@ using Cat.Demo.CatalogService.CoreService.Validators;
 using Cat.Demo.CatalogService.Infrastructure.CommandHandlers;
 using Cat.Demo.CatalogService.Infrastructure.Extensions;
 using Cat.Demo.CatalogService.Infrastructure.QueryHandlers;
+using Cat.Demo.ServiceDefaults;
 using Cat.Expressions.Extensions;
 using Cat.Minimal.Api.Extensions;
 using Cat.Queries.Decorators.Logging.Extensions;
@@ -24,6 +25,8 @@ using Microsoft.Extensions.Hosting;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 builder.Services.AddOpenApi();
 
@@ -55,6 +58,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapDefaultEndpoints();
 app.MapCatalogServiceEndpoints();
 app.Services.AddCatServiceRequestsModuleValidationDecorator();
 app.Services.AddCatServiceRequestsModuleLoggingDecorator();

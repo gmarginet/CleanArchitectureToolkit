@@ -26,6 +26,7 @@
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests\Cat.ServiceRequests.csproj" />
       <ProjectReference Include="..\Cat.Demo.CatalogService.Contracts\Cat.Demo.CatalogService.Contracts.csproj" />
       <ProjectReference Include="..\Cat.Demo.CatalogService.CoreService\Cat.Demo.CatalogService.CoreService.csproj" />
+      <ProjectReference Include="..\..\Cat.Demo.ServiceDefaults\Cat.Demo.ServiceDefaults\Cat.Demo.ServiceDefaults.csproj" />
       <ProjectReference Include="..\Cat.Demo.CatalogService.Infrastructure\Cat.Demo.CatalogService.Infrastructure.csproj" />
     </ItemGroup>
 
