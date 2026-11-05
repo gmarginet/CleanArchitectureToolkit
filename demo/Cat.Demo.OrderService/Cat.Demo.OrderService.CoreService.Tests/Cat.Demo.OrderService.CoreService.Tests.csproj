@@ -30,6 +30,7 @@
       <ProjectReference Include="..\..\..\modules\Cat.Expressions\Cat.Expressions\Cat.Expressions.csproj" />
       <ProjectReference Include="..\..\..\tests\Cat.NUnit\Cat.NUnit.csproj" />
       <ProjectReference Include="..\Cat.Demo.OrderService.CoreService\Cat.Demo.OrderService.CoreService.csproj" />
+      <ProjectReference Include="..\Cat.Demo.OrderService.Infrastructure\Cat.Demo.OrderService.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

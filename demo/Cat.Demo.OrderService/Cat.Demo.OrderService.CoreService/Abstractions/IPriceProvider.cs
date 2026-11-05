@@ -7,8 +7,8 @@ using Cat.Responses.Abstractions;
 namespace Cat.Demo.OrderService.CoreService.Abstractions;
 
 /// <summary>
-/// Gives the current price of books. Later an Api.Client call to the Catalog service implements it.
-/// Until then a fake does.
+/// Gives the current price of books. Under the AppHost a plain HttpClient call to the Catalog service implements it.
+/// Without the AppHost a fake does. Later an Api.Client call replaces the HttpClient call.
 /// </summary>
 public interface IPriceProvider
 {

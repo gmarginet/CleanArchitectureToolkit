@@ -54,6 +54,7 @@ builder.Services.AddCatFluentWorkflowsSteps(typeof(PriceLinesStep));
 var connectionString = builder.Configuration.GetConnectionString("orders")
     ?? throw new InvalidOperationException("Connection string 'orders' is missing.");
 builder.Services.AddCatDemoOrderDatabase(connectionString);
+builder.Services.AddCatDemoOrderPriceProvider(builder.Configuration);
 builder.Services.AddCatDemoOrderFakes();
 
 // The stub knows three demo users. The real one reads the token, once the gateway and Keycloak are there.

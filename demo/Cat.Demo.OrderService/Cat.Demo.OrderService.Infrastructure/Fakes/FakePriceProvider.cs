@@ -11,7 +11,7 @@ namespace Cat.Demo.OrderService.Infrastructure.Fakes;
 
 /// <summary>
 /// A stand-in for the Catalog service. Every book gets a price made from its id, so the same book always costs the same.
-/// The empty id has no price. Once Aspire runs the services, an Api.Client call to Catalog replaces this class.
+/// The empty id has no price. It answers when Orders runs without the AppHost. Under the AppHost, CatalogPriceProvider asks Catalog.
 /// </summary>
 public class FakePriceProvider : IPriceProvider
 {
