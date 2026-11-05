@@ -1,0 +1,120 @@
+<link href="../resources/styles/style.css" rel="stylesheet" />
+<table>
+    <tr>
+        <td colspan='6' style='text-align: center; font-weight: bold; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+             Clean Architecture Toolkit for .NET
+        </td>
+    </tr>
+    <tr>
+        <td colspan='5' style='padding: 0; vertical-align: middle; border: none;'>
+            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>
+            It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>
+        <td style='padding: 0; border: none;' width='220'>
+            <img src='../resources/logo/CatLogo.svg' alt='' width='200' style='padding: 15px; float: right; background: #121314; border-radius: 10px'/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](../README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
+
+</td>
+</tr>
+</table>
+
+# Plans for Cat.Api.Gateway
+
+The single front door of an application: it routes the calls of clients and services to the right service and checks the token in one place.  
+Status: not started. This plan collects what we know. The open questions need an answer before the build.
+
+## Contents
+
+- [The idea](#the-idea)
+- [What we already know](#what-we-already-know)
+- [Decisions and open questions](#decisions-and-open-questions)
+- [Questions before building](#questions-before-building)
+
+## The idea
+
+The application architecture of the toolkit has an API gateway. Clients only talk to it, and so do services that need something from another service. Every team that follows the architecture has to build that gateway itself: the routes, the token check, the forwarding and the health checks. Most of it is the same in every application.
+
+`Cat.Api.Gateway` gives the gateway a standard shape. A developer picks it when they want the architecture as it is described, and leaves it out when they use another gateway. It holds no business logic. It only routes, and it does the cross-cutting work that belongs at the door.
+
+It sits between two other modules. `Cat.Api.Client` is the caller side of a service to service call and sends it to the gateway. `Cat.Authorization` makes the service check the token again, because the gateway and the service both validate it.
+
+## What we already know
+
+From the root readme:
+
+- The API gateway is the single front door of the application. It receives every request from the clients, and every call between services, and forwards it to the right service.
+- Clients need to know one address, not one per service. Services only need to know the gateway address.
+- Cross-cutting concerns like authentication and routing live in one place.
+- The gateway holds no business logic. It only routes.
+- Services never call each other directly. The call always goes through the gateway.
+- A request flows from the client through the gateway to the service. A call from one service to another goes through the gateway and the answer comes back the same way.
+- The application runs as containers in Azure Container Apps.
+
+From the demo plan:
+
+- The gateway is planned for later. It is the API gateway of the root readme. How it looks is clear once it is built, and it could become a new module.
+- The React client only talks to the gateway. The client has no shared contracts with the services.
+- Keycloak runs as a container, started by the AppHost. The realm holds a client for the gateway.
+- The gateway validates the token and forwards it unchanged. The inner service validates the JWT itself and does not trust the network.
+- Catalog reads need no token. The Orders endpoints do. The gateway rejects an unauthenticated save of a book, and the service checks the token again.
+- The gateway comes together with Keycloak, the JWT validation in the services, the real `ICurrentUser` and the login of the React client. Orders does not change for it.
+- The roadmap puts the gateway and the login in stage 2, before the React client.
+- Until the gateway exists, Orders calls Catalog directly, and the calls of the `.http` files go straight to the services on the ports 5101 and 5102.
+- The architecture drawing has a hatched box for it, and the demo block detects it by a folder `demo/Cat.Demo.Gateway`.
+
+From the other module plans:
+
+- `Cat.Api.Client` sends calls through the gateway. The gateway address comes from configuration or Aspire service discovery, and the module must work without Aspire.
+- `Cat.Api.Client` forwards the token of the caller. Calls without a user use a client credentials token.
+- `Cat.Authorization` says the gateway and the service both validate the token.
+- `Cat.Messaging` covers the asynchronous side. A message does not go through the gateway.
+
+From the module conventions:
+
+- A module never depends on Aspire or on the demo `ServiceDefaults`.
+- A module splits into an `Abstractions` project, the implementation and optional parts. A developer picks the modules and the projects they want, and a module never forces another one on them.
+
+## Decisions and open questions
+
+### Decided
+
+| Topic | Decision |
+|---|---|
+| Name | `Cat.Api.Gateway`. The owner decided that the gateway is a module. |
+| Job | The single front door. It routes the calls of clients and services. It holds no business logic. See the root readme. |
+| Token | The gateway validates the token and forwards it unchanged. The service validates it again. See the demo plan. |
+| Aspire | The module never references Aspire or `ServiceDefaults`. |
+
+### Open
+
+- **Foundation.** Build on YARP, the Microsoft reverse proxy, or write a small router of our own? YARP is the standard and does routing, load balancing, health checks and header transforms. It is a dependency, and the module would be a thin layer on top. Our own router is small to write and hard to make as good.
+- **What the module is.** A library with extensions that configure a gateway host? A ready made host project that a developer runs? A template through `Cat.Templates`? The first fits the toolbox idea best.
+- **Where the routes come from.** Configuration, code, or the services themselves (OpenAPI documents or a convention such as `/catalog` to the Catalog service)? The demo already has one prefix per service.
+- **Authentication.** Does the module validate JWT tokens itself, or only call the standard ASP.NET Core authentication, with the provider (Keycloak) set in configuration? Which part, if any, is shared with `Cat.Authorization`?
+- **Authorization at the door.** Does the gateway only check that a valid token is present, or also rules such as a role for an endpoint? The demo says it rejects an unauthenticated save. Where is the line with the service?
+- **Public routes.** How does a route say that it needs no token, like the Catalog reads?
+- **Service to service calls.** A service calls the gateway with the token of the user or a client credentials token. Is token exchange or forwarding in scope?
+- **Other duties.** Rate limiting, CORS, request logging, correlation ids, aggregation of OpenAPI documents, caching. Which are in the first version? The root readme says the gateway only routes.
+- **Resilience.** Does the gateway retry, or leave that to the caller? Two retry layers multiply.
+- **Tracing and health.** Does the trace continue across the gateway? Does the gateway report the health of the services behind it?
+- **Without Aspire.** How does the gateway find the services outside Aspire, and how is it configured in Azure Container Apps?
+- **Alternatives.** Azure API Management or another existing gateway can take this role. Does the module stay optional, so a developer can use that instead and still use `Cat.Api.Client`?
+- **Demo.** Does the demo gateway in stage 2 use the module from the start, or is the module built from the working demo gateway, the way `Cat.Api.Client` comes after `CatalogPriceProvider`?
+- **Projects.** Which projects does the module have? An `Abstractions` project may not be needed for a host.
+
+## Questions before building
+
+1. Do we build on YARP, or write our own router?
+2. Is the module a library of extensions, a ready made host, or both?
+3. Where do the routes come from: configuration, code or the services?
+4. Does the gateway only check that a token is valid, or also rules such as a role?
+5. Which duties are in the first version besides routing and the token check?
+6. How does a route say that it is public?
+7. Is token exchange for service to service calls in scope?
+8. How does the gateway find the services outside Aspire?
+9. May a developer use another gateway, such as Azure API Management, and still use `Cat.Api.Client`?
+10. Should the first version wait until the demo gateway of stage 2 works, as `Cat.Api.Client` waits for `CatalogPriceProvider`?

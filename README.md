@@ -393,6 +393,7 @@ They are ideas to support the application architecture and the service project s
 | [Cat.EventProcessor](./plans/Cat.EventProcessor.md) | Worker support that turns incoming messages into service requests. |
 | [Cat.Scheduling](./plans/Cat.Scheduling.md) | Worker support that turns schedules into service requests. |
 | [Cat.Sagas](./plans/Cat.Sagas.md) | Long running workflows that send a message, wait for the answer and carry on. |
+| [Cat.Api.Gateway](./plans/Cat.Api.Gateway.md) | The single front door of the application. It routes the calls of clients and services and checks the token in one place. |
 | [Cat.Api.Client](./plans/Cat.Api.Client.md) | Typed API clients that call other services through the API gateway. |
 | [Cat.Dapper](./plans/Cat.Dapper.md) | Base query and command handlers for Dapper, including bulk operations. |
 | [Cat.Auditing](./plans/Cat.Auditing.md) | Records who changed what and when. |

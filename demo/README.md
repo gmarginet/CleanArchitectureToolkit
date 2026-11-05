@@ -303,7 +303,7 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 
 **What it is.** The one door for clients. It validates the token and forwards calls to the services.
 
-**CAT modules.** Not decided yet. The gateway could become a new module.
+**CAT modules.** Planned: `Cat.Api.Gateway`, a new module. See [its plan](../plans/Cat.Api.Gateway.md).
 
 **Pros.**
 - Clients know one address.

@@ -38,6 +38,7 @@ It replaces the todo demo with a small bookshop.
 - [Data models](#data-models)
   - [Order number counter](#order-number-counter)
   - [Counter cleanup](#counter-cleanup)
+- [Roadmap](#roadmap)
 - [Next steps](#next-steps)
 - [Interesting documentation](#interesting-documentation)
 
@@ -75,13 +76,17 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 | Counter cleanup | The `CleanUpOrderCounters` service request deletes the rows of earlier days and creates the row of today. The Scheduler will run it nightly. Until the Scheduler exists, a development only endpoint triggers it. |
 | Currency | One currency, euro, to keep the demo simple. |
 | Sharing contracts | A choice per connection, as the root readme describes. React client to gateway: not shared. Orders to Catalog: not shared. A later service to service call: shared, so the demo shows both. See [Sharing contracts](#sharing-contracts). |
-| API gateway | It is the API gateway from the Application Architecture chapter of the root readme. How it looks is clear once it is built. It could become a new module. |
+| API gateway | It is the API gateway from the Application Architecture chapter of the root readme. It becomes a module, `Cat.Api.Gateway`. See [Cat.Api.Gateway.md](Cat.Api.Gateway.md). |
 | Notifications storage | Decided once the Scheduling module is designed. |
 | Todo demo | `Cat.Demo.TodoService` is removed. Catalog is the first service of this plan. |
 | First service | Catalog is built first, then Orders. |
 
 ### Open
 
+- **Roadmap order.** Do you confirm the order of the [roadmap](#roadmap)? In particular: the gateway and login before the React client, and Inventory before messaging.
+- **Gateway technology.** The gateway is the module `Cat.Api.Gateway`. Is it built on YARP or on a router of our own, and does the demo gateway use the module from the start? See the open questions of [Cat.Api.Gateway.md](Cat.Api.Gateway.md).
+- **Stock call.** Until messaging exists, Orders reserves stock with an HTTP call to Inventory. Does that call share the `Contracts` of Inventory? It is the candidate for the shared choice in [Sharing contracts](#sharing-contracts).
+- **Resilience in the demo.** [Aspire ServiceDefaults](#aspire-servicedefaults) says the demo does not use `Cat.Resilience`, because ServiceDefaults covers it. The roadmap shows the resilience story with the ServiceDefaults handler. When does the demo use `Cat.Resilience`: never, or in a part that runs without Aspire?
 - **Payment service failures.** Which failures can the setting switch on: latency, a share of random errors, a full outage? Which values does it take?
 - **Unreachable payment service.** What does the place order step do when the payment service times out or the circuit is open? A failed order with its own error code, or something else?
 - **Double charge.** A retried payment call may charge twice. Does the call carry an idempotency key, for example the order number, and does the service remember the keys?
@@ -128,6 +133,7 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 |---|---|
 | Messaging, EventProcessor | Orders publishes `OrderPlaced`. Inventory and Notifications consume it. |
 | Scheduling | Clean up the daily order counters every night. Cancel unpaid orders after 24 hours. A nightly low stock report. |
+| Api.Gateway | The single front door in stage 2 of the [roadmap](#roadmap): routes for Catalog and Orders, and the token check. |
 | Api.Client | Orders asks Catalog for current prices through the gateway. It starts as a plain `HttpClient` in Orders, and the module replaces that once the shape is clear. |
 | Dapper | Fast read-only order overview queries, next to EF Core for writes. |
 | Caching | Cached catalog queries. |
@@ -461,6 +467,30 @@ Inventory uses commands, queries, responses and decorators, but not the entity b
 
 - A small SQL scripts folder and one extra step in the AppHost.
 - A readme section on how to scaffold again after a database change.
+
+## Roadmap
+
+The order for the rest of the demo build. **This order is a proposal.** It becomes a decision when the owner confirms it, see the open questions. Every stage ends in a working demo: the stage is done when the "Done when" column is true, the demo readme and the drawing are current (the `demo-readme` skill) and the tests pass.
+
+Built so far: Catalog, Orders with fakes for stock and payment, ServiceDefaults and the AppHost with both SQL Server modes. The price call from Orders to Catalog is real.
+
+| Stage | What | Needs | Done when |
+|---|---|---|---|
+| 1. Payment service | `Cat.Demo.PaymentService` and a client for it in Orders, with the failure setting. The AppHost starts it. | Nothing new. ServiceDefaults already gives retries and a circuit breaker. | Placing an order calls the payment service. With a failure switched on, the retries and the open circuit show in the dashboard trace. The box in the drawing is solid. |
+| 2. Gateway and login | The API gateway, Keycloak with the imported realm, JWT validation in the services and the real `ICurrentUser`. | The module plan [Cat.Api.Gateway.md](Cat.Api.Gateway.md) answered, and its first version built or built from the demo gateway. | A request without a token gets 401 on Orders. Alice sees her orders, Bob does not. Catalog reads stay public. `.http` files get a token. |
+| 3. React client | The thin client: book list, basket and order overview, with login. The AppHost starts it. | Stage 2. | A person logs in as `alice`, places an order and sees it in the overview. |
+| 4. Inventory | The database first service with its SQL scripts, and a client in Orders that replaces `FakeStockReservation`. | No new module. The AppHost runs the SQL scripts. | An order reserves real stock. A 51st copy is still refused. The `inventory` box is solid. |
+| 5. Messaging | `Cat.Messaging` and `Cat.EventProcessor`, the Service Bus emulator in the AppHost, and the `OrderPlaced` bridge in Orders. | The module plans [Cat.Messaging.md](Cat.Messaging.md) and [Cat.EventProcessor.md](Cat.EventProcessor.md) answered and built. | Orders publishes `OrderPlaced` and Inventory consumes it. The emulator box is solid. |
+| 6. Notifications and scheduling | The Notifications service, `Cat.Scheduling` and `Cat.Localizations` for the texts. The nightly clean up of the order counters and the cancel of unpaid orders. | Stage 5. [Cat.Scheduling.md](Cat.Scheduling.md). A storage decision for Notifications. | An order confirmed mail is written in the language of the customer. The nightly jobs run from the Scheduler, and the development endpoint can go. |
+| 7. The other modules | One showcase at a time, each with its own plan: `Cat.Api.Client` replaces `CatalogPriceProvider`, `Cat.Caching` for catalog queries, `Cat.Dapper` for the order overview, `Cat.Auditing`, `Cat.Authorization` and `Cat.Sagas` for a payment over messages. | The module plan of each, built first. | Per module: the demo uses it and the readme says where. |
+
+Notes on the order:
+
+- **Payment first.** It needs no new module and it is the case the resilience story is built on.
+- **Gateway before the client.** The client only talks to the gateway, and the login comes with it. A client built earlier would need rework.
+- **Inventory before messaging.** Reserving stock needs an answer, and a message gives none. So Orders calls Inventory over HTTP first, as the interface already allows. Messages then tell Inventory about the order afterwards.
+- **Modules come from working code.** For stages 5 to 7 the module is designed from what the demo shows, the way `CatalogPriceProvider` comes before `Cat.Api.Client`.
+- **Stages 3 and 4 are independent.** Their order can be swapped.
 
 ## Next steps
 
