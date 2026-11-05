@@ -103,6 +103,62 @@ public class ServiceRequestHandlerTests
 
     #endregion BookGet
 
+    #region BookPriceList
+
+    [Test]
+    public async Task BookPriceList_ShouldAskForTheDistinctIdsAndKeepTheRequestOrder()
+    {
+        var first = Guid.NewGuid();
+        var second = Guid.NewGuid();
+        _queryProcessor.Setup<BookPriceListQuery, IList<BookPrice>>(CatResponse.Ok<IList<BookPrice>>(
+        [
+            new BookPrice { BookId = second, Amount = 20m },
+            new BookPrice { BookId = first, Amount = 10m }
+        ]));
+        var handler = new BookPriceListRequestHandler(_queryProcessor);
+
+        var response = await handler.HandleAsync(new BookPriceListRequest([first, second, first]));
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response.Value!.Select(p => (p.BookId, p.Price)), Is.EqualTo(new[] { (first, 10m), (second, 20m) }));
+            Assert.That(((BookPriceListQuery)_queryProcessor.Queries.Single()).BookIds, Is.EqualTo(new[] { first, second }));
+        }
+    }
+
+    [Test]
+    public async Task BookPriceList_WhenABookHasNoPrice_ShouldReturnNotFoundThatNamesTheId()
+    {
+        var known = Guid.NewGuid();
+        var unknown = Guid.NewGuid();
+        _queryProcessor.Setup<BookPriceListQuery, IList<BookPrice>>(CatResponse.Ok<IList<BookPrice>>(
+            [new BookPrice { BookId = known, Amount = 10m }]));
+        var handler = new BookPriceListRequestHandler(_queryProcessor);
+
+        var response = await handler.HandleAsync(new BookPriceListRequest([known, unknown]));
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.NotFound>());
+            Assert.That(response.ErrorList.Single().Code, Is.EqualTo(CatalogErrorDefinitions.BookPriceNotFound.Code));
+            Assert.That(response.ErrorList.Single().Arguments, Is.EqualTo(new object?[] { unknown }));
+        }
+    }
+
+    [Test]
+    public async Task BookPriceList_WhenTheQueryFails_ShouldPassTheFailureOn()
+    {
+        _queryProcessor.Setup<BookPriceListQuery, IList<BookPrice>>(CatResponse.InternalServerError<IList<BookPrice>>());
+        var handler = new BookPriceListRequestHandler(_queryProcessor);
+
+        var response = await handler.HandleAsync(new BookPriceListRequest([Guid.NewGuid()]));
+
+        Assert.That(response.IsFailed, Is.True);
+    }
+
+    #endregion BookPriceList
+
     #region BookSave
 
     [Test]

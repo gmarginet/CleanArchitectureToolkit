@@ -11,12 +11,15 @@ public static class CatalogEndpoints
 {
     public static IEndpointRouteBuilder MapCatalogServiceEndpoints(this IEndpointRouteBuilder builder)
     {
-        var groupBuilder = builder.MapGroup("/catalog");
+        var catalogBuilder = builder.MapGroup("/catalog");
 
-        groupBuilder.MapCatGetList<BookSearchRequest, BookModel>("/books");
-        groupBuilder.MapCatGet<BookGetRequest, BookModel>("/books/{bookId:guid}", CatResponseType.Ok, CatResponseType.NotFound);
-        groupBuilder.MapCatPost<BookSaveRequest>("/books", CatResponseType.Ok);
-        groupBuilder.MapCatGetList<CategoryGetListRequest, CategoryModel>("/categories");
+        var booksBuilder = catalogBuilder.MapGroup("/books");
+        booksBuilder.MapCatGetList<BookSearchRequest, BookModel>("/");
+        booksBuilder.MapCatGetList<BookPriceListRequest, BookPriceModel>("/prices", CatResponseType.Ok, CatResponseType.NotFound);
+        booksBuilder.MapCatGet<BookGetRequest, BookModel>("/{bookId:guid}", CatResponseType.Ok, CatResponseType.NotFound);
+        booksBuilder.MapCatPost<BookSaveRequest>("/", CatResponseType.Ok);
+        
+        catalogBuilder.MapCatGetList<CategoryGetListRequest, CategoryModel>("/categories");
 
         return builder;
     }

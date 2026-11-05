@@ -23,6 +23,9 @@ public static partial class MappingExtensions
     [MapperIgnoreSource(nameof(Category.SequenceId))]
     public static partial CategoryModel ToModel(this Category category);
 
+    public static BookPriceModel ToPriceModel(this BookPrice bookPrice)
+        => new() { BookId = bookPrice.BookId, Price = bookPrice.Amount };
+
     public static BookSaveCommand ToCommand(this BookSaveRequest request)
     {
         var model = request.Book;

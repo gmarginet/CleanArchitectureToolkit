@@ -198,4 +198,38 @@ public class BookValidationTests : UnitTestBase
     }
 
     #endregion Other rules
+
+    #region Price list
+
+    [TestCase(1)]
+    [TestCase(BookPriceListRequestValidator.MaximumBooks)]
+    public async Task PriceList_WithinTheLimit_ShouldSucceed(int count)
+    {
+        var request = new BookPriceListRequest([.. System.Linq.Enumerable.Range(0, count).Select(_ => Guid.NewGuid())]);
+
+        var result = await _validatorProcessor.ValidateAsync(request);
+
+        Assert.That(result.IsSucceeded, Is.True);
+    }
+
+    [Test]
+    public async Task PriceList_Empty_ShouldFail()
+    {
+        var result = await _validatorProcessor.ValidateAsync(new BookPriceListRequest([]));
+
+        AssertSingleError(result, CatValidatorErrorDefinitions.NotEmpty.Code, "BookIds");
+    }
+
+    [Test]
+    public async Task PriceList_OverTheLimit_ShouldFail()
+    {
+        var count = BookPriceListRequestValidator.MaximumBooks + 1;
+        var request = new BookPriceListRequest([.. System.Linq.Enumerable.Range(0, count).Select(_ => Guid.NewGuid())]);
+
+        var result = await _validatorProcessor.ValidateAsync(request);
+
+        AssertSingleError(result, CatValidatorErrorDefinitions.MaximumCount.Code, "BookIds", BookPriceListRequestValidator.MaximumBooks, count);
+    }
+
+    #endregion Price list
 }

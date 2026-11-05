@@ -106,3 +106,12 @@ POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
 Content-Type: text/plain
 
 hello
+
+### BookPriceListRequest => OK (the current price of the first two books of the search above)
+GET {{CatalogApi_HostAddress}}/catalog/books/prices?bookIds={{search.response.body.$[0].id}}&bookIds={{search.response.body.$[1].id}}
+
+### BookPriceListRequest => Not Found, the book does not exist or has no price (CAT-CTL-1001)
+GET {{CatalogApi_HostAddress}}/catalog/books/prices?bookIds=00000000-0000-0000-0000-000000000001
+
+### BookPriceListRequest => Bad request, no book ids
+GET {{CatalogApi_HostAddress}}/catalog/books/prices
