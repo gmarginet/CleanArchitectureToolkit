@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 using Cat.Commands.Decorators.Logging.Extensions;
 using Cat.Commands.Extensions;
 using Cat.Demo.CatalogService.Api.Extensions;
@@ -11,6 +12,7 @@ using Cat.Expressions.Extensions;
 using Cat.Minimal.Api.Extensions;
 using Cat.Queries.Decorators.Logging.Extensions;
 using Cat.Queries.Extensions;
+using Cat.ServiceRequests.Decorators.ActivitySource.Extensions;
 using Cat.ServiceRequests.Decorators.Logging.Extensions;
 using Cat.ServiceRequests.Decorators.Validation.Extensions;
 using Cat.ServiceRequests.Extensions;
@@ -24,6 +26,11 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+
+// Numbers are numbers only. The default also reads them from strings, and then the OpenAPI document
+// describes a price as a number or a string with a pattern.
+builder.Services.ConfigureHttpJsonOptions(options =>
+    options.SerializerOptions.NumberHandling = JsonNumberHandling.Strict);
 
 builder.Services.AddCatMinimalApiModule();
 builder.Services.AddCatCompiledMemberExpressionCache();
@@ -51,6 +58,7 @@ app.UseHttpsRedirection();
 app.MapCatalogServiceEndpoints();
 app.Services.AddCatServiceRequestsModuleValidationDecorator();
 app.Services.AddCatServiceRequestsModuleLoggingDecorator();
+app.Services.AddCatServiceRequestsModuleActivitySourceDecorator();
 app.Services.AddCatQueriesModuleLoggingDecorator();
 app.Services.AddCatCommandsModuleLoggingDecorator();
 

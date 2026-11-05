@@ -84,7 +84,7 @@ None at the moment.
 |---|---|
 | Commands, Queries, ServiceRequests | `PlaceOrder`, `CancelOrder`, `GetOrder`, `BookSearch` |
 | Responses, Validators | Validating an order. Stock and payment failures come back as error responses. |
-| Decorators | Logging, validation and tracing on every request. Catalog does not use the tracing decorator yet. |
+| Decorators | Logging, validation and tracing on every request. |
 | Minimal.Api | The endpoints of each service. |
 | FluentWorkflows | The place order process: validate, reserve stock, take payment, confirm. It has an `if` for out of stock and a `foreach` over the order lines. |
 | EventAggregators | In-process events inside Orders, such as `OrderConfirmed` triggering a status update. See [Events and interfaces](#events-and-interfaces). |
@@ -425,8 +425,11 @@ Done:
 - `Cat.Demo.TodoService` removed.
 - Readme of the demo added.
 - Orders service built, with the place order workflow, events, the counter cleanup and tests for the core service. Tried against a local SQL Server with every request of `OrderRequests.http`, and all responses matched.
-- Price endpoint for Orders in Catalog: `GET /catalog/books/prices?bookIds=...` (`BookPriceListRequest`), with tests for the core service. Not tried against a SQL Server yet. Orders still uses the fake `IPriceProvider` until the Aspire phase, when an Api.Client implementation calls it through the gateway.
+- Price endpoint for Orders in Catalog: `GET /catalog/books/prices?bookIds=...` (`BookPriceListRequest`), with tests for the core service. Tried against a local SQL Server: valid ids, an unknown book and a missing id list all gave the expected status. Orders still uses the fake `IPriceProvider` until the Aspire phase, when an Api.Client implementation calls it through the gateway.
 - Order lines capped at 50 per order (`MaximumCount`). The first order of the day was tried with 20 parallel requests on a local SQL Server: 20 orders, numbers 0001 to 0020, none missing or doubled. There is no automated test for it on purpose, because the unit tests do not use a database.
+- Catalog tracing: the `ActivitySource` decorator runs on the Catalog requests.
+- Catalog OpenAPI price type: `price` is a plain nullable number, because the JSON options no longer read numbers from strings.
+- Catalog duplicate ISBN race: `BookSaveCommandHandler` catches the unique index error and returns the `CAT-CTL-1000` response. Tried with 12 parallel saves of the same new ISBN on a local SQL Server: one saved, eleven bad requests, no 500. There is no automated test for it, because the unit tests do not use a database.
 
 To do:
 
@@ -441,16 +444,13 @@ To do:
 
 ### Known gaps in Catalog
 
-- **Tracing.** Add the `Cat.ServiceRequests.Decorators.ActivitySource` decorator to the Catalog requests.
-- **Localizations.** Show category names in several languages with `Cat.Localizations`.
-- **OpenAPI price type.** The nullable `decimal? Price` is documented as `null`, `number` or `string`, with a regex pattern. That is awkward for the generated React client. Change the OpenAPI or JSON options so `price` is a plain nullable number.
+- **Localizations.** Show category names in several languages with `Cat.Localizations`. This waits until the module is stable.
 - **Admin only saves.** `POST /catalog/books` (`BookSaveRequest`) is the only write endpoint and has no authorization yet. Do this in the authentication phase, when the services get JWT validation:
   - Add a `CatalogAdmin` policy that checks the admin role claim.
   - Put `RequireAuthorization("CatalogAdmin")` on the save endpoint. The read endpoints stay anonymous.
   - The gateway rejects an unauthenticated save as well, and the service checks the token again.
   - Consider an admin check as a decorator on `BookSaveRequest` over `ICurrentUser`, so the rule lives in `CoreService` and is testable without HTTP.
   - Add a test that a non admin gets a 403 on the save.
-- **Duplicate ISBN race.** Two saves with the same new ISBN at the same moment can both pass the validator. The second one hits the unique index and returns a 500. Catch that database error and return the same `CAT-CTL-1000` response.
 
 ## Interesting documentation
 
