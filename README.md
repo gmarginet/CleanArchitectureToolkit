@@ -389,19 +389,19 @@ They are ideas to support the application architecture and the service project s
 
 | Module                      | Idea                                                                                       |
 |-----------------------------|--------------------------------------------------------------------------------------------|
-| [`Cat.Messaging`](./plans/Cat.Messaging.md) | Publish and consume messages on Azure Service Bus with the same handler style as the other modules. |
-| [`Cat.EventProcessor`](./plans/Cat.EventProcessor.md) | Worker support that turns incoming messages into service requests. |
-| [`Cat.Scheduling`](./plans/Cat.Scheduling.md) | Worker support that turns schedules into service requests. |
-| [`Cat.Sagas`](./plans/Cat.Sagas.md) | Long running workflows that send a message, wait for the answer and carry on. |
-| [`Cat.Api.Client`](./plans/Cat.Api.Client.md) | Typed API clients that call other services through the API gateway. |
-| [`Cat.Dapper`](./plans/Cat.Dapper.md) | Base query and command handlers for Dapper, including bulk operations. |
-| [`Cat.Auditing`](./plans/Cat.Auditing.md) | Records who changed what and when. |
-| [`Cat.Caching`](./plans/Cat.Caching.md) | A caching decorator for queries. |
-| [`Cat.Authorization`](./plans/Cat.Authorization.md) | A decorator that checks permissions before a service request runs. |
-| [`Cat.Resilience`](./plans/Cat.Resilience.md) | Retry and circuit breaker decorators for calls to other services and integrations. |
-| [`Cat.Telemetry`](./plans/Cat.Telemetry.md) | Shared tracing and metrics setup for all services. |
-| [`Cat.UnitTesting`](./plans/Cat.UnitTesting.md) | Helpers for unit tests, like test doubles for processors and responses, in small projects you pick from. |
-| [`Cat.Templates`](./plans/Cat.Templates.md) | `dotnet new` templates that create a new service with this project structure. |
+| [Cat.Messaging](./plans/Cat.Messaging.md) | Publish and consume messages on Azure Service Bus with the same handler style as the other modules. |
+| [Cat.EventProcessor](./plans/Cat.EventProcessor.md) | Worker support that turns incoming messages into service requests. |
+| [Cat.Scheduling](./plans/Cat.Scheduling.md) | Worker support that turns schedules into service requests. |
+| [Cat.Sagas](./plans/Cat.Sagas.md) | Long running workflows that send a message, wait for the answer and carry on. |
+| [Cat.Api.Client](./plans/Cat.Api.Client.md) | Typed API clients that call other services through the API gateway. |
+| [Cat.Dapper](./plans/Cat.Dapper.md) | Base query and command handlers for Dapper, including bulk operations. |
+| [Cat.Auditing](./plans/Cat.Auditing.md) | Records who changed what and when. |
+| [Cat.Caching](./plans/Cat.Caching.md) | A caching decorator for queries. |
+| [Cat.Authorization](./plans/Cat.Authorization.md) | A decorator that checks permissions before a service request runs. |
+| [Cat.Resilience](./plans/Cat.Resilience.md) | Retry and circuit breaker decorators for calls to other services and integrations. |
+| [Cat.Telemetry](./plans/Cat.Telemetry.md) | Shared tracing and metrics setup for all services. |
+| [Cat.UnitTesting](./plans/Cat.UnitTesting.md) | Helpers for unit tests, like test doubles for processors and responses, in small projects you pick from. |
+| [Cat.Templates](./plans/Cat.Templates.md) | `dotnet new` templates that create a new service with this project structure. |
 
 ## Other future things
 
