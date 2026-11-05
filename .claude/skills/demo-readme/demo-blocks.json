@@ -13,6 +13,6 @@
     { "name": "catalog database",       "element": "JtMvjFgw4gyfTUO20EniT", "chapter": "Catalog service",              "detect": { "path": "demo/Cat.Demo.CatalogService" } },
     { "name": "orders database",        "element": "e8SQo7ftm199fmG9MK9Al", "chapter": "Orders service",              "detect": { "path": "demo/Cat.Demo.OrderService" } },
     { "name": "inventory database",     "element": "Ek0xgRx4ld105-ZnGlx8M", "chapter": "Inventory service",              "detect": { "path": "demo/Cat.Demo.InventoryService" } },
-    { "name": "Fake payment provider",  "element": "lgASgvA3Is3v3LmNxNJFX", "chapter": "Fake payment provider",  "detect": { "path": "demo/Cat.Demo.OrderService", "pattern": ": IPaymentProvider" } }
+    { "name": "Fake payment provider",  "element": "lgASgvA3Is3v3LmNxNJFX", "chapter": "Fake payment provider",  "detect": { "path": "demo/Cat.Demo.PaymentService" } }
   ]
 }

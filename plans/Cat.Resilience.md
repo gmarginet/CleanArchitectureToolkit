@@ -48,7 +48,7 @@ From the root readme:
 
 From the demo plan:
 
-- The demo case is retry and circuit breaker on the payment call. The provider is a fake today, so the module needs something to protect. `FakePaymentProvider` always answers.
+- The demo case is retry and circuit breaker on the payment call. Today `FakePaymentProvider` runs inside Orders and always answers, so there is nothing to protect. The decided answer is a separate `Cat.Demo.PaymentService` that can fail on purpose. See the payment provider decision in [Demo.md](Demo.md#decided).
 - `Aspire ServiceDefaults` already adds the standard resilience handler to every `HttpClient`: retries, timeouts and a circuit breaker.
 - That overlaps with the future `Cat.Resilience` and `Cat.Telemetry` modules on purpose. CAT is a toolbox, so the developer picks what to use.
 - The future module must work in projects that do not use Aspire, and must not depend on Aspire or on `ServiceDefaults`.
@@ -71,6 +71,7 @@ From the module conventions:
 | Place | Decorators on handlers that call other services and integrations. |
 | Independence | The module works without Aspire and never references it. |
 | Overlap | With Aspire, use `ServiceDefaults` and skip this module. The module exists for projects without Aspire. It may also hold extensions of `ServiceDefaults`. |
+| Demo stand-in | The payment call in the demo goes to a separate, flaky `Cat.Demo.PaymentService`, so the module has something to show. |
 
 ### Open
 
@@ -94,6 +95,5 @@ From the module conventions:
 5. How do we prevent retries on retries with the `ServiceDefaults` handler? Should the module detect it, or do we document it?
 6. Do we need fallbacks and timeouts in the first version?
 7. Where do policies live: attributes, code or `appsettings`?
-8. Should the payment call in the demo get a real, flaky stand-in so the module has something to show?
-9. Does the module tell `Cat.Telemetry` about every retry and break?
-10. Does `Cat.Api.Client` use this module internally, or stay with the `HttpClient` handler?
+8. Does the module tell `Cat.Telemetry` about every retry and break?
+9. Does `Cat.Api.Client` use this module internally, or stay with the `HttpClient` handler?
