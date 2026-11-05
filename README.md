@@ -28,6 +28,7 @@
 - [Getting Started](#getting-started)
 - [About this project](#about-this-project)
 - [Module overview](#module-overview)
+- [Demo](#demo)
 - [Application Architecture](#application-architecture)
   - [Clients](#clients)
   - [API gateway](#api-gateway)
@@ -49,6 +50,7 @@
   - [ServiceName.CoreService.Tests](#servicenamecoreservicetests)
   - [Reference rules](#reference-rules)
 - [Future modules](#future-modules)
+- [Other future things](#other-future-things)
 
 
 ## Getting Started
@@ -87,23 +89,31 @@ Some modules depend on other modules, in the documentation of each module you ca
 <!-- Modules start-->
 <!-- In development badge: [![In development](https://img.shields.io/badge/status-in%20development-orange)](#module-overview) -->
 
-| Module | | Description |
-|--------|--------|-------------|
-| [Cat.Commands](./modules/Cat.Commands/README.md) | | Change state through one entry point. Describe a change as a command, write one handler for it, and let the processor find the handler. |
-| [Cat.Decorators](./modules/Cat.Decorators/README.md) | | Wrap handlers in decorators for cross-cutting work like logging, validation or tracing. |
-| [Cat.EFCore](./modules/Cat.EFCore/README.md) | | Configure Entity Framework Core entities the same way every time, with base classes for regular, temporal and reference data. |
-| [Cat.EventAggregators](./modules/Cat.EventAggregators/README.md) | | Let parts of your app talk to each other through in-process events, without direct dependencies. |
-| [Cat.Expressions](./modules/Cat.Expressions/README.md) | | Compile member access expressions once and reuse them, so repeated calls stay fast. |
-| [Cat.Extensions](./modules/Cat.Extensions/README.md) | | Small extension method libraries for enumerables, expressions, objects, service collections and strings. |
-| [Cat.FluentWorkflows](./modules/Cat.FluentWorkflows/README.md) | | Describe a business process as a list of steps in plain C#. |
-| [Cat.Localizations](./modules/Cat.Localizations/README.md) | [![In development](https://img.shields.io/badge/status-in%20development-orange)](#module-overview) | Look up localized strings by key, without tying your app to one localization provider. |
-| [Cat.Minimal.Api](./modules/Cat.Minimal.Api/README.md) | | Map service requests to minimal API endpoints that document the responses they return and share one error shape. |
-| [Cat.Queries](./modules/Cat.Queries/README.md) | | Read data through one entry point. Describe a read as a query, write one handler for it, and let the processor find the handler. |
-| [Cat.Responses](./modules/Cat.Responses/README.md) | | Return the outcome of an operation as a response, either succeeded with a value or failed with errors. |
-| [Cat.ServiceRequests](./modules/Cat.ServiceRequests/README.md) | | Run application use cases through one entry point, with validation, logging and tracing decorators. |
-| [Cat.Validators](./modules/Cat.Validators/README.md) | | Check a model against fluent rules and get every problem back in one response. |
+| Module | | Description | Plans |
+|--------|--------|-------------|-------|
+| [Cat.Commands](./modules/Cat.Commands/README.md) | | Change state through one entry point. Describe a change as a command, write one handler for it, and let the processor find the handler. | [Plans](./plans/Cat.Commands.md) |
+| [Cat.Decorators](./modules/Cat.Decorators/README.md) | | Wrap handlers in decorators for cross-cutting work like logging, validation or tracing. | [Plans](./plans/Cat.Decorators.md) |
+| [Cat.EFCore](./modules/Cat.EFCore/README.md) | | Configure Entity Framework Core entities the same way every time, with base classes for regular, temporal and reference data. | [Plans](./plans/Cat.EFCore.md) |
+| [Cat.EventAggregators](./modules/Cat.EventAggregators/README.md) | | Let parts of your app talk to each other through in-process events, without direct dependencies. | |
+| [Cat.Expressions](./modules/Cat.Expressions/README.md) | | Compile member access expressions once and reuse them, so repeated calls stay fast. | |
+| [Cat.Extensions](./modules/Cat.Extensions/README.md) | | Small extension method libraries for enumerables, expressions, objects, service collections and strings. | |
+| [Cat.FluentWorkflows](./modules/Cat.FluentWorkflows/README.md) | | Describe a business process as a list of steps in plain C#. | [Plans](./plans/Cat.FluentWorkflows.md) |
+| [Cat.Localizations](./modules/Cat.Localizations/README.md) | [![In development](https://img.shields.io/badge/status-in%20development-orange)](#module-overview) | Look up localized strings by key, without tying your app to one localization provider. | [Plans](./plans/Cat.Localizations.md) |
+| [Cat.Minimal.Api](./modules/Cat.Minimal.Api/README.md) | | Map service requests to minimal API endpoints that document the responses they return and share one error shape. | |
+| [Cat.Queries](./modules/Cat.Queries/README.md) | | Read data through one entry point. Describe a read as a query, write one handler for it, and let the processor find the handler. | |
+| [Cat.Responses](./modules/Cat.Responses/README.md) | | Return the outcome of an operation as a response, either succeeded with a value or failed with errors. | [Plans](./plans/Cat.Responses.md) |
+| [Cat.ServiceRequests](./modules/Cat.ServiceRequests/README.md) | | Run application use cases through one entry point, with validation, logging and tracing decorators. | |
+| [Cat.Validators](./modules/Cat.Validators/README.md) | | Check a model against fluent rules and get every problem back in one response. | |
 
 <!-- Modules end-->
+
+## Demo
+
+A small bookshop that shows how the modules work together.  
+It has a Catalog service and an Order service, built with the application architecture and the service project structure described below.  
+Run them locally, try the endpoints and read the code as a working example.
+
+See the [demo README](./demo/README.md) for what is in it and how to run it.
 
 ## Application Architecture
 
@@ -324,7 +334,15 @@ The contracts project holds the contract of the service, the way the outside wor
 - **Models:** The contract models that the requests and responses use. They are the public shape of your data, not the entities from the `DataModels` project.  
 - **Enums:** Enumerations that the requests and the contract models use. Callers need them, so they live in the contract.  
 
-It has almost no dependencies, so other services and clients can reference it without pulling in the rest of the service.  
+It has almost no dependencies, so it is easy to share. Sharing it is a choice, not a rule.  
+
+**Share it or not**  
+A caller of the service, whether another service or a client, can use the contract in two ways.  
+
+- **Reference the project.** The caller reuses the request, model and enum types. There is no duplicate code, and a breaking change shows up at compile time. The price is coupling. The caller depends on your types and on your release rhythm.  
+- **Keep its own models.** The caller declares only what it needs, often generated from the OpenAPI document of the service. The services stay independent. The price is duplicate types, and a change only shows up at runtime.  
+
+Both are fine. Decide per situation, and per caller. A .NET client and a service that change together can share. A client in another technology, or a service owned by another team, probably should not. You can mix both in one application.  
 
 ### ServiceName.DataModels
 
@@ -371,17 +389,24 @@ They are ideas to support the application architecture and the service project s
 
 | Module                      | Idea                                                                                       |
 |-----------------------------|--------------------------------------------------------------------------------------------|
-| `Cat.Messaging`             | Publish and consume messages on Azure Service Bus with the same handler style as the other modules. |
-| `Cat.EventProcessor`        | Worker support that turns incoming messages into service requests.                           |
-| `Cat.Scheduling`            | Worker support that turns schedules into service requests.                                   |
-| `Cat.Api.Client`            | Typed API clients that call other services through the API gateway.                        |
-| `Cat.EntityFrameworkCore`   | Base query and command handlers for Entity Framework Core, with connection and transaction handling. |
-| `Cat.Dapper`                | Base query and command handlers for Dapper, including bulk operations.                     |
-| `Cat.Auditing`              | Records who changed what and when.                                                         |
-| `Cat.Caching`               | A caching decorator for queries.                                                           |
-| `Cat.Transactions`          | A transaction decorator for commands.                                                      |
-| `Cat.Authorization`         | A decorator that checks permissions before a service request runs.                         |
-| `Cat.Resilience`            | Retry and circuit breaker decorators for calls to other services and integrations.         |
-| `Cat.Telemetry`             | Shared tracing and metrics setup for all services.                                         |
-| `Cat.Testing`               | Helpers for unit tests, like test doubles for processors and responses.                    |
-| `Cat.Templates`             | `dotnet new` templates that create a new service with this project structure.              |
+| [`Cat.Messaging`](./plans/Cat.Messaging.md) | Publish and consume messages on Azure Service Bus with the same handler style as the other modules. |
+| [`Cat.EventProcessor`](./plans/Cat.EventProcessor.md) | Worker support that turns incoming messages into service requests. |
+| [`Cat.Scheduling`](./plans/Cat.Scheduling.md) | Worker support that turns schedules into service requests. |
+| [`Cat.Sagas`](./plans/Cat.Sagas.md) | Long running workflows that send a message, wait for the answer and carry on. |
+| [`Cat.Api.Client`](./plans/Cat.Api.Client.md) | Typed API clients that call other services through the API gateway. |
+| [`Cat.Dapper`](./plans/Cat.Dapper.md) | Base query and command handlers for Dapper, including bulk operations. |
+| [`Cat.Auditing`](./plans/Cat.Auditing.md) | Records who changed what and when. |
+| [`Cat.Caching`](./plans/Cat.Caching.md) | A caching decorator for queries. |
+| [`Cat.Authorization`](./plans/Cat.Authorization.md) | A decorator that checks permissions before a service request runs. |
+| [`Cat.Resilience`](./plans/Cat.Resilience.md) | Retry and circuit breaker decorators for calls to other services and integrations. |
+| [`Cat.Telemetry`](./plans/Cat.Telemetry.md) | Shared tracing and metrics setup for all services. |
+| [`Cat.UnitTesting`](./plans/Cat.UnitTesting.md) | Helpers for unit tests, like test doubles for processors and responses, in small projects you pick from. |
+| [`Cat.Templates`](./plans/Cat.Templates.md) | `dotnet new` templates that create a new service with this project structure. |
+
+## Other future things
+
+These are not modules, but we plan them too.  
+
+| Item                        | Idea                                                                                       |
+|-----------------------------|--------------------------------------------------------------------------------------------|
+| [CAT skills for developers](./plans/Skills.md) | Claude Code skills, shipped as a plugin, that teach Claude the CAT conventions in the projects of the developers who use the toolkit. |
