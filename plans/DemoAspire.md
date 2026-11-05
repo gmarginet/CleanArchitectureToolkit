@@ -113,7 +113,7 @@ A setting in the AppHost configuration, `Sql:Mode`, picks one of two modes.
 
 ### Ports
 
-Under the AppHost the ports come from Aspire. The `.http` files still point at 5101 and 5102 and keep working for standalone runs. Decide in phase 2 whether the AppHost keeps those ports too.
+Decided: the AppHost keeps the fixed ports 5101 and 5102, with `WithHttpEndpoint(port: ...)` and no Aspire proxy. The `.http` files, the Orders to Catalog address and standalone runs all use the same ports. The dashboard runs on 15101 (OTLP on 19101 and the resource service on 20101), set in the launch profile of the AppHost.
 
 ## Swapping the price provider
 
@@ -149,7 +149,7 @@ Under the AppHost the ports come from Aspire. The `.http` files still point at 5
 ## Phases
 
 1. **ServiceDefaults.** Create the project. Both Api projects call it. Build and run both services standalone to check that nothing broke.
-2. **AppHost, `Existing` mode.** Create the AppHost with Catalog and Orders. Both show up in the dashboard with logs, traces and health. Run every request of both `.http` files against the AppHost.
+2. **AppHost, `Existing` mode.** (Built. The `.http` requests pass and the traces show in the dashboard.) Create the AppHost with Catalog and Orders. Both show up in the dashboard with logs, traces and health. Run every request of both `.http` files against the AppHost.
 3. **Price provider.** Add `CatalogPriceProvider` and its tests. Place an order through the AppHost and check in the dashboard that the Catalog call is part of the trace.
 4. **AppHost, `Container` mode.** Needs Docker on the machine. Add the SQL Server container, the data volume and the databases. Check a fresh start from an empty volume and a restart that keeps the data.
 5. **Documents.** Update `demo/README.md` with the run steps for both modes and the Docker memory notes. Update [Demo.md](Demo.md).
@@ -169,5 +169,7 @@ These come after the first AppHost build, in the order of the demo plan.
 ## Open questions
 
 - **Tracing sources.** Settled in phase 1. ServiceDefaults adds the wildcard source `Cat.*`, which covers `Cat.ServiceRequests` and `Cat.FluentWorkFlows`. Check in phase 2 that the activities show up in the dashboard.
-- **Ports.** Fixed ports or Aspire ports. See [Ports](#ports).
+- **Phase 2 check.** Done for the requests: every request of both `.http` files gives the expected status under the AppHost, and both health checks answer. Seen in the dashboard: traces with the `Cat.ServiceRequests` and `Cat.FluentWorkFlows` sources.
+- **ASPIRE010 warning.** The AppHost build warns that `AspireUseCliBundle` is false. Decide whether to set it to true or suppress the warning.
+- **Development certificate.** The dashboard shows "No trusted development certificate was found" when the machine has not run `dotnet dev-certs https --trust`. It is harmless now, because the AppHost, the dashboard and the services all run on HTTP. It matters once HTTPS is used, for example with the gateway or Keycloak. Decide whether the run steps in `demo/README.md` (phase 5) tell a developer to trust the certificate, and whether the AppHost keeps `ASPIRE_ALLOW_UNSECURED_TRANSPORT`.
 - **Existing mode and Trusted_Connection.** The default strings use Windows authentication. That works for a local process but not for a container. Fine for `Existing` mode, since nothing runs in a container there.
