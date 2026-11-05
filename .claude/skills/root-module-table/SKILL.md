@@ -14,11 +14,12 @@ Keep the module table in the root `README.md` in sync with the folders in `modul
 - Never remove the comment with the badge snippet, right after `<!-- Modules start-->`.
 
 ## Table format
-- Header row: `| Module | | Description |`. The status column has no header text.
-- Separator row: `|--------|--------|-------------|`
+- Header row: `| Module | | Description | Plans |`. The status column has no header text.
+- Separator row: `|--------|--------|-------------|-------|`
 - One row per folder in `modules/`, sorted by name.
-- Row format: `| [[[ModuleName]]](./modules/[[ModuleName]]/README.md) | [[StatusBadge]] | [[ModuleDescription]] |`
+- Row format: `| [[[ModuleName]]](./modules/[[ModuleName]]/README.md) | [[StatusBadge]] | [[ModuleDescription]] | [[PlansLink]] |`
 - The link always points to the module readme, also for modules that are still in development.
+- `[[PlansLink]]` is `[Plans](./plans/[[ModuleName]].md)` when the file `plans/[[ModuleName]].md` exists. It holds the plans for the future of the module. When there is no plan file, the cell stays empty.
 - `[[ModuleDescription]]` is one short sentence about what the module is used for. Base it on the intro of the module readme.
 - Follow the documentation style in CLAUDE.md: plain and direct, no long dashes, no ellipses.
 
@@ -37,4 +38,4 @@ Keep the module table in the root `README.md` in sync with the folders in `modul
 1. List the folders in `modules/`. Ignore files such as `CatModuleReadmeTemplate.md`.
 2. Read the intro of each module readme that needs a new or changed row.
 3. Edit the rows. Keep the existing rows untouched when nothing changed.
-4. Check that the table has exactly one row per module folder and that it is sorted by name.
+4. Check that the table has exactly one row per module folder and that it is sorted by name.. Check the Plans cell of every row against the files in plans/.

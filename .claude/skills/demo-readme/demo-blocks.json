@@ -1,0 +1,18 @@
+{
+  "drawing": "resources/schemas/CatDemoArchitecture.excalidraw.svg",
+  "blocks": [
+    { "name": "React client",           "element": "-hL5vscu-SNB1I8JH0yMQ", "chapter": "React client",           "detect": { "path": "demo/Cat.Demo.Client*" } },
+    { "name": "Aspire dashboard",       "element": "u05NMZlPkNX3QQPb2JHdK", "chapter": "Aspire AppHost and dashboard",         "detect": { "path": "demo/Cat.Demo.AppHost*" } },
+    { "name": "API Gateway",            "element": "ifuKXsmw2EOy_3TWPiejJ", "chapter": "API Gateway",            "detect": { "path": "demo/Cat.Demo.Gateway*" } },
+    { "name": "Service Bus emulator",   "element": "49PMKRPGFsWEQYKcQGCkG", "chapter": "Service Bus emulator",   "detect": { "path": "demo/Cat.Demo.AppHost*", "pattern": "AddAzureServiceBus" } },
+    { "name": "Catalog",                "element": "WDRzsEBbpFT88vZ0Z4Ct0", "chapter": "Catalog service",        "detect": { "path": "demo/Cat.Demo.CatalogService" } },
+    { "name": "Orders",                 "element": "iCI-Jn38YpZ23TWuRfmWE", "chapter": "Orders service",         "detect": { "path": "demo/Cat.Demo.OrderService" } },
+    { "name": "Inventory",              "element": "BMOS81ArgqLkvdO0QLPWe", "chapter": "Inventory service",      "detect": { "path": "demo/Cat.Demo.InventoryService" } },
+    { "name": "Notifications",          "element": "aHCq3RL3oGvk7MusMjO9z", "chapter": "Notifications service",  "detect": { "path": "demo/Cat.Demo.NotificationService" } },
+    { "name": "Aspire ServiceDefaults", "element": "PPBv5TJU-cIX3XvSVPErx", "chapter": "Aspire ServiceDefaults", "detect": { "path": "demo/Cat.Demo.ServiceDefaults" } },
+    { "name": "catalog database",       "element": "JtMvjFgw4gyfTUO20EniT", "chapter": "Catalog service",              "detect": { "path": "demo/Cat.Demo.CatalogService" } },
+    { "name": "orders database",        "element": "e8SQo7ftm199fmG9MK9Al", "chapter": "Orders service",              "detect": { "path": "demo/Cat.Demo.OrderService" } },
+    { "name": "inventory database",     "element": "Ek0xgRx4ld105-ZnGlx8M", "chapter": "Inventory service",              "detect": { "path": "demo/Cat.Demo.InventoryService" } },
+    { "name": "Fake payment provider",  "element": "lgASgvA3Is3v3LmNxNJFX", "chapter": "Fake payment provider",  "detect": { "path": "demo/Cat.Demo.OrderService", "pattern": ": IPaymentProvider" } }
+  ]
+}

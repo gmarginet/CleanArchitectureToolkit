@@ -17,6 +17,10 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 | [excalidraw-svg](excalidraw-svg/SKILL.md) | Create or edit an editable Excalidraw drawing in `resources/schemas`. | `/excalidraw-svg add a drawing of the demo security setup` |
 | [mermaid-diagram](mermaid-diagram/SKILL.md) | Write or update an ERD, class or sequence diagram as inline Mermaid. | `/mermaid-diagram ERD for the Catalog service` |
 | [demo-structure](demo-structure/SKILL.md) | Add or restructure a service, client or Aspire project in `demo/`. | `/demo-structure service Orders` |
+| [git-commit](git-commit/SKILL.md) | Commit the changes in logical blocks, with `(skip-pub)` when no code in `modules/` changed. Never pushes. | `/git-commit` |
+| [docs-check](docs-check/SKILL.md) | Check all markdown locally: links, anchors, letter case, code fences, markers and forbidden punctuation. | `/docs-check` |
+| [module-plan](module-plan/SKILL.md) | Create, update or check a module plan in `plans/`. | `/module-plan update Cat.Messaging outbox decided` |
+| [demo-readme](demo-readme/SKILL.md) | Keep `demo/README.md` and the demo architecture drawing in sync with the demo app. | `/demo-readme Inventory service started` |
 | [cat-verify](cat-verify/SKILL.md) | Build, test and check the regenerated namespaces pages. | `/cat-verify` |
 | [link-check](link-check/SKILL.md) | Crawl the published site for broken links. Only on request. | `/link-check --external` |
 | [new-module](new-module/SKILL.md) | Start a new module with projects, tests, readme and table row. | `/new-module Cat.Caching` |
@@ -48,6 +52,30 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **What it does:** Applies the demo folder rules: one folder per deployable unit, one subfolder per project, and a matching solution folder in `CleanArchitectureToolkit.slnx`.
 - **How to use it:** Give it the kind of unit (`service`, `client`, `apphost` or `servicedefaults`) and a name.
 - **When:** When a demo project is added, moved or renamed.
+
+### git-commit
+- **What it does:** Splits the working tree into logical blocks and commits each one with a plain subject line. It runs `git-commit/commit-info.ps1` to group the changes by area and to decide per commit whether the subject must end with ` (skip-pub)`. That is the case when no code in `modules/` and no build file changed, so the build workflow does not publish NuGet packages. It never pushes, amends or rebases.
+- **How to use it:** Ask for a commit. Add a hint if you want a certain split or wording.
+- **When:** Only when you ask for a commit.
+- **Note:** It runs `docs-check` first when markdown changed, and it keeps generated, private and scratch files out of commits.
+
+### docs-check
+- **What it does:** Runs `docs-check/check-docs.ps1` over all markdown, locally and without web requests. It reports broken relative links, wrong letter case in paths, anchors without a heading, unclosed code fences, a lost root README marker, skills missing from this overview and forbidden punctuation. It skips the generated namespaces pages unless asked.
+- **How to use it:** Run it without arguments. Add a folder or file to limit the check while you work.
+- **When:** At the end of a task that changed markdown, a heading or a file name, and after every rename or move.
+- **Note:** `link-check` is the slow crawl of the published site with external links, and runs only on request.
+
+### module-plan
+- **What it does:** Starts a module plan from a template, using what the readmes, plans and demo code already say. It records decisions, moves answered questions from Open to Decided, and keeps the README tables and the other plans in sync. `module-plan/check-plans.ps1` checks links, titles, required chapters and the table of contents, and warns about unknown module names.
+- **How to use it:** Give it the module name and what changed, or ask for a check.
+- **When:** When a future module gets a plan, when a decision about a module is made, or when a module is added, renamed, merged or dropped.
+- **Note:** The demo plans are not covered. Use `demo-readme` for the demo.
+
+### demo-readme
+- **What it does:** Keeps `demo/README.md` current: the functional description, the architecture, the how to run steps and one chapter per block of the architecture drawing. It runs `demo-readme/sync-demo-architecture.ps1`, which switches the boxes of the drawing to hatched (not built) or solid (built) by checking what exists in `demo/`.
+- **How to use it:** Describe what changed, or run it without arguments to resync.
+- **When:** After any change to the demo app, and when a block of the drawing is started or finished.
+- **Note:** `demo-readme/demo-blocks.json` lists the blocks, their drawing elements and the rule that says a block is built. Add new blocks there.
 
 ### cat-verify
 - **What it does:** Runs the Cake `Debug` build, which regenerates the namespaces pages, and the tests, then checks the diff of the regenerated `namespaces/` pages. It reports passed and failed items and unexpected changes. It never edits generated files and never commits.
