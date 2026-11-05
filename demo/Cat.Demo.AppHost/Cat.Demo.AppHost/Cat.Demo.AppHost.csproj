@@ -1,0 +1,18 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.6.4">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <UserSecretsId>cat-demo-apphost</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting.AppHost" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Cat.Demo.CatalogService\Cat.Demo.CatalogService.Api\Cat.Demo.CatalogService.Api.csproj" />
+        <ProjectReference Include="..\..\Cat.Demo.OrderService\Cat.Demo.OrderService.Api\Cat.Demo.OrderService.Api.csproj" />
+    </ItemGroup>
+
+</Project>

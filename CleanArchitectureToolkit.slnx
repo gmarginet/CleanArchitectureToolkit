@@ -13,6 +13,9 @@
     <File Path="demo/Directory.Build.props" />
     <File Path="demo/README.md" />
   </Folder>
+  <Folder Name="/demo/Cat.Demo.AppHost/">
+    <Project Path="demo/Cat.Demo.AppHost/Cat.Demo.AppHost/Cat.Demo.AppHost.csproj" />
+  </Folder>
   <Folder Name="/demo/Cat.Demo.CatalogService/">
     <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api/Cat.Demo.CatalogService.Api.csproj" />
     <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Contracts/Cat.Demo.CatalogService.Contracts.csproj" />
