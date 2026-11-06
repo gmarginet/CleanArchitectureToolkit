@@ -44,6 +44,10 @@
     <Project Path="demo/Cat.Demo.ServiceDefaults/Cat.Demo.ServiceDefaults/Cat.Demo.ServiceDefaults.csproj" />
   </Folder>
   <Folder Name="/modules/" />
+  <Folder Name="/modules/Cat.Api.Client/">
+    <File Path="modules/Cat.Api.Client/README.md" />
+    <Project Path="modules/Cat.Api.Client/Cat.Api.Client/Cat.Api.Client.csproj" />
+  </Folder>
   <Folder Name="/modules/Cat.Api.Gateway/">
     <File Path="modules/Cat.Api.Gateway/README.md" />
     <Project Path="modules/Cat.Api.Gateway/Cat.Api.Gateway.Abstractions/Cat.Api.Gateway.Abstractions.csproj" />
@@ -126,6 +130,7 @@
   </Folder>
   <Folder Name="/tests/">
     <File Path="tests/Directory.Build.props" />
+    <Project Path="tests/Cat.Api.Client.Tests/Cat.Api.Client.Tests.csproj" />
     <Project Path="tests/Cat.Api.Gateway.Tests/Cat.Api.Gateway.Tests.csproj" />
     <Project Path="tests/Cat.Commands.Tests/Cat.Commands.Tests.csproj" />
     <Project Path="tests/Cat.Decorators.Tests/Cat.Decorators.Tests.csproj" />

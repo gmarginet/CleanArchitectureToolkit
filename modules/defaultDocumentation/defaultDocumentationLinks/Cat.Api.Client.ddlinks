@@ -1,0 +1,34 @@
+../../../Cat.Api.Client/namespaces/Cat.Api.Client/
+M:Cat.Api.Client.CatApiCall.ExecuteAsync``1(System.Func{System.Threading.Tasks.Task{``0}},System.String,System.Threading.CancellationToken)|CatApiCall.ExecuteAsync.md#Cat.Api.Client.CatApiCall.ExecuteAsync_TResponse_(System.Func_System.Threading.Tasks.Task_TResponse__,string,System.Threading.CancellationToken)|ExecuteAsync<TResponse>(Func<Task<TResponse>>, string, CancellationToken)
+M:Cat.Api.Client.CatApiCall.ExecuteAsync(System.Func{System.Threading.Tasks.Task},System.String,System.Threading.CancellationToken)|CatApiCall.ExecuteAsync.md#Cat.Api.Client.CatApiCall.ExecuteAsync(System.Func_System.Threading.Tasks.Task_,string,System.Threading.CancellationToken)|ExecuteAsync(Func<Task>, string, CancellationToken)
+M:Cat.Api.Client.CatApiCall.IsApiFailure(System.Exception,System.Threading.CancellationToken)|CatApiCall.IsApiFailure.42TWMR0QIINSDCTYJX460CXT3.md|IsApiFailure(Exception, CancellationToken)
+M:Cat.Api.Client.CatApiCall.Fail``1(System.Exception,System.String)|CatApiCall.Fail.Z5NPCRK1AV9XQ5EIO9BRLVAW3.md|Fail<TResponse>(Exception, string)
+M:Cat.Api.Client.CatApiCall.Unexpected(System.String)|CatApiCall.Unexpected.1AO9S484S47UDSASVRXQY7KP.md|Unexpected(string)
+M:Cat.Api.Client.CatApiCall.ReadErrors(System.String)|CatApiCall.ReadErrors.36O4YDYQ2U5XRJ72RVR0CD289.md|ReadErrors(string)
+M:Cat.Api.Client.CatApiCall.ToPlainValue(System.Object)|CatApiCall.ToPlainValue.CVWKKUHR8K251C2XHFZ5MXPTB.md|ToPlainValue(object)
+N:Cat.Api.Client|Cat.Api.Client.md|Cat.Api.Client
+T:Cat.Api.Client.CatApiCall|CatApiCall.md|CatApiCall
+P:Cat.Api.Client.CatApiException.StatusCode|CatApiException.StatusCode.md|StatusCode
+P:Cat.Api.Client.CatApiException.Response|CatApiException.Response.md|Response
+P:Cat.Api.Client.CatApiException.Headers|CatApiException.Headers.md|Headers
+M:Cat.Api.Client.CatApiException.#ctor(System.String,System.Int32,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IEnumerable{System.String}},System.Exception)|CatApiException..ctor.1G0QMZBOCX3YHJS31RJO8NL0F.md|CatApiException(string, int, string, IReadOnlyDictionary<string,IEnumerable<string>>, Exception)
+T:Cat.Api.Client.CatApiException|CatApiException.md|CatApiException
+P:Cat.Api.Client.CatApiException`1.Result|CatApiException_TResult_.Result.md|Result
+M:Cat.Api.Client.CatApiException`1.#ctor(System.String,System.Int32,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IEnumerable{System.String}},`0,System.Exception)|CatApiException_TResult_..ctor.YR6XG7BA4V3UL8ZAC8AYJ5FQE.md|CatApiException(string, int, string, IReadOnlyDictionary<string,IEnumerable<string>>, TResult, Exception)
+T:Cat.Api.Client.CatApiException`1|CatApiException_TResult_.md|CatApiException<TResult>
+P:Cat.Api.Client.CatErrorResponse.Type|CatErrorResponse.Type.md|Type
+P:Cat.Api.Client.CatErrorResponse.Title|CatErrorResponse.Title.md|Title
+P:Cat.Api.Client.CatErrorResponse.Status|CatErrorResponse.Status.md|Status
+P:Cat.Api.Client.CatErrorResponse.Detail|CatErrorResponse.Detail.md|Detail
+P:Cat.Api.Client.CatErrorResponse.Instance|CatErrorResponse.Instance.md|Instance
+P:Cat.Api.Client.CatErrorResponse.CatErrors|CatErrorResponse.CatErrors.md|CatErrors
+P:Cat.Api.Client.CatErrorResponse.CatTraceId|CatErrorResponse.CatTraceId.md|CatTraceId
+T:Cat.Api.Client.CatErrorResponse|CatErrorResponse.md|CatErrorResponse
+P:Cat.Api.Client.CatErrorResponseItem.Code|CatErrorResponseItem.Code.md|Code
+P:Cat.Api.Client.CatErrorResponseItem.Message|CatErrorResponseItem.Message.md|Message
+P:Cat.Api.Client.CatErrorResponseItem.Arguments|CatErrorResponseItem.Arguments.md|Arguments
+T:Cat.Api.Client.CatErrorResponseItem|CatErrorResponseItem.md|CatErrorResponseItem
+M:Cat.Api.Client.Extensions.ServiceCollectionExtensions.AddCatApiClient``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)|ServiceCollectionExtensions.AddCatApiClient.S1XS8K6M1BY2OK7KEKD6F4JF8.md|AddCatApiClient<TClient,TImplementation>(this IServiceCollection, string)
+N:Cat.Api.Client.Extensions|Cat.Api.Client.Extensions.md|Cat.Api.Client.Extensions
+T:Cat.Api.Client.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+?:Cat.Api.Client.CatApiCall.ExecuteAsync|CatApiCall.ExecuteAsync.md|ExecuteAsync
