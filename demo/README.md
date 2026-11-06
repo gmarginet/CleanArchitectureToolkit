@@ -114,11 +114,12 @@ The [building blocks](#building-blocks) explain where each module is used and wh
 
 ## How to run
 
-The main route is the Aspire AppHost. One command starts the gateway, Catalog, Orders, Keycloak and SQL Server, and opens the dashboard. You can also start one service on its own, see [Run one service](#run-one-service).
+The main route is the Aspire AppHost. One command starts the gateway, Catalog, Orders, the payment service, Keycloak, SQL Server and the React client, and opens the dashboard. You can also start one service on its own, see [Run one service](#run-one-service).
 
 ### Prerequisites
 
 - The .NET SDK that `global.json` asks for.
+- **Node.js 24 or newer** for the React client. The AppHost runs `npm install` and `npm run dev` for you, so you only need Node and npm on the path.
 - **Docker Desktop** for the default route. SQL Server and Keycloak run in containers.
 - Or a SQL Server you already have, and no Docker. Temporal tables need SQL Server, so SQLite and PostgreSQL do not work.
 
@@ -129,11 +130,12 @@ The main route is the Aspire AppHost. One command starts the gateway, Catalog, O
    ```
    dotnet run --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost --launch-profile http
    ```
-3. Wait until the dashboard shows `gateway`, `catalog` and `orders` as running. The first start pulls the SQL Server and Keycloak images, so it takes a few minutes. Keycloak needs a moment to import the realm.
+3. Wait until the dashboard shows `gateway`, `catalog`, `orders` and `web` as running. The first start pulls the SQL Server and Keycloak images, so it takes a few minutes. Keycloak needs a moment to import the realm.
 4. Open the dashboard at `http://localhost:15101`. It needs no login. It shows the logs, traces, metrics and health checks of the services.
 5. Try the endpoints. The gateway runs on `http://localhost:5100` and is the door for every call. Keycloak runs on `http://localhost:8180`. Open these files in Visual Studio or Rider and run the requests from top to bottom. Run the login requests at the top first. Later requests use ids from earlier responses.
    - `demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api/CatalogRequests.http`
    - `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Api/OrderRequests.http`
+   - The React client runs on `http://localhost:5104`. It is a start page for now, see [React client](#react-client).
 6. Place an order and open its trace in the dashboard. It shows the call from Orders to Catalog for the prices.
 7. Press Ctrl+C to stop. The database lives in the Docker volume `cat-demo-sql-data`, so the data is still there at the next start.
 
@@ -255,6 +257,8 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 
 **What it is.** A thin web client with a book list, a basket and an order overview. It uses React with TypeScript, built with Vite.
 
+**Where it stands.** The first step of stage 3 is done. The project `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App` is a Vite, React and TypeScript app with a start page. The AppHost starts it as `web` on the fixed port 5104. The gateway lists `http://localhost:5104` as an allowed CORS origin, so the browser may call it. The screens, the login and the calls come in the next steps. The box in the drawing stays hatched until the login works.
+
 **How it will work.**
 - It only talks to the API gateway.
 - It logs in with OpenID Connect and sends the token with every call.
@@ -274,13 +278,13 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 - No shared contracts, so a change in a service needs a refresh of the generated client.
 - Blazor WebAssembly would share the contracts, but it makes the demo look .NET only.
 
-**More.** [Client section of the plan](../plans/Demo.md#client).
+**More.** `demo/Cat.Demo.WebClient`. [React client plan](../plans/Demo.md#react-client).
 
 ### Aspire AppHost and dashboard
 
 **Status:** Built
 
-**What it is.** One project that describes the system: the gateway, Catalog, Orders, Keycloak and SQL Server. The Aspire dashboard shows logs, traces, metrics and health checks. The React app and the Service Bus emulator join later.
+**What it is.** One project that describes the system: the gateway, Catalog, Orders, Keycloak and SQL Server. The Aspire dashboard shows logs, traces, metrics and health checks. The React client starts from it too. The Service Bus emulator joins later.
 
 **How it works.**
 - `demo/Cat.Demo.AppHost/Cat.Demo.AppHost` adds the Api project of each service. The services keep their ports, 5101 and 5102, with no Aspire proxy. The dashboard runs on 15101.

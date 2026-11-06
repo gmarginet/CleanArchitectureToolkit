@@ -59,8 +59,12 @@ var keycloak = builder.AddContainer("keycloak", "quay.io/keycloak/keycloak", "26
 var authority = $"http://localhost:{keycloakPort}/realms/cat-demo";
 catalog.WithEnvironment("Authentication__Authority", authority);
 orders.WithEnvironment("Authentication__Authority", authority);
-builder.AddProject<Projects.Cat_Demo_Api_Gateway>("gateway")
-    .WithHttpEndpoint(port: 5100, name: "http", isProxied: false)
+const int gatewayPort = 5100;
+const int webPort = 5104;
+var gatewayUrl = $"http://localhost:{gatewayPort}";
+var webUrl = $"http://localhost:{webPort}";
+var gateway = builder.AddProject<Projects.Cat_Demo_Api_Gateway>("gateway")
+    .WithHttpEndpoint(port: gatewayPort, name: "http", isProxied: false)
     .WithReference(catalog)
     .WithReference(orders)
     .WaitFor(catalog)
@@ -69,7 +73,20 @@ builder.AddProject<Projects.Cat_Demo_Api_Gateway>("gateway")
     .WithEnvironment("CatGateway__Services__catalog__Address", "http://catalog")
     .WithEnvironment("CatGateway__Services__orders__Address", "http://orders")
     .WithEnvironment("CatGateway__Authentication__Authority", authority)
+    .WithEnvironment("CatGateway__Cors__AllowedOrigins__0", webUrl)
     .WithHttpHealthCheck("/health");
+
+// The React client runs with Vite. The port is fixed, because the gateway lists it as an allowed CORS origin.
+// The page reads the VITE_ variables when it starts.
+builder.AddViteApp("web", "../../Cat.Demo.WebClient/Cat.Demo.WebClient.App")
+    .WithEndpoint("http", endpoint =>
+    {
+        endpoint.Port = webPort;
+        endpoint.IsProxied = false;
+    })
+    .WithEnvironment("VITE_GATEWAY_URL", gatewayUrl)
+    .WithEnvironment("VITE_AUTHORITY", authority)
+    .WaitFor(gateway);
 
 if (useContainer)
 {
