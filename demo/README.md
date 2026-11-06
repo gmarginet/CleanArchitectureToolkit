@@ -688,7 +688,7 @@ Remove the secret to switch the failure off again. When you run the service on i
 
 **Cons.**
 - One more project to build and run.
-- The service has no login for now, and it forgets its answers when it restarts.
+- The service has no login and forgets its answers when it restarts. It is a fake, so it stays simple on purpose.
 - The service is still pretend. It proves nothing about a real provider.
 
 **More.** `demo/Cat.Demo.PaymentService`, `PaymentServiceProvider` in `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Infrastructure/PaymentServices`. [Payment decisions and open questions](../plans/Demo.md#decided), [Cat.Resilience](../plans/Cat.Resilience.md).
