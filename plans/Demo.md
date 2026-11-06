@@ -81,7 +81,7 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 | Counter cleanup | The `CleanUpOrderCounters` service request deletes the rows of earlier days and creates the row of today. The Scheduler will run it nightly. Until the Scheduler exists, a development only endpoint triggers it. |
 | Currency | One currency, euro, to keep the demo simple. |
 | Sharing contracts | A choice per connection, as the root readme describes. React client to gateway: not shared. Orders to Catalog: not shared. A later service to service call: shared, so the demo shows both. See [Sharing contracts](#sharing-contracts). |
-| API gateway | It is the API gateway from the Application Architecture chapter of the root readme. It becomes a module, `Cat.Api.Gateway`. See [Cat.Api.Gateway.md](Cat.Api.Gateway.md). |
+| API gateway | It is the API gateway from the Application Architecture chapter of the root readme. It is the module `Cat.Api.Gateway`. See its [readme](../modules/Cat.Api.Gateway/README.md). |
 | Notifications storage | Decided once the Scheduling module is designed. |
 | Todo demo | `Cat.Demo.TodoService` is removed. Catalog is the first service of this plan. |
 | First service | Catalog is built first, then Orders. |
@@ -89,7 +89,7 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 ### Open
 
 - **Roadmap order.** Do you confirm the order of the [roadmap](#roadmap)? In particular: the gateway and login before the React client, and Inventory before messaging.
-- **Gateway and the module.** Decided: the gateway is built on YARP and the demo gateway `Cat.Demo.Api.Gateway` uses the module from the start. See [Cat.Api.Gateway.md](Cat.Api.Gateway.md).
+- **Gateway and the module.** Decided: the gateway is built on YARP and the demo gateway `Cat.Demo.Api.Gateway` uses the module from the start. See the [readme of the module](../modules/Cat.Api.Gateway/README.md).
 - **Stock call.** Until messaging exists, Orders reserves stock with an HTTP call to Inventory. Does that call share the `Contracts` of Inventory? It is the candidate for the shared choice in [Sharing contracts](#sharing-contracts).
 - **Resilience in the demo.** [Aspire ServiceDefaults](#aspire-servicedefaults) says the demo does not use `Cat.Resilience`, because ServiceDefaults covers it. The roadmap shows the resilience story with the ServiceDefaults handler. When does the demo use `Cat.Resilience`: never, or in a part that runs without Aspire?
 
@@ -479,7 +479,7 @@ Built so far: Catalog, Orders with a fake for stock, ServiceDefaults, the AppHos
 | Stage | What | Needs | Done when |
 |---|---|---|---|
 | 1. Payment service (done) | `Cat.Demo.PaymentService` and a client for it in Orders, with the failure setting. The AppHost starts it. | Nothing new. ServiceDefaults already gives retries and a circuit breaker. | Placing an order calls the payment service. With a failure switched on, the retries and the open circuit show in the dashboard trace. The box in the drawing is solid. |
-| 2. Gateway and login (done) | The API gateway, Keycloak with the imported realm, JWT validation in the services and the real `ICurrentUser`. | The module plan [Cat.Api.Gateway.md](Cat.Api.Gateway.md) answered, and the module built, with the demo gateway as its first host. | A request without a token gets 401 on Orders. Alice sees her orders, Bob does not. Catalog reads stay public. `.http` files get a token. Tried against the running AppHost, and all of it held. The login screen of the React app waits for stage 3. |
+| 2. Gateway and login (done) | The API gateway, Keycloak with the imported realm, JWT validation in the services and the real `ICurrentUser`. | The module [Cat.Api.Gateway](../modules/Cat.Api.Gateway/README.md) built, with the demo gateway as its first host. | A request without a token gets 401 on Orders. Alice sees her orders, Bob does not. Catalog reads stay public. `.http` files get a token. Tried against the running AppHost, and all of it held. The login screen of the React app waits for stage 3. |
 | 3. React client | The thin client: book list, basket and order overview, with login against the `cat-demo-web` client of the realm. The AppHost starts it. | Stage 2, which is done. | A person logs in as `alice`, places an order and sees it in the overview. |
 | 4. Inventory | The database first service with its SQL scripts, and a client in Orders that replaces `FakeStockReservation`. | No new module. The AppHost runs the SQL scripts. | An order reserves real stock. A 51st copy is still refused. The `inventory` box is solid. |
 | 5. Messaging | `Cat.Messaging` and `Cat.EventProcessor`, the Service Bus emulator in the AppHost, and the `OrderPlaced` bridge in Orders. | The module plans [Cat.Messaging.md](Cat.Messaging.md) and [Cat.EventProcessor.md](Cat.EventProcessor.md) answered and built. | Orders publishes `OrderPlaced` and Inventory consumes it. The emulator box is solid. |
