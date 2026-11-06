@@ -29,6 +29,7 @@
     <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Infrastructure/Cat.Demo.CatalogService.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/demo/Cat.Demo.InventoryService/">
+    <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.Api/Cat.Demo.InventoryService.Api.csproj" />
     <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.Contracts/Cat.Demo.InventoryService.Contracts.csproj" />
     <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.CoreService/Cat.Demo.InventoryService.CoreService.csproj" />
     <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.CoreService.Tests/Cat.Demo.InventoryService.CoreService.Tests.csproj" />

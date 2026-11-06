@@ -1,0 +1,85 @@
+@Gateway_HostAddress = http://localhost:5100
+@Keycloak_HostAddress = http://localhost:8180
+
+### Start the AppHost first. Every call needs a token, so run the login first. The requests go through the gateway.
+### The order number is the idempotency key. Asking again for the same order changes nothing.
+### The seed data holds 50 copies of every book of the Catalog service.
+
+### Login of alice (password: alice) => OK, with the access token for the requests below
+# @name alice
+POST {{Keycloak_HostAddress}}/realms/cat-demo/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=cat-demo-cli&username=alice&password=alice
+
+### StockReserveRequest => OK (2 copies of 1984 and 1 of Clean Code)
+POST {{Gateway_HostAddress}}/inventory/reservations HTTP/1.1
+Authorization: Bearer {{alice.response.body.$.access_token}}
+Content-Type: application/json
+
+{
+  "orderNumber": "20261106-9101",
+  "lines": [
+    { "isbn": "9780141036144", "quantity": 2 },
+    { "isbn": "9780132350884", "quantity": 1 }
+  ]
+}
+
+### StockReserveRequest => OK, nothing changes because the order has its stock already
+POST {{Gateway_HostAddress}}/inventory/reservations HTTP/1.1
+Authorization: Bearer {{alice.response.body.$.access_token}}
+Content-Type: application/json
+
+{
+  "orderNumber": "20261106-9101",
+  "lines": [
+    { "isbn": "9780141036144", "quantity": 2 },
+    { "isbn": "9780132350884", "quantity": 1 }
+  ]
+}
+
+### StockReserveRequest => Conflict, out of stock (CAT-INV-1000). The first line is not reserved either.
+POST {{Gateway_HostAddress}}/inventory/reservations HTTP/1.1
+Authorization: Bearer {{alice.response.body.$.access_token}}
+Content-Type: application/json
+
+{
+  "orderNumber": "20261106-9102",
+  "lines": [
+    { "isbn": "9780132350884", "quantity": 1 },
+    { "isbn": "9780141036144", "quantity": 51 }
+  ]
+}
+
+### StockReserveRequest => Not Found, the book is not in the warehouse (CAT-INV-1001)
+POST {{Gateway_HostAddress}}/inventory/reservations HTTP/1.1
+Authorization: Bearer {{alice.response.body.$.access_token}}
+Content-Type: application/json
+
+{
+  "orderNumber": "20261106-9103",
+  "lines": [ { "isbn": "9789999999999", "quantity": 1 } ]
+}
+
+### StockReserveRequest => Bad request, no lines
+POST {{Gateway_HostAddress}}/inventory/reservations HTTP/1.1
+Authorization: Bearer {{alice.response.body.$.access_token}}
+Content-Type: application/json
+
+{
+  "orderNumber": "20261106-9104",
+  "lines": []
+}
+
+### StockReserveRequest => Unauthorized, no token
+POST {{Gateway_HostAddress}}/inventory/reservations HTTP/1.1
+Content-Type: application/json
+
+{
+  "orderNumber": "20261106-9105",
+  "lines": [ { "isbn": "9780141036144", "quantity": 1 } ]
+}
+
+### StockReleaseRequest => OK, the stock of the first order is back
+DELETE {{Gateway_HostAddress}}/inventory/reservations/20261106-9101 HTTP/1.1
+Authorization: Bearer {{alice.response.body.$.access_token}}
