@@ -38,6 +38,7 @@ It replaces the todo demo with a small bookshop.
 - [Data models](#data-models)
   - [Order number counter](#order-number-counter)
   - [Counter cleanup](#counter-cleanup)
+- [React client](#react-client)
 - [Roadmap](#roadmap)
 - [Next steps](#next-steps)
 - [Interesting documentation](#interesting-documentation)
@@ -89,6 +90,7 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 ### Open
 
 - **Roadmap order.** Do you confirm the order of the [roadmap](#roadmap)? In particular: the gateway and login before the React client, and Inventory before messaging.
+- **React client.** The technical choices and the first cut are decided. Two points are open, and both are settled while building. See [React client](#react-client).
 - **Gateway and the module.** Decided: the gateway is built on YARP and the demo gateway `Cat.Demo.Api.Gateway` uses the module from the start. See the [readme of the module](../modules/Cat.Api.Gateway/README.md).
 - **Stock call.** Until messaging exists, Orders reserves stock with an HTTP call to Inventory. Does that call share the `Contracts` of Inventory? It is the candidate for the shared choice in [Sharing contracts](#sharing-contracts).
 - **Development certificate.** The dashboard says "No trusted development certificate was found" when the machine has not run `dotnet dev-certs https --trust`. It is harmless now, because the AppHost, the dashboard and the services all run on HTTP. It matters once something uses HTTPS. Do the run steps of the demo readme then tell a developer to trust the certificate, and does the AppHost keep `ASPIRE_ALLOW_UNSECURED_TRANSPORT`?
@@ -471,6 +473,104 @@ Inventory uses commands, queries, responses and decorators, but not the entity b
 - A small SQL scripts folder and one extra step in the AppHost.
 - A readme section on how to scaffold again after a database change.
 
+## React client
+
+This is the first version of the plan for stage 3 of the [roadmap](#roadmap). It is a proposal to discuss. Nothing in it is decided yet, so every point is also in the open list below. The decisions that already exist are in [Decided](#decided): React with TypeScript and Vite, login with the `cat-demo-web` client, no shared contracts, and the AppHost starts the app.
+
+### Goal
+
+A person opens the shop in the browser, logs in as `alice`, picks books, places an order and sees it in the overview. The client stays thin. It has no business rules. It shows what the services answer, and it shows their error messages as they are.
+
+### What the services give the client
+
+Everything goes through the gateway on port 5100.
+
+| Call | Login | Used by |
+|---|---|---|
+| `GET /catalog/books?text=&categoryId=` | No | Book list, search |
+| `GET /catalog/books/{bookId}` | No | Book detail |
+| `GET /catalog/categories` | No | Category filter |
+| `POST /catalog/books` | Admin | Book edit (optional screen) |
+| `POST /orders` with `Lines` of `BookId` and `Quantity` | Yes | Checkout |
+| `GET /orders` | Yes | Order overview |
+| `GET /orders/{orderId}` | Yes | Order detail |
+| `POST /orders/{orderId}/cancel` | Yes | Order detail |
+
+What is not there: a call for several books by id, a stock count, and a call for the customer.
+
+### Screens
+
+The first version has five screens and one bar on top. The numbers in the first column are the order to build them in.
+
+| # | Screen | Route | What is on it |
+|---|---|---|---|
+| 1 | Book list | `/` | Search box and category filter. A card or row per book with title, author, category and price. An "Add to basket" button. |
+| 2 | Book detail | `/books/:id` | All fields of the book, a quantity and an "Add to basket" button. A book without a price cannot be added. |
+| 3 | Basket | `/basket` | The lines with title, quantity (1 to 50) and line total, a remove button and the basket total. A "Place order" button. A person who is not logged in is sent to the login first. |
+| 4 | Order overview | `/orders` | A table of the orders of the person: number, date, status, total. A row opens the detail. |
+| 5 | Order detail | `/orders/:id` | Number, status, date, the lines with title, quantity, unit price and total. A "Cancel order" button when the status allows it. |
+| 6 | Admin book edit (optional) | `/admin/books/:id?` | A form for the fields of `BookModel`. Only an admin sees the link. Shows the 403 for everybody else. |
+
+The bar on top has the shop name, a search shortcut, the basket with its count, and the login. After login it shows the name of the person and a logout button, and a link to the order overview.
+
+Not in the first version: signup, payment screens, an address, a stock count, languages, and a "my profile" page.
+
+The screens that show what the demo is about:
+
+- **Checkout result.** After "Place order" the client shows the order number and the status. A decline, an out of stock line or an unavailable payment service comes back as an error and shows its message and code, such as `CAT-ORD-1006`. This is where a person sees the payment failure setting at work.
+- **Own orders only.** Log in as Bob and the overview does not contain the orders of Alice. Opening her order by its id shows "not found".
+
+### Flow of a purchase
+
+1. The person browses. No login is needed.
+2. The basket lives in the browser. The person clicks "Place order", the client logs in when needed and comes back to the basket.
+3. The client posts the lines. The server decides the price, the stock and the payment.
+4. The client shows the answer and empties the basket when the order was created.
+
+### Decisions and open questions of the client
+
+#### Decided
+
+| Topic | Decision |
+|---|---|
+| First cut | The five screens: book list, book detail, basket, order overview and order detail. The admin edit screen is left out and comes after the others. |
+| Login library | `react-oidc-context`, the React layer on top of `oidc-client-ts`. |
+| Token storage | In memory only. A page refresh does a silent login again. |
+| Calls | The browser calls the gateway on its own address. CORS is set in the gateway, and the realm already has `webOrigins`. There is no Vite proxy, so the demo shows the CORS options of the module. |
+| Start | The AppHost starts the app with Aspire's JavaScript or Vite support and gives it the gateway and Keycloak addresses. The page reads them at startup. |
+| Types | Generated from the OpenAPI documents of Catalog and Orders with `openapi-typescript`, and called with `openapi-fetch`. Only if the documents are complete enough, which the live check in the open list settles. A script in package.json runs the generation and the output is not committed, so the types always match the services. |
+| Server state | TanStack Query. |
+| Routing and look | React Router and plain CSS with CSS modules. No component library. |
+| Titles in the order detail | The client asks `GET /catalog/books/{id}` for each line, and TanStack Query caches the answers. No change to the contracts. |
+| Errors | One small component shows the message and the code of every failed call. |
+| Cancel button | Always shown. The client does not copy the list of statuses that allow a cancel, so it holds no rule of the service. A 409 answer shows its message through the error component. |
+| Tests | Vitest with React Testing Library for the basket and the error component. A Playwright run of the whole flow comes later if the owner wants it. Only the developer runs Vitest with `npm test`. The Cake build does not. |
+| Price in the basket | The basket shows the price of the book list and no warning. The server price wins, and the answer of the order shows the real total. A warning can come later. |
+| Port | 5104, the next one after the payment service on 5103. The AppHost sets it, so the page and the CORS list of the gateway agree. The realm already accepts any `http://localhost:*` redirect and every web origin, so it needs no change. |
+| Build | Cake does not build the client. It is not a package. The AppHost runs it, and Node is a prerequisite in the demo readme. |
+| Location | `demo/Cat.Demo.WebClient/`. |
+
+#### Open
+
+1. **Live check of the OpenAPI documents.** The static check below looks fine, but nobody has fetched a document from a running service yet. The first build step does it, and settles the question about generating types.
+2. **CORS.** Does the CORS list of the gateway hold the origin `http://localhost:5104`? The first login proves it.
+
+#### Checked
+
+- **Not a .NET project.** The `demo-structure` skill has a `client` kind and says each client gets its own folder, with every project in its own subfolder. It says nothing about a client that is not .NET, and the solution file lists .NET projects only. So the unit is `demo/Cat.Demo.WebClient/` with the app in a subfolder, such as `Cat.Demo.WebClient/Cat.Demo.WebClient.App/`, and no entry in `CleanArchitectureToolkit.slnx`. The skill needs one sentence for this when the unit is built. Cake finds only `*.Tests.csproj`, so it ignores the folder.
+- **Aspire support.** The package `Aspire.Hosting.JavaScript` exists on NuGet, up to the version 13.6.4 that the AppHost uses. It has the `AddViteApp` and `AddJavaScriptApp` calls. The AppHost references only `Aspire.Hosting.AppHost` and `Aspire.Hosting.SqlServer` now, so the package is added to `Directory.Packages.props`. Node is on this machine (v26), `npm` too. Which version of Node the demo asks for is a small open point.
+- **Error body.** A failed call answers `application/problem+json`, the `CatProblemDetails` type: the standard `type`, `title`, `status`, `detail` and `instance`, plus `catErrors` and `catTraceId`. Each entry of `catErrors` has `code`, `message` and `arguments`. The `message` is a template, so the client either fills the arguments in or shows `detail`. A call that is not allowed, a missing token and so on, may answer with an empty body, so the error component must cope with that.
+- **OpenAPI completeness, static part.** Catalog and Orders both call `AddOpenApi()` and `MapOpenApi()`, but only in Development. Every endpoint declares its success type and, for each failure, `CatProblemDetails`. The request body is inferred. The 415 answer is added where a body is read. That is enough to generate the types.
+### Build order
+
+1. The project with Vite, TypeScript and the AppHost start. The page shows the shop name.
+2. Book list and book detail, from Catalog without a login.
+3. Login with Keycloak, the top bar, and the token on the calls.
+4. Basket and checkout, with the error component.
+5. Order overview and order detail with the cancel button.
+6. The demo readme chapter, the drawing box and the run steps.
+7. Optional: the admin screen.
+
 ## Roadmap
 
 The order for the rest of the demo build. **This order is a proposal.** It becomes a decision when the owner confirms it, see the open questions. Every stage ends in a working demo: the stage is done when the "Done when" column is true, the demo readme and the drawing are current (the `demo-readme` skill) and the tests pass.
@@ -481,7 +581,7 @@ Built so far: Catalog, Orders with a fake for stock, ServiceDefaults, the AppHos
 |---|---|---|---|
 | 1. Payment service (done) | `Cat.Demo.PaymentService` and a client for it in Orders, with the failure setting. The AppHost starts it. | Nothing new. ServiceDefaults already gives retries and a circuit breaker. | Placing an order calls the payment service. With a failure switched on, the retries and the open circuit show in the dashboard trace. The box in the drawing is solid. |
 | 2. Gateway and login (done) | The API gateway, Keycloak with the imported realm, JWT validation in the services and the real `ICurrentUser`. | The module [Cat.Api.Gateway](../modules/Cat.Api.Gateway/README.md) built, with the demo gateway as its first host. | A request without a token gets 401 on Orders. Alice sees her orders, Bob does not. Catalog reads stay public. `.http` files get a token. Tried against the running AppHost, and all of it held. The login screen of the React app waits for stage 3. |
-| 3. React client | The thin client: book list, basket and order overview, with login against the `cat-demo-web` client of the realm. The AppHost starts it. | Stage 2, which is done. | A person logs in as `alice`, places an order and sees it in the overview. |
+| 3. React client | The thin client, planned in [React client](#react-client): book list, basket and order overview, with login against the `cat-demo-web` client of the realm. The AppHost starts it. | Stage 2, which is done. | A person logs in as `alice`, places an order and sees it in the overview. |
 | 4. Inventory | The database first service with its SQL scripts, and a client in Orders that replaces `FakeStockReservation`. | No new module. The AppHost runs the SQL scripts. | An order reserves real stock. A 51st copy is still refused. The `inventory` box is solid. |
 | 5. Messaging | `Cat.Messaging` and `Cat.EventProcessor`, the Service Bus emulator in the AppHost, and the `OrderPlaced` bridge in Orders. | The module plans [Cat.Messaging.md](Cat.Messaging.md) and [Cat.EventProcessor.md](Cat.EventProcessor.md) answered and built. | Orders publishes `OrderPlaced` and Inventory consumes it. The emulator box is solid. |
 | 6. Notifications and scheduling | The Notifications service, `Cat.Scheduling` and `Cat.Localizations` for the texts. The nightly clean up of the order counters and the cancel of unpaid orders. | Stage 5. [Cat.Scheduling.md](Cat.Scheduling.md). A storage decision for Notifications. | An order confirmed mail is written in the language of the customer. The nightly jobs run from the Scheduler, and the development endpoint can go. |
