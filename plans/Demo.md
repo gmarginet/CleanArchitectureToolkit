@@ -490,7 +490,7 @@ Everything goes through the gateway on port 5100.
 | `GET /catalog/books?text=&categoryId=` | No | Book list, search |
 | `GET /catalog/books/{bookId}` | No | Book detail |
 | `GET /catalog/categories` | No | Category filter |
-| `POST /catalog/books` | Admin | Book edit (optional screen) |
+| `POST /catalog/books` | Admin | Admin book form |
 | `POST /orders` with `Lines` of `BookId` and `Quantity` | Yes | Checkout |
 | `GET /orders` | Yes | Order overview |
 | `GET /orders/{orderId}` | Yes | Order detail |
@@ -509,7 +509,7 @@ The first version has five screens and one bar on top. The numbers in the first 
 | 3 | Basket | `/basket` | The lines with title, quantity (1 to 50) and line total, a remove button and the basket total. A "Place order" button. A person who is not logged in is sent to the login first. |
 | 4 | Order overview | `/orders` | A table of the orders of the person: number, date, status, total. A row opens the detail. |
 | 5 | Order detail | `/orders/:id` | Number, status, date, the lines with title, quantity, unit price and total. A "Cancel order" button when the status allows it. |
-| 6 | Admin book edit (optional) | `/admin/books/:id?` | A form for the fields of `BookModel`. Only an admin sees the link. Shows the 403 for everybody else. |
+| 6 | Admin book form | `/admin/books/new` and `/admin/books/:id` | A form for the fields of `BookModel`. Only an admin sees the link. Shows the 403 for everybody else. |
 
 The bar on top has the shop name, a search shortcut, the basket with its count, and the login. After login it shows the name of the person and a logout button, and a link to the order overview.
 
@@ -533,7 +533,7 @@ The screens that show what the demo is about:
 
 | Topic | Decision |
 |---|---|
-| First cut | The five screens: book list, book detail, basket, order overview and order detail. The admin edit screen is left out and comes after the others. |
+| Scope | Six screens: book list, book detail, basket, order overview, order detail and the admin book form. Stage 3 is done when all six work. |
 | Login library | `react-oidc-context`, the React layer on top of `oidc-client-ts`. |
 | Token storage | In memory only. A page refresh does a silent login again. |
 | Calls | The browser calls the gateway on its own address. CORS is set in the gateway, and the `cat-demo-web` client of the realm lists the web origin. There is no Vite proxy, so the demo shows the CORS options of the module. |
@@ -557,7 +557,9 @@ The screens that show what the demo is about:
 
 #### Open
 
-Nothing is open for the client now. The points that were left are checked, see below.
+- **Admin role in the client (my proposal, to confirm).** The realm adds the `roles` claim to the ID token of `cat-demo-web`, and the client reads `profile.roles` to show the admin links. The services still check the role on every call. The alternative is to decode the access token in the browser, which needs no realm change but reads a token the client should treat as opaque.
+
+The other points are checked, see below.
 
 #### Checked
 
@@ -571,9 +573,9 @@ Nothing is open for the client now. The points that were left are checked, see b
 2. Done: book list and book detail, from Catalog without a login. Tried in a browser against the running AppHost: search, category filter, detail and not found.
 3. Done: login with Keycloak, the top bar, and the token on the calls. Tried in a browser against the running AppHost as `alice`: the login and the return to the same page, the token on the calls, Orders answering 200 with the token and 401 without, the silent sign-in after a refresh and the logout.
 4. Done: basket and checkout, with the error component. Tried in a browser against the running AppHost as `alice`: books in the basket, a changed quantity, a reload that keeps the basket, the login from the checkout and the return to the basket, a confirmed order, a declined order above 500 euro (`CAT-ORD-1003`) and, with `Payment:Outage` on, `CAT-ORD-1006` for every order with the basket kept. The orders in the service matched the screen.
-5. Order overview and order detail with the cancel button.
-6. The demo readme chapter, the drawing box and the run steps.
-7. Optional: the admin screen.
+5. Done: order overview and order detail with the cancel button. Tried in a browser against the running AppHost as `alice` and `bob`: an order placed and opened from the confirmation, the lines with their titles, a cancel, a second cancel that shows `CAT-ORD-1004`, and the order of Alice opened as Bob, which is not found.
+6. Done: the admin book form. Tried as `admin`: a new book, an edit, and a duplicate ISBN that shows `CAT-CTL-1000`. Alice sees no admin links and gets the note on the form.
+7. Done: the demo readme chapter, the drawing box and the run steps.
 
 ## Roadmap
 
@@ -585,7 +587,7 @@ Built so far: Catalog, Orders with a fake for stock, ServiceDefaults, the AppHos
 |---|---|---|---|
 | 1. Payment service (done) | `Cat.Demo.PaymentService` and a client for it in Orders, with the failure setting. The AppHost starts it. | Nothing new. ServiceDefaults already gives retries and a circuit breaker. | Placing an order calls the payment service. With a failure switched on, the retries and the open circuit show in the dashboard trace. The box in the drawing is solid. |
 | 2. Gateway and login (done) | The API gateway, Keycloak with the imported realm, JWT validation in the services and the real `ICurrentUser`. | The module [Cat.Api.Gateway](../modules/Cat.Api.Gateway/README.md) built, with the demo gateway as its first host. | A request without a token gets 401 on Orders. Alice sees her orders, Bob does not. Catalog reads stay public. `.http` files get a token. Tried against the running AppHost, and all of it held. The login screen of the React app waits for stage 3. |
-| 3. React client | The thin client, planned in [React client](#react-client): book list, basket and order overview, with login against the `cat-demo-web` client of the realm. The AppHost starts it. | Stage 2, which is done. | A person logs in as `alice`, places an order and sees it in the overview. |
+| 3. React client (done) | The thin client, planned in [React client](#react-client): book list, basket, order overview and the admin book form, with login against the `cat-demo-web` client of the realm. The AppHost starts it. | Stage 2, which is done. | A person logs in as `alice`, places an order and sees it in the overview. Tried against the running AppHost, and all of it held. |
 | 4. Inventory | The database first service with its SQL scripts, and a client in Orders that replaces `FakeStockReservation`. | No new module. The AppHost runs the SQL scripts. | An order reserves real stock. A 51st copy is still refused. The `inventory` box is solid. |
 | 5. Messaging | `Cat.Messaging` and `Cat.EventProcessor`, the Service Bus emulator in the AppHost, and the `OrderPlaced` bridge in Orders. | The module plans [Cat.Messaging.md](Cat.Messaging.md) and [Cat.EventProcessor.md](Cat.EventProcessor.md) answered and built. | Orders publishes `OrderPlaced` and Inventory consumes it. The emulator box is solid. |
 | 6. Notifications and scheduling | The Notifications service, `Cat.Scheduling` and `Cat.Localizations` for the texts. The nightly clean up of the order counters and the cancel of unpaid orders. | Stage 5. [Cat.Scheduling.md](Cat.Scheduling.md). A storage decision for Notifications. | An order confirmed mail is written in the language of the customer. The nightly jobs run from the Scheduler, and the development endpoint can go. |

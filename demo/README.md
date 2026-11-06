@@ -59,7 +59,7 @@ What you can do today:
 - **Cancel an order.** Change your mind after ordering and cancel it.
 - **Log in.** Alice, Bob and the admin each have an account. You need to be logged in to place or follow orders. Anyone can browse the catalog without a login.
 - **Stay private.** A customer only sees their own orders. An admin sees all of them. Only an admin can add or change a book.
-- **Use the web shop.** Open the shop in the browser, search the books by text or category, open a book and log in. Put books in a basket and place an order. Following your orders in the browser comes next.
+- **Use the web shop.** Open the shop in the browser, search the books by text or category, open a book and log in. Put books in a basket and place an order. Follow your orders in the browser, and cancel one. An admin can add a book and change a book.
 
 What the shop does when something goes wrong:
 
@@ -73,7 +73,6 @@ What comes later:
 
 - A real stock service that keeps the stock levels.
 - Emails when an order is confirmed or shipped.
-- An order overview in the web shop, with the cancel button.
 - Nightly jobs, such as cancelling orders that are not paid.
 
 ## Architecture
@@ -240,7 +239,7 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 
 | Block | Status | What it is |
 |---|---|---|
-| [React client](#react-client) | Built | The web shop. It shows the books, has a login and takes orders. The order overview comes next. |
+| [React client](#react-client) | Built | The web shop. It shows the books, has a login, takes orders and shows them, and lets an admin edit books. |
 | [Aspire AppHost and dashboard](#aspire-apphost-and-dashboard) | Built | Starts the whole system and shows how it runs. |
 | [API Gateway](#api-gateway) | Built | The one door for clients. |
 | [Keycloak](#keycloak) | Built | The identity provider that holds the users and signs the tokens. |
@@ -256,9 +255,9 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 
 **Status:** Built
 
-**What it is.** A thin web client with a book list, a basket and an order overview. It uses React with TypeScript, built with Vite.
+**What it is.** A thin web client with a book list, a basket, an order overview and an admin screen for books. It uses React with TypeScript, built with Vite.
 
-**Where it stands.** Steps 1 to 4 of stage 3 are done. The app is in `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App`, a Vite, React and TypeScript project. The AppHost starts it as `web` on the fixed port 5104, and the gateway lists `http://localhost:5104` as an allowed CORS origin. It has three screens, the book list, the book detail and the basket, and a login. The book list has a search box and a category filter, and keeps them in the address. One error component shows the message, the code and the trace id of every failed call. The order overview and the order detail come in the next step.
+**Where it stands.** Stage 3 is done. The app is in `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App`, a Vite, React and TypeScript project. The AppHost starts it as `web` on the fixed port 5104, and the gateway lists `http://localhost:5104` as an allowed CORS origin. It has six screens: the book list, the book detail, the basket, the order overview, the order detail and the book form for admins. It also has a login. The book list has a search box and a category filter, and keeps them in the address. One error component shows the message, the code and the trace id of every failed call.
 **Work on the client.** Run these in the app folder. Node 24 or newer is needed.
 
 | Command | What it does |
@@ -276,7 +275,9 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 - Every call to the gateway carries the token when a person is logged in. Catalog reads need none.
 - The basket lives in the local storage of the browser, so a refresh or the trip to the login does not empty it. A line holds the book, the title, the price of the list and the quantity from 1 to 50. A book without a price cannot be added.
 - Place order sends only the book and the quantity. The shop decides price, stock and payment. A visitor who is not logged in is sent to the login first and returns to the basket. After a success the screen shows the order number, status and total, and the basket is emptied. A failed order is never retried by the client, so nobody is charged twice by a retry.
-- A failed call shows its CAT errors: the code and the message with the arguments filled in, and the trace id. The basket stays, so the person can try again.
+- The order overview lists the orders of the person, newest first. The order detail shows the lines with the book titles, which come from the catalog, and a Cancel button that is always shown. The client holds no list of the statuses that allow a cancel. A refused cancel shows the message of the service, such as `CAT-ORD-1004`. Another person's order comes back as not found.
+- The admin screens `/admin/books/new` and `/admin/books/:id` hold a form for ISBN, title, author, category and price. The links to them show only when the ID token has the `admin` role in its `roles` claim. That only decides what the screen shows. The catalog checks the role again on every save, so a non admin who opens the address gets the 403 of the service. A duplicate ISBN shows `CAT-CTL-1000`.
+- A failed call shows its CAT errors: the code and the message with the arguments filled in, and the trace id. The validators put the field name in front of the arguments, and the client skips it. The basket stays, so the person can try again.
 - Log out ends the Keycloak session as well.
 - It has no shared code with the services. The types come from a saved copy of the OpenAPI documents of the services.
 
@@ -369,7 +370,7 @@ The gateway only option of the module is not used in the demo. The services chec
 - The AppHost starts it as a plain container on port 8180. There is no data volume, so every start imports the realm again.
 - The realm file `demo/Cat.Demo.AppHost/Cat.Demo.AppHost/keycloak/cat-demo-realm.json` holds the realm `cat-demo`, the role `admin` and the users `alice`, `bob` and `admin`. The user ids equal the user names, so the `sub` claim of a token matches the seeded data.
 - Two public clients exist. `cat-demo-web` is for the React app. It uses the authorization code flow with PKCE. Its web origin is `http://localhost:5104`, so the browser may call the token endpoint of Keycloak. `cat-demo-cli` allows the password grant, for the `.http` files only.
-- Both clients add the audience `cat-gateway` and a flat `roles` claim to the access token.
+- Both clients add the audience `cat-gateway` and a flat `roles` claim to the access token. The web client adds the `roles` claim to the ID token too, so the React app can show the admin links.
 - The gateway and the services read the signing keys from the realm and check every token themselves. See [API Gateway](#api-gateway).
 
 **CAT modules.** None. The toolkit works with any OpenID Connect provider, so Keycloak is no dependency of a module.
