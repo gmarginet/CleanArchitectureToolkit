@@ -46,8 +46,16 @@ var connectionString = builder.Configuration.GetConnectionString("catalog")
     ?? throw new InvalidOperationException("Connection string 'catalog' is missing.");
 builder.Services.AddCatDemoCatalogDatabase(connectionString);
 
+var authenticationOn = builder.AddDemoJwtAuthentication();
+
 var app = builder.Build();
 app.UseCatMinimalApiModule();
+
+if (authenticationOn)
+{
+    app.UseAuthentication();
+    app.UseAuthorization();
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -59,7 +67,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapDefaultEndpoints();
-app.MapCatalogServiceEndpoints();
+app.MapCatalogServiceEndpoints(authenticationOn);
 app.Services.AddCatServiceRequestsModuleValidationDecorator();
 app.Services.AddCatServiceRequestsModuleLoggingDecorator();
 app.Services.AddCatServiceRequestsModuleActivitySourceDecorator();

@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Cat.Demo.Api.Gateway\Cat.Demo.Api.Gateway\Cat.Demo.Api.Gateway.csproj" />
         <ProjectReference Include="..\..\Cat.Demo.CatalogService\Cat.Demo.CatalogService.Api\Cat.Demo.CatalogService.Api.csproj" />
         <ProjectReference Include="..\..\Cat.Demo.OrderService\Cat.Demo.OrderService.Api\Cat.Demo.OrderService.Api.csproj" />
     </ItemGroup>

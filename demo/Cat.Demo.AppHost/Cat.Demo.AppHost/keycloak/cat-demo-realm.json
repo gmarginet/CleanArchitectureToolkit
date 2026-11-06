@@ -1,0 +1,162 @@
+{
+    "realm":  "cat-demo",
+    "enabled":  true,
+    "sslRequired":  "none",
+    "registrationAllowed":  false,
+    "accessTokenLifespan":  3600,
+    "roles":  {
+                  "realm":  [
+                                {
+                                    "name":  "admin",
+                                    "description":  "Can manage the catalog"
+                                }
+                            ]
+              },
+    "clients":  [
+                    {
+                        "clientId":  "cat-demo-web",
+                        "name":  "Cat demo web app",
+                        "enabled":  true,
+                        "publicClient":  true,
+                        "standardFlowEnabled":  true,
+                        "directAccessGrantsEnabled":  false,
+                        "redirectUris":  [
+                                             "http://localhost:*"
+                                         ],
+                        "webOrigins":  [
+                                           "+"
+                                       ],
+                        "attributes":  {
+                                           "pkce.code.challenge.method":  "S256"
+                                       },
+                        "defaultClientScopes":  [
+                                                    "basic",
+                                                    "web-origins",
+                                                    "profile",
+                                                    "email",
+                                                    "roles"
+                                                ],
+                        "protocolMappers":  [
+                                                {
+                                                    "name":  "cat-demo-api",
+                                                    "protocol":  "openid-connect",
+                                                    "protocolMapper":  "oidc-audience-mapper",
+                                                    "consentRequired":  false,
+                                                    "config":  {
+                                                                   "included.custom.audience":  "cat-gateway",
+                                                                   "id.token.claim":  "false",
+                                                                   "access.token.claim":  "true"
+                                                               }
+                                                },
+                                                {
+                                                    "name":  "roles-flat",
+                                                    "protocol":  "openid-connect",
+                                                    "protocolMapper":  "oidc-usermodel-realm-role-mapper",
+                                                    "consentRequired":  false,
+                                                    "config":  {
+                                                                   "claim.name":  "roles",
+                                                                   "multivalued":  "true",
+                                                                   "jsonType.label":  "String",
+                                                                   "id.token.claim":  "false",
+                                                                   "access.token.claim":  "true"
+                                                               }
+                                                }
+                                            ]
+                    },
+                    {
+                        "clientId":  "cat-demo-cli",
+                        "name":  "Cat demo http files",
+                        "description":  "Public client with the password grant, for the .http files only.",
+                        "enabled":  true,
+                        "publicClient":  true,
+                        "standardFlowEnabled":  false,
+                        "directAccessGrantsEnabled":  true,
+                        "defaultClientScopes":  [
+                                                    "basic",
+                                                    "web-origins",
+                                                    "profile",
+                                                    "email",
+                                                    "roles"
+                                                ],
+                        "protocolMappers":  [
+                                                {
+                                                    "name":  "cat-demo-api",
+                                                    "protocol":  "openid-connect",
+                                                    "protocolMapper":  "oidc-audience-mapper",
+                                                    "consentRequired":  false,
+                                                    "config":  {
+                                                                   "included.custom.audience":  "cat-gateway",
+                                                                   "id.token.claim":  "false",
+                                                                   "access.token.claim":  "true"
+                                                               }
+                                                },
+                                                {
+                                                    "name":  "roles-flat",
+                                                    "protocol":  "openid-connect",
+                                                    "protocolMapper":  "oidc-usermodel-realm-role-mapper",
+                                                    "consentRequired":  false,
+                                                    "config":  {
+                                                                   "claim.name":  "roles",
+                                                                   "multivalued":  "true",
+                                                                   "jsonType.label":  "String",
+                                                                   "id.token.claim":  "false",
+                                                                   "access.token.claim":  "true"
+                                                               }
+                                                }
+                                            ]
+                    }
+                ],
+    "users":  [
+                  {
+                      "id":  "alice",
+                      "username":  "alice",
+                      "firstName":  "Alice",
+                      "lastName":  "Jansen",
+                      "email":  "alice@example.com",
+                      "emailVerified":  true,
+                      "enabled":  true,
+                      "credentials":  [
+                                          {
+                                              "type":  "password",
+                                              "value":  "alice",
+                                              "temporary":  false
+                                          }
+                                      ]
+                  },
+                  {
+                      "id":  "bob",
+                      "username":  "bob",
+                      "firstName":  "Bob",
+                      "lastName":  "de Vries",
+                      "email":  "bob@example.com",
+                      "emailVerified":  true,
+                      "enabled":  true,
+                      "credentials":  [
+                                          {
+                                              "type":  "password",
+                                              "value":  "bob",
+                                              "temporary":  false
+                                          }
+                                      ]
+                  },
+                  {
+                      "id":  "admin",
+                      "username":  "admin",
+                      "firstName":  "Admin",
+                      "lastName":  "Demo",
+                      "email":  "admin@example.com",
+                      "emailVerified":  true,
+                      "enabled":  true,
+                      "realmRoles":  [
+                                         "admin"
+                                     ],
+                      "credentials":  [
+                                          {
+                                              "type":  "password",
+                                              "value":  "admin",
+                                              "temporary":  false
+                                          }
+                                      ]
+                  }
+              ]
+}

@@ -23,6 +23,32 @@ var orders = builder.AddProject<Projects.Cat_Demo_OrderService_Api>("orders")
     .WaitFor(catalog)
     .WithHttpHealthCheck("/health");
 
+// Keycloak is the identity provider of the demo. The realm file is imported at the first start.
+// The admin console is at http://localhost:8180 (admin / admin). Do not use these settings outside the demo.
+const int keycloakPort = 8180;
+var keycloak = builder.AddContainer("keycloak", "quay.io/keycloak/keycloak", "26.5")
+    .WithHttpEndpoint(port: keycloakPort, targetPort: 8080, name: "http", isProxied: false)
+    .WithEnvironment("KC_BOOTSTRAP_ADMIN_USERNAME", "admin")
+    .WithEnvironment("KC_BOOTSTRAP_ADMIN_PASSWORD", "admin")
+    .WithBindMount("keycloak/cat-demo-realm.json", "/opt/keycloak/data/import/cat-demo-realm.json", isReadOnly: true)
+    .WithArgs("start-dev", "--import-realm");
+
+// The gateway is the single front door. The services are found by name through service discovery.
+var authority = $"http://localhost:{keycloakPort}/realms/cat-demo";
+catalog.WithEnvironment("Authentication__Authority", authority);
+orders.WithEnvironment("Authentication__Authority", authority);
+builder.AddProject<Projects.Cat_Demo_Api_Gateway>("gateway")
+    .WithHttpEndpoint(port: 5100, name: "http", isProxied: false)
+    .WithReference(catalog)
+    .WithReference(orders)
+    .WaitFor(catalog)
+    .WaitFor(orders)
+    .WaitFor(keycloak)
+    .WithEnvironment("CatGateway__Services__catalog__Address", "http://catalog")
+    .WithEnvironment("CatGateway__Services__orders__Address", "http://orders")
+    .WithEnvironment("CatGateway__Authentication__Authority", authority)
+    .WithHttpHealthCheck("/health");
+
 if (useContainer)
 {
     // The data volume keeps the databases when the container is removed.

@@ -1,4 +1,16 @@
 @CatalogApi_HostAddress = http://localhost:5101
+@Gateway_HostAddress = http://localhost:5100
+@Keycloak_HostAddress = http://localhost:8180
+
+### Start the AppHost first. Reads are public. Saving a book needs the token of an admin, so run the login first.
+
+### Login of admin (password: admin) => OK, with the access token for the requests below
+# @name admin
+POST {{Keycloak_HostAddress}}/realms/cat-demo/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=cat-demo-cli&username=admin&password=admin
+
 
 ### Run the requests from top to bottom. Later requests use ids from earlier responses.
 ### The database is seeded in Development with 4 categories and 7 books.
@@ -31,6 +43,7 @@ GET {{CatalogApi_HostAddress}}/catalog/books/abc
 
 ### BookSaveRequest => OK (no id, so a new book is added)
 POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Authorization: Bearer {{admin.response.body.$.access_token}}
 Content-Type: application/json
 
 {
@@ -44,6 +57,7 @@ Content-Type: application/json
 ### BookSaveRequest => OK (the id of an existing book, so it is updated)
 ### The old price moves to the History.BookPrice table.
 POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Authorization: Bearer {{admin.response.body.$.access_token}}
 Content-Type: application/json
 
 {
@@ -57,6 +71,7 @@ Content-Type: application/json
 
 ### BookSaveRequest => OK (no price, so the current price stays)
 POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Authorization: Bearer {{admin.response.body.$.access_token}}
 Content-Type: application/json
 
 {
@@ -69,6 +84,7 @@ Content-Type: application/json
 
 ### BookSaveRequest => Bad request, the ISBN is already used by another book (CAT-CTL-1000)
 POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Authorization: Bearer {{admin.response.body.$.access_token}}
 Content-Type: application/json
 
 {
@@ -81,6 +97,7 @@ Content-Type: application/json
 
 ### BookSaveRequest => Bad request, several rules fail (ISBN length, title, author, category, price)
 POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Authorization: Bearer {{admin.response.body.$.access_token}}
 Content-Type: application/json
 
 {
@@ -93,16 +110,19 @@ Content-Type: application/json
 
 ### BookSaveRequest => Bad request, the book is missing from the body
 POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Authorization: Bearer {{admin.response.body.$.access_token}}
 Content-Type: application/json
 
 ### BookSaveRequest => Bad request, the body is not valid json
 POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Authorization: Bearer {{admin.response.body.$.access_token}}
 Content-Type: application/json
 
 {bad json
 
 ### BookSaveRequest => Unsupported media type
 POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
+Authorization: Bearer {{admin.response.body.$.access_token}}
 Content-Type: text/plain
 
 hello

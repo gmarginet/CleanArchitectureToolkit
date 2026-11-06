@@ -1,10 +1,36 @@
 @OrderApi_HostAddress = http://localhost:5102
+@Gateway_HostAddress = http://localhost:5100
+@Keycloak_HostAddress = http://localhost:8180
+
+### Start the AppHost first. The requests go through the gateway and need a token from Keycloak, so run the logins first.
+
+### Login of alice (password: alice) => OK, with the access token for the requests below
+# @name alice
+POST {{Keycloak_HostAddress}}/realms/cat-demo/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=cat-demo-cli&username=alice&password=alice
+
+### Login of bob (password: bob) => OK, with the access token for the requests below
+# @name bob
+POST {{Keycloak_HostAddress}}/realms/cat-demo/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=cat-demo-cli&username=bob&password=bob
+
+### Login of admin (password: admin) => OK, with the access token for the requests below
+# @name admin
+POST {{Keycloak_HostAddress}}/realms/cat-demo/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=cat-demo-cli&username=admin&password=admin
+
 @CatalogApi_HostAddress = http://localhost:5101
 
 ### Run the requests from top to bottom. Later requests use ids from earlier responses.
 ### Start Catalog and Orders together, for example with the AppHost. The first request reads the book ids from Catalog,
 ### because Catalog creates them when it seeds the database and they differ on every machine.
-### There is no login yet. The X-Demo-User header picks the user: alice (the default), bob or admin.
+### The token picks the user: alice, bob or admin. Without the AppHost, a plain dotnet run has no login and uses the X-Demo-User header, so these requests need the AppHost.
 ### Stock and payment come from fakes:
 ###   a line of more than 50 copies is out of stock,
 ###   a total above 500 euro is declined.
@@ -17,6 +43,7 @@ GET {{CatalogApi_HostAddress}}/catalog/books
 ### PlaceOrderRequest => Created (alice orders 2 copies of a book)
 # @name placed
 POST {{OrderApi_HostAddress}}/orders HTTP/1.1
+Authorization: Bearer {{alice.response.body.$.access_token}}
 Content-Type: application/json
 
 {
@@ -28,24 +55,27 @@ Content-Type: application/json
 
 ### OrderGetListRequest => OK (alice sees her own orders, newest first)
 GET {{OrderApi_HostAddress}}/orders
+Authorization: Bearer {{alice.response.body.$.access_token}}
 
 ### OrderGetRequest => OK (the order that was just placed)
 GET {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}
+Authorization: Bearer {{alice.response.body.$.access_token}}
 
 ### OrderGetRequest => Not Found, because the order belongs to alice (CAT-GEN-1002)
 GET {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}
-X-Demo-User: bob
+Authorization: Bearer {{bob.response.body.$.access_token}}
 
 ### OrderGetListRequest => OK (bob has no orders yet)
 GET {{OrderApi_HostAddress}}/orders
-X-Demo-User: bob
+Authorization: Bearer {{bob.response.body.$.access_token}}
 
 ### OrderGetRequest => OK (an admin sees every order)
 GET {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}
-X-Demo-User: admin
+Authorization: Bearer {{admin.response.body.$.access_token}}
 
 ### PlaceOrderRequest => Bad request, out of stock (CAT-ORD-1002). The order is saved with status Cancelled.
 POST {{OrderApi_HostAddress}}/orders HTTP/1.1
+Authorization: Bearer {{alice.response.body.$.access_token}}
 Content-Type: application/json
 
 {
@@ -57,6 +87,7 @@ Content-Type: application/json
 ### PlaceOrderRequest => Bad request, the payment is declined (CAT-ORD-1003). The order is saved with status Cancelled.
 ### 100 copies cost far more than the 500 euro limit of the fake, whatever the books cost.
 POST {{OrderApi_HostAddress}}/orders HTTP/1.1
+Authorization: Bearer {{alice.response.body.$.access_token}}
 Content-Type: application/json
 
 {
@@ -68,6 +99,7 @@ Content-Type: application/json
 
 ### PlaceOrderRequest => Bad request, no lines
 POST {{OrderApi_HostAddress}}/orders HTTP/1.1
+Authorization: Bearer {{alice.response.body.$.access_token}}
 Content-Type: application/json
 
 {
@@ -76,6 +108,7 @@ Content-Type: application/json
 
 ### PlaceOrderRequest => Bad request, several rules fail (book id and quantity)
 POST {{OrderApi_HostAddress}}/orders HTTP/1.1
+Authorization: Bearer {{alice.response.body.$.access_token}}
 Content-Type: application/json
 
 {
@@ -87,13 +120,15 @@ Content-Type: application/json
 
 ### CancelOrderRequest => No Content (alice cancels her order)
 POST {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}/cancel
+Authorization: Bearer {{alice.response.body.$.access_token}}
 
 ### CancelOrderRequest => Conflict, the order is already cancelled (CAT-ORD-1004)
 POST {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}/cancel
+Authorization: Bearer {{alice.response.body.$.access_token}}
 
 ### CancelOrderRequest => Not Found, bob cannot cancel the order of alice
 POST {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}/cancel
-X-Demo-User: bob
+Authorization: Bearer {{bob.response.body.$.access_token}}
 
 ### CleanUpOrderCountersRequest => No Content
 ### Development only. It simulates the nightly run of the scheduler.

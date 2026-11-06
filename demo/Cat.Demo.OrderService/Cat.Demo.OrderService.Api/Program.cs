@@ -57,12 +57,27 @@ builder.Services.AddCatDemoOrderDatabase(connectionString);
 builder.Services.AddCatDemoOrderPriceProvider(builder.Configuration);
 builder.Services.AddCatDemoOrderFakes();
 
-// The stub knows three demo users. The real one reads the token, once the gateway and Keycloak are there.
+// With an authority in the configuration (the AppHost sets it) the service checks the token and reads the user from it.
+// Without one, a plain dotnet run uses the stub with three demo users.
+var authenticationOn = builder.AddDemoJwtAuthentication();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ICurrentUser, DevelopmentCurrentUser>();
+if (authenticationOn)
+{
+    builder.Services.AddScoped<ICurrentUser, TokenCurrentUser>();
+}
+else
+{
+    builder.Services.AddScoped<ICurrentUser, DevelopmentCurrentUser>();
+}
 
 var app = builder.Build();
 app.UseCatMinimalApiModule();
+
+if (authenticationOn)
+{
+    app.UseAuthentication();
+    app.UseAuthorization();
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -74,7 +89,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapDefaultEndpoints();
-app.MapOrderServiceEndpoints();
+app.MapOrderServiceEndpoints(authenticationOn);
 
 if (app.Environment.IsDevelopment())
 {

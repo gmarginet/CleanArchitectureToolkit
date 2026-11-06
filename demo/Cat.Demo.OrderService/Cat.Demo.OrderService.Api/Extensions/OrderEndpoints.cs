@@ -9,9 +9,14 @@ namespace Cat.Demo.OrderService.Api.Extensions;
 
 public static class OrderEndpoints
 {
-    public static IEndpointRouteBuilder MapOrderServiceEndpoints(this IEndpointRouteBuilder builder)
+    public static IEndpointRouteBuilder MapOrderServiceEndpoints(this IEndpointRouteBuilder builder, bool requireLogin = false)
     {
         var ordersBuilder = builder.MapGroup("/orders");
+
+        if (requireLogin)
+        {
+            ordersBuilder.RequireAuthorization();
+        }
 
         ordersBuilder.MapCatPost<PlaceOrderRequest, OrderModel>("/", order => $"/orders/{order.Id}", CatResponseType.Created, CatResponseType.Unauthorized);
         ordersBuilder.MapCatGetList<OrderGetListRequest, OrderSummaryModel>("/", CatResponseType.Ok, CatResponseType.Unauthorized);
