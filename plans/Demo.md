@@ -84,7 +84,7 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 ### Open
 
 - **Roadmap order.** Do you confirm the order of the [roadmap](#roadmap)? In particular: the gateway and login before the React client, and Inventory before messaging.
-- **Gateway and the module.** The gateway is built on YARP, if it fits, see [Cat.Api.Gateway.md](Cat.Api.Gateway.md). Does the demo gateway `Cat.Demo.Api.Gateway` use the module from the start?
+- **Gateway and the module.** Decided: the gateway is built on YARP and the demo gateway `Cat.Demo.Api.Gateway` uses the module from the start. See [Cat.Api.Gateway.md](Cat.Api.Gateway.md).
 - **Stock call.** Until messaging exists, Orders reserves stock with an HTTP call to Inventory. Does that call share the `Contracts` of Inventory? It is the candidate for the shared choice in [Sharing contracts](#sharing-contracts).
 - **Resilience in the demo.** [Aspire ServiceDefaults](#aspire-servicedefaults) says the demo does not use `Cat.Resilience`, because ServiceDefaults covers it. The roadmap shows the resilience story with the ServiceDefaults handler. When does the demo use `Cat.Resilience`: never, or in a part that runs without Aspire?
 - **Payment service failures.** Which failures can the setting switch on: latency, a share of random errors, a full outage? Which values does it take?
@@ -477,7 +477,7 @@ Built so far: Catalog, Orders with fakes for stock and payment, ServiceDefaults 
 | Stage | What | Needs | Done when |
 |---|---|---|---|
 | 1. Payment service | `Cat.Demo.PaymentService` and a client for it in Orders, with the failure setting. The AppHost starts it. | Nothing new. ServiceDefaults already gives retries and a circuit breaker. | Placing an order calls the payment service. With a failure switched on, the retries and the open circuit show in the dashboard trace. The box in the drawing is solid. |
-| 2. Gateway and login | The API gateway, Keycloak with the imported realm, JWT validation in the services and the real `ICurrentUser`. | The module plan [Cat.Api.Gateway.md](Cat.Api.Gateway.md) answered, and its first version built or built from the demo gateway. | A request without a token gets 401 on Orders. Alice sees her orders, Bob does not. Catalog reads stay public. `.http` files get a token. |
+| 2. Gateway and login | The API gateway, Keycloak with the imported realm, JWT validation in the services and the real `ICurrentUser`. | The module plan [Cat.Api.Gateway.md](Cat.Api.Gateway.md) answered, and the module built, with the demo gateway as its first host. | A request without a token gets 401 on Orders. Alice sees her orders, Bob does not. Catalog reads stay public. `.http` files get a token. |
 | 3. React client | The thin client: book list, basket and order overview, with login. The AppHost starts it. | Stage 2. | A person logs in as `alice`, places an order and sees it in the overview. |
 | 4. Inventory | The database first service with its SQL scripts, and a client in Orders that replaces `FakeStockReservation`. | No new module. The AppHost runs the SQL scripts. | An order reserves real stock. A 51st copy is still refused. The `inventory` box is solid. |
 | 5. Messaging | `Cat.Messaging` and `Cat.EventProcessor`, the Service Bus emulator in the AppHost, and the `OrderPlaced` bridge in Orders. | The module plans [Cat.Messaging.md](Cat.Messaging.md) and [Cat.EventProcessor.md](Cat.EventProcessor.md) answered and built. | Orders publishes `OrderPlaced` and Inventory consumes it. The emulator box is solid. |

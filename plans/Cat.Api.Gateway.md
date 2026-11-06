@@ -25,12 +25,13 @@
 # Plans for Cat.Api.Gateway
 
 The single front door of an application: it routes the calls of clients and services to the right service and checks the token in one place.  
-Status: not started. The design is decided. Two checks and one demo question are left before the build.
+Status: not started. The design is decided and YARP is confirmed. The build can start.
 
 ## Contents
 
 - [The idea](#the-idea)
 - [What we already know](#what-we-already-know)
+- [What the spike showed](#what-the-spike-showed)
 - [Decisions and open questions](#decisions-and-open-questions)
 - [Questions before building](#questions-before-building)
 
@@ -78,6 +79,15 @@ From the module conventions:
 - A module never depends on Aspire or on the demo `ServiceDefaults`.
 - A module splits into an `Abstractions` project, the implementation and optional parts. A developer picks the modules and the projects they want, and a module never forces another one on them.
 
+## What the spike showed
+
+A throwaway project with YARP 2.3.0 and `Microsoft.Extensions.ServiceDiscovery.Yarp` 10.11.0 on .NET 10 tested the two fit checks. It used HTTP only, with a configuration file in place of Aspire service discovery.
+
+- **Header stripping.** A request transform removes identity headers after YARP copies the request headers. A spoofed `X-User-Id` never reached the service, and a forged assertion header was replaced. The `Authorization` header and the trace header were forwarded.
+- **Reload.** After a change of the service address in the configuration file, the gateway sent traffic to the new address in about 6 seconds, without a restart.
+- **Broken configuration.** Invalid JSON kept the last good configuration. A valid but wrong change goes live, as YARP does it: removing the service gave a 502. This is a reason for the module to validate its service options.
+- **Not tested.** JWT validation, assertion signing, rate limiting and CORS. They are standard ASP.NET Core and YARP features and are tested in the build.
+
 ## Decisions and open questions
 
 ### Decided
@@ -105,16 +115,16 @@ From the module conventions:
 | Other gateways | A developer may use another gateway, such as Azure API Management, and still use `Cat.Api.Client`. The gateway only option needs this module as the gateway. |
 | Authentication | The module does not validate tokens itself. It uses the standard ASP.NET Core JWT bearer authentication, and by convention only `Authority` and `Audience` need configuring. Any OpenID Connect provider works, Keycloak is only the demo choice. Services do the same on their side. |
 | Projects | `Cat.Api.Gateway.Abstractions` (shared, no dependencies: header name, options, claim names), `Cat.Api.Gateway` (the YARP based extensions for the gateway host) and `Cat.Api.Gateway.Verification` (an authentication scheme for services that choose the gateway only option, no YARP). A service that does not choose that option references none of them. |
+| Demo gateway | The demo gateway `Cat.Demo.Api.Gateway` uses the module from the start. It is a host project that calls the extensions of the module. |
 | Scope | The module has all its features from the start, even those the demo does not use. The demo does not lead the module, and there is no time pressure. |
-| Foundation | Build on YARP, if it fits our requirements. We do not write our own router, and we do not reinvent what exists, like `Mapperly` for mappings. Whether YARP fits is checked against the requirements before the build. |
+| Foundation | Build on YARP. We do not write our own router, and we do not reinvent what exists, like `Mapperly` for mappings. A spike confirmed that it fits, see [What the spike showed](#what-the-spike-showed). |
 
 ### Open
 
-- **Does YARP fit?** The owner decided on YARP if it fits. Two checks are left. Does a route reload re-resolve destinations with Aspire service discovery? Does the stripping of identity headers work together with copying the request headers? A small spike answers both.
-- **Demo gateway.** Does the demo gateway `Cat.Demo.Api.Gateway` of stage 2 use the module from the start?
+None at the moment.
 
 ## Questions before building
 
-1. Does YARP pass the two fit checks above?
-2. Does the demo gateway of stage 2 use the module from the start?
+None at the moment. The design is decided and the fit checks passed.
+
 
