@@ -42,7 +42,7 @@ The full plan is in [Demo.md](../plans/Demo.md).
   - [Inventory service](#inventory-service)
   - [Notifications service](#notifications-service)
   - [Aspire ServiceDefaults](#aspire-servicedefaults)
-  - [Fake payment provider](#fake-payment-provider)
+  - [Payment service](#payment-service)
 
 ## What the bookshop does
 
@@ -64,8 +64,9 @@ What the shop does when something goes wrong:
 
 - A book that is not in stock stops the order. The order is cancelled and the customer is told which book is the problem.
 - A payment that is declined stops the order in the same way.
+- A payment service that is down or too slow stops the order too. The order is cancelled, the customer is told to try again later and is not charged. A short hiccup is retried, so most customers never notice it.
 
-For now stock and payment are pretend. Any line of more than 50 copies is out of stock. Any total above 500 euro is declined. When you start the shop with Aspire, the order asks the catalog for the real price of every book.
+For now stock is pretend. Any line of more than 50 copies is out of stock. When you start the shop with Aspire, the order asks the catalog for the real price of every book, and a separate payment service takes the payment. That service declines any total above 500 euro. It never charges an order twice.
 
 What comes later:
 
@@ -86,7 +87,7 @@ Hatched boxes are not built yet. Solid boxes are. The drawing and the status of 
 
 - **Clients** only talk to the API gateway. It checks the token, lets the public catalog reads through and forwards the call with the token unchanged. Orders still calls Catalog directly for prices. That call moves to the gateway with `Cat.Api.Client`.
 - **Login.** Keycloak runs as a container and holds the users. The gateway and each service check the token. A service does not trust the network. See [Things to know](#things-to-know).
-- **Services** own their data. A service never reads the database of another service. Where one needs data of another, it asks through an interface. Orders asks Catalog for prices over HTTP when you run through Aspire. Stock and payment are still fakes.
+- **Services** own their data. A service never reads the database of another service. Where one needs data of another, it asks through an interface. Orders asks Catalog for prices and the payment service for payments over HTTP when you run through Aspire. Stock is still a fake.
 - **Contracts.** Sharing the contracts of a service is a choice per connection. The React client and the price call from Orders to Catalog keep their own models. A later service to service call will share contracts, so the demo shows both. See [Sharing contracts](../plans/Demo.md#sharing-contracts).
 - **Events** between services will travel over the Service Bus. Inside a service, events stay in memory.
 - **Databases.** Every service has its own SQL Server database.
@@ -208,11 +209,11 @@ In `Development` both services apply their EF Core migrations at startup. Catalo
 - **Users.** Keycloak holds three users: `alice`, `bob` and `admin`. The password is the same as the name. Alice and Bob only see their own orders. The admin sees all orders and may save books. The Keycloak admin console at `http://localhost:8180` uses `admin` and `admin`. Use these settings in the demo only.
 - **Tokens.** The `.http` files get a token from Keycloak with the password grant of the client `cat-demo-cli`. The gateway needs a valid token for everything except reading books and categories. The services check the token again, so a call straight to port 5101 or 5102 without a token gets a 401 too.
 - **Run without the AppHost.** Without the setting `Authentication:Authority` a service has no login. Orders then reads the `X-Demo-User` header (`alice` by default, `bob` or `admin`).
-- **Fakes for the other services.** Stock and payment are fakes, because the real services are not built yet.
+- **Fakes for the other services.** Stock is a fake, because the Inventory service is not built yet. Payment is a fake only without the AppHost.
   - Prices are real under the AppHost, because Orders asks Catalog. Without the AppHost the price of a book is made from its id, between 5.95 and 44.95 euro.
   - A line of more than 50 copies is out of stock.
-  - A total above 500 euro is declined.
-- **Order numbers** look like `20261105-0001`. The counter restarts every UTC day. The development endpoint `POST /development/scheduler/clean-up-order-counters` removes the counters of earlier days. The scheduler will do that every night.
+  - A total above 500 euro is declined, by the payment service under the AppHost and by a fake without it.
+- **Payment failures.** The payment service can fail on purpose, to show the retries and the circuit breaker. See [Payment service](#payment-service) for the settings.- **Order numbers** look like `20261105-0001`. The counter restarts every UTC day. The development endpoint `POST /development/scheduler/clean-up-order-counters` removes the counters of earlier days. The scheduler will do that every night.
 
 ### Health checks
 
@@ -246,7 +247,7 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 | [Inventory service](#inventory-service) | Planned | Stock levels and reservations. |
 | [Notifications service](#notifications-service) | Planned | Messages to customers and scheduled jobs. |
 | [Aspire ServiceDefaults](#aspire-servicedefaults) | Built | Shared telemetry, health checks and resilience. |
-| [Fake payment provider](#fake-payment-provider) | Planned | A separate pretend payment service that can fail on purpose. |
+| [Payment service](#payment-service) | Built | A separate pretend payment service that can fail on purpose. |
 
 ### React client
 
@@ -475,10 +476,10 @@ erDiagram
   2. Look up the price of every line and add up the total.
   3. Create the order. It gets its number and the status `Pending` in one transaction.
   4. Reserve the stock. If a book is out of stock, cancel the order and stop.
-  5. Take the payment and save it. If it is declined, cancel the order and stop.
+  5. Take the payment and save it. If it is declined, cancel the order and stop. If the payment service cannot answer, cancel the order with `CAT-ORD-1006` and stop. Nothing is saved then.
   6. Confirm the order.
 - Confirmed and cancelled are events. Subscribers set the status, write an audit record and release the stock.
-- Stock, price and payment sit behind interfaces: `IStockReservation`, `IPriceProvider` and `IPaymentProvider`. Fakes answer for stock and payment. For prices, `CatalogPriceProvider` calls `GET /catalog/books/prices` over HTTP when the host gives Orders an address for Catalog, as the AppHost does. Without it, `FakePriceProvider` answers.
+- Stock, price and payment sit behind interfaces: `IStockReservation`, `IPriceProvider` and `IPaymentProvider`. A fake answers for stock. For prices, `CatalogPriceProvider` calls `GET /catalog/books/prices` over HTTP when the host gives Orders an address for Catalog, as the AppHost does. Without it, `FakePriceProvider` answers. For payments, `PaymentServiceProvider` calls the payment service the same way, and `FakePaymentProvider` answers without an address.
 - `ICurrentUser` tells the core service who is calling. With a login it reads the claims of the token (`sub`, `name`, `email` and the `admin` role). Without one, a development stub reads the `X-Demo-User` header. Orders of other users come back as not found.
 - Order numbers come from a `DailyOrderCounter` table, increased in one atomic statement in the same transaction that saves the order.
 
@@ -630,7 +631,7 @@ erDiagram
 - Logs, metrics and traces with OpenTelemetry. The wildcard source `Cat.*` covers the CAT decorators and workflows. Data leaves the process only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set, which the AppHost does.
 - A readiness check at `/health` and a liveness check at `/alive`.
 - The token check of the services. `AddDemoJwtAuthentication` turns on JWT validation when `Authentication:Authority` is set.
-- Service discovery and the standard resilience handler on every `HttpClient`: retries, timeouts and a circuit breaker.
+- Service discovery and the standard resilience handler on every `HttpClient`: retries, timeouts and a circuit breaker. The pipeline is chosen per service address, so a failing service opens its own circuit and not the circuit of the others.
 
 **CAT modules.** None are referenced. It works next to them: the tracing decorator of `Cat.ServiceRequests` shows up in the traces.
 
@@ -644,34 +645,50 @@ erDiagram
 
 **More.** [Plan](../plans/Demo.md#aspire-servicedefaults).
 
-### Fake payment provider
+### Payment service
 
-**Status:** Planned
+**Status:** Built
 
-**What it is.** A small separate service, `Cat.Demo.PaymentService`, that pretends to be a payment provider. Orders calls it over HTTP. It has no database.
+**What it is.** A small separate service, `Cat.Demo.PaymentService`, that pretends to be a payment provider. Orders calls it over HTTP, so retry and circuit breaker have a real call to protect. It has no database and no login.
 
-**Today.** `FakePaymentProvider` runs inside the Orders service behind `IPaymentProvider`. It approves every amount up to 500 euro and declines the rest. An approved payment gets a fake reference. The `TakePaymentStep` of the place order workflow calls it. This is why the box is hatched: a call inside the process never times out or fails, so there is nothing for retry and circuit breaker to do.
+**How it works.**
+- `POST /payments` takes an order number and an amount. It answers 200 with `approved` and a `reference`. An amount up to 500 euro is approved. A higher amount is declined, which is an answer and not an error. Bad input gets a 400.
+- The order number is the idempotency key. The service remembers the answer per order number in memory. A retried call gets the same answer and nothing is charged twice.
+- The service runs on port 5103. The AppHost starts it and gives Orders its address. Orders finds it by name, `services:payment:*`, like Catalog.
+- In Orders, `PaymentServiceProvider` implements `IPaymentProvider`. The resilience handler of ServiceDefaults gives the client retries, a timeout and a circuit breaker. When no answer comes, the provider says the payment is unavailable. The place order workflow then cancels the order with `CAT-ORD-1006`, saves no payment and releases the stock.
+- Without the AppHost, `FakePaymentProvider` answers in the process, the way `FakePriceProvider` does for prices.
+- The `Cat.Demo.PaymentService.CoreService` project holds the rules and the failure switches. The `Api` project is one endpoint.
 
-**How it will work.**
-- The service takes payments by the same rules as the fake of today.
-- A setting of the service can make it fail on purpose, for example slow or not answering. Which failures are possible is still open.
-- Orders gets a client for it behind the same `IPaymentProvider`. Without the AppHost, `FakePaymentProvider` keeps answering, the way `FakePriceProvider` does for prices.
-- The AppHost starts the service.
+**Failures on purpose.** The settings of the service switch them on. A call cannot ask for a failure. All are off by default.
 
-**CAT modules.**
+| Setting | What it does |
+|---|---|
+| `PaymentFailures:Latency` | Waits this long before every answer, for example `00:00:05`. A long delay shows the timeout. |
+| `PaymentFailures:ErrorPercentage` | The share of calls, 0 to 100, that fail with a 503 after the payment is taken. The retry shows that nothing is charged twice. |
+| `PaymentFailures:Outage` | `true` makes every call fail at once, and nothing is taken. The retries run out, and after a burst of failing calls the circuit opens and orders end at once. |
+
+Under the AppHost, set `Payment:Latency`, `Payment:ErrorPercentage` or `Payment:Outage` in the configuration of the AppHost and start it again. For example:
+
+```
+dotnet user-secrets set "Payment:Outage" "true" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost
+```
+
+Remove the secret to switch the failure off again. When you run the service on its own, change `PaymentFailures` in its `appsettings.json` or set `PaymentFailures__Outage=true`. A running service reads a changed setting again. Place an order and open the trace in the dashboard to see the retries.
+
+**CAT modules.** The service uses none on purpose. It is a plain stand-in for something outside the toolkit.
 
 | Module | Where | Why |
 |---|---|---|
-| `Cat.FluentWorkflows` | The step that calls it | The workflow only knows the interface. |
-| `Cat.Resilience` (future) | Around the client in Orders | Retry and circuit breaker on a call that can really fail. |
+| `Cat.FluentWorkflows` | The step in Orders that calls it | The workflow only knows the interface. |
+| `Cat.Resilience` (future) | Around the client in Orders | Retry and circuit breaker on a call that can really fail. The demo uses the ServiceDefaults handler for now. |
 
 **Pros.**
 - Retry and circuit breaker have a real call to protect, and you can switch the failures on in a demo.
-- The demo shows a call to a service that does not behave.
+- The demo shows a call to a service that does not behave, and how the order ends when it fails.
 
 **Cons.**
 - One more project to build and run.
-- A retried payment call may charge twice, so the call needs an idempotency key.
+- The service has no login for now, and it forgets its answers when it restarts.
 - The service is still pretend. It proves nothing about a real provider.
 
-**More.** Code of today: `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Infrastructure/Fakes/FakePaymentProvider.cs`. [Payment provider decision and open questions](../plans/Demo.md#decided), [Cat.Resilience](../plans/Cat.Resilience.md).
+**More.** `demo/Cat.Demo.PaymentService`, `PaymentServiceProvider` in `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Infrastructure/PaymentServices`. [Payment decisions and open questions](../plans/Demo.md#decided), [Cat.Resilience](../plans/Cat.Resilience.md).

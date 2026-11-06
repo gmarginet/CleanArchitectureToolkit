@@ -164,7 +164,6 @@ Phases 1 to 3 do not need Docker. Phase 4 does.
 These come after the first AppHost build, in the order of the demo plan.
 
 - The `Cat.Api.Client` module, replacing `CatalogPriceProvider`.
-- `Cat.Demo.PaymentService`, a separate fake payment service that the AppHost starts and that can fail on purpose. See the payment provider decision in [Demo.md](Demo.md#decided).
 - The React client, started by the AppHost.
 - The Service Bus emulator, with `Cat.Messaging`.
 - Inventory, database first.
