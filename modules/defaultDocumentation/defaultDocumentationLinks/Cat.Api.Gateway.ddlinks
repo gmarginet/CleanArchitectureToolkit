@@ -1,0 +1,161 @@
+../../../Cat.Api.Gateway/namespaces/Cat.Api.Gateway/
+F:Cat.Api.Gateway.CatApiGatewayExtensions.CorsPolicyName|CatApiGatewayExtensions.CorsPolicyName.md|CorsPolicyName
+M:Cat.Api.Gateway.CatApiGatewayExtensions.AddCatApiGateway(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)|CatApiGatewayExtensions.AddCatApiGateway.LR897ZD6NMBCCEGNHUQYZHC1D.md|AddCatApiGateway(this IServiceCollection, IConfiguration)
+M:Cat.Api.Gateway.CatApiGatewayExtensions.UseCatApiGateway(Microsoft.AspNetCore.Builder.IApplicationBuilder)|CatApiGatewayExtensions.UseCatApiGateway.RYGJENGR6GH4BS6UIRK7YTZB1.md|UseCatApiGateway(this IApplicationBuilder)
+M:Cat.Api.Gateway.CatApiGatewayExtensions.MapCatApiGateway(Microsoft.AspNetCore.Routing.IEndpointRouteBuilder)|CatApiGatewayExtensions.MapCatApiGateway.QS3DULSU3Q2N52HOBF7OHS5I2.md|MapCatApiGateway(this IEndpointRouteBuilder)
+M:Cat.Api.Gateway.CatApiGatewayExtensions.AddAuthentication(Microsoft.Extensions.DependencyInjection.IServiceCollection,Cat.Api.Gateway.Configuration.CatGatewayOptions)|CatApiGatewayExtensions.AddAuthentication.4X694V7XP13TU06FBMFI6FZUE.md|AddAuthentication(IServiceCollection, CatGatewayOptions)
+M:Cat.Api.Gateway.CatApiGatewayExtensions.AddRateLimiting(Microsoft.Extensions.DependencyInjection.IServiceCollection,Cat.Api.Gateway.Configuration.CatGatewayRateLimitOptions)|CatApiGatewayExtensions.AddRateLimiting.ARUJD2JGEA7IYV7T1IXC0P0G8.md|AddRateLimiting(IServiceCollection, CatGatewayRateLimitOptions)
+M:Cat.Api.Gateway.CatApiGatewayExtensions.AddCors(Microsoft.Extensions.DependencyInjection.IServiceCollection,Cat.Api.Gateway.Configuration.CatGatewayCorsOptions)|CatApiGatewayExtensions.AddCors.CXHJBNHXIITH855RTW051GT84.md|AddCors(IServiceCollection, CatGatewayCorsOptions)
+N:Cat.Api.Gateway|Cat.Api.Gateway.md|Cat.Api.Gateway
+T:Cat.Api.Gateway.CatApiGatewayExtensions|CatApiGatewayExtensions.md|CatApiGatewayExtensions
+F:Cat.Api.Gateway.Transforms.CatGatewayTransformProvider.BuiltInStripHeaders|CatGatewayTransformProvider.BuiltInStripHeaders.md|BuiltInStripHeaders
+F:Cat.Api.Gateway.Transforms.CatGatewayTransformProvider._configuration|CatGatewayTransformProvider._configuration.md|_configuration
+F:Cat.Api.Gateway.Transforms.CatGatewayTransformProvider._signingKeys|CatGatewayTransformProvider._signingKeys.md|_signingKeys
+M:Cat.Api.Gateway.Transforms.CatGatewayTransformProvider.#ctor(Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider,Cat.Api.Gateway.Assertion.CatGatewaySigningKeys)|CatGatewayTransformProvider..ctor.QOGJWHOL1CBB0TFCTGS2CZ9Y6.md|CatGatewayTransformProvider(CatGatewayConfigurationProvider, CatGatewaySigningKeys)
+M:Cat.Api.Gateway.Transforms.CatGatewayTransformProvider.ValidateRoute(Yarp.ReverseProxy.Transforms.Builder.TransformRouteValidationContext)|CatGatewayTransformProvider.ValidateRoute.I3ZFNNO906APMYU1ORR5WS589.md|ValidateRoute(TransformRouteValidationContext)
+M:Cat.Api.Gateway.Transforms.CatGatewayTransformProvider.ValidateCluster(Yarp.ReverseProxy.Transforms.Builder.TransformClusterValidationContext)|CatGatewayTransformProvider.ValidateCluster.0M7S1PA6Y5BUA99BFO8NM1Q7A.md|ValidateCluster(TransformClusterValidationContext)
+M:Cat.Api.Gateway.Transforms.CatGatewayTransformProvider.Apply(Yarp.ReverseProxy.Transforms.Builder.TransformBuilderContext)|CatGatewayTransformProvider.Apply.9WZ3AK3G5L3LQOQ23KNBNSL0C.md|Apply(TransformBuilderContext)
+N:Cat.Api.Gateway.Transforms|Cat.Api.Gateway.Transforms.md|Cat.Api.Gateway.Transforms
+T:Cat.Api.Gateway.Transforms.CatGatewayTransformProvider|CatGatewayTransformProvider.md|CatGatewayTransformProvider
+F:Cat.Api.Gateway.Middleware.CorrelationIdMiddleware.MaximumLength|CorrelationIdMiddleware.MaximumLength.md|MaximumLength
+F:Cat.Api.Gateway.Middleware.CorrelationIdMiddleware._next|CorrelationIdMiddleware._next.md|_next
+F:Cat.Api.Gateway.Middleware.CorrelationIdMiddleware._logger|CorrelationIdMiddleware._logger.md|_logger
+M:Cat.Api.Gateway.Middleware.CorrelationIdMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.Extensions.Logging.ILogger{Cat.Api.Gateway.Middleware.CorrelationIdMiddleware})|CorrelationIdMiddleware..ctor.C0NAD4NWPWEJJUOLXGOB42GF5.md|CorrelationIdMiddleware(RequestDelegate, ILogger<CorrelationIdMiddleware>)
+M:Cat.Api.Gateway.Middleware.CorrelationIdMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)|CorrelationIdMiddleware.InvokeAsync.4DO8M29GC3PEBNZO99I1JOEB3.md|InvokeAsync(HttpContext)
+M:Cat.Api.Gateway.Middleware.CorrelationIdMiddleware.IsValid(System.String)|CorrelationIdMiddleware.IsValid.7VFIP0JP9QO7QO2F227CPLNJE.md|IsValid(string)
+N:Cat.Api.Gateway.Middleware|Cat.Api.Gateway.Middleware.md|Cat.Api.Gateway.Middleware
+T:Cat.Api.Gateway.Middleware.CorrelationIdMiddleware|CorrelationIdMiddleware.md|CorrelationIdMiddleware
+F:Cat.Api.Gateway.Middleware.RequestLimitsMiddleware._next|RequestLimitsMiddleware._next.md|_next
+F:Cat.Api.Gateway.Middleware.RequestLimitsMiddleware._configuration|RequestLimitsMiddleware._configuration.md|_configuration
+M:Cat.Api.Gateway.Middleware.RequestLimitsMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider)|RequestLimitsMiddleware..ctor.J5U9EVHLBJN0LS9I2C1V37JZ4.md|RequestLimitsMiddleware(RequestDelegate, CatGatewayConfigurationProvider)
+M:Cat.Api.Gateway.Middleware.RequestLimitsMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)|RequestLimitsMiddleware.InvokeAsync.DGWWG61ZXLULOUWU6KR0C2RPB.md|InvokeAsync(HttpContext)
+T:Cat.Api.Gateway.Middleware.RequestLimitsMiddleware|RequestLimitsMiddleware.md|RequestLimitsMiddleware
+F:Cat.Api.Gateway.Middleware.RequestLoggingMiddleware._next|RequestLoggingMiddleware._next.md|_next
+F:Cat.Api.Gateway.Middleware.RequestLoggingMiddleware._logger|RequestLoggingMiddleware._logger.md|_logger
+M:Cat.Api.Gateway.Middleware.RequestLoggingMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.Extensions.Logging.ILogger{Cat.Api.Gateway.Middleware.RequestLoggingMiddleware})|RequestLoggingMiddleware..ctor.PA7PRU7QZ1AQZH8YUBAT45SA.md|RequestLoggingMiddleware(RequestDelegate, ILogger<RequestLoggingMiddleware>)
+M:Cat.Api.Gateway.Middleware.RequestLoggingMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)|RequestLoggingMiddleware.InvokeAsync.F0M9NEO21KPIUGH2QAE90TM81.md|InvokeAsync(HttpContext)
+T:Cat.Api.Gateway.Middleware.RequestLoggingMiddleware|RequestLoggingMiddleware.md|RequestLoggingMiddleware
+F:Cat.Api.Gateway.Configuration.AnonymousPattern.KnownMethods|AnonymousPattern.KnownMethods.md|KnownMethods
+P:Cat.Api.Gateway.Configuration.AnonymousPattern.Methods|AnonymousPattern.Methods.md|Methods
+P:Cat.Api.Gateway.Configuration.AnonymousPattern.Segments|AnonymousPattern.Segments.md|Segments
+M:Cat.Api.Gateway.Configuration.AnonymousPattern.#ctor(System.String[],System.String[])|AnonymousPattern.AnonymousPattern.md#Cat.Api.Gateway.Configuration.AnonymousPattern.AnonymousPattern(string[],string[])|AnonymousPattern(string[], string[])
+M:Cat.Api.Gateway.Configuration.AnonymousPattern.TryParse(System.String,Cat.Api.Gateway.Configuration.AnonymousPattern@,System.String@)|AnonymousPattern.TryParse.P7CXZWCJ2RLXD54A31ZO0VS74.md|TryParse(string, AnonymousPattern, string)
+M:Cat.Api.Gateway.Configuration.AnonymousPattern.ToRouteTemplate(System.String)|AnonymousPattern.ToRouteTemplate.DL51YIDKKJD4BDDQ8BLSYOGTD.md|ToRouteTemplate(string)
+M:Cat.Api.Gateway.Configuration.AnonymousPattern.IsLiteralCharacter(System.Char)|AnonymousPattern.IsLiteralCharacter.RDCGSFNACQ0TZAC56QVN4FB3D.md|IsLiteralCharacter(char)
+M:Cat.Api.Gateway.Configuration.AnonymousPattern.#cctor|AnonymousPattern.AnonymousPattern.md#Cat.Api.Gateway.Configuration.AnonymousPattern.AnonymousPattern()|AnonymousPattern()
+N:Cat.Api.Gateway.Configuration|Cat.Api.Gateway.Configuration.md|Cat.Api.Gateway.Configuration
+T:Cat.Api.Gateway.Configuration.AnonymousPattern|AnonymousPattern.md|AnonymousPattern
+F:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider._section|CatGatewayConfigurationProvider._section.md|_section
+F:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider._signingKeyAvailable|CatGatewayConfigurationProvider._signingKeyAvailable.md|_signingKeyAvailable
+F:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider._logger|CatGatewayConfigurationProvider._logger.md|_logger
+F:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider._registration|CatGatewayConfigurationProvider._registration.md|_registration
+F:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider._gate|CatGatewayConfigurationProvider._gate.md|_gate
+F:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider._current|CatGatewayConfigurationProvider._current.md|_current
+P:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.Options|CatGatewayConfigurationProvider.Options.md|Options
+M:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.#ctor(Microsoft.Extensions.Configuration.IConfiguration,System.Boolean,Microsoft.Extensions.Logging.ILogger{Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider})|CatGatewayConfigurationProvider..ctor.BXVHISD0P43UMRVTBA9RL6JCC.md|CatGatewayConfigurationProvider(IConfiguration, bool, ILogger<CatGatewayConfigurationProvider>)
+M:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.GetConfig|CatGatewayConfigurationProvider.GetConfig().md|GetConfig()
+M:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.Dispose|CatGatewayConfigurationProvider.Dispose().md|Dispose()
+M:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.Bind|CatGatewayConfigurationProvider.Bind().md|Bind()
+M:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.Reload|CatGatewayConfigurationProvider.Reload().md|Reload()
+T:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider|CatGatewayConfigurationProvider.md|CatGatewayConfigurationProvider
+F:Cat.Api.Gateway.Configuration.CatGatewayOptions.SectionName|CatGatewayOptions.SectionName.md|SectionName
+P:Cat.Api.Gateway.Configuration.CatGatewayOptions.Authentication|CatGatewayOptions.Authentication.md|Authentication
+P:Cat.Api.Gateway.Configuration.CatGatewayOptions.Defaults|CatGatewayOptions.Defaults.md|Defaults
+P:Cat.Api.Gateway.Configuration.CatGatewayOptions.Services|CatGatewayOptions.Services.md|Services
+P:Cat.Api.Gateway.Configuration.CatGatewayOptions.Assertion|CatGatewayOptions.Assertion.md|Assertion
+P:Cat.Api.Gateway.Configuration.CatGatewayOptions.RateLimit|CatGatewayOptions.RateLimit.md|RateLimit
+P:Cat.Api.Gateway.Configuration.CatGatewayOptions.Cors|CatGatewayOptions.Cors.md|Cors
+P:Cat.Api.Gateway.Configuration.CatGatewayOptions.Limits|CatGatewayOptions.Limits.md|Limits
+P:Cat.Api.Gateway.Configuration.CatGatewayOptions.Headers|CatGatewayOptions.Headers.md|Headers
+T:Cat.Api.Gateway.Configuration.CatGatewayOptions|CatGatewayOptions.md|CatGatewayOptions
+P:Cat.Api.Gateway.Configuration.CatGatewayAuthenticationOptions.Authority|CatGatewayAuthenticationOptions.Authority.md|Authority
+P:Cat.Api.Gateway.Configuration.CatGatewayAuthenticationOptions.Audience|CatGatewayAuthenticationOptions.Audience.md|Audience
+P:Cat.Api.Gateway.Configuration.CatGatewayAuthenticationOptions.RequireHttpsMetadata|CatGatewayAuthenticationOptions.RequireHttpsMetadata.md|RequireHttpsMetadata
+T:Cat.Api.Gateway.Configuration.CatGatewayAuthenticationOptions|CatGatewayAuthenticationOptions.md|CatGatewayAuthenticationOptions
+P:Cat.Api.Gateway.Configuration.CatGatewayServiceDefaults.GatewayOnly|CatGatewayServiceDefaults.GatewayOnly.md|GatewayOnly
+P:Cat.Api.Gateway.Configuration.CatGatewayServiceDefaults.Timeout|CatGatewayServiceDefaults.Timeout.md|Timeout
+T:Cat.Api.Gateway.Configuration.CatGatewayServiceDefaults|CatGatewayServiceDefaults.md|CatGatewayServiceDefaults
+P:Cat.Api.Gateway.Configuration.CatGatewayServiceOptions.Address|CatGatewayServiceOptions.Address.md|Address
+P:Cat.Api.Gateway.Configuration.CatGatewayServiceOptions.Addresses|CatGatewayServiceOptions.Addresses.md|Addresses
+P:Cat.Api.Gateway.Configuration.CatGatewayServiceOptions.Path|CatGatewayServiceOptions.Path.md|Path
+P:Cat.Api.Gateway.Configuration.CatGatewayServiceOptions.StripPrefix|CatGatewayServiceOptions.StripPrefix.md|StripPrefix
+P:Cat.Api.Gateway.Configuration.CatGatewayServiceOptions.Anonymous|CatGatewayServiceOptions.Anonymous.md|Anonymous
+P:Cat.Api.Gateway.Configuration.CatGatewayServiceOptions.GatewayOnly|CatGatewayServiceOptions.GatewayOnly.md|GatewayOnly
+P:Cat.Api.Gateway.Configuration.CatGatewayServiceOptions.Timeout|CatGatewayServiceOptions.Timeout.md|Timeout
+P:Cat.Api.Gateway.Configuration.CatGatewayServiceOptions.HealthCheckPath|CatGatewayServiceOptions.HealthCheckPath.md|HealthCheckPath
+P:Cat.Api.Gateway.Configuration.CatGatewayServiceOptions.HealthCheckInterval|CatGatewayServiceOptions.HealthCheckInterval.md|HealthCheckInterval
+T:Cat.Api.Gateway.Configuration.CatGatewayServiceOptions|CatGatewayServiceOptions.md|CatGatewayServiceOptions
+P:Cat.Api.Gateway.Configuration.CatGatewayAssertionOptions.Issuer|CatGatewayAssertionOptions.Issuer.md|Issuer
+P:Cat.Api.Gateway.Configuration.CatGatewayAssertionOptions.Lifetime|CatGatewayAssertionOptions.Lifetime.md|Lifetime
+P:Cat.Api.Gateway.Configuration.CatGatewayAssertionOptions.PrivateKeyPem|CatGatewayAssertionOptions.PrivateKeyPem.md|PrivateKeyPem
+P:Cat.Api.Gateway.Configuration.CatGatewayAssertionOptions.PrivateKeyPemFile|CatGatewayAssertionOptions.PrivateKeyPemFile.md|PrivateKeyPemFile
+P:Cat.Api.Gateway.Configuration.CatGatewayAssertionOptions.PreviousPublicKeyPems|CatGatewayAssertionOptions.PreviousPublicKeyPems.md|PreviousPublicKeyPems
+P:Cat.Api.Gateway.Configuration.CatGatewayAssertionOptions.JwksPath|CatGatewayAssertionOptions.JwksPath.md|JwksPath
+T:Cat.Api.Gateway.Configuration.CatGatewayAssertionOptions|CatGatewayAssertionOptions.md|CatGatewayAssertionOptions
+P:Cat.Api.Gateway.Configuration.CatGatewayRateLimitOptions.Enabled|CatGatewayRateLimitOptions.Enabled.md|Enabled
+P:Cat.Api.Gateway.Configuration.CatGatewayRateLimitOptions.PermitLimit|CatGatewayRateLimitOptions.PermitLimit.md|PermitLimit
+P:Cat.Api.Gateway.Configuration.CatGatewayRateLimitOptions.Window|CatGatewayRateLimitOptions.Window.md|Window
+T:Cat.Api.Gateway.Configuration.CatGatewayRateLimitOptions|CatGatewayRateLimitOptions.md|CatGatewayRateLimitOptions
+P:Cat.Api.Gateway.Configuration.CatGatewayCorsOptions.AllowedOrigins|CatGatewayCorsOptions.AllowedOrigins.md|AllowedOrigins
+P:Cat.Api.Gateway.Configuration.CatGatewayCorsOptions.AllowedMethods|CatGatewayCorsOptions.AllowedMethods.md|AllowedMethods
+P:Cat.Api.Gateway.Configuration.CatGatewayCorsOptions.AllowedHeaders|CatGatewayCorsOptions.AllowedHeaders.md|AllowedHeaders
+P:Cat.Api.Gateway.Configuration.CatGatewayCorsOptions.AllowCredentials|CatGatewayCorsOptions.AllowCredentials.md|AllowCredentials
+T:Cat.Api.Gateway.Configuration.CatGatewayCorsOptions|CatGatewayCorsOptions.md|CatGatewayCorsOptions
+P:Cat.Api.Gateway.Configuration.CatGatewayLimitsOptions.MaxRequestBodySize|CatGatewayLimitsOptions.MaxRequestBodySize.md|MaxRequestBodySize
+T:Cat.Api.Gateway.Configuration.CatGatewayLimitsOptions|CatGatewayLimitsOptions.md|CatGatewayLimitsOptions
+P:Cat.Api.Gateway.Configuration.CatGatewayHeadersOptions.StripHeaders|CatGatewayHeadersOptions.StripHeaders.md|StripHeaders
+P:Cat.Api.Gateway.Configuration.CatGatewayHeadersOptions.TrustForwardedHeaders|CatGatewayHeadersOptions.TrustForwardedHeaders.md|TrustForwardedHeaders
+T:Cat.Api.Gateway.Configuration.CatGatewayHeadersOptions|CatGatewayHeadersOptions.md|CatGatewayHeadersOptions
+F:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.MinimumAssertionLifetime|CatGatewayOptionsValidator.MinimumAssertionLifetime.md|MinimumAssertionLifetime
+F:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.MaximumAssertionLifetime|CatGatewayOptionsValidator.MaximumAssertionLifetime.md|MaximumAssertionLifetime
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.Validate(Cat.Api.Gateway.Configuration.CatGatewayOptions,System.Boolean)|CatGatewayOptionsValidator.Validate.JJWCZWA2R6MXM3AKW0XDAYQY8.md|Validate(CatGatewayOptions, bool)
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.EffectivePath(System.String,Cat.Api.Gateway.Configuration.CatGatewayServiceOptions)|CatGatewayOptionsValidator.EffectivePath.U66IBN4X7MT1MXC18BJZKRTN8.md|EffectivePath(string, CatGatewayServiceOptions)
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.EffectiveAddresses(Cat.Api.Gateway.Configuration.CatGatewayServiceOptions)|CatGatewayOptionsValidator.EffectiveAddresses.47BINWLI25QGD434H6V0Y74R3.md|EffectiveAddresses(CatGatewayServiceOptions)
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.EffectiveGatewayOnly(Cat.Api.Gateway.Configuration.CatGatewayOptions,Cat.Api.Gateway.Configuration.CatGatewayServiceOptions)|CatGatewayOptionsValidator.EffectiveGatewayOnly.ZJLVMNAPCS900YQQZSY5CJBX6.md|EffectiveGatewayOnly(CatGatewayOptions, CatGatewayServiceOptions)
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.EffectiveTimeout(Cat.Api.Gateway.Configuration.CatGatewayOptions,Cat.Api.Gateway.Configuration.CatGatewayServiceOptions)|CatGatewayOptionsValidator.EffectiveTimeout.X7WLDNYH5W88CQL2ID0RQ5JF8.md|EffectiveTimeout(CatGatewayOptions, CatGatewayServiceOptions)
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.ValidateServices(Cat.Api.Gateway.Configuration.CatGatewayOptions,System.Boolean,System.Collections.Generic.List{System.String})|CatGatewayOptionsValidator.ValidateServices.FW711YJ41R3GBXDU1U4A985PA.md|ValidateServices(CatGatewayOptions, bool, List<string>)
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.ValidateAuthentication(Cat.Api.Gateway.Configuration.CatGatewayOptions,System.Collections.Generic.List{System.String})|CatGatewayOptionsValidator.ValidateAuthentication.V6MBH1G7GUU0O8QE2W39IWKK2.md|ValidateAuthentication(CatGatewayOptions, List<string>)
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.ValidateAssertion(Cat.Api.Gateway.Configuration.CatGatewayOptions,System.Collections.Generic.List{System.String})|CatGatewayOptionsValidator.ValidateAssertion.CTR09C8I6U392W3BKPYFKCNPA.md|ValidateAssertion(CatGatewayOptions, List<string>)
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.ValidateCors(Cat.Api.Gateway.Configuration.CatGatewayCorsOptions,System.Collections.Generic.List{System.String})|CatGatewayOptionsValidator.ValidateCors.PSY7LD713L7KPEMJ7QG4I6L27.md|ValidateCors(CatGatewayCorsOptions, List<string>)
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.IsFullyAnonymous(Cat.Api.Gateway.Configuration.CatGatewayServiceOptions)|CatGatewayOptionsValidator.IsFullyAnonymous.VWOPSMRX0PXBCWBT50LJFUU94.md|IsFullyAnonymous(CatGatewayServiceOptions)
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.IsValidName(System.String)|CatGatewayOptionsValidator.IsValidName.IMF1Q8VWIZJ4WO1C2XOWA76UE.md|IsValidName(string)
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.IsValidPath(System.String)|CatGatewayOptionsValidator.IsValidPath.PLHKX3NOICGZO2TIGO27HU7K1.md|IsValidPath(string)
+M:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator.#cctor|CatGatewayOptionsValidator.CatGatewayOptionsValidator().md|CatGatewayOptionsValidator()
+T:Cat.Api.Gateway.Configuration.CatGatewayOptionsValidator|CatGatewayOptionsValidator.md|CatGatewayOptionsValidator
+F:Cat.Api.Gateway.Configuration.CatProxyConfigBuilder.ServiceMetadataKey|CatProxyConfigBuilder.ServiceMetadataKey.md|ServiceMetadataKey
+F:Cat.Api.Gateway.Configuration.CatProxyConfigBuilder.GatewayOnlyMetadataKey|CatProxyConfigBuilder.GatewayOnlyMetadataKey.md|GatewayOnlyMetadataKey
+F:Cat.Api.Gateway.Configuration.CatProxyConfigBuilder.AnonymousPolicy|CatProxyConfigBuilder.AnonymousPolicy.md|AnonymousPolicy
+M:Cat.Api.Gateway.Configuration.CatProxyConfigBuilder.Build(Cat.Api.Gateway.Configuration.CatGatewayOptions)|CatProxyConfigBuilder.Build.PA9S7SRIURZF7UO1WCWVAT3IE.md|Build(CatGatewayOptions)
+M:Cat.Api.Gateway.Configuration.CatProxyConfigBuilder.BuildCluster(Cat.Api.Gateway.Configuration.CatGatewayOptions,System.String,Cat.Api.Gateway.Configuration.CatGatewayServiceOptions)|CatProxyConfigBuilder.BuildCluster.K4TAGYG14ARRZ9WJZ2ZJSZR94.md|BuildCluster(CatGatewayOptions, string, CatGatewayServiceOptions)
+T:Cat.Api.Gateway.Configuration.CatProxyConfigBuilder|CatProxyConfigBuilder.md|CatProxyConfigBuilder
+F:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys._key|CatGatewaySigningKeys._key.md|_key
+F:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys._keyId|CatGatewaySigningKeys._keyId.md|_keyId
+F:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys._jwks|CatGatewaySigningKeys._jwks.md|_jwks
+F:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys._issuer|CatGatewaySigningKeys._issuer.md|_issuer
+F:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys._lifetime|CatGatewaySigningKeys._lifetime.md|_lifetime
+F:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys._time|CatGatewaySigningKeys._time.md|_time
+F:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys._handler|CatGatewaySigningKeys._handler.md|_handler
+F:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys._cache|CatGatewaySigningKeys._cache.md|_cache
+P:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys.HasKey|CatGatewaySigningKeys.HasKey.md|HasKey
+M:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys.#ctor(Cat.Api.Gateway.Configuration.CatGatewayAssertionOptions,Microsoft.Extensions.Hosting.IHostEnvironment,Microsoft.Extensions.Logging.ILogger{Cat.Api.Gateway.Assertion.CatGatewaySigningKeys},System.TimeProvider)|CatGatewaySigningKeys..ctor.V1RJ8M72JBZE4E4YZVAJZ5GBE.md|CatGatewaySigningKeys(CatGatewayAssertionOptions, IHostEnvironment, ILogger<CatGatewaySigningKeys>, TimeProvider)
+M:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys.GetJwks|CatGatewaySigningKeys.GetJwks().md|GetJwks()
+M:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys.GetAssertion(System.String)|CatGatewaySigningKeys.GetAssertion.ASKHFEZF662RBY984JJ9KL6N1.md|GetAssertion(string)
+M:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys.Dispose|CatGatewaySigningKeys.Dispose().md|Dispose()
+M:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys.ReadPrivateKeyPem(Cat.Api.Gateway.Configuration.CatGatewayAssertionOptions)|CatGatewaySigningKeys.ReadPrivateKeyPem.AKDV5C5ZJUW4LH20JWMGJANW1.md|ReadPrivateKeyPem(CatGatewayAssertionOptions)
+M:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys.BuildJwks(System.Security.Cryptography.ECParameters,System.Collections.Generic.IEnumerable{System.String})|CatGatewaySigningKeys.BuildJwks.TFATGS763OCNTVLD2HLU4YAL6.md|BuildJwks(ECParameters, IEnumerable<string>)
+M:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys.WriteKey(System.Text.Json.Utf8JsonWriter,System.Security.Cryptography.ECParameters)|CatGatewaySigningKeys.WriteKey.BR4V3ZHMGLE941ZIWHZ8832K6.md|WriteKey(Utf8JsonWriter, ECParameters)
+N:Cat.Api.Gateway.Assertion|Cat.Api.Gateway.Assertion.md|Cat.Api.Gateway.Assertion
+T:Cat.Api.Gateway.Assertion.CatGatewaySigningKeys|CatGatewaySigningKeys.md|CatGatewaySigningKeys
+P:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.Snapshot.Options|CatGatewayConfigurationProvider.Snapshot.Options.md|Options
+P:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.Snapshot.Config|CatGatewayConfigurationProvider.Snapshot.Config.md|Config
+M:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.Snapshot.#ctor(Cat.Api.Gateway.Configuration.CatGatewayOptions,Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.ProxyConfig)|CatGatewayConfigurationProvider.Snapshot..ctor.JOK80NI827HFUQK1175X8CIE2.md|Snapshot(CatGatewayOptions, ProxyConfig)
+M:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.Snapshot.Create(Cat.Api.Gateway.Configuration.CatGatewayOptions)|CatGatewayConfigurationProvider.Snapshot.Create.O85UZ33FOIMX1HDGRYZCKBG5.md|Create(CatGatewayOptions)
+T:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.Snapshot|CatGatewayConfigurationProvider.Snapshot.md|Snapshot
+F:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.ProxyConfig._source|CatGatewayConfigurationProvider.ProxyConfig._source.md|_source
+P:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.ProxyConfig.Routes|CatGatewayConfigurationProvider.ProxyConfig.Routes.md|Routes
+P:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.ProxyConfig.Clusters|CatGatewayConfigurationProvider.ProxyConfig.Clusters.md|Clusters
+P:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.ProxyConfig.ChangeToken|CatGatewayConfigurationProvider.ProxyConfig.ChangeToken.md|ChangeToken
+M:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.ProxyConfig.#ctor(System.Collections.Generic.IReadOnlyList{Yarp.ReverseProxy.Configuration.RouteConfig},System.Collections.Generic.IReadOnlyList{Yarp.ReverseProxy.Configuration.ClusterConfig})|CatGatewayConfigurationProvider.ProxyConfig..ctor.8C7W585MJDQPWCXH648E5R6B9.md|ProxyConfig(IReadOnlyList<RouteConfig>, IReadOnlyList<ClusterConfig>)
+M:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.ProxyConfig.Cancel|CatGatewayConfigurationProvider.ProxyConfig.Cancel().md|Cancel()
+T:Cat.Api.Gateway.Configuration.CatGatewayConfigurationProvider.ProxyConfig|CatGatewayConfigurationProvider.ProxyConfig.md|ProxyConfig
+?:Cat.Api.Gateway.Configuration.AnonymousPattern.#ctor|AnonymousPattern.AnonymousPattern.md|AnonymousPattern

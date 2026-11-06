@@ -1,0 +1,13 @@
+../../../Cat.Api.Gateway/namespaces/Cat.Api.Gateway.Abstractions/
+F:Cat.Api.Gateway.Abstractions.CatGatewayDefaults.AssertionHeaderName|CatGatewayDefaults.AssertionHeaderName.md|AssertionHeaderName
+F:Cat.Api.Gateway.Abstractions.CatGatewayDefaults.CorrelationIdHeaderName|CatGatewayDefaults.CorrelationIdHeaderName.md|CorrelationIdHeaderName
+F:Cat.Api.Gateway.Abstractions.CatGatewayDefaults.DefaultJwksPath|CatGatewayDefaults.DefaultJwksPath.md|DefaultJwksPath
+F:Cat.Api.Gateway.Abstractions.CatGatewayDefaults.DefaultIssuer|CatGatewayDefaults.DefaultIssuer.md|DefaultIssuer
+F:Cat.Api.Gateway.Abstractions.CatGatewayDefaults.SigningAlgorithm|CatGatewayDefaults.SigningAlgorithm.md|SigningAlgorithm
+F:Cat.Api.Gateway.Abstractions.CatGatewayDefaults.DefaultAssertionLifetime|CatGatewayDefaults.DefaultAssertionLifetime.md|DefaultAssertionLifetime
+M:Cat.Api.Gateway.Abstractions.CatGatewayDefaults.#cctor|CatGatewayDefaults.CatGatewayDefaults().md|CatGatewayDefaults()
+N:Cat.Api.Gateway.Abstractions|Cat.Api.Gateway.Abstractions.md|Cat.Api.Gateway.Abstractions
+T:Cat.Api.Gateway.Abstractions.CatGatewayDefaults|CatGatewayDefaults.md|CatGatewayDefaults
+M:Cat.Api.Gateway.Abstractions.CatGatewayKeyId.ForP256(System.Byte[],System.Byte[])|CatGatewayKeyId.ForP256.46C6QF2TES3H6NX2JIHHP3TX8.md|ForP256(byte[], byte[])
+M:Cat.Api.Gateway.Abstractions.CatGatewayKeyId.ToBase64Url(System.Byte[])|CatGatewayKeyId.ToBase64Url.ZCIQZ7KXUPCJ7HBV8RZIQA3ID.md|ToBase64Url(byte[])
+T:Cat.Api.Gateway.Abstractions.CatGatewayKeyId|CatGatewayKeyId.md|CatGatewayKeyId
