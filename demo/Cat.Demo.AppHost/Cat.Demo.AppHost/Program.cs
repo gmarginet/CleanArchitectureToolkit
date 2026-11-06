@@ -37,12 +37,11 @@ foreach (var (setting, variable) in new[]
     }
 }
 
-// Orders asks Catalog for prices through the gateway, so it references the gateway and not Catalog.
+// Orders asks Catalog for prices and the payment service for payments through the gateway, so it references the gateway
+// and not the services.
 // The gateway waits for Orders, so Orders must not wait for the gateway.
 var orders = builder.AddProject<Projects.Cat_Demo_OrderService_Api>("orders")
     .WithHttpEndpoint(port: 5102, name: "http", isProxied: false)
-    .WithReference(payment)
-    .WaitFor(payment)
     .WithHttpHealthCheck("/health");
 
 // Keycloak is the identity provider of the demo. The realm file is imported at the first start.
@@ -59,6 +58,7 @@ var keycloak = builder.AddContainer("keycloak", "quay.io/keycloak/keycloak", "26
 var authority = $"http://localhost:{keycloakPort}/realms/cat-demo";
 catalog.WithEnvironment("Authentication__Authority", authority);
 orders.WithEnvironment("Authentication__Authority", authority);
+payment.WithEnvironment("Authentication__Authority", authority);
 const int gatewayPort = 5100;
 const int webPort = 5104;
 var gatewayUrl = $"http://localhost:{gatewayPort}";
@@ -67,11 +67,14 @@ var gateway = builder.AddProject<Projects.Cat_Demo_Api_Gateway>("gateway")
     .WithHttpEndpoint(port: gatewayPort, name: "http", isProxied: false)
     .WithReference(catalog)
     .WithReference(orders)
+    .WithReference(payment)
     .WaitFor(catalog)
     .WaitFor(orders)
+    .WaitFor(payment)
     .WaitFor(keycloak)
     .WithEnvironment("CatGateway__Services__catalog__Address", "http://catalog")
     .WithEnvironment("CatGateway__Services__orders__Address", "http://orders")
+    .WithEnvironment("CatGateway__Services__payment__Address", "http://payment")
     .WithEnvironment("CatGateway__Authentication__Authority", authority)
     .WithEnvironment("CatGateway__Cors__AllowedOrigins__0", webUrl)
     .WithHttpHealthCheck("/health");

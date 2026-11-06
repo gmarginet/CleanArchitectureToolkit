@@ -6,6 +6,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\Cat.Demo.PaymentService.CoreService\Cat.Demo.PaymentService.CoreService.csproj" />
         <ProjectReference Include="..\..\Cat.Demo.ServiceDefaults\Cat.Demo.ServiceDefaults\Cat.Demo.ServiceDefaults.csproj" />
     </ItemGroup>

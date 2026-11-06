@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Demo.OrderService.Infrastructure.PaymentServices;
+using Cat.Demo.PaymentService.Api.Client;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Cat.Demo.OrderService.CoreService.Tests;
@@ -25,7 +26,7 @@ public class PaymentServiceProviderTests
         new(status) { Content = new StringContent(json, Encoding.UTF8, "application/json") };
 
     private static PaymentServiceProvider Provider(StubHandler handler) =>
-        new(new HttpClient(handler) { BaseAddress = new Uri("http://payment") }, NullLogger<PaymentServiceProvider>.Instance);
+        new(new PaymentClient(new HttpClient(handler) { BaseAddress = new Uri("http://gateway") }), NullLogger<PaymentServiceProvider>.Instance);
 
     [Test]
     public async Task AnApprovedAnswer_ShouldBeApprovedWithTheReference()
@@ -37,7 +38,7 @@ public class PaymentServiceProviderTests
         Assert.That(result, Is.EqualTo(new PaymentResult(true, "PAY-1")));
         var request = handler.Requests.Single();
         Assert.That(request.Method, Is.EqualTo(HttpMethod.Post));
-        Assert.That(request.Path, Is.EqualTo("/payments"));
+        Assert.That(request.Path, Is.EqualTo("/payment/payments"));
         using var body = JsonDocument.Parse(request.Body);
         Assert.That(body.RootElement.GetProperty("orderNumber").GetString(), Is.EqualTo("20261106-0001"));
         Assert.That(body.RootElement.GetProperty("amount").GetDecimal(), Is.EqualTo(12.5m));
