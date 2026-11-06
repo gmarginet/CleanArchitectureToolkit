@@ -25,6 +25,7 @@ public class TakePaymentStep : CatStepBodyAsync<PlaceOrderState>
     {
         var result = await _paymentProvider.TakePaymentAsync(WorkflowState.OrderNumber, WorkflowState.Total, cancellationToken);
 
+        WorkflowState.PaymentUnavailable = result.Unavailable;
         WorkflowState.PaymentApproved = result.Approved;
         WorkflowState.PaymentReference = result.Reference;
 

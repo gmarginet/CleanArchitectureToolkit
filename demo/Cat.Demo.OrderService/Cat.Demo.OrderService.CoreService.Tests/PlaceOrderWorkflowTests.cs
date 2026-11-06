@@ -52,6 +52,7 @@ public class PlaceOrderWorkflowTests : UnitTestBase
         _stockReservation.Reserved.Clear();
         _stockReservation.Released.Clear();
         _paymentProvider.Approve = true;
+        _paymentProvider.Unavailable = false;
         _paymentProvider.Payments.Clear();
 
         _scope = ServiceProvider.CreateScope();
@@ -204,6 +205,22 @@ public class PlaceOrderWorkflowTests : UnitTestBase
             Assert.That(response.ErrorList.Single().Code, Is.EqualTo(OrderErrorDefinitions.PaymentDeclined.Code));
             Assert.That(_commandProcessor.Of<PaymentSaveCommand>().Single().Approved, Is.False);
             Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(FakeCommandProcessor.NewOrderId, FakeCommandProcessor.NewOrderNumber, OrderCancelReasons.PaymentDeclined)));
+        }
+    }
+
+    [Test]
+    public async Task WhenThePaymentServiceIsUnavailable_ShouldCancelTheOrderAndSaveNoPayment()
+    {
+        _paymentProvider.Unavailable = true;
+
+        var response = await RunAsync(NewState((Guid.NewGuid(), 1)));
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response.WorkflowResult, Is.EqualTo(CatStepExecutionResult.BreakCascade));
+            Assert.That(response.ErrorList.Single().Code, Is.EqualTo(OrderErrorDefinitions.PaymentUnavailable.Code));
+            Assert.That(_commandProcessor.Of<PaymentSaveCommand>(), Is.Empty);
+            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(FakeCommandProcessor.NewOrderId, FakeCommandProcessor.NewOrderNumber, OrderCancelReasons.PaymentUnavailable)));
         }
     }
 }

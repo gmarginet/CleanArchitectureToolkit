@@ -50,8 +50,16 @@ public class PlaceOrderWorkflow : ICatWorkflow<PlaceOrderState>
                 OrderErrorDefinitions.OutOfStock.CreateCatError(s.OutOfStockBookId, s.OrderNumber)));
         });
 
-        // 5. The payment. It is saved when it is declined too. A decline cancels the order and ends the workflow.
+        // 5. The payment. A payment service that cannot answer cancels the order and ends the workflow, and nothing is saved.
+        // An answer is saved when it is a decline too. A decline cancels the order and ends the workflow.
         builder.Run<PlaceOrderState, TakePaymentStep>();
+        builder.If(s => s.PaymentUnavailable, then =>
+        {
+            then.Set(s => s.CancelReason, s => OrderCancelReasons.PaymentUnavailable);
+            then.Run<PlaceOrderState, PublishOrderCancelledStep>();
+            then.Run(s => CatResponse.BadRequest<CatStepExecutionResult>(
+                OrderErrorDefinitions.PaymentUnavailable.CreateCatError(s.OrderNumber)));
+        });
         builder.ProcessCommand<PlaceOrderState, PaymentSaveCommand>()
             .Input(s => s.OrderId, step => step.Command.OrderId)
             .Input(s => s.Total, step => step.Command.Amount)

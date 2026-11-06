@@ -17,10 +17,32 @@ var catalog = builder.AddProject<Projects.Cat_Demo_CatalogService_Api>("catalog"
     .WithHttpEndpoint(port: 5101, name: "http", isProxied: false)
     .WithHttpHealthCheck("/health");
 
+// The payment service can fail on purpose. Set Payment:Latency, Payment:ErrorPercentage or Payment:Outage in the
+// configuration of the AppHost (for example in the user secrets) and restart. The demo readme explains the values.
+var payment = builder.AddProject<Projects.Cat_Demo_PaymentService_Api>("payment")
+    .WithHttpEndpoint(port: 5103, name: "http", isProxied: false)
+    .WithHttpHealthCheck("/health");
+
+foreach (var (setting, variable) in new[]
+{
+    ("Payment:Latency", "PaymentFailures__Latency"),
+    ("Payment:ErrorPercentage", "PaymentFailures__ErrorPercentage"),
+    ("Payment:Outage", "PaymentFailures__Outage")
+})
+{
+    var value = builder.Configuration[setting];
+    if (!string.IsNullOrWhiteSpace(value))
+    {
+        payment.WithEnvironment(variable, value);
+    }
+}
+
 var orders = builder.AddProject<Projects.Cat_Demo_OrderService_Api>("orders")
     .WithHttpEndpoint(port: 5102, name: "http", isProxied: false)
     .WithReference(catalog)
     .WaitFor(catalog)
+    .WithReference(payment)
+    .WaitFor(payment)
     .WithHttpHealthCheck("/health");
 
 // Keycloak is the identity provider of the demo. The realm file is imported at the first start.

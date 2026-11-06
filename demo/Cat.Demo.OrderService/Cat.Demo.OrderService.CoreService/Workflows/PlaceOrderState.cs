@@ -21,6 +21,7 @@ public class PlaceOrderState : ICatWorkflowState<PlaceOrderState>
     public bool StockReserved { get; set; }
     public Guid? OutOfStockBookId { get; set; }
     public bool PaymentApproved { get; set; }
+    public bool PaymentUnavailable { get; set; }
     public string? PaymentReference { get; set; }
 
     /// <summary>One of the codes in <c>OrderCancelReasons</c>. Set before the cancelled event is published.</summary>

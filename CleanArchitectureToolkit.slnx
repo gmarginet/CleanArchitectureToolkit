@@ -35,6 +35,11 @@
     <Project Path="demo/Cat.Demo.OrderService/Cat.Demo.OrderService.DataModels/Cat.Demo.OrderService.DataModels.csproj" />
     <Project Path="demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Infrastructure/Cat.Demo.OrderService.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/demo/Cat.Demo.PaymentService/">
+    <Project Path="demo/Cat.Demo.PaymentService/Cat.Demo.PaymentService.Api/Cat.Demo.PaymentService.Api.csproj" />
+    <Project Path="demo/Cat.Demo.PaymentService/Cat.Demo.PaymentService.CoreService/Cat.Demo.PaymentService.CoreService.csproj" />
+    <Project Path="demo/Cat.Demo.PaymentService/Cat.Demo.PaymentService.CoreService.Tests/Cat.Demo.PaymentService.CoreService.Tests.csproj" />
+  </Folder>
   <Folder Name="/demo/Cat.Demo.ServiceDefaults/">
     <Project Path="demo/Cat.Demo.ServiceDefaults/Cat.Demo.ServiceDefaults/Cat.Demo.ServiceDefaults.csproj" />
   </Folder>

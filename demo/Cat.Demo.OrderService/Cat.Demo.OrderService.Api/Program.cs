@@ -55,6 +55,7 @@ var connectionString = builder.Configuration.GetConnectionString("orders")
     ?? throw new InvalidOperationException("Connection string 'orders' is missing.");
 builder.Services.AddCatDemoOrderDatabase(connectionString);
 builder.Services.AddCatDemoOrderPriceProvider(builder.Configuration);
+builder.Services.AddCatDemoOrderPaymentProvider(builder.Configuration);
 builder.Services.AddCatDemoOrderFakes();
 
 // With an authority in the configuration (the AppHost sets it) the service checks the token and reads the user from it.

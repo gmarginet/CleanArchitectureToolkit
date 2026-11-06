@@ -3,6 +3,7 @@ using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Demo.OrderService.Infrastructure.Catalog;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
 using Cat.Demo.OrderService.Infrastructure.Fakes;
+using Cat.Demo.OrderService.Infrastructure.PaymentServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,13 +44,32 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Registers the fakes for the services Orders talks to: Inventory (stock) and the payment provider.
+    /// Registers the payment provider. When the host gives Orders an address for the <c>payment</c> service
+    /// (Aspire does, as <c>services:payment:*</c>), <see cref="PaymentServiceProvider"/> takes the payment at that service.
+    /// Without an address, <see cref="FakePaymentProvider"/> answers, so <c>dotnet run</c> keeps working on its own.
+    /// </summary>
+    public static IServiceCollection AddCatDemoOrderPaymentProvider(this IServiceCollection services, IConfiguration configuration)
+    {
+        if (configuration.GetSection("services:payment").Exists())
+        {
+            // The resilience handler of ServiceDefaults adds retries, a timeout and a circuit breaker to this client.
+            services.AddHttpClient<IPaymentProvider, PaymentServiceProvider>(client => client.BaseAddress = new Uri("https+http://payment"));
+        }
+        else
+        {
+            services.AddSingleton<IPaymentProvider, FakePaymentProvider>();
+        }
+
+        return services;
+    }
+
+    /// <summary>
+    /// Registers the fake for the Inventory service (stock), which is not built yet.
     /// The fake stock reservation is a singleton, because it remembers its reservations in memory.
     /// </summary>
     public static IServiceCollection AddCatDemoOrderFakes(this IServiceCollection services)
     {
         services.AddSingleton<IStockReservation, FakeStockReservation>();
-        services.AddSingleton<IPaymentProvider, FakePaymentProvider>();
         return services;
     }
 }

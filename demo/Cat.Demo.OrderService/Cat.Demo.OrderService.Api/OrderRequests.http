@@ -31,9 +31,9 @@ grant_type=password&client_id=cat-demo-cli&username=admin&password=admin
 ### Start Catalog and Orders together, for example with the AppHost. The first request reads the book ids from Catalog,
 ### because Catalog creates them when it seeds the database and they differ on every machine.
 ### The token picks the user: alice, bob or admin. Without the AppHost, a plain dotnet run has no login and uses the X-Demo-User header, so these requests need the AppHost.
-### Stock and payment come from fakes:
-###   a line of more than 50 copies is out of stock,
-###   a total above 500 euro is declined.
+### Stock comes from a fake: a line of more than 50 copies is out of stock.
+### Under the AppHost the payment is taken at the payment service, and a total above 500 euro is declined.
+### Without the AppHost a fake does the same. When the payment service is down, the order is cancelled with CAT-ORD-1006.
 ### Prices come from Catalog when Orders runs under the AppHost. Without the AppHost a fake makes the price from the book id.
 
 ### BookSearchRequest (Catalog) => OK (the seeded books, whose ids the orders below use)
