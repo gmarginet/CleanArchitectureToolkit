@@ -18,5 +18,7 @@ public static class OrderErrorDefinitions
 
     public static readonly CatErrorDefinition PaymentUnavailable = CatErrorDefinition.Create($"{OrderErrorCodePrefix}1006", "The payment service is not available. Order {OrderNumber} was cancelled. Try again later.");
 
+    public static readonly CatErrorDefinition StockUnavailable = CatErrorDefinition.Create($"{OrderErrorCodePrefix}1007", "The inventory service is not available. Order {OrderNumber} was cancelled. Try again later.");
+
     public static readonly CatErrorDefinition NotAuthenticated = CatErrorDefinition.Create($"{OrderErrorCodePrefix}1005", "You must be logged in to do this.");
 }

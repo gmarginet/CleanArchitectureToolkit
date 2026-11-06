@@ -25,11 +25,12 @@ public class ReserveStockStep : CatStepBodyAsync<PlaceOrderState>
     public override async Task<ICatWorkflowResponse> RunAsync(CancellationToken cancellationToken = default)
     {
         var lines = WorkflowState.Lines
-            .Select(x => new StockReservationLine(x.BookId, x.Quantity))
+            .Select(x => new StockReservationLine(x.BookId, x.Isbn, x.Quantity))
             .ToList();
 
         var result = await _stockReservation.ReserveAsync(WorkflowState.OrderNumber, lines, cancellationToken);
 
+        WorkflowState.StockUnavailable = result.Unavailable;
         WorkflowState.StockReserved = result.Reserved;
         WorkflowState.OutOfStockBookId = result.OutOfStockBookId;
 

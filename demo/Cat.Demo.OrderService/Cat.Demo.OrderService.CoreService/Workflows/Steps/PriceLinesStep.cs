@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Cat.Demo.OrderService.CoreService.Workflows.Steps;
 
-/// <summary>Asks the price provider for the current price of every book and fills the unit price of the lines.</summary>
+/// <summary>Asks the price provider for the current price of every book and fills the unit price and the ISBN of the lines.</summary>
 public class PriceLinesStep : CatStepBodyAsync<PlaceOrderState>
 {
     private readonly IPriceProvider _priceProvider;
@@ -38,7 +38,8 @@ public class PriceLinesStep : CatStepBodyAsync<PlaceOrderState>
                     OrderErrorDefinitions.PriceUnavailable.CreateCatError(line.BookId));
             }
 
-            line.UnitPrice = price;
+            line.UnitPrice = price.Price;
+            line.Isbn = price.Isbn;
         }
 
         return CatWorkflowResponse.Succeeded(CatStepExecutionResult.Continue);

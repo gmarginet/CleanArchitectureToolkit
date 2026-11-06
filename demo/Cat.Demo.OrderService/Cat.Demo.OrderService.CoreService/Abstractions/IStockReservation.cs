@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 namespace Cat.Demo.OrderService.CoreService.Abstractions;
 
 /// <summary>
-/// Reserves stock for an order in the Inventory service. Until Inventory exists a fake implements it.
-/// Inventory identifies an order by its order number.
+/// Reserves stock for an order in the Inventory service. Without the AppHost a fake implements it.
+/// Inventory identifies an order by its order number and a book by its ISBN.
 /// </summary>
 public interface IStockReservation
 {
@@ -18,8 +18,12 @@ public interface IStockReservation
     Task ReleaseAsync(string orderNumber, CancellationToken cancellationToken = default);
 }
 
-/// <summary>One book and the number of copies to reserve.</summary>
-public record StockReservationLine(Guid BookId, int Quantity);
+/// <summary>One book and the number of copies to reserve. Orders knows the book by its id, Inventory by its ISBN.</summary>
+public record StockReservationLine(Guid BookId, string Isbn, int Quantity);
 
-/// <summary>The outcome of a reservation. <paramref name="OutOfStockBookId"/> names the first book that is not available.</summary>
-public record StockReservationResult(bool Reserved, Guid? OutOfStockBookId);
+/// <summary>
+/// The outcome of a reservation. <paramref name="OutOfStockBookId"/> names the first book that is not available.
+/// <paramref name="Unavailable"/> is true when the provider could not answer, for example when it is down or its circuit is open.
+/// The stock is then neither reserved nor refused.
+/// </summary>
+public record StockReservationResult(bool Reserved, Guid? OutOfStockBookId, bool Unavailable = false);

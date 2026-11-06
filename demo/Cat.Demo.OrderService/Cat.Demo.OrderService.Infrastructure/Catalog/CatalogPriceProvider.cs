@@ -33,7 +33,7 @@ public class CatalogPriceProvider : IPriceProvider
         _logger = logger;
     }
 
-    public async Task<ICatResponse<IReadOnlyDictionary<Guid, decimal>>> GetPricesAsync(IReadOnlyCollection<Guid> bookIds, CancellationToken cancellationToken = default)
+    public async Task<ICatResponse<IReadOnlyDictionary<Guid, BookPrice>>> GetPricesAsync(IReadOnlyCollection<Guid> bookIds, CancellationToken cancellationToken = default)
     {
         var response = await CatApiCall.ExecuteAsync(
             () => _catalogClient.PricesAsync(bookIds, cancellationToken),
@@ -44,7 +44,7 @@ public class CatalogPriceProvider : IPriceProvider
         {
             if (response.Type is CatResponseType.Failed.NotFound)
             {
-                return CatResponse.NotFound<IReadOnlyDictionary<Guid, decimal>>(
+                return CatResponse.NotFound<IReadOnlyDictionary<Guid, BookPrice>>(
                     OrderErrorDefinitions.PriceUnavailable.CreateCatError(FindMissingBookId(response.ErrorList, bookIds)));
             }
 
@@ -59,11 +59,11 @@ public class CatalogPriceProvider : IPriceProvider
             return Unexpected();
         }
 
-        return CatResponse.Ok<IReadOnlyDictionary<Guid, decimal>>(prices.ToDictionary(price => price.BookId, price => (decimal)price.Price));
+        return CatResponse.Ok<IReadOnlyDictionary<Guid, BookPrice>>(prices.ToDictionary(price => price.BookId, price => new BookPrice((decimal)price.Price, price.Isbn)));
     }
 
-    private static ICatResponse<IReadOnlyDictionary<Guid, decimal>> Unexpected()
-        => CatResponse.InternalServerError<IReadOnlyDictionary<Guid, decimal>>(
+    private static ICatResponse<IReadOnlyDictionary<Guid, BookPrice>> Unexpected()
+        => CatResponse.InternalServerError<IReadOnlyDictionary<Guid, BookPrice>>(
             CatGeneralErrorDefinitions.UnexpectedResponse.CreateCatError(ServiceName));
 
     /// <summary>Reads the first book id from the Catalog errors. Falls back to the first requested book.</summary>

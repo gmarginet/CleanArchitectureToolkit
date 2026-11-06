@@ -19,6 +19,7 @@ public class PlaceOrderState : ICatWorkflowState<PlaceOrderState>
     public Guid OrderId { get; set; }
     public string OrderNumber { get; set; } = "";
     public bool StockReserved { get; set; }
+    public bool StockUnavailable { get; set; }
     public Guid? OutOfStockBookId { get; set; }
     public bool PaymentApproved { get; set; }
     public bool PaymentUnavailable { get; set; }
@@ -28,10 +29,13 @@ public class PlaceOrderState : ICatWorkflowState<PlaceOrderState>
     public string CancelReason { get; set; } = "";
 }
 
-/// <summary>One line of the order being placed. The price step fills the unit price.</summary>
+/// <summary>One line of the order being placed. The price step fills the unit price and the ISBN.</summary>
 public class PlaceOrderLineState
 {
     public Guid BookId { get; set; }
     public int Quantity { get; set; }
+
+    /// <summary>The ISBN of the book. The price step fills it, because Inventory knows a book by its ISBN.</summary>
+    public string Isbn { get; set; } = "";
     public decimal UnitPrice { get; set; }
 }

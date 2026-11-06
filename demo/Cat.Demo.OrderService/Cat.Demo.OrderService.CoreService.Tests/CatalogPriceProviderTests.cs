@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text;
 using Cat.Demo.CatalogService.Api.Client;
+using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Demo.OrderService.Infrastructure.Catalog;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
@@ -24,20 +25,20 @@ public class CatalogPriceProviderTests
     public async Task Ok_ReturnsThePriceOfEachBook()
     {
         var handler = new StubHandler(_ => Json(HttpStatusCode.OK,
-            $$"""[{"bookId":"{{BookA}}","price":29.95},{"bookId":"{{BookB}}","price":9.5}]"""));
+            $$"""[{"bookId":"{{BookA}}","isbn":"9780141036144","price":29.95},{"bookId":"{{BookB}}","isbn":"9780261103573","price":9.5}]"""));
 
         var response = await CreateProvider(handler).GetPricesAsync([BookA, BookB]);
 
         Assert.That(response.IsSucceeded, Is.True);
-        Assert.That(response.Value![BookA], Is.EqualTo(29.95m));
-        Assert.That(response.Value![BookB], Is.EqualTo(9.5m));
+        Assert.That(response.Value![BookA], Is.EqualTo(new BookPrice(29.95m, "9780141036144")));
+        Assert.That(response.Value![BookB], Is.EqualTo(new BookPrice(9.5m, "9780261103573")));
     }
 
     [Test]
     public async Task Ok_SendsOneBookIdsValuePerBook()
     {
         var handler = new StubHandler(_ => Json(HttpStatusCode.OK,
-            $$"""[{"bookId":"{{BookA}}","price":1},{"bookId":"{{BookB}}","price":2}]"""));
+            $$"""[{"bookId":"{{BookA}}","isbn":"9780141036144","price":1},{"bookId":"{{BookB}}","isbn":"9780261103573","price":2}]"""));
 
         await CreateProvider(handler).GetPricesAsync([BookA, BookB]);
 
@@ -88,7 +89,7 @@ public class CatalogPriceProviderTests
     [Test]
     public async Task Ok_WithAMissingBook_ReturnsAnErrorResponse()
     {
-        var handler = new StubHandler(_ => Json(HttpStatusCode.OK, $$"""[{"bookId":"{{BookA}}","price":29.95}]"""));
+        var handler = new StubHandler(_ => Json(HttpStatusCode.OK, $$"""[{"bookId":"{{BookA}}","isbn":"9780141036144","price":29.95}]"""));
 
         var response = await CreateProvider(handler).GetPricesAsync([BookA, BookB]);
 

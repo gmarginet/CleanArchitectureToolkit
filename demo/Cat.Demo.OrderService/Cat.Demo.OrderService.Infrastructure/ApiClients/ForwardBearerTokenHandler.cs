@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 
-namespace Cat.Demo.OrderService.Infrastructure.PaymentServices;
+namespace Cat.Demo.OrderService.Infrastructure.ApiClients;
 
 /// <summary>
 /// Passes the <c>Authorization</c> header of the request that Orders is handling on to the call it makes.

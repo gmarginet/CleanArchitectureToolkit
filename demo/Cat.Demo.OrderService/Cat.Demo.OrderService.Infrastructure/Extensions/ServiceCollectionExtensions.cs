@@ -2,9 +2,12 @@ using System;
 using Cat.Api.Client.Extensions;
 using Cat.Demo.CatalogService.Api.Client;
 using Cat.Demo.OrderService.CoreService.Abstractions;
+using Cat.Demo.InventoryService.Api.Client;
+using Cat.Demo.OrderService.Infrastructure.ApiClients;
 using Cat.Demo.OrderService.Infrastructure.Catalog;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
 using Cat.Demo.OrderService.Infrastructure.Fakes;
+using Cat.Demo.OrderService.Infrastructure.Inventory;
 using Cat.Demo.OrderService.Infrastructure.PaymentServices;
 using Cat.Demo.PaymentService.Api.Client;
 using Microsoft.EntityFrameworkCore;
@@ -60,7 +63,7 @@ public static class ServiceCollectionExtensions
         {
             // The resilience handler of ServiceDefaults adds retries, a timeout and a circuit breaker to this client.
             services.AddHttpContextAccessor();
-            services.AddTransient<ForwardBearerTokenHandler>();
+            services.TryAddTransient<ForwardBearerTokenHandler>();
             services.AddCatApiClient<IPaymentClient, PaymentClient>("https+http://gateway")
                 .AddHttpMessageHandler<ForwardBearerTokenHandler>();
             services.AddScoped<IPaymentProvider, PaymentServiceProvider>();
@@ -74,12 +77,26 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Registers the fake for the Inventory service (stock), which is not built yet.
-    /// The fake stock reservation is a singleton, because it remembers its reservations in memory.
+    /// Registers the stock reservation. When the host gives Orders an address for the <c>gateway</c>,
+    /// <see cref="InventoryStockReservation"/> reserves the stock at the Inventory service through the gateway, with the generated client.
+    /// The call forwards the token of the user, because the inventory route is not anonymous.
+    /// Without an address, <see cref="FakeStockReservation"/> answers. It is a singleton, because it remembers its reservations in memory.
     /// </summary>
-    public static IServiceCollection AddCatDemoOrderFakes(this IServiceCollection services)
+    public static IServiceCollection AddCatDemoOrderStockReservation(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<IStockReservation, FakeStockReservation>();
+        if (configuration.GetSection("services:gateway").Exists())
+        {
+            services.AddHttpContextAccessor();
+            services.TryAddTransient<ForwardBearerTokenHandler>();
+            services.AddCatApiClient<IInventoryClient, InventoryClient>("https+http://gateway")
+                .AddHttpMessageHandler<ForwardBearerTokenHandler>();
+            services.AddScoped<IStockReservation, InventoryStockReservation>();
+        }
+        else
+        {
+            services.AddSingleton<IStockReservation, FakeStockReservation>();
+        }
+
         return services;
     }
 }

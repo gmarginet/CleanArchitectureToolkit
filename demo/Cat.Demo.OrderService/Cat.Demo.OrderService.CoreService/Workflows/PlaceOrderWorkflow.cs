@@ -40,8 +40,16 @@ public class PlaceOrderWorkflow : ICatWorkflow<PlaceOrderState>
             .Output(step => step.Command.OrderId, s => s.OrderId)
             .Output(step => step.Command.OrderNumber, s => s.OrderNumber);
 
-        // 4. The stock. Out of stock cancels the order and ends the workflow.
+        // 4. The stock. An inventory service that cannot answer cancels the order and ends the workflow.
+        // Out of stock cancels the order and ends the workflow too.
         builder.Run<PlaceOrderState, ReserveStockStep>();
+        builder.If(s => s.StockUnavailable, then =>
+        {
+            then.Set(s => s.CancelReason, s => OrderCancelReasons.StockUnavailable);
+            then.Run<PlaceOrderState, PublishOrderCancelledStep>();
+            then.Run(s => CatResponse.BadRequest<CatStepExecutionResult>(
+                OrderErrorDefinitions.StockUnavailable.CreateCatError(s.OrderNumber)));
+        });
         builder.If(s => !s.StockReserved, then =>
         {
             then.Set(s => s.CancelReason, s => OrderCancelReasons.OutOfStock);

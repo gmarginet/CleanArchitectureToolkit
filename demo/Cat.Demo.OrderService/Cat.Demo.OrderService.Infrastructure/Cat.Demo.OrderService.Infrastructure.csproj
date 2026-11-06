@@ -8,6 +8,7 @@
       <ProjectReference Include="..\..\..\modules\Cat.Api.Client\Cat.Api.Client\Cat.Api.Client.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Extensions\Cat.EFCore.Extensions.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.CatalogService\Cat.Demo.CatalogService.Api.Client\Cat.Demo.CatalogService.Api.Client.csproj" />
+      <ProjectReference Include="..\..\Cat.Demo.InventoryService\Cat.Demo.InventoryService.Api.Client\Cat.Demo.InventoryService.Api.Client.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.PaymentService\Cat.Demo.PaymentService.Api.Client\Cat.Demo.PaymentService.Api.Client.csproj" />
       <ProjectReference Include="..\Cat.Demo.OrderService.CoreService\Cat.Demo.OrderService.CoreService.csproj" />
       <ProjectReference Include="..\Cat.Demo.OrderService.DataModels\Cat.Demo.OrderService.DataModels.csproj" />

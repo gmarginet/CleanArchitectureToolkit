@@ -15,24 +15,27 @@ namespace Cat.Demo.OrderService.Infrastructure.Fakes;
 /// </summary>
 public class FakePriceProvider : IPriceProvider
 {
-    public Task<ICatResponse<IReadOnlyDictionary<Guid, decimal>>> GetPricesAsync(IReadOnlyCollection<Guid> bookIds, CancellationToken cancellationToken = default)
+    public Task<ICatResponse<IReadOnlyDictionary<Guid, BookPrice>>> GetPricesAsync(IReadOnlyCollection<Guid> bookIds, CancellationToken cancellationToken = default)
     {
-        var prices = new Dictionary<Guid, decimal>();
+        var prices = new Dictionary<Guid, BookPrice>();
 
         foreach (var bookId in bookIds)
         {
             if (bookId == Guid.Empty)
             {
                 return Task.FromResult(
-                    CatResponse.NotFound<IReadOnlyDictionary<Guid, decimal>>(OrderErrorDefinitions.PriceUnavailable.CreateCatError(bookId)));
+                    CatResponse.NotFound<IReadOnlyDictionary<Guid, BookPrice>>(OrderErrorDefinitions.PriceUnavailable.CreateCatError(bookId)));
             }
 
-            prices[bookId] = PriceOf(bookId);
+            prices[bookId] = new BookPrice(PriceOf(bookId), IsbnOf(bookId));
         }
 
-        return Task.FromResult(CatResponse.Ok<IReadOnlyDictionary<Guid, decimal>>(prices));
+        return Task.FromResult(CatResponse.Ok<IReadOnlyDictionary<Guid, BookPrice>>(prices));
     }
 
     /// <summary>A price between 5.95 and 44.95 euro.</summary>
     public static decimal PriceOf(Guid bookId) => 5.95m + bookId.ToByteArray()[0] % 40;
+
+    /// <summary>A made up ISBN of 13 digits, the same for the same book.</summary>
+    public static string IsbnOf(Guid bookId) => "978" + (BitConverter.ToUInt32(bookId.ToByteArray(), 0) % 10_000_000_000UL).ToString("D10");
 }

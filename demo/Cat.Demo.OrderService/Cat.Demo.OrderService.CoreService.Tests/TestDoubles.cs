@@ -103,16 +103,16 @@ public class FakePriceProvider : IPriceProvider
     public bool Fail { get; set; }
     public HashSet<Guid> UnknownBooks { get; } = [];
 
-    public Task<ICatResponse<IReadOnlyDictionary<Guid, decimal>>> GetPricesAsync(IReadOnlyCollection<Guid> bookIds, CancellationToken cancellationToken = default)
+    public Task<ICatResponse<IReadOnlyDictionary<Guid, BookPrice>>> GetPricesAsync(IReadOnlyCollection<Guid> bookIds, CancellationToken cancellationToken = default)
     {
         if (Fail)
         {
-            return Task.FromResult(CatResponse.NotFound<IReadOnlyDictionary<Guid, decimal>>(OrderErrorDefinitions.PriceUnavailable.CreateCatError(bookIds.First())));
+            return Task.FromResult(CatResponse.NotFound<IReadOnlyDictionary<Guid, BookPrice>>(OrderErrorDefinitions.PriceUnavailable.CreateCatError(bookIds.First())));
         }
 
-        IReadOnlyDictionary<Guid, decimal> prices = bookIds
+        IReadOnlyDictionary<Guid, BookPrice> prices = bookIds
             .Where(x => !UnknownBooks.Contains(x))
-            .ToDictionary(x => x, _ => Price);
+            .ToDictionary(x => x, _ => new BookPrice(Price, "9780000000002"));
 
         return Task.FromResult(CatResponse.Ok(prices));
     }
@@ -122,12 +122,18 @@ public class FakePriceProvider : IPriceProvider
 public class FakeStockReservation : IStockReservation
 {
     public bool OutOfStock { get; set; }
+    public bool Unavailable { get; set; }
     public Guid? OutOfStockBookId { get; set; }
     public List<string> Reserved { get; } = [];
     public List<string> Released { get; } = [];
 
     public Task<StockReservationResult> ReserveAsync(string orderNumber, IReadOnlyCollection<StockReservationLine> lines, CancellationToken cancellationToken = default)
     {
+        if (Unavailable)
+        {
+            return Task.FromResult(new StockReservationResult(false, null, Unavailable: true));
+        }
+
         if (OutOfStock)
         {
             return Task.FromResult(new StockReservationResult(false, OutOfStockBookId ?? lines.First().BookId));

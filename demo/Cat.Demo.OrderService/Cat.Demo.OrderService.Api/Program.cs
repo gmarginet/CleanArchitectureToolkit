@@ -56,7 +56,7 @@ var connectionString = builder.Configuration.GetConnectionString("orders")
 builder.Services.AddCatDemoOrderDatabase(connectionString);
 builder.Services.AddCatDemoOrderPriceProvider(builder.Configuration);
 builder.Services.AddCatDemoOrderPaymentProvider(builder.Configuration);
-builder.Services.AddCatDemoOrderFakes();
+builder.Services.AddCatDemoOrderStockReservation(builder.Configuration);
 
 // With an authority in the configuration (the AppHost sets it) the service checks the token and reads the user from it.
 // Without one, a plain dotnet run uses the stub with three demo users.

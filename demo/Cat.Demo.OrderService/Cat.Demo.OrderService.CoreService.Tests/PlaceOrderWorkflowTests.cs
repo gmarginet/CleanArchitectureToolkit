@@ -49,6 +49,7 @@ public class PlaceOrderWorkflowTests : UnitTestBase
         _priceProvider.Fail = false;
         _priceProvider.UnknownBooks.Clear();
         _stockReservation.OutOfStock = false;
+        _stockReservation.Unavailable = false;
         _stockReservation.Reserved.Clear();
         _stockReservation.Released.Clear();
         _paymentProvider.Approve = true;
@@ -189,6 +190,22 @@ public class PlaceOrderWorkflowTests : UnitTestBase
             Assert.That(_paymentProvider.Payments, Is.Empty);
             Assert.That(_commandProcessor.Of<PaymentSaveCommand>(), Is.Empty);
             Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(FakeCommandProcessor.NewOrderId, FakeCommandProcessor.NewOrderNumber, OrderCancelReasons.OutOfStock)));
+        }
+    }
+
+    [Test]
+    public async Task WhenTheInventoryServiceIsUnavailable_ShouldCancelTheOrderAndSkipThePayment()
+    {
+        _stockReservation.Unavailable = true;
+
+        var response = await RunAsync(NewState((Guid.NewGuid(), 1)));
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response.WorkflowResult, Is.EqualTo(CatStepExecutionResult.BreakCascade));
+            Assert.That(response.ErrorList.Single().Code, Is.EqualTo(OrderErrorDefinitions.StockUnavailable.Code));
+            Assert.That(_paymentProvider.Payments, Is.Empty);
+            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(FakeCommandProcessor.NewOrderId, FakeCommandProcessor.NewOrderNumber, OrderCancelReasons.StockUnavailable)));
         }
     }
 
