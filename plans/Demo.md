@@ -473,13 +473,13 @@ Inventory uses commands, queries, responses and decorators, but not the entity b
 
 The order for the rest of the demo build. **This order is a proposal.** It becomes a decision when the owner confirms it, see the open questions. Every stage ends in a working demo: the stage is done when the "Done when" column is true, the demo readme and the drawing are current (the `demo-readme` skill) and the tests pass.
 
-Built so far: Catalog, Orders with fakes for stock and payment, ServiceDefaults and the AppHost with both SQL Server modes. The price call from Orders to Catalog is real.
+Built so far: Catalog, Orders with fakes for stock and payment, ServiceDefaults, the AppHost with both SQL Server modes, and the gateway with Keycloak and the token checks (stage 2). The price call from Orders to Catalog is real, and it still goes straight to Catalog.
 
 | Stage | What | Needs | Done when |
 |---|---|---|---|
 | 1. Payment service | `Cat.Demo.PaymentService` and a client for it in Orders, with the failure setting. The AppHost starts it. | Nothing new. ServiceDefaults already gives retries and a circuit breaker. | Placing an order calls the payment service. With a failure switched on, the retries and the open circuit show in the dashboard trace. The box in the drawing is solid. |
-| 2. Gateway and login | The API gateway, Keycloak with the imported realm, JWT validation in the services and the real `ICurrentUser`. | The module plan [Cat.Api.Gateway.md](Cat.Api.Gateway.md) answered, and the module built, with the demo gateway as its first host. | A request without a token gets 401 on Orders. Alice sees her orders, Bob does not. Catalog reads stay public. `.http` files get a token. |
-| 3. React client | The thin client: book list, basket and order overview, with login. The AppHost starts it. | Stage 2. | A person logs in as `alice`, places an order and sees it in the overview. |
+| 2. Gateway and login (done) | The API gateway, Keycloak with the imported realm, JWT validation in the services and the real `ICurrentUser`. | The module plan [Cat.Api.Gateway.md](Cat.Api.Gateway.md) answered, and the module built, with the demo gateway as its first host. | A request without a token gets 401 on Orders. Alice sees her orders, Bob does not. Catalog reads stay public. `.http` files get a token. Tried against the running AppHost, and all of it held. The login screen of the React app waits for stage 3. |
+| 3. React client | The thin client: book list, basket and order overview, with login against the `cat-demo-web` client of the realm. The AppHost starts it. | Stage 2, which is done. | A person logs in as `alice`, places an order and sees it in the overview. |
 | 4. Inventory | The database first service with its SQL scripts, and a client in Orders that replaces `FakeStockReservation`. | No new module. The AppHost runs the SQL scripts. | An order reserves real stock. A 51st copy is still refused. The `inventory` box is solid. |
 | 5. Messaging | `Cat.Messaging` and `Cat.EventProcessor`, the Service Bus emulator in the AppHost, and the `OrderPlaced` bridge in Orders. | The module plans [Cat.Messaging.md](Cat.Messaging.md) and [Cat.EventProcessor.md](Cat.EventProcessor.md) answered and built. | Orders publishes `OrderPlaced` and Inventory consumes it. The emulator box is solid. |
 | 6. Notifications and scheduling | The Notifications service, `Cat.Scheduling` and `Cat.Localizations` for the texts. The nightly clean up of the order counters and the cancel of unpaid orders. | Stage 5. [Cat.Scheduling.md](Cat.Scheduling.md). A storage decision for Notifications. | An order confirmed mail is written in the language of the customer. The nightly jobs run from the Scheduler, and the development endpoint can go. |
@@ -488,7 +488,7 @@ Built so far: Catalog, Orders with fakes for stock and payment, ServiceDefaults 
 Notes on the order:
 
 - **Payment first.** It needs no new module and it is the case the resilience story is built on.
-- **Gateway before the client.** The client only talks to the gateway, and the login comes with it. A client built earlier would need rework.
+- **Gateway before the client.** The client only talks to the gateway, and the login comes with it. A client built earlier would need rework. The gateway came first, so stage 3 can start.
 - **Inventory before messaging.** Reserving stock needs an answer, and a message gives none. So Orders calls Inventory over HTTP first, as the interface already allows. Messages then tell Inventory about the order afterwards.
 - **Modules come from working code.** For stages 5 to 7 the module is designed from what the demo shows, the way `CatalogPriceProvider` comes before `Cat.Api.Client`.
 - **Stages 3 and 4 are independent.** Their order can be swapped.
@@ -508,6 +508,8 @@ Done:
 - Catalog duplicate ISBN race: `BookSaveCommandHandler` catches the unique index error and returns the `CAT-CTL-1000` response. Tried with 12 parallel saves of the same new ISBN on a local SQL Server: one saved, eleven bad requests, no 500. There is no automated test for it, because the unit tests do not use a database.
 - Aspire AppHost built in the phases of [DemoAspire.md](DemoAspire.md): ServiceDefaults, the AppHost in `Existing` mode, the `HttpClient` price provider and the `Container` mode. A fresh start from an empty volume and a restart that keeps the data were tried. The readme of the demo has the run steps for both modes and the Docker memory notes.
 
+- Gateway and login (stage 2): `Cat.Demo.Api.Gateway` on the `Cat.Api.Gateway` module, Keycloak in the AppHost with an imported realm, JWT validation in Catalog and Orders, and `TokenCurrentUser` for Orders. Tried against the running AppHost: 401 without a token, Bob does not see the orders of Alice, an admin sees them, catalog reads are public and only an admin saves a book. The `.http` files log in and call the gateway.
+
 To do:
 
 1. Build `Cat.Demo.PaymentService` and a client for it in Orders. Answer the open questions about it first. This also gives [Cat.Resilience.md](Cat.Resilience.md) a call to protect.
@@ -524,10 +526,7 @@ To do:
 ### Known gaps in Catalog
 
 - **Localizations.** Show category names in several languages with `Cat.Localizations`. This waits until the module is stable.
-- **Admin only saves.** `POST /catalog/books` (`BookSaveRequest`) is the only write endpoint and has no authorization yet. Do this in the authentication phase, when the services get JWT validation:
-  - Add a `CatalogAdmin` policy that checks the admin role claim.
-  - Put `RequireAuthorization("CatalogAdmin")` on the save endpoint. The read endpoints stay anonymous.
-  - The gateway rejects an unauthenticated save as well, and the service checks the token again.
+- **Admin only saves.** `POST /catalog/books` (`BookSaveRequest`) needs the `admin` role when the service has a login. The endpoint uses the `admin` policy of `AuthenticationExtensions`, the read endpoints stay anonymous, and the gateway rejects an unauthenticated save as well. Tried: 401 without a token, 403 for Alice, passes for the admin. What is left:
   - Consider an admin check as a decorator on `BookSaveRequest` over `ICurrentUser`, so the rule lives in `CoreService` and is testable without HTTP.
   - Add a test that a non admin gets a 403 on the save.
 
