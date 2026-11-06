@@ -11,7 +11,7 @@ Every deployable unit in `demo/` gets its own folder. Never put project folders 
 ## Folder rules
 - **Services:** one folder per service. It holds all projects of that service, as described in the Service Project structure chapter of the root `README.md`: Api, CoreService, Infrastructure, Contracts, DataModels and the optional ones. Read that chapter first.
 - **Service tests:** the optional `ServiceName.CoreService.Tests` project sits in the folder of its service, not in `tests/`. Name it so the file ends in `.Tests.csproj`. Cake finds it by that name under `demo/`.
-- **Clients:** one folder per client.
+- **Clients:** one folder per client. A client that is not a .NET project, such as the React app in `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App`, sits in a subfolder the same way. It gets no entry in `CleanArchitectureToolkit.slnx`, and Cake ignores it.
 - **Aspire AppHosts:** one folder per AppHost.
 - **Aspire ServiceDefaults:** one folder per ServiceDefaults project.
 - Each project sits in its own subfolder inside the folder of its service, client or Aspire project.

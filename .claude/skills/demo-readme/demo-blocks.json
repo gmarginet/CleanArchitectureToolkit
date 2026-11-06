@@ -1,7 +1,7 @@
 {
   "drawing": "resources/schemas/CatDemoArchitecture.excalidraw.svg",
   "blocks": [
-    { "name": "React client",           "element": "-hL5vscu-SNB1I8JH0yMQ", "chapter": "React client",           "detect": { "path": "demo/Cat.Demo.Client*" } },
+    { "name": "React client",           "element": "-hL5vscu-SNB1I8JH0yMQ", "chapter": "React client",           "detect": { "path": "demo/Cat.Demo.WebClient*", "pattern": "react-oidc-context" } },
     { "name": "Aspire dashboard",       "element": "u05NMZlPkNX3QQPb2JHdK", "chapter": "Aspire AppHost and dashboard",         "detect": { "path": "demo/Cat.Demo.AppHost*" } },
     { "name": "API Gateway",            "element": "ifuKXsmw2EOy_3TWPiejJ", "chapter": "API Gateway",            "detect": { "path": "demo/Cat.Demo.Api.Gateway*" } },
     { "name": "Keycloak",               "element": "KcBox0Keycloak00000001", "chapter": "Keycloak",               "detect": { "path": "demo/Cat.Demo.AppHost*", "pattern": "keycloak" } },
