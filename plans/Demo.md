@@ -90,7 +90,7 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 ### Open
 
 - **Roadmap order.** Do you confirm the order of the [roadmap](#roadmap)? In particular: the gateway and login before the React client, and Inventory before messaging.
-- **React client.** The technical choices and the first cut are decided. Two points are open, and both are settled while building. See [React client](#react-client).
+- **React client.** The technical choices and the first cut are decided, and nothing is open for the client. See [React client](#react-client).
 - **Gateway and the module.** Decided: the gateway is built on YARP and the demo gateway `Cat.Demo.Api.Gateway` uses the module from the start. See the [readme of the module](../modules/Cat.Api.Gateway/README.md).
 - **Stock call.** Until messaging exists, Orders reserves stock with an HTTP call to Inventory. Does that call share the `Contracts` of Inventory? It is the candidate for the shared choice in [Sharing contracts](#sharing-contracts).
 - **Development certificate.** The dashboard says "No trusted development certificate was found" when the machine has not run `dotnet dev-certs https --trust`. It is harmless now, because the AppHost, the dashboard and the services all run on HTTP. It matters once something uses HTTPS. Do the run steps of the demo readme then tell a developer to trust the certificate, and does the AppHost keep `ASPIRE_ALLOW_UNSECURED_TRANSPORT`?
@@ -552,15 +552,14 @@ The screens that show what the demo is about:
 
 #### Open
 
-1. **Live check of the OpenAPI documents.** The static check below looks fine, but nobody has fetched a document from a running service yet. The first build step does it, and settles the question about generating types.
-2. **CORS.** Does the CORS list of the gateway hold the origin `http://localhost:5104`? The first login proves it.
+Nothing is open for the client now. The points that were left are checked, see below.
 
 #### Checked
 
 - **Not a .NET project.** The `demo-structure` skill has a `client` kind and says each client gets its own folder, with every project in its own subfolder. It says nothing about a client that is not .NET, and the solution file lists .NET projects only. So the unit is `demo/Cat.Demo.WebClient/` with the app in a subfolder, such as `Cat.Demo.WebClient/Cat.Demo.WebClient.App/`, and no entry in `CleanArchitectureToolkit.slnx`. The skill needs one sentence for this when the unit is built. Cake finds only `*.Tests.csproj`, so it ignores the folder.
 - **Aspire support.** The package `Aspire.Hosting.JavaScript` exists on NuGet, up to the version 13.6.4 that the AppHost uses. It has the `AddViteApp` and `AddJavaScriptApp` calls. The AppHost references only `Aspire.Hosting.AppHost` and `Aspire.Hosting.SqlServer` now, so the package is added to `Directory.Packages.props`. Node is on this machine (v26), `npm` too. Which version of Node the demo asks for is a small open point.
-- **Error body.** A failed call answers `application/problem+json`, the `CatProblemDetails` type: the standard `type`, `title`, `status`, `detail` and `instance`, plus `catErrors` and `catTraceId`. Each entry of `catErrors` has `code`, `message` and `arguments`. The `message` is a template, so the client either fills the arguments in or shows `detail`. A call that is not allowed, a missing token and so on, may answer with an empty body, so the error component must cope with that.
-- **OpenAPI completeness, static part.** Catalog and Orders both call `AddOpenApi()` and `MapOpenApi()`, but only in Development. Every endpoint declares its success type and, for each failure, `CatProblemDetails`. The request body is inferred. The 415 answer is added where a body is read. That is enough to generate the types.
+- **CORS.** The gateway answers a preflight and a public call from `http://localhost:5104` with `Access-Control-Allow-Origin` for that origin only. The AppHost sets it with `CatGateway__Cors__AllowedOrigins__0`. Another origin gets no allow header. The login itself is not tried yet.`n- **Error body.** A failed call answers `application/problem+json`, the `CatProblemDetails` type: the standard `type`, `title`, `status`, `detail` and `instance`, plus `catErrors` and `catTraceId`. Each entry of `catErrors` has `code`, `message` and `arguments`. The `message` is a template, so the client either fills the arguments in or shows `detail`. A call that is not allowed, a missing token and so on, may answer with an empty body, so the error component must cope with that.
+- **OpenAPI completeness.** Fetched from the running AppHost. `/openapi/v1.json` of Catalog and of Orders answer 200, but only in Development, which is what the AppHost runs. Every endpoint lists its success type and `CatProblemDetails` for its failures, and the bodies point at `PlaceOrderModel` and `BookModel`. The book search lists `Text` and `CategoryId` as query parameters, with a capital letter, and the binding ignores the case. The schema list holds the models and `CatProblemDetails`. That is enough to generate the types. The development endpoint `/development/scheduler/clean-up-order-counters` is in the Orders document too, and the client does not use it. The gateway has no document, so the client generates from the two service documents, which need the services running or a saved copy.
 ### Build order
 
 1. The project with Vite, TypeScript and the AppHost start. The page shows the shop name.
