@@ -536,7 +536,7 @@ The screens that show what the demo is about:
 | First cut | The five screens: book list, book detail, basket, order overview and order detail. The admin edit screen is left out and comes after the others. |
 | Login library | `react-oidc-context`, the React layer on top of `oidc-client-ts`. |
 | Token storage | In memory only. A page refresh does a silent login again. |
-| Calls | The browser calls the gateway on its own address. CORS is set in the gateway, and the realm already has `webOrigins`. There is no Vite proxy, so the demo shows the CORS options of the module. |
+| Calls | The browser calls the gateway on its own address. CORS is set in the gateway, and the `cat-demo-web` client of the realm lists the web origin. There is no Vite proxy, so the demo shows the CORS options of the module. |
 | Start | The AppHost starts the app with Aspire's JavaScript or Vite support and gives it the gateway and Keycloak addresses. The page reads them at startup. |
 | Types | Generated from the OpenAPI documents of Catalog and Orders with `openapi-typescript`, and called with `openapi-fetch`. The documents are complete enough, checked live. A script in `package.json` runs the generation before `dev`, `build` and `test`, and the generated types are not committed, so they always match the saved document. |
 | Server state | TanStack Query. |
@@ -546,9 +546,10 @@ The screens that show what the demo is about:
 | Cancel button | Always shown. The client does not copy the list of statuses that allow a cancel, so it holds no rule of the service. A 409 answer shows its message through the error component. |
 | Tests | Vitest with React Testing Library for the basket and the error component. A Playwright run of the whole flow comes later if the owner wants it. Only the developer runs Vitest with `npm test`. The Cake build does not. |
 | Price in the basket | The basket shows the price of the book list and no warning. The server price wins, and the answer of the order shows the real total. A warning can come later. |
+| Login details | `react-oidc-context` with authorization code and PKCE against `cat-demo-web`. The user and its tokens live in memory. Only the state of a login in progress uses session storage, because it has to survive the trip to Keycloak. After a page refresh the app signs in again silently with `prompt=none`, if a tab flag in session storage says the person was logged in. After a login the person returns to the page they came from. The realm sets `post.logout.redirect.uris` so the logout comes back to the shop. |
 | OpenAPI copy | The client keeps a saved copy of each service document in `api/`, so a fresh clone builds without a running service. `npm run api:refresh` downloads it again from a running AppHost, and the change is committed. The services only publish the document in Development, which the AppHost uses. |
 | TypeScript version | 5.x, not 7. The generator `openapi-typescript` accepts TypeScript 5 only, also in its latest release, and forcing it needs an `.npmrc` workaround in every clone. Go back to 7 when the generator supports it. |
-| Port | 5104, the next one after the payment service on 5103. The AppHost sets it, so the page and the CORS list of the gateway agree. The realm already accepts any `http://localhost:*` redirect and every web origin, so it needs no change. |
+| Port | 5104, the next one after the payment service on 5103. The AppHost sets it, so the page and the CORS list of the gateway agree. The realm accepts any `http://localhost:*` redirect, but the web origin of the `cat-demo-web` client is set to `http://localhost:5104` itself. The value `+` does not work with a wildcard redirect, because Keycloak then sends no CORS header on the token call, which was found when the login was tried. |
 | Build | Cake does not build the client. It is not a package. The AppHost runs it, and Node is a prerequisite in the demo readme. |
 | Location | `demo/Cat.Demo.WebClient/`. |
 
@@ -566,7 +567,7 @@ Nothing is open for the client now. The points that were left are checked, see b
 
 1. Done: the project with Vite, TypeScript and the AppHost start. The page shows the shop name.
 2. Done: book list and book detail, from Catalog without a login. Tried in a browser against the running AppHost: search, category filter, detail and not found.
-3. Login with Keycloak, the top bar, and the token on the calls.
+3. Done: login with Keycloak, the top bar, and the token on the calls. Tried in a browser against the running AppHost as `alice`: the login and the return to the same page, the token on the calls, Orders answering 200 with the token and 401 without, the silent sign-in after a refresh and the logout.
 4. Basket and checkout, with the error component.
 5. Order overview and order detail with the cancel button.
 6. The demo readme chapter, the drawing box and the run steps.

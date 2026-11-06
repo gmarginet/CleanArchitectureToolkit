@@ -59,6 +59,7 @@ What you can do today:
 - **Cancel an order.** Change your mind after ordering and cancel it.
 - **Log in.** Alice, Bob and the admin each have an account. You need to be logged in to place or follow orders. Anyone can browse the catalog without a login.
 - **Stay private.** A customer only sees their own orders. An admin sees all of them. Only an admin can add or change a book.
+- **Use the web shop.** Open the shop in the browser, search the books by text or category, open a book and log in. Placing and following orders in the browser comes next.
 
 What the shop does when something goes wrong:
 
@@ -72,7 +73,7 @@ What comes later:
 
 - A real stock service that keeps the stock levels.
 - Emails when an order is confirmed or shipped.
-- A web shop to click through, with a login screen.
+- A basket, checkout and an order overview in the web shop.
 - Nightly jobs, such as cancelling orders that are not paid.
 
 ## Architecture
@@ -135,7 +136,7 @@ The main route is the Aspire AppHost. One command starts the gateway, Catalog, O
 5. Try the endpoints. The gateway runs on `http://localhost:5100` and is the door for every call. Keycloak runs on `http://localhost:8180`. Open these files in Visual Studio or Rider and run the requests from top to bottom. Run the login requests at the top first. Later requests use ids from earlier responses.
    - `demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api/CatalogRequests.http`
    - `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Api/OrderRequests.http`
-   - The React client runs on `http://localhost:5104`. It is a start page for now, see [React client](#react-client).
+   - The web shop runs on `http://localhost:5104`. You can browse the books and log in as `alice` with the password `alice`. See [React client](#react-client).
 6. Place an order and open its trace in the dashboard. It shows the call from Orders to Catalog for the prices.
 7. Press Ctrl+C to stop. The database lives in the Docker volume `cat-demo-sql-data`, so the data is still there at the next start.
 
@@ -239,7 +240,7 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 
 | Block | Status | What it is |
 |---|---|---|
-| [React client](#react-client) | Planned | The web shop. |
+| [React client](#react-client) | Built | The web shop. It shows the books and has a login. The basket and the orders come next. |
 | [Aspire AppHost and dashboard](#aspire-apphost-and-dashboard) | Built | Starts the whole system and shows how it runs. |
 | [API Gateway](#api-gateway) | Built | The one door for clients. |
 | [Keycloak](#keycloak) | Built | The identity provider that holds the users and signs the tokens. |
@@ -253,12 +254,11 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 
 ### React client
 
-**Status:** Planned
+**Status:** Built
 
 **What it is.** A thin web client with a book list, a basket and an order overview. It uses React with TypeScript, built with Vite.
 
-**Where it stands.** Steps 1 and 2 of stage 3 are done. The app is in `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App`, a Vite, React and TypeScript project. The AppHost starts it as `web` on the fixed port 5104, and the gateway lists `http://localhost:5104` as an allowed CORS origin. It has two screens, both without a login. The book list has a search box and a category filter, and keeps them in the address. The book detail shows one book. One error component shows the message, the code and the trace id of every failed call. The basket, the login and the orders come in the next steps. The box in the drawing stays hatched until the login works.
-
+**Where it stands.** Steps 1 to 3 of stage 3 are done. The app is in `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App`, a Vite, React and TypeScript project. The AppHost starts it as `web` on the fixed port 5104, and the gateway lists `http://localhost:5104` as an allowed CORS origin. It has two screens, the book list and the book detail, and a login. The book list has a search box and a category filter, and keeps them in the address. One error component shows the message, the code and the trace id of every failed call. The basket, the checkout and the orders come in the next steps.
 **Work on the client.** Run these in the app folder. Node 24 or newer is needed.
 
 | Command | What it does |
@@ -269,9 +269,12 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 | `npm run api:refresh` | Saves the OpenAPI document of Catalog from a running AppHost into `api/`. Commit the change. |
 
 **Types.** `npm run api:generate` makes the TypeScript types from `api/catalog.openapi.json`. It runs before `dev`, `build` and `test`. The generated file is not committed. The saved copy of the document is, so a fresh clone builds without a running service. TypeScript is pinned to 5.x, because `openapi-typescript` does not support 7 yet.
-**How it will work.**
+**How it works.**
 - It only talks to the API gateway.
-- It logs in with OpenID Connect and sends the token with every call.
+- The Log in button sends the browser to Keycloak. The login uses authorization code with PKCE (`react-oidc-context`). After the login the person is back on the page they came from, and the top bar shows their name.
+- The access token lives in memory only. A page refresh loses it, so the app asks Keycloak for a new token without showing the login page. This works while the Keycloak session lasts. A tab flag, kept in session storage, says that the person was logged in. It holds no token.
+- Every call to the gateway carries the token when a person is logged in. Catalog reads need none.
+- Log out ends the Keycloak session as well.
 - It has no shared code with the services. The types come from a saved copy of the OpenAPI documents of the services.
 
 **CAT modules.**
@@ -362,7 +365,7 @@ The gateway only option of the module is not used in the demo. The services chec
 **How it works.**
 - The AppHost starts it as a plain container on port 8180. There is no data volume, so every start imports the realm again.
 - The realm file `demo/Cat.Demo.AppHost/Cat.Demo.AppHost/keycloak/cat-demo-realm.json` holds the realm `cat-demo`, the role `admin` and the users `alice`, `bob` and `admin`. The user ids equal the user names, so the `sub` claim of a token matches the seeded data.
-- Two public clients exist. `cat-demo-web` is for the React app later. `cat-demo-cli` allows the password grant, for the `.http` files only.
+- Two public clients exist. `cat-demo-web` is for the React app. It uses the authorization code flow with PKCE. Its web origin is `http://localhost:5104`, so the browser may call the token endpoint of Keycloak. `cat-demo-cli` allows the password grant, for the `.http` files only.
 - Both clients add the audience `cat-gateway` and a flat `roles` claim to the access token.
 - The gateway and the services read the signing keys from the realm and check every token themselves. See [API Gateway](#api-gateway).
 
