@@ -63,7 +63,14 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 | ServiceDefaults | The demo uses the Aspire ServiceDefaults project. |
 | Code first or database first | Catalog and Orders are code first. Inventory is database first. |
 | Inventory schema | A folder with SQL scripts, applied by the AppHost. |
+| Applying the scripts | In `Container` mode the AppHost runs the scripts in a small init step, once the `inventory` database exists. In `Existing` mode the AppHost does nothing, because the owner of that database, such as a DBA, owns its schema. |
+| Inventory seed data | The scripts seed stock for the ISBNs of the Catalog seed books, 50 copies per book. |
+| Inventory API | Reserve all lines or none, and release. The order number is the idempotency key, like the payment call. |
+| Concurrent reservations | The reserve step is an atomic conditional update, `UPDATE ... SET QuantityOnHand = QuantityOnHand - @n WHERE ... AND QuantityOnHand >= @n`, for all lines inside one transaction. No locks and no version column. |
+| Inventory data access | The EF Core scaffold only for now. Dapper waits for the `Cat.Dapper` module. |
+| Inventory login | Like payment: a restricted gateway route, and Orders forwards the token of the user. |
 | Book and order references | Orders owns its database, so `OrderLine` uses `BookId`. Inventory does not own its database, so it identifies a book by `Isbn` and an order by `OrderNumber`. |
+| ISBN for the stock call | The price endpoint of Catalog also returns the `Isbn` of every book. Inventory identifies a book by its ISBN, and Orders only has the `BookId`, so this is how Orders gets the ISBN. |
 | Order number | Unique, created when the order is placed, in the format `YYYYMMDD-0000`. The counter restarts at `0001` every day. The date is the UTC date. |
 | Order number counter | A `DailyOrderCounter` table with one row per UTC day. The service increases the row in one atomic SQL statement, in the same transaction that saves the order. See [Order number counter](#order-number-counter). |
 | Authentication | OpenID Connect with Keycloak, started by the AppHost with an imported realm and seeded users. See [Authentication and authorization](#authentication-and-authorization). |
@@ -81,7 +88,7 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 | SQL Server mode | The AppHost supports two modes, switched by a setting: a SQL Server container, or an existing instance through connection strings. Docker is not required to run the demo. Both modes are built, `Existing` first. The AppHost reads `Sql:Mode`, with `Container` as the default. |
 | Counter cleanup | The `CleanUpOrderCounters` service request deletes the rows of earlier days and creates the row of today. The Scheduler will run it nightly. Until the Scheduler exists, a development only endpoint triggers it. |
 | Currency | One currency, euro, to keep the demo simple. |
-| Sharing contracts | A choice per connection, as the root readme describes. React client to gateway: not shared. Orders to Catalog: not shared. A later service to service call: shared, so the demo shows both. See [Sharing contracts](#sharing-contracts). |
+| Sharing contracts | A choice per connection, as the root readme describes. React client to gateway: not shared. Orders to Catalog: not shared. Orders to Inventory (stock): shared, so the demo shows both. See [Sharing contracts](#sharing-contracts). |
 | API gateway | It is the API gateway from the Application Architecture chapter of the root readme. It is the module `Cat.Api.Gateway`. See its [readme](../modules/Cat.Api.Gateway/README.md). |
 | Notifications storage | Decided once the Scheduling module is designed. |
 | Todo demo | `Cat.Demo.TodoService` is removed. Catalog is the first service of this plan. |
@@ -92,7 +99,6 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 - **Roadmap order.** Do you confirm the order of the [roadmap](#roadmap)? In particular: the gateway and login before the React client, and Inventory before messaging.
 - **React client.** The technical choices and the first cut are decided, and nothing is open for the client. See [React client](#react-client).
 - **Gateway and the module.** Decided: the gateway is built on YARP and the demo gateway `Cat.Demo.Api.Gateway` uses the module from the start. See the [readme of the module](../modules/Cat.Api.Gateway/README.md).
-- **Stock call.** Until messaging exists, Orders reserves stock with an HTTP call to Inventory. Does that call share the `Contracts` of Inventory? It is the candidate for the shared choice in [Sharing contracts](#sharing-contracts).
 - **Development certificate.** The dashboard says "No trusted development certificate was found" when the machine has not run `dotnet dev-certs https --trust`. It is harmless now, because the AppHost, the dashboard and the services all run on HTTP. It matters once something uses HTTPS. Do the run steps of the demo readme then tell a developer to trust the certificate, and does the AppHost keep `ASPIRE_ALLOW_UNSECURED_TRANSPORT`?
 - **Resilience in the demo.** [Aspire ServiceDefaults](#aspire-servicedefaults) says the demo does not use `Cat.Resilience`, because ServiceDefaults covers it. The roadmap shows the resilience story with the ServiceDefaults handler. When does the demo use `Cat.Resilience`: never, or in a part that runs without Aspire?
 
@@ -168,7 +174,8 @@ The root readme says that sharing the `Contracts` project of a service is a choi
 |---|---|---|
 | React client to gateway | Not shared | The client is TypeScript, so there is nothing to reference. It also keeps the demo client-agnostic. The client comes from the OpenAPI documents. |
 | Orders to Catalog (prices) | Not shared | Orders needs a price per book and nothing else. The generated Catalog client has models of its own, so Orders does not depend on the Catalog contract. |
-| A later service to service call | Shared | To show the other option. The service that calls references the `Contracts` project of the other one and reuses its types. The call is chosen when it is built. A candidate is a service that reads a whole order from Orders. |
+| Orders to Inventory (stock) | Shared | To show the other option. Orders references the `Contracts` project of Inventory and reuses its types. |
+| A later service to service call | Open | Chosen when it is built. A candidate is a service that reads a whole order from Orders. |
 
 What it costs:
 
@@ -207,7 +214,7 @@ Aspire passes connection strings and service URLs to each project. Nobody edits 
 #### Schema and seed data
 
 - Each code first service applies its EF Core migrations at startup, in `Development` only.
-- Inventory gets its schema from the SQL scripts, which the AppHost runs on startup.
+- Inventory gets its schema from the SQL scripts, which the AppHost runs in a small init step in `Container` mode.
 - A small seeder fills in books, categories and stock when the tables are empty.
 - Reset is `docker volume rm`, or a reset command on the AppHost.
 
@@ -458,7 +465,7 @@ erDiagram
 #### How the database first approach works
 
 - **The database is the source of truth.** A folder with SQL scripts defines the schema and the seed data. People change the database, not C# classes.
-- **Aspire applies it.** The AppHost creates the `inventory` database in the SQL Server container and runs the scripts on startup.
+- **Aspire applies it.** The AppHost creates the `inventory` database in the SQL Server container and runs the scripts in a small init step. In `Existing` mode it does nothing, because the owner of that database owns its schema.
 - **The model is scaffolded.** `dotnet ef dbcontext scaffold` generates the entities and the `DbContext` into `Inventory.Infrastructure`. Nobody edits the generated files. They are regenerated after a database change. Custom behavior goes in partial classes.
 - **The rest of the service stays the same.** Api, CoreService and Contracts follow the normal service structure. Only the data access differs. The business logic does not care how the model was made.
 - **Dapper fits well.** Views and stored procedures suit the future `Cat.Dapper` module, so Inventory can read through Dapper next to the scaffolded EF Core model.
