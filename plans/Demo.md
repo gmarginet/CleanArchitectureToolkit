@@ -538,7 +538,7 @@ The screens that show what the demo is about:
 | Token storage | In memory only. A page refresh does a silent login again. |
 | Calls | The browser calls the gateway on its own address. CORS is set in the gateway, and the realm already has `webOrigins`. There is no Vite proxy, so the demo shows the CORS options of the module. |
 | Start | The AppHost starts the app with Aspire's JavaScript or Vite support and gives it the gateway and Keycloak addresses. The page reads them at startup. |
-| Types | Generated from the OpenAPI documents of Catalog and Orders with `openapi-typescript`, and called with `openapi-fetch`. Only if the documents are complete enough, which the live check in the open list settles. A script in package.json runs the generation and the output is not committed, so the types always match the services. |
+| Types | Generated from the OpenAPI documents of Catalog and Orders with `openapi-typescript`, and called with `openapi-fetch`. The documents are complete enough, checked live. A script in `package.json` runs the generation before `dev`, `build` and `test`, and the generated types are not committed, so they always match the saved document. |
 | Server state | TanStack Query. |
 | Routing and look | React Router and plain CSS with CSS modules. No component library. |
 | Titles in the order detail | The client asks `GET /catalog/books/{id}` for each line, and TanStack Query caches the answers. No change to the contracts. |
@@ -546,6 +546,8 @@ The screens that show what the demo is about:
 | Cancel button | Always shown. The client does not copy the list of statuses that allow a cancel, so it holds no rule of the service. A 409 answer shows its message through the error component. |
 | Tests | Vitest with React Testing Library for the basket and the error component. A Playwright run of the whole flow comes later if the owner wants it. Only the developer runs Vitest with `npm test`. The Cake build does not. |
 | Price in the basket | The basket shows the price of the book list and no warning. The server price wins, and the answer of the order shows the real total. A warning can come later. |
+| OpenAPI copy | The client keeps a saved copy of each service document in `api/`, so a fresh clone builds without a running service. `npm run api:refresh` downloads it again from a running AppHost, and the change is committed. The services only publish the document in Development, which the AppHost uses. |
+| TypeScript version | 5.x, not 7. The generator `openapi-typescript` accepts TypeScript 5 only, also in its latest release, and forcing it needs an `.npmrc` workaround in every clone. Go back to 7 when the generator supports it. |
 | Port | 5104, the next one after the payment service on 5103. The AppHost sets it, so the page and the CORS list of the gateway agree. The realm already accepts any `http://localhost:*` redirect and every web origin, so it needs no change. |
 | Build | Cake does not build the client. It is not a package. The AppHost runs it, and Node is a prerequisite in the demo readme. |
 | Location | `demo/Cat.Demo.WebClient/`. |
@@ -562,8 +564,8 @@ Nothing is open for the client now. The points that were left are checked, see b
 - **OpenAPI completeness.** Fetched from the running AppHost. `/openapi/v1.json` of Catalog and of Orders answer 200, but only in Development, which is what the AppHost runs. Every endpoint lists its success type and `CatProblemDetails` for its failures, and the bodies point at `PlaceOrderModel` and `BookModel`. The book search lists `Text` and `CategoryId` as query parameters, with a capital letter, and the binding ignores the case. The schema list holds the models and `CatProblemDetails`. That is enough to generate the types. The development endpoint `/development/scheduler/clean-up-order-counters` is in the Orders document too, and the client does not use it. The gateway has no document, so the client generates from the two service documents, which need the services running or a saved copy.
 ### Build order
 
-1. The project with Vite, TypeScript and the AppHost start. The page shows the shop name.
-2. Book list and book detail, from Catalog without a login.
+1. Done: the project with Vite, TypeScript and the AppHost start. The page shows the shop name.
+2. Done: book list and book detail, from Catalog without a login. Tried in a browser against the running AppHost: search, category filter, detail and not found.
 3. Login with Keycloak, the top bar, and the token on the calls.
 4. Basket and checkout, with the error component.
 5. Order overview and order detail with the cancel button.
