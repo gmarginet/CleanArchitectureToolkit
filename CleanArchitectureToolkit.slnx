@@ -20,6 +20,7 @@
     <Project Path="demo/Cat.Demo.AppHost/Cat.Demo.AppHost/Cat.Demo.AppHost.csproj" />
   </Folder>
   <Folder Name="/demo/Cat.Demo.CatalogService/">
+    <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api.Client/Cat.Demo.CatalogService.Api.Client.csproj" />
     <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api/Cat.Demo.CatalogService.Api.csproj" />
     <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Contracts/Cat.Demo.CatalogService.Contracts.csproj" />
     <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.CoreService/Cat.Demo.CatalogService.CoreService.csproj" />
