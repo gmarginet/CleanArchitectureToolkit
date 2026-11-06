@@ -58,6 +58,8 @@ The `plans/` folder holds the plans we make before we build.
 - Put only decisions the owner made in `Decided`. Everything else is `Open`.
 - Keep a plan current. When a decision is made, move it from `Open` to `Decided` and fix the other plans that mention it.
 - Link a future module plan from the Future modules table in the root `README.md`. Link the plan of an existing module from the Plans column of the module overview. The `root-module-table` skill covers that column.
+- A module readme never links to the plan of its module. Only the root `README.md` links to a plan.
+- The readme of a module must in the end hold everything about how the module works and how to use it. Then the plan can go. Remove a plan only when the owner agrees.
 - Use the `module-plan` skill to create, update or check a module plan. It also keeps the README tables and the other plans in sync.
 
 ### Demo Folder Structure

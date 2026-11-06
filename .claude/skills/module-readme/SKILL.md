@@ -15,6 +15,10 @@ Create or update `modules/<ModuleName>/README.md` from the template.
 - Read the namespace summaries in `modules/<ModuleName>/namespaces/<NamespaceName>/index.md` for the descriptions. These files are generated. Read them only.
 - Read the `ProjectReference` entries in the `.csproj` files. A reference to a project of another module is a dependency.
 
+## Plans
+- Never link to `plans/` from a module readme. Only the root `README.md` links to a plan.
+- The readme must in the end hold everything about how the module works and how to use it, so that the plan can be removed. When the plan holds a decision that a user needs to know, write it in the readme.
+
 ## Fill the template
 Replace these placeholders. Keep every block marker comment.
 

@@ -23,7 +23,8 @@ A module plan collects what we know about a module before it is built. It holds 
 ## Where the plan is linked
 - A module that does not exist yet: a row in the Future modules table of the root `README.md`. The module name in the row links to `plans/<ModuleName>.md`, written as `[Cat.X](./plans/Cat.X.md)`. Put no backticks around the name. A code span inside a link does not look like a link on the published site.
 - A module that exists: the Plans column of its row in the module overview, `[Plans](./plans/<ModuleName>.md)`. The `root-module-table` skill covers that column. The row must not be in the Future modules table.
-- When a future module is started with the `new-module` skill, move it: remove the row from the Future modules table and add the Plans link to the module overview. Keep the plan until the module has done everything in it.
+- When a future module is started with the `new-module` skill, move it: remove the row from the Future modules table and add the Plans link to the module overview. Keep the plan until the module has done everything in it, and until the owner agrees that it can go.
+- The readme of the module never links to the plan. Only the root `README.md` does. The readme of a module grows until it holds everything about how the module works and how to use it, so the plan can be removed.
 
 ## Where the facts come from
 Read these before you write, and search them for the module name:
