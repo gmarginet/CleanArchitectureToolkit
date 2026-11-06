@@ -1,22 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Cat.Api.Client;
 using Cat.Demo.OrderService.CoreService;
 using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 using Microsoft.Extensions.Logging;
 
+// The generated models of the client have an ICatError of their own, so only the client itself is imported.
+using ICatalogClient = Cat.Demo.CatalogService.Api.Client.ICatalogClient;
+
 namespace Cat.Demo.OrderService.Infrastructure.Catalog;
 
 /// <summary>
-/// Asks the Catalog service for the current price of books, with a plain <see cref="HttpClient"/>.
+/// Asks the Catalog service for the current price of books, through the generated client and the API gateway.
 /// A 404 becomes a failed response, so the order step answers with <c>PriceUnavailable</c>.
 /// Every other problem becomes an error response. Orders never trusts a half answer.
 /// </summary>
@@ -24,54 +24,42 @@ public class CatalogPriceProvider : IPriceProvider
 {
     private const string ServiceName = "Catalog";
 
-    private readonly HttpClient _httpClient;
+    private readonly ICatalogClient _catalogClient;
     private readonly ILogger<CatalogPriceProvider> _logger;
 
-    public CatalogPriceProvider(HttpClient httpClient, ILogger<CatalogPriceProvider> logger)
+    public CatalogPriceProvider(ICatalogClient catalogClient, ILogger<CatalogPriceProvider> logger)
     {
-        _httpClient = httpClient;
+        _catalogClient = catalogClient;
         _logger = logger;
     }
 
     public async Task<ICatResponse<IReadOnlyDictionary<Guid, decimal>>> GetPricesAsync(IReadOnlyCollection<Guid> bookIds, CancellationToken cancellationToken = default)
     {
-        var query = string.Join("&", bookIds.Select(id => $"bookIds={id}"));
+        var response = await CatApiCall.ExecuteAsync(
+            () => _catalogClient.PricesAsync(bookIds, cancellationToken),
+            ServiceName,
+            cancellationToken);
 
-        try
+        if (response.IsFailed)
         {
-            using var response = await _httpClient.GetAsync($"/catalog/books/prices?{query}", cancellationToken);
-
-            if (response.StatusCode == HttpStatusCode.NotFound)
+            if (response.Type is CatResponseType.Failed.NotFound)
             {
                 return CatResponse.NotFound<IReadOnlyDictionary<Guid, decimal>>(
-                    OrderErrorDefinitions.PriceUnavailable.CreateCatError(await FindMissingBookIdAsync(response, bookIds, cancellationToken)));
+                    OrderErrorDefinitions.PriceUnavailable.CreateCatError(FindMissingBookId(response.ErrorList, bookIds)));
             }
 
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                _logger.LogWarning("Catalog answered {StatusCode} to the price request.", (int)response.StatusCode);
-                return Unexpected();
-            }
-
-            var prices = await response.Content.ReadFromJsonAsync<List<CatalogPriceModel>>(cancellationToken);
-            if (prices is null || bookIds.Any(id => prices.All(x => x.BookId != id)))
-            {
-                _logger.LogWarning("Catalog answered 200 but not with a price for every book.");
-                return Unexpected();
-            }
-
-            return CatResponse.Ok<IReadOnlyDictionary<Guid, decimal>>(prices.ToDictionary(x => x.BookId, x => x.Price));
-        }
-        catch (Exception ex) when (ex is HttpRequestException or JsonException or TaskCanceledException or NotSupportedException)
-        {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                throw;
-            }
-
-            _logger.LogWarning(ex, "The price request to Catalog failed.");
+            _logger.LogWarning("Catalog failed the price request with {ErrorCodes}.", string.Join(", ", response.ErrorList.Select(error => error.Code)));
             return Unexpected();
         }
+
+        var prices = response.Value!;
+        if (bookIds.Any(id => prices.All(price => price.BookId != id)))
+        {
+            _logger.LogWarning("Catalog answered 200 but not with a price for every book.");
+            return Unexpected();
+        }
+
+        return CatResponse.Ok<IReadOnlyDictionary<Guid, decimal>>(prices.ToDictionary(price => price.BookId, price => (decimal)price.Price));
     }
 
     private static ICatResponse<IReadOnlyDictionary<Guid, decimal>> Unexpected()
@@ -79,25 +67,17 @@ public class CatalogPriceProvider : IPriceProvider
             CatGeneralErrorDefinitions.UnexpectedResponse.CreateCatError(ServiceName));
 
     /// <summary>Reads the first book id from the Catalog errors. Falls back to the first requested book.</summary>
-    private static async Task<Guid> FindMissingBookIdAsync(HttpResponseMessage response, IReadOnlyCollection<Guid> bookIds, CancellationToken cancellationToken)
+    private static Guid FindMissingBookId(IReadOnlyList<ICatError> errors, IReadOnlyCollection<Guid> bookIds)
     {
-        try
+        foreach (var error in errors)
         {
-            var body = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
-            foreach (var error in body.GetProperty("catErrors").EnumerateArray())
+            foreach (var argument in error.Arguments)
             {
-                foreach (var argument in error.GetProperty("arguments").EnumerateArray())
+                if (argument is string text && Guid.TryParse(text, out var id))
                 {
-                    if (argument.ValueKind == JsonValueKind.String && Guid.TryParse(argument.GetString(), out var id))
-                    {
-                        return id;
-                    }
+                    return id;
                 }
             }
-        }
-        catch (Exception ex) when (ex is JsonException or KeyNotFoundException or InvalidOperationException)
-        {
-            // The body is not what we expect. The first requested book is the best we can name.
         }
 
         return bookIds.FirstOrDefault();

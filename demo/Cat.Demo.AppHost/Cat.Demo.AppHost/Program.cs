@@ -37,10 +37,10 @@ foreach (var (setting, variable) in new[]
     }
 }
 
+// Orders asks Catalog for prices through the gateway, so it references the gateway and not Catalog.
+// The gateway waits for Orders, so Orders must not wait for the gateway.
 var orders = builder.AddProject<Projects.Cat_Demo_OrderService_Api>("orders")
     .WithHttpEndpoint(port: 5102, name: "http", isProxied: false)
-    .WithReference(catalog)
-    .WaitFor(catalog)
     .WithReference(payment)
     .WaitFor(payment)
     .WithHttpHealthCheck("/health");
@@ -75,6 +75,7 @@ var gateway = builder.AddProject<Projects.Cat_Demo_Api_Gateway>("gateway")
     .WithEnvironment("CatGateway__Authentication__Authority", authority)
     .WithEnvironment("CatGateway__Cors__AllowedOrigins__0", webUrl)
     .WithHttpHealthCheck("/health");
+orders.WithReference(gateway);
 
 // The React client runs with Vite. The port is fixed, because the gateway lists it as an allowed CORS origin.
 // The page reads the VITE_ variables when it starts.

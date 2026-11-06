@@ -1,4 +1,6 @@
 using System;
+using Cat.Api.Client.Extensions;
+using Cat.Demo.CatalogService.Api.Client;
 using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Demo.OrderService.Infrastructure.Catalog;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
@@ -24,16 +26,18 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Registers the price provider. When the host gives Orders an address for the <c>catalog</c> service
-    /// (Aspire does, as <c>services:catalog:*</c>), <see cref="CatalogPriceProvider"/> asks Catalog for the prices.
+    /// Registers the price provider. When the host gives Orders an address for the <c>gateway</c>
+    /// (Aspire does, as <c>services:gateway:*</c>), <see cref="CatalogPriceProvider"/> asks Catalog for the prices
+    /// through the gateway, with the generated client. Services never call each other directly.
     /// Without an address, <see cref="FakePriceProvider"/> answers, so <c>dotnet run</c> keeps working on its own.
     /// </summary>
     public static IServiceCollection AddCatDemoOrderPriceProvider(this IServiceCollection services, IConfiguration configuration)
     {
-        if (configuration.GetSection("services:catalog").Exists())
+        if (configuration.GetSection("services:gateway").Exists())
         {
             // The resilience handler of ServiceDefaults adds retries and a circuit breaker to this client.
-            services.AddHttpClient<IPriceProvider, CatalogPriceProvider>(client => client.BaseAddress = new Uri("https+http://catalog"));
+            services.AddCatApiClient<ICatalogClient, CatalogClient>("https+http://gateway");
+            services.AddScoped<IPriceProvider, CatalogPriceProvider>();
         }
         else
         {

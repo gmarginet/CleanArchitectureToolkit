@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text;
+using Cat.Demo.CatalogService.Api.Client;
 using Cat.Demo.OrderService.Infrastructure.Catalog;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
@@ -14,7 +15,7 @@ public class CatalogPriceProviderTests
     private static readonly Guid BookB = Guid.Parse("6f1c0a7e-5c0e-4a53-9d4b-1d3a3b8d0002");
 
     private static CatalogPriceProvider CreateProvider(StubHandler handler)
-        => new(new HttpClient(handler) { BaseAddress = new Uri("http://catalog") }, NullLogger<CatalogPriceProvider>.Instance);
+        => new(new CatalogClient(new HttpClient(handler) { BaseAddress = new Uri("http://gateway") }), NullLogger<CatalogPriceProvider>.Instance);
 
     private static HttpResponseMessage Json(HttpStatusCode status, string json)
         => new(status) { Content = new StringContent(json, Encoding.UTF8, "application/json") };
@@ -42,7 +43,7 @@ public class CatalogPriceProviderTests
 
         Assert.That(handler.Requests, Has.Count.EqualTo(1));
         Assert.That(handler.Requests[0].Method, Is.EqualTo(HttpMethod.Get));
-        Assert.That(handler.Requests[0].PathAndQuery, Is.EqualTo($"/catalog/books/prices?bookIds={BookA}&bookIds={BookB}"));
+        Assert.That(handler.Requests[0].PathAndQuery, Is.EqualTo($"/catalog/books/prices?BookIds={BookA}&BookIds={BookB}"));
     }
 
     [Test]
