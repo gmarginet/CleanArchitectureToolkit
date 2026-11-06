@@ -12,9 +12,9 @@ export function ErrorMessage({ error }: ErrorMessageProps) {
 
   return (
     <div role="alert" className={styles.error}>
-      <p className={styles.message}>{apiError?.message ?? 'Something went wrong.'}</p>
+      {entries.length === 0 && <p className={styles.message}>{apiError?.message ?? 'Something went wrong.'}</p>}
       {entries.length > 0 && (
-        <ul>
+        <ul className={styles.entries}>
           {entries.map((entry, index) => (
             <li key={index}>
               {entry.code && <code>{entry.code}</code>} {entry.message}

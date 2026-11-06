@@ -1,6 +1,7 @@
 import { useAuth } from 'react-oidc-context'
 import { Link, Outlet, useLocation } from 'react-router'
 import { forgetSignedIn } from '../auth/silentSignIn'
+import { useBasket } from '../basket/useBasket'
 import styles from './Layout.module.css'
 
 /** The refusal of a silent login, because the Keycloak session ended, is not an error to show. */
@@ -11,6 +12,7 @@ function isSilentRefusal(error: Error): boolean {
 
 export function Layout() {
   const auth = useAuth()
+  const basket = useBasket()
   const location = useLocation()
   const user = auth.user?.profile
   const name = user?.name ?? user?.preferred_username ?? 'Signed in'
@@ -23,6 +25,7 @@ export function Layout() {
         </Link>
         <nav className={styles.nav}>
           <Link to="/">Books</Link>
+          <Link to="/basket">Basket ({basket.count})</Link>
           {auth.isAuthenticated ? (
             <>
               <span className={styles.user}>{name}</span>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { useBooks, useCategories } from '../api/books'
+import { AddToBasketButton } from '../components/AddToBasketButton'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { formatPrice } from '../format'
 import styles from './BookListPage.module.css'
@@ -71,7 +72,10 @@ export function BookListPage() {
                 <div>{book.author}</div>
                 <div className={styles.category}>{book.categoryName}</div>
               </div>
-              <div className={styles.price}>{formatPrice(book.price)}</div>
+              <div className={styles.price}>
+                <div>{formatPrice(book.price)}</div>
+                <AddToBasketButton book={book} />
+              </div>
             </li>
           ))}
         </ul>

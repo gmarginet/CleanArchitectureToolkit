@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router'
 import { createQueryClient } from './api/queryClient'
 import App from './App.tsx'
 import { AuthProviderWithRouter } from './auth/AuthProviderWithRouter'
+import { BasketProvider } from './basket/BasketProvider'
 import './index.css'
 
 const queryClient = createQueryClient()
@@ -14,7 +15,9 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProviderWithRouter>
-          <App />
+          <BasketProvider>
+            <App />
+          </BasketProvider>
         </AuthProviderWithRouter>
       </BrowserRouter>
     </QueryClientProvider>

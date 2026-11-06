@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { BasketProvider } from '../basket/BasketProvider'
 import { Layout } from './Layout'
 
 vi.mock('react-oidc-context', () => ({ useAuth: vi.fn() }))
@@ -23,7 +24,9 @@ function auth(value: object) {
 function renderLayout(path = '/books/b1?x=1') {
   render(
     <MemoryRouter initialEntries={[path]}>
-      <Layout />
+      <BasketProvider>
+        <Layout />
+      </BasketProvider>
     </MemoryRouter>,
   )
 }
@@ -33,6 +36,21 @@ describe('Layout', () => {
     signinRedirect.mockReset()
     signoutRedirect.mockReset()
     sessionStorage.clear()
+    localStorage.clear()
+  })
+
+  it('shows the number of copies in the basket', () => {
+    localStorage.setItem(
+      'cat-demo-basket',
+      JSON.stringify([
+        { bookId: 'b1', title: 'Dune', price: 12.5, quantity: 2 },
+        { bookId: 'b2', title: 'Emma', price: 9.99, quantity: 1 },
+      ]),
+    )
+    auth({})
+    renderLayout()
+
+    expect(screen.getByRole('link', { name: 'Basket (3)' })).toHaveAttribute('href', '/basket')
   })
 
   it('offers a login that returns to the same page', async () => {

@@ -10,6 +10,16 @@ describe('formatTemplate', () => {
     expect(formatTemplate('Book {0} has {1} copies', ['Dune', 3])).toBe('Book Dune has 3 copies')
   })
 
+  it('fills named placeholders in the order they appear', () => {
+    expect(
+      formatTemplate('Book {BookId} is out of stock. Order {OrderNumber} was cancelled.', ['b1', '20261106-0001']),
+    ).toBe('Book b1 is out of stock. Order 20261106-0001 was cancelled.')
+  })
+
+  it('gives a name that appears twice the same argument', () => {
+    expect(formatTemplate('{Name} meets {Other}. {Name} waves.', ['Ann', 'Bob'])).toBe('Ann meets Bob. Ann waves.')
+  })
+
   it('keeps a placeholder when its argument is missing', () => {
     expect(formatTemplate('Book {0} and {1}', ['Dune'])).toBe('Book Dune and {1}')
   })

@@ -27,10 +27,22 @@ export class ApiError extends Error {
   }
 }
 
-/** Fills `{0}`, `{1}` and so on in a message template with the arguments of the error. */
+/**
+ * Fills the placeholders of a message template with the arguments of the error. The services write named
+ * placeholders, such as `{OrderNumber}`, and the arguments fill them in the order the names first appear.
+ * A numbered placeholder, such as `{0}`, takes the argument at that position.
+ */
 export function formatTemplate(template: string, args: unknown[] | null | undefined): string {
-  return template.replace(/\{(\d+)\}/g, (match, index: string) => {
-    const value = args?.[Number(index)]
+  const names: string[] = []
+  return template.replace(/\{(\w+)\}/g, (match, name: string) => {
+    let position: number
+    if (/^\d+$/.test(name)) {
+      position = Number(name)
+    } else {
+      if (!names.includes(name)) names.push(name)
+      position = names.indexOf(name)
+    }
+    const value = args?.[position]
     return value === undefined || value === null ? match : String(value)
   })
 }

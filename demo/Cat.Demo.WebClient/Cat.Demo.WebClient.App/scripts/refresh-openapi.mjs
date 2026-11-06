@@ -5,6 +5,7 @@ import { mkdir, writeFile } from 'node:fs/promises'
 
 const documents = [
   { name: 'catalog', url: process.env.CATALOG_OPENAPI_URL ?? 'http://localhost:5101/openapi/v1.json' },
+  { name: 'orders', url: process.env.ORDERS_OPENAPI_URL ?? 'http://localhost:5102/openapi/v1.json' },
 ]
 
 await mkdir('api', { recursive: true })

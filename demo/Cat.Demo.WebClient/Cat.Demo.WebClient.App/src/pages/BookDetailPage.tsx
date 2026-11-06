@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router'
 import { useBook } from '../api/books'
 import { ApiError } from '../api/errors'
+import { AddToBasketButton } from '../components/AddToBasketButton'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { formatPrice } from '../format'
 import styles from './BookDetailPage.module.css'
@@ -34,6 +35,7 @@ export function BookDetailPage() {
             <dt>Price</dt>
             <dd>{formatPrice(book.data.price)}</dd>
           </dl>
+          <AddToBasketButton book={book.data} />
         </article>
       )}
     </>

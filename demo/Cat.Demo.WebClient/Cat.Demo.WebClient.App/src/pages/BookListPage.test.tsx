@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, useLocation } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { toApiError } from '../api/errors'
+import { BasketProvider } from '../basket/BasketProvider'
 import { BookListPage } from './BookListPage'
 
 vi.mock('../api/books', () => ({ useBooks: vi.fn(), useCategories: vi.fn() }))
@@ -22,7 +23,9 @@ function renderPage(initial = '/') {
   render(
     <QueryClientProvider client={new QueryClient()}>
       <MemoryRouter initialEntries={[initial]}>
-        <BookListPage />
+        <BasketProvider>
+          <BookListPage />
+        </BasketProvider>
         <Location />
       </MemoryRouter>
     </QueryClientProvider>,
@@ -84,6 +87,21 @@ describe('BookListPage', () => {
 
     expect(screen.getByRole('searchbox', { name: 'Search' })).toHaveValue('clean')
     expect(useBooks).toHaveBeenLastCalledWith({ text: 'clean', categoryId: '' })
+  })
+
+  it('adds a book to the basket, and not a book without a price', async () => {
+    localStorage.clear()
+    vi.mocked(useBooks).mockReturnValue(answer({ isSuccess: true, data: books }))
+    renderPage()
+    const [dune, emma] = screen.getAllByRole('button', { name: 'Add to basket' })
+
+    expect(emma).toBeDisabled()
+    await userEvent.click(dune)
+    await userEvent.click(dune)
+
+    expect(JSON.parse(localStorage.getItem('cat-demo-basket') ?? '[]')).toEqual([
+      { bookId: 'b1', title: 'Dune', price: 12.5, quantity: 2 },
+    ])
   })
 
   it('filters by category', async () => {

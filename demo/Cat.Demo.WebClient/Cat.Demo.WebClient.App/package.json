@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "api:generate": "openapi-typescript api/catalog.openapi.json -o src/api/catalog.schema.d.ts",
+    "api:generate": "openapi-typescript api/catalog.openapi.json -o src/api/catalog.schema.d.ts && openapi-typescript api/orders.openapi.json -o src/api/orders.schema.d.ts",
     "api:refresh": "node scripts/refresh-openapi.mjs",
     "predev": "npm run api:generate",
     "dev": "vite",
