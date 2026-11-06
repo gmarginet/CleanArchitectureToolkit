@@ -3,6 +3,7 @@ M:Cat.Api.Client.CatApiCall.ExecuteAsync``1(System.Func{System.Threading.Tasks.T
 M:Cat.Api.Client.CatApiCall.ExecuteAsync(System.Func{System.Threading.Tasks.Task},System.String,System.Threading.CancellationToken)|CatApiCall.ExecuteAsync.md#Cat.Api.Client.CatApiCall.ExecuteAsync(System.Func_System.Threading.Tasks.Task_,string,System.Threading.CancellationToken)|ExecuteAsync(Func<Task>, string, CancellationToken)
 M:Cat.Api.Client.CatApiCall.IsApiFailure(System.Exception,System.Threading.CancellationToken)|CatApiCall.IsApiFailure.42TWMR0QIINSDCTYJX460CXT3.md|IsApiFailure(Exception, CancellationToken)
 M:Cat.Api.Client.CatApiCall.Fail``1(System.Exception,System.String)|CatApiCall.Fail.Z5NPCRK1AV9XQ5EIO9BRLVAW3.md|Fail<TResponse>(Exception, string)
+M:Cat.Api.Client.CatApiCall.BodyOf(Cat.Api.Client.CatApiException)|CatApiCall.BodyOf.DH1XZGHU2W1DIO1VDKRZ56B9.md|BodyOf(CatApiException)
 M:Cat.Api.Client.CatApiCall.Unexpected(System.String)|CatApiCall.Unexpected.1AO9S484S47UDSASVRXQY7KP.md|Unexpected(string)
 M:Cat.Api.Client.CatApiCall.ReadErrors(System.String)|CatApiCall.ReadErrors.36O4YDYQ2U5XRJ72RVR0CD289.md|ReadErrors(string)
 M:Cat.Api.Client.CatApiCall.ToPlainValue(System.Object)|CatApiCall.ToPlainValue.CVWKKUHR8K251C2XHFZ5MXPTB.md|ToPlainValue(object)
@@ -11,9 +12,11 @@ T:Cat.Api.Client.CatApiCall|CatApiCall.md|CatApiCall
 P:Cat.Api.Client.CatApiException.StatusCode|CatApiException.StatusCode.md|StatusCode
 P:Cat.Api.Client.CatApiException.Response|CatApiException.Response.md|Response
 P:Cat.Api.Client.CatApiException.Headers|CatApiException.Headers.md|Headers
+P:Cat.Api.Client.CatApiException.ResultObject|CatApiException.ResultObject.md|ResultObject
 M:Cat.Api.Client.CatApiException.#ctor(System.String,System.Int32,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IEnumerable{System.String}},System.Exception)|CatApiException..ctor.1G0QMZBOCX3YHJS31RJO8NL0F.md|CatApiException(string, int, string, IReadOnlyDictionary<string,IEnumerable<string>>, Exception)
 T:Cat.Api.Client.CatApiException|CatApiException.md|CatApiException
 P:Cat.Api.Client.CatApiException`1.Result|CatApiException_TResult_.Result.md|Result
+P:Cat.Api.Client.CatApiException`1.ResultObject|CatApiException_TResult_.ResultObject.md|ResultObject
 M:Cat.Api.Client.CatApiException`1.#ctor(System.String,System.Int32,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IEnumerable{System.String}},`0,System.Exception)|CatApiException_TResult_..ctor.YR6XG7BA4V3UL8ZAC8AYJ5FQE.md|CatApiException(string, int, string, IReadOnlyDictionary<string,IEnumerable<string>>, TResult, Exception)
 T:Cat.Api.Client.CatApiException`1|CatApiException_TResult_.md|CatApiException<TResult>
 P:Cat.Api.Client.CatErrorResponse.Type|CatErrorResponse.Type.md|Type

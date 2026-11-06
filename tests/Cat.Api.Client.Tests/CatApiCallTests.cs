@@ -70,6 +70,25 @@ public class CatApiCallTests
         Assert.That(error.Arguments, Is.EqualTo(new object?[] { "b1", 3L, true, null }));
     }
 
+    [Test]
+    public async Task ABodyThatTheGeneratedClientHasRead_IsFoundInTheModel()
+    {
+        // A generated client keeps no body text for a body it could read. It only keeps the model.
+        var model = new CatErrorResponse
+        {
+            CatErrors = [new CatErrorResponseItem { Code = "CAT-CTL-1001", Message = "Book {BookId} does not exist.", Arguments = ["b1"] }],
+        };
+
+        var response = await CatApiCall.ExecuteAsync<int>(
+            () => throw new CatApiException<CatErrorResponse>("Not Found", 404, string.Empty, NoHeaders, model, null),
+            ServiceName);
+
+        var error = response.ErrorList.Single();
+        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.NotFound>());
+        Assert.That(error.Code, Is.EqualTo("CAT-CTL-1001"));
+        Assert.That(error.Arguments, Is.EqualTo(new object?[] { "b1" }));
+    }
+
     [TestCase(null)]
     [TestCase("")]
     [TestCase("not json")]

@@ -39,4 +39,10 @@ public class CatApiException : Exception
 
     /// <summary>The headers of the answer.</summary>
     public IReadOnlyDictionary<string, IEnumerable<string>> Headers { get; }
+
+    /// <summary>
+    /// The error body the generated client already read into its own model, or <c>null</c> when it did not.
+    /// A generated client keeps no body text for a body it can read, so <see cref="CatApiCall"/> uses this to find the errors.
+    /// </summary>
+    public virtual object? ResultObject => null;
 }

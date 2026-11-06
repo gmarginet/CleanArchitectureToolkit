@@ -32,4 +32,7 @@ public class CatApiException<TResult> : CatApiException
 
     /// <summary>The body of the answer, read into the generated model.</summary>
     public TResult Result { get; }
+
+    /// <inheritdoc />
+    public override object? ResultObject => Result;
 }

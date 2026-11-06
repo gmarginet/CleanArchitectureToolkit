@@ -39,6 +39,7 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Methods | |
 | :--- | :--- |
+| [BodyOf\(CatApiException\)](CatApiCall.BodyOf.DH1XZGHU2W1DIO1VDKRZ56B9.md 'Cat\.Api\.Client\.CatApiCall\.BodyOf\(Cat\.Api\.Client\.CatApiException\)') | Gets the body of a failed answer as JSON text\. A generated client keeps the text only for a body it could not read, so a body that it did read comes back from the model it was read into\. |
 | [ExecuteAsync\(Func&lt;Task&gt;, string, CancellationToken\)](CatApiCall.ExecuteAsync.md#Cat.Api.Client.CatApiCall.ExecuteAsync(System.Func_System.Threading.Tasks.Task_,string,System.Threading.CancellationToken) 'Cat\.Api\.Client\.CatApiCall\.ExecuteAsync\(System\.Func\<System\.Threading\.Tasks\.Task\>, string, System\.Threading\.CancellationToken\)') | Runs a call that returns nothing\. |
 | [ExecuteAsync&lt;TResponse&gt;\(Func&lt;Task&lt;TResponse&gt;&gt;, string, CancellationToken\)](CatApiCall.ExecuteAsync.md#Cat.Api.Client.CatApiCall.ExecuteAsync_TResponse_(System.Func_System.Threading.Tasks.Task_TResponse__,string,System.Threading.CancellationToken) 'Cat\.Api\.Client\.CatApiCall\.ExecuteAsync\<TResponse\>\(System\.Func\<System\.Threading\.Tasks\.Task\<TResponse\>\>, string, System\.Threading\.CancellationToken\)') | Runs a call that returns a value\. |
 | [Fail&lt;TResponse&gt;\(Exception, string\)](CatApiCall.Fail.Z5NPCRK1AV9XQ5EIO9BRLVAW3.md 'Cat\.Api\.Client\.CatApiCall\.Fail\<TResponse\>\(System\.Exception, string\)') | |

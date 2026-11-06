@@ -77,7 +77,7 @@ public static class CatApiCall
             return CatResponse.InternalServerError<TResponse>(Unexpected(serviceName));
         }
 
-        var errors = ReadErrors(apiException.Response);
+        var errors = ReadErrors(BodyOf(apiException));
         if (errors.Length == 0)
         {
             errors = [Unexpected(serviceName)];
@@ -92,6 +92,20 @@ public static class CatApiCall
             case 409: return CatResponse.Conflict<TResponse>(errors);
             default: return CatResponse.InternalServerError<TResponse>(errors);
         }
+    }
+
+    /// <summary>
+    /// Gets the body of a failed answer as JSON text. A generated client keeps the text only for a body it could not read,
+    /// so a body that it did read comes back from the model it was read into.
+    /// </summary>
+    private static string? BodyOf(CatApiException exception)
+    {
+        if (!string.IsNullOrWhiteSpace(exception.Response) || exception.ResultObject == null)
+        {
+            return exception.Response;
+        }
+
+        return JsonSerializer.Serialize(exception.ResultObject, exception.ResultObject.GetType());
     }
 
     private static ICatError Unexpected(string serviceName)

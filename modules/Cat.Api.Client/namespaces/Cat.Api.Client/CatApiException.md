@@ -49,4 +49,5 @@ Derived
 | :--- | :--- |
 | [Headers](CatApiException.Headers.md 'Cat\.Api\.Client\.CatApiException\.Headers') | The headers of the answer\. |
 | [Response](CatApiException.Response.md 'Cat\.Api\.Client\.CatApiException\.Response') | The body of the answer as text, or `null` when it has none\. |
+| [ResultObject](CatApiException.ResultObject.md 'Cat\.Api\.Client\.CatApiException\.ResultObject') | The error body the generated client already read into its own model, or `null` when it did not\. A generated client keeps no body text for a body it can read, so [CatApiCall](CatApiCall.md 'Cat\.Api\.Client\.CatApiCall') uses this to find the errors\. |
 | [StatusCode](CatApiException.StatusCode.md 'Cat\.Api\.Client\.CatApiException\.StatusCode') | The HTTP status code of the answer\. |

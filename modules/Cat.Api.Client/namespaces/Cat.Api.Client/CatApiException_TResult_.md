@@ -50,3 +50,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 | Properties | |
 | :--- | :--- |
 | [Result](CatApiException_TResult_.Result.md 'Cat\.Api\.Client\.CatApiException\<TResult\>\.Result') | The body of the answer, read into the generated model\. |
+| [ResultObject](CatApiException_TResult_.ResultObject.md 'Cat\.Api\.Client\.CatApiException\<TResult\>\.ResultObject') | The error body the generated client already read into its own model, or `null` when it did not\. A generated client keeps no body text for a body it can read, so [CatApiCall](CatApiCall.md 'Cat\.Api\.Client\.CatApiCall') uses this to find the errors\. |
