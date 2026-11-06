@@ -54,6 +54,20 @@ public class EventSubscriberTests
     }
 
     [Test]
+    public async Task OrderCancelledBecauseInventoryIsUnavailable_ShouldSetTheStatusAndSkipTheRelease()
+    {
+        var orderId = Guid.NewGuid();
+
+        await _eventAggregator.PublishAsync(new OrderCancelledEvent(orderId, "20261105-0003", OrderCancelReasons.StockUnavailable));
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(_commandProcessor.Of<OrderSetStatusCommand>().Single(), Is.EqualTo(new OrderSetStatusCommand(orderId, OrderStatuses.CancelledCode)));
+            Assert.That(_stockReservation.Released, Is.Empty);
+        }
+    }
+
+    [Test]
     public async Task OrderCancelled_ShouldSetTheStatusToCancelledAndReleaseTheStock()
     {
         var orderId = Guid.NewGuid();

@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Http.Resilience;
 
 namespace Cat.Demo.OrderService.Infrastructure.Extensions;
 
@@ -65,7 +66,8 @@ public static class ServiceCollectionExtensions
             services.AddHttpContextAccessor();
             services.TryAddTransient<ForwardBearerTokenHandler>();
             services.AddCatApiClient<IPaymentClient, PaymentClient>("https+http://gateway")
-                .AddHttpMessageHandler<ForwardBearerTokenHandler>();
+                .AddHttpMessageHandler<ForwardBearerTokenHandler>()
+                .UseFastFailResilience();
             services.AddScoped<IPaymentProvider, PaymentServiceProvider>();
         }
         else
@@ -89,7 +91,8 @@ public static class ServiceCollectionExtensions
             services.AddHttpContextAccessor();
             services.TryAddTransient<ForwardBearerTokenHandler>();
             services.AddCatApiClient<IInventoryClient, InventoryClient>("https+http://gateway")
-                .AddHttpMessageHandler<ForwardBearerTokenHandler>();
+                .AddHttpMessageHandler<ForwardBearerTokenHandler>()
+                .UseFastFailResilience();
             services.AddScoped<IStockReservation, InventoryStockReservation>();
         }
         else
@@ -98,5 +101,29 @@ public static class ServiceCollectionExtensions
         }
 
         return services;
+    }
+
+    /// <summary>
+    /// Replaces the standard resilience handler of a client that a person waits for while an order is placed.
+    /// With the defaults, a service that is down makes the order wait about 50 seconds, and the gateway gives up after 30.
+    /// Here one retry is enough, because the calls are safe to repeat: the order number is the key. One try takes at most 5 seconds,
+    /// and the whole call at most 12, so Orders answers well before the gateway does.
+    /// The default handler of the ServiceDefaults is removed first, so the client has only this one.
+    /// </summary>
+    private static IHttpClientBuilder UseFastFailResilience(this IHttpClientBuilder clientBuilder)
+    {
+        // Marked experimental by Microsoft, but it is the supported way to drop the default handler.
+#pragma warning disable EXTEXP0001
+        clientBuilder.RemoveAllResilienceHandlers();
+#pragma warning restore EXTEXP0001
+        clientBuilder.AddStandardResilienceHandler(options =>
+        {
+            options.Retry.MaxRetryAttempts = 1;
+            options.Retry.Delay = TimeSpan.FromMilliseconds(500);
+            options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(5);
+            options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(12);
+        });
+
+        return clientBuilder;
     }
 }

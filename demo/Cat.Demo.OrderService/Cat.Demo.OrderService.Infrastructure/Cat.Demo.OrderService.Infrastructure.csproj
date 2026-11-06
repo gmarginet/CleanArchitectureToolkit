@@ -17,6 +17,7 @@
     <ItemGroup>
       <!-- The shared framework also brings Microsoft.Extensions.Http and the dependency injection abstractions. -->
       <FrameworkReference Include="Microsoft.AspNetCore.App" />
+      <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
     </ItemGroup>
 
 </Project>
