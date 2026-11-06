@@ -30,6 +30,7 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 - A module splits into an `Abstractions` project, the implementation and optional parts such as decorators. The core of a service only references abstractions.
 - Modules never depend on Aspire or on the demo `ServiceDefaults`.
 - Sharing the `Contracts` project of a service is the developer's choice, not a rule.
+- Module projects target `netstandard2.0` as much as possible. A project that needs more, such as one that uses ASP.NET Core or EF Core, targets the latest stable .NET. Check this when you add a project.
 - A shared abstraction lives in the `Abstractions` project of the module that owns it, such as `ICatUser` in `Cat.Authorization.Abstractions`.
 
 ## Environment Constraints
