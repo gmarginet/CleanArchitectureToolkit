@@ -58,7 +58,7 @@
                                                                    "claim.name":  "roles",
                                                                    "multivalued":  "true",
                                                                    "jsonType.label":  "String",
-                                                                   "id.token.claim":  "false",
+                                                                   "id.token.claim":  "true",
                                                                    "access.token.claim":  "true"
                                                                }
                                                 }
