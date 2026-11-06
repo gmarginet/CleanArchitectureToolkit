@@ -25,7 +25,7 @@
 # Plans for Cat.Api.Gateway
 
 The single front door of an application: it routes the calls of clients and services to the right service and checks the token in one place.  
-Status: not started. The design is decided and YARP is confirmed. The build can start.
+Status: in development. The module is built and tested. The demo gateway does not use it yet.
 
 ## Contents
 
