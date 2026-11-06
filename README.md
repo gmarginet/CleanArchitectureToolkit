@@ -91,6 +91,7 @@ Some modules depend on other modules, in the documentation of each module you ca
 
 | Module | | Description | Plans |
 |--------|--------|-------------|-------|
+| [Cat.Api.Client](./modules/Cat.Api.Client/README.md) | [![In development](https://img.shields.io/badge/status-in%20development-orange)](#module-overview) | Call another service through the API gateway with a typed client, and get the outcome back as a response. | [Plans](./plans/Cat.Api.Client.md) |
 | [Cat.Api.Gateway](./modules/Cat.Api.Gateway/README.md) | | The single front door of an application. It routes the calls of clients and services to the right service, checks the token in one place and builds on YARP. | |
 | [Cat.Commands](./modules/Cat.Commands/README.md) | | Change state through one entry point. Describe a change as a command, write one handler for it, and let the processor find the handler. | [Plans](./plans/Cat.Commands.md) |
 | [Cat.Decorators](./modules/Cat.Decorators/README.md) | | Wrap handlers in decorators for cross-cutting work like logging, validation or tracing. | [Plans](./plans/Cat.Decorators.md) |
@@ -394,7 +395,6 @@ They are ideas to support the application architecture and the service project s
 | [Cat.EventProcessor](./plans/Cat.EventProcessor.md) | Worker support that turns incoming messages into service requests. |
 | [Cat.Scheduling](./plans/Cat.Scheduling.md) | Worker support that turns schedules into service requests. |
 | [Cat.Sagas](./plans/Cat.Sagas.md) | Long running workflows that send a message, wait for the answer and carry on. |
-| [Cat.Api.Client](./plans/Cat.Api.Client.md) | Typed API clients that call other services through the API gateway. |
 | [Cat.Dapper](./plans/Cat.Dapper.md) | Base query and command handlers for Dapper, including bulk operations. |
 | [Cat.Auditing](./plans/Cat.Auditing.md) | Records who changed what and when. |
 | [Cat.Caching](./plans/Cat.Caching.md) | A caching decorator for queries. |
