@@ -77,6 +77,15 @@ describe('BookListPage', () => {
     expect(useBooks).toHaveBeenLastCalledWith({ text: 'dune', categoryId: '' })
   })
 
+  it('shows the search text of the address in the search box', () => {
+    vi.mocked(useBooks).mockReturnValue(answer({ isSuccess: true, data: books }))
+
+    renderPage('/?text=clean')
+
+    expect(screen.getByRole('searchbox', { name: 'Search' })).toHaveValue('clean')
+    expect(useBooks).toHaveBeenLastCalledWith({ text: 'clean', categoryId: '' })
+  })
+
   it('filters by category', async () => {
     vi.mocked(useBooks).mockReturnValue(answer({ isSuccess: true, data: books }))
     renderPage()

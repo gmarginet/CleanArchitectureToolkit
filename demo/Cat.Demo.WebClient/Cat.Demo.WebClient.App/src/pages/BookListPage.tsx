@@ -10,7 +10,10 @@ export function BookListPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const text = searchParams.get('text') ?? ''
   const categoryId = searchParams.get('category') ?? ''
-  const [draft, setDraft] = useState(text)
+  // What the person is typing. Without a draft the box shows the text of the address, so it follows the address
+  // when the page is reached by a link, a back button or the return from the login.
+  const [draft, setDraft] = useState<string>()
+  const typed = draft ?? text
 
   const books = useBooks({ text, categoryId })
   const categories = useCategories()
@@ -32,12 +35,13 @@ export function BookListPage() {
         className={styles.search}
         onSubmit={(event) => {
           event.preventDefault()
-          update({ text: draft.trim() })
+          update({ text: typed.trim() })
+          setDraft(undefined)
         }}
       >
         <label>
           Search
-          <input type="search" value={draft} onChange={(event) => setDraft(event.target.value)} />
+          <input type="search" value={typed} onChange={(event) => setDraft(event.target.value)} />
         </label>
         <label>
           Category

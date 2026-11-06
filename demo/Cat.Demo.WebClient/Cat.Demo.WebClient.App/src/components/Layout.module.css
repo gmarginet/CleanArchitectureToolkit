@@ -19,3 +19,20 @@
   margin: 0 auto;
   padding: 1rem;
 }
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user {
+  font-weight: 600;
+}
+
+.loginError {
+  max-width: 60rem;
+  margin: 0.5rem auto;
+  padding: 0 1rem;
+  color: #c0392b;
+}
