@@ -52,7 +52,7 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 ### Plans
 The `plans/` folder holds the plans we make before we build.
 
-- `Demo.md` and `DemoAspire.md` are the plans of the demo.
+- `Demo.md` is the plan of the demo.
 - Every future module has a plan named after the module, such as `Cat.Messaging.md`. An existing module gets one too when it has future work, such as `Cat.EFCore.md`.
 - The main title of a module plan is `Plans for <ModuleName>`.
 - A module plan has at least these chapters: `The idea`, `Decisions and open questions` (with `Decided` and `Open`) and `Questions before building`. `What we already know` is expected. `Demo.md` is the example.

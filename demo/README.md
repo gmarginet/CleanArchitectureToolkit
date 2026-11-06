@@ -304,7 +304,7 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 - The first start pulls a SQL Server image of about 1.5 GB, and the Keycloak image.
 - It is one more thing to learn.
 
-**More.** `demo/Cat.Demo.AppHost`. [DemoAspire.md](../plans/DemoAspire.md).
+**More.** `demo/Cat.Demo.AppHost`.
 ### API Gateway
 
 **Status:** Built
@@ -480,6 +480,7 @@ erDiagram
   6. Confirm the order.
 - Confirmed and cancelled are events. Subscribers set the status, write an audit record and release the stock.
 - Stock, price and payment sit behind interfaces: `IStockReservation`, `IPriceProvider` and `IPaymentProvider`. A fake answers for stock. For prices, `CatalogPriceProvider` calls `GET /catalog/books/prices` over HTTP when the host gives Orders an address for Catalog, as the AppHost does. Without it, `FakePriceProvider` answers. For payments, `PaymentServiceProvider` calls the payment service the same way, and `FakePaymentProvider` answers without an address.
+- `CatalogPriceProvider` maps the answers of Catalog. A 200 gives the prices and a 404 becomes `PriceUnavailable`. Any other status, a network error or a timeout becomes an error response, because Orders never trusts a half answer. The resilience handler adds retries and a circuit breaker. Catalog reads are public, so the call sends no token. The unit tests use a fake `HttpMessageHandler`, so they need no database and no running service.
 - `ICurrentUser` tells the core service who is calling. With a login it reads the claims of the token (`sub`, `name`, `email` and the `admin` role). Without one, a development stub reads the `X-Demo-User` header. Orders of other users come back as not found.
 - Order numbers come from a `DailyOrderCounter` table, increased in one atomic statement in the same transaction that saves the order.
 

@@ -96,6 +96,6 @@ From the module conventions:
 5. Where does retry live: `ServiceDefaults`, `Cat.Resilience` or this module?
 6. How does a client find the gateway outside Aspire?
 7. Do we need versioned APIs in the first version?
-8. Should the first release wait until Orders has used `CatalogPriceProvider` for a while, as the Aspire plan suggests?
+8. Should the first release wait until Orders has used `CatalogPriceProvider` for a while? The idea is to build the module from that working code and not up front.
 9. Is it enough for the module to cover GET and POST with JSON, or do we need file uploads and streaming?
 10. Do we also want a `Cat.Api.Client` flavor for the React client, or is that out of scope?

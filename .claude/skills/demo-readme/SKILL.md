@@ -6,7 +6,7 @@ argument-hint: "[what changed in the demo, or leave empty to resync]"
 
 # Demo readme
 
-`demo/README.md` is the front door of the demo. It must always describe the demo as it is now, not as planned. The plans live in `plans/Demo.md` and `plans/DemoAspire.md`.
+`demo/README.md` is the front door of the demo. It must always describe the demo as it is now, not as planned. The plan lives in `plans/Demo.md`.
 
 ## Chapters of demo/README.md
 Keep this order. Each chapter below the table of contents has a table of contents entry.

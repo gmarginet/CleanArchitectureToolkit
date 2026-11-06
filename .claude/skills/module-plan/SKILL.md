@@ -6,7 +6,7 @@ argument-hint: "[create|update|check] [ModuleName] [what changed]"
 
 # Module plans
 
-A module plan collects what we know about a module before it is built. It holds the idea, the decisions, the open questions and the questions to ask the owner. The plans of the demo (`Demo.md`, `DemoAspire.md`) are free-form and are not covered by this skill. The `demo-readme` skill covers the demo.
+A module plan collects what we know about a module before it is built. It holds the idea, the decisions, the open questions and the questions to ask the owner. The plan of the demo (`Demo.md`) is free-form and is not covered by this skill. The `demo-readme` skill covers the demo.
 
 ## Rules for a plan
 - File: `plans/<ModuleName>.md`, named exactly like the module. An existing module gets a plan too when it has future work.
@@ -29,7 +29,7 @@ A module plan collects what we know about a module before it is built. It holds 
 ## Where the facts come from
 Read these before you write, and search them for the module name:
 - the root `README.md`: the application architecture, the service project structure and the module tables,
-- `plans/Demo.md` and `plans/DemoAspire.md`, and the other module plans,
+- `plans/Demo.md`, and the other module plans,
 - the readmes of the existing modules that the new one touches,
 - the demo code in `demo/`, with the Roslyn tools for symbols and references.
 

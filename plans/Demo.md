@@ -70,14 +70,14 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 | Customers | `Customer` stays in Orders, with an `ExternalId` that holds the `sub` claim of the token. No customer endpoints. `PlaceOrder` finds or creates the customer from the token. |
 | Current user | The business logic only knows `ICurrentUser`. Orders is built against it first, with a development stub. The real implementation reads the claims of the token and is used when `Authentication:Authority` is set, which the AppHost does. A plain `dotnet run` keeps the stub. The interface moves to `Cat.Authorization.Abstractions` and is renamed `ICatUser` when that project exists. Until then the demo keeps `ICurrentUser`. See [Cat.Authorization.md](Cat.Authorization.md). |
 | Scope of the first Orders build | Core plus FluentWorkflows and EventAggregators. The place order workflow runs with `IStockReservation` and `IPaymentProvider`, both with a fake behind them. Orders keeps its state in the order status. A saga style payment over messages comes later, see [Cat.Sagas.md](Cat.Sagas.md). |
-| Unit price | The client sends only `BookId` and `Quantity`. Orders asks `IPriceProvider` for the current price of each book and stores it in `OrderLine.UnitPrice`. Under the AppHost, `CatalogPriceProvider`, a plain `HttpClient` implementation, calls the price endpoint of Catalog. Without the AppHost a fake answers. The `Cat.Api.Client` module replaces it in the future. See [DemoAspire.md](DemoAspire.md). |
+| Unit price | The client sends only `BookId` and `Quantity`. Orders asks `IPriceProvider` for the current price of each book and stores it in `OrderLine.UnitPrice`. Under the AppHost, `CatalogPriceProvider`, a plain `HttpClient` implementation, calls the price endpoint of Catalog. Without the AppHost a fake answers. The `Cat.Api.Client` module replaces it in the future. |
 | Payment provider | A separate demo service, `Cat.Demo.PaymentService`, with no database. Orders connects to it over HTTP, so retry and circuit breaker have a real call to protect. The service takes payments by the same rules as `FakePaymentProvider` and can be made to fail on purpose. A setting of the service switches the failures on, not a header or a query value of the call. The in-process `FakePaymentProvider` stays for a plain `dotnet run`, the way `FakePriceProvider` does. The box in the architecture drawing is solid since the service exists. |
 | Payment failures | The `PaymentFailures` section of the service holds three settings: `Latency` (a delay before every answer), `ErrorPercentage` (the share of calls from 0 to 100 that fail after the payment is already taken) and `Outage` (every call fails at once and nothing is taken). All are off by default. The service reads them again when they change. The AppHost passes `Payment:Latency`, `Payment:ErrorPercentage` and `Payment:Outage` from its own configuration. |
 | Unreachable payment service | When Orders cannot get an answer, after the retries, on a timeout or with an open circuit, it cancels the order with the reason `PaymentUnavailable` and the error `CAT-ORD-1006`, like a declined payment. It answers 400, as every failure of the place order workflow does. No payment is saved, because nothing was decided. The stock reservation is released by the cancelled event. |
 | Double charge | The order number is the idempotency key. The payment service remembers the answer per order number in memory and gives the same answer to a retry. A failure from `ErrorPercentage` comes after the charge on purpose, so the retry shows that nothing is charged twice. |
 | Payment service stays simple | The payment service is fake, so it stays as it is. It has no login, because Orders calls it directly and a fake has nothing to protect. A failure setting is changed in the configuration and needs a restart of the AppHost, with no development endpoint to switch it. Orders keeps its own small model of the payment request and answer and does not reference the payment service. The calls of a real payment provider would need a login, and then Orders would use a client credentials token, as `Cat.Api.Client` plans. |
 | Payment port and wiring | Port 5103. Orders finds it through service discovery, `services:payment:*`, like Catalog. Without that setting a plain `dotnet run` uses `FakePaymentProvider`. |
-| SQL Server mode | The AppHost supports two modes, switched by a setting: a SQL Server container, or an existing instance through connection strings. Docker is not required to run the demo. Both modes are built, `Existing` first. See [DemoAspire.md](DemoAspire.md). |
+| SQL Server mode | The AppHost supports two modes, switched by a setting: a SQL Server container, or an existing instance through connection strings. Docker is not required to run the demo. Both modes are built, `Existing` first. The AppHost reads `Sql:Mode`, with `Container` as the default. |
 | Counter cleanup | The `CleanUpOrderCounters` service request deletes the rows of earlier days and creates the row of today. The Scheduler will run it nightly. Until the Scheduler exists, a development only endpoint triggers it. |
 | Currency | One currency, euro, to keep the demo simple. |
 | Sharing contracts | A choice per connection, as the root readme describes. React client to gateway: not shared. Orders to Catalog: not shared. A later service to service call: shared, so the demo shows both. See [Sharing contracts](#sharing-contracts). |
@@ -91,6 +91,7 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 - **Roadmap order.** Do you confirm the order of the [roadmap](#roadmap)? In particular: the gateway and login before the React client, and Inventory before messaging.
 - **Gateway and the module.** Decided: the gateway is built on YARP and the demo gateway `Cat.Demo.Api.Gateway` uses the module from the start. See the [readme of the module](../modules/Cat.Api.Gateway/README.md).
 - **Stock call.** Until messaging exists, Orders reserves stock with an HTTP call to Inventory. Does that call share the `Contracts` of Inventory? It is the candidate for the shared choice in [Sharing contracts](#sharing-contracts).
+- **Development certificate.** The dashboard says "No trusted development certificate was found" when the machine has not run `dotnet dev-certs https --trust`. It is harmless now, because the AppHost, the dashboard and the services all run on HTTP. It matters once something uses HTTPS. Do the run steps of the demo readme then tell a developer to trust the certificate, and does the AppHost keep `ASPIRE_ALLOW_UNSECURED_TRANSPORT`?
 - **Resilience in the demo.** [Aspire ServiceDefaults](#aspire-servicedefaults) says the demo does not use `Cat.Resilience`, because ServiceDefaults covers it. The roadmap shows the resilience story with the ServiceDefaults handler. When does the demo use `Cat.Resilience`: never, or in a part that runs without Aspire?
 
 ## Services
@@ -184,7 +185,7 @@ Aspire and Docker are also a good way for the owner to learn both.
 
 #### What the AppHost does
 
-One `AppHost` project in `demo/` describes the whole system. [DemoAspire.md](DemoAspire.md) has the build order.
+One `AppHost` project in `demo/` describes the whole system.
 
 - A SQL Server container with a volume, so data survives restarts.
 - One database per service: `catalog`, `orders` and `inventory`.
@@ -507,7 +508,7 @@ Done:
 - Catalog tracing: the `ActivitySource` decorator runs on the Catalog requests.
 - Catalog OpenAPI price type: `price` is a plain nullable number, because the JSON options no longer read numbers from strings.
 - Catalog duplicate ISBN race: `BookSaveCommandHandler` catches the unique index error and returns the `CAT-CTL-1000` response. Tried with 12 parallel saves of the same new ISBN on a local SQL Server: one saved, eleven bad requests, no 500. There is no automated test for it, because the unit tests do not use a database.
-- Aspire AppHost built in the phases of [DemoAspire.md](DemoAspire.md): ServiceDefaults, the AppHost in `Existing` mode, the `HttpClient` price provider and the `Container` mode. A fresh start from an empty volume and a restart that keeps the data were tried. The readme of the demo has the run steps for both modes and the Docker memory notes.
+- Aspire AppHost built in phases: ServiceDefaults, the AppHost in `Existing` mode, the `HttpClient` price provider and the `Container` mode. A fresh start from an empty volume and a restart that keeps the data were tried. The readme of the demo has the run steps for both modes and the Docker memory notes.
 
 - Gateway and login (stage 2): `Cat.Demo.Api.Gateway` on the `Cat.Api.Gateway` module, Keycloak in the AppHost with an imported realm, JWT validation in Catalog and Orders, and `TokenCurrentUser` for Orders. Tried against the running AppHost: 401 without a token, Bob does not see the orders of Alice, an admin sees them, catalog reads are public and only an admin saves a book. The `.http` files log in and call the gateway.
 
@@ -515,7 +516,7 @@ Done:
 
 To do:
 
-1. Add the next block of the demo architecture. The order is in the sections above, and the open points of the AppHost are in [DemoAspire.md](DemoAspire.md#open-questions).
+1. Add the next block of the demo architecture. The order is in the sections above.
 2. Handle the known gaps of Orders and Catalog below. The remaining ones wait for the authentication phase, `Cat.Localizations` or the saga work.
 
 ### Known gaps in Orders
