@@ -84,7 +84,7 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 ### Open
 
 - **Roadmap order.** Do you confirm the order of the [roadmap](#roadmap)? In particular: the gateway and login before the React client, and Inventory before messaging.
-- **Gateway technology.** The gateway is the module `Cat.Api.Gateway`. Is it built on YARP or on a router of our own, and does the demo gateway use the module from the start? See the open questions of [Cat.Api.Gateway.md](Cat.Api.Gateway.md).
+- **Gateway and the module.** The gateway is built on YARP, if it fits, see [Cat.Api.Gateway.md](Cat.Api.Gateway.md). Does the demo gateway `Cat.Demo.Api.Gateway` use the module from the start?
 - **Stock call.** Until messaging exists, Orders reserves stock with an HTTP call to Inventory. Does that call share the `Contracts` of Inventory? It is the candidate for the shared choice in [Sharing contracts](#sharing-contracts).
 - **Resilience in the demo.** [Aspire ServiceDefaults](#aspire-servicedefaults) says the demo does not use `Cat.Resilience`, because ServiceDefaults covers it. The roadmap shows the resilience story with the ServiceDefaults handler. When does the demo use `Cat.Resilience`: never, or in a part that runs without Aspire?
 - **Payment service failures.** Which failures can the setting switch on: latency, a share of random errors, a full outage? Which values does it take?
