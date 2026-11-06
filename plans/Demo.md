@@ -68,7 +68,7 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 | Authentication | OpenID Connect with Keycloak, started by the AppHost with an imported realm and seeded users. See [Authentication and authorization](#authentication-and-authorization). |
 | Authorization | The gateway and the services validate the same JWT. Services authorize on the claims. Catalog reads are public, Orders needs a login. |
 | Customers | `Customer` stays in Orders, with an `ExternalId` that holds the `sub` claim of the token. No customer endpoints. `PlaceOrder` finds or creates the customer from the token. |
-| Current user | The business logic only knows `ICurrentUser`. Orders is built against it first, with a development stub. Keycloak and the real implementation come with the gateway. The interface moves to `Cat.Authorization.Abstractions` and is renamed `ICatUser` when that project exists. Until then the demo keeps `ICurrentUser`. See [Cat.Authorization.md](Cat.Authorization.md). |
+| Current user | The business logic only knows `ICurrentUser`. Orders is built against it first, with a development stub. The real implementation reads the claims of the token and is used when `Authentication:Authority` is set, which the AppHost does. A plain `dotnet run` keeps the stub. The interface moves to `Cat.Authorization.Abstractions` and is renamed `ICatUser` when that project exists. Until then the demo keeps `ICurrentUser`. See [Cat.Authorization.md](Cat.Authorization.md). |
 | Scope of the first Orders build | Core plus FluentWorkflows and EventAggregators. The place order workflow runs with `IStockReservation` and `IPaymentProvider`, both with a fake behind them. Orders keeps its state in the order status. A saga style payment over messages comes later, see [Cat.Sagas.md](Cat.Sagas.md). |
 | Unit price | The client sends only `BookId` and `Quantity`. Orders asks `IPriceProvider` for the current price of each book and stores it in `OrderLine.UnitPrice`. Under the AppHost, `CatalogPriceProvider`, a plain `HttpClient` implementation, calls the price endpoint of Catalog. Without the AppHost a fake answers. The `Cat.Api.Client` module replaces it in the future. See [DemoAspire.md](DemoAspire.md). |
 | Payment provider | A separate demo service, `Cat.Demo.PaymentService`, with no database. Orders connects to it over HTTP, so retry and circuit breaker have a real call to protect. The service takes payments by the same rules as `FakePaymentProvider` and can be made to fail on purpose. A setting of the service switches the failures on, not a header or a query value of the call. The in-process `FakePaymentProvider` stays for a plain `dotnet run`, the way `FakePriceProvider` does. The box in the architecture drawing stays hatched until the service exists. |
@@ -105,7 +105,7 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 
 ![Architecture](../resources/schemas/CatDemoArchitecture.excalidraw.svg)
 
-- Clients only talk to the API gateway. The gateway is planned for later.
+- Clients only talk to the API gateway. The gateway is built. The React client is not, so the `.http` files call the gateway for now.
 - Services call each other through the gateway, and publish messages on the Service Bus.
 - Every service has its own database in the SQL Server container.
 - Aspire ServiceDefaults gives every service telemetry, health checks and resilience.
@@ -189,7 +189,8 @@ One `AppHost` project in `demo/` describes the whole system. [DemoAspire.md](Dem
 - One database per service: `catalog`, `orders` and `inventory`.
 - The .NET services.
 - The React app.
-- Later, the gateway, Keycloak and the Service Bus emulator.
+- The gateway and Keycloak.
+- Later, the Service Bus emulator.
 
 Aspire passes connection strings and service URLs to each project. Nobody edits config files.
 
@@ -247,8 +248,8 @@ Service to service calls forward the same token. Work without a user, such as th
 
 **Staging**
 
-1. Now: Orders is built with `ICurrentUser` and the owner filter in the queries. In `Development` the Api uses a stub that knows three demo users (`alice`, `bob` and `admin`) and picks one with the `X-Demo-User` header. The unit tests fake `ICurrentUser`.
-2. With the gateway: add Keycloak to the AppHost, JWT validation in the services, the real `ICurrentUser` and the login in the React app. Orders does not change.
+1. Orders is built with `ICurrentUser` and the owner filter in the queries. Without a configured authority, the Api uses a stub that knows three demo users (`alice`, `bob` and `admin`) and picks one with the `X-Demo-User` header. The unit tests fake `ICurrentUser`.
+2. With the gateway (done): Keycloak in the AppHost, JWT validation in the services and the real `ICurrentUser`. The user ids in the realm are `alice`, `bob` and `admin`, so the token `sub` matches the seeded data. The login in the React app comes with the client. Orders does not change.
 
 ### Events and interfaces
 

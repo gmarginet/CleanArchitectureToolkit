@@ -25,7 +25,7 @@
 # Plans for Cat.Api.Gateway
 
 The single front door of an application: it routes the calls of clients and services to the right service and checks the token in one place.  
-Status: in development. The module is built and tested. The demo gateway does not use it yet.
+Status: in development. The module is built and tested, and the demo gateway `Cat.Demo.Api.Gateway` uses it.
 
 ## Contents
 

@@ -57,7 +57,8 @@ What you can do today:
 - **Get an order number.** Every order gets a number like `20261105-0001`. The date is the day of the order. The counter starts again every day.
 - **Follow your orders.** See a list of your orders and open one to see its lines, its total and its status.
 - **Cancel an order.** Change your mind after ordering and cancel it.
-- **Stay private.** A customer only sees their own orders. An admin sees all of them.
+- **Log in.** Alice, Bob and the admin each have an account. You need to be logged in to place or follow orders. Anyone can browse the catalog without a login.
+- **Stay private.** A customer only sees their own orders. An admin sees all of them. Only an admin can add or change a book.
 
 What the shop does when something goes wrong:
 
@@ -70,12 +71,12 @@ What comes later:
 
 - A real stock service that keeps the stock levels.
 - Emails when an order is confirmed or shipped.
-- A web shop to click through, with a login.
+- A web shop to click through, with a login screen.
 - Nightly jobs, such as cancelling orders that are not paid.
 
 ## Architecture
 
-The demo is a small system of services, each with its own database. The services are built the same way, with the project structure from the root [README](../README.md#service-project-structure). A client talks to them through an API gateway. Services tell each other about events through a message bus.
+The demo is a small system of services, each with its own database. The services are built the same way, with the project structure from the root [README](../README.md#service-project-structure). A client talks to them through an API gateway, which checks the login. Services tell each other about events through a message bus.
 
 ![Architecture](../resources/schemas/CatDemoArchitecture.excalidraw.svg)
 
@@ -83,12 +84,13 @@ Hatched boxes are not built yet. Solid boxes are. The drawing and the status of 
 
 ### How the pieces fit
 
-- **Clients** only talk to the API gateway. The gateway is planned. Until then you call the services directly.
+- **Clients** only talk to the API gateway. It checks the token, lets the public catalog reads through and forwards the call with the token unchanged. Orders still calls Catalog directly for prices. That call moves to the gateway with `Cat.Api.Client`.
+- **Login.** Keycloak runs as a container and holds the users. The gateway and each service check the token. A service does not trust the network. See [Things to know](#things-to-know).
 - **Services** own their data. A service never reads the database of another service. Where one needs data of another, it asks through an interface. Orders asks Catalog for prices over HTTP when you run through Aspire. Stock and payment are still fakes.
 - **Contracts.** Sharing the contracts of a service is a choice per connection. The React client and the price call from Orders to Catalog keep their own models. A later service to service call will share contracts, so the demo shows both. See [Sharing contracts](../plans/Demo.md#sharing-contracts).
 - **Events** between services will travel over the Service Bus. Inside a service, events stay in memory.
 - **Databases.** Every service has its own SQL Server database.
-- **Aspire** starts everything with one command: the services, SQL Server in a container and the dashboard. You can still start a service on its own.
+- **Aspire** starts everything with one command: the gateway, the services, Keycloak and SQL Server in containers, and the dashboard. You can still start a service on its own.
 
 ### How a request flows through a service
 
@@ -111,12 +113,12 @@ The [building blocks](#building-blocks) explain where each module is used and wh
 
 ## How to run
 
-The main route is the Aspire AppHost. One command starts Catalog, Orders and SQL Server, and opens the dashboard. You can also start one service on its own, see [Run one service](#run-one-service).
+The main route is the Aspire AppHost. One command starts the gateway, Catalog, Orders, Keycloak and SQL Server, and opens the dashboard. You can also start one service on its own, see [Run one service](#run-one-service).
 
 ### Prerequisites
 
 - The .NET SDK that `global.json` asks for.
-- **Docker Desktop** for the default route. SQL Server runs in a container.
+- **Docker Desktop** for the default route. SQL Server and Keycloak run in containers.
 - Or a SQL Server you already have, and no Docker. Temporal tables need SQL Server, so SQLite and PostgreSQL do not work.
 
 ### Run with Aspire
@@ -126,9 +128,9 @@ The main route is the Aspire AppHost. One command starts Catalog, Orders and SQL
    ```
    dotnet run --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost --launch-profile http
    ```
-3. Wait until the dashboard shows `catalog` and `orders` as running. The first start pulls the SQL Server image, about 1.5 GB, so it takes a few minutes.
-4. Open the dashboard at `http://localhost:15101`. It needs no login. It shows the logs, traces, metrics and health checks of both services.
-5. Try the endpoints. Catalog runs on `http://localhost:5101` and Orders on `http://localhost:5102`. Open these files in Visual Studio or Rider and run the requests from top to bottom. Later requests use ids from earlier responses.
+3. Wait until the dashboard shows `gateway`, `catalog` and `orders` as running. The first start pulls the SQL Server and Keycloak images, so it takes a few minutes. Keycloak needs a moment to import the realm.
+4. Open the dashboard at `http://localhost:15101`. It needs no login. It shows the logs, traces, metrics and health checks of the services.
+5. Try the endpoints. The gateway runs on `http://localhost:5100` and is the door for every call. Keycloak runs on `http://localhost:8180`. Open these files in Visual Studio or Rider and run the requests from top to bottom. Run the login requests at the top first. Later requests use ids from earlier responses.
    - `demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api/CatalogRequests.http`
    - `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Api/OrderRequests.http`
 6. Place an order and open its trace in the dashboard. It shows the call from Orders to Catalog for the prices.
@@ -178,7 +180,7 @@ Docker Desktop on Windows runs on WSL2. By default the WSL2 virtual machine can 
 
 ### Run one service
 
-Every service still starts on its own, with its own `appsettings`. It needs a SQL Server that you start yourself, and no Docker is involved. Without the AppHost, Orders uses a fake for prices.
+Every service still starts on its own, with its own `appsettings`. It needs a SQL Server that you start yourself, and no Docker is involved. Without the AppHost, Orders uses a fake for prices, and there is no gateway and no login.
 
 1. Start the Catalog service. First check the connection string in `demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api/appsettings.Development.json`. The default points to the local default instance:
    ```
@@ -198,12 +200,14 @@ Every service still starts on its own, with its own `appsettings`. It needs a SQ
    dotnet run --project demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Api
    ```
    Open `http://localhost:5102`.
-3. Use the `.http` files from the Aspire steps.
+3. Call the services directly on ports 5101 and 5102. The requests in the `.http` files that go through the gateway need the AppHost. Change their host to the service port and remove the `Authorization` line to use them here.
 
 In `Development` both services apply their EF Core migrations at startup. Catalog adds 4 categories and 7 books when its tables are empty. Orders adds the three order statuses.
 ### Things to know
 
-- **No login yet.** The `X-Demo-User` header picks the user: `alice` (the default), `bob` or `admin`. Alice and Bob only see their own orders.
+- **Users.** Keycloak holds three users: `alice`, `bob` and `admin`. The password is the same as the name. Alice and Bob only see their own orders. The admin sees all orders and may save books. The Keycloak admin console at `http://localhost:8180` uses `admin` and `admin`. Use these settings in the demo only.
+- **Tokens.** The `.http` files get a token from Keycloak with the password grant of the client `cat-demo-cli`. The gateway needs a valid token for everything except reading books and categories. The services check the token again, so a call straight to port 5101 or 5102 without a token gets a 401 too.
+- **Run without the AppHost.** Without the setting `Authentication:Authority` a service has no login. Orders then reads the `X-Demo-User` header (`alice` by default, `bob` or `admin`).
 - **Fakes for the other services.** Stock and payment are fakes, because the real services are not built yet.
   - Prices are real under the AppHost, because Orders asks Catalog. Without the AppHost the price of a book is made from its id, between 5.95 and 44.95 euro.
   - A line of more than 50 copies is out of stock.
@@ -212,7 +216,7 @@ In `Development` both services apply their EF Core migrations at startup. Catalo
 
 ### Health checks
 
-Both services answer `/health` (ready) and `/alive` (running) in every environment, with a plain `Healthy` or `Unhealthy`. The AppHost watches `/health` of both.
+The gateway and both services answer `/health` (ready) and `/alive` (running) in every environment, with a plain `Healthy` or `Unhealthy`, and no token is needed. The AppHost watches `/health` of all three. The gateway also calls `/health` of Catalog and Orders and stops sending calls to an instance that fails.
 
 ### Things to know about the dashboard
 
@@ -234,7 +238,8 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 |---|---|---|
 | [React client](#react-client) | Planned | The web shop. |
 | [Aspire AppHost and dashboard](#aspire-apphost-and-dashboard) | Built | Starts the whole system and shows how it runs. |
-| [API Gateway](#api-gateway) | Planned | The one door for clients. |
+| [API Gateway](#api-gateway) | Built | The one door for clients. |
+| [Keycloak](#keycloak) | Built | The identity provider that holds the users and signs the tokens. |
 | [Service Bus emulator](#service-bus-emulator) | Planned | Messages between services. |
 | [Catalog service](#catalog-service) | Built | Books, categories and prices. |
 | [Orders service](#orders-service) | Built | Placing and following orders. |
@@ -274,7 +279,7 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 
 **Status:** Built
 
-**What it is.** One project that describes the system: Catalog, Orders and SQL Server. The Aspire dashboard shows logs, traces, metrics and health checks. The React app, Keycloak and the Service Bus emulator join later.
+**What it is.** One project that describes the system: the gateway, Catalog, Orders, Keycloak and SQL Server. The Aspire dashboard shows logs, traces, metrics and health checks. The React app and the Service Bus emulator join later.
 
 **How it works.**
 - `demo/Cat.Demo.AppHost/Cat.Demo.AppHost` adds the Api project of each service. The services keep their ports, 5101 and 5102, with no Aspire proxy. The dashboard runs on 15101.
@@ -282,6 +287,8 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 - In `Container` mode the AppHost adds a SQL Server container with a named data volume and the databases `catalog` and `orders`. The services wait for their database, and Orders waits for Catalog.
 - The services read `GetConnectionString("catalog")` and `GetConnectionString("orders")` in both modes. They do not know which mode runs.
 - Orders gets the address of Catalog through service discovery. That switches on `CatalogPriceProvider`.
+- Keycloak is a plain container on port 8180. The realm file `keycloak/cat-demo-realm.json` is mounted and imported at the start. The official Aspire Keycloak package is only a preview, so the demo does not use it.
+- The gateway runs on port 5100. It finds Catalog and Orders through service discovery. The AppHost gives the gateway, Catalog and Orders the address of the Keycloak realm.
 - Every service still starts on its own with `dotnet run`. The AppHost is a convenience, not a requirement.
 
 **CAT modules.** None. The AppHost is demo infrastructure. The modules never depend on Aspire.
@@ -293,27 +300,68 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 
 **Cons.**
 - Docker Desktop eats memory. See [Docker memory](#docker-memory) for the limits.
-- The first start pulls a SQL Server image of about 1.5 GB.
+- The first start pulls a SQL Server image of about 1.5 GB, and the Keycloak image.
 - It is one more thing to learn.
 
 **More.** `demo/Cat.Demo.AppHost`. [DemoAspire.md](../plans/DemoAspire.md).
 ### API Gateway
 
-**Status:** Planned
+**Status:** Built
 
-**What it is.** The one door for clients. It validates the token and forwards calls to the services.
+**What it is.** The one door for clients. It checks the token and forwards calls to Catalog and Orders. It holds no business logic. The block is a small host project on top of the `Cat.Api.Gateway` module.
 
-**CAT modules.** Planned: `Cat.Api.Gateway`, a new module. See [its plan](../plans/Cat.Api.Gateway.md).
+**How it works.**
+- `demo/Cat.Demo.Api.Gateway/Cat.Demo.Api.Gateway` is a web project of about twenty lines. It calls `AddCatApiGateway`, adds the Aspire service discovery for YARP, and calls `UseCatApiGateway` and `MapCatApiGateway`.
+- The `CatGateway` section of `appsettings.json` names the services `catalog` and `orders`. The path of a service is its name, so `/catalog/**` goes to Catalog and `/orders/**` goes to Orders. Both services already use that prefix, so `StripPrefix` is off.
+- The AppHost sets the addresses to `http://catalog` and `http://orders`, which service discovery resolves. Without the AppHost the defaults point to ports 5101 and 5102.
+- Catalog lists `GET /books/**` and `GET /categories/**` as public. Everything else needs a token. Saving a book needs a token, and the Catalog service wants the `admin` role on top.
+- The gateway checks that the token comes from the Keycloak realm and has the audience `cat-gateway`. It does not look at roles. It forwards the token unchanged, and the service checks it again.
+- Identity headers a caller sends, such as `X-Demo-User`, never reach a service.
+- The `/health` and `/alive` endpoints of the gateway are mapped with `AllowAnonymous`, because the gateway is closed by default.
+
+**CAT modules.**
+
+| Module | Where | Why |
+|---|---|---|
+| `Cat.Api.Gateway` | The gateway project | Routes, token check, header cleaning and rate limits from configuration. |
+
+The gateway only option of the module is not used in the demo. The services check the token themselves.
 
 **Pros.**
 - Clients know one address.
-- Security checks sit in one place.
+- Adding a service is a few lines of configuration.
+- The token check sits in one place and the services stay safe on their own.
 
 **Cons.**
-- One more hop, and one more thing to run.
+- One more hop and one more process to run.
+- The demo keeps its Keycloak settings in plain text. That is fine for a demo and wrong for production.
 
-**More.** [Decisions in the plan](../plans/Demo.md#decided).
+**More.** `demo/Cat.Demo.Api.Gateway`. [Decisions in the plan](../plans/Demo.md#decided).
 
+### Keycloak
+
+**Status:** Built
+
+**What it is.** The identity provider of the demo. It holds the users, checks passwords and signs the access tokens. Any OpenID Connect provider would do. Keycloak is only the demo choice.
+
+**How it works.**
+- The AppHost starts it as a plain container on port 8180. There is no data volume, so every start imports the realm again.
+- The realm file `demo/Cat.Demo.AppHost/Cat.Demo.AppHost/keycloak/cat-demo-realm.json` holds the realm `cat-demo`, the role `admin` and the users `alice`, `bob` and `admin`. The user ids equal the user names, so the `sub` claim of a token matches the seeded data.
+- Two public clients exist. `cat-demo-web` is for the React app later. `cat-demo-cli` allows the password grant, for the `.http` files only.
+- Both clients add the audience `cat-gateway` and a flat `roles` claim to the access token.
+- The gateway and the services read the signing keys from the realm and check every token themselves. See [API Gateway](#api-gateway).
+
+**CAT modules.** None. The toolkit works with any OpenID Connect provider, so Keycloak is no dependency of a module.
+
+**Pros.**
+- Real tokens and a real login flow, with no account or tenant to create.
+- The realm is a file in the repository, so every clone gets the same users.
+
+**Cons.**
+- Another container to start and a few hundred MB of memory.
+- The passwords and the admin console login are public and simple. That is fine for a demo and wrong for production.
+
+**More.** `demo/Cat.Demo.AppHost/Cat.Demo.AppHost/keycloak`. [Identity provider in the plan](../plans/Demo.md#authentication-and-authorization).
 ### Service Bus emulator
 
 **Status:** Planned
@@ -431,7 +479,7 @@ erDiagram
   6. Confirm the order.
 - Confirmed and cancelled are events. Subscribers set the status, write an audit record and release the stock.
 - Stock, price and payment sit behind interfaces: `IStockReservation`, `IPriceProvider` and `IPaymentProvider`. Fakes answer for stock and payment. For prices, `CatalogPriceProvider` calls `GET /catalog/books/prices` over HTTP when the host gives Orders an address for Catalog, as the AppHost does. Without it, `FakePriceProvider` answers.
-- `ICurrentUser` tells the core service who is calling. A development stub reads the `X-Demo-User` header. Orders of other users come back as not found.
+- `ICurrentUser` tells the core service who is calling. With a login it reads the claims of the token (`sub`, `name`, `email` and the `admin` role). Without one, a development stub reads the `X-Demo-User` header. Orders of other users come back as not found.
 - Order numbers come from a `DailyOrderCounter` table, increased in one atomic statement in the same transaction that saves the order.
 
 **Database.** The `orders` database is built. It is a SQL Server database that only Orders reads. In `Development` the service applies its EF Core migrations at startup and adds the three order statuses. All tables are regular entities that inherit `CatEntityBase`. `OrderNumber` is unique. `OrderLine` refers to a book with `BookId` and has no foreign key, because the book lives in the Catalog database. `DailyOrderCounter` has no relationship with the other tables. Names and columns are not final.
@@ -581,6 +629,7 @@ erDiagram
 **How it works.** `AddServiceDefaults()` in the `Program.cs` of a service sets up:
 - Logs, metrics and traces with OpenTelemetry. The wildcard source `Cat.*` covers the CAT decorators and workflows. Data leaves the process only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set, which the AppHost does.
 - A readiness check at `/health` and a liveness check at `/alive`.
+- The token check of the services. `AddDemoJwtAuthentication` turns on JWT validation when `Authentication:Authority` is set.
 - Service discovery and the standard resilience handler on every `HttpClient`: retries, timeouts and a circuit breaker.
 
 **CAT modules.** None are referenced. It works next to them: the tracing decorator of `Cat.ServiceRequests` shows up in the traces.

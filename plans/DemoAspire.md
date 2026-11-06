@@ -48,7 +48,7 @@ One command starts the whole demo, and the Aspire dashboard shows it.
 - Logs, traces, metrics and health checks are in the dashboard.
 - Orders asks Catalog for the current price of every book, instead of using the fake.
 
-React, the gateway, Keycloak, the Service Bus and Inventory are not part of this build. See [Later](#later).
+React, the Service Bus and Inventory are not part of this build. The gateway and Keycloak came later, see [Demo.md](Demo.md#decided). See [Later](#later).
 
 ## Decisions
 
@@ -59,7 +59,7 @@ React, the gateway, Keycloak, the Service Bus and Inventory are not part of this
 | First mode to build | `Existing`, because Docker and WSL were not installed on the owner's machine at the start. `Container` followed in its own phase. |
 | Standalone start | Every service still starts with `dotnet run` and its own `appsettings`. The AppHost is a convenience, not a requirement. |
 | Price provider | The first version is a plain `HttpClient` implementation in `Orders.Infrastructure`. `Cat.Api.Client` replaces it in the future. See [Swapping the price provider](#swapping-the-price-provider). |
-| Service to service calls | Orders calls Catalog directly for now, because the gateway does not exist yet. |
+| Service to service calls | Orders calls Catalog directly for now. The gateway exists, but the call moves to it with `Cat.Api.Client`. |
 | Contracts | Orders keeps its own small model of the price response and does not reference `Catalog.Contracts`. This is a choice, not a rule: Orders needs only the price, so it stays independent of the rest of the Catalog contract. A later service to service call shares contracts, so the demo shows both. See [Sharing contracts](Demo.md#sharing-contracts). |
 | Aspire version | The latest stable Aspire that supports .NET 10. Pin it in `Directory.Packages.props` when the projects are created. |
 
@@ -165,7 +165,6 @@ These come after the first AppHost build, in the order of the demo plan.
 
 - The `Cat.Api.Client` module, replacing `CatalogPriceProvider`.
 - `Cat.Demo.PaymentService`, a separate fake payment service that the AppHost starts and that can fail on purpose. See the payment provider decision in [Demo.md](Demo.md#decided).
-- The API gateway, Keycloak, JWT validation in the services and the real `ICurrentUser`.
 - The React client, started by the AppHost.
 - The Service Bus emulator, with `Cat.Messaging`.
 - Inventory, database first.
