@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
@@ -35,7 +36,9 @@ public static class Extensions
         builder.Services.AddServiceDiscovery();
         builder.Services.ConfigureHttpClientDefaults(http =>
         {
-            http.AddStandardResilienceHandler();
+            // One pipeline per service address. Without this every client shares one circuit breaker,
+            // and a failing payment service would break the calls to Catalog too.
+            http.AddStandardResilienceHandler().SelectPipelineByAuthority();
             http.AddServiceDiscovery();
         });
 
