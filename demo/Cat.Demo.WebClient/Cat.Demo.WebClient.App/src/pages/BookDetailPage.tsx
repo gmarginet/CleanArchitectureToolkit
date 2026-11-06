@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router'
+import { useIsAdmin } from '../auth/useIsAdmin'
 import { useBook } from '../api/books'
 import { ApiError } from '../api/errors'
 import { AddToBasketButton } from '../components/AddToBasketButton'
@@ -9,6 +10,7 @@ import styles from './BookDetailPage.module.css'
 export function BookDetailPage() {
   const { id = '' } = useParams()
   const book = useBook(id)
+  const isAdmin = useIsAdmin()
 
   return (
     <>
@@ -36,6 +38,11 @@ export function BookDetailPage() {
             <dd>{formatPrice(book.data.price)}</dd>
           </dl>
           <AddToBasketButton book={book.data} />
+          {isAdmin && (
+            <p>
+              <Link to={`/admin/books/${book.data.id}`}>Edit this book</Link>
+            </p>
+          )}
         </article>
       )}
     </>

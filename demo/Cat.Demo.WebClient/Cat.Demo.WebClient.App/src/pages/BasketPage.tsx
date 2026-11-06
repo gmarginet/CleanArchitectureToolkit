@@ -23,6 +23,9 @@ export function BasketPage() {
           {formatAmount(order.total)}.
         </p>
         <p>
+          <Link to={`/orders/${order.id}`}>See this order</Link>
+        </p>
+        <p>
           <Link to="/">Back to the books</Link>
         </p>
       </>

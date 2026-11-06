@@ -1,6 +1,7 @@
 import { useAuth } from 'react-oidc-context'
 import { Link, Outlet, useLocation } from 'react-router'
 import { forgetSignedIn } from '../auth/silentSignIn'
+import { useIsAdmin } from '../auth/useIsAdmin'
 import { useBasket } from '../basket/useBasket'
 import styles from './Layout.module.css'
 
@@ -13,6 +14,7 @@ function isSilentRefusal(error: Error): boolean {
 export function Layout() {
   const auth = useAuth()
   const basket = useBasket()
+  const isAdmin = useIsAdmin()
   const location = useLocation()
   const user = auth.user?.profile
   const name = user?.name ?? user?.preferred_username ?? 'Signed in'
@@ -26,6 +28,8 @@ export function Layout() {
         <nav className={styles.nav}>
           <Link to="/">Books</Link>
           <Link to="/basket">Basket ({basket.count})</Link>
+          {auth.isAuthenticated && <Link to="/orders">Orders</Link>}
+          {isAdmin && <Link to="/admin/books/new">New book</Link>}
           {auth.isAuthenticated ? (
             <>
               <span className={styles.user}>{name}</span>
