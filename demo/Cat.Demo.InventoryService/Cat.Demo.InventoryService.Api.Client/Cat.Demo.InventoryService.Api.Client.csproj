@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <!-- The client shares the Contracts project of Inventory, which targets net10.0. -->
+        <TargetFramework>net10.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\modules\Cat.Api.Client\Cat.Api.Client\Cat.Api.Client.csproj" />
+        <ProjectReference Include="..\Cat.Demo.InventoryService.Contracts\Cat.Demo.InventoryService.Contracts.csproj" />
+    </ItemGroup>
+
+</Project>

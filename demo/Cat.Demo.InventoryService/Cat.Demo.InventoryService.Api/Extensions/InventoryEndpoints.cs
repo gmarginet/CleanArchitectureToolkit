@@ -19,8 +19,10 @@ public static class InventoryEndpoints
 
         var reservationsBuilder = inventoryBuilder.MapGroup("/reservations");
 
-        reservationsBuilder.MapCatPost<StockReserveRequest>("/", CatResponseType.Ok, CatResponseType.NotFound, CatResponseType.Conflict, CatResponseType.Unauthorized);
-        reservationsBuilder.MapCatDelete<StockReleaseRequest>("/{orderNumber}", CatResponseType.Ok, CatResponseType.Unauthorized);
+        reservationsBuilder.MapCatPost<StockReserveRequest>("/", CatResponseType.Ok, CatResponseType.NotFound, CatResponseType.Conflict, CatResponseType.Unauthorized)
+            .WithName("ReserveStock");
+        reservationsBuilder.MapCatDelete<StockReleaseRequest>("/{orderNumber}", CatResponseType.Ok, CatResponseType.Unauthorized)
+            .WithName("ReleaseStock");
 
         return builder;
     }

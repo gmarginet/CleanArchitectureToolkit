@@ -1,0 +1,31 @@
+{
+  "runtime": "Net100",
+  "documentGenerator": {
+    "fromDocument": {
+      "json": "inventory.openapi.json",
+      "url": "",
+      "output": null
+    }
+  },
+  "codeGenerators": {
+    "openApiToCSharpClient": {
+      "clientBaseClass": null,
+      "generateClientClasses": true,
+      "generateClientInterfaces": true,
+      "generateDtoTypes": true,
+      "excludedTypeNames": [ "StockReservationModel", "StockLineModel" ],
+      "injectHttpClient": true,
+      "useBaseUrl": false,
+      "disposeHttpClient": false,
+      "generateExceptionClasses": false,
+      "exceptionClass": "CatApiException",
+      "additionalNamespaceUsages": [ "Cat.Api.Client", "Cat.Demo.InventoryService.Contracts.Models" ],
+      "jsonLibrary": "SystemTextJson",
+      "generateNullableReferenceTypes": true,
+      "operationGenerationMode": "SingleClientFromOperationId",
+      "className": "InventoryClient",
+      "namespace": "Cat.Demo.InventoryService.Api.Client",
+      "output": "InventoryClient.cs"
+    }
+  }
+}
