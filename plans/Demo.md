@@ -549,6 +549,8 @@ The screens that show what the demo is about:
 | Login details | `react-oidc-context` with authorization code and PKCE against `cat-demo-web`. The user and its tokens live in memory. Only the state of a login in progress uses session storage, because it has to survive the trip to Keycloak. After a page refresh the app signs in again silently with `prompt=none`, if a tab flag in session storage says the person was logged in. After a login the person returns to the page they came from. The realm sets `post.logout.redirect.uris` so the logout comes back to the shop. |
 | OpenAPI copy | The client keeps a saved copy of each service document in `api/`, so a fresh clone builds without a running service. `npm run api:refresh` downloads it again from a running AppHost, and the change is committed. The services only publish the document in Development, which the AppHost uses. |
 | TypeScript version | 5.x, not 7. The generator `openapi-typescript` accepts TypeScript 5 only, also in its latest release, and forcing it needs an `.npmrc` workaround in every clone. Go back to 7 when the generator supports it. |
+| Basket | The basket lives in the local storage of the browser, so it survives a refresh and the trip to the login. A line holds the book, its title, the price of the list and the quantity, 1 to 50, and the basket holds 50 lines at most, as Orders does. Place order sends only the book and the quantity. The failed order is not retried by the client. |
+| Error messages | A failed call shows the CAT errors: the code, and the message template with its named placeholders filled from the arguments in the order they first appear. The headline is the message only when there are no CAT errors. The trace id is shown too. |
 | Port | 5104, the next one after the payment service on 5103. The AppHost sets it, so the page and the CORS list of the gateway agree. The realm accepts any `http://localhost:*` redirect, but the web origin of the `cat-demo-web` client is set to `http://localhost:5104` itself. The value `+` does not work with a wildcard redirect, because Keycloak then sends no CORS header on the token call, which was found when the login was tried. |
 | Build | Cake does not build the client. It is not a package. The AppHost runs it, and Node is a prerequisite in the demo readme. |
 | Location | `demo/Cat.Demo.WebClient/`. |
@@ -568,7 +570,7 @@ Nothing is open for the client now. The points that were left are checked, see b
 1. Done: the project with Vite, TypeScript and the AppHost start. The page shows the shop name.
 2. Done: book list and book detail, from Catalog without a login. Tried in a browser against the running AppHost: search, category filter, detail and not found.
 3. Done: login with Keycloak, the top bar, and the token on the calls. Tried in a browser against the running AppHost as `alice`: the login and the return to the same page, the token on the calls, Orders answering 200 with the token and 401 without, the silent sign-in after a refresh and the logout.
-4. Basket and checkout, with the error component.
+4. Done: basket and checkout, with the error component. Tried in a browser against the running AppHost as `alice`: books in the basket, a changed quantity, a reload that keeps the basket, the login from the checkout and the return to the basket, a confirmed order, a declined order above 500 euro (`CAT-ORD-1003`) and, with `Payment:Outage` on, `CAT-ORD-1006` for every order with the basket kept. The orders in the service matched the screen.
 5. Order overview and order detail with the cancel button.
 6. The demo readme chapter, the drawing box and the run steps.
 7. Optional: the admin screen.
@@ -622,6 +624,8 @@ To do:
 2. Handle the known gaps of Orders and Catalog below. The remaining ones wait for the authentication phase, `Cat.Localizations` or the saga work.
 
 ### Known gaps in Orders
+
+- **Number or string in the OpenAPI document.** The document of Orders types `total` and `quantity` as a number or a string, because the JSON options read numbers from strings. Catalog had the same and was fixed, see the note on the Catalog OpenAPI price type. The React client converts with `Number()` for now. Make the options of Orders strict as well, and refresh the saved document with `npm run api:refresh`.
 
 - **No refund for a cancelled order.** A cancelled order keeps its `Approved` payment, because there is no refund step yet. This shows after a user cancels a confirmed order: the order is `Cancelled` and the `Payment` row still says `Approved`. Add a refund when payment becomes a message flow (see `Cat.Sagas.md`):
   - A `Refunded` payment status, and an `IPaymentProvider` refund call.

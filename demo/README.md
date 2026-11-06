@@ -59,7 +59,7 @@ What you can do today:
 - **Cancel an order.** Change your mind after ordering and cancel it.
 - **Log in.** Alice, Bob and the admin each have an account. You need to be logged in to place or follow orders. Anyone can browse the catalog without a login.
 - **Stay private.** A customer only sees their own orders. An admin sees all of them. Only an admin can add or change a book.
-- **Use the web shop.** Open the shop in the browser, search the books by text or category, open a book and log in. Placing and following orders in the browser comes next.
+- **Use the web shop.** Open the shop in the browser, search the books by text or category, open a book and log in. Put books in a basket and place an order. Following your orders in the browser comes next.
 
 What the shop does when something goes wrong:
 
@@ -73,7 +73,7 @@ What comes later:
 
 - A real stock service that keeps the stock levels.
 - Emails when an order is confirmed or shipped.
-- A basket, checkout and an order overview in the web shop.
+- An order overview in the web shop, with the cancel button.
 - Nightly jobs, such as cancelling orders that are not paid.
 
 ## Architecture
@@ -136,7 +136,7 @@ The main route is the Aspire AppHost. One command starts the gateway, Catalog, O
 5. Try the endpoints. The gateway runs on `http://localhost:5100` and is the door for every call. Keycloak runs on `http://localhost:8180`. Open these files in Visual Studio or Rider and run the requests from top to bottom. Run the login requests at the top first. Later requests use ids from earlier responses.
    - `demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api/CatalogRequests.http`
    - `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Api/OrderRequests.http`
-   - The web shop runs on `http://localhost:5104`. You can browse the books and log in as `alice` with the password `alice`. See [React client](#react-client).
+   - The web shop runs on `http://localhost:5104`. You can browse the books, log in as `alice` with the password `alice`, fill the basket and place an order. See [React client](#react-client).
 6. Place an order and open its trace in the dashboard. It shows the call from Orders to Catalog for the prices.
 7. Press Ctrl+C to stop. The database lives in the Docker volume `cat-demo-sql-data`, so the data is still there at the next start.
 
@@ -240,7 +240,7 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 
 | Block | Status | What it is |
 |---|---|---|
-| [React client](#react-client) | Built | The web shop. It shows the books and has a login. The basket and the orders come next. |
+| [React client](#react-client) | Built | The web shop. It shows the books, has a login and takes orders. The order overview comes next. |
 | [Aspire AppHost and dashboard](#aspire-apphost-and-dashboard) | Built | Starts the whole system and shows how it runs. |
 | [API Gateway](#api-gateway) | Built | The one door for clients. |
 | [Keycloak](#keycloak) | Built | The identity provider that holds the users and signs the tokens. |
@@ -258,7 +258,7 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 
 **What it is.** A thin web client with a book list, a basket and an order overview. It uses React with TypeScript, built with Vite.
 
-**Where it stands.** Steps 1 to 3 of stage 3 are done. The app is in `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App`, a Vite, React and TypeScript project. The AppHost starts it as `web` on the fixed port 5104, and the gateway lists `http://localhost:5104` as an allowed CORS origin. It has two screens, the book list and the book detail, and a login. The book list has a search box and a category filter, and keeps them in the address. One error component shows the message, the code and the trace id of every failed call. The basket, the checkout and the orders come in the next steps.
+**Where it stands.** Steps 1 to 4 of stage 3 are done. The app is in `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App`, a Vite, React and TypeScript project. The AppHost starts it as `web` on the fixed port 5104, and the gateway lists `http://localhost:5104` as an allowed CORS origin. It has three screens, the book list, the book detail and the basket, and a login. The book list has a search box and a category filter, and keeps them in the address. One error component shows the message, the code and the trace id of every failed call. The order overview and the order detail come in the next step.
 **Work on the client.** Run these in the app folder. Node 24 or newer is needed.
 
 | Command | What it does |
@@ -266,7 +266,7 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 | `npm run dev` | Starts Vite on port 5104. It needs the gateway on port 5100, which the AppHost starts. |
 | `npm test` | Runs the Vitest tests. The Cake build does not run them. |
 | `npm run build` | Checks the types and builds the app. |
-| `npm run api:refresh` | Saves the OpenAPI document of Catalog from a running AppHost into `api/`. Commit the change. |
+| `npm run api:refresh` | Saves the OpenAPI documents of Catalog and Orders from a running AppHost into `api/`. Commit the change. |
 
 **Types.** `npm run api:generate` makes the TypeScript types from `api/catalog.openapi.json`. It runs before `dev`, `build` and `test`. The generated file is not committed. The saved copy of the document is, so a fresh clone builds without a running service. TypeScript is pinned to 5.x, because `openapi-typescript` does not support 7 yet.
 **How it works.**
@@ -274,6 +274,9 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 - The Log in button sends the browser to Keycloak. The login uses authorization code with PKCE (`react-oidc-context`). After the login the person is back on the page they came from, and the top bar shows their name.
 - The access token lives in memory only. A page refresh loses it, so the app asks Keycloak for a new token without showing the login page. This works while the Keycloak session lasts. A tab flag, kept in session storage, says that the person was logged in. It holds no token.
 - Every call to the gateway carries the token when a person is logged in. Catalog reads need none.
+- The basket lives in the local storage of the browser, so a refresh or the trip to the login does not empty it. A line holds the book, the title, the price of the list and the quantity from 1 to 50. A book without a price cannot be added.
+- Place order sends only the book and the quantity. The shop decides price, stock and payment. A visitor who is not logged in is sent to the login first and returns to the basket. After a success the screen shows the order number, status and total, and the basket is emptied. A failed order is never retried by the client, so nobody is charged twice by a retry.
+- A failed call shows its CAT errors: the code and the message with the arguments filled in, and the trace id. The basket stays, so the person can try again.
 - Log out ends the Keycloak session as well.
 - It has no shared code with the services. The types come from a saved copy of the OpenAPI documents of the services.
 
@@ -691,7 +694,7 @@ Under the AppHost, set `Payment:Latency`, `Payment:ErrorPercentage` or `Payment:
 dotnet user-secrets set "Payment:Outage" "true" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost
 ```
 
-Remove the secret to switch the failure off again. When you run the service on its own, change `PaymentFailures` in its `appsettings.json` or set `PaymentFailures__Outage=true`. A running service reads a changed setting again. Place an order and open the trace in the dashboard to see the retries.
+Remove the secret to switch the failure off again. When you run the service on its own, change `PaymentFailures` in its `appsettings.json` or set `PaymentFailures__Outage=true`. A running service reads a changed setting again. Place an order and open the trace in the dashboard to see the retries. In the web shop the order ends with `CAT-ORD-1006` and the text "Try again later" after 6 to 10 seconds, the time of the retries, and the basket stays. The circuit only opens under a burst of calls. A person who clicks Place order now and then does not open it.
 
 **CAT modules.** The service uses none on purpose. It is a plain stand-in for something outside the toolkit.
 
