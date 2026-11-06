@@ -67,7 +67,7 @@ From the module conventions:
 From the code of the demo, checked while preparing this plan:
 
 - `CatalogPriceProvider` works, but it calls Catalog directly, at `https+http://catalog`. That breaks the rule that services go through the gateway. The registration is in `Orders.Infrastructure`.
-- The gateway routes `catalog` and `orders` only. It has no route for the payment service, and Orders calls the payment service directly too. The payment service has no login.
+- The gateway routed `catalog` and `orders` only when this plan was written. Orders called the payment service directly, and it had no login. Both are done now, see the decision on the payment call.
 - Catalog reads, such as the price endpoint, are public at the gateway. The realm has no client for calls without a user.
 - `CatProblemDetails` is the error body of every service. It lives in `Cat.Minimal.Api`, which targets `net10.0`. It derives from the ASP.NET Core `ProblemDetails`, and its errors are `ICatError` interfaces that a client cannot deserialize. So a `netstandard2.0` client needs a plain class of its own for that shape.
 - `Cat.Responses` and `Cat.Api.Gateway.Abstractions` already target `netstandard2.0`.
@@ -103,17 +103,18 @@ From the code of the demo, checked while preparing this plan:
 | First version | No versioned APIs. JSON with GET and POST only, without file uploads and streaming. |
 | First client | Catalog, for the price call of Orders. |
 | Direct calls | Services never call each other directly, the payment service included. Every call goes through the gateway. The drawing of the demo shows this. |
-| Order of the calls | The call to Catalog comes first. The payment call is looked at when that is done. |
+| Order of the calls | The call to Catalog came first. The payment call followed. |
+| Payment call | Orders calls the payment service through the gateway, with a generated client like the Catalog one. The gateway has a restricted route for `payment`, so a token is needed. Orders forwards the token of the user with a handler of its own, and the payment service validates the same token. Client credentials are not built, because no call without a user exists yet. |
 | Audience | The clients are for .NET code. The React client does not use the module. It generates TypeScript from the same OpenAPI documents. |
 
 ### Open
 
 The numbers match the questions below. A number stays with its question, so an answered question leaves a gap. Recommendations are marked. They are not decisions.
 
-10. **Payment.** The payment call of Orders is direct as well, and the owner wants it to go through the gateway too. The catalog call comes first. When it is done, we look at the payment call: does the gateway get a restricted route for it, and does the payment service get a login?
+No open points at the moment.
 
 ## Questions before building
 
 The numbers are the numbers of the open points above.
 
-10. How does the payment call go through the gateway, once the catalog call is done?
+None at the moment.

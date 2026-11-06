@@ -76,8 +76,8 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 | Payment failures | The `PaymentFailures` section of the service holds three settings: `Latency` (a delay before every answer), `ErrorPercentage` (the share of calls from 0 to 100 that fail after the payment is already taken) and `Outage` (every call fails at once and nothing is taken). All are off by default. The service reads them again when they change. The AppHost passes `Payment:Latency`, `Payment:ErrorPercentage` and `Payment:Outage` from its own configuration. |
 | Unreachable payment service | When Orders cannot get an answer, after the retries, on a timeout or with an open circuit, it cancels the order with the reason `PaymentUnavailable` and the error `CAT-ORD-1006`, like a declined payment. It answers 400, as every failure of the place order workflow does. No payment is saved, because nothing was decided. The stock reservation is released by the cancelled event. |
 | Double charge | The order number is the idempotency key. The payment service remembers the answer per order number in memory and gives the same answer to a retry. A failure from `ErrorPercentage` comes after the charge on purpose, so the retry shows that nothing is charged twice. |
-| Payment service stays simple | The payment service is fake, so it stays as it is. It has no login, because Orders calls it directly and a fake has nothing to protect. A failure setting is changed in the configuration and needs a restart of the AppHost, with no development endpoint to switch it. Orders keeps its own small model of the payment request and answer and does not reference the payment service. The calls of a real payment provider would need a login, and then Orders would use a client credentials token, as `Cat.Api.Client` plans. |
-| Payment port and wiring | Port 5103. Orders finds it through service discovery, `services:payment:*`, like Catalog. Without that setting a plain `dotnet run` uses `FakePaymentProvider`. |
+| Payment service stays simple | The payment service is fake, so it stays as it is. Under the AppHost it validates the token like the other services, because every call comes through the gateway. A failure setting is changed in the configuration and needs a restart of the AppHost, with no development endpoint to switch it. Orders uses a generated client, `Cat.Demo.PaymentService.Api.Client`, like the Catalog one, and does not reference the payment service. The call forwards the token of the user. Calls without a user, such as the Scheduler, would need a client credentials token later. |
+| Payment port and wiring | Port 5103, path `/payment/payments`. The gateway routes it, restricted, and Orders calls it through the gateway, `services:gateway:*`, like Catalog. Without that setting a plain `dotnet run` uses `FakePaymentProvider`. |
 | SQL Server mode | The AppHost supports two modes, switched by a setting: a SQL Server container, or an existing instance through connection strings. Docker is not required to run the demo. Both modes are built, `Existing` first. The AppHost reads `Sql:Mode`, with `Container` as the default. |
 | Counter cleanup | The `CleanUpOrderCounters` service request deletes the rows of earlier days and creates the row of today. The Scheduler will run it nightly. Until the Scheduler exists, a development only endpoint triggers it. |
 | Currency | One currency, euro, to keep the demo simple. |
@@ -138,7 +138,7 @@ Start small. Catalog plus a basic Orders service already covers most of the curr
 | Messaging, EventProcessor | Orders publishes `OrderPlaced`. Inventory and Notifications consume it. |
 | Scheduling | Clean up the daily order counters every night. Cancel unpaid orders after 24 hours. A nightly low stock report. |
 | Api.Gateway | The single front door in stage 2 of the [roadmap](#roadmap): routes for Catalog and Orders, and the token check. |
-| Api.Client | Orders asks Catalog for current prices through the gateway, with a generated client and the `Cat.Api.Client` module. |
+| Api.Client | Orders asks Catalog for current prices and the payment service for payments through the gateway, with generated clients and the `Cat.Api.Client` module. |
 | Dapper | Fast read-only order overview queries, next to EF Core for writes. |
 | Caching | Cached catalog queries. |
 | EFCore transactions | Saving an order and its lines in one go. |
@@ -268,7 +268,7 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 - The workflow publishes `OrderConfirmed` and `OrderCancelled`. It knows only the aggregator, not the subscribers.
 - Subscribers: a status updater, an audit logger and later the message bridge for `OrderPlaced`.
 - Events cannot drive the process. `PublishAsync` returns no answer and rethrows the exception of a failing handler.
-- Calls whose answer decides the next step go through an interface. A fake sits behind it when there is no host address. `Api.Client` does the price call. The payment fake is replaced by a client for the separate payment service, see the decision on the payment provider.
+- Calls whose answer decides the next step go through an interface. A fake sits behind it when there is no host address. `Api.Client` does the price call. The payment call works the same way, with a generated client for the separate payment service, see the decision on the payment provider.
 - Subscribers are long lived singletons, because the aggregator holds them with weak references. A subscriber that needs a scoped service such as the `DbContext` opens its own scope.
 - Later the payment may move to a message flow, where the workflow sends a message and waits for the answer. That needs a saga capability. See [Cat.Sagas.md](Cat.Sagas.md). Until then the payment is an interface with a fake, and Orders keeps its state in the order status.
 
@@ -581,7 +581,7 @@ The other points are checked, see below.
 
 The order for the rest of the demo build. **This order is a proposal.** It becomes a decision when the owner confirms it, see the open questions. Every stage ends in a working demo: the stage is done when the "Done when" column is true, the demo readme and the drawing are current (the `demo-readme` skill) and the tests pass.
 
-Built so far: Catalog, Orders with a fake for stock, ServiceDefaults, the AppHost with both SQL Server modes, the gateway with Keycloak and the token checks (stage 2), and the payment service (stage 1). The price call and the payment call from Orders are real, and both go straight to the service.
+Built so far: Catalog, Orders with a fake for stock, ServiceDefaults, the AppHost with both SQL Server modes, the gateway with Keycloak and the token checks (stage 2), and the payment service (stage 1). The price call and the payment call from Orders are real, and both go through the gateway.
 
 | Stage | What | Needs | Done when |
 |---|---|---|---|
