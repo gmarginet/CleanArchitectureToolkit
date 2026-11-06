@@ -30,4 +30,4 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Api\.Gateway\.Abstractions](Cat.Api.Gateway.Abstractions.md 'Cat\.Api\.Gateway\.Abstractions') | |
+| [Cat\.Api\.Gateway\.Abstractions](Cat.Api.Gateway.Abstractions.md 'Cat\.Api\.Gateway\.Abstractions') | Holds the header names and values that the gateway and the services share\. |

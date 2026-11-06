@@ -30,4 +30,4 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Api\.Gateway\.Verification](Cat.Api.Gateway.Verification.md 'Cat\.Api\.Gateway\.Verification') | |
+| [Cat\.Api\.Gateway\.Verification](Cat.Api.Gateway.Verification.md 'Cat\.Api\.Gateway\.Verification') | The check that makes a service accept only calls that come from the gateway\. |

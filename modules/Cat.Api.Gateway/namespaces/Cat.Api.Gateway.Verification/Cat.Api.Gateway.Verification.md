@@ -28,6 +28,8 @@
 
 ## Cat\.Api\.Gateway\.Verification Namespace
 
+The check that makes a service accept only calls that come from the gateway\.
+
 | Classes | |
 | :--- | :--- |
 | [CatGatewayAssertionHandler](CatGatewayAssertionHandler.md 'Cat\.Api\.Gateway\.Verification\.CatGatewayAssertionHandler') | Checks the gateway assertion of a request: the signature, the issuer, the audience and the lifetime\. |

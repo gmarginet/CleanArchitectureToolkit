@@ -30,7 +30,7 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Api\.Gateway](Cat.Api.Gateway.md 'Cat\.Api\.Gateway') | |
+| [Cat\.Api\.Gateway](Cat.Api.Gateway.md 'Cat\.Api\.Gateway') | The gateway, built on YARP: the setup calls, the configuration and the secure defaults\. It checks the token in one place, routes calls to the services and removes the headers a client must not send\. |
 | [Cat\.Api\.Gateway\.Assertion](Cat.Api.Gateway.Assertion.md 'Cat\.Api\.Gateway\.Assertion') | |
 | [Cat\.Api\.Gateway\.Configuration](Cat.Api.Gateway.Configuration.md 'Cat\.Api\.Gateway\.Configuration') | |
 | [Cat\.Api\.Gateway\.Middleware](Cat.Api.Gateway.Middleware.md 'Cat\.Api\.Gateway\.Middleware') | |

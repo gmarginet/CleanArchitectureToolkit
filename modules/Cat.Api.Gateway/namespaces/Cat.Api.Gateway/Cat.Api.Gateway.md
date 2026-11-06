@@ -28,6 +28,9 @@
 
 ## Cat\.Api\.Gateway Namespace
 
+The gateway, built on YARP: the setup calls, the configuration and the secure defaults\.
+It checks the token in one place, routes calls to the services and removes the headers a client must not send\.
+
 | Classes | |
 | :--- | :--- |
 | [CatApiGatewayExtensions](CatApiGatewayExtensions.md 'Cat\.Api\.Gateway\.CatApiGatewayExtensions') | Sets up a gateway in a host project, in three calls\. |

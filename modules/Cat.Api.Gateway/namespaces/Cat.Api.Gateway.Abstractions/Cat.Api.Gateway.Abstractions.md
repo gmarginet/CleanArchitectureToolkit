@@ -28,6 +28,8 @@
 
 ## Cat\.Api\.Gateway\.Abstractions Namespace
 
+Holds the header names and values that the gateway and the services share\.
+
 | Classes | |
 | :--- | :--- |
 | [CatGatewayDefaults](CatGatewayDefaults.md 'Cat\.Api\.Gateway\.Abstractions\.CatGatewayDefaults') | The names and values that the gateway and the services must agree on\. |
