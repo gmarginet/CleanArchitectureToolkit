@@ -1,11 +1,16 @@
-// The AppHost sets VITE_GATEWAY_URL. The fallback is the gateway of a plain local run.
-const gatewayUrl: string = import.meta.env.VITE_GATEWAY_URL ?? 'http://localhost:5100'
+import { Route, Routes } from 'react-router'
+import { Layout } from './components/Layout'
+import { BookDetailPage } from './pages/BookDetailPage'
+import { BookListPage } from './pages/BookListPage'
 
 export default function App() {
   return (
-    <main>
-      <h1>CAT Bookshop</h1>
-      <p>The shop talks to the gateway at {gatewayUrl}.</p>
-    </main>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<BookListPage />} />
+        <Route path="books/:id" element={<BookDetailPage />} />
+        <Route path="*" element={<p>That page does not exist.</p>} />
+      </Route>
+    </Routes>
   )
 }

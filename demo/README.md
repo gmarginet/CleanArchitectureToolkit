@@ -257,12 +257,22 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 
 **What it is.** A thin web client with a book list, a basket and an order overview. It uses React with TypeScript, built with Vite.
 
-**Where it stands.** The first step of stage 3 is done. The project `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App` is a Vite, React and TypeScript app with a start page. The AppHost starts it as `web` on the fixed port 5104. The gateway lists `http://localhost:5104` as an allowed CORS origin, so the browser may call it. The screens, the login and the calls come in the next steps. The box in the drawing stays hatched until the login works.
+**Where it stands.** Steps 1 and 2 of stage 3 are done. The app is in `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App`, a Vite, React and TypeScript project. The AppHost starts it as `web` on the fixed port 5104, and the gateway lists `http://localhost:5104` as an allowed CORS origin. It has two screens, both without a login. The book list has a search box and a category filter, and keeps them in the address. The book detail shows one book. One error component shows the message, the code and the trace id of every failed call. The basket, the login and the orders come in the next steps. The box in the drawing stays hatched until the login works.
 
+**Work on the client.** Run these in the app folder. Node 24 or newer is needed.
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Starts Vite on port 5104. It needs the gateway on port 5100, which the AppHost starts. |
+| `npm test` | Runs the Vitest tests. The Cake build does not run them. |
+| `npm run build` | Checks the types and builds the app. |
+| `npm run api:refresh` | Saves the OpenAPI document of Catalog from a running AppHost into `api/`. Commit the change. |
+
+**Types.** `npm run api:generate` makes the TypeScript types from `api/catalog.openapi.json`. It runs before `dev`, `build` and `test`. The generated file is not committed. The saved copy of the document is, so a fresh clone builds without a running service. TypeScript is pinned to 5.x, because `openapi-typescript` does not support 7 yet.
 **How it will work.**
 - It only talks to the API gateway.
 - It logs in with OpenID Connect and sends the token with every call.
-- It has no shared code with the services. The client comes from the OpenAPI documents of the services.
+- It has no shared code with the services. The types come from a saved copy of the OpenAPI documents of the services.
 
 **CAT modules.**
 
@@ -275,7 +285,7 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 - React is the most widely known option.
 
 **Cons.**
-- No shared contracts, so a change in a service needs a refresh of the generated client.
+- No shared contracts, so a change in a service needs `npm run api:refresh` and a commit of the saved document.
 - Blazor WebAssembly would share the contracts, but it makes the demo look .NET only.
 
 **More.** `demo/Cat.Demo.WebClient`. [React client plan](../plans/Demo.md#react-client).

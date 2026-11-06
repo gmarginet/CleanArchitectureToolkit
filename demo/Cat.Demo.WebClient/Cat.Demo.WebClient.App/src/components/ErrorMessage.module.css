@@ -1,0 +1,16 @@
+.error {
+  border: 1px solid #c0392b;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+}
+
+.message {
+  font-weight: 600;
+  margin: 0.25rem 0;
+}
+
+.trace {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}

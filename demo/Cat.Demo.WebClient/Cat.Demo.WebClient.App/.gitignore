@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Generated from api/*.openapi.json by npm run api:generate
+src/api/*.schema.d.ts

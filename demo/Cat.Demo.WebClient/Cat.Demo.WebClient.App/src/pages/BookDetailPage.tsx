@@ -1,0 +1,41 @@
+import { Link, useParams } from 'react-router'
+import { useBook } from '../api/books'
+import { ApiError } from '../api/errors'
+import { ErrorMessage } from '../components/ErrorMessage'
+import { formatPrice } from '../format'
+import styles from './BookDetailPage.module.css'
+
+export function BookDetailPage() {
+  const { id = '' } = useParams()
+  const book = useBook(id)
+
+  return (
+    <>
+      <p>
+        <Link to="/">Back to the books</Link>
+      </p>
+      {book.isPending && <p>Loading the book</p>}
+      {book.isError &&
+        (book.error instanceof ApiError && book.error.status === 404 ? (
+          <p role="alert">We could not find that book.</p>
+        ) : (
+          <ErrorMessage error={book.error} />
+        ))}
+      {book.isSuccess && (
+        <article>
+          <h1>{book.data.title}</h1>
+          <dl className={styles.fields}>
+            <dt>Author</dt>
+            <dd>{book.data.author}</dd>
+            <dt>Category</dt>
+            <dd>{book.data.categoryName}</dd>
+            <dt>ISBN</dt>
+            <dd>{book.data.isbn}</dd>
+            <dt>Price</dt>
+            <dd>{formatPrice(book.data.price)}</dd>
+          </dl>
+        </article>
+      )}
+    </>
+  )
+}
