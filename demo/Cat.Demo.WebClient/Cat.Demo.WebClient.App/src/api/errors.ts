@@ -30,17 +30,20 @@ export class ApiError extends Error {
 /**
  * Fills the placeholders of a message template with the arguments of the error. The services write named
  * placeholders, such as `{OrderNumber}`, and the arguments fill them in the order the names first appear.
- * A numbered placeholder, such as `{0}`, takes the argument at that position.
+ * A numbered placeholder, such as `{0}`, takes the argument at that position. The validators put the name of the
+ * field in front of the arguments, so with more arguments than names the extra ones at the front are skipped.
  */
 export function formatTemplate(template: string, args: unknown[] | null | undefined): string {
   const names: string[] = []
+  const namedCount = new Set(Array.from(template.matchAll(/\{([A-Za-z_]\w*)\}/g), (m) => m[1])).size
+  const skipped = args && namedCount > 0 ? Math.max(0, args.length - namedCount) : 0
   return template.replace(/\{(\w+)\}/g, (match, name: string) => {
     let position: number
     if (/^\d+$/.test(name)) {
       position = Number(name)
     } else {
       if (!names.includes(name)) names.push(name)
-      position = names.indexOf(name)
+      position = names.indexOf(name) + skipped
     }
     const value = args?.[position]
     return value === undefined || value === null ? match : String(value)

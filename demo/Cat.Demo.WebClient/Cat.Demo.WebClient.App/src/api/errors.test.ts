@@ -20,6 +20,12 @@ describe('formatTemplate', () => {
     expect(formatTemplate('{Name} meets {Other}. {Name} waves.', ['Ann', 'Bob'])).toBe('Ann meets Bob. Ann waves.')
   })
 
+  it('skips the field name the validators put in front', () => {
+    expect(formatTemplate('A book with ISBN {Isbn} already exists.', ['Book.Isbn', '978'])).toBe(
+      'A book with ISBN 978 already exists.',
+    )
+  })
+
   it('keeps a placeholder when its argument is missing', () => {
     expect(formatTemplate('Book {0} and {1}', ['Dune'])).toBe('Book Dune and {1}')
   })
