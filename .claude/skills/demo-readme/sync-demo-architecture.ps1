@@ -32,9 +32,12 @@ function Test-Built($detect) {
     $target = Join-Path $root $detect.path
     if (-not (Test-Path -Path $target)) { return $false }
     if (-not $detect.pattern) { return $true }
-    $hit = Get-ChildItem -Path $target -Recurse -File -Include *.cs, *.csproj, *.json, *.ts, *.tsx -ErrorAction SilentlyContinue |
+    # Resolve the wildcard first. Get-ChildItem returns nothing for a wildcard path combined with -Recurse and -Include.
+    $hit = Get-Item -Path $target -ErrorAction SilentlyContinue |
+        ForEach-Object { Get-ChildItem -LiteralPath $_.FullName -Recurse -File -Include *.cs, *.csproj, *.json, *.ts, *.tsx -ErrorAction SilentlyContinue } |
         Where-Object { $_.FullName -notmatch '\\(bin|obj|node_modules)\\' } |
-        Select-String -Pattern $detect.pattern -SimpleMatch -Quiet
+        Select-String -Pattern $detect.pattern -SimpleMatch |
+        Select-Object -First 1
     return [bool]$hit
 }
 
