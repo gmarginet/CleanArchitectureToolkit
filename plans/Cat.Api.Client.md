@@ -64,6 +64,17 @@ From the module conventions:
 - `Cat.Minimal.Api` maps service requests to endpoints and documents the responses. A client could be the mirror image: a service request type goes in, an HTTP call is made, a response comes out.
 - Infrastructure treats an integration like a database. The core never calls it directly. It sends a query or a command, and a handler calls the other service.
 
+From the code of the demo, checked while preparing this plan:
+
+- `CatalogPriceProvider` works, but it calls Catalog directly, at `https+http://catalog`. That breaks the rule that services go through the gateway. The registration is in `Orders.Infrastructure`.
+- The gateway routes `catalog` and `orders` only. It has no route for the payment service, and Orders calls the payment service directly too. The payment service has no login.
+- Catalog reads, such as the price endpoint, are public at the gateway. The realm has no client for calls without a user.
+- `CatProblemDetails` is the error body of every service. It lives in `Cat.Minimal.Api`, which targets `net10.0`. It derives from the ASP.NET Core `ProblemDetails`, and its errors are `ICatError` interfaces that a client cannot deserialize. So a `netstandard2.0` client needs a plain class of its own for that shape.
+- `Cat.Responses` and `Cat.Api.Gateway.Abstractions` already target `netstandard2.0`.
+- `ServiceDefaults` adds the standard resilience handler, with retries and a circuit breaker, to every `HttpClient`. `Cat.Resilience` is only a plan.
+- The AppHost makes the gateway wait for Orders. Orders must not wait for the gateway, or both wait forever. The gateway has a fixed port, so Orders can also get the address from configuration.
+- The React client generates its types from a saved OpenAPI document of each service, in its `api/` folder, and a script refreshes the copy from the running AppHost. The services only publish the document in Development.
+
 ## Decisions and open questions
 
 ### Decided
@@ -72,30 +83,37 @@ From the module conventions:
 |---|---|
 | Route | Calls go through the API gateway. |
 | Result | The client returns an `ICatResponse`. |
-| Order of work | The module is built from the working `HttpClient` code of Orders. |
+| Order of work | The module is built from the working `HttpClient` code of Orders. The owner wants it before the Inventory stage of the demo. |
 | Aspire | The module never references Aspire. |
+| What matters | The client has no references except the module. It is easy to set up. A caller references the client and sets the address of the gateway. |
+| Declaration | The clients are generated with NSwag from a saved OpenAPI document. The generated code is checked in, so a fresh clone builds without the generator. |
+| Generation project | None. NSwag reads the saved document, so no project needs a reference to the API project. |
+| Layout | A service that offers a client gets a `ServiceName.Api.Client` project. It references the module and nothing else. The saved OpenAPI document and the NSwag settings sit with it. |
+| Errors | The generated code throws on a failed call. The module turns that into an `ICatResponse` in one place, so the generated code stays as it is. |
+| Models | By default the client has its own generated models. Sharing the `Contracts` project of the service is the choice of the developer, see the root readme. |
+| Shared Contracts | The generated class and its methods are the same with and without shared `Contracts`. When the developer shares `Contracts`, the generator skips the models and imports the namespace of `Contracts`, and the client project references `Contracts`. The module is referenced in both cases, because it holds the base class, the exception type, the wrapper to `ICatResponse` and the NSwag settings template. To check before this variant is relied on: that NSwag skips the models and finds the `Contracts` types without a name mismatch. The first client, for Catalog, uses its own models, so this does not block the build. |
+| Token | The client forwards the token of the caller. A client credentials token waits until a call needs it, because the realm has no client for that. |
+| Error class | The error body shape for clients is a plain class, for example `CatErrorResponse`, in `Cat.Api.Client`. Only the client uses it, so it is not shared and needs no project of its own. It has the same JSON shape as `CatProblemDetails` and a concrete error item. `CatProblemDetails` stays in `Cat.Minimal.Api`, because it needs the ASP.NET Core `ProblemDetails` base. A test keeps the two shapes equal. The wrapper of the module reads the body text of a failed call into the class, so it does not depend on the generated models. |
+| Address | The address of the gateway can come from configuration or from service discovery. Both work, and the module works without Aspire. |
+| Serializer | The generated code uses System.Text.Json, so the client has no extra package. |
+| Resilience | For now the client relies on the `HttpClient` handler from `ServiceDefaults`. Later, a developer who does not use Aspire should be able to use `Cat.Resilience` instead. That is looked at together with the plan of that module, see [Cat.Resilience](Cat.Resilience.md). |
+| Refresh | A script refreshes the saved OpenAPI document and runs the generation, like `api:refresh` of the React client. The output is checked in. Other ways, such as an MSBuild step, can come later. |
+| Use | The typed client is used inside a query or command handler in the infrastructure, as the readmes describe the architecture. A developer who wants to use it directly from a request handler can do so. The module does not forbid it. |
+| Tracing | The trace continues across the call. Whether the `HttpClient` instrumentation is enough for that is checked when the first call works. |
+| First version | No versioned APIs. JSON with GET and POST only, without file uploads and streaming. |
+| First client | Catalog, for the price call of Orders. |
+| Direct calls | Services never call each other directly, the payment service included. Every call goes through the gateway. The drawing of the demo shows this. |
+| Order of the calls | The call to Catalog comes first. The payment call is looked at when that is done. |
+| Audience | The clients are for .NET code. The React client does not use the module. It generates TypeScript from the same OpenAPI documents. |
 
 ### Open
 
-- **Contracts.** Sharing is a choice per call, so the module should work with both: a client built on the shared `Contracts` types, and a client with its own models. Which is the default, and does the module need to know which one is used?
-- **Declaration.** How is a client declared? An interface with attributes, a service request type, a fluent registration, or generated from OpenAPI?
-- **Generation.** Generate from the OpenAPI documents that `Cat.Minimal.Api` produces, or write by hand and keep it small?
-- **Token.** Forward the token of the current user, use a client credentials token, or choose per call?
-- **Error mapping.** Is the error shape the same everywhere? `Cat.Minimal.Api` says services share one error shape, so a client could turn it back into the original `ICatResponse` errors.
-- **Resilience.** Does the client rely on the `HttpClient` handler from `ServiceDefaults`, on `Cat.Resilience`, or both? Two retry layers multiply.
-- **Addresses.** The gateway address comes from configuration or Aspire service discovery. The module must work without Aspire.
-- **Handler or client.** Is the typed client used inside a query or command handler in the infrastructure, as the architecture suggests?
-- **Tracing.** Does the trace continue across the call? `HttpClient` instrumentation may be enough.
+The numbers match the questions below. A number stays with its question, so an answered question leaves a gap. Recommendations are marked. They are not decisions.
+
+10. **Payment.** The payment call of Orders is direct as well, and the owner wants it to go through the gateway too. The catalog call comes first. When it is done, we look at the payment call: does the gateway get a restricted route for it, and does the payment service get a login?
 
 ## Questions before building
 
-1. Should the module work equally well with shared `Contracts` and with the caller's own models, and which one is the default?
-2. Should the client be generated from OpenAPI, or written by hand from a request type?
-3. Which token goes with the call by default?
-4. May the module assume the shared error shape of `Cat.Minimal.Api` on the other side?
-5. Where does retry live: `ServiceDefaults`, `Cat.Resilience` or this module?
-6. How does a client find the gateway outside Aspire?
-7. Do we need versioned APIs in the first version?
-8. Should the first release wait until Orders has used `CatalogPriceProvider` for a while? The idea is to build the module from that working code and not up front.
-9. Is it enough for the module to cover GET and POST with JSON, or do we need file uploads and streaming?
-10. Do we also want a `Cat.Api.Client` flavor for the React client, or is that out of scope?
+The numbers are the numbers of the open points above.
+
+10. How does the payment call go through the gateway, once the catalog call is done?

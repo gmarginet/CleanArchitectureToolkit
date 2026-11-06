@@ -96,4 +96,4 @@ From the module conventions:
 6. Do we need fallbacks and timeouts in the first version?
 7. Where do policies live: attributes, code or `appsettings`?
 8. Does the module tell `Cat.Telemetry` about every retry and break?
-9. Does `Cat.Api.Client` use this module internally, or stay with the `HttpClient` handler?
+9. `Cat.Api.Client` stays with the `HttpClient` handler of `ServiceDefaults` for now, see [Cat.Api.Client](Cat.Api.Client.md). How does a project without Aspire use this module with that client?
