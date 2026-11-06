@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Cat.Demo.CatalogService.Contracts.Models;
 using Cat.Demo.CatalogService.Contracts.ServiceRequests;
 using Cat.Demo.CatalogService.CoreService.Extensions;
-using Cat.Demo.CatalogService.DataModels.Entities;
 using Cat.Queries.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;

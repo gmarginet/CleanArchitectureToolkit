@@ -96,8 +96,8 @@
               }
             }
           },
-          "415": {
-            "description": "Unsupported Media Type",
+          "500": {
+            "description": "Internal Server Error",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -106,8 +106,8 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error",
+          "415": {
+            "description": "Unsupported Media Type",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -152,8 +152,8 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -162,8 +162,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "400": {
+            "description": "Bad Request",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -212,8 +212,8 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -222,8 +222,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "400": {
+            "description": "Bad Request",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -336,6 +336,9 @@
           "bookId": {
             "type": "string",
             "format": "uuid"
+          },
+          "isbn": {
+            "type": "string"
           },
           "price": {
             "type": "number",

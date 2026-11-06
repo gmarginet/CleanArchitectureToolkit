@@ -337,6 +337,9 @@
             "type": "string",
             "format": "uuid"
           },
+          "isbn": {
+            "type": "string"
+          },
           "price": {
             "type": "number",
             "format": "double"

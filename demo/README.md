@@ -418,7 +418,7 @@ The gateway only option of the module is not used in the demo. The services chec
 - Endpoints, all under `/catalog`:
   - `GET /books` searches books.
   - `GET /books/{bookId}` returns one book.
-  - `GET /books/prices` returns the price list, which Orders uses under the AppHost.
+  - `GET /books/prices` returns the price list with the ISBN of every book. Orders uses it under the AppHost, and Inventory will know a book by its ISBN.
   - `POST /books` adds or changes a book.
   - `GET /categories` lists the categories.
 - Each endpoint maps to a service request such as `BookSearchRequest`. A handler turns it into queries and commands.

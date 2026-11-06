@@ -110,10 +110,10 @@ public class ServiceRequestHandlerTests
     {
         var first = Guid.NewGuid();
         var second = Guid.NewGuid();
-        _queryProcessor.Setup<BookPriceListQuery, IList<BookPrice>>(CatResponse.Ok<IList<BookPrice>>(
+        _queryProcessor.Setup<BookPriceListQuery, IList<BookPriceInfo>>(CatResponse.Ok<IList<BookPriceInfo>>(
         [
-            new BookPrice { BookId = second, Amount = 20m },
-            new BookPrice { BookId = first, Amount = 10m }
+            new BookPriceInfo(second, "9780000000002", 20m),
+            new BookPriceInfo(first, "9780000000001", 10m)
         ]));
         var handler = new BookPriceListRequestHandler(_queryProcessor);
 
@@ -122,7 +122,7 @@ public class ServiceRequestHandlerTests
         using (Assert.EnterMultipleScope())
         {
             Assert.That(response.IsSucceeded, Is.True);
-            Assert.That(response.Value!.Select(p => (p.BookId, p.Price)), Is.EqualTo(new[] { (first, 10m), (second, 20m) }));
+            Assert.That(response.Value!.Select(p => (p.BookId, p.Isbn, p.Price)), Is.EqualTo(new[] { (first, "9780000000001", 10m), (second, "9780000000002", 20m) }));
             Assert.That(((BookPriceListQuery)_queryProcessor.Queries.Single()).BookIds, Is.EqualTo(new[] { first, second }));
         }
     }
@@ -132,8 +132,8 @@ public class ServiceRequestHandlerTests
     {
         var known = Guid.NewGuid();
         var unknown = Guid.NewGuid();
-        _queryProcessor.Setup<BookPriceListQuery, IList<BookPrice>>(CatResponse.Ok<IList<BookPrice>>(
-            [new BookPrice { BookId = known, Amount = 10m }]));
+        _queryProcessor.Setup<BookPriceListQuery, IList<BookPriceInfo>>(CatResponse.Ok<IList<BookPriceInfo>>(
+            [new BookPriceInfo(known, "9780000000001", 10m)]));
         var handler = new BookPriceListRequestHandler(_queryProcessor);
 
         var response = await handler.HandleAsync(new BookPriceListRequest([known, unknown]));
@@ -149,7 +149,7 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task BookPriceList_WhenTheQueryFails_ShouldPassTheFailureOn()
     {
-        _queryProcessor.Setup<BookPriceListQuery, IList<BookPrice>>(CatResponse.InternalServerError<IList<BookPrice>>());
+        _queryProcessor.Setup<BookPriceListQuery, IList<BookPriceInfo>>(CatResponse.InternalServerError<IList<BookPriceInfo>>());
         var handler = new BookPriceListRequestHandler(_queryProcessor);
 
         var response = await handler.HandleAsync(new BookPriceListRequest([Guid.NewGuid()]));

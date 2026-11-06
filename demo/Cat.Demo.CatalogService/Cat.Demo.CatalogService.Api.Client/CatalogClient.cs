@@ -826,6 +826,9 @@ namespace Cat.Demo.CatalogService.Api.Client
         [System.Text.Json.Serialization.JsonPropertyName("bookId")]
         public System.Guid BookId { get; set; } = default!;
 
+        [System.Text.Json.Serialization.JsonPropertyName("isbn")]
+        public string Isbn { get; set; } = default!;
+
         [System.Text.Json.Serialization.JsonPropertyName("price")]
         public double Price { get; set; } = default!;
 
