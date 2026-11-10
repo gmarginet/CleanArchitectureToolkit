@@ -32,20 +32,21 @@ Status: not started. `Cat.Commands` itself exists. This plan collects what we kn
 - [The idea](#the-idea)
 - [What we already know](#what-we-already-know)
 - [Decisions and open questions](#decisions-and-open-questions)
+- [Can the module be built?](#can-the-module-be-built)
 - [Questions before building](#questions-before-building)
 
 ## The idea
 
-The module readme says a command changes state and returns no data, only the outcome. Use a query to read data.
+The module README says a command changes state and returns no data, only the outcome. Use a query to read data.
 
-A real use case pushes against that. When a command creates an order, the caller wants the new order id, the order number and the time. The demo solves it by putting result properties on the command, which the handler fills in after it runs. That works, but the module does not say it is allowed. We need to decide whether this is a supported pattern, a thing to avoid, or a reason for a change in the module.
+A real use case pushes against that. When a command creates an order, the caller wants the new order ID, the order number and the time. The demo solves it by putting result properties on the command, which the handler fills in after it runs. That works, but the module does not say it is allowed. We need to decide whether this is a supported pattern, a thing to avoid, or a reason for a change in the module.
 
 ## What we already know
 
-From the module readme:
+From the module README:
 
 - A command changes state and returns no data, only the outcome. Use `Cat.Queries` to read data.
-- A command returns an `ICatResponse`. A failed response is the normal way to say something went wrong.
+- A command returns a `ICatResponse`. A failed response is the normal way to say something went wrong.
 
 From the demo:
 
@@ -59,19 +60,40 @@ From the demo:
 
 | Topic | Decision |
 |---|---|
-| Current rule | The readme says a command returns no data. Nothing newer is decided. |
+| Current rule | The README says a command returns no data. Nothing newer is decided. |
+| Result properties | The owner does not want result properties on the command. A user cannot see what to fill in to run the command. |
+| Caller supplied IDs | This is the preferred way to get an ID. The toolkit still gives users other options, because not every user will agree. |
+| README | The README describes the chosen pattern, and the demo says the same. |
 
 ### Open
 
-- **Result on the command.** Allow result properties as a documented pattern? Cost: the command is no longer a plain message, and a workflow step has to read it back.
-- **A typed command.** A command with a result type, such as `ICatCommand<TResult>` and a response that carries the value. Cost: a bigger change to the processor, the decorators and the workflow steps, and it blurs the line with queries.
-- **Query after the command.** The caller sends the command and then a query for the data. Cost: a second round trip, and the id must still come from somewhere.
-- **Caller supplied ids.** The caller creates the id, so no result is needed. Cost: it does not cover a number the database hands out, like the order number.
-- **Readme.** Whichever way we go, the readme and the demo must say the same thing.
+- **Typed command.** A command with a result type, such as `ICatCommand<TResult>`, handled by `ICatCommandHandler<TCommand, TResult>` that returns an `ICatResponse<TResult>`. You find it the cleanest way to stay flexible, but it lets commands read data, which you do not like. The risk is a convention problem, not a technical one, since a handler could always read data. Ways to limit it:
+  - **A rule in the README.** The result holds only what the command made or decided: an ID, a number, a time. It is never a read model. Cost: nothing in code, and nobody checks it.
+  - **A narrow result type.** The README suggests a small record per command, such as `OrderCreated(OrderId, OrderNumber, PlacedAt)`. It reads like the answer of a write. Cost: one more type per command.
+  - **No typed command.** Then the toolkit supports caller supplied IDs and a query after the command, and nothing else.
+- **Query after the command.** The caller sends the command, then a query for the data. It works well together with caller supplied IDs, because the caller already knows the ID to ask for. Cost: a second round trip. You gave no answer yet.
+- **The order number in the demo.** The order number comes from the database, so the caller cannot supply it. With the rules above the demo has two ways. (1) The workflow creates the `OrderId`, sends the command, and a query step reads the number by that ID. It shows the preferred way. (2) A typed command returns the `OrderCreated` record. It shows the typed command. Which one should the demo show? Recommendation: 1, because it is your preferred way and it needs no change in the module.
+- **Recommendation for the module.** Support three ways and write them in the README in this order: caller supplied IDs as the default, a query after the command when the database hands out a value, and the typed command for the cases that need the result right away, with the rule that it holds only what the command made. Result properties on the command are not documented, and the demo stops using them. Cost: the typed command is a real change in the module, see below.
+
+## Can the module be built?
+
+Yes, in two steps. Only the typed command needs a decision first.
+
+**Step 1, no module change.** It needs no answer to the open points.
+
+- Rewrite the README chapter on results: caller supplied IDs first, then the query after the command.
+- Change the demo: `PlaceOrderState` creates the `OrderId`, `OrderCreateCommand` carries it in, and a query step reads the order number. Today `OrderCreateCommand` has the result properties `OrderId`, `OrderNumber` and `PlacedAt`, and the workflow step copies them out with `Output`. Those go away.
+- A query by order ID is new in the Orders core service. Check that the workflow step for a query, `ProcessQuery`, can read it with `Output`, as the `Cat.FluentWorkflows` README says.
+
+**Step 2, the typed command, only when you want it.** The processor, the abstractions and the logging decorator of `Cat.Commands` have the one handler shape `ICatCommandHandler<TCommand>` today. `Cat.Queries` already has the typed shape, `ICatQuery<TResult>`, so it is the pattern to copy. The work:
+
+- `ICatCommand<TResult>`, `ICatCommandHandler<TCommand, TResult>` and the processor methods for it in `Cat.Commands.Abstractions`.
+- The handler lookup in `CatCommandProcessor`, and the logging decorator for the typed handler.
+- A `ProcessCommand` overload in `Cat.FluentWorkflows` that exposes the result of the response. Check this in the module first.
+- Tests for each, and the README chapter.
 
 ## Questions before building
 
-1. May a command carry a result?
-2. If yes, is a property filled by the handler enough, or do we want a typed command?
-3. If no, how does the demo get the order number back?
-4. Should the readme describe the chosen pattern?
+1. Does `Cat.Commands` get a typed command, or only caller supplied IDs and a query after the command?
+2. If it gets a typed command, which limit do we use: the rule in the README, a narrow result type per command, or both?
+3. Which way does the demo show for the order number: a workflow created ID with a query after, or a typed command?
