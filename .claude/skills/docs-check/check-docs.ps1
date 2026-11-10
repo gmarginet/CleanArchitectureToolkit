@@ -7,7 +7,7 @@ Exit code 1 when there is an error. Warnings do not change the exit code.
 Scope
 - Every markdown file that git knows, tracked or new, except the generated pages in modules/*/namespaces,
   the Jekyll theme, vendor, artifacts and node_modules. Use -IncludeGenerated to add the generated pages.
-- The module readme template and the module plan template are skipped, because their links are written for the folder where the copy goes.
+- Template files are skipped, because their links are written for the folder where the copy goes. That is every file that ends in `.template.md`, the module readme template, the module plan template and everything in resources\templates.
 - CLAUDE.md is skipped for the style warning, because it quotes the forbidden punctuation as examples.
 
 Errors
@@ -15,6 +15,7 @@ Errors
   The published site runs on Linux, where case matters.
 - A link points to an anchor that no heading of the target markdown file has.
 - A code fence is not closed.
+- A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or has no comment line with its `RootPath`.
 - The root README lost its <!-- Modules start--> or <!-- Modules end--> marker.
 - A skill folder has no SKILL.md, has a name that differs from the folder, or is missing from .claude/skills/README.md.
 
@@ -40,7 +41,7 @@ try {
 
 $files = $files | Where-Object {
     $_ -ne 'modules\CatModuleReadmeTemplate.md' -and $_ -ne '.claude\skills\module-plan\ModulePlanTemplate.md' -and
-    $_ -notmatch '^(jekyll-theme|vendor|artifacts)\\' -and $_ -notmatch '(^|\\)node_modules\\' -and
+    $_ -notmatch '^(jekyll-theme|vendor|artifacts|resources\\templates)\\' -and $_ -notmatch '(^|\\)node_modules\\' -and $_ -notmatch '\.template\.md$' -and
     ($IncludeGenerated -or $_ -notmatch '^modules\\[^\\]+\\namespaces\\')
 }
 if ($Path) {
@@ -166,6 +167,23 @@ foreach ($file in $files) {
         if ($text -match '^\s{0,3}\[[^\]]+\]:\s*(\S+)') { Test-Link $file $n $Matches[1] }
     }
     if ($inFence) { $errors.Add("${file}:$fenceStart code fence is not closed") }
+}
+
+# Header regions copied from the header template
+$headerTemplateFile = Join-Path $root '.claude\skills\cat-internal-create-header\header.template.md'
+if (Test-Path $headerTemplateFile) {
+    $headerTemplate = ([System.IO.File]::ReadAllText($headerTemplateFile) -replace "`r`n", "`n")
+    $headerTemplate = [regex]::Match($headerTemplate, '(?s)<!-- region start: Header-->\n.*?<!-- region end: Header-->').Value
+    foreach ($file in $files) {
+        $content = [System.IO.File]::ReadAllText((Join-Path $root $file)) -replace "`r`n", "`n"
+        $region = [regex]::Match($content, '(?s)<!-- region start: Header-->\n.*?<!-- region end: Header-->')
+        if (-not $region.Success) { continue }
+        $comment = [regex]::Match($region.Value, '<!-- Header template: @\.claude\\skills\\cat-internal-create-header\\header\.template\.md, RootPath: (\S+) -->')
+        if (-not $comment.Success) { $errors.Add("${file}: the Header region has no 'Header template' comment line with a RootPath"); continue }
+        if ($region.Value -cne $headerTemplate.Replace('[[RootPath]]', $comment.Groups[1].Value)) {
+            $errors.Add("${file}: the Header region differs from .claude\skills\cat-internal-create-header\header.template.md")
+        }
+    }
 }
 
 # Markers in the root README

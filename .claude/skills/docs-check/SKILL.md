@@ -25,6 +25,7 @@ Errors, which you must fix:
 - A path with the wrong letter case. The published site runs on Linux, where case matters, and Windows hides the mistake.
 - A link to an anchor that no heading of the target markdown file has. Anchors follow the GitHub rules: lowercase, punctuation removed, spaces become hyphens, and a repeated heading gets `-1`, `-2`.
 - A code fence that is never closed.
+- A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or that has no comment line with its `RootPath`. Template files (`*.template.md`) and the files in `resources/templates` are skipped.
 - A missing or repeated `<!-- Modules start-->` or `<!-- Modules end-->` marker in the root `README.md`.
 - A skill folder without `SKILL.md`, with a `name` that differs from the folder, or without a row and an entry in `.claude/skills/README.md`.
 

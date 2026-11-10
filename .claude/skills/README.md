@@ -22,6 +22,10 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 | [module-plan](module-plan/SKILL.md) | Create, update or check a module plan in `plans/`. | `/module-plan update Cat.Messaging outbox decided` |
 | [demo-readme](demo-readme/SKILL.md) | Keep `demo/README.md` and the demo architecture drawing in sync with the demo app. | `/demo-readme Inventory service started` |
 | [cat-verify](cat-verify/SKILL.md) | Build, test and check the regenerated namespaces pages. | `/cat-verify` |
+| [cat-internal-template-concepts](cat-internal-template-concepts/SKILL.md) | The basic concepts of CAT templates: regions, template markers, placeholders. Other template skills load it first. | `/cat-internal-template-concepts` |
+| [cat-internal-create-header](cat-internal-create-header/SKILL.md) | Create or update the header of a template-based markdown file, and update every file that uses it. | `/cat-internal-create-header update` |
+| [cat-internal-create-plan](cat-internal-create-plan/SKILL.md) | Create, build and update a plan in `plans/` from the plan template, and convert old plans. | `/cat-internal-create-plan create Cat.Caching` |
+| [cat-internal-create-template](cat-internal-create-template/SKILL.md) | Create a new template and the skill that uses it, from two skeletons. | `/cat-internal-create-template Cat.Report a module report` |
 | [link-check](link-check/SKILL.md) | Crawl the published site for broken links. Only on request. | `/link-check --external` |
 | [new-module](new-module/SKILL.md) | Start a new module with projects, tests, readme and table row. | `/new-module Cat.Caching` |
 
@@ -60,7 +64,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **Note:** It runs `docs-check` first when markdown changed, and it keeps generated, private and scratch files out of commits.
 
 ### docs-check
-- **What it does:** Runs `docs-check/check-docs.ps1` over all markdown, locally and without web requests. It reports broken relative links, wrong letter case in paths, anchors without a heading, unclosed code fences, a lost root README marker, skills missing from this overview and forbidden punctuation. It skips the generated namespaces pages unless asked.
+- **What it does:** Runs `docs-check/check-docs.ps1` over all markdown, locally and without web requests. It reports broken relative links, wrong letter case in paths, anchors without a heading, unclosed code fences, a Header region that differs from the header template, a lost root README marker, skills missing from this overview and forbidden punctuation. It skips the generated namespaces pages unless asked.
 - **How to use it:** Run it without arguments. Add a folder or file to limit the check while you work.
 - **When:** At the end of a task that changed markdown, a heading or a file name, and after every rename or move.
 - **Note:** `link-check` is the slow crawl of the published site with external links, and runs only on request.
@@ -91,6 +95,27 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **What it does:** Creates the module projects, the test project and the solution entries, then runs `module-readme`, `root-module-table` and `cat-verify`. A new module starts as In development.
 - **How to use it:** Give it the module name and a short description. It asks about anything it cannot decide.
 - **When:** When a new CAT module is started.
+### cat-internal-template-concepts
+- **What it does:** Explains the shared concepts of CAT templates: regions, template markers, placeholders and indentation. It holds no task of its own.
+- **How to use it:** You do not run it. Every skill that works with a template file loads it first.
+- **When:** Whenever a template is used or created.
+- **Note:** Skills for the owner of the toolkit start with `cat-internal-`. Skills for developers who use the toolkit start with `cat-`. The older skills are not renamed yet.
+
+### cat-internal-create-header
+- **What it does:** Fills the `Header` region of a new file from `cat-internal-create-header/header.template.md`. When the header template changes, it finds every file that uses it and replaces their `Header` regions.
+- **How to use it:** Ask for a header for a new file, or ask to update all files that use the header template after you changed it.
+- **When:** When a template-based file is created, and after a change to the header template.
+- **Note:** `docs-check` reports every `Header` region that differs from the template.
+### cat-internal-create-plan
+- **What it does:** Creates a plan from `cat-internal-create-plan/plan.template.md`, adds phases and open questions from `plan.parts.template.md`, keeps the status badge right and processes the answers to open questions. It also builds a phase, converts an old plan and updates plans after the template changed.
+- **How to use it:** Ask for a new plan, to build the next phase of a plan, to convert an old plan, or to update the plans after you changed the template.
+- **When:** When a plan is created, built, answered or converted, and after a change to the plan template.
+- **Note:** The header comes from `cat-internal-create-header`. The instructions live in the `SKILL.md`, so the template files hold only what ends up in a plan.
+### cat-internal-create-template
+- **What it does:** Creates a new template together with the skill that uses it. It copies `BaseTemplate.template.md` to the main template file and `BaseSkill.template.md` to the `SKILL.md`, and adds a parts file when the template needs small templates.
+- **How to use it:** Say what kind of file the template should create. It asks about the name, the regions and the small templates before it starts.
+- **When:** When a new kind of file gets a template.
+- **Note:** It follows the rules of `cat-internal-template-concepts`: instructions in the `SKILL.md`, only the start of the created file in the template.
 
 ## Adding or changing a skill
 - A skill is a folder in `.claude/skills/` with a `SKILL.md`. The front matter holds the `name`, a `description` that says when to use it, and optionally an `argument-hint`.
