@@ -55,7 +55,7 @@ A skill for a developer teaches Claude the CAT conventions inside the repository
 
 #### Background
 From the repository:
-- `.claude/skills/` holds the skills for the owner, such as `new-module`, `module-plan`, `docs-check` and `git-commit`. They are listed in `.claude/skills/README.md`.
+- `.claude/skills/` holds the skills for the owner, such as `new-module`, `cat-internal-create-module-readme`, `docs-check` and `git-commit`. They are listed in `.claude/skills/README.md`.
 - The root readme describes the conventions a skill would teach: the service project structure, the `Abstractions` split, handler registration, `ICatResponse` and error codes.
 - [Cat.Templates.md](Cat.Templates.md) plans `dotnet new` templates for the project structure. A scaffold skill overlaps with it.
 - `docs-check` checks all markdown in the repository, and `pages.yml` builds the GitHub Pages site from the markdown.

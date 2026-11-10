@@ -7,12 +7,13 @@ Exit code 1 when there is an error. Warnings do not change the exit code.
 Scope
 - Every markdown file that git knows, tracked or new, except the generated pages in modules/*/namespaces,
   the Jekyll theme, vendor, artifacts and node_modules. Use -IncludeGenerated to add the generated pages.
-- Template files are skipped, because their links are written for the folder where the copy goes. That is every file that ends in `.template.md`, the module readme template, the module plan template and everything in resources\templates.
+- Template files are skipped, because their links are written for the folder where the copy goes. That is every file that ends in `.template.md`.
 - CLAUDE.md is skipped for the style warning, because it quotes the forbidden punctuation as examples.
 
 Errors
 - A relative link or image points to a file or folder that does not exist, or the case of the path is wrong.
   The published site runs on Linux, where case matters.
+- A module plan (plans/Cat.*.md) has no place in the root README, or a row links to the wrong plan. A module that exists has a Plans link in the module overview. A module that does not exist yet has a row in the Future modules table, and a module is never in both.
 - A link points to an anchor that no heading of the target markdown file has.
 - A code fence is not closed.
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or has no comment line with its `RootPath`.
@@ -40,8 +41,7 @@ try {
 } finally { Pop-Location }
 
 $files = $files | Where-Object {
-    $_ -ne 'modules\CatModuleReadmeTemplate.md' -and $_ -ne '.claude\skills\module-plan\ModulePlanTemplate.md' -and
-    $_ -notmatch '^(jekyll-theme|vendor|artifacts|resources\\templates)\\' -and $_ -notmatch '(^|\\)node_modules\\' -and $_ -notmatch '\.template\.md$' -and
+    $_ -notmatch '^(jekyll-theme|vendor|artifacts)\\' -and $_ -notmatch '(^|\\)node_modules\\' -and $_ -notmatch '\.template\.md$' -and
     ($IncludeGenerated -or $_ -notmatch '^modules\\[^\\]+\\namespaces\\')
 }
 if ($Path) {
@@ -193,6 +193,56 @@ if (Test-Path $rootReadme) {
     foreach ($marker in '<!-- Modules start-->', '<!-- Modules end-->') {
         $count = ([regex]::Matches($content, [regex]::Escape($marker))).Count
         if ($count -ne 1) { $errors.Add("README.md: the marker $marker must appear once. Found $count.") }
+    }
+}
+
+# Plans and the tables of the root README
+$plansRoot = Join-Path $root 'plans'
+if ((Test-Path $rootReadme) -and (Test-Path $plansRoot)) {
+    $readme = [System.IO.File]::ReadAllLines($rootReadme)
+    $moduleFolders = @(Get-ChildItem (Join-Path $root 'modules') -Directory | ForEach-Object { $_.Name })
+    $planNames = @(Get-ChildItem $plansRoot -Filter 'Cat.*.md' -File | ForEach-Object { $_.BaseName })
+
+    # Future modules table: [Cat.X](./plans/Cat.X.md), no backticks, and no module folder yet
+    $futureRows = @{}
+    $futureStart = [array]::IndexOf($readme, '## Future modules')
+    if ($futureStart -ge 0) {
+        for ($i = $futureStart + 1; $i -lt $readme.Count; $i++) {
+            if ($readme[$i] -like '## *') { break }
+            if ($readme[$i] -match '^\| \[`?(Cat\.[\w.]+)`?\]\(\./plans/([^)]+)\)') {
+                $futureRows[$Matches[1]] = $Matches[2]
+            } elseif ($readme[$i] -match '^\| `(Cat\.[\w.]+)`') {
+                $errors.Add("README.md Future modules: $($Matches[1]) has no link to a plan.")
+            }
+        }
+    }
+    foreach ($name in $futureRows.Keys) {
+        if ($futureRows[$name] -ne "$name.md") { $errors.Add("README.md Future modules: $name links to $($futureRows[$name]). Expected $name.md.") }
+        if ($moduleFolders -contains $name) { $errors.Add("README.md Future modules: $name exists in modules/. Remove it from the Future modules table.") }
+    }
+
+    # Plans column of the module overview: [Plans](./plans/Cat.X.md)
+    $planCells = @{}
+    $start = [array]::IndexOf($readme, '<!-- Modules start-->')
+    $end = [array]::IndexOf($readme, '<!-- Modules end-->')
+    if ($start -ge 0 -and $end -gt $start) {
+        for ($i = $start + 1; $i -lt $end; $i++) {
+            if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(\./modules/' -and $readme[$i] -match '\[Plans\]\(\./plans/([^)]+)\)') {
+                $planCells[[regex]::Match($readme[$i], '^\| \[(Cat\.[\w.]+)\]').Groups[1].Value] = $Matches[1]
+            }
+        }
+    }
+    foreach ($name in $planCells.Keys) {
+        if ($planCells[$name] -ne "$name.md") { $errors.Add("README.md module overview: $name links to $($planCells[$name]). Expected $name.md.") }
+    }
+
+    # Every module plan has exactly one place in the README
+    foreach ($name in $planNames) {
+        if ($moduleFolders -contains $name) {
+            if (-not $planCells.ContainsKey($name)) { $errors.Add("plans\${name}.md: $name exists, but its row in the module overview has no Plans link.") }
+        } elseif (-not $futureRows.ContainsKey($name)) {
+            $errors.Add("plans\${name}.md: $name does not exist yet and is not in the Future modules table of the root README.md.")
+        }
     }
 }
 

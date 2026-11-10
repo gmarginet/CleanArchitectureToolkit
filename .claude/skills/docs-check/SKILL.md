@@ -25,12 +25,13 @@ Errors, which you must fix:
 - A path with the wrong letter case. The published site runs on Linux, where case matters, and Windows hides the mistake.
 - A link to an anchor that no heading of the target markdown file has. Anchors follow the GitHub rules: lowercase, punctuation removed, spaces become hyphens, and a repeated heading gets `-1`, `-2`.
 - A code fence that is never closed.
-- A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or that has no comment line with its `RootPath`. Template files (`*.template.md`) and the files in `resources/templates` are skipped.
+- A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or that has no comment line with its `RootPath`. Template files (`*.template.md`) are skipped.
+- A module plan in `plans/Cat.*.md` that has no place in the root `README.md`. A module that exists needs a `[Plans](./plans/Cat.X.md)` link in the module overview. A module that does not exist yet needs a `[Cat.X](./plans/Cat.X.md)` row in the Future modules table. A module is never in both, and a row never links to another plan.
 - A missing or repeated `<!-- Modules start-->` or `<!-- Modules end-->` marker in the root `README.md`.
 - A skill folder without `SKILL.md`, with a `name` that differs from the folder, or without a row and an entry in `.claude/skills/README.md`.
 
 Warnings, which you should fix unless there is a reason:
-- A long dash, `--` or an ellipsis in text. Code spans and code blocks are skipped. CLAUDE.md and the module readme template are skipped.
+- A long dash, `--` or an ellipsis in text. Code spans and code blocks are skipped. CLAUDE.md and template files are skipped.
 
 ## What it does not check
 - External links. Use `link-check` for those, when the owner asks.

@@ -79,7 +79,7 @@ What is decided is a convention and documentation. It needs no new design. The h
 4. **Write the convention in the `Cat.Responses` README**, with the table of area abbreviations once it is decided.
 5. **List the demo errors in `demo/README.md`**, one table per service, built from the three definition classes.
 
-The `module-readme` and `demo-readme` skills cover the README work. Do the rename (step 1) in its own commit, before the documentation.
+The `cat-internal-create-module-readme` and `demo-readme` skills cover the README work. Do the rename (step 1) in its own commit, before the documentation.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions

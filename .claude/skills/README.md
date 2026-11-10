@@ -3,7 +3,7 @@
 Skills are small instruction sets for tasks we repeat in this repo. Claude loads one only when it is needed, so CLAUDE.md stays short.
 
 ## How to use a skill
-- Type `/` followed by the skill name, for example `/module-readme Cat.EFCore`.
+- Type `/` followed by the skill name, for example `/cat-internal-create-module-readme Cat.EFCore`.
 - Or just ask in plain words, for example "update the readme of Cat.EFCore". Claude picks the skill that fits.
 - Type `/` on its own to see all skills with their descriptions.
 - The full rules of a skill live in its `SKILL.md`. This page is only the overview.
@@ -12,14 +12,13 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 
 | Skill | Use it for | Example |
 |-------|------------|---------|
-| [module-readme](module-readme/SKILL.md) | Create or update a module readme from the template. | `/module-readme Cat.EFCore` |
+| [cat-internal-create-module-readme](cat-internal-create-module-readme/SKILL.md) | Create or update a module readme from the module readme template. | `/cat-internal-create-module-readme Cat.EFCore` |
 | [root-module-table](root-module-table/SKILL.md) | Keep the module table in the root README in sync. | `/root-module-table Cat.EFCore stable` |
 | [excalidraw-svg](excalidraw-svg/SKILL.md) | Create or edit an editable Excalidraw drawing in `resources/schemas`. | `/excalidraw-svg add a drawing of the demo security setup` |
 | [mermaid-diagram](mermaid-diagram/SKILL.md) | Write or update an ERD, class or sequence diagram as inline Mermaid. | `/mermaid-diagram ERD for the Catalog service` |
 | [demo-structure](demo-structure/SKILL.md) | Add or restructure a service, client or Aspire project in `demo/`. | `/demo-structure service Orders` |
 | [git-commit](git-commit/SKILL.md) | Commit the changes in logical blocks, with `(skip-pub)` when no code in `modules/` changed. Never pushes. | `/git-commit` |
 | [docs-check](docs-check/SKILL.md) | Check all markdown locally: links, anchors, letter case, code fences, markers and forbidden punctuation. | `/docs-check` |
-| [module-plan](module-plan/SKILL.md) | Create, update or check a module plan in `plans/`. | `/module-plan update Cat.Messaging outbox decided` |
 | [demo-readme](demo-readme/SKILL.md) | Keep `demo/README.md` and the demo architecture drawing in sync with the demo app. | `/demo-readme Inventory service started` |
 | [cat-verify](cat-verify/SKILL.md) | Build, test and check the regenerated namespaces pages. | `/cat-verify` |
 | [cat-internal-template-concepts](cat-internal-template-concepts/SKILL.md) | The basic concepts of CAT templates: regions, template markers, placeholders. Other template skills load it first. | `/cat-internal-template-concepts` |
@@ -31,10 +30,11 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 
 ## Skills in detail
 
-### module-readme
-- **What it does:** Fills the module readme template. It reads the projects, namespace summaries and project references to build the NuGet, Namespaces and Dependencies tables, and keeps the table of contents up to date.
+### cat-internal-create-module-readme
+- **What it does:** Fills the module readme template `cat-internal-create-module-readme/module-readme.template.md`. It reads the projects, namespace summaries and project references to build the NuGet, Namespaces and Dependencies tables with the small templates of `module-readme.parts.template.md`, and keeps the table of contents up to date. It also updates the readmes after the template changed.
 - **How to use it:** Give it the module name. It keeps your intro and usage text unless you ask for a change.
-- **When:** After adding a project to a module, changing dependencies, or writing a new readme.
+- **When:** After adding a project to a module, changing dependencies, writing a new readme, or changing the template.
+- **Note:** The header comes from `cat-internal-create-header`, with `RootPath` `../..`.
 
 ### root-module-table
 - **What it does:** Keeps one row per module folder in the root README, sorted by name, with the In development badge where it applies.
@@ -64,16 +64,10 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **Note:** It runs `docs-check` first when markdown changed, and it keeps generated, private and scratch files out of commits.
 
 ### docs-check
-- **What it does:** Runs `docs-check/check-docs.ps1` over all markdown, locally and without web requests. It reports broken relative links, wrong letter case in paths, anchors without a heading, unclosed code fences, a Header region that differs from the header template, a lost root README marker, skills missing from this overview and forbidden punctuation. It skips the generated namespaces pages unless asked.
+- **What it does:** Runs `docs-check/check-docs.ps1` over all markdown, locally and without web requests. It reports broken relative links, wrong letter case in paths, anchors without a heading, unclosed code fences, a Header region that differs from the header template, a module plan without its place in the root README tables, a lost root README marker, skills missing from this overview and forbidden punctuation. It skips the generated namespaces pages unless asked.
 - **How to use it:** Run it without arguments. Add a folder or file to limit the check while you work.
 - **When:** At the end of a task that changed markdown, a heading or a file name, and after every rename or move.
 - **Note:** `link-check` is the slow crawl of the published site with external links, and runs only on request.
-
-### module-plan
-- **What it does:** Starts a module plan from a template, using what the readmes, plans and demo code already say. It records decisions, moves answered questions from Open to Decided, and keeps the README tables and the other plans in sync. `module-plan/check-plans.ps1` checks links, titles, required chapters and the table of contents, and warns about unknown module names.
-- **How to use it:** Give it the module name and what changed, or ask for a check.
-- **When:** When a future module gets a plan, when a decision about a module is made, or when a module is added, renamed, merged or dropped.
-- **Note:** The demo plans are not covered. Use `demo-readme` for the demo.
 
 ### demo-readme
 - **What it does:** Keeps `demo/README.md` current: the functional description, the architecture, the how to run steps and one chapter per block of the architecture drawing. It runs `demo-readme/sync-demo-architecture.ps1`, which switches the boxes of the drawing to hatched (not built) or solid (built) by checking what exists in `demo/`.
@@ -92,7 +86,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **When:** Only when you ask. It sends thousands of requests and needs the latest push to be published first.
 
 ### new-module
-- **What it does:** Creates the module projects, the test project and the solution entries, then runs `module-readme`, `root-module-table` and `cat-verify`. A new module starts as In development.
+- **What it does:** Creates the module projects, the test project and the solution entries, then runs `cat-internal-create-module-readme`, `root-module-table` and `cat-verify`. A new module starts as In development.
 - **How to use it:** Give it the module name and a short description. It asks about anything it cannot decide.
 - **When:** When a new CAT module is started.
 ### cat-internal-template-concepts
@@ -107,7 +101,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **When:** When a template-based file is created, and after a change to the header template.
 - **Note:** `docs-check` reports every `Header` region that differs from the template.
 ### cat-internal-create-plan
-- **What it does:** Creates a plan from `cat-internal-create-plan/plan.template.md`, adds phases and open questions from `plan.parts.template.md`, keeps the status badge right and processes the answers to open questions. It also builds a phase, converts an old plan and updates plans after the template changed.
+- **What it does:** Creates a plan from `cat-internal-create-plan/plan.template.md`, adds phases and open questions from `plan.parts.template.md`, keeps the status badge right and processes the answers to open questions. It also builds a phase, converts an old plan, links a module plan from the root `README.md`, keeps the other plans and readmes in step and updates plans after the template changed.
 - **How to use it:** Ask for a new plan, to build the next phase of a plan, to convert an old plan, or to update the plans after you changed the template.
 - **When:** When a plan is created, built, answered or converted, and after a change to the plan template.
 - **Note:** The header comes from `cat-internal-create-header`. The instructions live in the `SKILL.md`, so the template files hold only what ends up in a plan.

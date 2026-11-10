@@ -16,12 +16,45 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 - The header comes from the `cat-internal-create-header` skill.
 
 ## Creating a plan
-1. Copy `plan.template.md` to `plans/<PlanName>.md`. The plan file is named after the plan, such as `Cat.Messaging.md` or `Demo.md`.
-2. Replace `[[PlanName]]`.
-3. Fill the `Header` region by following the `cat-internal-create-header` skill.
-4. Fill the `StatusBadge` region with the `NotStartedBadge` template.
-5. Add phase 1 with the `Phase` template, at the end of the file, and its `PhaseListLine` in the `Phases` region.
-6. Run the `docs-check` skill.
+1. Check that no plan exists yet. Check the name against the folders in `modules/`, the files in `plans/` and the Future modules table of the root `README.md`.
+2. Read the sources, see [Where the facts come from](#where-the-facts-come-from). Search them for the module name and its idea.
+3. Copy `plan.template.md` to `plans/<PlanName>.md`. The plan file is named after the plan, such as `Cat.Messaging.md` or `Demo.md`.
+4. Replace `[[PlanName]]`.
+5. Fill the `Header` region by following the `cat-internal-create-header` skill.
+6. Fill the `StatusBadge` region with the `NotStartedBadge` template.
+7. Add phase 1 with the `Phase` template, at the end of the file, and its `PhaseListLine` in the `Phases` region. Put what you found in the `PhaseDescription` region and the unknowns in numbered open questions.
+8. Link the plan from the root `README.md`, see [Where a module plan is linked](#where-a-module-plan-is-linked).
+9. Run the `docs-check` skill.
+
+## Rules for the content
+- `Decided` in a phase description holds only what the owner decided, or what the existing docs state. Name the document when it comes from one. Everything else is an open question. Never invent a decision.
+- Facts in the description come from documents and code that you read. Do not add facts you did not check. Mark a guess as something to check.
+- One decision per open question, answerable in a sentence. Put the blocking questions first.
+- A plan never says a module "will" exist in a certain version or on a date. It only says what is decided.
+- Follow the style rules in CLAUDE.md.
+
+## Where the facts come from
+Read these before you write, and search them for the module name:
+- the root `README.md`: the application architecture, the service project structure and the module tables,
+- the other plans in `plans/`,
+- the readmes of the existing modules that the plan touches,
+- the demo code in `demo/` and `demo/README.md`, with the Roslyn tools for symbols and references.
+
+## Where a module plan is linked
+Only plans of modules (`plans/Cat.*.md`) are linked from the root `README.md`. `Demo.md` and `Skills.md` are not.
+- A module that does not exist yet: a row in the Future modules table. The module name in the row links to the plan, written as `[Cat.X](./plans/Cat.X.md)`. Put no backticks around the name. A code span inside a link does not look like a link on the published site.
+- A module that exists: the Plans column of its row in the module overview, `[Plans](./plans/Cat.X.md)`. The `root-module-table` skill covers that column. The row must not be in the Future modules table.
+- When a future module is started with the `new-module` skill, move it: remove the row from the Future modules table and add the Plans link to the module overview.
+- Keep the plan until the module has done everything in it and the owner agrees that it can go. When the plan goes, remove its link from the root `README.md` too.
+- The readme of the module never links to the plan. Only the root `README.md` does. The readme of a module grows until it holds everything about how the module works and how to use it, so the plan can be removed.
+- The `docs-check` skill checks that every module plan has exactly one place in the root `README.md`.
+
+## Keeping the other documents in step
+Use this when an answer or a decision changes more than one plan, and when a module is renamed, merged or dropped.
+1. Search every plan, the root `README.md`, `demo/README.md` and the module readmes for the module name and for the topic. Use `git grep --untracked -l`, without the generated `namespaces` pages.
+2. Fix what no longer matches. A single decision often touches several plans, for example who owns the outbox or where an interface lives.
+3. When a module is renamed, merged or dropped: rename or delete the plan file with `git mv` or `git rm`, fix the README tables, fix the links in the other plans and say so in the plan that took over.
+4. Run the `docs-check` skill.
 
 ## Phases
 - Every plan has at least one phase. Every phase gets its own chapter and number.
@@ -35,7 +68,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 - If the check finds nothing open, Claude puts the plan in the `ReadyToStartBuildingBadge` status before the build starts.
 - When new questions come in view during the build, Claude adds them to the phase it is building and puts the plan back in the `PlanningBadge` status.
 - When the phase is fully built, Claude does the following in this order:
-  1. Update the README of the module or demo the plan belongs to, using the `module-readme` or `demo-readme` skill, so it incorporates all the info from the phase description.
+  1. Update the README of the module or demo the plan belongs to, using the `cat-internal-create-module-readme` or `demo-readme` skill, so it incorporates all the info from the phase description.
   2. Search the other markdown files for mentions of what the phase changed (`git grep --untracked -l`, without the generated `namespaces` pages) and update the READMEs and plans that are now out of date.
   3. Remove the phase.
 - If no phases are left after removing a phase that was built, Claude can ask if it can remove the plan file.

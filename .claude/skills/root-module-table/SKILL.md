@@ -35,7 +35,7 @@ Keep the module table in the root `README.md` in sync with the folders in `modul
 - Without these blank lines Jekyll treats the table as part of the HTML comment and shows plain text.
 
 ## Steps
-1. List the folders in `modules/`. Ignore files such as `CatModuleReadmeTemplate.md`.
+1. List the folders in `modules/`. Ignore files in `modules/`.
 2. Read the intro of each module readme that needs a new or changed row.
 3. Edit the rows. Keep the existing rows untouched when nothing changed.
 4. Check that the table has exactly one row per module folder and that it is sorted by name.. Check the Plans cell of every row against the files in plans/.

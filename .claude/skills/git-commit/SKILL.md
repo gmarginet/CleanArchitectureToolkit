@@ -11,7 +11,7 @@ Commit what is in the working tree as a series of small logical commits. The rul
 Run this skill only when the owner asks for a commit. Asking for the skill is the permission to commit. It is not permission to push.
 
 ## Rules
-- **Logical blocks.** Several small commits, never one big one. One commit has one reason. A reader of the history should see a step, such as "Add the module-plan skill" or "Rename the Saga plan".
+- **Logical blocks.** Several small commits, never one big one. One commit has one reason. A reader of the history should see a step, such as "Add the docs-check skill" or "Rename the Saga plan".
 - **Every commit stands on its own.** Links and references in a commit must resolve in that commit. A rename goes with the fixes of its references. A new file goes before or with the file that links to it. Order the commits so that this is true.
 - **Skip the publish when there is no code.** A push to `master` publishes NuGet packages. When a commit changes no code in `modules/`, the subject line ends with ` (skip-pub)`. See [Skip-pub](#skip-pub).
 - **Message.** One subject line in the imperative, plain words, about 72 characters or fewer before the suffix, no full stop. Start with a verb: Add, Fix, Rename, Move, Remove, Update. Match the history: `Add the Orders demo service`, `Move the demo plan to plans and add the saga plan`. Add a short body only when the reason is not obvious. Follow the style rules in CLAUDE.md.
@@ -39,7 +39,7 @@ Run this skill only when the owner asks for a commit. Asking for the skill is th
    3. Commit with a here-string, so the message keeps its lines.
       ```
       git commit -m @'
-      Add the module-plan skill (skip-pub)
+      Add the docs-check skill (skip-pub)
 
       A short body when it helps.
 
