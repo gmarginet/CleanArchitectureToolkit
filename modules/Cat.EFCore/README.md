@@ -105,8 +105,17 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 What you get:
 - `CatEntityBase`: a non-clustered Guid primary key on `Id` and a unique clustered index on the identity column `SequenceId`.
-- `CatTemporalEntityBase`: the same as above, in a temporal table with a history table in the `History` schema.
+- `CatTemporalEntityBase`: the same as above, in a [temporal table](https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal/overview?view=sql-server-ver17) with a history table in the `History` schema.
 - `CatReferenceEntityBase`: a non-clustered primary key, and the table is excluded from migrations.
+
+### What are temporal tables
+A temporal table is a SQL Server feature. It keeps the full history of your data, not only the current rows.
+
+- SQL Server stores the current rows in the table itself.
+- Every update or delete moves the old row to a history table.
+- Two period columns, `ValidFrom` and `ValidUntil`, say when a row version was valid.
+- You can query the data as it was at any point in time.
+- Only SQL Server supports them. Read the [overview of temporal tables](https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal/overview?view=sql-server-ver17) for the details.
 
 ### When to use `CatReferenceEntityBase`
 Use it for a table that someone else owns, so you can point a foreign key at it.
