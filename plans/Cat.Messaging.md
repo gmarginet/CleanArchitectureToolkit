@@ -32,6 +32,7 @@ Status: not started. This plan collects what we know. The open questions need an
 - [The idea](#the-idea)
 - [What we already know](#what-we-already-know)
 - [Decisions and open questions](#decisions-and-open-questions)
+- [Can the module be built?](#can-the-module-be-built)
 - [Questions before building](#questions-before-building)
 
 ## The idea
@@ -77,34 +78,66 @@ From the module conventions:
 
 | Topic | Decision |
 |---|---|
-| Transport | Azure Service Bus. |
+| Transport | Azure Service Bus first. |
+| Providers | The first phase supports Azure Service Bus only. In the future the user gets a choice, so a new broker must be possible to add. Every broker gets its own project in the module, such as `Cat.Messaging.AzureServiceBus` and `Cat.Messaging.RabbitMQ`. |
 | Style | The same handler, processor and decorator style as the other modules. |
 | Demo hosting | The Service Bus emulator, started by the AppHost. |
 | Aspire | The module never references Aspire. |
 | Wait step | `Cat.Sagas` goes through the messaging abstractions, not through `Cat.EventAggregators`. |
+| Topology | Both queues and topics. They are created when a service starts. |
+| Contracts | Message types live in the `Contracts` project of the sending service. A service that receives the message references that `Contracts` project. |
+| Naming | By convention the queue, topic and subject use the message type name. The user can override the name. |
+| Message properties | An abstract base class holds the properties the module needs. It is used in the `Contracts` project of the sending service to declare the message types. |
+| Delivery guarantees | This module is about sending, so it only looks at the outbox pattern. |
+| Failures | A message that keeps failing goes to the dead letter queue. By convention the defaults of Azure Service Bus apply, and the user can override them in the configuration of the service. Looking at the dead letter queue is the job of the user. |
+| Dead letter visibility | For users of Aspire it would be handy to see the dead letters on the Aspire dashboard. See the open point. |
+| Ordering and sessions | The defaults of Azure Service Bus apply. Sessions are off by convention, and the user can override that. |
+| Open question order | The check of the local emulator happens as soon as this module has no other open questions. |
 
 ### Open
 
-- **Provider abstraction.** Is the module Azure Service Bus only, or does it hide the transport behind interfaces so another broker could follow?
-- **Topology.** Queues, topics with subscriptions, or both? Who creates them: the AppHost, an admin script or the module at startup?
-- **Message kinds.** Do we separate an event (something happened, many receivers) from a command message (do this, one receiver)?
-- **Contracts.** Where do message types live? In the `Contracts` project of the sending service, in a shared project, or in a copy that the receiver owns? Sharing is the choice of the developer, as the root readme says, so the module should not force one.
-- **Serialization.** `System.Text.Json` only, or pluggable?
-- **Naming and routing.** How does a message type map to a topic or queue name and to subject, properties and a correlation id?
-- **Delivery guarantees.** Service Bus delivers at least once. Does the module give an inbox for duplicate messages and an outbox for the send, or leave that to the transaction part of `Cat.EFCore`?
-- **Failures.** What happens to a message that keeps failing? Dead letter after how many tries? Who looks at the dead letter queue?
-- **Ordering and sessions.** Do we need ordered delivery or sessions in the first version?
-- **Local emulator.** What does the emulator not support, and does that change the design? To check before the build.
+- **Message kinds.** You asked what I think. My view: separate them, but only at the type level, and keep one pipeline underneath.
+  - An **event** says something happened (`OrderPlaced`). Many services may listen, and the sender does not care if nobody does. That fits a **topic**, with a subscription per receiving service.
+  - A **command message** says do this (`ReserveStock`). One receiver must do it, and it must not get lost when the receiver is down. That fits a **queue**. A topic drops a message when no subscription exists, and a queue keeps it.
+  - Without a split the module cannot choose between a queue and a topic by convention. You would have to configure it for every message. The alternative is a topic for everything, and then a "command" with no subscription disappears.
+  - Cost of the split: two small base types, `CatEventMessage` and `CatCommandMessage`, and two send methods. The handler, the outbox, the serialization and the decorators stay the same for both.
+  - Recommendation: split. It is the answer to "queue or topic" that follows from your own decision to support both.
+- **Serialization.** I checked the repository. `Cat.Api.Client`, `Cat.Api.Gateway` and the generated clients use `System.Text.Json`, and nothing uses Newtonsoft. So `System.Text.Json` is the standard already.
+  - Pros: part of .NET, fast, no extra package, source generators for trimming and AOT, and the same everywhere in the toolkit.
+  - Cons: stricter than Newtonsoft by default, so some contract shapes need attributes, such as polymorphism and private setters. It writes JSON only, so a binary format such as Protobuf or Avro does not fit.
+  - Would pluggable pay off? Only when a message must go to or come from a system that wants another format, or when a team has a rule for one. The cost is real: a serializer seam in every module that serializes, such as `Cat.Sagas` and `Cat.Caching`, and a test matrix. You said that if it is pluggable it must be everywhere.
+  - Recommendation: not pluggable now. Messaging keeps one small internal seam for the serializer, with `System.Text.Json` behind it. The message carries a content type property, so a later change is possible without breaking old messages. Decide again when a real case asks for another format. The `Cat.Sagas` plan has the same question, see [Cat.Sagas.md](Cat.Sagas.md).
+- **The base class and the interface.** The base class lives in the `Contracts` project, so that project references the messaging abstractions. The root README wants `Contracts` to have almost no dependencies. An abstractions project is light and targets `netstandard2.0`, so I think it fits, but it is a dependency you accept. Option: an `ICatMessage` interface next to the base class, so a type that cannot inherit can still be a message. Recommendation: both.
+- **Which properties.** A first proposal for the base class: `MessageId` (Guid), `CorrelationId` (Guid) and `OccurredAt`. Nothing about the user or a token, because that is the job of the message headers, see [Cat.EventProcessor.md](Cat.EventProcessor.md).
+- **Correlation ID.** A GUID works, since Service Bus stores the correlation ID as a string. One thing to keep apart: the trace context. The Service Bus SDK already puts a `Diagnostic-Id` property on the message, and that is what continues the trace in the Aspire dashboard. The correlation ID is for your own use, to follow a business flow in the logs across services. Recommendation: a GUID, created at the start of a flow and copied to every message that follows from it. For an order, the order number may be easier to read in a log, so ask whether `CorrelationId` must be a GUID or just a string.
+- **Where the outbox lives.** The outbox is a table in the service database. The sender writes a row in the same `SaveChanges` as the entities, and a background service sends the rows. That needs no transaction decorator, see the note in [Cat.EFCore.md](Cat.EFCore.md). The code needs EF Core, so the module cannot hold it in the abstractions project. Proposal: `Cat.Messaging.Outbox` for the abstraction and the sender loop, and `Cat.Messaging.Outbox.EFCore` for the table and the writing. A developer who does not want an outbox leaves both out. Is the outbox part of the first version? Recommendation: yes, because without it the saga wait step has a hole, see [Cat.Sagas.md](Cat.Sagas.md).
+- **Creating the topology.** You decided that queues and topics get created at startup. Two things to keep in mind. The identity of the service then needs the manage right on the namespace, and production setups often do not give that. And the Service Bus emulator may not allow creating entities at runtime. I did not check this. It is the emulator question below. Recommendation: creating is a setting, on by default as decided, so a team can turn it off and create the entities with a script. A subscription belongs to the receiving service, so it is created by `Cat.EventProcessor` and the topic is created by the sender.
+- **Visible dead letters.** The module must not reference Aspire. It could still publish a metric, for example the number of dead letters per queue or subscription, through `System.Diagnostics.Metrics` with the source name `Cat.Messaging`. The Aspire dashboard shows that metric without any Aspire code in the module, like the traces of the other modules. Cost: the sender needs a management client to ask for the counts, which needs the manage right again. Recommendation: do it after the first version.
+- **Local emulator.** What does the emulator not support, and does that change the design? To check as soon as the other points are answered, as you said. Check at least: creating entities at runtime, topics with several subscriptions, dead letter queues and sessions.
+
+## Can the module be built?
+
+Not yet. The direction is clear, and most of it can start. Three open points block parts of it: the kinds of messages, the place of the outbox and the emulator check.
+
+What can start after the answers on kinds and base class:
+
+1. `Cat.Messaging.Abstractions`: the message base types, the publisher and sender interfaces and the handler interface, in the style of `Cat.Commands`. It targets `netstandard2.0`.
+2. `Cat.Messaging`: the processor and the registration by scanning assemblies, with the decorators from `Cat.Decorators`.
+3. `Cat.Messaging.AzureServiceBus`: sending, the topology at startup and the name convention with an override. It targets the latest stable .NET, because it uses the Azure SDK. Check this when the project is added.
+4. The outbox projects, once their place is decided.
+
+The consuming side is in [Cat.EventProcessor.md](Cat.EventProcessor.md). The first version of this module is not worth much without it, so they probably ship together. That is question 5 below.
 
 ## Questions before building
 
-1. Is Azure Service Bus the only transport we want, now and later?
-2. Should `Cat.Messaging` and `Cat.EventProcessor` be one module with two packages, or two modules?
-3. Where do message contracts live by default, and does the module support both sharing them and copying them?
-4. Do we want an outbox and an inbox in this module, or in `Cat.EFCore`?
-5. How should a failed message end: retry, dead letter, or a failed `ICatResponse` that the handler decides on?
-6. Do we publish from a command handler, from a service request handler or from an event subscriber? Which one is the preferred way?
-7. Who creates topics and subscriptions in the demo and in production?
-8. Which Azure Service Bus SDK version and features may we rely on, such as sessions and scheduled messages?
-9. Is scheduled delivery through the bus ("deliver in 24 hours") in scope? It overlaps with `Cat.Scheduling`.
-10. Should the first version ship before or together with `Cat.EventProcessor`?
+1. Do we split events and command messages, as recommended?
+2. Do we keep `System.Text.Json` only, with a small seam inside the module?
+3. Does the base class come with an `ICatMessage` interface?
+4. Must the correlation ID be a GUID, or is a string better?
+5. Do `Cat.Messaging` and `Cat.EventProcessor` ship together, and are they one module with two packages or two modules?
+6. Does the outbox go in the first version, and in the projects proposed above?
+7. Is creating the topology a setting that a team can turn off?
+8. Do we publish from a command handler, from a service request handler or from an event subscriber? Which one is the preferred way?
+9. Which Azure Service Bus SDK version and features may we rely on, such as sessions and scheduled messages?
+10. Is scheduled delivery through the bus ("deliver in 24 hours") in scope? It overlaps with `Cat.Scheduling`.
+11. Do we add a dead letter metric after the first version?
