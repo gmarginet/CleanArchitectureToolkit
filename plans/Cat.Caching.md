@@ -67,7 +67,7 @@ From the architecture:
 - Services run as several containers. An in-memory cache differs per instance.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the root README.
+- The module does not exist yet. It is listed under the future modules in the readme.
 - `Cat.Queries` and `Cat.Decorators` exist, with the logging decorator for queries as the example of an optional decorator.
 - Nothing in the modules or the demo caches query results yet.
 

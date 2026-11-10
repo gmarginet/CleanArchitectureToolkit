@@ -9,7 +9,7 @@ argument-hint: "[service|client|apphost|servicedefaults] [Name]"
 Every deployable unit in `demo/` gets its own folder. Never put project folders directly in `demo/`.
 
 ## Folder rules
-- **Services:** one folder per service. It holds all projects of that service, as described in the Service Project structure chapter of the root `README.md`: Api, CoreService, Infrastructure, Contracts, DataModels and the optional ones. Read that chapter first.
+- **Services:** one folder per service. It holds all projects of that service, as described in the Service Project structure chapter of the readme: Api, CoreService, Infrastructure, Contracts, DataModels and the optional ones. Read that chapter first.
 - **Service tests:** the optional `ServiceName.CoreService.Tests` project sits in the folder of its service, not in `tests/`. Name it so the file ends in `.Tests.csproj`. Cake finds it by that name under `demo/`.
 - **Clients:** one folder per client. A client that is not a .NET project, such as the React app in `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App`, sits in a subfolder the same way. It gets no entry in `CleanArchitectureToolkit.slnx`, and Cake ignores it.
 - **Aspire AppHosts:** one folder per AppHost.
@@ -38,7 +38,7 @@ Mirror the structure in `CleanArchitectureToolkit.slnx`.
 - Keep the `/demo/` folder entry with `demo/Directory.Build.props` and `demo/README.md`.
 
 ## Steps
-1. Read the Service Project structure chapter in the root `README.md` and `plans/Demo.md`.
+1. Read the Service Project structure chapter in the readme and `plans/Demo.md`.
 2. Decide which projects the unit needs. Start from the required ones and add optional ones only when the plan asks for them.
 3. Create the folders and project files. Use `dotnet new` or copy a project from an existing unit.
 4. Move files with `git mv` so the history stays intact.

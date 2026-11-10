@@ -63,7 +63,7 @@ From Microsoft:
 - CDC is a SQL Server feature. Check the edition and agent requirements for the version we target.
 - The change tables are cleaned up after a retention period, so a reader must keep up or remember its position.
 
-From the root readme:
+From the readme:
 - `Cat.Messaging` is the planned module that publishes and consumes messages on Azure Service Bus.
 - `Cat.EventProcessor` is the planned worker support that turns incoming messages into service requests.
 
@@ -77,7 +77,7 @@ From the `Cat.Auditing` plan:
 - Temporal tables answer "what was the price then" but not "who changed it". CDC has the same limit, since it does not record the user.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the root README.
+- The module does not exist yet. It is listed under the future modules in the readme.
 - Nothing in the code or the demo uses CDC. No other readme or plan mentions it.
 - `Cat.Messaging` and `Cat.EventProcessor` do not exist yet either.
 - The demo has two possible tables for a showcase. Catalog keeps the price history in a temporal table (`BookPrice`). Inventory has its own database project with SQL scripts.
@@ -127,7 +127,7 @@ How does a developer say "changes of table X become message Y"? Code configurati
 
 <!-- region start: Question 8-->
 #### Question 8
-Where do the message types live? The root readme says sharing a `Contracts` project is the choice of the developer.
+Where do the message types live? The readme says sharing a `Contracts` project is the choice of the developer.
 <!-- region end: Question 8-->
 
 <!-- region start: Question 9-->

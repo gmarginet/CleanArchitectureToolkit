@@ -104,7 +104,7 @@ Hatched boxes are not built yet. Solid boxes are. The drawing and the status of 
 
 ### Sharing contracts
 
-The root readme says that sharing the `Contracts` project of a service is a choice of the developer. The demo makes a choice per connection and shows both options.
+The readme says that sharing the `Contracts` project of a service is a choice of the developer. The demo makes a choice per connection and shows both options.
 
 | Connection | Choice | Why |
 |---|---|---|

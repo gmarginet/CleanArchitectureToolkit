@@ -56,14 +56,14 @@ A skill for a developer teaches Claude the CAT conventions inside the repository
 #### Background
 From the repository:
 - `.claude/skills/` holds the skills for the owner, such as `new-module`, `cat-internal-create-module-readme`, `docs-check` and `git-commit`. They are listed in `.claude/skills/README.md`.
-- The root readme describes the conventions a skill would teach: the service project structure, the `Abstractions` split, handler registration, `ICatResponse` and error codes.
+- The readme describes the conventions a skill would teach: the service project structure, the `Abstractions` split, handler registration, `ICatResponse` and error codes.
 - [Cat.Templates.md](Cat.Templates.md) plans `dotnet new` templates for the project structure. A scaffold skill overlaps with it.
 - `docs-check` checks all markdown in the repository, and `pages.yml` builds the GitHub Pages site from the markdown.
 - `skip-pub` goes at the end of a commit subject when no code in `modules/` changed. Files under `plugins/` would not be published as NuGet packages.
 
 #### What exists today
 - No skill for developers exists yet. The folders `plugins/` and `.claude-plugin/` do not exist.
-- The root readme lists the idea under `Other future things`.
+- The readme lists the idea under `Other future things`.
 - The skills in `.claude/skills/` are all for the owner. Four of them already use the `cat-internal-` prefix: `cat-internal-create-header`, `cat-internal-create-plan`, `cat-internal-create-template` and `cat-internal-template-concepts`.
 - The other skills for the owner are not renamed yet. `cat-verify` starts with `cat-`, which is the prefix of the developer skills, so it needs a rename to `cat-internal-verify` when we look at the existing skills one by one.
 - The repository has a `_plugins` folder. It belongs to the Jekyll site and is not related to this plan.
@@ -109,7 +109,7 @@ Things to check when we build it:
 Ideas only. None of them is decided. The names are suggestions.
 
 **Start**
-- `cat-new-service`: scaffold a service with the project structure of the root readme. It overlaps with `Cat.Templates`, so decide which one owns it.
+- `cat-new-service`: scaffold a service with the project structure of the readme. It overlaps with `Cat.Templates`, so decide which one owns it.
 - `cat-add-module`: add a module to a service, with the right packages, the registration call and the project references. It keeps the core on the abstractions.
 
 **Daily work**
@@ -134,7 +134,7 @@ Ideas only. None of them is decided. The names are suggestions.
 - Skills for the planned modules, such as messaging, sagas, scheduling and authorization. They wait for the modules.
 
 #### Decided
-- **Idea.** Create skills for the developers who use the toolkit. Plan them here and list them in the root readme under `Other future things`.
+- **Idea.** Create skills for the developers who use the toolkit. Plan them here and list them in the readme under `Other future things`.
 - **Skill prefix.** Skills for the owner of the toolkit start with `cat-internal-`. Skills for developers who use the toolkit start with `cat-`. New skills use the right prefix from now on. The existing skills are not renamed yet. We look at them one by one later.
 <!-- region end: PhaseDescription-->
 
@@ -182,7 +182,7 @@ The publishing steps above come from memory. Do we check them against the curren
 
 <!-- region start: Question 9-->
 #### Question 9
-Where is it documented? A short chapter in the root readme for developers, once the first skill exists.
+Where is it documented? A short chapter in the readme for developers, once the first skill exists.
 <!-- region end: Question 9-->
 
 <!-- region start: Question 10-->

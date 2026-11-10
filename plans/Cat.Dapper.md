@@ -54,7 +54,7 @@ Entity Framework Core is a good fit for writes and for entity graphs. For a fast
 `Cat.Dapper` gives the same handler style as the other modules, with Dapper underneath. A query handler runs a SQL statement and returns a result. A command handler runs a statement or a bulk operation.
 
 #### Background
-From the root readme:
+From the readme:
 - The infrastructure project holds the query and command handlers and the data access code. The core only knows the handler abstractions.
 - A service that uses a database first approach has an optional `DataAccessTooling` project that scaffolds the entities and the context.
 - `DataModels` also holds query result classes, for results that do not match an entity, such as an overview over several entities. These fit Dapper well.
@@ -69,7 +69,7 @@ From the existing modules:
 - `Cat.EFCore` is about entity configuration, and it has no part in Dapper work.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the root README.
+- The module does not exist yet. It is listed under the future modules in the readme.
 - Nothing in the modules or the demo uses Dapper. The demo plan says Inventory uses the EF Core scaffold only for now, and Dapper waits for this module.
 
 #### Decided

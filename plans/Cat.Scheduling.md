@@ -54,7 +54,7 @@ Some work starts because time passed, not because someone asked. A nightly clean
 `Cat.Scheduling` is the code behind that project. It runs on a schedule. Every run becomes a service request that the core handles. The worker holds no business logic.
 
 #### Background
-From the root readme:
+From the readme:
 - The scheduler is a worker, not a host. It lives in its own project and runs inside the API.
 - It runs work on a schedule, like a nightly cleanup or a periodic import. Every run triggers a service request.
 - It is optional.
@@ -75,7 +75,7 @@ From the architecture:
 - Services run as containers in Azure Container Apps. A service can run several instances, so a job must not run twice at the same time.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the root README.
+- The module does not exist yet. It is listed under the future modules in the readme.
 - The `CleanUpOrderCounters` service request exists in the contracts of Orders, with its handler and tests. The counter cleanup command handler uses `TimeProvider`.
 - Until the scheduler exists, the development endpoint `POST /development/scheduler/clean-up-order-counters` triggers the request. It only exists in the Development environment.
 - Orders has no `Scheduler` project yet, and the Notifications service does not exist.

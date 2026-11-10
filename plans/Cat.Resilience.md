@@ -52,7 +52,7 @@ A new module, `Cat.Resilience`, with retry and circuit breaker decorators for ca
 Calls to other services and to external systems fail now and then. A retry fixes a short glitch. A circuit breaker stops hammering something that is down. Decorators can add both to a handler without touching its code.
 
 #### Background
-From the root readme:
+From the readme:
 - External integrations, like an email provider or a storage account, live in the infrastructure project. The core never calls them. It sends a query or a command, and a handler talks to the integration.
 - A call to another service goes through the API gateway.
 - A slow or unavailable service must not bring down the caller.
@@ -71,7 +71,7 @@ From the module conventions:
 - Handlers of `Cat.Commands`, `Cat.Queries` and `Cat.ServiceRequests` run through decorators from `Cat.Decorators`.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the root README.
+- The module does not exist yet. It is listed under the future modules in the readme.
 - The demo uses the standard resilience handler of `ServiceDefaults` for its `HttpClient` calls. The demo readme says it does not use this module for now.
 - The separate payment service exists as `Cat.Demo.PaymentService`. Its configuration has a latency and an outage setting, so it can fail on purpose.
 - The Orders tests include `FastFailResilienceTests`.

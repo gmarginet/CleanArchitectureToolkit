@@ -56,7 +56,7 @@ Today the modules have nothing for the message side. `Cat.Messaging` fills that 
 The module should feel like `Cat.Commands` and `Cat.Queries`: a message is a plain type, a handler handles it, a processor finds the handler, and decorators wrap it.
 
 #### Background
-From the root readme:
+From the readme:
 - The sender does not know who receives the message.
 - A slow or unavailable service does not block the sender.
 - Messages stay on the bus until a consumer handles them.
@@ -80,7 +80,7 @@ From the module conventions:
 - The processing side lives in `Cat.EventProcessor`, the worker of the service project structure. This module is the sending side and the shared contracts.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the root README.
+- The module does not exist yet. It is listed under the future modules in the readme.
 - The demo has no Service Bus emulator in the AppHost, no `OrderPlaced` message and no outbox. The demo readme says Inventory does not listen to `OrderPlaced` yet. That comes with the messaging stage.
 - Orders announces facts inside the service with `Cat.EventAggregators`. `OrderAuditSubscriber` handles the order events. That is the place where a bridge to the bus would come.
 - The comment on `IPaymentProvider` says the payment call may go over the Service Bus later.
@@ -141,7 +141,7 @@ Recommendation: not pluggable now. Messaging keeps one small internal seam for t
 
 <!-- region start: Question 3-->
 #### Question 3
-Does the base class come with an `ICatMessage` interface? The base class lives in the `Contracts` project, so that project references the messaging abstractions. The root README wants `Contracts` to have almost no dependencies. An abstractions project is light and targets `netstandard2.0`, so it probably fits, but it is a dependency the owner accepts. An `ICatMessage` interface next to the base class lets a type that cannot inherit still be a message.
+Does the base class come with an `ICatMessage` interface? The base class lives in the `Contracts` project, so that project references the messaging abstractions. The readme wants `Contracts` to have almost no dependencies. An abstractions project is light and targets `netstandard2.0`, so it probably fits, but it is a dependency the owner accepts. An `ICatMessage` interface next to the base class lets a type that cannot inherit still be a message.
 
 Recommendation: both.
 <!-- region end: Question 3-->

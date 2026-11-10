@@ -52,7 +52,7 @@
 Every service in the architecture is built from the same set of projects, wired the same way. Making a new service by hand means creating up to nine projects, setting the references right and writing the same startup code. A `dotnet new` template does it in one command.
 
 #### Background
-From the root readme:
+From the readme:
 - The service project structure has these projects: Api (required), Scheduler (optional), EventProcessor (optional), CoreService (required), Infrastructure (required), Contracts (required), DataModels (required), Infrastructure.DataAccessTooling (optional) and CoreService.Tests (optional).
 - The reference rules: dependencies point inwards, the core only references the abstractions of the CAT modules, the API is the only place where everything is wired together, and Contracts stays small.
 - A service is either code first (hand written entities, migrations in Infrastructure) or database first (scaffolded entities and context through the DataAccessTooling project).
@@ -69,13 +69,13 @@ From the demo plan:
 - The AppHost references the Api project of each service, so a new service also needs a line there.
 
 #### What exists today
-- The templates do not exist yet. They are listed under the future modules in the root README.
+- The templates do not exist yet. They are listed under the future modules in the readme.
 - The repository has no template project and no `template.json`. The demo services are the working examples to build from.
 - The `Skills` plan asks who scaffolds a new service, the template or a skill. See [Skills.md](Skills.md).
 
 #### Decided
 - **Form.** `dotnet new` templates.
-- **Content.** The service project structure of the root readme.
+- **Content.** The service project structure of the readme.
 - **Optional parts.** Scheduler, EventProcessor, DataAccessTooling and Tests stay optional.
 <!-- region end: PhaseDescription-->
 

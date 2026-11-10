@@ -54,7 +54,7 @@ A service sometimes needs data or an action from another service, and it needs t
 `Cat.Api.Client` gives a typed client for that call. It returns an `ICatResponse`, like everything else in the toolkit, so a failed call looks like any other failed use case.
 
 #### Background
-From the root readme:
+From the readme:
 - Services never call each other directly. The call goes through the API gateway.
 - A service only needs to know the gateway address.
 - The `Contracts` project of a service has almost no dependencies, so other services and clients can reference it. Sharing it is a choice of the developer, not a rule.
@@ -81,7 +81,7 @@ From the demo and the code:
 - Orders uses three generated clients: Catalog, payment and Inventory. Each has a `ServiceName.Api.Client` project with a refresh script, such as `Refresh-CatalogClient.ps1`.
 - Orders forwards the token of the caller with its own `ForwardBearerTokenHandler`.
 - The module readme covers the layout of a client project, the NSwag settings, the call helper, the registration, the error mapping and resilience.
-- The root readme still marks the module as in development.
+- The readme still marks the module as in development.
 
 #### Decided
 - **Route.** Calls go through the API gateway.
@@ -93,7 +93,7 @@ From the demo and the code:
 - **Generation project.** None. NSwag reads the saved document, so no project needs a reference to the API project.
 - **Layout.** A service that offers a client gets a `ServiceName.Api.Client` project. It references the module and nothing else. The saved OpenAPI document and the NSwag settings sit with it.
 - **Errors.** The generated code throws on a failed call. The module turns that into an `ICatResponse` in one place, so the generated code stays as it is.
-- **Models.** By default the client has its own generated models. Sharing the `Contracts` project of the service is the choice of the developer, see the root readme.
+- **Models.** By default the client has its own generated models. Sharing the `Contracts` project of the service is the choice of the developer, see the readme.
 - **Shared Contracts.** The generated class and its methods are the same with and without shared `Contracts`. When the developer shares `Contracts`, the generator skips the models and imports the namespace of `Contracts`, and the client project references `Contracts`. The module is referenced in both cases, because it holds the base class, the exception type, the wrapper to `ICatResponse` and the NSwag settings template. The Inventory client of the demo uses this variant. Its `nswag.json` lists the models that `Contracts` already holds in `excludedTypeNames` and adds the namespace of `Contracts` to `additionalNamespaceUsages`. The Catalog and payment clients use their own models.
 - **Token.** The client forwards the token of the caller. A client credentials token waits until a call needs it, because the realm has no client for that.
 - **Error class.** The error body shape for clients is a plain class, for example `CatErrorResponse`, in `Cat.Api.Client`. Only the client uses it, so it is not shared and needs no project of its own. It has the same JSON shape as `CatProblemDetails` and a concrete error item. `CatProblemDetails` stays in `Cat.Minimal.Api`, because it needs the ASP.NET Core `ProblemDetails` base. A test keeps the two shapes equal. The wrapper of the module reads the body text of a failed call into the class, so it does not depend on the generated models.
@@ -124,7 +124,7 @@ The module itself is built. What is left is the documentation and the close out.
 - The readme gets these chapters.
 - The roadmap stage 3b is marked done. It is not yet.
 - The in development badge leaves the module overview.
-- The plan file and its links go. Links to remove: the Plans column of the module row in the root `README.md`, `plans/Demo.md` (stage 3b and the notes), and `plans/Cat.Resilience.md` and `plans/Cat.Telemetry.md` if they link it.
+- The plan file and its links go. Links to remove: the Plans column of the module row in the readme, `plans/Demo.md` (stage 3b and the notes), and `plans/Cat.Resilience.md` and `plans/Cat.Telemetry.md` if they link it.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions

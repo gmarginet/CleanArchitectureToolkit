@@ -33,7 +33,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 8. Run the `docs-check` skill.
 
 ## Plans
-- Never link to `plans/` from a module readme. Only the root `README.md` links to a plan.
+- Never link to `plans/` from a module readme. Only the readme links to a plan.
 - The readme must in the end hold everything about how the module works and how to use it, so that the plan can be removed. When the plan holds a decision that a developer needs to know, write it in the readme.
 
 ## Regions
@@ -65,7 +65,7 @@ Use this when the owner changes `module-readme.template.md` or `module-readme.pa
 
 ## Afterwards
 - Check that every project in the module has a row in the NuGet and Namespaces tables.
-- If the module is new or its description changed, run the `root-module-table` skill so the root README row matches the intro.
+- If the module is new or its description changed, run the `readme-module-table` skill so the readme row matches the intro.
 - Check that the module folder has its `README.md` in `CleanArchitectureToolkit.slnx`.
 
 ## Placeholders

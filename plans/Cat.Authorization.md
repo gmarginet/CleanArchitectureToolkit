@@ -66,7 +66,7 @@ From the module conventions:
 - The `Contracts` project stays small and free of service internals, so a permission attribute on a request needs a home that `Contracts` can reference.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the root README.
+- The module does not exist yet. It is listed under the future modules in the readme.
 - Keycloak runs in the demo, started by the AppHost. `AddDemoJwtAuthentication` in `ServiceDefaults` adds JWT bearer authentication when `Authentication:Authority` is set. The role claim is `roles`, and the `admin` policy requires the `admin` role.
 - `ICurrentUser` lives in `Cat.Demo.OrderService.CoreService`, with two implementations in the Api project:
   - `TokenCurrentUser` reads the user from the claims of the token. It is used when authentication is on.

@@ -73,7 +73,7 @@ From the architecture:
 - Everything runs as containers in Azure Container Apps.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the root README.
+- The module does not exist yet. It is listed under the future modules in the readme.
 - The activity sources of the modules exist: `Cat.ServiceRequests` in the service request decorator and `Cat.FluentWorkFlows` in the workflow processor.
 - `ConfigureOpenTelemetry` in the demo `ServiceDefaults` sets up logs, metrics and traces.
   - Tracing adds the application name and the `Cat.*` sources, plus ASP.NET Core and `HttpClient` instrumentation.

@@ -53,7 +53,7 @@
 - `Cat.Localizations` holds the no-op localizer and the module registration `AddCatNoLocalizationLocalizer`.
 - The no-op localizer returns the key itself. It fills in placeholders when the key contains them, in the order of the arguments.
 - The module readme shows how to write your own `ICatLocalizer`.
-- The root readme marks the module as in development.
+- The readme marks the module as in development.
 
 #### What we want to build
 - A real provider, so the module is useful beyond the no-op localizer. Which one comes first is open (see question 2). Each provider is a project that a developer can pick or skip.

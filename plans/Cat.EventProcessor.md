@@ -54,7 +54,7 @@ Not all work comes in over HTTP. A message on Azure Service Bus is work that sta
 `Cat.EventProcessor` is the code behind that project. It listens to the bus. Every incoming message becomes a service request that the core handles. The worker holds no business logic.
 
 #### Background
-From the root readme:
+From the readme:
 - The event processor is a worker, not a host. It has no executable. It lives in its own project and runs inside the API.
 - It listens to Azure Service Bus. Every incoming message triggers a service request.
 - It is optional. A service adds it only when it needs it.
@@ -74,7 +74,7 @@ From the module conventions:
 - Decorators from `Cat.ServiceRequests` already give logging, validation and tracing. The worker should reuse them and not add its own.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the root README.
+- The module does not exist yet. It is listed under the future modules in the readme.
 - The demo has no message listener. The Orders `DevelopmentEndpoints` has a group for the Scheduler, `/development/scheduler`. It has no group for an event processor.
 - The service request handler interfaces and the logging, validation and tracing decorators of `Cat.ServiceRequests` exist.
 - `Cat.Responses` has the outcomes the failure table uses: `BadRequest`, `NotFound`, `Conflict`, `Forbidden`, `Unauthorized` and `InternalServerError`.

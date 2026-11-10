@@ -13,11 +13,11 @@ Scope
 Errors
 - A relative link or image points to a file or folder that does not exist, or the case of the path is wrong.
   The published site runs on Linux, where case matters.
-- A module plan (plans/Cat.*.md) has no place in the root README, or a row links to the wrong plan. A module that exists has a Plans link in the module overview. A module that does not exist yet has a row in the Future modules table, and a module is never in both.
+- A module plan (plans/Cat.*.md) has no place in the readme, or a row links to the wrong plan. A module that exists has a Plans link in the module overview. A module that does not exist yet has a row in the Future modules table, and a module is never in both.
 - A link points to an anchor that no heading of the target markdown file has.
 - A code fence is not closed.
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or has no comment line with its `RootPath`.
-- The root README lost its <!-- Modules start--> or <!-- Modules end--> marker.
+- The readme lost its <!-- Modules start--> or <!-- Modules end--> marker.
 - A skill folder has no SKILL.md, has a name that differs from the folder, or is missing from .claude/skills/README.md.
 
 Warnings
@@ -186,20 +186,20 @@ if (Test-Path $headerTemplateFile) {
     }
 }
 
-# Markers in the root README
-$rootReadme = Join-Path $root 'README.md'
-if (Test-Path $rootReadme) {
-    $content = [System.IO.File]::ReadAllText($rootReadme)
+# Markers in the readme
+$readmeFile = Join-Path $root 'README.md'
+if (Test-Path $readmeFile) {
+    $content = [System.IO.File]::ReadAllText($readmeFile)
     foreach ($marker in '<!-- Modules start-->', '<!-- Modules end-->') {
         $count = ([regex]::Matches($content, [regex]::Escape($marker))).Count
         if ($count -ne 1) { $errors.Add("README.md: the marker $marker must appear once. Found $count.") }
     }
 }
 
-# Plans and the tables of the root README
+# Plans and the tables of the readme
 $plansRoot = Join-Path $root 'plans'
-if ((Test-Path $rootReadme) -and (Test-Path $plansRoot)) {
-    $readme = [System.IO.File]::ReadAllLines($rootReadme)
+if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
+    $readme = [System.IO.File]::ReadAllLines($readmeFile)
     $moduleFolders = @(Get-ChildItem (Join-Path $root 'modules') -Directory | ForEach-Object { $_.Name })
     $planNames = @(Get-ChildItem $plansRoot -Filter 'Cat.*.md' -File | ForEach-Object { $_.BaseName })
 
@@ -241,7 +241,7 @@ if ((Test-Path $rootReadme) -and (Test-Path $plansRoot)) {
         if ($moduleFolders -contains $name) {
             if (-not $planCells.ContainsKey($name)) { $errors.Add("plans\${name}.md: $name exists, but its row in the module overview has no Plans link.") }
         } elseif (-not $futureRows.ContainsKey($name)) {
-            $errors.Add("plans\${name}.md: $name does not exist yet and is not in the Future modules table of the root README.md.")
+            $errors.Add("plans\${name}.md: $name does not exist yet and is not in the Future modules table of the readme.")
         }
     }
 }

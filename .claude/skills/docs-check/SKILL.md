@@ -1,6 +1,6 @@
 ---
 name: docs-check
-description: Check the markdown of the repository locally and fast, with no web requests. Finds broken relative links, wrong letter case in paths, missing anchors, unclosed code fences, a lost root README marker, skills missing from the skills overview, and forbidden punctuation. Use at the end of a task that changed markdown, a link target, a heading or a file name, and after every rename or move.
+description: Check the markdown of the repository locally and fast, with no web requests. Finds broken relative links, wrong letter case in paths, missing anchors, unclosed code fences, a lost readme marker, skills missing from the skills overview, and forbidden punctuation. Use at the end of a task that changed markdown, a link target, a heading or a file name, and after every rename or move.
 argument-hint: "[folder or file to limit the check]"
 ---
 
@@ -26,8 +26,8 @@ Errors, which you must fix:
 - A link to an anchor that no heading of the target markdown file has. Anchors follow the GitHub rules: lowercase, punctuation removed, spaces become hyphens, and a repeated heading gets `-1`, `-2`.
 - A code fence that is never closed.
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or that has no comment line with its `RootPath`. Template files (`*.template.md`) are skipped.
-- A module plan in `plans/Cat.*.md` that has no place in the root `README.md`. A module that exists needs a `[Plans](./plans/Cat.X.md)` link in the module overview. A module that does not exist yet needs a `[Cat.X](./plans/Cat.X.md)` row in the Future modules table. A module is never in both, and a row never links to another plan.
-- A missing or repeated `<!-- Modules start-->` or `<!-- Modules end-->` marker in the root `README.md`.
+- A module plan in `plans/Cat.*.md` that has no place in the readme. A module that exists needs a `[Plans](./plans/Cat.X.md)` link in the module overview. A module that does not exist yet needs a `[Cat.X](./plans/Cat.X.md)` row in the Future modules table. A module is never in both, and a row never links to another plan.
+- A missing or repeated `<!-- Modules start-->` or `<!-- Modules end-->` marker in the readme.
 - A skill folder without `SKILL.md`, with a `name` that differs from the folder, or without a row and an entry in `.claude/skills/README.md`.
 
 Warnings, which you should fix unless there is a reason:

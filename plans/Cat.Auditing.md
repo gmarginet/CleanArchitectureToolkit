@@ -70,7 +70,7 @@ From the architecture:
 - Important events also go out on the Service Bus.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the root README.
+- The module does not exist yet. It is listed under the future modules in the readme.
 - The demo has `OrderAuditSubscriber` in the core service of Orders, and its own `ICurrentUser`.
 - `ICatUser` does not exist yet. It is planned in `Cat.Authorization.Abstractions`, see [Cat.Authorization.md](Cat.Authorization.md).
 - `Cat.EFCore.Entities` has a temporal entity base class, which keeps the history of the entity.

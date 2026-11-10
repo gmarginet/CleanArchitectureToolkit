@@ -58,7 +58,7 @@ Two jobs repeat in every service that uses Entity Framework Core.
 Neither gets a module of its own. They become new projects inside `Cat.EFCore`, next to the entity and model builder projects. A developer picks the projects they need and leaves the rest.
 
 #### Background
-From the root README:
+From the readme:
 - The infrastructure project holds the query handlers, the command handlers, the data access code and the registration extension method.
 - The core only knows the abstractions of `Cat.Queries` and `Cat.Commands`. The infrastructure implements the handlers.
 - The core knows nothing about the database.

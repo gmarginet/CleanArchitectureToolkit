@@ -1,6 +1,6 @@
 ---
 name: new-module
-description: Scaffold a new module end to end. Creates the projects in modules/, the test project, the solution entries, the module readme and the root README row. Use when a new CAT module is started.
+description: Scaffold a new module end to end. Creates the projects in modules/, the test project, the solution entries, the module readme and the readme row. Use when a new CAT module is started.
 argument-hint: "[ModuleName] [short description]"
 ---
 
@@ -25,14 +25,14 @@ Set up a new module so it matches the others. New modules start with the status 
    - Add `<Folder Name="/modules/<ModuleName>/">` with `<File Path="modules/<ModuleName>/README.md" />` and one `<Project>` entry per project. Keep the folders sorted by name.
    - Add the test project to the `/tests/` folder, sorted by name.
 5. **Module readme.** Run the `cat-internal-create-module-readme` skill for the new module.
-6. **Root table.** Run the `root-module-table` skill. Add the row with the In development badge. If the module had a row in the Future modules table of the root `README.md`, remove that row and put the Plans link in the new row. The `cat-internal-create-plan` skill describes this.
+6. **Readme table.** Run the `readme-module-table` skill. Add the row with the In development badge. If the module had a row in the Future modules table of the readme, remove that row and put the Plans link in the new row. The `cat-internal-create-plan` skill describes this.
 7. **Verify.** Run the `cat-verify` skill. The build generates the `namespaces/` pages for the new projects.
 8. **Check the generated pages.** They should appear in `modules/<ModuleName>/namespaces/`. If you need to change them, change the XML docs in the code and build again.
 
 ## Done when
 - All projects and the test project build and the tests pass.
 - The module has a readme with all blocks filled and a correct table of contents.
-- The root README has a row for the module with the In development badge.
+- The readme has a row for the module with the In development badge.
 - The solution file lists the folder, the readme, the projects and the test project.
 
 Do not commit unless the owner asks for it.

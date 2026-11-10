@@ -1,12 +1,12 @@
 ---
-name: root-module-table
-description: Update the module table in the root README.md. Use when a module is added or removed, when a module description changes, or when a module goes in or out of development.
+name: readme-module-table
+description: Update the module table in the readme. Use when a module is added or removed, when a module description changes, or when a module goes in or out of development.
 argument-hint: "[module name] [stable|development]"
 ---
 
-# Root readme module table
+# Readme module table
 
-Keep the module table in the root `README.md` in sync with the folders in `modules/`.
+Keep the module table in the readme in sync with the folders in `modules/`.
 
 ## Scope
 - Edit only between `<!-- Modules start-->` and `<!-- Modules end-->`.

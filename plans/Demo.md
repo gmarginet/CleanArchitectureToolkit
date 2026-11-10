@@ -111,7 +111,7 @@ Notifications and scheduling. The Notifications service, `Cat.Scheduling` and `C
   - A nightly low stock report.
 - `Cat.Localizations` writes the texts in the language of the customer: category names, order statuses and email texts in a few languages.
 - Work without a user, such as the Scheduler, uses a client credentials token.
-- The Scheduler is the worker of a service, as the root readme describes it. In debug mode the API has a development endpoint group with a sub group per worker.
+- The Scheduler is the worker of a service, as the readme describes it. In debug mode the API has a development endpoint group with a sub group per worker.
 
 #### What exists today
 - The Notifications service does not exist. The demo readme lists it as planned, and the box in the drawing is hatched.

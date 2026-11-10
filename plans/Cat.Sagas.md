@@ -115,7 +115,7 @@ Claude read the engine in `modules/Cat.FluentWorkflows`.
 | Handling a workflow that changed while instances were stored | Both |
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the root README.
+- The module does not exist yet. It is listed under the future modules in the readme.
 - The engine in `Cat.FluentWorkflows` is as described in the findings. It has no suspend, no checkpoint and no `ResumeAsync`.
 - Orders already works as phase 0 of the build order below:
   - The place order workflow has a `TakePaymentStep` that calls `IPaymentProvider`.

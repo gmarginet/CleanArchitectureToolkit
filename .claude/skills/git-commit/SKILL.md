@@ -60,7 +60,7 @@ Group by reason, not by folder. Typical blocks, in a good order:
 7. **Resources.** A drawing and the text that describes it can go together.
 
 Hints:
-- The root `README.md` often holds several topics. Put the file with the block that needs it most, and order the blocks so that links resolve. When one file really holds two separate topics, stage only the hunks you want. `git add -p` is interactive and not supported here. Save `git diff -U0 -- <file>` to the scratchpad, keep only the hunks for this block, and apply it with `git apply --cached --unidiff-zero <patch file>`. Use this only when it clearly makes the history better.
+- The readme often holds several topics. Put the file with the block that needs it most, and order the blocks so that links resolve. When one file really holds two separate topics, stage only the hunks you want. `git add -p` is interactive and not supported here. Save `git diff -U0 -- <file>` to the scratchpad, keep only the hunks for this block, and apply it with `git apply --cached --unidiff-zero <patch file>`. Use this only when it clearly makes the history better.
 - Do not split so far that a commit is meaningless. Do not merge unrelated work to save time.
 - A fix for something you added in this same session belongs in the commit that added it. Fix it before you commit, not in a later commit.
 
