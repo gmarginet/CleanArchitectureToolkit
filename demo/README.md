@@ -527,7 +527,7 @@ erDiagram
     OrderStatus {
         Guid Id PK
         int SequenceId
-        string Code
+        string Code UK
     }
     Order {
         Guid Id PK
