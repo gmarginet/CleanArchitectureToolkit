@@ -108,3 +108,8 @@ When writing, modifying, or generating code comments, XML documentation, or mark
 - **Punctuation:** NEVER use long dashes (`—` or `--`), ellipses (`...`), or decorative markdown wrappers. Stick to standard sentences.
 - **Structure:** Write in the active voice with short, punchy sentences. Use concise bullet fragments instead of sprawling text walls.
 - **XML Docs:** Keep C# XML `<summary>` tags descriptive but grounded. Do not write generic preambles like *"This method is used to..."*—start immediately with the action (e.g., *"Calculates the module layout boundaries."*).
+- **Words for people:** Use the same word for the same person in every skill, template, plan, readme and XML doc.
+  - **Owner:** the person who owns the toolkit and decides the design. Never "author".
+  - **Claude:** the assistant.
+  - **Developer:** a person who uses the toolkit modules in their own application.
+  - **User:** a person who uses an application built with the toolkit, such as the demo app. Never use "user" for a developer.

@@ -10,14 +10,14 @@ Create or update `modules/<ModuleName>/README.md` from the template.
 
 ## Before you start
 - Read the latest `modules/CatModuleReadmeTemplate.md`. Never work from memory.
-- Read the existing readme of the module, if there is one. Keep the intro and usage text unless the user asks to change them.
+- Read the existing readme of the module, if there is one. Keep the intro and usage text unless the owner asks to change them.
 - List the projects in the module folder (one `.csproj` per project). The root namespace of a project is its project name.
 - Read the namespace summaries in `modules/<ModuleName>/namespaces/<NamespaceName>/index.md` for the descriptions. These files are generated. Read them only.
 - Read the `ProjectReference` entries in the `.csproj` files. A reference to a project of another module is a dependency.
 
 ## Plans
 - Never link to `plans/` from a module readme. Only the root `README.md` links to a plan.
-- The readme must in the end hold everything about how the module works and how to use it, so that the plan can be removed. When the plan holds a decision that a user needs to know, write it in the readme.
+- The readme must in the end hold everything about how the module works and how to use it, so that the plan can be removed. When the plan holds a decision that a developer needs to know, write it in the readme.
 
 ## Fill the template
 Replace these placeholders. Keep every block marker comment.
