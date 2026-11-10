@@ -71,16 +71,32 @@ From the module conventions:
 
 - **Members of `ICatUser`.** The demo has `UserId`, `Name`, `Email` and `IsAdmin`. `IsAdmin` is a demo rule. A general interface needs roles (`IsInRole`) or claims, and an `IsAuthenticated` flag. Is the id a string? Keycloak's `sub` is a string, and the demo stores it in `Customer.ExternalId`.
 - **Package name.** `Cat.Auditing` references `Cat.Authorization.Abstractions` only to know who the user is. That is fine while the project stays tiny. If it grows, a neutral name may be better.
-- **No user.** Scheduler runs and message handlers have no HTTP user. Does `ICatUser` return an unauthenticated user, or a named system user?
+- **No user.** Scheduler runs and message handlers have no HTTP user. Does `ICatUser` return an unauthenticated user, or a named system user? Decided elsewhere, for the messages: a message sent for a user carries the token of that user, and a message sent by a system without a user carries the token of that system, see [Cat.EventProcessor.md](Cat.EventProcessor.md). For the scheduler, the recommendation is a named system user, see [Cat.Scheduling.md](Cat.Scheduling.md). What is still open is what `ICatUser` returns when no token comes with the work at all.
 - **Implementation.** The demo implements it in the Api project from the claims. Does the module ship an ASP.NET Core implementation in its own project, so the abstractions stay free of ASP.NET, or only document it? Workers need a way to set the user in a scope.
 - **Build order.** The abstractions project is small. Build it first, before the decorator, so the demo, `Cat.Auditing` and `Cat.UnitTesting` can use it early.
 - **Policy model.** Roles only, permissions, claims based rules or ownership rules?
-- **Declaring a rule.** An attribute on the request type, a registration per request, or a policy class per request?
-- **Contracts.** If the rule is an attribute on the request, where does the attribute type live so `Contracts` stays light?
+- **Only some requests need authorization (the note of the owner).** The factory of `Cat.Decorators` wraps every handler of a service type, so the authorization decorator would surround every service request handler. But only some need a check. You do not see how to select them, and asked for a suggestion.
+
+  What the code says, checked for this note:
+
+  - **The decorator is open over the request.** `AddDecorator` only accepts open generic types, such as `ICatServiceRequestHandler<>`. A decorator cannot be switched on for one closed request type. It can only decide for itself, at run time, whether to do anything.
+  - **There is a precedent.** The validation decorator of `Cat.ServiceRequests` wraps every handler too. It asks the validator processor for a validator of the request, runs it when there is one, and passes the request on when there is none. A flag, `validationRequired`, decides what a missing validator means. The same shape fits authorization: wrap everything, look up the rule of the request, check it when it exists.
+  - **The cost of "wrap everything" is small.** One lookup per request that returns nothing for a request without a rule.
+  - **Where the rule can live.** The `Contracts` project may not reference `Cat.Authorization.Abstractions`, as decided. So an attribute on the request type has no home. The rule has to sit in the core service or in the registration, next to the handlers and the tests.
+
+  Options for selecting the requests:
+
+  - **A. A rule class per request.** The module has an interface, for example `ICatAuthorizationRule<TRequest>`, with one method that gets the request and the `ICatUser` and returns an `ICatResponse`. The rule lives in the core, and the handlers and rules are found by scanning the assembly. The decorator asks the container for the rules of `TRequest`. No rule means no check. Cost: a class per protected request, even for a simple role check.
+  - **B. A registration per request.** `options.Require<BookSaveRequest>(user => user.IsInRole("admin"))`, in one place in the core or the API. The decorator reads the registry. Short for simple rules, and all rules are visible in one list. Cost: the rule is away from the handler, and a long registry grows unwieldy.
+  - **C. An attribute.** On the request type: not possible in `Contracts`. On the handler class: the decorator does not see the handler class when another decorator sits between, because it only gets the next handler in the chain. So the order of the decorators would matter. Not recommended.
+  - **D. A change in `Cat.Decorators`.** The factory gets a condition per decorator, such as "only when the request type has a rule". Cost: a change in another module for a gain that the small lookup cost does not justify.
+  - **Fail open or fail closed.** With A or B a request without a rule is open. A forgotten rule means an unprotected request. The validation decorator has the flag for this. Option: `authorizationRequired`. When it is on, a request with no rule, and not marked as public, fails with `Forbidden`. A marker for public requests then needs a home, and it cannot be in `Contracts` either. Alternatively the module logs the requests without a rule at startup, so a developer sees the list, and a unit test can check the list.
+  - **Recommendation.** A and B together, one mechanism with two ways to fill it: the rule class is the real thing, and the registration with a lambda is a shortcut that creates one. The decorator wraps every handler and passes the request on when there is no rule. Leave out the attribute and the change in `Cat.Decorators`. Offer the fail closed flag as an option that is off by default, and log the requests without a rule at startup. The position of the decorator is set in [Cat.Decorators.md](Cat.Decorators.md), where the proposal puts authorization after tracing and logging and before validation.
+- **Declaring a rule.** Answered by the point above, as a recommendation. Waiting for your answer on question 6.
+- **Contracts.** Answered by the point above: no attribute in `Contracts`, so the rule lives in the core or in the registration.
 - **Two kinds of check.** A check before the handler ("may you save a book?") and a data level filter ("only your orders"). Does the module cover both, or only the first?
 - **Responses.** Which `ICatResponse` for no login (401) and for no permission (403)? `Cat.Responses` has both `Unauthorized` (401) and `Forbidden` (403), and `Cat.Minimal.Api` maps them. Do we need anything more?
 - **ASP.NET Core.** The framework has its own authorization with `RequireAuthorization`. Do we complement it, replace it, or wrap it?
-- **No user.** Background work (scheduler, messages) has no person. What does it get?
 - **Claims mapping.** Keycloak puts roles in its own claim shape. Who maps them?
 - **Tests.** A fake `ICatUser` for unit tests. That may belong to `Cat.UnitTesting`.
 
@@ -99,3 +115,4 @@ From the module conventions:
 11. Is Keycloak the only identity provider we design for?
 12. Do we build this before the demo gets Keycloak, or after, with the real claims?
 13. Does the Catalog admin save become the first use case?
+14. Do we offer a flag that fails a request without a rule, and how does a request say it is public?
