@@ -111,7 +111,16 @@ From the code of the demo, checked while preparing this plan:
 
 The numbers match the questions below. A number stays with its question, so an answered question leaves a gap. Recommendations are marked. They are not decisions.
 
-No open points at the moment.
+- **Is the module stable?** The module is built and 27 tests pass. Orders uses it for three generated clients (Catalog, payment and Inventory). Two things from the decisions are still unchecked, so I did not call it stable and I did not touch the badge, the roadmap or this plan. Your call once these are settled:
+  - **Shared Contracts variant.** The decision says to check that NSwag skips the models and imports the namespace of `Contracts`. Nothing in the demo does it yet, and the readme only describes the default.
+  - **Tracing.** The decision says to check that the trace continues across the call. Check it in the Aspire dashboard with one placed order.
+- **What the readme lacks from this plan.** The readme covers the layout, the NSwag settings, the call helper, the registration, the error mapping and resilience. These decisions are not in it yet:
+  - The token. The module does not forward it. The demo does that with its own `ForwardBearerTokenHandler` in Orders. A reader needs to know that, and how to add such a handler.
+  - The refresh script that downloads the OpenAPI document and runs the generation, such as `Refresh-CatalogClient.ps1`.
+  - The first version limits: no versioned APIs, GET and POST with JSON only, no uploads or streaming.
+  - The audience: the clients are for .NET code, and the React client generates TypeScript from the same documents.
+  - The shared `Contracts` variant, once it is checked.
+- **If both are settled.** Then the readme gets these chapters, the roadmap stage 3b is marked done (it is not yet), the in development badge leaves the module overview, and the plan file and its links go. Links to remove: the Plans column of the module row in the root `README.md`, `plans/Demo.md` (stage 3b and the notes), `plans/Cat.Resilience.md` and `plans/Cat.Telemetry.md` if they link it. The header line "Status: not started" in this plan is out of date as well.
 
 ## Questions before building
 
