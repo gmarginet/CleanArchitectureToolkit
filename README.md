@@ -397,6 +397,7 @@ They are ideas to support the application architecture and the service project s
 | [Cat.Sagas](./plans/Cat.Sagas.md) | Long running workflows that send a message, wait for the answer and carry on. |
 | [Cat.Dapper](./plans/Cat.Dapper.md) | Base query and command handlers for Dapper, including bulk operations. |
 | [Cat.Auditing](./plans/Cat.Auditing.md) | Records who changed what and when. |
+| [Cat.Sql.Cdc](./plans/Cat.Sql.Cdc.md) | Turns SQL Server change data capture changes into service bus calls. |
 | [Cat.Caching](./plans/Cat.Caching.md) | A caching decorator for queries. |
 | [Cat.Authorization](./plans/Cat.Authorization.md) | A decorator that checks permissions before a service request runs. |
 | [Cat.Resilience](./plans/Cat.Resilience.md) | Retry and circuit breaker decorators for calls to other services and integrations. |
