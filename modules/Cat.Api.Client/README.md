@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,14 +23,19 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.Api.Client <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.Api.Client lets one service call another service through the API gateway with a typed client. Services never call each other directly, so the call always goes to the gateway, which forwards it.
 
 The client class is generated from the OpenAPI document of the other service. This module holds what the generated code needs: the exception it throws, the plain class for the error body, and one helper that turns the outcome of a call into an `ICatResponse`. A failed call then looks like any other failed use case.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -43,35 +50,35 @@ The client class is generated from the OpenAPI document of the other service. Th
   - [Resilience](#resilience)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Api.Client)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
 | [Cat.Api.Client](https://www.nuget.org/packages/gmarginet.Cat.Api.Client/) | Implementation | `dotnet add package gmarginet.Cat.Api.Client` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Api.Client)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Api.Client](namespaces/Cat.Api.Client/index.md) | The exception and the error body class for generated clients, the call helper, and the registration of a client. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 | Module | Why Cat.Api.Client needs it |
 |--------|-----------------------------|
 | [Cat.Responses](../Cat.Responses/README.md) | The call helper returns an `ICatResponse` and builds its errors with `CatError`. |
 
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 The module targets `netstandard2.0`. It has no reference to Aspire, to ASP.NET Core or to service discovery. A service that calls another service references the client project of that service and nothing else from this module.
 
 ### What a client project holds
@@ -148,4 +155,4 @@ An exception that is not about the call, such as a bug in your own code, is not 
 
 ### Resilience
 The module adds no retries and no circuit breaker. Add them to the `HttpClient` the way the host does for every client, for example with the standard resilience handler of `ServiceDefaults`. Two retry layers multiply, so use one.
-<!-- Usage end-->
+<!-- region end: Usage-->

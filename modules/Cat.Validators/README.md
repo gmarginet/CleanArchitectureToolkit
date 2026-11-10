@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,16 +23,21 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.Validators <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.Validators checks a model against a set of rules and tells you everything that is wrong with it. You describe the rules for a model in a validator class. The processor runs the rules and returns an `ICatResponse`: Ok when the model is valid, BadRequest with one error per failure when it is not.
 
 The rules are fluent and read like a sentence. Every rule has a stable error code and a message template, so clients can react to a failure without parsing text. You can replace the field name, the message and the code per rule, and run a rule only when a condition is true.
 
 Rules never stop at the first failure. One call reports every problem.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -60,7 +67,7 @@ Rules never stop at the first failure. One call reports every problem.
   - [Errors and exceptions](#errors-and-exceptions)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Validators)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
@@ -68,20 +75,20 @@ Rules never stop at the first failure. One call reports every problem.
 | [Cat.Validators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Validators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Validators.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Validators.Abstractions)](#nuget-packages) |
 | [Cat.Validators](https://www.nuget.org/packages/gmarginet.Cat.Validators/) | Implementation | `dotnet add package gmarginet.Cat.Validators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Validators)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Validators.Abstractions](namespaces/Cat.Validators.Abstractions/index.md) | Validator and rule interfaces. |
 | [Cat.Validators](namespaces/Cat.Validators/index.md) | The fluent rules, the processor and the module registration. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 | Module | Why Cat.Validators needs it |
 |--------|----------------------------|
@@ -89,10 +96,10 @@ Rules never stop at the first failure. One call reports every problem.
 | [Cat.Expressions](../Cat.Expressions/README.md) | Rules read property values through compiled expressions. |
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
 
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 ### Register the module
 
 Call `AddCatValidatorsModule` and pass one type from each assembly that holds validators. The module scans those assemblies and registers every non-generic validator with a scoped lifetime. It also registers `ICatValidatorProcessor`.
@@ -500,4 +507,4 @@ A broken model never throws. The processor returns a response. Mistakes in how y
 The code, message and arguments of every built-in rule are listed in [Rules](#rules). `CAT-VAL-1000` (`Unknown validation error occurred.`) is defined as a fallback.
 
 Codes you pass to `WithCode` or `CatValidatorError.Create` appear in the response as you wrote them. Give your own codes a prefix of your own, like `APP-`, so they don't clash with `CAT-VAL-` or `CAT-GEN-`.
-<!-- Usage end-->
+<!-- region end: Usage-->

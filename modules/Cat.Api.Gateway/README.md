@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,14 +23,19 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.Api.Gateway <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.Api.Gateway is the single front door of an application. Clients and services call it, and it routes each call to the right service and checks the token in one place. It is built on [YARP](https://microsoft.github.io/reverse-proxy/), the reverse proxy of Microsoft, and adds the conventions and the secure defaults on top.  
 
 You list your services and their addresses. The gateway derives the routes from that. Everything needs a valid token unless you say otherwise, and a service can choose to accept only the calls that really come from the gateway.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -52,7 +59,7 @@ You list your services and their addresses. The gateway derives the routes from 
   - [Configuration reference](#configuration-reference)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Api.Gateway)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
@@ -61,10 +68,10 @@ You list your services and their addresses. The gateway derives the routes from 
 | [Cat.Api.Gateway](https://www.nuget.org/packages/gmarginet.Cat.Api.Gateway/) | Implementation | `dotnet add package gmarginet.Cat.Api.Gateway` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Api.Gateway)](#nuget-packages) |
 | [Cat.Api.Gateway.Verification](https://www.nuget.org/packages/gmarginet.Cat.Api.Gateway.Verification/) | Optional check in a service | `dotnet add package gmarginet.Cat.Api.Gateway.Verification` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Api.Gateway.Verification)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
@@ -72,17 +79,17 @@ You list your services and their addresses. The gateway derives the routes from 
 | [Cat.Api.Gateway](namespaces/Cat.Api.Gateway/index.md) | The gateway: the setup calls, the configuration and the secure defaults, on top of YARP. |
 | [Cat.Api.Gateway.Verification](namespaces/Cat.Api.Gateway.Verification/index.md) | The check that makes a service accept only calls that come from the gateway. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 Cat.Api.Gateway has no dependencies on other CAT modules.  
 
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 You need the gateway project and, only in the services that want the gateway only guarantee, the verification project. A service that relies on the token alone, or on the network, references nothing from this module.
 
 | You are | You reference |
@@ -439,4 +446,4 @@ The settings of the verification project live in the `CatGatewayVerification` se
 | `JwksRefreshInterval` | `00:10:00` | How long the downloaded keys are kept. |
 | `JwksMinimumRefreshInterval` | `00:00:30` | The shortest time between two downloads. |
 | `ClockSkew` | `00:00:10` | The difference allowed between the clocks. |
-<!-- Usage end-->
+<!-- region end: Usage-->

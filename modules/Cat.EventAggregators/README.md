@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,14 +23,19 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.EventAggregators <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.EventAggregators is a lightweight in-process event aggregator. It lets different parts of your app talk to each other through events, without taking a direct dependency on one another.
 
 A publisher raises an event, and any subscriber that handles that event type gets notified. Subscribers are tracked through weak references, so you don't have to remember to unsubscribe just to avoid a memory leak.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -45,7 +52,7 @@ A publisher raises an event, and any subscriber that handles that event type get
   - [Errors and exceptions](#errors-and-exceptions)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.EventAggregators)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
@@ -53,29 +60,29 @@ A publisher raises an event, and any subscriber that handles that event type get
 | [Cat.EventAggregators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.EventAggregators.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators.Abstractions)](#nuget-packages) |
 | [Cat.EventAggregators](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators/) | Implementation | `dotnet add package gmarginet.Cat.EventAggregators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.EventAggregators.Abstractions](namespaces/Cat.EventAggregators.Abstractions/index.md) | Interfaces for publishers and subscribers. |
 | [Cat.EventAggregators](namespaces/Cat.EventAggregators/index.md) | The event aggregator and the module registration. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 | Module | Why Cat.EventAggregators needs it |
 |--------|----------------------------------|
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
 
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 ### Register the module
 
 Call `AddCatEventAggregatorsModule` to register `ICatEventAggregator` as a singleton. Every part of your app that injects it shares the same list of subscribers.
@@ -239,4 +246,4 @@ The aggregator has no response types. It reports problems as exceptions, and it 
 When a handler throws, `PublishAsync` skips the cleanup of garbage collected subscribers for that call. They are removed after the next publish that succeeds.
 
 Handle exceptions inside your handlers when one failing subscriber must not stop the publisher.
-<!-- Usage end-->
+<!-- region end: Usage-->

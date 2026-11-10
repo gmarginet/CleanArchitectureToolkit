@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,13 +23,18 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.EFCore <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Set up Entity Framework Core entities the same way every time.  
 Inherit from a base class, call one extension method in `OnModelCreating`, and get a Guid key, an identity sequence column, and optional temporal tables.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -36,8 +43,7 @@ Inherit from a base class, call one extension method in `OnModelCreating`, and g
 - [Usage](#usage)
 
 ## NuGet packages
-<!-- NuGet start -->
-<!-- Badge: use the package named like the module, or the first project if there is none -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.EFCore.Entities)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
@@ -45,26 +51,25 @@ Inherit from a base class, call one extension method in `OnModelCreating`, and g
 | [Cat.EFCore.Entities](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Entities/) | Entity base classes | `dotnet add package gmarginet.Cat.EFCore.Entities` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Entities)](#nuget-packages) |
 | [Cat.EFCore.Extensions](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions/) | Model builder extensions | `dotnet add package gmarginet.Cat.EFCore.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.EFCore.Entities](namespaces/Cat.EFCore.Entities/index.md) | Base classes for regular, temporal and reference data entities. |
 | [Cat.EFCore.Extensions](namespaces/Cat.EFCore.Extensions/index.md) | Model builder extensions that configure keys, indexes and tables for the base classes. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
-<!-- No dependencies: replace the table with "[[ModuleName]] has no dependencies on other CAT modules." -->
+<!-- region start: Dependencies-->
 Cat.EFCore has no dependencies on other CAT modules.  
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 Inherit your entities from the Cat base classes.
 
 ```csharp
@@ -126,4 +131,4 @@ Use it for a table that someone else owns, so you can point a foreign key at it.
 - Treat the entity as read-only. Only the owner changes the data.
 
 Do not use it for your own tables. Use `CatEntityBase` for those, even when the data is a short list of fixed values.
-<!-- Usage end-->
+<!-- region end: Usage-->

@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,16 +23,21 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.FluentWorkflows <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.FluentWorkflows lets you describe a business process as a list of steps in plain C#. Each step does one small thing: run some code, set a value, make a decision, loop over a collection, or call a command or a query. You read the workflow from top to bottom like a recipe.
 
 A workflow works on a state object. Steps read from it and write to it, so the data a process needs travels through the steps in one place. Steps can decide to stop the process early, leave a loop, or report errors.
 
 The module ships the common steps for you, and you can write your own.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -64,7 +71,7 @@ The module ships the common steps for you, and you can write your own.
   - [Tracing](#tracing)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.FluentWorkflows)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
@@ -74,10 +81,10 @@ The module ships the common steps for you, and you can write your own.
 | [Cat.FluentWorkflows.Commands](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Commands/) | Optional steps | `dotnet add package gmarginet.Cat.FluentWorkflows.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Commands)](#nuget-packages) |
 | [Cat.FluentWorkflows.Queries](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Queries/) | Optional steps | `dotnet add package gmarginet.Cat.FluentWorkflows.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Queries)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
@@ -86,10 +93,10 @@ The module ships the common steps for you, and you can write your own.
 | [Cat.FluentWorkflows.Commands](namespaces/Cat.FluentWorkflows.Commands/index.md) | A step that processes a command. |
 | [Cat.FluentWorkflows.Queries](namespaces/Cat.FluentWorkflows.Queries/index.md) | A step that processes a query. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 | Module | Why Cat.FluentWorkflows needs it |
 |--------|---------------------------------|
@@ -98,10 +105,10 @@ The module ships the common steps for you, and you can write your own.
 | [Cat.Queries](../Cat.Queries/README.md) | The query step hands queries to the query processor. |
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
 
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 ### Register the module
 
 Call `AddCatFluentWorkflowsModule` to register the processors and every built-in step. Register logging too, because every step gets a logger.
@@ -738,4 +745,4 @@ using Cat.FluentWorkflows.Telemetry;
 
 tracing.AddSource(CatWorkFlowActivitySource.ActivitySourceName);
 ```
-<!-- Usage end-->
+<!-- region end: Usage-->

@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,14 +23,19 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.Minimal.Api <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.Minimal.Api turns service requests into ASP.NET Core minimal API endpoints. You map a request type to a route with one line per http method. The endpoint runs the request through the service request processor and writes the result.
 
 You decide which response types your handler returns. The OpenAPI description lists exactly those status codes, so the consumers of your api see what the endpoint really does. A failed response becomes a problem details object with the CAT errors, so clients always get one consistent error shape. Unexpected exceptions and requests that can't be bound are reported the same way.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -47,36 +54,36 @@ You decide which response types your handler returns. The OpenAPI description li
     - [Unexpected exceptions](#unexpected-exceptions)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Minimal.Api)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
 | [Cat.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.Minimal.Api/) | Implementation | `dotnet add package gmarginet.Cat.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Minimal.Api)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Minimal.Api](namespaces/Cat.Minimal.Api/index.md) | Maps service requests to minimal API endpoints and reports failures as problem details. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 | Module | Why Cat.Minimal.Api needs it |
 |--------|-----------------------------|
 | [Cat.Responses](../Cat.Responses/README.md) | Endpoints turn responses into results and problem details, and list the response types in the OpenAPI description. |
 | [Cat.ServiceRequests](../Cat.ServiceRequests/README.md) | Endpoints run requests through the service request processor. The patch endpoint uses its `PatchDocumentRequest`. |
 
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 ### Register the module
 
 Call `AddCatMinimalApiModule` to register the exception handler and the problem details services. Call `UseCatMinimalApiModule` early in the pipeline, before you map the endpoints.
@@ -354,4 +361,4 @@ What the client sees about the exception depends on the environment, so internal
 | Any other | `Use the CatTraceId to find the error in the logs.` |
 
 Expected failures, like a missing resource or a failed validation, should come back as failed responses, not exceptions. They give the client a useful status and error codes.
-<!-- Usage end-->
+<!-- region end: Usage-->

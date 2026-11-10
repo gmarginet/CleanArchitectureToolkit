@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,14 +23,19 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.Expressions <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.Expressions caches compiled member access delegates. Compiling a `LambdaExpression` through reflection has a real cost, so this module compiles it once per expression and reuses the result on every later call.
 
 Use the caching implementation when the same expression gets called repeatedly, like a property accessor used in a loop. Swap in the no-cache implementation when caching isn't worth it, for example when expressions are built fresh each time anyway.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -42,7 +49,7 @@ Use the caching implementation when the same expression gets called repeatedly, 
   - [Errors and exceptions](#errors-and-exceptions)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Expressions)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
@@ -50,29 +57,29 @@ Use the caching implementation when the same expression gets called repeatedly, 
 | [Cat.Expressions.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Expressions.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Expressions.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions.Abstractions)](#nuget-packages) |
 | [Cat.Expressions](https://www.nuget.org/packages/gmarginet.Cat.Expressions/) | Implementation | `dotnet add package gmarginet.Cat.Expressions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Expressions.Abstractions](namespaces/Cat.Expressions.Abstractions/index.md) | Interfaces for compiling member expressions. |
 | [Cat.Expressions](namespaces/Cat.Expressions/index.md) | The caching and no-cache compilers, and the module registration. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 | Module | Why Cat.Expressions needs it |
 |--------|-----------------------------|
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
 
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 ### Register the module
 
 Pick one of two registration methods. Both register `ICatCompiledMemberExpressionCache<T>` as an open generic singleton, so one cache exists per type `T`.
@@ -165,4 +172,4 @@ The module has no response types. It throws for invalid input and stays quiet ot
 | The cache for `T` isn't registered | An `InvalidOperationException` from the service provider when you resolve it. |
 
 Other CAT modules use this cache too. Cat.Validators reads property values through it, so register it before you register the validators module.
-<!-- Usage end-->
+<!-- region end: Usage-->

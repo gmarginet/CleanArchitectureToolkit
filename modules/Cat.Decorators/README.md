@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,10 +23,15 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.Decorators <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.Decorators wraps a service in decorators for cross-cutting work like logging, validation or tracing. You register a decorator once for an open generic service, like `ICatQueryHandler<,>`. The factory then wraps every closed version of that service when you ask for it.
 
 The Commands, Queries and ServiceRequests modules use it for their handlers. You only touch it directly when you write your own decorators.
@@ -32,7 +39,7 @@ The Commands, Queries and ServiceRequests modules use it for their handlers. You
 Why does this module exist? Scrutor can't apply decorators to open generic registrations. The Scrutor maintainers discuss this in [issue 39](https://github.com/khellang/Scrutor/issues/39). It comes from a limitation of the Microsoft DI container that Scrutor builds on, not from Scrutor itself.
 
 CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scrutor decorators were not an option. Cat.Decorators works around the limitation. It keeps its own list of decorators and wraps the service by hand when you ask the factory for it.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -48,7 +55,7 @@ CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scru
   - [Errors and exceptions](#errors-and-exceptions)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Decorators)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
@@ -56,29 +63,29 @@ CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scru
 | [Cat.Decorators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Decorators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Decorators.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators.Abstractions)](#nuget-packages) |
 | [Cat.Decorators](https://www.nuget.org/packages/gmarginet.Cat.Decorators/) | Implementation | `dotnet add package gmarginet.Cat.Decorators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Decorators.Abstractions](namespaces/Cat.Decorators.Abstractions/index.md) | Interfaces for decorators and the decorated service factory. |
 | [Cat.Decorators](namespaces/Cat.Decorators/index.md) | The factory that wraps services in decorators, and the module registration. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 | Module | Why Cat.Decorators needs it |
 |--------|----------------------------|
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
 
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 ### Register the module
 
 Call `AddCatDecoratorsModule` to register the factory and the builder as singletons. You can call it more than once. A service that is already registered is skipped.
@@ -216,4 +223,4 @@ The module reports every problem as an exception. It has no response types, beca
 | A decorator constructor asks for a service the provider can't resolve | An `InvalidOperationException` from the service provider, naming the missing service. |
 
 The factory only wraps a service when you ask for it. A mistake in a decorator therefore shows up the first time something requests the decorated service, not at startup.
-<!-- Usage end-->
+<!-- region end: Usage-->

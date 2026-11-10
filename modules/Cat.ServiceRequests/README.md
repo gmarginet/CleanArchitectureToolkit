@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,14 +23,19 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.ServiceRequests <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.ServiceRequests gives you one entry point for running application use cases. You describe a use case as a service request, write one handler for it, and hand the request to the processor. The processor finds the handler for you and returns an `ICatResponse`.
 
 Handlers can be wrapped in decorators for cross-cutting work. The module ships three: validation, logging and activity tracing. You switch each one on only when you need it.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -47,7 +54,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
   - [Errors and exceptions](#errors-and-exceptions)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.ServiceRequests)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
@@ -59,10 +66,10 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
 | [Cat.ServiceRequests.Decorators.Validation](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Validation/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Validation` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Validation)](#nuget-packages) |
 | [Cat.ServiceRequests.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Minimal.Api/) | Optional integration | `dotnet add package gmarginet.Cat.ServiceRequests.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Minimal.Api)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
@@ -73,10 +80,10 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
 | [Cat.ServiceRequests.Decorators.Validation](namespaces/Cat.ServiceRequests.Decorators.Validation/index.md) | The validation decorator for handlers. |
 | [Cat.ServiceRequests.Minimal.Api](namespaces/Cat.ServiceRequests.Minimal.Api/index.md) | The service request for a JSON Patch document. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 | Module | Why Cat.ServiceRequests needs it |
 |--------|---------------------------------|
@@ -84,10 +91,10 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
 | [Cat.Decorators](../Cat.Decorators/README.md) | Builds the handlers and runs their decorators. |
 | [Cat.Validators](../Cat.Validators/README.md) | The validation decorator checks requests with validators. |
 
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 ### Register the module
 
 Call `AddCatServiceRequestsModule` and pass one type from each assembly that holds handlers. The module scans those assemblies and registers every non-generic handler with a scoped lifetime. It also registers `ICatServiceRequestProcessor`.
@@ -312,4 +319,4 @@ The processor never turns a failure into an exception for you. What you get back
 | The handler throws | The original exception reaches the caller as it is. It isn't wrapped in a `TargetInvocationException`. |
 
 Over HTTP, [Cat.Minimal.Api](../Cat.Minimal.Api/README.md) turns each of these into a status code and a problem details body.
-<!-- Usage end-->
+<!-- region end: Usage-->

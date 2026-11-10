@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,14 +23,19 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.Responses <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.Responses models the outcome of an operation as a response: either succeeded, optionally carrying a value, or failed, carrying one or more errors.
 
 Handlers across the other CAT modules (commands, queries, service requests) return `ICatResponse` or `ICatResponse<TResponse>`, so callers get one consistent return type instead of exceptions for outcomes the caller is expected to handle, like a missing resource or a failed validation.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -47,7 +54,7 @@ Handlers across the other CAT modules (commands, queries, service requests) retu
   - [Errors and exceptions](#errors-and-exceptions)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Responses)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
@@ -55,29 +62,29 @@ Handlers across the other CAT modules (commands, queries, service requests) retu
 | [Cat.Responses.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Responses.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Responses.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Responses.Abstractions)](#nuget-packages) |
 | [Cat.Responses](https://www.nuget.org/packages/gmarginet.Cat.Responses/) | Implementation | `dotnet add package gmarginet.Cat.Responses` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Responses)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Responses.Abstractions](namespaces/Cat.Responses.Abstractions/index.md) | Response, paged list and error interfaces. |
 | [Cat.Responses](namespaces/Cat.Responses/index.md) | The response types, the paged list and error definitions. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 | Module | Why Cat.Responses needs it |
 |--------|---------------------------|
 | [Cat.Extensions](../Cat.Extensions/README.md) | `CatPagedList` checks its values with `ThrowIfNull` and `ThrowIfLessThan`. |
 
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 ### Register the module
 
 This module has nothing to register. Reference `Cat.Responses.Abstractions` in projects that only read responses. Reference `Cat.Responses` in projects that create them.
@@ -332,4 +339,4 @@ The failures a response reports are errors, not exceptions. Which codes you can 
 - **Cat.ServiceRequests validation decorator:** `InternalServerError` with `CAT-GEN-1001`, when the validator returns neither a succeeded nor a failed response.
 - **Cat.Minimal.Api:** maps each failed type to an HTTP status. See [Cat.Minimal.Api](../Cat.Minimal.Api/README.md).
 - **Your handlers:** the codes you define yourself.
-<!-- Usage end-->
+<!-- region end: Usage-->

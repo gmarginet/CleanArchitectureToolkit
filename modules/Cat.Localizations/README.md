@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,14 +23,19 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.Localizations <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.Localizations defines a contract for looking up localized strings by key, so the rest of your app doesn't need to know which localization provider sits behind it.
 
 The module ships with a no-op implementation that returns the key as-is, with placeholders filled in. It's a safe default, and handy in tests. Plug in your own `ICatLocalizer` backed by resource files, a translation service, or whatever fits your app, when you need real localization.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -41,7 +48,7 @@ The module ships with a no-op implementation that returns the key as-is, with pl
   - [Errors and exceptions](#errors-and-exceptions)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Localizations)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
@@ -49,29 +56,29 @@ The module ships with a no-op implementation that returns the key as-is, with pl
 | [Cat.Localizations.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Localizations.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Localizations.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Localizations.Abstractions)](#nuget-packages) |
 | [Cat.Localizations](https://www.nuget.org/packages/gmarginet.Cat.Localizations/) | Implementation | `dotnet add package gmarginet.Cat.Localizations` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Localizations)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Localizations.Abstractions](namespaces/Cat.Localizations.Abstractions/index.md) | The `ICatLocalizer` interface. |
 | [Cat.Localizations](namespaces/Cat.Localizations/index.md) | The no-op localizer and the module registration. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 | Module | Why Cat.Localizations needs it |
 |--------|-------------------------------|
 | [Cat.Extensions](../Cat.Extensions/README.md) | Small helpers for service registration. |
 
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 ### Register the module
 
 Call `AddCatNoLocalizationLocalizer` to register `ICatLocalizer` as a singleton, backed by the no-op implementation.
@@ -155,4 +162,4 @@ The contract doesn't define errors. A localizer returns a string for every key, 
 | `ICatLocalizer` isn't registered | An `InvalidOperationException` from the service provider when you resolve it. |
 
 What your own localizer does for a missing key is up to you. Returning the key, as in the example, makes a missing translation easy to spot in the UI.
-<!-- Usage end-->
+<!-- region end: Usage-->

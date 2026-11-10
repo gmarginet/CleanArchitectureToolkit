@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,12 +23,17 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.Extensions <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.Extensions is a collection of small, focused extension method libraries. Each namespace targets one type, IEnumerable, Expression, IServiceCollection, string, or general objects, and has no dependency on any other CAT module, so you can pull in just the ones you need.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -42,7 +49,7 @@ Cat.Extensions is a collection of small, focused extension method libraries. Eac
   - [Errors and exceptions](#errors-and-exceptions)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Enumerable.Extensions)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
@@ -53,10 +60,10 @@ Cat.Extensions is a collection of small, focused extension method libraries. Eac
 | [Cat.ServiceCollection.Extensions](https://www.nuget.org/packages/gmarginet.Cat.ServiceCollection.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.ServiceCollection.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceCollection.Extensions)](#nuget-packages) |
 | [Cat.String.Extensions](https://www.nuget.org/packages/gmarginet.Cat.String.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.String.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.String.Extensions)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
@@ -66,16 +73,16 @@ Cat.Extensions is a collection of small, focused extension method libraries. Eac
 | [Cat.ServiceCollection.Extensions](namespaces/Cat.ServiceCollection.Extensions/index.md) | Extension methods for `IServiceCollection`. |
 | [Cat.String.Extensions](namespaces/Cat.String.Extensions/index.md) | Extension methods for strings. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 Cat.Extensions has no dependencies on other CAT modules.  
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 ### Register the module
 
 This module has nothing to register. Add a `using` for the namespace you need, and the extension methods show up on the type.
@@ -191,4 +198,4 @@ These methods throw exceptions. They don't return responses.
 | `GetMemberInfo` | The expression isn't a direct member access | `null`. No exception. |
 | `IsEmpty`, `HasRegistrationFor` | Never | These don't throw for valid input. |
 
-<!-- Usage end-->
+<!-- region end: Usage-->

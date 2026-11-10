@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: ../.. -->
 <link href="../../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,16 +23,21 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-module-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Cat.Queries <!-- omit in toc -->  
 
-<!-- Intro start-->
+<!-- region start: Intro-->
 Cat.Queries gives you one entry point for reading data. You describe a read as a query, write one handler for it, and hand the query to the processor. The processor finds the handler for you and returns an `ICatResponse<TQueryResult>`.
 
 A query only reads. It never changes state. Use Cat.Commands for writes.
 
 Handlers can be wrapped in decorators for cross-cutting work. The module ships a logging decorator. You switch it on only when you need it.  
-<!-- Intro end-->
+<!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
 - [NuGet packages](#nuget-packages)
@@ -45,7 +52,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
   - [Errors and exceptions](#errors-and-exceptions)
 
 ## NuGet packages
-<!-- NuGet start -->
+<!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Queries)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
@@ -54,10 +61,10 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 | [Cat.Queries](https://www.nuget.org/packages/gmarginet.Cat.Queries/) | Implementation | `dotnet add package gmarginet.Cat.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries)](#nuget-packages) |
 | [Cat.Queries.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Queries.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.Queries.Decorators.Logging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Decorators.Logging)](#nuget-packages) |
 
-<!-- NuGet end -->
+<!-- region end: NuGet-->
 
 ## Namespaces
-<!-- Namespaces start-->
+<!-- region start: Namespaces-->
 
 | Namespace | What it holds |
 |-----------|---------------|
@@ -65,20 +72,20 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 | [Cat.Queries](namespaces/Cat.Queries/index.md) | The processor and the module registration. |
 | [Cat.Queries.Decorators.Logging](namespaces/Cat.Queries.Decorators.Logging/index.md) | The logging decorator for handlers. |
 
-<!-- Namespaces end-->
+<!-- region end: Namespaces-->
 
 ## Dependencies
-<!-- Dependencies start-->
+<!-- region start: Dependencies-->
 
 | Module | Why Cat.Queries needs it |
 |--------|-------------------------|
 | [Cat.Responses](../Cat.Responses/README.md) | Handlers return an `ICatResponse<TQueryResult>`. |
 | [Cat.Decorators](../Cat.Decorators/README.md) | Builds the handlers and runs their decorators. |
 
-<!-- Dependencies end-->
+<!-- region end: Dependencies-->
 
 ## Usage
-<!-- Usage start-->
+<!-- region start: Usage-->
 ### Register the module
 
 Call `AddCatQueriesModule` and pass one type from each assembly that holds handlers. The module scans those assemblies and registers every non-generic handler with a scoped lifetime. It also registers `ICatQueryProcessor`.
@@ -243,4 +250,4 @@ The processor never turns a failure into an exception for you. What you get back
 A failed response has no value, so read `Value` only after `IsSucceeded` is `true`.
 
 The error codes and messages come from the handler, so each application defines its own. See [Cat.Responses](../Cat.Responses/README.md) for how to define reusable errors.
-<!-- Usage end-->
+<!-- region end: Usage-->
