@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: .. -->
 <link href="../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,29 +23,38 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
 
-# Plans for Cat.Auditing
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-plan skill to update this plan.-->
+<!-- region end: TemplateSkill-->
 
-Records who changed what and when.  
-Status: not started. This plan collects what we know. The open questions need an answer before the build.
+# Plans for `Cat.Auditing` <!-- omit in toc -->  
 
-## Contents
+<!-- region start: StatusBadge-->
+[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catauditing)
+<!-- region end: StatusBadge-->
 
-- [The idea](#the-idea)
-- [What we already know](#what-we-already-know)
-- [Decisions and open questions](#decisions-and-open-questions)
-- [Questions before building](#questions-before-building)
+## Table of contents <!-- omit in toc -->  
+<!-- region start: Phases-->
+- [Phase 1](#phase-1)
+<!-- region end: Phases-->
 
-## The idea
+<!-- region start: Phase 1-->
+## Phase 1
 
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+A new module, `Cat.Auditing`, that records who changed what and when.
+
+#### The idea
 Some changes matter later: a price that was changed, an order that was cancelled. People ask who did it and when. An audit trail answers that without anyone writing log statements by hand.
 
 `Cat.Auditing` records the change together with the user and the time. The business logic should not have to know about it.
 
-## What we already know
-
+#### Background
 From the demo plan:
-
 - The demo shows it with who changed a price, and who cancelled an order.
 - Orders has an event subscriber, `OrderAuditSubscriber`, that writes an audit record when an order event happens. It is a first sketch of what the module could replace.
 - Catalog keeps every old price in a temporal table, which already answers "what was the price then". It does not say who changed it.
@@ -51,48 +62,85 @@ From the demo plan:
 - Work without a user, like a scheduled job, has no person to record. The Scheduler uses a client credentials token.
 
 From the module conventions:
-
 - Cross-cutting work is added through decorators, not mixed into the business logic. `Cat.ServiceRequests`, `Cat.Commands` and `Cat.Queries` all run decorators from `Cat.Decorators`.
 - Events inside a service go through `Cat.EventAggregators`. Subscribers cannot drive a process, and a failing subscriber throws.
 
 From the architecture:
-
 - Every service owns its data. An audit trail for a service belongs to that service, unless a central audit store is chosen.
 - Important events also go out on the Service Bus.
 
-## Decisions and open questions
+#### What exists today
+- The module does not exist yet. It is listed under the future modules in the root README.
+- The demo has `OrderAuditSubscriber` in the core service of Orders, and its own `ICurrentUser`.
+- `ICatUser` does not exist yet. It is planned in `Cat.Authorization.Abstractions`, see [Cat.Authorization.md](Cat.Authorization.md).
+- `Cat.EFCore.Entities` has a temporal entity base class, which keeps the history of the entity.
 
-### Decided
+#### Decided
+- **Content.** Who, what and when.
+- **Style.** Added through a decorator or an event subscriber, not in the business logic.
+- **User.** The module gets the user from `ICatUser` in `Cat.Authorization.Abstractions`. `Cat.Authorization` owns that interface.
+<!-- region end: PhaseDescription-->
 
-| Topic | Decision |
-|---|---|
-| Content | Who, what and when. |
-| Style | Added through a decorator or an event subscriber, not in the business logic. |
-| User | The module gets the user from `ICatUser` in `Cat.Authorization.Abstractions`. `Cat.Authorization` owns that interface. |
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 1-->
+#### Question 1
+What is audited: use cases, entity changes or both? Where do we hook in: a decorator on commands, a decorator on service requests, a `SaveChanges` interceptor in EF Core, or an event subscriber? Each sees something different.
+<!-- region end: Question 1-->
 
-### Open
+<!-- region start: Question 2-->
+#### Question 2
+Do we want old and new values, or only the fact? Is it only the fact ("order 123 cancelled by Alice"), or the changed fields with old and new values?
+<!-- region end: Question 2-->
 
-- **Where to hook in.** A decorator on commands, a decorator on service requests, a `SaveChanges` interceptor in EF Core, or an event subscriber? Each sees something different.
-- **Detail.** Only the fact ("order 123 cancelled by Alice"), or the changed fields with old and new values?
-- **Storage.** A table in the database of the service, a separate store, or messages to a central audit service?
-- **Overlap.** Temporal tables already keep history for some entities. Does the module use them or stay apart?
-- **Who.** It references `Cat.Authorization.Abstractions` for `ICatUser`, without the rest of the authorization module. Is a dependency on a package called Authorization acceptable for users who only want auditing?
-- **No user.** What is recorded for a scheduled job or a message handler?
-- **Opt in.** Is everything audited, or only what is marked? How is it marked: attribute, registration or interface?
-- **Sensitive data.** Names, emails and addresses are personal data. What is left out, and how long is the trail kept?
-- **Failures.** If writing the audit record fails, does the change fail too?
-- **Reading.** Does the module offer a query to read the trail, or is that the job of the service?
-- **Tamper evidence.** Does the trail need to be append only?
+<!-- region start: Question 3-->
+#### Question 3
+Where should the trail live: in each service database or in one central place? Options are a table in the database of the service, a separate store, or messages to a central audit service.
+<!-- region end: Question 3-->
 
-## Questions before building
+<!-- region start: Question 4-->
+#### Question 4
+Is it fine that this module references `Cat.Authorization.Abstractions` for `ICatUser`, without the rest of the authorization module? Is a dependency on a package called Authorization acceptable for developers who only want auditing? Which members of `ICatUser` does auditing need?
+<!-- region end: Question 4-->
 
-1. What is audited: use cases, entity changes or both?
-2. Do you want old and new values, or only the fact?
-3. Where should the trail live: in each service database or in one central place?
-4. Is it fine that this module references `Cat.Authorization.Abstractions` for `ICatUser`? Which members of `ICatUser` does auditing need?
-5. How long must the trail be kept, and are there privacy rules we must follow?
-6. Is an audit failure allowed to fail the business action?
-7. How do we mark what to audit?
-8. What should be recorded when there is no user?
-9. Do we need to read the trail in the demo, and through which endpoint?
-10. Does `OrderAuditSubscriber` in the demo stay as an example of the event approach, or does the module replace it?
+<!-- region start: Question 5-->
+#### Question 5
+How long must the trail be kept, and are there privacy rules we must follow? Names, emails and addresses are personal data. What is left out?
+<!-- region end: Question 5-->
+
+<!-- region start: Question 6-->
+#### Question 6
+Is an audit failure allowed to fail the business action? If writing the audit record fails, does the change fail too?
+<!-- region end: Question 6-->
+
+<!-- region start: Question 7-->
+#### Question 7
+How do we mark what to audit? Is everything audited, or only what is marked? If marked, how: an attribute, a registration or an interface?
+<!-- region end: Question 7-->
+
+<!-- region start: Question 8-->
+#### Question 8
+What should be recorded when there is no user, for example for a scheduled job or a message handler?
+<!-- region end: Question 8-->
+
+<!-- region start: Question 9-->
+#### Question 9
+Do we need to read the trail in the demo, and through which endpoint? Does the module offer a query to read the trail, or is that the job of the service?
+<!-- region end: Question 9-->
+
+<!-- region start: Question 10-->
+#### Question 10
+Does `OrderAuditSubscriber` in the demo stay as an example of the event approach, or does the module replace it?
+<!-- region end: Question 10-->
+
+<!-- region start: Question 11-->
+#### Question 11
+Temporal tables already keep history for some entities. Does the module use them or stay apart?
+<!-- region end: Question 11-->
+
+<!-- region start: Question 12-->
+#### Question 12
+Does the trail need to be append only, so it is tamper evident?
+<!-- region end: Question 12-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 1-->

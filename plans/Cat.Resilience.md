@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: .. -->
 <link href="../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,79 +23,121 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
 
-# Plans for Cat.Resilience
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-plan skill to update this plan.-->
+<!-- region end: TemplateSkill-->
 
-Retry and circuit breaker decorators for calls to other services and integrations.  
-Status: not started. This plan collects what we know. The open questions need an answer before the build.
+# Plans for `Cat.Resilience` <!-- omit in toc -->  
 
-## Contents
+<!-- region start: StatusBadge-->
+[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catresilience)
+<!-- region end: StatusBadge-->
 
-- [The idea](#the-idea)
-- [What we already know](#what-we-already-know)
-- [Decisions and open questions](#decisions-and-open-questions)
-- [Questions before building](#questions-before-building)
+## Table of contents <!-- omit in toc -->  
+<!-- region start: Phases-->
+- [Phase 1](#phase-1)
+<!-- region end: Phases-->
 
-## The idea
+<!-- region start: Phase 1-->
+## Phase 1
 
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+A new module, `Cat.Resilience`, with retry and circuit breaker decorators for calls to other services and integrations.
+
+#### The idea
 Calls to other services and to external systems fail now and then. A retry fixes a short glitch. A circuit breaker stops hammering something that is down. Decorators can add both to a handler without touching its code.
 
-## What we already know
-
+#### Background
 From the root readme:
-
 - External integrations, like an email provider or a storage account, live in the infrastructure project. The core never calls them. It sends a query or a command, and a handler talks to the integration.
 - A call to another service goes through the API gateway.
 - A slow or unavailable service must not bring down the caller.
 
 From the demo plan:
-
-- The demo case is retry and circuit breaker on the payment call. Today `FakePaymentProvider` runs inside Orders and always answers, so there is nothing to protect. The decided answer is a separate `Cat.Demo.PaymentService` that can fail on purpose. See the payment provider decision in [Demo.md](Demo.md#decided).
+- The demo case is retry and circuit breaker on the payment call. The payment call goes to a separate `Cat.Demo.PaymentService` that can fail on purpose. See the payment provider decision in [Demo.md](Demo.md#phase-5).
 - `Aspire ServiceDefaults` already adds the standard resilience handler to every `HttpClient`: retries, timeouts and a circuit breaker.
 - That overlaps with the future `Cat.Resilience` and `Cat.Telemetry` modules on purpose. CAT is a toolbox, so the developer picks what to use.
 - The future module must work in projects that do not use Aspire, and must not depend on Aspire or on `ServiceDefaults`.
 - The rule: a project with Aspire uses `ServiceDefaults` and does not need this module. The module exists for projects without Aspire. The only reason to use both is to extend `ServiceDefaults`, and then the extension can live in the module.
 
 From the Aspire plan:
-
 - The `CatalogPriceProvider` gets its retries from the `HttpClient` handler. `Cat.Api.Client` has to work together with this module.
 
 From the module conventions:
-
 - Handlers of `Cat.Commands`, `Cat.Queries` and `Cat.ServiceRequests` run through decorators from `Cat.Decorators`.
 
-## Decisions and open questions
+#### What exists today
+- The module does not exist yet. It is listed under the future modules in the root README.
+- The demo uses the standard resilience handler of `ServiceDefaults` for its `HttpClient` calls. The demo readme says it does not use this module for now.
+- The separate payment service exists as `Cat.Demo.PaymentService`. Its configuration has a latency and an outage setting, so it can fail on purpose.
+- The Orders tests include `FastFailResilienceTests`.
 
-### Decided
+#### Decided
+- **Place.** Decorators on handlers that call other services and integrations.
+- **Independence.** The module works without Aspire and never references it.
+- **Overlap.** With Aspire, use `ServiceDefaults` and skip this module. The module exists for projects without Aspire. It may also hold extensions of `ServiceDefaults`.
+- **Demo stand-in.** The payment call in the demo goes to a separate, flaky `Cat.Demo.PaymentService`, so the module has something to show.
+<!-- region end: PhaseDescription-->
 
-| Topic | Decision |
-|---|---|
-| Place | Decorators on handlers that call other services and integrations. |
-| Independence | The module works without Aspire and never references it. |
-| Overlap | With Aspire, use `ServiceDefaults` and skip this module. The module exists for projects without Aspire. It may also hold extensions of `ServiceDefaults`. |
-| Demo stand-in | The payment call in the demo goes to a separate, flaky `Cat.Demo.PaymentService`, so the module has something to show. |
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 1-->
+#### Question 1
+The module is for projects without Aspire. May we depend on Polly for that? The foundation can be Polly and `Microsoft.Extensions.Resilience`, or our own small policies. Polly is the standard, but it is a dependency.
+<!-- region end: Question 1-->
 
-### Open
+<!-- region start: Question 2-->
+#### Question 2
+Do we want the decorators on handlers, on `HttpClient`, or both? If on handlers: query and command handlers in the infrastructure, which is where integrations live, or service requests?
+<!-- region end: Question 2-->
 
-- **Foundation.** Build on Polly and `Microsoft.Extensions.Resilience`, or write our own small policies? Polly is the standard, but it is a dependency.
-- **What gets decorated.** Query and command handlers in the infrastructure, which is where integrations live? Or service requests?
-- **Policy.** One default, named policies, or a policy per handler type? Declared by attribute, registration or configuration?
-- **Retry safety.** A retried command may run twice. Only queries and idempotent commands may be retried. How does a handler say it is safe?
-- **Failures.** What is a failure: an exception, a failed `ICatResponse`, or certain error codes only? A 404 should not be retried.
-- **Double retry.** The `HttpClient` handler retries, and this decorator retries on top. Three times three is nine calls. How do we avoid that?
-- **State of the breaker.** Per process, per handler or per target? Shared across instances is probably not needed.
-- **Fallback and timeout.** In scope, or only retry and circuit breaker?
-- **Visibility.** Log retries and breaker changes. Metrics and traces depend on `Cat.Telemetry`.
-- **Testing.** Tests need to move time. `TimeProvider` support is needed.
+<!-- region start: Question 3-->
+#### Question 3
+How should a command say it is safe to retry? A retried command may run twice. Only queries and idempotent commands may be retried.
+<!-- region end: Question 3-->
 
-## Questions before building
+<!-- region start: Question 4-->
+#### Question 4
+Which failures count: exceptions, failed responses, or specific error codes? A 404 should not be retried.
+<!-- region end: Question 4-->
 
-1. The module is for projects without Aspire. May we depend on Polly for that?
-2. Do you want the decorators on handlers, on `HttpClient`, or both?
-3. How should a command say it is safe to retry?
-4. Which failures count: exceptions, failed responses, or specific error codes?
-5. How do we prevent retries on retries with the `ServiceDefaults` handler? Should the module detect it, or do we document it?
-6. Do we need fallbacks and timeouts in the first version?
-7. Where do policies live: attributes, code or `appsettings`?
-8. Does the module tell `Cat.Telemetry` about every retry and break?
-9. `Cat.Api.Client` stays with the `HttpClient` handler of `ServiceDefaults` for now, see [Cat.Api.Client](Cat.Api.Client.md). How does a project without Aspire use this module with that client?
+<!-- region start: Question 5-->
+#### Question 5
+How do we prevent retries on retries with the `ServiceDefaults` handler? The `HttpClient` handler retries, and this decorator retries on top. Three times three is nine calls. Should the module detect it, or do we document it?
+<!-- region end: Question 5-->
+
+<!-- region start: Question 6-->
+#### Question 6
+Do we need fallbacks and timeouts in the first version, or only retry and circuit breaker?
+<!-- region end: Question 6-->
+
+<!-- region start: Question 7-->
+#### Question 7
+Where do policies live: attributes, code or `appsettings`? Is there one default, named policies, or a policy per handler type?
+<!-- region end: Question 7-->
+
+<!-- region start: Question 8-->
+#### Question 8
+Does the module tell `Cat.Telemetry` about every retry and break? Retries and breaker changes are logged. Metrics and traces depend on `Cat.Telemetry`.
+<!-- region end: Question 8-->
+
+<!-- region start: Question 9-->
+#### Question 9
+`Cat.Api.Client` stays with the `HttpClient` handler of `ServiceDefaults` for now, see [Cat.Api.Client.md](Cat.Api.Client.md). How does a project without Aspire use this module with that client?
+<!-- region end: Question 9-->
+
+<!-- region start: Question 10-->
+#### Question 10
+What is the scope of the circuit breaker state: per process, per handler or per target? Shared across instances is probably not needed.
+<!-- region end: Question 10-->
+
+<!-- region start: Question 11-->
+#### Question 11
+Tests need to move time. How do we support `TimeProvider`?
+<!-- region end: Question 11-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 1-->

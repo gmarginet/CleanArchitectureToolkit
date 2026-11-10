@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: .. -->
 <link href="../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,34 +23,41 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
 
-# Plans for Cat.UnitTesting
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-plan skill to update this plan.-->
+<!-- region end: TemplateSkill-->
 
-Helpers for unit tests, like test doubles for processors and responses, in small projects the developer picks from.  
-Status: not started. This plan collects what we know. The open questions need an answer before the build.
+# Plans for `Cat.UnitTesting` <!-- omit in toc -->  
 
-## Contents
+<!-- region start: StatusBadge-->
+[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catunittesting)
+<!-- region end: StatusBadge-->
 
-- [The idea](#the-idea)
-- [What we already know](#what-we-already-know)
-- [Decisions and open questions](#decisions-and-open-questions)
-- [Can the module be built?](#can-the-module-be-built)
-- [Questions before building](#questions-before-building)
+## Table of contents <!-- omit in toc -->  
+<!-- region start: Phases-->
+- [Phase 1](#phase-1)
+<!-- region end: Phases-->
 
-## The idea
+<!-- region start: Phase 1-->
+## Phase 1
 
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+A new module, `Cat.UnitTesting`, with helpers for unit tests, like test doubles for processors and responses, in small projects the developer picks from.
+
+#### The idea
 The core service is free of technology, so its unit tests need no database. They replace the query and command processors with test doubles. Every service writes the same doubles again. A shared module saves that work and makes the tests look the same everywhere.
 
 The module is a toolbox of small projects. A fake command processor lives in its own project, a fake query processor in another, and so on. A developer references only the ones they need, so a test project does not pull in fakes for modules it does not use.
 
-## What we already know
-
+#### Background
 From the root readme:
-
 - `ServiceName.CoreService.Tests` holds the unit tests of the business logic. It replaces the queries and commands with test doubles, so no database is needed. It references the `CoreService` project only.
 
 From the demo:
-
 - The demo services wrote their own `FakeCommandProcessor` (Catalog, Inventory and Orders) and `FakeQueryProcessor` (Catalog and Orders). They are close to each other and not the same:
   - Catalog: one response for every command, and a list of the commands that were processed.
   - Orders: a response per command type, a list of the commands, defaults that fill result properties like the new order id and number, and an `Of<T>()` helper.
@@ -56,36 +65,38 @@ From the demo:
 - The tests check workflows, validators, event subscribers, order statuses and the service request handlers.
 
 From the repository:
-
 - Unit tests of the repository use NUnit. `tests/Cat.NUnit` holds a `UnitTestBase` that the module tests share. Today it is a repository test helper and not a package.
 
 From the existing modules:
-
 - `Cat.Responses` has `ICatResponse` and `CatResponse` with succeeded and failed outcomes and errors.
 - `Cat.Commands`, `Cat.Queries`, `Cat.ServiceRequests` and `Cat.EventAggregators` each have abstractions with a processor or aggregator interface.
 - Tests of the future modules will need fakes for their parts too: messages, the clock and the user (`ICatUser` from `Cat.Authorization.Abstractions`).
 
-## Decisions and open questions
+#### What exists today
+- The module does not exist yet. It is listed under the future modules in the root README.
+- `tests/Cat.NUnit` targets `net10.0` and references NUnit. It is not packable. 14 repository test projects and the 3 demo `CoreService.Tests` projects (Catalog, Inventory and Orders) reference it.
+- The copies of the fakes in the demo test projects exist as the plan says:
+  - `FakeCommandProcessor` in Catalog, Inventory and Orders.
+  - `FakeQueryProcessor` in Catalog and Orders.
+  - `RecordingSubscriber` and `FakeCurrentUser` in the Orders `TestDoubles.cs`.
+- `FakePriceProvider`, `FakeStockReservation` and `FakePaymentProvider` exist in the Orders test doubles, and also in the Orders `Infrastructure/Fakes` folder. They are demo doubles, not doubles of a CAT interface.
+- Two test projects have their own `FakeTime : TimeProvider`: `Cat.Api.Gateway.Tests` and the Payment `CoreService.Tests`. Nothing uses `FakeTimeProvider` of Microsoft yet.
 
-### Decided
+#### Decided
+- **Name.** `Cat.UnitTesting`, renamed from `Cat.Testing`.
+- **Purpose.** Test doubles and helpers for unit tests, such as the core service tests.
+- **Structure.** One project per CAT module. A developer only references the test project of a module they use.
+- **Dependencies.** A test project references only the abstractions of the module it fakes. A fake command processor does not need `Cat.Queries`.
+- **Test framework.** The framework neutral parts live apart from the NUnit parts, such as `Cat.UnitTesting.NUnit`, so other frameworks can follow.
+- **Fake processors.** One generic fake processor per kind. The developer controls and defines the output.
+- **Response asserts.** Stand alone if possible, and easy to use from NUnit. If that is not possible, they go in a separate project such as `Cat.UnitTesting.Responses.NUnit`.
+- **Which doubles.** At least the ones our own test projects need, and more if possible. The list is in the next chapter.
+- **Cat.NUnit.** `tests/Cat.NUnit` becomes part of this module, as soon as possible. The solution is still in alpha, so it moves before the first stable version.
+- **No database.** The unit tests never need a database.
+- **Integration tests.** Out of scope for now. If integration testing comes, it is a separate module.
+- **Own tests.** The fakes have tests of their own.
 
-| Topic | Decision |
-|---|---|
-| Name | `Cat.UnitTesting`, renamed from `Cat.Testing`. |
-| Purpose | Test doubles and helpers for unit tests, such as the core service tests. |
-| Structure | One project per CAT module. A developer only references the test project of a module they use. |
-| Dependencies | A test project references only the abstractions of the module it fakes. A fake command processor does not need `Cat.Queries`. |
-| Test framework | The framework neutral parts live apart from the NUnit parts, such as `Cat.UnitTesting.NUnit`, so other frameworks can follow. |
-| Fake processors | One generic fake processor per kind. The user controls and defines the output. |
-| Response asserts | Stand alone if possible, and easy to use from NUnit. If that is not possible, they go in a separate project such as `Cat.UnitTesting.Responses.NUnit`. |
-| Which doubles | At least the ones our own test projects need, and more if possible. The plan holds the list, see [The list of doubles](#the-list-of-doubles). |
-| Cat.NUnit | `tests/Cat.NUnit` becomes part of this module, as soon as possible. The solution is still in alpha, so it moves before the first stable version. |
-| No database | The unit tests never need a database. |
-| Integration tests | Out of scope for now. If integration testing comes, it is a separate module. |
-| Own tests | The fakes have tests of their own. |
-
-### The list of doubles
-
+#### The list of doubles
 Checked in the test projects of the demo and the repository. "Needed now" means one of our test projects has its own copy today.
 
 | Double | Fakes | Project | Needed now | Notes |
@@ -103,21 +114,7 @@ Checked in the test projects of the demo and the repository. "Needed now" means 
 
 The demo has fakes that are not doubles of a CAT interface: `FakePriceProvider`, `FakeStockReservation` and `FakePaymentProvider`. They belong to the demo and stay there.
 
-### Open
-
-- **Which first.** The question was whether we build the fakes for every module that has abstractions, or only the main ones. The two ways:
-  - **Everything up front.** A project for every module with a processor or an aggregator, before a test needs it. Cost: a lot of code nobody uses yet, and a design that follows guesses.
-  - **Only what a test needs now.** Start with the doubles marked "Needed now" in the list above, and add the others when the module that owns the interface gets built or a test needs it. The Aspire plan did the same for the API client.
-  - **Recommendation.** Only what is needed now, as the list shows. Order: the move of `Cat.NUnit`, then the command and query fakes, then the event ones, then the response asserts.
-- **Project names.** The list above proposes `Cat.UnitTesting.<Module>` per module and `Cat.UnitTesting.NUnit` for the base class. Do you agree with this naming?
-- **The hook for results on a command.** Orders fills result properties on commands, as a real handler would. You said this depends on how [Cat.Commands.md](Cat.Commands.md) ends. The generic fake can take a function per command type, `Respond<TCommand>(command => response)`, instead of only a fixed response. A function can change the command, so it covers result properties if they stay, and it works for a typed command as well. Recommendation: build the function overload. It is small, and then this question no longer waits for the commands plan.
-- **Do the fakes act like the real thing?** Fill ids, set timestamps. You said the user controls the output. Recommendation: stay dumb on purpose. The fake returns what the test says, and the test fills what it needs. Then a fake never hides a bug in a test.
-- **Audience.** Users of the toolkit, the repository tests, or both? Recommendation: both. The repository tests are the first users of the package, the same way the demo is the first user of the other modules.
-- **The package of the moved `Cat.NUnit`.** It is not packable today. It targets `net10.0` and references NUnit. Does it become a package in this module? Check the target framework of the new project: the NUnit parts may need the latest .NET, the neutral parts target `netstandard2.0` where possible.
-- **Fake clock.** Use `FakeTimeProvider` of Microsoft and write no clock of our own? Recommendation: yes.
-
-## Can the module be built?
-
+#### Can the module be built?
 Yes, in steps, with no open question blocking the first ones.
 
 1. **Create the module** with the `new-module` skill: the projects `Cat.UnitTesting.Commands` and `Cat.UnitTesting.Queries`, the test project of the module, the solution entries, the readme and the root README row. The module is in the Future modules table now. It moves to the module overview, and the plan stays until the readme says everything.
@@ -128,13 +125,55 @@ Yes, in steps, with no open question blocking the first ones.
 6. **The readme** of the module with a table of the projects, as the other modules have.
 
 The fake user waits for `Cat.Authorization`, and the messaging fake for `Cat.Messaging`.
+<!-- region end: PhaseDescription-->
 
-## Questions before building
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 1-->
+#### Question 1
+Which doubles do we build first? Do we build the fakes for every module that has abstractions, or only the main ones?
+- **Everything up front.** A project for every module with a processor or an aggregator, before a test needs it. Cost: a lot of code nobody uses yet, and a design that follows guesses.
+- **Only what a test needs now.** Start with the doubles marked "Needed now" in the list of doubles, and add the others when the module that owns the interface gets built or a test needs it. The Aspire plan did the same for the API client.
 
-1. Do you agree with the project names in the list of doubles?
-2. Do we build only the doubles that are needed now, as recommended?
-3. Does the generic fake take a function per command type, so the result properties question stops blocking?
-4. Do the fakes stay dumb on purpose?
-5. Who is the audience: users of the toolkit, the repository tests, or both?
-6. Does the moved `Cat.NUnit` become a package, and which target framework do the NUnit parts use?
-7. Do we use `FakeTimeProvider` of Microsoft instead of a clock of our own?
+Recommendation: only what is needed now, as the list shows. Order: the move of `Cat.NUnit`, then the command and query fakes, then the event ones, then the response asserts.
+<!-- region end: Question 1-->
+
+<!-- region start: Question 2-->
+#### Question 2
+Do we agree with the project names? The list of doubles proposes `Cat.UnitTesting.<Module>` per module and `Cat.UnitTesting.NUnit` for the base class.
+<!-- region end: Question 2-->
+
+<!-- region start: Question 3-->
+#### Question 3
+How does the generic fake handle the result properties on a command? Orders fills result properties on commands, as a real handler would. The owner said this depends on how [Cat.Commands.md](Cat.Commands.md) ends. The generic fake can take a function per command type, `Respond<TCommand>(command => response)`, instead of only a fixed response. A function can change the command, so it covers result properties if they stay, and it works for a typed command as well.
+
+Recommendation: build the function overload. It is small, and then this question no longer waits for the commands plan.
+<!-- region end: Question 3-->
+
+<!-- region start: Question 4-->
+#### Question 4
+Do the fakes act like the real thing, by filling ids and setting timestamps? The owner said the developer controls the output.
+
+Recommendation: stay dumb on purpose. The fake returns what the test says, and the test fills what it needs. Then a fake never hides a bug in a test.
+<!-- region end: Question 4-->
+
+<!-- region start: Question 5-->
+#### Question 5
+Who is the audience: developers who use the toolkit, the repository tests, or both?
+
+Recommendation: both. The repository tests are the first consumers of the package, the same way the demo is the first consumer of the other modules.
+<!-- region end: Question 5-->
+
+<!-- region start: Question 6-->
+#### Question 6
+Does the moved `Cat.NUnit` become a package in this module? It is not packable today. It targets `net10.0` and references NUnit. Which target framework do the NUnit parts use? The NUnit parts may need the latest .NET, and the neutral parts target `netstandard2.0` where possible.
+<!-- region end: Question 6-->
+
+<!-- region start: Question 7-->
+#### Question 7
+Do we use `FakeTimeProvider` of Microsoft and write no clock of our own? Two test projects have their own `FakeTime` today.
+
+Recommendation: yes.
+<!-- region end: Question 7-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 1-->

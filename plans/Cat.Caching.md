@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: .. -->
 <link href="../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,74 +23,134 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
 
-# Plans for Cat.Caching
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-plan skill to update this plan.-->
+<!-- region end: TemplateSkill-->
 
-A caching decorator for queries.  
-Status: not started. This plan collects what we know. The open questions need an answer before the build.
+# Plans for `Cat.Caching` <!-- omit in toc -->  
 
-## Contents
+<!-- region start: StatusBadge-->
+[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catcaching)
+<!-- region end: StatusBadge-->
 
-- [The idea](#the-idea)
-- [What we already know](#what-we-already-know)
-- [Decisions and open questions](#decisions-and-open-questions)
-- [Questions before building](#questions-before-building)
+## Table of contents <!-- omit in toc -->  
+<!-- region start: Phases-->
+- [Phase 1](#phase-1)
+<!-- region end: Phases-->
 
-## The idea
+<!-- region start: Phase 1-->
+## Phase 1
 
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+A new module, `Cat.Caching`, with a caching decorator for queries. The first use is the Catalog queries in the demo.
+
+#### The idea
 Many reads ask the same question again and again. A book list, a category list. A decorator can answer from a cache and skip the database. The query handler stays as it is, because the decorator wraps it.
 
-## What we already know
-
+#### Background
 From the module conventions:
-
 - `Cat.Queries` runs handlers through decorators from `Cat.Decorators`. A decorator is an open generic class that wraps `ICatQueryHandler<,>`. The module already ships a logging decorator you switch on only when you need it.
 - A query is a plain type that holds the data the handler needs. A query handler returns an `ICatResponse` with the result.
 - Decorators are applied in an order. Cache placement relative to logging and tracing needs a decision.
 
 From the demo plan:
-
 - Cached catalog queries are the demo case. Catalog is mostly reads, with a small admin part.
 - Authorization in Orders is a filter in the query: the queries get the external id of the customer, or none for an admin. A cached answer for one user must never reach another user.
 - `Cat.Responses` outcomes include errors. A failed response should not be cached by default.
 - Writes go through commands. A command that changes a book makes a cached book list stale.
 
 From the architecture:
-
 - Services run as several containers. An in-memory cache differs per instance.
 
-## Decisions and open questions
+#### What exists today
+- The module does not exist yet. It is listed under the future modules in the root README.
+- `Cat.Queries` and `Cat.Decorators` exist, with the logging decorator for queries as the example of an optional decorator.
+- Nothing in the modules or the demo caches query results yet.
 
-### Decided
+#### Decided
+- **Place.** A decorator on query handlers.
+- **First use.** The Catalog queries in the demo.
+<!-- region end: PhaseDescription-->
 
-| Topic | Decision |
-|---|---|
-| Place | A decorator on query handlers. |
-| First use | The Catalog queries in the demo. |
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 1-->
+#### Question 1
+Which cache do we use as the default: memory, distributed or `HybridCache`? That means `IMemoryCache`, `IDistributedCache`, or `HybridCache` from .NET. Is the default swappable?
+<!-- region end: Question 1-->
 
-### Open
+<!-- region start: Question 2-->
+#### Question 2
+How should a query say it may be cached? Which queries are cached: an attribute on the query type, a registration, or an interface?
+<!-- region end: Question 2-->
 
-- **Cache technology.** `IMemoryCache`, `IDistributedCache`, or `HybridCache` from .NET? Which one is the default, and is it swappable?
-- **Opt in.** Which queries are cached? An attribute on the query type, a registration, or an interface?
-- **Key.** How is the cache key built from a query? Serialize the query, use record equality, or let the query supply its own key?
-- **Lifetime.** Absolute or sliding expiry? Set per query?
-- **Invalidation.** How does a command clear what it made stale? Tags, key prefixes, or nothing but short lifetimes?
-- **Per user.** How does the key vary by user, role or tenant? A safe default is needed, so nothing leaks between users.
-- **What is stored.** Only successful responses? A cached "not found"?
-- **Size and copies.** Does the cache hand out the same object, or a copy? Results are mutable classes today.
-- **Stampede.** Many requests for the same missing key at once. Does the module protect against it?
-- **Visibility.** Metrics for hits and misses, and a way to see the key in logs.
-- **Overlap.** HTTP output caching in `Cat.Minimal.Api` is a different layer. Is that out of scope?
+<!-- region start: Question 3-->
+#### Question 3
+Do commands invalidate the cache, or do we only use short lifetimes? How does a command clear what it made stale: with tags, with key prefixes, or with nothing but short lifetimes?
+<!-- region end: Question 3-->
 
-## Questions before building
+<!-- region start: Question 4-->
+#### Question 4
+How do we guarantee that per user results do not leak? How does the key vary by user, role or tenant? A safe default is needed, so nothing leaks between users.
+<!-- region end: Question 4-->
 
-1. Which cache do you want as the default: memory, distributed or `HybridCache`?
-2. How should a query say it may be cached?
-3. Do commands invalidate the cache, or do we only use short lifetimes?
-4. How do we guarantee that per user results do not leak?
-5. Should failed responses ever be cached?
-6. Do we need to support several instances in the first version?
-7. Where in the decorator order does the cache sit, relative to logging and validation?
-8. Do we want hit and miss metrics from day one, and does that depend on `Cat.Telemetry`?
-9. Is there a query in the demo that we know is slow, or do we pick one to show the effect?
-10. Do we ever want to cache service requests, or only queries?
+<!-- region start: Question 5-->
+#### Question 5
+Should failed responses ever be cached? Is only a successful response stored, and what about a cached "not found"?
+<!-- region end: Question 5-->
+
+<!-- region start: Question 6-->
+#### Question 6
+Do we need to support several instances in the first version? Services run as several containers, and an in-memory cache differs per instance.
+<!-- region end: Question 6-->
+
+<!-- region start: Question 7-->
+#### Question 7
+Where in the decorator order does the cache sit, relative to logging and validation? See [Cat.Decorators.md](Cat.Decorators.md), where the proposed default order puts caching after validation.
+<!-- region end: Question 7-->
+
+<!-- region start: Question 8-->
+#### Question 8
+Do we want hit and miss metrics from day one, and does that depend on `Cat.Telemetry`? Visibility also means a way to see the key in the logs.
+<!-- region end: Question 8-->
+
+<!-- region start: Question 9-->
+#### Question 9
+Is there a query in the demo that we know is slow, or do we pick one to show the effect?
+<!-- region end: Question 9-->
+
+<!-- region start: Question 10-->
+#### Question 10
+Do we ever want to cache service requests, or only queries?
+<!-- region end: Question 10-->
+
+<!-- region start: Question 11-->
+#### Question 11
+How is the cache key built from a query? We can serialize the query, use record equality, or let the query supply its own key.
+<!-- region end: Question 11-->
+
+<!-- region start: Question 12-->
+#### Question 12
+Is the expiry absolute or sliding? Is it set per query?
+<!-- region end: Question 12-->
+
+<!-- region start: Question 13-->
+#### Question 13
+Does the cache hand out the same object, or a copy? Results are mutable classes today.
+<!-- region end: Question 13-->
+
+<!-- region start: Question 14-->
+#### Question 14
+Many requests can ask for the same missing key at once. Does the module protect against that stampede?
+<!-- region end: Question 14-->
+
+<!-- region start: Question 15-->
+#### Question 15
+HTTP output caching in `Cat.Minimal.Api` is a different layer. Is that out of scope?
+<!-- region end: Question 15-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 1-->

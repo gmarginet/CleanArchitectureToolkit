@@ -1,3 +1,5 @@
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: .. -->
 <link href="../resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
@@ -21,57 +23,72 @@
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
 
-# Plans for Cat.Localizations
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-plan skill to update this plan.-->
+<!-- region end: TemplateSkill-->
 
-Future work in the existing `Cat.Localizations` module: finish it and use it in the demo.  
-Status: not started. `Cat.Localizations` itself exists and is marked in development. This plan collects what we know. The open questions need an answer before the build.
+# Plans for `Cat.Localizations` <!-- omit in toc -->  
 
-## Contents
+<!-- region start: StatusBadge-->
+[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catlocalizations)
+<!-- region end: StatusBadge-->
 
-- [The idea](#the-idea)
-- [What we already know](#what-we-already-know)
-- [Decisions and open questions](#decisions-and-open-questions)
-- [Questions before building](#questions-before-building)
+## Table of contents <!-- omit in toc -->  
+<!-- region start: Phases-->
+- [Phase 1](#phase-1)
+<!-- region end: Phases-->
 
-## The idea
+<!-- region start: Phase 1-->
+## Phase 1
 
-The module defines a contract to look up localized strings by key, so the rest of the app does not depend on one provider. It ships only a no-op implementation that returns the key. To be useful it needs a real provider, and the demo needs it for category names, order statuses and email texts.
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+`Cat.Localizations` already exists and is marked in development. This phase finishes the module and uses it in the demo.
 
-## What we already know
-
-From the module readme:
-
-- It has `Cat.Localizations.Abstractions` with `ICatLocalizer`, and `Cat.Localizations` with the no-op localizer and the module registration.
+#### What exists today
+- `Cat.Localizations.Abstractions` holds `ICatLocalizer`. It is a contract to look up a localized string by key, so the rest of the app does not depend on one provider.
+- `Cat.Localizations` holds the no-op localizer and the module registration `AddCatNoLocalizationLocalizer`.
 - The no-op localizer returns the key itself. It fills in placeholders when the key contains them, in the order of the arguments.
+- The module readme shows how to write your own `ICatLocalizer`.
 - The root readme marks the module as in development.
 
-From the demo:
+#### What we want to build
+- A real provider, so the module is useful beyond the no-op localizer. Which one comes first is open (see question 2). Each provider is a project that a developer can pick or skip.
+- The demo uses the module for category names, order statuses and email texts in a few languages. See [Demo.md](Demo.md).
+  - Category names are plain text today, because the module is not used yet.
 
-- [Demo.md](Demo.md) wants categories, order statuses and email texts in a few languages.
-- Category names are plain text today, because `Cat.Localizations` is not used yet.
-- The demo waits until the module is stable.
+#### Decided
+- The demo waits until the module is stable. See [Demo.md](Demo.md).
+<!-- region end: PhaseDescription-->
 
-## Decisions and open questions
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 1-->
+#### Question 1
+What is left before the module is stable? In other words, what must be true before we drop the "in development" badge?
+<!-- region end: Question 1-->
 
-### Decided
+<!-- region start: Question 2-->
+#### Question 2
+Which real implementation do we ship or document first: resource files, `IStringLocalizer` from ASP.NET Core, or a database? Each one is a project a developer can pick or skip.
+<!-- region end: Question 2-->
 
-| Topic | Decision |
-|---|---|
-| Demo timing | The demo waits until the module is stable. See [Demo.md](Demo.md). |
+<!-- region start: Question 3-->
+#### Question 3
+Where does the current culture come from: the request, the user, or a parameter?
+<!-- region end: Question 3-->
 
-### Open
+<!-- region start: Question 4-->
+#### Question 4
+Category names live in the database. How do we localize data that sits in the database: through keys, or by storing a translation per language?
+<!-- region end: Question 4-->
 
-- **Providers.** Which real implementation do we ship or document: resource files, `IStringLocalizer` from ASP.NET Core, or a database? Each one is a project a developer can pick or skip.
-- **Culture.** Where does the current culture come from: the request, the user, or a parameter?
-- **Stored data.** Category names live in the database. Do we localize them through keys, or store a translation per language?
-- **Error messages.** Do codes from `Cat.Responses` and `Cat.Validators` get localized messages through the localizer? See [Cat.Responses.md](Cat.Responses.md).
-- **Finish line.** What must be true before we drop the "in development" badge?
-
-## Questions before building
-
-1. What is left before the module is stable?
-2. Which provider do we build first?
-3. Where does the culture come from?
-4. How do we localize data that sits in the database?
-5. Do the validation and error messages go through the localizer?
+<!-- region start: Question 5-->
+#### Question 5
+Do the codes from `Cat.Responses` and `Cat.Validators` get localized messages through the localizer? See [Cat.Responses.md](Cat.Responses.md).
+<!-- region end: Question 5-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 1-->
