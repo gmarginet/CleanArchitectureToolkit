@@ -282,5 +282,10 @@ Recommendation: C. The `IPaymentProvider` interface already hides the provider, 
 #### Question 3
 What do we do about the development certificate? The dashboard says "No trusted development certificate was found" when the machine has not run `dotnet dev-certs https --trust`. It is harmless now, because the AppHost, the dashboard and the services all run on HTTP. It matters once something uses HTTPS. Do the run steps of the demo readme then tell a developer to trust the certificate, and does the AppHost keep `ASPIRE_ALLOW_UNSECURED_TRANSPORT`?
 <!-- region end: Question 3-->
+
+<!-- region start: Question 4-->
+#### Question 4
+Do all three failure switches of the payment service hold when the call goes through the gateway? The outage was tried live: with it on, the order ended after about 9 seconds. As far as we know, the latency and the error percentage were not tried through the gateway. Test them with one order each, and check that the gateway does not add its own timeout or retry that changes the result. Where do we write down the outcome: in the payment chapter of the demo readme?
+<!-- region end: Question 4-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 5-->

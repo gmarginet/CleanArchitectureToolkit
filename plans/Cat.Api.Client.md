@@ -139,5 +139,20 @@ Is the check of the shared `Contracts` variant done? The decision says to check 
 ##### Question 1.2
 Does the trace continue across the call? The decision says to check this. Check it in the Aspire dashboard with one placed order.
 <!-- region end: Question 1-->
+
+<!-- region start: Question 2-->
+#### Question 2
+Where does the NSwag settings template live? The decisions say the module holds a settings template, but the module has no such file today. The three `nswag.json` files of the demo are copies of each other with small changes. A developer who adds a client for a new service has to copy one by hand. Options: ship the template inside the package as a content file, document it in the module readme only, or let the `Refresh-*Client.ps1` script create the file when it is missing.
+<!-- region end: Question 2-->
+
+<!-- region start: Question 3-->
+#### Question 3
+Can the generated names get better? The generated methods have names like `BooksGETAsync`, because most endpoints have no operation id in their OpenAPI documents. Options: give every endpoint a clear name in the service, so the generator uses it, or set an NSwag option that builds the names from the route. Which one, and does `Cat.Minimal.Api` set the name for the developer?
+<!-- region end: Question 3-->
+
+<!-- region start: Question 4-->
+#### Question 4
+How do we handle generated types that clash with other types, such as `ICatError`? A generated client brings its own interface and model types. Orders keeps them apart with alias imports, for example `using IPaymentClient = Cat.Demo.PaymentService.Api.Client.IPaymentClient;`. Does the module readme describe aliases as the way to do it, or does the NSwag settings template exclude or rename the clashing types, so a developer needs no aliases?
+<!-- region end: Question 4-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
