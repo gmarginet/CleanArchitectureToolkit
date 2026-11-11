@@ -34,7 +34,7 @@
 <!-- region start: Intro-->
 Cat.Commands gives you one entry point for changing state. You describe a change as a command, write one handler for it, and hand the command to the processor. The processor finds the handler for you and returns an `ICatResponse`.
 
-A command changes state and returns no data, only the outcome. Use Cat.Queries to read data.
+A command changes state and returns the outcome. Most commands return no data. When the caller needs something the command made, see [Get a result from a command](#get-a-result-from-a-command). Use Cat.Queries to read data.
 
 Handlers can be wrapped in decorators for cross-cutting work. The module ships a logging decorator. You switch it on only when you need it.  
 <!-- region end: Intro-->
@@ -48,6 +48,8 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
   - [Define a command](#define-a-command)
   - [Write a handler](#write-a-handler)
   - [Process a command](#process-a-command)
+  - [Get a result from a command](#get-a-result-from-a-command)
+    - [The typed command](#the-typed-command)
   - [Add decorators](#add-decorators)
   - [Errors and exceptions](#errors-and-exceptions)
 
@@ -79,7 +81,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 
 | Module | Why Cat.Commands needs it |
 |--------|---------------------------|
-| [Cat.Responses](../Cat.Responses/README.md) | Handlers return an `ICatResponse`. |
+| [Cat.Responses](../Cat.Responses/README.md) | Handlers return an `ICatResponse`, or an `ICatResponse<TResult>` for a command with a result. |
 | [Cat.Decorators](../Cat.Decorators/README.md) | Builds the handlers and runs their decorators. |
 
 <!-- region end: Dependencies-->
@@ -209,6 +211,55 @@ if (response.IsFailed)
 }
 ```
 
+### Get a result from a command
+
+Sometimes the caller needs something the command made, such as an order number. There are three ways. They are listed in the order we recommend.
+
+1. **The caller supplies the ID.** Create the ID before the command runs and put it in the command. This is the default. A GUID needs no database, so the caller already knows the ID when the command returns, and a retry can use the same ID. Entities that inherit from `CatEntityBase` get their GUID when you create them, and the same goes for a timestamp such as `PlacedAt`, which the caller sets.
+2. **A typed command.** Use it when the caller needs the result right away. The handler returns an `ICatResponse<TResult>`, in the same way a query handler does.
+3. **A query after the command.** Send the command, then ask a query for the data. It fits a value that only the database can hand out, and it works well with a caller supplied ID, because the caller knows which ID to ask for. The cost is a second round trip.
+
+Do not put result properties on a command for the handler to fill in. A developer cannot see from the command what the handler returns.
+
+#### The typed command
+
+Implement `ICatCommand<TResult>` and write the handler with `ICatCommandHandler<TCommand, TResult>`:
+
+```csharp
+using Cat.Commands.Abstractions;
+using Cat.Responses;
+using Cat.Responses.Abstractions;
+
+public record OrderCreated(Guid OrderId, string OrderNumber);
+
+public record OrderCreateCommand(Guid OrderId, Guid CustomerId) : ICatCommand<OrderCreated>;
+
+public class OrderCreateCommandHandler : ICatCommandHandler<OrderCreateCommand, OrderCreated>
+{
+    public async Task<ICatResponse<OrderCreated>> HandleAsync(OrderCreateCommand command, CancellationToken cancellationToken = default)
+    {
+        var orderNumber = await SaveOrderAsync(command, cancellationToken);
+
+        return CatResponse.Ok(new OrderCreated(command.OrderId, orderNumber));
+    }
+}
+```
+
+Process it with the same processor. The response carries the result in `Value` when the command succeeded:
+
+```csharp
+var response = await _commandProcessor.ProcessAsync(new OrderCreateCommand(Guid.NewGuid(), customerId), cancellationToken);
+
+if (response.IsSucceeded)
+{
+    Console.WriteLine(response.Value!.OrderNumber);
+}
+```
+
+`AddCatCommandsModule` registers a handler with a result like any other handler, and the logging decorator wraps it too. `ProcessAsync` and `Process` have an overload for a command with a result.
+
+A typed command is not a query. The result holds only what the command made or decided, such as an ID, a number or a time. It is never a read model. The developer follows this rule, and the developer team checks it in its own code reviews. Nothing in the code enforces it. A command with a result is a different command type from one without, so give each command one interface only.
+
 ### Add decorators
 
 Decorators run through the `Cat.Decorators` module. `AddCatCommandsModule` already registers it, so you don't have to.
@@ -234,7 +285,7 @@ The processor never turns a failure into an exception for you. What you get back
 
 | Situation | What you get |
 |-----------|--------------|
-| The handler returns `Ok`, `Created` or `NoContent` | A succeeded response. |
+| The handler returns `Ok`, `Created` or `NoContent` | A succeeded response. A handler with a result returns its result in `Value`. |
 | The handler returns `BadRequest`, `NotFound`, `Unauthorized`, `Forbidden`, `Conflict` or `InternalServerError` | A failed response with the errors the handler passed. The processor hands it back untouched. |
 | No handler is registered for the command | An `InvalidOperationException` with the message `No decorated service found for service type ICatCommandHandler<YourCommand>`. Check that `AddCatCommandsModule` got a type from the handler's assembly. |
 | The handler throws | The original exception reaches the caller as it is. It isn't wrapped in a `TargetInvocationException`. |

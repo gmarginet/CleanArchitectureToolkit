@@ -581,7 +581,7 @@ erDiagram
 - The place order process is a workflow, in `PlaceOrderWorkflow`:
   1. Find or create the customer from the current user.
   2. Look up the price of every line and add up the total.
-  3. Create the order. It gets its number and the status `Pending` in one transaction.
+  3. Create the order. It gets its number and the status `Pending` in one transaction. The workflow supplies the order ID and the time before the command runs. `OrderCreateCommand` is a typed command, and it returns an `OrderCreated` with the ID and the order number, which only the database can hand out.
   4. Reserve the stock. If a book is out of stock, cancel the order and stop.
   5. Take the payment and save it. If it is declined, cancel the order and stop. If the payment service cannot answer, cancel the order with `CAT-ORD-1006` and stop. Nothing is saved then.
   6. Confirm the order.

@@ -566,6 +566,23 @@ What happens after the command ran:
 
 The step keeps the response of the command in `Response`. Read it with `Output` when you need it.
 
+A command that returns a result, `ICatCommand<TResult>`, has its own overload with the result type as the third type argument. Read the result from `Response.Value` with `Output`, like with a query:
+
+```csharp
+public record CreateOrderCommand(Guid OrderId) : ICatCommand<OrderCreated>
+{
+    public CreateOrderCommand() : this(Guid.Empty)
+    {
+    }
+}
+
+builder.ProcessCommand<OrderState, CreateOrderCommand, OrderCreated>()
+    .Input(s => s.OrderId, step => step.Command.OrderId)
+    .Output(step => step.Response!.Value, s => s.Created);
+```
+
+The output is copied after the step ran, also when the command failed. `Value` is then null, so do not reach into it in the `Output` expression. Copy the whole result to the state and read the part you need from there.
+
 #### Process a query
 
 `ProcessQuery` sends a query through Cat.Queries. It lives in `Cat.FluentWorkflows.Queries`. It works like the command step. The query needs a parameterless constructor, you fill it with `Input`, and you read the result with `Output`.
