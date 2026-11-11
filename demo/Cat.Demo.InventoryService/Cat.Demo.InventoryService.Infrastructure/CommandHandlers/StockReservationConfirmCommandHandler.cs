@@ -13,7 +13,7 @@ namespace Cat.Demo.InventoryService.Infrastructure.CommandHandlers;
 /// <summary>
 /// Sets <c>ConfirmedAt</c> on the reservations of an order that have none yet. A repeated message finds nothing to update and succeeds,
 /// so the handler is safe to run twice and needs no inbox. An order number without any reservation fails with <c>NotFound</c>.
-/// The column comes from <c>003-reservation-confirmed.sql</c>, so the handler uses SQL and not the scaffolded entity.
+/// The column comes from <c>003-reservation-confirmed.sql</c>. One SQL command updates all reservations of the order with the clock of the database.
 /// </summary>
 public class StockReservationConfirmCommandHandler : ICatCommandHandler<StockReservationConfirmCommand>
 {

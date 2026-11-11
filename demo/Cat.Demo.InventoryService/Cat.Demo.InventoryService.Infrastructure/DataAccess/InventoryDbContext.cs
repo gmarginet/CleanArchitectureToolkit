@@ -40,6 +40,7 @@ public partial class InventoryDbContext : DbContext
 
             entity.HasIndex(e => new { e.StockItemId, e.OrderNumber }, "UQ_StockReservation_StockItem_OrderNumber").IsUnique();
 
+            entity.Property(e => e.ConfirmedAt).HasPrecision(0);
             entity.Property(e => e.OrderNumber).HasMaxLength(20);
             entity.Property(e => e.ReservedAt)
                 .HasPrecision(0)

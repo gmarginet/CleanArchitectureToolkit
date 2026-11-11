@@ -15,5 +15,7 @@ public partial class StockReservation
 
     public DateTime ReservedAt { get; set; }
 
+    public DateTime? ConfirmedAt { get; set; }
+
     public virtual StockItem StockItem { get; set; } = null!;
 }
