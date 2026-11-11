@@ -93,10 +93,9 @@ Some modules depend on other modules, in the documentation of each module you ca
 ## Repo overview
 <!-- region start: RepoOverview-->
 
-> **New** means not built yet. The badge links to the plan.  
-> **Building** means built, with a plan for the work that is left. The badge links to the plan. Breaking changes are possible.  
-> **Stable** means built, with no plan left.  
-> **#** is the priority. 1 is the next item to work on. A stable item has none.  
+> **New** means not started yet.  
+> **Building** means building has started. Breaking changes are still possible.  
+> **Stable** means fully built.  
 
 | Name | Description | # |
 |------|-------------|---|
