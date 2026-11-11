@@ -59,7 +59,7 @@ Phase 1 is built. The module readme `modules/Cat.EventProcessor/README.md` holds
 
 #### What is not built
 - **Identity from the token.** `ICatUser` and `Cat.Authorization` do not exist, and `Cat.Messaging` does not attach a token to a message yet. A handler that runs for a message has no current user. The readme of the module says so.
-- **Tests against a real bus.** The listener host and the development endpoint have no tests of their own. The emulator tests are in [Cat.Messaging.md](Cat.Messaging.md) and in the messaging stage of [Demo.md](Demo.md).
+- **Tests against a real bus.** The listener host and the development endpoint have no tests of their own. The emulator tests are in [Cat.Messaging.md](Cat.Messaging.md). The demo already runs `OrderConfirmed` through the emulator, but that was checked by hand.
 
 #### Still to check
 - Which arrival time the bus sets for a scheduled message.

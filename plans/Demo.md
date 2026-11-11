@@ -32,64 +32,17 @@
 # Plans for `Demo` <!-- omit in toc -->  
 
 <!-- region start: StatusBadge-->
-[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-demo)
+[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-demo)
 <!-- region end: StatusBadge-->
 
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
-- [Phase 1](#phase-1)
 - [Phase 2](#phase-2)
 - [Phase 3](#phase-3)
 - [Phase 4](#phase-4)
 - [Phase 5](#phase-5)
+- [Phase 6](#phase-6)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 1-->
-## Phase 1
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Messaging. `Cat.Messaging` and `Cat.EventProcessor`, the Service Bus emulator in the AppHost, and the `OrderConfirmed` bridge in Orders.
-
-#### Background
-- Every phase of this plan ends in a working demo. A phase is done when its "Done when" is true, the demo readme and the drawing are current (the `cat-internal-create-demo-readme` skill) and the tests pass.
-- The demo uses the Azure Service Bus emulator. It runs in Docker, so it fits the Aspire setup. The AppHost starts it next to SQL Server when `Cat.Messaging` arrives.
-- Orders publishes `OrderConfirmed`. Inventory and Notifications consume it. Inventory comes in this phase. Notifications does not exist yet, so it comes in phase 2.
-- A handler that runs for a message has no current user yet. `Cat.Authorization` does not exist, and `Cat.Messaging` does not attach a token. The demo keeps its own `ICurrentUser` until phase 3, and the handlers of this phase must not need a user. Whether messages carry a token in the demo is question 10 of phase 3.
-- Orders keeps announcing facts inside the service with `Cat.EventAggregators`. A subscriber bridges an event to the bus. The event aggregator itself is in-process only and cannot carry a message to another service.
-- Inventory came before messaging on purpose. Reserving stock needs an answer, and a message gives none. So Orders calls Inventory over HTTP, and messages tell Inventory about the order afterwards.
-- The modules come from working code. The module is designed from what the demo shows, the way `CatalogPriceProvider` came before `Cat.Api.Client`.
-- The modules must not depend on Aspire.
-- EF Core 11 is released. Phase 2 of [Cat.EFCore.md](Cat.EFCore.md) upgrades the toolkit and the demo. It moves the Catalog and Orders Infrastructure projects and the three Api projects to `net11.0`, and it checks that the Catalog creates no new migration. The migration for the outbox table made in this phase is easier to make after that upgrade. The order of the two is question 16 of that plan.
-
-#### What exists today
-- The Service Bus emulator is not in the AppHost, and the box in the drawing is hatched. The demo readme lists it as planned.
-- Orders publishes no `OrderConfirmed`. Its event subscribers handle the order events inside the service: the status update, the audit record and the stock release.
-- Inventory has no message listener.
-- `Cat.EventProcessor` and `Cat.Messaging` exist. Their plans, [Cat.EventProcessor.md](Cat.EventProcessor.md) and [Cat.Messaging.md](Cat.Messaging.md), hold what is left, such as the tests against the emulator and the identity from the token.
-
-#### Needs
-The module plans [Cat.Messaging.md](Cat.Messaging.md) and [Cat.EventProcessor.md](Cat.EventProcessor.md) answered and built.
-
-#### Done when
-Orders publishes `OrderConfirmed` and Inventory consumes it and marks its reservations as confirmed. The emulator box in the drawing is solid.
-
-#### Decided
-- **Messaging.** The Azure Service Bus emulator, started by the AppHost.
-- **ERDs.** The ERDs show the database. The Catalog ERD keeps `ValidFrom` and `ValidUntil` on `BookPrice`, with a comment on the attribute that says the class does not map them yet. The comment goes when the class gets the properties. The Inventory ERD gets a comment on each attribute of a composite unique constraint, such as "unique with Isbn" on `WarehouseId`. The ERDs mark nullable columns with a comment "nullable", and show nothing else about nullability.
-- **Order message.** The message is `OrderConfirmed`, and Orders publishes it when the order is confirmed, which is also the moment of the outbox row. It was called `OrderPlaced` before. A consumer never sees an order that was cancelled before the confirmation.
-- **Message type.** A message type lives in the `Contracts` project of the sender. That is the base idea, and an exception is allowed. `OrderConfirmed` lives in the `Contracts` project of Orders, and Inventory references it.
-- **Topology.** The services create their own queues, topics and subscriptions at startup, in the Development environment only, with `ICatServiceBusTopology.EnsureTopologyAsync` and `ICatEventProcessorTopology.EnsureSubscriptionsAsync`. The emulator tests of [Cat.Messaging.md](Cat.Messaging.md) prove it first. If port 5300 is not exposed or the call fails, the demo uses the configuration file of the emulator instead.
-- **Outbox.** Orders publishes `OrderConfirmed` through the outbox (`Cat.Messaging.Outbox.EFCore`). The row is written in the command that confirms the order, in the same `SaveChanges` as the status, so the row and the status are saved together. The bridge subscriber goes away or only triggers that command. Orders gets a migration for the `CatOutbox` table.
-- **Inventory handler.** Inventory marks the reservations of the order as confirmed, with a column such as `ConfirmedAt` on `StockReservation`, set by the handler. The SQL scripts and the scaffolded model change for it. Setting it twice changes nothing. An unknown order number gives a failed response, which the failure table of `Cat.EventProcessor` dead letters.
-- **Inbox.** Inventory does not use the inbox. The reserve is already safe to repeat, and the demo shows that an idempotent handler needs none. The inbox can come with a demo handler that cannot repeat, if one appears.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 1-->
 
 <!-- region start: Phase 2-->
 ## Phase 2
@@ -97,7 +50,7 @@ Orders publishes `OrderConfirmed` and Inventory consumes it and marks its reserv
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-Notifications and scheduling. The Notifications service, `Cat.Scheduling` and `Cat.Localizations` for the texts. The nightly clean up of the order counters, the cancel of unpaid orders and a nightly low stock report.
+Notifications and scheduling. The Notifications service and `Cat.Scheduling`. The nightly clean up of the order counters, the cancel of unpaid orders and a nightly low stock report.
 
 #### Background
 - Notifications sends the order confirmed and order shipped messages. It also runs the scheduled jobs. It consumes `OrderConfirmed`.
@@ -105,7 +58,7 @@ Notifications and scheduling. The Notifications service, `Cat.Scheduling` and `C
   - Clean up the daily order counters every night, shortly after midnight UTC.
   - Cancel unpaid orders after 24 hours.
   - A nightly low stock report.
-- `Cat.Localizations` writes the texts in the language of the customer: category names, order statuses and email texts in a few languages.
+- The mails are in English. Languages come in [Phase 6](#phase-6).
 - Work without a user, such as the Scheduler, uses a client credentials token.
 - The Scheduler is the worker of a service, as the readme describes it. In debug mode the API has a development endpoint group with a sub group per worker.
 
@@ -113,14 +66,13 @@ Notifications and scheduling. The Notifications service, `Cat.Scheduling` and `C
 - The Notifications service does not exist. The demo readme lists it as planned, and the box in the drawing is hatched.
 - The `CleanUpOrderCounters` service request exists in Orders, with its handler and tests. The development endpoint `POST /development/scheduler/clean-up-order-counters` triggers it, in the Development environment only. Orders has no `Scheduler` project yet.
 - The Keycloak realm has the clients `cat-demo-web` and `cat-demo-cli` only. It has no client for a client credentials token.
-- Catalog does not use `Cat.Localizations`, so category names are plain text. Showing them in several languages waits until the module is stable.
 - `Cat.Scheduling` does not exist yet. Its plan is [Cat.Scheduling.md](Cat.Scheduling.md). The plan recommends that a one-off timeout, such as the cancel after 24 hours, goes through a scheduled message of the bus and not through the Scheduler.
 
 #### Needs
-Phase 1. The module plan [Cat.Scheduling.md](Cat.Scheduling.md) answered and built. A decision on where Notifications stores its data.
+The module plan [Cat.Scheduling.md](Cat.Scheduling.md) answered and built. A decision on where Notifications stores its data.
 
 #### Done when
-An order confirmed mail is written in the language of the customer. The nightly jobs run from the Scheduler, and the development endpoint can go.
+An order confirmed mail is sent. The nightly jobs run from the Scheduler, and the development endpoint can go.
 
 #### Decided
 - **Counter cleanup.** The Scheduler runs the `CleanUpOrderCounters` service request every night. Until the Scheduler exists, the development endpoint triggers it.
@@ -197,7 +149,7 @@ Do messages carry a token in the demo when `Cat.Authorization` exists? The decid
 - **Carry the token of the user,** and a client credentials token for the Scheduler, as decided. Cost: the token sits in the queue, the dead letter queue and the outbox table, so it needs short lived tokens, and a security review before production. The demo needs a client in the Keycloak realm for the system token.
 - **No token in the demo messages.** Cost: the demo does not show the identity rule. A handler that needs a user cannot be shown.
 
-Recommendation: carry the token, once `Cat.Authorization` and the sending side exist. It is the decided design, and the demo is the place that proves it. Until then, phase 1 and 2 need no user in their handlers.
+Recommendation: carry the token, once `Cat.Authorization` and the sending side exist. It is the decided design, and the demo is the place that proves it. Until then, the handlers of the earlier phases need no user.
 <!-- region end: Question 10-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 3-->
@@ -323,3 +275,73 @@ Recommendation: a database check per service on `/health` only, and keep `/alive
 <!-- region end: Question 5-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 5-->
+
+<!-- region start: Phase 6-->
+## Phase 6
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+Languages. The demo works in more than one language: the client has a language selector, and the mails are translated. `Cat.Localizations` provides the texts.
+
+#### Background
+- The owner moved this out of [Phase 2](#phase-2). The client has no language support, so everything is in English, and translated mails alone would not show.
+- `Cat.Localizations` looks up localized texts by key. Its open points about the culture, localized data and error messages are in [Cat.Localizations.md](Cat.Localizations.md).
+
+#### What exists today
+- The client and the mails of Notifications (Phase 2) are in English.
+- Catalog does not use `Cat.Localizations`, so category names are plain text. Showing them in several languages waits until the module is stable.
+- `ICatLocalizer` has no culture parameter, so a provider must find the culture itself.
+
+#### Needs
+[Phase 2](#phase-2), for the Notifications service. The module plan [Cat.Localizations.md](Cat.Localizations.md) answered and built.
+
+#### Done when
+A user picks a language in the client, and the order confirmed mail arrives in that language.
+
+#### Decided
+- **Scope.** The phase supports translated mails and a client where the user selects the language.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 11-->
+#### Question 11
+Which languages does the demo support? Each one needs texts in the client, in the mails and in the Catalog data.
+- **Two,** English and one more, for example Dutch. Cost: the least work, and it shows the idea.
+- **Three or more.** Cost: more texts to write and keep in step, with little more to show.
+
+Recommendation: two. It proves the mechanism, and a third language adds work and nothing to learn.
+<!-- region end: Question 11-->
+
+<!-- region start: Question 12-->
+#### Question 12
+How does the mail find the language of the customer? The `OrderConfirmed` message carries no language today.
+- **The language in the message.** Orders puts the language of the request in `OrderConfirmed`. Cost: the message grows a field, and Orders must know the language.
+- **A stored preference per user.** Notifications or another service keeps the language of each user. Cost: a place to store it. It also works for mails that no request triggers, such as the nightly jobs.
+- **Always English for jobs, the request language for mails.** Cost: two rules.
+
+Recommendation: the language in the message. The message is already the only link between the services, and it needs no new storage.
+<!-- region end: Question 12-->
+
+<!-- region start: Question 13-->
+#### Question 13
+How does the client tell the services which language it wants?
+- **The `Accept-Language` header,** sent by the client on every call and passed on by the gateway. Cost: the services must read it, and the gateway must not drop it.
+- **A claim in the token.** Cost: a change needs a new login, and it ties the language to Keycloak.
+- **A query parameter.** Cost: every call and every generated client method carries it.
+
+Recommendation: the `Accept-Language` header. It is the standard way, and a service needs no extra contract.
+<!-- region end: Question 13-->
+
+<!-- region start: Question 14-->
+#### Question 14
+Does the client remember the language choice, and where?
+- **In the browser,** in local storage. Cost: the choice is lost on another device.
+- **In the user profile of Keycloak.** Cost: more setup, and a call to save it.
+- **Not at all.** The client starts in the language of the browser. Cost: a user picks the language again after each visit.
+
+Recommendation: local storage, with the browser language as the first default. It is the smallest step.
+<!-- region end: Question 14-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 6-->

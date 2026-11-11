@@ -50,10 +50,10 @@ Test the Azure Service Bus project against the Service Bus emulator, and change 
 
 #### What exists today
 - Phase 1 is built: see the [module readme](../modules/Cat.Messaging/README.md). It was tested without the emulator.
-- The demo has no Service Bus emulator in the AppHost yet. That comes with the messaging stage of [Demo.md](Demo.md), together with `Cat.EventProcessor`.
+- The demo AppHost starts the Service Bus emulator. Orders publishes `OrderConfirmed` through it, and Inventory receives it. The services create the topic and the subscription at startup, through the management port of the emulator. That flow was checked by hand, and it is not one of the tests below.
 
 #### Decided
-- **Emulator facts.** The official page (Microsoft Learn, "Overview of the Azure Service Bus emulator") says nothing about dead letter queues, sessions, scheduled messages or reading message counts. These four are tested once the emulator is in the AppHost.
+- **Emulator facts.** The official page (Microsoft Learn, "Overview of the Azure Service Bus emulator") says nothing about dead letter queues, sessions, scheduled messages or reading message counts. These four are still to test, now that the emulator is in the AppHost.
 - **Duplicate detection.** `EnsureTopologyAsync` turns on duplicate detection on the queues and topics it creates, so the bus drops a repeated message with the same `MessageId` inside a time window. That removes the duplicates of an outbox that sends a row twice. It is decided in [Cat.EventProcessor.md](Cat.EventProcessor.md), and it is a setting that is made when the queue or topic is created.
 - **Scope.** Only the Azure project is affected.
 
@@ -71,7 +71,7 @@ Test the Azure Service Bus project against the Service Bus emulator, and change 
 - Duplicate detection in `ServiceBusTopology`, with a test of the creation options. The module readme says so in the chapter about creating the queues and topics, and the sample script gets the matching Azure CLI option.
 
 #### Can the phase be built?
-Not yet. It waits for the emulator in the AppHost.
+The emulator is in the AppHost now. The checks under "Still to check" come first.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
