@@ -1,0 +1,28 @@
+../../../Cat.Messaging/namespaces/Cat.Messaging/
+M:Cat.Messaging.CatMessageNameResolver.GetName(System.Type)|CatMessageNameResolver.GetName.4IX62DO8VM2WWZ1FIDI9VT4J9.md|GetName(Type)
+M:Cat.Messaging.CatMessageNameResolver.RequiresSession(System.Type)|CatMessageNameResolver.RequiresSession.H75IXE71EH7K4QK32CRJDU712.md|RequiresSession(Type)
+M:Cat.Messaging.CatMessageNameResolver.GetKind(System.Type)|CatMessageNameResolver.GetKind.MUD5TAE7RQ25F7621AXZPU6QD.md|GetKind(Type)
+N:Cat.Messaging|Cat.Messaging.md|Cat.Messaging
+T:Cat.Messaging.CatMessageNameResolver|CatMessageNameResolver.md|CatMessageNameResolver
+F:Cat.Messaging.CatMessageSender._nameResolver|CatMessageSender._nameResolver.md|_nameResolver
+F:Cat.Messaging.CatMessageSender._serializer|CatMessageSender._serializer.md|_serializer
+F:Cat.Messaging.CatMessageSender._sink|CatMessageSender._sink.md|_sink
+M:Cat.Messaging.CatMessageSender.#ctor(Cat.Messaging.Abstractions.ICatMessageNameResolver,Cat.Messaging.ICatMessageSerializer,Cat.Messaging.Abstractions.ICatOutgoingMessageSink)|CatMessageSender..ctor.SKRQ8ICX0K0A2A2YET133MIT5.md|CatMessageSender(ICatMessageNameResolver, ICatMessageSerializer, ICatOutgoingMessageSink)
+M:Cat.Messaging.CatMessageSender.PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|CatMessageSender.PublishAsync.ZEXHIX2911PSUWEAKC0G8NP3D.md|PublishAsync(ICatEventMessage, Nullable<DateTimeOffset>, CancellationToken)
+M:Cat.Messaging.CatMessageSender.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|CatMessageSender.SendAsync.WSQRBKEN9WV1HFOAL8OYEJYXE.md|SendAsync(ICatCommandMessage, Nullable<DateTimeOffset>, CancellationToken)
+M:Cat.Messaging.CatMessageSender.AcceptAsync(Cat.Messaging.Abstractions.ICatMessage,Cat.Messaging.Abstractions.CatMessageKind,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|CatMessageSender.AcceptAsync.5R1ASBXJOGKPLUT5AQ349EKQ.md|AcceptAsync(ICatMessage, CatMessageKind, Nullable<DateTimeOffset>, CancellationToken)
+T:Cat.Messaging.CatMessageSender|CatMessageSender.md|CatMessageSender
+F:Cat.Messaging.DirectMessageSink._transport|DirectMessageSink._transport.md|_transport
+M:Cat.Messaging.DirectMessageSink.#ctor(Cat.Messaging.Abstractions.ICatMessageTransport)|DirectMessageSink..ctor.GRYGPPK1SC4U8ZAC0GVITGH5.md|DirectMessageSink(ICatMessageTransport)
+M:Cat.Messaging.DirectMessageSink.AcceptAsync(Cat.Messaging.Abstractions.CatOutgoingMessage,System.Threading.CancellationToken)|DirectMessageSink.AcceptAsync.X1LU69VCS1NEYD3EXH7W3KRE1.md|AcceptAsync(CatOutgoingMessage, CancellationToken)
+T:Cat.Messaging.DirectMessageSink|DirectMessageSink.md|DirectMessageSink
+P:Cat.Messaging.ICatMessageSerializer.ContentType|ICatMessageSerializer.ContentType.md|ContentType
+M:Cat.Messaging.ICatMessageSerializer.Serialize(System.Object,System.Type)|ICatMessageSerializer.Serialize.KGJ12MD7J6R1BB53GDZ5CJJWA.md|Serialize(object, Type)
+T:Cat.Messaging.ICatMessageSerializer|ICatMessageSerializer.md|ICatMessageSerializer
+F:Cat.Messaging.SystemTextJsonMessageSerializer.Options|SystemTextJsonMessageSerializer.Options.md|Options
+P:Cat.Messaging.SystemTextJsonMessageSerializer.ContentType|SystemTextJsonMessageSerializer.ContentType.md|ContentType
+M:Cat.Messaging.SystemTextJsonMessageSerializer.Serialize(System.Object,System.Type)|SystemTextJsonMessageSerializer.Serialize.0LW0X09TDZXMUFM913QN7HQUE.md|Serialize(object, Type)
+T:Cat.Messaging.SystemTextJsonMessageSerializer|SystemTextJsonMessageSerializer.md|SystemTextJsonMessageSerializer
+M:Cat.Messaging.Extensions.ServiceCollectionExtensions.AddCatMessagingModule(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatMessagingModule.BRHT60JL1RA8UK9WIQEE7VFL4.md|AddCatMessagingModule(this IServiceCollection)
+N:Cat.Messaging.Extensions|Cat.Messaging.Extensions.md|Cat.Messaging.Extensions
+T:Cat.Messaging.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

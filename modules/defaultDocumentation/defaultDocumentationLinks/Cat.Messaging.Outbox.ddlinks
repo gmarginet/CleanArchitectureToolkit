@@ -1,0 +1,26 @@
+../../../Cat.Messaging/namespaces/Cat.Messaging.Outbox/
+P:Cat.Messaging.Outbox.CatOutboxItem.Id|CatOutboxItem.Id.md|Id
+P:Cat.Messaging.Outbox.CatOutboxItem.Message|CatOutboxItem.Message.md|Message
+N:Cat.Messaging.Outbox|Cat.Messaging.Outbox.md|Cat.Messaging.Outbox
+T:Cat.Messaging.Outbox.CatOutboxItem|CatOutboxItem.md|CatOutboxItem
+P:Cat.Messaging.Outbox.CatOutboxOptions.PollInterval|CatOutboxOptions.PollInterval.md|PollInterval
+P:Cat.Messaging.Outbox.CatOutboxOptions.BatchSize|CatOutboxOptions.BatchSize.md|BatchSize
+T:Cat.Messaging.Outbox.CatOutboxOptions|CatOutboxOptions.md|CatOutboxOptions
+M:Cat.Messaging.Outbox.ICatOutboxStore.AddAsync(Cat.Messaging.Abstractions.CatOutgoingMessage,System.Threading.CancellationToken)|ICatOutboxStore.AddAsync.YFPZP6FGJ9SSI4M7BALC88ZXC.md|AddAsync(CatOutgoingMessage, CancellationToken)
+M:Cat.Messaging.Outbox.ICatOutboxStore.GetPendingAsync(System.Int32,System.Threading.CancellationToken)|ICatOutboxStore.GetPendingAsync.6DHIU6ZXYUHR1N6AEHJY1EVQ3.md|GetPendingAsync(int, CancellationToken)
+M:Cat.Messaging.Outbox.ICatOutboxStore.MarkSentAsync(System.Guid,System.Threading.CancellationToken)|ICatOutboxStore.MarkSentAsync.1A6P64PUZ7EVYJPQ7C4FAPIBC.md|MarkSentAsync(Guid, CancellationToken)
+T:Cat.Messaging.Outbox.ICatOutboxStore|ICatOutboxStore.md|ICatOutboxStore
+F:Cat.Messaging.Outbox.OutboxMessageSink._store|OutboxMessageSink._store.md|_store
+M:Cat.Messaging.Outbox.OutboxMessageSink.#ctor(Cat.Messaging.Outbox.ICatOutboxStore)|OutboxMessageSink..ctor.YF9445RDU3YH03EOH6ALYRTO3.md|OutboxMessageSink(ICatOutboxStore)
+M:Cat.Messaging.Outbox.OutboxMessageSink.AcceptAsync(Cat.Messaging.Abstractions.CatOutgoingMessage,System.Threading.CancellationToken)|OutboxMessageSink.AcceptAsync.GZODJHG7SMN0GUOIPRXLX4ZOA.md|AcceptAsync(CatOutgoingMessage, CancellationToken)
+T:Cat.Messaging.Outbox.OutboxMessageSink|OutboxMessageSink.md|OutboxMessageSink
+F:Cat.Messaging.Outbox.OutboxSender._scopeFactory|OutboxSender._scopeFactory.md|_scopeFactory
+F:Cat.Messaging.Outbox.OutboxSender._options|OutboxSender._options.md|_options
+F:Cat.Messaging.Outbox.OutboxSender._logger|OutboxSender._logger.md|_logger
+M:Cat.Messaging.Outbox.OutboxSender.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Cat.Messaging.Outbox.CatOutboxOptions},Microsoft.Extensions.Logging.ILogger{Cat.Messaging.Outbox.OutboxSender})|OutboxSender..ctor.0IMLW5U28W1BWD9YQ59Z2LD4A.md|OutboxSender(IServiceScopeFactory, IOptions<CatOutboxOptions>, ILogger<OutboxSender>)
+M:Cat.Messaging.Outbox.OutboxSender.ExecuteAsync(System.Threading.CancellationToken)|OutboxSender.ExecuteAsync.KOERDX2BBLILJL6O2W3YM5T2B.md|ExecuteAsync(CancellationToken)
+M:Cat.Messaging.Outbox.OutboxSender.SendPendingAsync(System.Threading.CancellationToken)|OutboxSender.SendPendingAsync.X406B14T2NFKBJ8VG6F754969.md|SendPendingAsync(CancellationToken)
+T:Cat.Messaging.Outbox.OutboxSender|OutboxSender.md|OutboxSender
+M:Cat.Messaging.Outbox.Extensions.ServiceCollectionExtensions.AddCatMessagingOutbox(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Cat.Messaging.Outbox.CatOutboxOptions})|ServiceCollectionExtensions.AddCatMessagingOutbox.RHC2GIP1FL69S5KQBYMUJZ5W8.md|AddCatMessagingOutbox(this IServiceCollection, Action<CatOutboxOptions>)
+N:Cat.Messaging.Outbox.Extensions|Cat.Messaging.Outbox.Extensions.md|Cat.Messaging.Outbox.Extensions
+T:Cat.Messaging.Outbox.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

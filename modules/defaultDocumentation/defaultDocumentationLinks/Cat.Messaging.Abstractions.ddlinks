@@ -1,0 +1,46 @@
+../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/
+P:Cat.Messaging.Abstractions.CatCommandMessage.MessageId|CatCommandMessage.MessageId.md|MessageId
+P:Cat.Messaging.Abstractions.CatCommandMessage.CorrelationId|CatCommandMessage.CorrelationId.md|CorrelationId
+P:Cat.Messaging.Abstractions.CatCommandMessage.OccurredAt|CatCommandMessage.OccurredAt.md|OccurredAt
+N:Cat.Messaging.Abstractions|Cat.Messaging.Abstractions.md|Cat.Messaging.Abstractions
+T:Cat.Messaging.Abstractions.CatCommandMessage|CatCommandMessage.md|CatCommandMessage
+P:Cat.Messaging.Abstractions.CatEventMessage.MessageId|CatEventMessage.MessageId.md|MessageId
+P:Cat.Messaging.Abstractions.CatEventMessage.CorrelationId|CatEventMessage.CorrelationId.md|CorrelationId
+P:Cat.Messaging.Abstractions.CatEventMessage.OccurredAt|CatEventMessage.OccurredAt.md|OccurredAt
+T:Cat.Messaging.Abstractions.CatEventMessage|CatEventMessage.md|CatEventMessage
+P:Cat.Messaging.Abstractions.CatMessageAttribute.Name|CatMessageAttribute.Name.md|Name
+P:Cat.Messaging.Abstractions.CatMessageAttribute.RequiresSession|CatMessageAttribute.RequiresSession.md|RequiresSession
+T:Cat.Messaging.Abstractions.CatMessageAttribute|CatMessageAttribute.md|CatMessageAttribute
+F:Cat.Messaging.Abstractions.CatMessageKind.Command|CatMessageKind.md#Cat.Messaging.Abstractions.CatMessageKind.Command|Command
+F:Cat.Messaging.Abstractions.CatMessageKind.Event|CatMessageKind.md#Cat.Messaging.Abstractions.CatMessageKind.Event|Event
+T:Cat.Messaging.Abstractions.CatMessageKind|CatMessageKind.md|CatMessageKind
+P:Cat.Messaging.Abstractions.CatOutgoingMessage.EntityName|CatOutgoingMessage.EntityName.md|EntityName
+P:Cat.Messaging.Abstractions.CatOutgoingMessage.Kind|CatOutgoingMessage.Kind.md|Kind
+P:Cat.Messaging.Abstractions.CatOutgoingMessage.Body|CatOutgoingMessage.Body.md|Body
+P:Cat.Messaging.Abstractions.CatOutgoingMessage.ContentType|CatOutgoingMessage.ContentType.md|ContentType
+P:Cat.Messaging.Abstractions.CatOutgoingMessage.MessageId|CatOutgoingMessage.MessageId.md|MessageId
+P:Cat.Messaging.Abstractions.CatOutgoingMessage.CorrelationId|CatOutgoingMessage.CorrelationId.md|CorrelationId
+P:Cat.Messaging.Abstractions.CatOutgoingMessage.Subject|CatOutgoingMessage.Subject.md|Subject
+P:Cat.Messaging.Abstractions.CatOutgoingMessage.SessionId|CatOutgoingMessage.SessionId.md|SessionId
+P:Cat.Messaging.Abstractions.CatOutgoingMessage.ScheduledAt|CatOutgoingMessage.ScheduledAt.md|ScheduledAt
+P:Cat.Messaging.Abstractions.CatOutgoingMessage.Properties|CatOutgoingMessage.Properties.md|Properties
+T:Cat.Messaging.Abstractions.CatOutgoingMessage|CatOutgoingMessage.md|CatOutgoingMessage
+T:Cat.Messaging.Abstractions.ICatCommandMessage|ICatCommandMessage.md|ICatCommandMessage
+T:Cat.Messaging.Abstractions.ICatEventMessage|ICatEventMessage.md|ICatEventMessage
+P:Cat.Messaging.Abstractions.ICatMessage.MessageId|ICatMessage.MessageId.md|MessageId
+P:Cat.Messaging.Abstractions.ICatMessage.CorrelationId|ICatMessage.CorrelationId.md|CorrelationId
+P:Cat.Messaging.Abstractions.ICatMessage.OccurredAt|ICatMessage.OccurredAt.md|OccurredAt
+T:Cat.Messaging.Abstractions.ICatMessage|ICatMessage.md|ICatMessage
+M:Cat.Messaging.Abstractions.ICatMessageNameResolver.GetName(System.Type)|ICatMessageNameResolver.GetName.EJDE3V0APPM267E5RQ3EJIRW.md|GetName(Type)
+M:Cat.Messaging.Abstractions.ICatMessageNameResolver.RequiresSession(System.Type)|ICatMessageNameResolver.RequiresSession.OUCTRKEQZ0W61OAPZLON7FYCD.md|RequiresSession(Type)
+M:Cat.Messaging.Abstractions.ICatMessageNameResolver.GetKind(System.Type)|ICatMessageNameResolver.GetKind.B96XVL9DBP5SDW65K1CLM9XG4.md|GetKind(Type)
+T:Cat.Messaging.Abstractions.ICatMessageNameResolver|ICatMessageNameResolver.md|ICatMessageNameResolver
+M:Cat.Messaging.Abstractions.ICatMessageSender.PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|ICatMessageSender.PublishAsync.4E8W5QCL2ENIUVTRBILDV6YA7.md|PublishAsync(ICatEventMessage, Nullable<DateTimeOffset>, CancellationToken)
+M:Cat.Messaging.Abstractions.ICatMessageSender.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|ICatMessageSender.SendAsync.OVZEFSEJM5EVI7JZG3U8EL09B.md|SendAsync(ICatCommandMessage, Nullable<DateTimeOffset>, CancellationToken)
+T:Cat.Messaging.Abstractions.ICatMessageSender|ICatMessageSender.md|ICatMessageSender
+M:Cat.Messaging.Abstractions.ICatMessageTransport.SendAsync(Cat.Messaging.Abstractions.CatOutgoingMessage,System.Threading.CancellationToken)|ICatMessageTransport.SendAsync.YHH6UGRLYIHAH8747FY52RCE5.md|SendAsync(CatOutgoingMessage, CancellationToken)
+T:Cat.Messaging.Abstractions.ICatMessageTransport|ICatMessageTransport.md|ICatMessageTransport
+M:Cat.Messaging.Abstractions.ICatOutgoingMessageSink.AcceptAsync(Cat.Messaging.Abstractions.CatOutgoingMessage,System.Threading.CancellationToken)|ICatOutgoingMessageSink.AcceptAsync.AYIJDI2SZDK94W0MEDXVMRZTB.md|AcceptAsync(CatOutgoingMessage, CancellationToken)
+T:Cat.Messaging.Abstractions.ICatOutgoingMessageSink|ICatOutgoingMessageSink.md|ICatOutgoingMessageSink
+P:Cat.Messaging.Abstractions.ICatSessionMessage.SessionId|ICatSessionMessage.SessionId.md|SessionId
+T:Cat.Messaging.Abstractions.ICatSessionMessage|ICatSessionMessage.md|ICatSessionMessage

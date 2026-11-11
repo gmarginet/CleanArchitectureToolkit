@@ -1,0 +1,53 @@
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>
+<table>
+    <tr>
+        <td colspan='6' style='text-align: center; font-weight: bold; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+             Clean Architecture Toolkit for .NET
+        </td>
+    </tr>
+    <tr>
+        <td colspan='5' style='padding: 0; vertical-align: middle; border: none;'>
+            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>
+            It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>
+        <td style='padding: 0; border: none;' width='220'>
+            <img src='../../../../resources/logo/CatLogo.svg' alt='' width='200' style='padding: 15px; float: right; background: #121314; border-radius: 10px'/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../../../../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../../../../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../../../../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[CAT.MESSAGING](../../README.md)&nbsp;&nbsp;&nbsp;&#124;
+
+</td>
+</tr>
+</table>
+
+# Code Reference  
+  
+##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageNameResolver Class](CatMessageNameResolver.md 'Cat\.Messaging\.CatMessageNameResolver')
+
+## CatMessageNameResolver\.GetKind\(Type\) Method
+
+Tells whether a message type is an event or a command message\.
+
+```csharp
+public Cat.Messaging.Abstractions.CatMessageKind GetKind(System.Type messageType);
+```
+#### Parameters
+
+<a name='Cat.Messaging.CatMessageNameResolver.GetKind(System.Type).messageType'></a>
+
+`messageType` [System\.Type](https://learn.microsoft.com/en-us/dotnet/api/system.type 'System\.Type')
+
+The message type\.
+
+Implements [GetKind\(Type\)](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessageNameResolver.GetKind.B96XVL9DBP5SDW65K1CLM9XG4.md 'Cat\.Messaging\.Abstractions\.ICatMessageNameResolver\.GetKind\(System\.Type\)')
+
+#### Returns
+[CatMessageKind](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/CatMessageKind.md 'Cat\.Messaging\.Abstractions\.CatMessageKind')  
+The kind of the message\.
+
+#### Exceptions
+
+[System\.ArgumentException](https://learn.microsoft.com/en-us/dotnet/api/system.argumentexception 'System\.ArgumentException')  
+The type is neither an [ICatEventMessage](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatEventMessage.md 'Cat\.Messaging\.Abstractions\.ICatEventMessage') nor an [ICatCommandMessage](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatCommandMessage.md 'Cat\.Messaging\.Abstractions\.ICatCommandMessage'), or it is both\.
