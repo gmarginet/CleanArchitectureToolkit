@@ -27,7 +27,7 @@ Errors, which you must fix:
 - A code fence that is never closed.
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or that has no comment line with its `RootPath`. Template files (`*.template.md`) are skipped.
 - A module plan in `plans/Cat.*.md` that has no place in the readme. A module that exists needs a `[Plans](./plans/Cat.X.md)` link in the module overview. A module that does not exist yet needs a `[Cat.X](./plans/Cat.X.md)` row in the Future modules table. A module is never in both, and a row never links to another plan.
-- A missing or repeated `<!-- Modules start-->` or `<!-- Modules end-->` marker in the readme.
+- A missing or repeated `<!-- region start: ModuleOverview-->` or `<!-- region end: ModuleOverview-->` marker in the readme.
 - A skill folder without `SKILL.md`, with a `name` that differs from the folder, or without a row and an entry in `.claude/skills/README.md`.
 
 Warnings, which you should fix unless there is a reason:

@@ -17,7 +17,7 @@ Errors
 - A link points to an anchor that no heading of the target markdown file has.
 - A code fence is not closed.
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or has no comment line with its `RootPath`.
-- The readme lost its <!-- Modules start--> or <!-- Modules end--> marker.
+- The readme lost its <!-- region start: ModuleOverview--> or <!-- region end: ModuleOverview--> region marker.
 - A skill folder has no SKILL.md, has a name that differs from the folder, or is missing from .claude/skills/README.md.
 
 Warnings
@@ -186,11 +186,11 @@ if (Test-Path $headerTemplateFile) {
     }
 }
 
-# Markers in the readme
+# Region markers of the module overview in the readme
 $readmeFile = Join-Path $root 'README.md'
 if (Test-Path $readmeFile) {
     $content = [System.IO.File]::ReadAllText($readmeFile)
-    foreach ($marker in '<!-- Modules start-->', '<!-- Modules end-->') {
+    foreach ($marker in '<!-- region start: ModuleOverview-->', '<!-- region end: ModuleOverview-->') {
         $count = ([regex]::Matches($content, [regex]::Escape($marker))).Count
         if ($count -ne 1) { $errors.Add("README.md: the marker $marker must appear once. Found $count.") }
     }
@@ -223,8 +223,8 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
 
     # Plans column of the module overview: [Plans](./plans/Cat.X.md)
     $planCells = @{}
-    $start = [array]::IndexOf($readme, '<!-- Modules start-->')
-    $end = [array]::IndexOf($readme, '<!-- Modules end-->')
+    $start = [array]::IndexOf($readme, '<!-- region start: ModuleOverview-->')
+    $end = [array]::IndexOf($readme, '<!-- region end: ModuleOverview-->')
     if ($start -ge 0 -and $end -gt $start) {
         for ($i = $start + 1; $i -lt $end; $i++) {
             if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(\./modules/' -and $readme[$i] -match '\[Plans\]\(\./plans/([^)]+)\)') {

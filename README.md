@@ -1,4 +1,6 @@
-<link href="resources/styles/style.css" rel="stylesheet" />
+<!-- region start: Header-->
+<!-- Header template: @.claude\skills\cat-internal-create-header\header.template.md, RootPath: . -->
+<link href="./resources/styles/style.css" rel="stylesheet" />
 <table>
     <tr>
         <td colspan='6' style='text-align: center; font-weight: bold; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
@@ -16,15 +18,21 @@
     <tr>
         <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
 
-&#124;&nbsp;&nbsp;&nbsp;[HOME](README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
+&#124;&nbsp;&nbsp;&nbsp;[HOME](./README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](./README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](./demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
 
 </td>
 </tr>
 </table>
+<!-- region end: Header-->
+
+<!-- region start: TemplateSkill-->
+<!-- Use the cat-internal-create-readme skill to update this readme.-->
+<!-- region end: TemplateSkill-->
 
 # Clean Architecture Toolkit for .NET <!-- omit in toc -->  
 
 ## Table of contents <!-- omit in toc -->  
+<!-- region start: TableOfContents-->
 - [Getting Started](#getting-started)
 - [About this project](#about-this-project)
 - [Module overview](#module-overview)
@@ -51,9 +59,10 @@
   - [Reference rules](#reference-rules)
 - [Future modules](#future-modules)
 - [Other future things](#other-future-things)
-
+<!-- region end: TableOfContents-->
 
 ## Getting Started
+<!-- region start: GettingStarted-->
 
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/gmarginet/CleanArchitectureToolkit/build.yml)](#getting-started) 
 [![nuget](https://img.shields.io/nuget/v/gmarginet.Cat.ServiceRequests)](#getting-started)  
@@ -61,8 +70,10 @@
 The `Clean Architecture Toolkit for .NET` contains a set of modules.  
 Most of the modules can be used independently.  
 Some modules depend on other modules, in the documentation of each module you can find the list of the dependencies.  
+<!-- region end: GettingStarted-->
 
 ## About this project
+<!-- region start: AboutThisProject-->
 
 > <img src="https://github.com/gmarginet.png?size=120" alt="Gert Marginet" width="120" align="right" style="border-radius: 50%; margin: 13px 0 10px 15px;" />
 > <div style="height: 16px;"></div>
@@ -80,14 +91,13 @@ Some modules depend on other modules, in the documentation of each module you ca
 >
 > [Project Website](https://gmarginet.github.io/CleanArchitectureToolkit/) &#124; [Personal Website](https://gert.marginet.be/) &#124; [LinkedIn](https://www.linkedin.com/in/gertmarginet/) &#124; [GitHub](https://github.com/gmarginet)
 > <div style="height: 1px;"></div>
+<!-- region end: AboutThisProject-->
 
 ## Module overview
+<!-- region start: ModuleOverview-->
 
 > Modules with the status in development are still being built.  
 > Expect breaking changes in them before they are stable.  
-
-<!-- Modules start-->
-<!-- In development badge: [![In development](https://img.shields.io/badge/status-in%20development-orange)](#module-overview) -->
 
 | Module | | Description | Plans |
 |--------|--------|-------------|-------|
@@ -107,17 +117,20 @@ Some modules depend on other modules, in the documentation of each module you ca
 | [Cat.ServiceRequests](./modules/Cat.ServiceRequests/README.md) | | Run application use cases through one entry point, with validation, logging and tracing decorators. | |
 | [Cat.Validators](./modules/Cat.Validators/README.md) | | Check a model against fluent rules and get every problem back in one response. | |
 
-<!-- Modules end-->
+<!-- region end: ModuleOverview-->
 
 ## Demo
+<!-- region start: Demo-->
 
 A small bookshop that shows how the modules work together.  
 It has a Catalog service and an Order service, built with the application architecture and the service project structure described below.  
 Run them locally, try the endpoints and read the code as a working example.
 
 See the [demo README](./demo/README.md) for what is in it and how to run it.
+<!-- region end: Demo-->
 
 ## Application Architecture
+<!-- region start: ApplicationArchitecture-->
 
 The modules are built with a certain application architecture in mind.  
 It is a set of small services behind one entry point, talking to each other through messages.  
@@ -224,8 +237,10 @@ The modules support the building blocks of a service.
 | Cross-cutting work                   | [Cat.Decorators](./modules/Cat.Decorators/README.md)             |
 | Business processes as steps          | [Cat.FluentWorkflows](./modules/Cat.FluentWorkflows/README.md)   |
 | In-process events                    | [Cat.EventAggregators](./modules/Cat.EventAggregators/README.md) |
+<!-- region end: ApplicationArchitecture-->
 
 ## Service Project structure
+<!-- region start: ServiceProjectStructure-->
 
 Every service in the [application architecture](#application-architecture) is built from the same set of projects.  
 Each project has one job, and the references between them keep the business logic free of technology.  
@@ -383,8 +398,10 @@ This project holds the unit tests of the business logic.
 - The core only references the abstractions of the CAT modules.  
 - The API is the only place where everything is wired together.  
 - The `Contracts` project stays small and free of service internals.  
+<!-- region end: ServiceProjectStructure-->
 
 ## Future modules
+<!-- region start: FutureModules-->
 
 These modules do not exist in this repository yet.  
 They are ideas to support the application architecture and the service project structure even more.  
@@ -405,10 +422,15 @@ They are ideas to support the application architecture and the service project s
 | [Cat.UnitTesting](./plans/Cat.UnitTesting.md) | Helpers for unit tests, like test doubles for processors and responses, in small projects you pick from. |
 | [Cat.Templates](./plans/Cat.Templates.md) | `dotnet new` templates that create a new service with this project structure. |
 
+<!-- region end: FutureModules-->
+
 ## Other future things
+<!-- region start: OtherFutureThings-->
 
 These are not modules, but we plan them too.  
 
 | Item                        | Idea                                                                                       |
 |-----------------------------|--------------------------------------------------------------------------------------------|
 | [CAT skills for developers](./plans/Skills.md) | Claude Code skills, shipped as a plugin, that teach Claude the CAT conventions in the projects of the developers who use the toolkit. |
+
+<!-- region end: OtherFutureThings-->
