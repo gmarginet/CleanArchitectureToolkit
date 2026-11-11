@@ -56,7 +56,7 @@ Name column:
 
 Status column, from two facts: is the item built, and does it still have a plan in `plans/`.
 - Not built: the `NewBadge` template. The badge links to the plan.
-- Built, and the plan file exists: the `InDevelopmentBadge` template. The badge links to the plan. Expect breaking changes.
+- Built, and the plan file exists: the `InDevelopmentBadge` template. The badge links to the plan. Breaking changes are possible.
 - Built, and no plan file: the `StableBadge` template.
 - A plan goes only when the owner agrees. That is the moment an item becomes stable.
 
