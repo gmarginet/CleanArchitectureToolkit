@@ -1,7 +1,7 @@
 ---
 name: cat-internal-create-plan
-description: Create, build and update a plan in the plans folder from plan.template.md. Handles the phases, the open questions and their answers, the status badge, converting an old plan, and updating plans after the template changed. Use when a plan is created, when the owner asks to build a phase, answers an open question, asks to convert an old plan, or changes the plan template.
-argument-hint: "[create|build|answer|convert|update] [plan name]"
+description: Create, build and update a plan in the plans folder from plan.template.md. Handles the phases, the open questions and their answers, the status badge, and updating plans after the template changed. Use when a plan is created, when the owner asks to build a phase, answers an open question, or changes the plan template.
+argument-hint: "[create|build|answer|update] [plan name]"
 ---
 
 # Plans
@@ -25,6 +25,10 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 7. Add phase 1 with the `Phase` template, at the end of the file, and its `PhaseListLine` in the `Phases` region. Put what you found in the `PhaseDescription` region and the unknowns in numbered open questions.
 8. Link the plan from the readme, see [Where a module plan is linked](#where-a-module-plan-is-linked).
 9. Run the `cat-internal-verify-docs` skill.
+
+## Which plans exist
+- `Demo.md` is the plan of the demo, and `Skills.md` and `Cat.Templates.md` are plans of the tooling.
+- Every future module has a plan named after the module, such as `Cat.Messaging.md`. An existing module gets one too when it has future work, such as `Cat.EFCore.md`.
 
 ## Rules for the content
 - `Decided` in a phase description holds only what the owner decided, or what the existing docs state. Name the document when it comes from one. Everything else is an open question. Never invent a decision.
@@ -131,27 +135,6 @@ Use this when the owner changes `plan.template.md` or `plan.parts.template.md` a
 3. Never change the content of a phase, such as its description or its questions.
 4. For the header, follow the `cat-internal-create-header` skill.
 5. Run the `cat-internal-verify-docs` skill.
-
-<!-- region start: PlanConversion-->
-## Converting an old plan
-This chapter is only needed while we convert the plans from before this template.
-Once all plans are converted, remove this whole `PlanConversion` region from this skill.
-- Before Claude starts converting the old plan, it first verifies that everything is clear for the conversion. If not, it asks the owner what to do before it starts.
-- When the owner asks Claude to convert a plan, create a new file with the module name followed by a 2, such as `Cat.Messaging2.md` for `Cat.Messaging.md`.
-- Keep the old file until the owner has checked the new one.
-- When the owner says the new file is ok, remove the old file and give the new file the original name, such as `Cat.Messaging.md`.
-  - `git mv` only works on a file that git tracks, and the new file is untracked.
-  - So remove the old file with `git rm` (add `-f` when the old file has uncommitted edits, after you checked that the new file already holds them), move the new file to the original name with a plain move, and unstage the deletion with `git reset -q <file>`. Git then shows the plan as a modified file.
-  - If the new file is already tracked, use `git mv` as usual.
-- The new file is a plan made with this skill. The old plan becomes phase 1 of it.
-- The plan name in the new file stays the module name, so without the 2.
-- The open questions of the old plan become open questions of phase 1, with sub questions where the old plan already has several levels.
-- All other info goes into the description of phase 1.
-- Do not copy and paste it. Write a clear description, with structure where needed, that is easy to read and makes it easy to check what will be built and how it will be used.
-- When the plan is converted, Claude compares the description of phase 1 with the README of the module or demo and with the code.
-  - If parts of the description are already built, Claude notifies the owner with detailed info about what is built and where.
-  - The owner can then ask Claude to update the description of phase 1, so it only mentions what still needs to be built.
-<!-- region end: PlanConversion-->
 
 ## Placeholders
 - [[PlanName]]: The name of the plan.

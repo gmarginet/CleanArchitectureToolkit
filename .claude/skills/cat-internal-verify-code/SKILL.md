@@ -20,6 +20,13 @@ Run the standard checks and report what you find. Do not commit.
 - To change them, change the XML docs in the code, the generator (`tools/Cat.DefaultDocumentationPlugin/`) or the template, then build again.
 - If a page changed and you did not expect it, say so. Do not revert it silently.
 
+## Changing the generator
+The build loads the generator as a committed binary from `resources/defaultDocumentationPlugins/`. Use this when you change `tools/Cat.DefaultDocumentationPlugin/`.
+1. Run `tools\Cat.DefaultDocumentationPlugin\BuildAndDeployPlugin.cmd`. A change in the generator only takes effect after this.
+2. Run the build of the steps above, with `--configuration=Debug`. A plain `dotnet cake --target=Build` builds `Release` and does not regenerate the pages.
+3. Check the diff of the regenerated pages and confirm that the change is what you expect.
+4. Commit the change to `tools/`, the updated DLLs and the regenerated pages together.
+
 ## Report
 - Build: passed or failed. On failure, give the first errors with file and line.
 - Tests: number passed, failed and skipped. On failure, name the failing tests and the message.

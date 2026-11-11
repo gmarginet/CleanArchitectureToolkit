@@ -20,10 +20,10 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 | [cat-internal-commit](cat-internal-commit/SKILL.md) | Commit the changes in logical blocks, with `(skip-pub)` when no code in `modules/` changed. Never pushes. | `/cat-internal-commit` |
 | [cat-internal-verify-docs](cat-internal-verify-docs/SKILL.md) | Check all markdown locally: links, anchors, letter case, code fences, markers and forbidden punctuation. | `/cat-internal-verify-docs` |
 | [cat-internal-create-demo-readme](cat-internal-create-demo-readme/SKILL.md) | Create and update `demo/README.md` from its template, and keep the demo architecture drawing in sync with the demo app. | `/cat-internal-create-demo-readme Inventory service built` |
-| [cat-internal-verify-code](cat-internal-verify-code/SKILL.md) | Build, test and check the regenerated namespaces pages. | `/cat-internal-verify-code` |
+| [cat-internal-verify-code](cat-internal-verify-code/SKILL.md) | Build, test, check the regenerated namespaces pages and deploy a changed generator. | `/cat-internal-verify-code` |
 | [cat-internal-template-concepts](cat-internal-template-concepts/SKILL.md) | The basic concepts of CAT templates: regions, template markers, placeholders. Other template skills load it first. | `/cat-internal-template-concepts` |
 | [cat-internal-create-header](cat-internal-create-header/SKILL.md) | Create or update the header of a template-based markdown file, and update every file that uses it. | `/cat-internal-create-header update` |
-| [cat-internal-create-plan](cat-internal-create-plan/SKILL.md) | Create, build and update a plan in `plans/` from the plan template, and convert old plans. | `/cat-internal-create-plan create Cat.Caching` |
+| [cat-internal-create-plan](cat-internal-create-plan/SKILL.md) | Create, build and update a plan in `plans/` from the plan template. | `/cat-internal-create-plan create Cat.Caching` |
 | [cat-internal-create-template](cat-internal-create-template/SKILL.md) | Create a new template and the skill that uses it, from two skeletons. | `/cat-internal-create-template Cat.Report a module report` |
 | [cat-internal-verify-site](cat-internal-verify-site/SKILL.md) | Crawl the published site for broken links. Only on request. | `/cat-internal-verify-site --external` |
 | [cat-internal-create-module](cat-internal-create-module/SKILL.md) | Start a new module with projects, tests, readme and table row. | `/cat-internal-create-module Cat.Caching` |
@@ -96,14 +96,14 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **Note:** Skills for the owner of the toolkit start with `cat-internal-`. Skills for developers who use the toolkit start with `cat-`. The older skills are not renamed yet.
 
 ### cat-internal-create-header
-- **What it does:** Fills the `Header` region of a new file from `cat-internal-create-header/header.template.md`. When the header template changes, it finds every file that uses it and replaces their `Header` regions.
+- **What it does:** Fills the `Header` region of a new file from `cat-internal-create-header/header.template.md`. When the header template changes, it finds every file that uses it and replaces their `Header` regions. It also covers the generated pages and the `#repo-overview` anchor.
 - **How to use it:** Ask for a header for a new file, or ask to update all files that use the header template after you changed it.
 - **When:** When a template-based file is created, and after a change to the header template.
 - **Note:** `cat-internal-verify-docs` reports every `Header` region that differs from the template.
 ### cat-internal-create-plan
-- **What it does:** Creates a plan from `cat-internal-create-plan/plan.template.md`, adds phases and open questions from `plan.parts.template.md`, keeps the status badge right and processes the answers to open questions. It also builds a phase, converts an old plan, links a module plan from the readme, keeps the other plans and readmes in step and updates plans after the template changed.
-- **How to use it:** Ask for a new plan, to build the next phase of a plan, to convert an old plan, or to update the plans after you changed the template.
-- **When:** When a plan is created, built, answered or converted, and after a change to the plan template.
+- **What it does:** Creates a plan from `cat-internal-create-plan/plan.template.md`, adds phases and open questions from `plan.parts.template.md`, keeps the status badge right and processes the answers to open questions. It also builds a phase, links a module plan from the readme, keeps the other plans and readmes in step and updates plans after the template changed.
+- **How to use it:** Ask for a new plan, to build the next phase of a plan, or to update the plans after you changed the template.
+- **When:** When a plan is created, built or answered, and after a change to the plan template.
 - **Note:** The header comes from `cat-internal-create-header`. The instructions live in the `SKILL.md`, so the template files hold only what ends up in a plan.
 ### cat-internal-create-template
 - **What it does:** Creates a new template together with the skill that uses it. It copies `BaseTemplate.template.md` to the main template file and `BaseSkill.template.md` to the `SKILL.md`, and adds a parts file when the template needs small templates.
