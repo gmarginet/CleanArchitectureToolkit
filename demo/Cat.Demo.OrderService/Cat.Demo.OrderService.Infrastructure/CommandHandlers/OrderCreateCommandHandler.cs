@@ -21,7 +21,7 @@ namespace Cat.Demo.OrderService.Infrastructure.CommandHandlers;
 /// The counter row is increased and read back in one SQL statement, so two orders at the same moment never get the same number.
 /// If saving the order fails, the transaction rolls back and the counter goes back with it.
 /// </summary>
-public class OrderCreateCommandHandler : ICatCommandHandler<OrderCreateCommand>
+public class OrderCreateCommandHandler : ICatCommandHandler<OrderCreateCommand, OrderCreated>
 {
     /// <summary>The order number has four digits for the counter.</summary>
     public const int DailyLimit = 9999;
@@ -31,18 +31,15 @@ public class OrderCreateCommandHandler : ICatCommandHandler<OrderCreateCommand>
     private const int MaximumAttempts = 3;
 
     private readonly OrderDbContext _dbContext;
-    private readonly TimeProvider _timeProvider;
 
-    public OrderCreateCommandHandler(OrderDbContext dbContext, TimeProvider timeProvider)
+    public OrderCreateCommandHandler(OrderDbContext dbContext)
     {
         _dbContext = dbContext;
-        _timeProvider = timeProvider;
     }
 
-    public async Task<ICatResponse> HandleAsync(OrderCreateCommand command, CancellationToken cancellationToken = default)
+    public async Task<ICatResponse<OrderCreated>> HandleAsync(OrderCreateCommand command, CancellationToken cancellationToken = default)
     {
-        var now = _timeProvider.GetUtcNow().UtcDateTime;
-        var today = DateOnly.FromDateTime(now);
+        var today = DateOnly.FromDateTime(command.PlacedAt);
 
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
 
@@ -50,15 +47,16 @@ public class OrderCreateCommandHandler : ICatCommandHandler<OrderCreateCommand>
         if (counter > DailyLimit)
         {
             // Leaving the method without a commit rolls the counter back.
-            return CatResponse.BadRequest(OrderErrorDefinitions.DailyLimitReached.CreateCatError(DailyLimit));
+            return CatResponse.BadRequest<OrderCreated>(OrderErrorDefinitions.DailyLimitReached.CreateCatError(DailyLimit));
         }
 
         var order = new Order
         {
+            Id = command.OrderId,
             OrderNumber = $"{today:yyyyMMdd}-{counter:0000}",
             CustomerId = command.CustomerId,
             OrderStatusId = OrderStatuses.PendingId,
-            PlacedAt = now,
+            PlacedAt = command.PlacedAt,
             Total = command.Total,
             Lines =
             [
@@ -70,10 +68,7 @@ public class OrderCreateCommandHandler : ICatCommandHandler<OrderCreateCommand>
         await _dbContext.SaveChangesAsync(cancellationToken);
         await transaction.CommitAsync(cancellationToken);
 
-        command.OrderId = order.Id;
-        command.OrderNumber = order.OrderNumber;
-        command.PlacedAt = order.PlacedAt;
-        return CatResponse.Ok();
+        return CatResponse.Ok(new OrderCreated(order.Id, order.OrderNumber));
     }
 
     private async Task<int> TakeNextCounterAsync(DateOnly today, CancellationToken cancellationToken)

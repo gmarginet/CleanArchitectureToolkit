@@ -47,6 +47,22 @@ internal class CatCommandProcessor : ICatCommandProcessor
         return result;
     }
 
+    /// <inheritdoc />
+    public async Task<ICatResponse<TResult>> ProcessAsync<TResult>(ICatCommand<TResult> catCommand, CancellationToken cancellationToken = default)
+    {
+        await using var scope = _serviceProvider.CreateAsyncScope();
+
+        var commandType = catCommand.GetType();
+        var handlerType = typeof(ICatCommandHandler<,>).MakeGenericType(commandType, typeof(TResult));
+        var handler = _decoratorFactory.GetRequiredDecoratedService(scope.ServiceProvider, handlerType);
+
+        var method = handlerType.GetMethod("HandleAsync");
+        var task = (Task<ICatResponse<TResult>>)InvokeHandler(method!, handler, catCommand, cancellationToken);
+        var result = await task;
+
+        return result;
+    }
+
     /// <summary>
     /// Calls the handler. An exception thrown by the handler itself reaches the caller as it is, not wrapped in a <see cref="TargetInvocationException"/>.
     /// </summary>
@@ -65,6 +81,12 @@ internal class CatCommandProcessor : ICatCommandProcessor
 
     /// <inheritdoc />
     ICatResponse ICatCommandProcessor.Process(ICatCommand catCommand)
+    {
+        return AsyncContext.Run(() => ProcessAsync(catCommand));
+    }
+
+    /// <inheritdoc />
+    ICatResponse<TResult> ICatCommandProcessor.Process<TResult>(ICatCommand<TResult> catCommand)
     {
         return AsyncContext.Run(() => ProcessAsync(catCommand));
     }

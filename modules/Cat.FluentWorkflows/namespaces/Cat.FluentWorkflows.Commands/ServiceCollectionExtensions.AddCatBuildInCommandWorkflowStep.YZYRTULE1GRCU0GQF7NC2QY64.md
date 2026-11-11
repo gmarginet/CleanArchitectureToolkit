@@ -28,7 +28,7 @@
 
 ## ServiceCollectionExtensions\.AddCatBuildInCommandWorkflowStep\(this IServiceCollection\) Method
 
-Registers the process command step\.
+Registers the process command step, with and without a result\.
 
 ```csharp
 public static void AddCatBuildInCommandWorkflowStep(this Microsoft.Extensions.DependencyInjection.IServiceCollection services);

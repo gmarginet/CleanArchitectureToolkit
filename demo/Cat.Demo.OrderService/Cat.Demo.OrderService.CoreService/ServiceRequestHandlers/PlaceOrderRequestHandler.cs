@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,15 +21,18 @@ public class PlaceOrderRequestHandler : ICatServiceRequestHandler<PlaceOrderRequ
     private readonly ICatWorkflowProcessor _workflowProcessor;
     private readonly ICatQueryProcessor _queryProcessor;
     private readonly ICurrentUser _currentUser;
+    private readonly TimeProvider _timeProvider;
 
     public PlaceOrderRequestHandler(
         ICatWorkflowProcessor workflowProcessor,
         ICatQueryProcessor queryProcessor,
-        ICurrentUser currentUser)
+        ICurrentUser currentUser,
+        TimeProvider timeProvider)
     {
         _workflowProcessor = workflowProcessor;
         _queryProcessor = queryProcessor;
         _currentUser = currentUser;
+        _timeProvider = timeProvider;
     }
 
     public async Task<ICatResponse<OrderModel>> HandleAsync(PlaceOrderRequest serviceRequest, CancellationToken cancellationToken = default)
@@ -40,6 +44,7 @@ public class PlaceOrderRequestHandler : ICatServiceRequestHandler<PlaceOrderRequ
 
         var state = new PlaceOrderState
         {
+            PlacedAt = _timeProvider.GetUtcNow().UtcDateTime,
             CustomerExternalId = _currentUser.UserId,
             CustomerName = _currentUser.Name,
             CustomerEmail = _currentUser.Email,

@@ -70,6 +70,8 @@ public class PlaceOrderWorkflowTests : UnitTestBase
 
     private static PlaceOrderState NewState(params (Guid BookId, int Quantity)[] lines) => new()
     {
+        OrderId = FakeCommandProcessor.NewOrderId,
+        PlacedAt = new DateTime(2026, 11, 5, 10, 0, 0, DateTimeKind.Utc),
         CustomerExternalId = "alice",
         CustomerName = "Alice Jansen",
         CustomerEmail = "alice@example.com",
@@ -97,6 +99,8 @@ public class PlaceOrderWorkflowTests : UnitTestBase
             Assert.That(response.WorkflowResult, Is.EqualTo(CatStepExecutionResult.Continue));
             Assert.That(state.Total, Is.EqualTo(37.50m));
             Assert.That(state.OrderNumber, Is.EqualTo(FakeCommandProcessor.NewOrderNumber));
+            Assert.That(create.OrderId, Is.EqualTo(FakeCommandProcessor.NewOrderId));
+            Assert.That(create.PlacedAt, Is.EqualTo(state.PlacedAt));
             Assert.That(create.CustomerId, Is.EqualTo(FakeCommandProcessor.CustomerId));
             Assert.That(create.Total, Is.EqualTo(37.50m));
             Assert.That(create.Lines, Is.EqualTo(new[] { new OrderCreateLine(bookA, 2, 12.50m), new OrderCreateLine(bookB, 1, 12.50m) }));
@@ -159,7 +163,7 @@ public class PlaceOrderWorkflowTests : UnitTestBase
     public async Task WhenTheOrderCannotBeCreated_ShouldStopBeforeStockAndPayment()
     {
         _commandProcessor.Responses[typeof(OrderCreateCommand)] =
-            Cat.Responses.CatResponse.BadRequest(OrderErrorDefinitions.DailyLimitReached.CreateCatError(9999));
+            Cat.Responses.CatResponse.BadRequest<OrderCreated>(OrderErrorDefinitions.DailyLimitReached.CreateCatError(9999));
 
         var response = await RunAsync(NewState((Guid.NewGuid(), 1)));
 

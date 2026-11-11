@@ -9,11 +9,12 @@ namespace Cat.FluentWorkflows.Commands.Extensions;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers the process command step.
+    /// Registers the process command step, with and without a result.
     /// </summary>
     /// <param name="services">The service collection to add to.</param>
     public static void AddCatBuildInCommandWorkflowStep(this IServiceCollection services)
     {
         services.AddTransient(typeof(CatProcessCommandStep<>));
+        services.AddTransient(typeof(CatProcessCommandStep<,>));
     }
 }

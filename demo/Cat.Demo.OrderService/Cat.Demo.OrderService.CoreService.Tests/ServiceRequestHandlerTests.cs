@@ -234,7 +234,8 @@ public class ServiceRequestHandlerTests
     private PlaceOrderRequestHandler NewPlaceOrderHandler(ServiceProvider provider) => new(
         provider.GetRequiredService<ICatWorkflowProcessor>(),
         _queryProcessor,
-        _currentUser);
+        _currentUser,
+        TimeProvider.System);
 
     private ServiceProvider NewWorkflowProvider(FakeStockReservation? stock = null, FakePaymentProvider? payment = null)
     {
@@ -271,7 +272,7 @@ public class ServiceRequestHandlerTests
         {
             Assert.That(response.Type, Is.TypeOf<CatResponseType.Succeeded.Created>());
             Assert.That(response.Value!.Status, Is.EqualTo(OrderStatuses.ConfirmedCode));
-            Assert.That(_queryProcessor.Queries.Single(), Is.EqualTo(new OrderGetQuery(FakeCommandProcessor.NewOrderId, "alice")));
+            Assert.That(_queryProcessor.Queries.Single(), Is.EqualTo(new OrderGetQuery(_commandProcessor.Of<OrderCreateCommand>().Single().OrderId, "alice")));
             Assert.That(_events.Events.Single(), Is.TypeOf<OrderConfirmedEvent>());
         }
     }

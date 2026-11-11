@@ -450,6 +450,29 @@ public class WorkflowTests : UnitTestBase
     }
 
     [Test]
+    public async Task ProcessCommandWithAResult_Succeeded_ContinuesAndTheOutputIsAssigned()
+    {
+        var state = new ProcessCommandWithResultFlowState { Name = "ok" };
+        var result = await RunAsync<ProcessCommandWithResultFlow, ProcessCommandWithResultFlowState>(state);
+
+        Assert.That(result.WorkflowResult, Is.EqualTo(CatStepExecutionResult.Continue));
+        Assert.That(state.Number, Is.EqualTo(11));
+        Assert.That(state.Trace, Is.EqualTo(new[] { "after-command" }));
+    }
+
+    [Test]
+    public async Task ProcessCommandWithAResult_Failed_StopsTheWorkflowAndReturnsTheErrors()
+    {
+        var state = new ProcessCommandWithResultFlowState { Name = "fail" };
+        var result = await RunAsync<ProcessCommandWithResultFlow, ProcessCommandWithResultFlowState>(state);
+
+        Assert.That(result.WorkflowResult, Is.EqualTo(CatStepExecutionResult.BreakCascade));
+        Assert.That(result.ErrorList, Has.Count.EqualTo(1));
+        Assert.That(result.ErrorList[0].Code, Is.EqualTo("X-3"));
+        Assert.That(state.Trace, Is.Empty);
+    }
+
+    [Test]
     public async Task ProcessQuery_Succeeded_ContinuesAndTheOutputIsAssigned()
     {
         var state = new ProcessQueryFlowState();

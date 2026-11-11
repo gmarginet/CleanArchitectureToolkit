@@ -30,4 +30,5 @@
 
 | Classes | |
 | :--- | :--- |
+| [CatProcessCommandStep&lt;TCommand,TResult&gt;](CatProcessCommandStep_TCommand,TResult_.md 'Cat\.FluentWorkflows\.Commands\.Steps\.CatProcessCommandStep\<TCommand,TResult\>') | Built\-in step behind `ProcessCommand` for a command that returns a result\. It processes the command with the command processor\. A succeeded command continues the workflow\. A failed command ends it with BreakCascade and the errors\. |
 | [CatProcessCommandStep&lt;TCommand&gt;](CatProcessCommandStep_TCommand_.md 'Cat\.FluentWorkflows\.Commands\.Steps\.CatProcessCommandStep\<TCommand\>') | Built\-in step behind `ProcessCommand`\. It processes a command with the command processor\. A succeeded command continues the workflow\. A failed command ends it with BreakCascade and the errors\. |

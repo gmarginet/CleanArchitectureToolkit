@@ -57,4 +57,51 @@ internal static  class LoggingDecorator
             return response;
         }
     }
+
+    /// <summary>
+    /// Logs the start and end of a command handler that returns a result.
+    /// </summary>
+    /// <typeparam name="TCommand">The command being handled.</typeparam>
+    /// <typeparam name="TResult">The type of the data the handler returns.</typeparam>
+    internal sealed class CatCommandHandler<TCommand, TResult>
+        : ICatCommandHandler<TCommand, TResult>
+        where TCommand : class, ICatCommand<TResult>
+    {
+        private readonly ICatCommandHandler<TCommand, TResult> _innerHandler;
+        private readonly ILogger<CatCommandHandler<TCommand, TResult>> _logger;
+
+        /// <summary>
+        /// Creates the decorator.
+        /// </summary>
+        /// <param name="innerHandler">The handler to wrap.</param>
+        /// <param name="logger">Receives the log entries.</param>
+        public CatCommandHandler(
+            ICatCommandHandler<TCommand, TResult> innerHandler,
+            ILogger<CatCommandHandler<TCommand, TResult>> logger)
+        {
+            _innerHandler = innerHandler;
+            _logger = logger;
+        }
+
+        /// <inheritdoc />
+        public async Task<ICatResponse<TResult>> HandleAsync(TCommand command, CancellationToken cancellationToken = default)
+        {
+            var commandType = command.GetType();
+
+            _logger.LogDebug("Start handling Command {commandName}", commandType.Name);
+
+            var response = await _innerHandler.HandleAsync(command, cancellationToken);
+
+            if (response.IsSucceeded)
+            {
+                _logger.LogDebug("Finished handling Command {commandName}", commandType.Name);
+            }
+            else
+            {
+                _logger.LogCatResponseErrors(response, "Error occurred during handling of Command {commandName}:", commandType.Name);
+            }
+
+            return response;
+        }
+    }
 }

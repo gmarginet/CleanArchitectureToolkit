@@ -38,4 +38,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Methods | |
 | :--- | :--- |
-| [AddCatBuildInCommandWorkflowStep\(this IServiceCollection\)](ServiceCollectionExtensions.AddCatBuildInCommandWorkflowStep.YZYRTULE1GRCU0GQF7NC2QY64.md 'Cat\.FluentWorkflows\.Commands\.Extensions\.ServiceCollectionExtensions\.AddCatBuildInCommandWorkflowStep\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)') | Registers the process command step\. |
+| [AddCatBuildInCommandWorkflowStep\(this IServiceCollection\)](ServiceCollectionExtensions.AddCatBuildInCommandWorkflowStep.YZYRTULE1GRCU0GQF7NC2QY64.md 'Cat\.FluentWorkflows\.Commands\.Extensions\.ServiceCollectionExtensions\.AddCatBuildInCommandWorkflowStep\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)') | Registers the process command step, with and without a result\. |

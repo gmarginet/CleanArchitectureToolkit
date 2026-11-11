@@ -33,12 +33,14 @@ public class PlaceOrderWorkflow : ICatWorkflow<PlaceOrderState>
         });
 
         // 3. The order. It gets its number and status Pending in one transaction.
-        builder.ProcessCommand<PlaceOrderState, OrderCreateCommand>()
+        // The state supplies the id and the time. The command returns the number, which the database hands out.
+        builder.ProcessCommand<PlaceOrderState, OrderCreateCommand, OrderCreated>()
+            .Input(s => s.OrderId, step => step.Command.OrderId)
+            .Input(s => s.PlacedAt, step => step.Command.PlacedAt)
             .Input(s => s.CustomerId, step => step.Command.CustomerId)
             .Input(s => s.Total, step => step.Command.Total)
             .Input(s => s.Lines.Select(l => new OrderCreateLine(l.BookId, l.Quantity, l.UnitPrice)).ToList(), step => step.Command.Lines)
-            .Output(step => step.Command.OrderId, s => s.OrderId)
-            .Output(step => step.Command.OrderNumber, s => s.OrderNumber);
+            .Output(step => step.Response!.Value, s => s.Created);
 
         // 4. The stock. An inventory service that cannot answer cancels the order and ends the workflow.
         // Out of stock cancels the order and ends the workflow too.

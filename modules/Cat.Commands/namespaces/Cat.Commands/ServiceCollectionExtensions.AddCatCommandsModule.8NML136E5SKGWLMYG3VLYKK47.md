@@ -29,6 +29,7 @@
 ## ServiceCollectionExtensions\.AddCatCommandsModule\(this IServiceCollection, Type\[\]\) Method
 
 Registers the command processor and every command handler found in the given assemblies\.
+That covers handlers with a result too, see [ICatCommandHandler&lt;TCommand,TResult&gt;](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandHandler_TCommand,TResult_.md 'Cat\.Commands\.Abstractions\.ICatCommandHandler\`2')\.
 Handlers get a scoped lifetime\. Open generic handlers are skipped\.
 Registers the decorators module too, unless it is already registered\.
 

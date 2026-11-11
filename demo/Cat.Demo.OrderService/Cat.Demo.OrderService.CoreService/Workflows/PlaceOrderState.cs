@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cat.Demo.OrderService.CoreService.Commands;
 using Cat.FluentWorkflows.Abstractions;
 
 namespace Cat.Demo.OrderService.CoreService.Workflows;
@@ -9,6 +10,12 @@ public class PlaceOrderState : ICatWorkflowState<PlaceOrderState>
 {
     // Filled before the workflow runs.
     public string CustomerExternalId { get; set; } = "";
+
+    /// <summary>The id of the new order. It exists from the start, so the create command gets it as input.</summary>
+    public Guid OrderId { get; set; } = Guid.NewGuid();
+
+    /// <summary>The moment the order is placed. The caller of the workflow sets it.</summary>
+    public DateTime PlacedAt { get; set; }
     public string CustomerName { get; set; } = "";
     public string CustomerEmail { get; set; } = "";
     public List<PlaceOrderLineState> Lines { get; set; } = [];
@@ -16,8 +23,12 @@ public class PlaceOrderState : ICatWorkflowState<PlaceOrderState>
     // Filled by the steps.
     public Guid CustomerId { get; set; }
     public decimal Total { get; set; }
-    public Guid OrderId { get; set; }
-    public string OrderNumber { get; set; } = "";
+
+    /// <summary>What the create command returned. It is null until the order is created, and when the command failed.</summary>
+    public OrderCreated? Created { get; set; }
+
+    /// <summary>The order number from the database. Empty until the order is created.</summary>
+    public string OrderNumber => Created?.OrderNumber ?? "";
     public bool StockReserved { get; set; }
     public bool StockUnavailable { get; set; }
     public Guid? OutOfStockBookId { get; set; }

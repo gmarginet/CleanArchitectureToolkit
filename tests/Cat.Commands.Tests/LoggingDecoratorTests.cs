@@ -74,6 +74,33 @@ public class LoggingDecoratorTests : UnitTestBase
     }
 
     [Test]
+    public async Task SucceededCommandWithAResult_LogsTheStartAndTheEndAtDebugLevel()
+    {
+        var response = await Processor.ProcessAsync(new CreateOrderCommand(Guid.NewGuid(), "anna"));
+
+        Assert.That(response.Value!.OrderNumber, Is.EqualTo(42));
+        Assert.That(Logs.Entries.Select(e => e.Level), Is.All.EqualTo(LogLevel.Debug));
+        Assert.That(Logs.Entries.Select(e => e.Message), Is.EqualTo(new[]
+        {
+            "Start handling Command CreateOrderCommand",
+            "Finished handling Command CreateOrderCommand"
+        }));
+    }
+
+    [Test]
+    public async Task FailedCommandWithAResult_LogsTheStartAndTheErrors()
+    {
+        var response = await Processor.ProcessAsync(new CreateOrderCommand(Guid.NewGuid(), "fail"));
+
+        Assert.That(response.IsFailed, Is.True);
+        var entries = Logs.Entries;
+        Assert.That(entries[0].Message, Is.EqualTo("Start handling Command CreateOrderCommand"));
+        Assert.That(entries.Skip(1).Select(e => e.Level), Is.All.EqualTo(LogLevel.Error));
+        Assert.That(entries.Any(e => e.Message.Contains("ORD-1") && e.Message.Contains("Customer fail is not allowed")), Is.True);
+        Assert.That(entries.Any(e => e.Message.StartsWith("Finished")), Is.False);
+    }
+
+    [Test]
     public async Task TheHandlerThrows_TheExceptionIsNotSwallowed()
     {
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>

@@ -103,6 +103,79 @@ public class CommandProcessorTests : UnitTestBase
 
     #endregion Processing
 
+    #region Processing with a result
+
+    [Test]
+    public async Task ProcessAsync_WithAResult_ReturnsTheResultOfTheHandler()
+    {
+        var orderId = Guid.NewGuid();
+
+        var response = await Processor.ProcessAsync(new CreateOrderCommand(orderId, "anna"));
+
+        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response.Value, Is.EqualTo(new OrderCreated(orderId, 42)));
+        Assert.That(Recorder.Calls.Select(c => c.Name), Is.EqualTo(new[] { "anna" }));
+    }
+
+    [Test]
+    public async Task ProcessAsync_WithAResult_AFailedResponse_IsReturnedWithItsErrors()
+    {
+        var response = await Processor.ProcessAsync(new CreateOrderCommand(Guid.NewGuid(), "fail"));
+
+        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.BadRequest>());
+        Assert.That(response.ErrorList.Select(e => e.Code), Is.EqualTo(new[] { "ORD-1" }));
+    }
+
+    [Test]
+    public async Task ProcessAsync_WithAResult_PassesTheCancellationTokenToTheHandler()
+    {
+        using var source = new CancellationTokenSource();
+
+        await Processor.ProcessAsync(new CreateOrderCommand(Guid.NewGuid(), "anna"), source.Token);
+
+        Assert.That(Recorder.Calls.Single().Token, Is.EqualTo(source.Token));
+    }
+
+    [Test]
+    public async Task ProcessAsync_WithAResult_TheHandlerThrows_TheExceptionReachesTheCaller()
+    {
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Processor.ProcessAsync(new CreateOrderCommand(Guid.NewGuid(), "throw")));
+
+        Assert.That(exception!.Message, Is.EqualTo("boom"));
+    }
+
+    [Test]
+    public async Task ProcessAsync_WithAResult_NoHandlerIsRegistered_Throws()
+    {
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Processor.ProcessAsync(new UnhandledResultCommand()));
+    }
+
+    [Test]
+    public void Process_WithAResult_RunsTheHandlerAndWaitsForIt()
+    {
+        var orderId = Guid.NewGuid();
+
+        var response = Processor.Process(new CreateOrderCommand(orderId, "anna"));
+
+        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response.Value!.OrderId, Is.EqualTo(orderId));
+    }
+
+    [Test]
+    public async Task ProcessAsync_WithAResult_EachCallRunsInItsOwnScope()
+    {
+        await Processor.ProcessAsync(new CreateOrderCommand(Guid.NewGuid(), "one"));
+        await Processor.ProcessAsync(new CreateOrderCommand(Guid.NewGuid(), "two"));
+
+        var scopeIds = Recorder.Calls.Select(c => c.ScopeId).ToList();
+        Assert.That(scopeIds[1], Is.Not.EqualTo(scopeIds[0]));
+    }
+
+    #endregion Processing with a result
+
     #region Scopes
 
     [Test]
@@ -148,6 +221,18 @@ public class CommandProcessorTests : UnitTestBase
 
         var descriptor = services.Single(s => s.ServiceType == typeof(ICatCommandHandler<RegisterUserCommand>)
                                               && s.ImplementationType == typeof(RegisterUserCommandHandler));
+
+        Assert.That(descriptor.Lifetime, Is.EqualTo(ServiceLifetime.Scoped));
+    }
+
+    [Test]
+    public void AddCatCommandsModule_RegistersTheHandlersWithAResultAsScoped()
+    {
+        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        services.AddCatCommandsModule(typeof(RegisterUserCommandHandler));
+
+        var descriptor = services.Single(s => s.ServiceType == typeof(ICatCommandHandler<CreateOrderCommand, OrderCreated>)
+                                              && s.ImplementationType == typeof(CreateOrderCommandHandler));
 
         Assert.That(descriptor.Lifetime, Is.EqualTo(ServiceLifetime.Scoped));
     }

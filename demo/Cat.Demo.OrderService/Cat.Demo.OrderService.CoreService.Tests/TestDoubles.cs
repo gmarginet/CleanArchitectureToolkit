@@ -15,7 +15,7 @@ namespace Cat.Demo.OrderService.CoreService.Tests;
 /// </summary>
 public class FakeCommandProcessor : ICatCommandProcessor
 {
-    /// <summary>The order id the fake hands out for a new order.</summary>
+    /// <summary>The order id that <c>NewState</c> in the workflow tests puts in the state.</summary>
     public static readonly Guid NewOrderId = Guid.Parse("11111111-1111-1111-1111-111111111111");
 
     public const string NewOrderNumber = "20261105-0001";
@@ -27,7 +27,7 @@ public class FakeCommandProcessor : ICatCommandProcessor
     public Dictionary<Type, ICatResponse> Responses { get; } = [];
 
     /// <summary>Every command that was processed, in order.</summary>
-    public List<ICatCommand> Commands { get; } = [];
+    public List<object> Commands { get; } = [];
 
     public Task<ICatResponse> ProcessAsync(ICatCommand catCommand, CancellationToken cancellationToken = default)
         => Task.FromResult(Process(catCommand));
@@ -46,17 +46,32 @@ public class FakeCommandProcessor : ICatCommandProcessor
             case CustomerCreateOrUpdateCommand customer:
                 customer.CustomerId = CustomerId;
                 break;
-            case OrderCreateCommand order:
-                order.OrderId = NewOrderId;
-                order.OrderNumber = NewOrderNumber;
-                order.PlacedAt = DateTime.UtcNow;
-                break;
         }
 
         return CatResponse.Ok();
     }
 
-    public IEnumerable<T> Of<T>() where T : ICatCommand => Commands.OfType<T>();
+    public Task<ICatResponse<TResult>> ProcessAsync<TResult>(ICatCommand<TResult> catCommand, CancellationToken cancellationToken = default)
+        => Task.FromResult(Process(catCommand));
+
+    public ICatResponse<TResult> Process<TResult>(ICatCommand<TResult> catCommand)
+    {
+        Commands.Add(catCommand);
+
+        if (Responses.TryGetValue(catCommand.GetType(), out var response))
+        {
+            return (ICatResponse<TResult>)response;
+        }
+
+        if (catCommand is OrderCreateCommand order)
+        {
+            return (ICatResponse<TResult>)CatResponse.Ok(new OrderCreated(order.OrderId, NewOrderNumber));
+        }
+
+        throw new NotSupportedException($"No answer is set up for {catCommand.GetType().Name}.");
+    }
+
+    public IEnumerable<T> Of<T>() => Commands.OfType<T>();
 }
 
 /// <summary>A query processor for tests. Set up the response per query type.</summary>

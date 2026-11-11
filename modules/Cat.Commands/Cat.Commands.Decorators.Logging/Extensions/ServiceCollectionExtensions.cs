@@ -13,12 +13,13 @@ namespace Cat.Commands.Decorators.Logging.Extensions;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Adds the logging decorator to all command handlers.
+    /// Adds the logging decorator to all command handlers, with or without a result.
     /// </summary>
     /// <param name="serviceProvider">Must be able to resolve <see cref="ICatDecoratorFactoryBuilder"/>.</param>
     public static void AddCatCommandsModuleLoggingDecorator(this IServiceProvider serviceProvider)
     {
         var decoratorFactory = serviceProvider.GetRequiredService<ICatDecoratorFactoryBuilder>();
         decoratorFactory.AddDecorator(typeof(ICatCommandHandler<>), typeof(LoggingDecorator.CatCommandHandler<>));
+        decoratorFactory.AddDecorator(typeof(ICatCommandHandler<,>), typeof(LoggingDecorator.CatCommandHandler<,>));
     }
 }

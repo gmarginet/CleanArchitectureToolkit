@@ -25,4 +25,10 @@ public class FakeCommandProcessor : ICatCommandProcessor
         Commands.Add(catCommand);
         return Response;
     }
+
+    public Task<ICatResponse<TResult>> ProcessAsync<TResult>(ICatCommand<TResult> catCommand, CancellationToken cancellationToken = default)
+        => throw new NotSupportedException("This fake handles commands without a result only.");
+
+    public ICatResponse<TResult> Process<TResult>(ICatCommand<TResult> catCommand)
+        => throw new NotSupportedException("This fake handles commands without a result only.");
 }

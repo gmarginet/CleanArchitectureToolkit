@@ -12,6 +12,7 @@ public static class ServiceCollectionExtensions
 {
     /// <summary>
     /// Registers the command processor and every command handler found in the given assemblies.
+    /// That covers handlers with a result too, see <see cref="ICatCommandHandler{TCommand,TResult}"/>.
     /// Handlers get a scoped lifetime. Open generic handlers are skipped.
     /// Registers the decorators module too, unless it is already registered.
     /// </summary>
@@ -25,6 +26,10 @@ public static class ServiceCollectionExtensions
         services.Scan(scan => scan
             .FromAssembliesOf(types)
             .AddClasses(c => c.AssignableTo(typeof(ICatCommandHandler<>))
+                .Where(t => !t.IsGenericType))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime()
+            .AddClasses(c => c.AssignableTo(typeof(ICatCommandHandler<,>))
                 .Where(t => !t.IsGenericType))
             .AsImplementedInterfaces()
             .WithScopedLifetime()

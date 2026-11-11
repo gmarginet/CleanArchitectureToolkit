@@ -28,7 +28,7 @@
 
 ## ServiceCollectionExtensions\.AddCatCommandsModuleLoggingDecorator\(this IServiceProvider\) Method
 
-Adds the logging decorator to all command handlers\.
+Adds the logging decorator to all command handlers, with or without a result\.
 
 ```csharp
 public static void AddCatCommandsModuleLoggingDecorator(this System.IServiceProvider serviceProvider);

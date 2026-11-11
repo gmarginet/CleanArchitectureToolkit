@@ -24,24 +24,31 @@
 
 # Code Reference  
   
-##### >> [Cat\.Commands\.Abstractions Assembly](index.md 'index') >> [Cat\.Commands\.Abstractions Namespace](Cat.Commands.Abstractions.md 'Cat\.Commands\.Abstractions') >> [ICatCommandProcessor Interface](ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')
+##### >> [Cat\.Commands\.Abstractions Assembly](index.md 'index') >> [Cat\.Commands\.Abstractions Namespace](Cat.Commands.Abstractions.md 'Cat\.Commands\.Abstractions')
 
-## ICatCommandProcessor\.Process\(ICatCommand\) Method
+## ICatCommandHandler\<TCommand,TResult\> Interface
 
-Runs a command and blocks until it finishes\.
-Prefer [ProcessAsync\(ICatCommand, CancellationToken\)](ICatCommandProcessor.ProcessAsync.VVA0QGJV7BSKJ1729JAXLLQT8.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor\.ProcessAsync\(Cat\.Commands\.Abstractions\.ICatCommand, System\.Threading\.CancellationToken\)') when you can\.
+Handles one kind of command that returns a result\.
+Implement it once per command type\. The module finds and registers it for you\.
 
 ```csharp
-Cat.Responses.Abstractions.ICatResponse Process(Cat.Commands.Abstractions.ICatCommand catCommand);
+public interface ICatCommandHandler<in TCommand,TResult>
+    where TCommand : class, Cat.Commands.Abstractions.ICatCommand<TResult>
 ```
-#### Parameters
+#### Type parameters
 
-<a name='Cat.Commands.Abstractions.ICatCommandProcessor.Process(Cat.Commands.Abstractions.ICatCommand).catCommand'></a>
+<a name='Cat.Commands.Abstractions.ICatCommandHandler_TCommand,TResult_.TCommand'></a>
 
-`catCommand` [ICatCommand](ICatCommand.md 'Cat\.Commands\.Abstractions\.ICatCommand')
+`TCommand`
 
-The command to run\.
+The command this handler can run\.
 
-#### Returns
-[ICatResponse](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')  
-The response of the handler\.
+<a name='Cat.Commands.Abstractions.ICatCommandHandler_TCommand,TResult_.TResult'></a>
+
+`TResult`
+
+The type of the data the handler returns\.
+
+| Methods | |
+| :--- | :--- |
+| [HandleAsync\(TCommand, CancellationToken\)](ICatCommandHandler_TCommand,TResult_.HandleAsync.TPIUUXKGIBWH7YKSVBFAZVUFD.md 'Cat\.Commands\.Abstractions\.ICatCommandHandler\<TCommand,TResult\>\.HandleAsync\(TCommand, System\.Threading\.CancellationToken\)') | Runs the command\. |

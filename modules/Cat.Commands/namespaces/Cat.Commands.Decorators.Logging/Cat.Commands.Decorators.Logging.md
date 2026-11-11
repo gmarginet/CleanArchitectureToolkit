@@ -34,4 +34,5 @@ including the errors of a failed response\.
 | Classes | |
 | :--- | :--- |
 | [LoggingDecorator](LoggingDecorator.md 'Cat\.Commands\.Decorators\.Logging\.LoggingDecorator') | Wraps command handlers with debug logging and error logging\. |
+| [LoggingDecorator\.CatCommandHandler&lt;TCommand,TResult&gt;](LoggingDecorator.CatCommandHandler_TCommand,TResult_.md 'Cat\.Commands\.Decorators\.Logging\.LoggingDecorator\.CatCommandHandler\<TCommand,TResult\>') | Logs the start and end of a command handler that returns a result\. |
 | [LoggingDecorator\.CatCommandHandler&lt;TCommand&gt;](LoggingDecorator.CatCommandHandler_TCommand_.md 'Cat\.Commands\.Decorators\.Logging\.LoggingDecorator\.CatCommandHandler\<TCommand\>') | Logs the start and end of a command handler\. |
