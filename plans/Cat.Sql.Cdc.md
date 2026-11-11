@@ -172,7 +172,7 @@ Who runs `sys.sp_cdc_enable_table`: the module, a script or the developer? The d
 - **A script** that the developer owns, as the demo does for its tables. Cost: a script to write, but it fits the deployment of the database.
 - **The module offers a ready script** in its readme or as a resource. Cost: a script to keep up to date.
 
-Recommendation: a script owned by the developer, with the ready script as a sample in the module readme. This is the same idea as turning off the topology creation in question 7 of [Cat.Messaging.md](Cat.Messaging.md).
+Recommendation: a script owned by the developer, with the ready script as a sample in the module readme. This is the same idea as dropping the creation of the topology at startup, see [Cat.Messaging.md](Cat.Messaging.md).
 <!-- region end: Question 9-->
 
 <!-- region start: Question 10-->

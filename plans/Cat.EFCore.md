@@ -95,6 +95,7 @@ From the saga plan:
 - **DbContext.** The base classes use a generic context type.
 - **Tracking.** Queries use `AsNoTracking` by convention. A developer can override it per query type.
 - **Demo case.** Saving an order and its lines in one go.
+- **Outbox.** Not in this module. It lives in `Cat.Messaging`, as `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore`, see [Cat.Messaging.md](Cat.Messaging.md). The base command handler leaves room for it, because a row added to the same context is saved by the same `SaveChanges`.
 
 #### What the code says about transactions
 These facts were checked for the note of the owner behind question 1.
@@ -201,16 +202,6 @@ What isolation level is the default, and how can it change per command? Only rel
 
 Recommendation: the database default, with the property. Inventory's conditional updates already stay correct at that level.
 <!-- region end: Question 8-->
-
-<!-- region start: Question 9-->
-#### Question 9
-Is an outbox part of the first version, and does it live here or in `Cat.Messaging`? The outbox is a table in the service database written by the same `SaveChanges`, a background sender, and inbox IDs on the receiving side. See [Cat.Messaging.md](Cat.Messaging.md), which has the same question, and question 9 in [Cat.Sagas.md](Cat.Sagas.md). Answer it once, in the messaging plan. The options:
-- **In `Cat.Messaging`,** as outbox projects next to the bus project. Cost: the outbox projects reference EF Core, so they target the latest .NET.
-- **In `Cat.EFCore`.** Cost: `Cat.EFCore` then knows what a message is, which the toolbox rule does not like.
-- **Not in the first version.** Cost: a crash between the save and the send can lose a message.
-
-Recommendation: not in the first version of `Cat.EFCore`. It is a messaging concern, and the messaging plan decides it. The base command handler leaves room for it, because a row added to the same context is saved by the same `SaveChanges`.
-<!-- region end: Question 9-->
 
 <!-- region start: Question 10-->
 #### Question 10

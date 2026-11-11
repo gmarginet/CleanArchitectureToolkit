@@ -141,7 +141,7 @@ Recommendation: yes, the module name as the source and meter name, and a short t
 
 <!-- region start: Question 6-->
 #### Question 6
-Who carries the trace context over the Service Bus: this module or `Cat.Messaging`? The Service Bus SDK already puts the trace context (`Diagnostic-Id`) on a message, see question 5 in [Cat.Messaging.md](Cat.Messaging.md). The options:
+Who carries the trace context over the Service Bus: this module or `Cat.Messaging`? The Service Bus SDK already puts the trace context (`Diagnostic-Id`) on a message, see [Cat.Messaging.md](Cat.Messaging.md). The options:
 - **`Cat.Messaging`,** since the SDK does it and the module sets the properties. Cost: none for `Cat.Telemetry`.
 - **This module** with a helper that writes and reads the context. Cost: messaging then depends on telemetry, which the toolbox rule does not like.
 

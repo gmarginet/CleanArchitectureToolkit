@@ -195,6 +195,7 @@ Steps 1 to 3 do not depend on the other future modules, so they can start before
 #### Decided
 - **Orders now.** Orders keeps its state in the order status. The payment is an interface.
 - **Messaging.** The wait step goes through the messaging abstractions, not through `Cat.EventAggregators`.
+- **Outbox.** The outbox lives in `Cat.Messaging`, see [Cat.Messaging.md](Cat.Messaging.md). The saga module saves the instance and the outgoing message in one `SaveChanges`, through `Cat.Messaging.Outbox.EFCore`.
 - **Order of work.** The engine change comes first and needs no other future module. The module itself follows `Cat.Messaging` and `Cat.EventProcessor`.
 <!-- region end: PhaseDescription-->
 
@@ -260,7 +261,7 @@ Recommendation: the one in the engine plan (fail clearly on a mismatch, no side 
 
 <!-- region start: Question 6-->
 #### Question 6
-Which serializer: `System.Text.Json` only, or pluggable from day one? The messaging plan has the same question, see question 2 in [Cat.Messaging.md](Cat.Messaging.md), with the same options. The saga module also serializes the state and the checkpoint, so it follows the answer there. The options:
+Which serializer: `System.Text.Json` only, or pluggable from day one? The messaging plan decided this for messages: `System.Text.Json` only, behind a small internal seam, see [Cat.Messaging.md](Cat.Messaging.md). The saga module also serializes the state and the checkpoint, so the owner can confirm that it follows that answer. The options:
 - **`System.Text.Json` only,** behind a small internal interface. Cost: a state class that needs polymorphism needs attributes.
 - **Pluggable from day one.** Cost: a seam in every module that serializes, and a test matrix.
 
@@ -282,13 +283,6 @@ Is it fine that Orders works with option A until the saga work is ready? Orders 
 
 Recommendation: yes. Nothing waits for this plan, and the move to a message flow is step 6 of the build order.
 <!-- region end: Question 8-->
-
-<!-- region start: Question 9-->
-#### Question 9
-Who owns the outbox: this module, `Cat.EFCore` or `Cat.Messaging`? This is the same point as question 6 in [Cat.Messaging.md](Cat.Messaging.md) and question 9 in [Cat.EFCore.md](Cat.EFCore.md). Answer it once in the messaging plan, where the options are. The saga module only needs the answer: it saves the instance and the outgoing message in one `SaveChanges`, through whichever project owns the outbox.
-
-Recommendation: the messaging plan's recommendation (outbox projects in `Cat.Messaging`, in the first version).
-<!-- region end: Question 9-->
 
 <!-- region start: Question 10-->
 #### Question 10

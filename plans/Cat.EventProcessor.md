@@ -95,9 +95,10 @@ From the module conventions:
 - **Tracing.** The trace of the sender continues, using the message properties.
 - **Identity.** It depends on the context of the sender. A message sent for a user carries the token of that user. A message sent without a user, such as one from the scheduler, carries the token of the sending system. Every system that sends messages without a user has its own token.
 - **Failure.** The developer is responsible, from the handler. See Question 2 on how that could look.
+- **Two modules.** `Cat.EventProcessor` and `Cat.Messaging` are two modules. For the demo they are built in one phase, and `Cat.Messaging` can be built independently of this module, see [Cat.Messaging.md](Cat.Messaging.md).
 
 #### Can the module be built?
-Not alone. It depends on `Cat.Messaging`, because it receives what that module defines: the message types, the serializer, the name convention, the topology and the Azure Service Bus project. The two ship together or this one follows.
+Not alone. It depends on `Cat.Messaging`, because it receives what that module defines: the message types, the serializer, the name convention, the topology and the Azure Service Bus project. They are built in one phase for the demo.
 
 Settled enough to start, once the messaging abstractions exist:
 1. `Cat.EventProcessor`: the declaration of the message types, in the style of the endpoints of the API.
@@ -139,7 +140,7 @@ Recommendation: the table as the default, and the override in the registration, 
 #### Question 3
 Does the bus alone retry, with the default count and no delay in the first version? The options:
 - **The bus alone.** Cost: a failing dependency is hit up to ten times in a second.
-- **The bus plus a delay between tries,** by resending the message with a scheduled time. Cost: more code, and it needs scheduled delivery (question 13 in [Cat.Messaging.md](Cat.Messaging.md)).
+- **The bus plus a delay between tries,** by resending the message with a scheduled time. Cost: more code, and it needs scheduled delivery (decided in [Cat.Messaging.md](Cat.Messaging.md): an optional `scheduledAt` argument on the send methods).
 - **A retry loop in the module.** Cost: two retry layers multiply, as in the HTTP case.
 
 Recommendation: the bus alone in the first version, the delay later. The suggestion: the bus retries, and the module adds no retry loop of its own in the first version. Azure Service Bus redelivers an abandoned message up to its maximum delivery count, which is 10 by default (to check), and then dead letters it. The developer can change the count in the configuration of the service, as decided for the failures in [Cat.Messaging.md](Cat.Messaging.md). Two retry layers multiply, as the plan of [Cat.Resilience.md](Cat.Resilience.md) says about HTTP.
@@ -205,10 +206,5 @@ Is the split with `Cat.Sagas` right? Which parts belong here and which in `Cat.S
 
 Recommendation: this module only does what is the same for every message: find the handler, run it and settle the message. The answer to a waiting workflow is a message, and so a service request. A handler from `Cat.Sagas` finds, locks, resumes and saves the instance. See [Cat.Sagas.md](Cat.Sagas.md).
 <!-- region end: Question 11-->
-
-<!-- region start: Question 12-->
-#### Question 12
-Do we build this together with `Cat.Messaging`, and is it one module with two packages or two modules? This is the same question as Question 10 in [Cat.Messaging.md](Cat.Messaging.md), with the options and the recommendation (two modules, built in one phase). Answer it there, and close this one with it.
-<!-- region end: Question 12-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
