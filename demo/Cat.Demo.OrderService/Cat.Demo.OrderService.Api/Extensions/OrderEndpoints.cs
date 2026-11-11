@@ -18,10 +18,14 @@ public static class OrderEndpoints
             ordersBuilder.RequireAuthorization();
         }
 
-        ordersBuilder.MapCatPost<PlaceOrderRequest, OrderModel>("/", order => $"/orders/{order.Id}", CatResponseType.Created, CatResponseType.Unauthorized);
-        ordersBuilder.MapCatGetList<OrderGetListRequest, OrderSummaryModel>("/", CatResponseType.Ok, CatResponseType.Unauthorized);
-        ordersBuilder.MapCatGet<OrderGetRequest, OrderModel>("/{orderId:guid}", CatResponseType.Ok, CatResponseType.NotFound, CatResponseType.Unauthorized);
-        ordersBuilder.MapCatPost<CancelOrderRequest>("/{orderId:guid}/cancel", CatResponseType.NoContent, CatResponseType.NotFound, CatResponseType.Conflict, CatResponseType.Unauthorized);
+        ordersBuilder.MapCatPost<PlaceOrderRequest, OrderModel>("/", order => $"/orders/{order.Id}", CatResponseType.Created, CatResponseType.Unauthorized)
+            .WithName("PlaceOrder");
+        ordersBuilder.MapCatGetList<OrderGetListRequest, OrderSummaryModel>("/", CatResponseType.Ok, CatResponseType.Unauthorized)
+            .WithName("GetOrders");
+        ordersBuilder.MapCatGet<OrderGetRequest, OrderModel>("/{orderId:guid}", CatResponseType.Ok, CatResponseType.NotFound, CatResponseType.Unauthorized)
+            .WithName("GetOrder");
+        ordersBuilder.MapCatPost<CancelOrderRequest>("/{orderId:guid}/cancel", CatResponseType.NoContent, CatResponseType.NotFound, CatResponseType.Conflict, CatResponseType.Unauthorized)
+            .WithName("CancelOrder");
 
         return builder;
     }

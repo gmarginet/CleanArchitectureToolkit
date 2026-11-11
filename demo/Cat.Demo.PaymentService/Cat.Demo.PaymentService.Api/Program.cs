@@ -52,7 +52,8 @@ var payments = app.MapPost("/payment/payments", async (PaymentRequest request, P
 })
 .Produces<PaymentResponse>(StatusCodes.Status200OK)
 .ProducesProblem(StatusCodes.Status400BadRequest)
-.ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+.ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+.WithName("TakePayment");
 
 if (authenticationOn)
 {

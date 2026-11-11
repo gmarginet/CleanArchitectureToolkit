@@ -15,16 +15,21 @@ public static class CatalogEndpoints
         var catalogBuilder = builder.MapGroup("/catalog");
 
         var booksBuilder = catalogBuilder.MapGroup("/books");
-        booksBuilder.MapCatGetList<BookSearchRequest, BookModel>("/");
-        booksBuilder.MapCatGetList<BookPriceListRequest, BookPriceModel>("/prices", CatResponseType.Ok, CatResponseType.NotFound);
-        booksBuilder.MapCatGet<BookGetRequest, BookModel>("/{bookId:guid}", CatResponseType.Ok, CatResponseType.NotFound);
-        var save = booksBuilder.MapCatPost<BookSaveRequest>("/", CatResponseType.Ok);
+        booksBuilder.MapCatGetList<BookSearchRequest, BookModel>("/")
+            .WithName("SearchBooks");
+        booksBuilder.MapCatGetList<BookPriceListRequest, BookPriceModel>("/prices", CatResponseType.Ok, CatResponseType.NotFound)
+            .WithName("GetBookPrices");
+        booksBuilder.MapCatGet<BookGetRequest, BookModel>("/{bookId:guid}", CatResponseType.Ok, CatResponseType.NotFound)
+            .WithName("GetBook");
+        var save = booksBuilder.MapCatPost<BookSaveRequest>("/", CatResponseType.Ok)
+            .WithName("SaveBook");
         if (requireLogin)
         {
             save.RequireAuthorization(AuthenticationExtensions.AdminPolicy);
         }
         
-        catalogBuilder.MapCatGetList<CategoryGetListRequest, CategoryModel>("/categories");
+        catalogBuilder.MapCatGetList<CategoryGetListRequest, CategoryModel>("/categories")
+            .WithName("GetCategories");
 
         return builder;
     }
