@@ -5,7 +5,7 @@
     { "name": "Aspire dashboard",       "element": "u05NMZlPkNX3QQPb2JHdK", "chapter": "Aspire AppHost and dashboard",         "detect": { "path": "demo/Cat.Demo.AppHost*" } },
     { "name": "API Gateway",            "element": "ifuKXsmw2EOy_3TWPiejJ", "chapter": "API Gateway",            "detect": { "path": "demo/Cat.Demo.Api.Gateway*" } },
     { "name": "Keycloak",               "element": "KcBox0Keycloak00000001", "chapter": "Keycloak",               "detect": { "path": "demo/Cat.Demo.AppHost*", "pattern": "keycloak" } },
-    { "name": "Service Bus emulator",   "element": "49PMKRPGFsWEQYKcQGCkG", "chapter": null,   "detect": { "path": "demo/Cat.Demo.AppHost*", "pattern": "AddAzureServiceBus" } },
+    { "name": "Service Bus emulator",   "element": "49PMKRPGFsWEQYKcQGCkG", "chapter": "Service Bus emulator",   "detect": { "path": "demo/Cat.Demo.AppHost*", "pattern": "AddAzureServiceBus" } },
     { "name": "Catalog",                "element": "WDRzsEBbpFT88vZ0Z4Ct0", "chapter": "Catalog service",        "detect": { "path": "demo/Cat.Demo.CatalogService" } },
     { "name": "Orders",                 "element": "iCI-Jn38YpZ23TWuRfmWE", "chapter": "Orders service",         "detect": { "path": "demo/Cat.Demo.OrderService" } },
     { "name": "Inventory",              "element": "BMOS81ArgqLkvdO0QLPWe", "chapter": "Inventory service",      "detect": { "path": "demo/Cat.Demo.InventoryService" } },

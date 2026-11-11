@@ -52,6 +52,7 @@ A small bookshop that shows how the Clean Architecture Toolkit modules work toge
   - [Inventory service](#inventory-service)
   - [Aspire ServiceDefaults](#aspire-servicedefaults)
   - [Payment service](#payment-service)
+  - [Service Bus emulator](#service-bus-emulator)
 <!-- region end: TableOfContents-->
 
 ## What the bookshop does
@@ -101,9 +102,9 @@ Hatched boxes are not built yet. Solid boxes are. The drawing is kept in sync wi
 - **Login.** Keycloak runs as a container and holds the users. The gateway and each service check the token. A service does not trust the network. See [Things to know](#things-to-know).
 - **Services** own their data. A service never reads the database of another service. Where one needs data of another, it asks through an interface. Orders asks Catalog for prices, Inventory for stock and the payment service for payments, all through the gateway when you run through Aspire.
 - **Contracts.** Sharing the contracts of a service is a choice per connection. The React client and the price call from Orders to Catalog keep their own models. The stock call from Orders to Inventory shares the `Contracts` project of Inventory, so the demo shows both. See [Sharing contracts](#sharing-contracts).
-- **Events** stay in memory inside a service. Services do not tell each other about events.
+- **Events** stay in memory inside a service. A service tells another one about a fact with a message on Azure Service Bus. Orders publishes `OrderConfirmed` through its outbox, and Inventory receives it. See [Events and interfaces](#events-and-interfaces).
 - **Databases.** Every service has its own SQL Server database.
-- **Aspire** starts everything with one command: the gateway, the services, Keycloak and SQL Server in containers, and the dashboard. You can still start a service on its own.
+- **Aspire** starts everything with one command: the gateway, the services, Keycloak, SQL Server and the Service Bus emulator in containers, and the dashboard. You can still start a service on its own.
 <!-- region end: HowThePiecesFit-->
 
 ### How a request flows through a service
@@ -169,9 +170,12 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 |---|---|---|
 | Reserve stock, take payment | An interface (`IStockReservation`, `IPaymentProvider`), called from a workflow step | Yes |
 | Order confirmed, order cancelled | An event on `ICatEventAggregator` | No |
+| Order confirmed, told to another service | A message on Azure Service Bus (`OrderConfirmed`) | No |
 
 - The workflow publishes `OrderConfirmed` and `OrderCancelled`. It knows only the aggregator, not the subscribers.
 - Subscribers: a status updater, an audit logger and the stock release.
+- The in-process event `OrderConfirmedEvent` and the message `OrderConfirmed` are two different types. The status updater sets the status through a command, and that command also publishes the message. See [Orders service](#orders-service).
+- The message is a service request as well. Inventory writes a handler for it, like for any other request, and `Cat.EventProcessor` runs it. See [Inventory service](#inventory-service).
 - Events cannot drive the process. `PublishAsync` returns no answer and rethrows the exception of a failing handler.
 - Calls whose answer decides the next step go through an interface. A fake sits behind it when there is no host address.
 - Subscribers are long lived singletons, because the aggregator holds them with weak references. A subscriber that needs a scoped service such as the `DbContext` opens its own scope.
@@ -184,7 +188,8 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 |---|---|
 | API | `Cat.Minimal.Api` |
 | Core service | `Cat.ServiceRequests`, `Cat.Queries`, `Cat.Commands`, `Cat.Validators`, `Cat.Responses`, and in Orders also `Cat.FluentWorkflows` and `Cat.EventAggregators` |
-| Infrastructure | `Cat.EFCore` |
+| Infrastructure | `Cat.EFCore`, and in Orders `Cat.Messaging` with the outbox |
+| EventProcessor | `Cat.EventProcessor` (Inventory) |
 | Everywhere | `Cat.Expressions` |
 
 The [building blocks](#building-blocks) explain where each module is used and why.
@@ -201,8 +206,8 @@ The main route is the Aspire AppHost. One command starts the gateway, Catalog, O
 
 - The .NET SDK that `global.json` asks for.
 - **Node.js 24 or newer** for the React client. The AppHost runs `npm install` and `npm run dev` for you, so you only need Node and npm on the path.
-- **Docker Desktop** for the default route. SQL Server and Keycloak run in containers.
-- Or a SQL Server you already have, and no Docker. Temporal tables need SQL Server, so SQLite and PostgreSQL do not work.
+- **Docker Desktop** for the default route. SQL Server, Keycloak and the Service Bus emulator run in containers. The emulator needs Docker in every mode, because the AppHost always starts it.
+- Or a SQL Server you already have, for the databases. Temporal tables need SQL Server, so SQLite and PostgreSQL do not work.
 <!-- region end: Prerequisites-->
 
 ### Run with Aspire
@@ -213,14 +218,14 @@ The main route is the Aspire AppHost. One command starts the gateway, Catalog, O
    ```
    dotnet run --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost --launch-profile http
    ```
-3. Wait until the dashboard shows `gateway`, `catalog`, `orders`, `payment`, `inventory` and `web` as running. The first start pulls the SQL Server and Keycloak images, so it takes a few minutes. Keycloak needs a moment to import the realm.
+3. Wait until the dashboard shows `gateway`, `catalog`, `orders`, `payment`, `inventory` and `web` as running. The first start pulls the SQL Server, Keycloak and Service Bus emulator images, so it takes a few minutes. Keycloak needs a moment to import the realm.
 4. Open the dashboard at `http://localhost:15101`. It needs no login. It shows the logs, traces, metrics and health checks of the services.
 5. Try the endpoints. The gateway runs on `http://localhost:5100` and is the door for every call. Keycloak runs on `http://localhost:8180`. Open these files in Visual Studio or Rider and run the requests from top to bottom. Run the login requests at the top first. Later requests use ids from earlier responses.
    - `demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api/CatalogRequests.http`
    - `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Api/OrderRequests.http`
    - `demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.Api/InventoryRequests.http`
    - The web shop runs on `http://localhost:5104`. You can browse the books, log in as `alice` with the password `alice`, fill the basket and place an order. See [React client](#react-client).
-6. Place an order and open its trace in the dashboard. It shows the call from Orders to Catalog for the prices.
+6. Place an order and open its trace in the dashboard. It shows the call from Orders to Catalog for the prices. A moment after the order is confirmed, the log of `inventory` shows the SQL command `UPDATE dbo.StockReservation SET ConfirmedAt`, which is the handler of the message `OrderConfirmed` at work.
 7. Press Ctrl+C to stop. The database lives in the Docker volume `cat-demo-sql-data`, so the data is still there at the next start.
 
 To start again with empty databases, stop the AppHost and remove the volume:
@@ -306,7 +311,7 @@ In `Development` both services apply their EF Core migrations at startup. Catalo
 - **Users.** Keycloak holds three users: `alice`, `bob` and `admin`. The password is the same as the name. Alice and Bob only see their own orders. The admin sees all orders and may save books. The Keycloak admin console at `http://localhost:8180` uses `admin` and `admin`. Use these settings in the demo only.
 - **Tokens.** The `.http` files get a token from Keycloak with the password grant of the client `cat-demo-cli`. The gateway needs a valid token for everything except reading books and categories. The services check the token again, so a call straight to port 5101 or 5102 without a token gets a 401 too.
 - **Run without the AppHost.** Without the setting `Authentication:Authority` a service has no login. Orders then reads the `X-Demo-User` header (`alice` by default, `bob` or `admin`).
-- **Fakes for the other services.** Prices, stock and payment are fakes only without the AppHost.
+- **Fakes for the other services.** Prices, stock, payment and the message bus are fakes only without the AppHost. Without a bus, Orders only logs the `OrderConfirmed` message, and Inventory does not listen.
   - Prices are real under the AppHost, because Orders asks Catalog. Without the AppHost the price of a book is made from its id, between 5.95 and 44.95 euro, with a made up ISBN.
   - Stock is real under the AppHost, because Orders asks Inventory. Every book starts with 50 copies. Without the AppHost a line of more than 50 copies is out of stock.
   - A total above 500 euro is declined, by the payment service under the AppHost and by a fake without it.
@@ -354,6 +359,7 @@ One chapter for every block that is built. A database sits in the chapter of the
 | [Inventory service](#inventory-service) | Stock levels and reservations. |
 | [Aspire ServiceDefaults](#aspire-servicedefaults) | Shared telemetry, health checks and resilience. |
 | [Payment service](#payment-service) | A separate pretend payment service that can fail on purpose. |
+| [Service Bus emulator](#service-bus-emulator) | The message bus that carries `OrderConfirmed` from Orders to Inventory. |
 <!-- region end: BlockOverview-->
 
 ### React client
@@ -407,7 +413,7 @@ One chapter for every block that is built. A database sits in the chapter of the
 ### Aspire AppHost and dashboard
 <!-- region start: AspireAppHostAndDashboard-->
 
-**What it is.** One project that describes the system: the gateway, Catalog, Orders, Inventory, the payment service, Keycloak, SQL Server and the React client. The Aspire dashboard shows logs, traces, metrics and health checks.
+**What it is.** One project that describes the system: the gateway, Catalog, Orders, Inventory, the payment service, Keycloak, SQL Server, the Service Bus emulator and the React client. The Aspire dashboard shows logs, traces, metrics and health checks.
 
 **How it works.**
 - `demo/Cat.Demo.AppHost/Cat.Demo.AppHost` adds the Api project of each service. The services keep their fixed ports with no Aspire proxy: gateway 5100, Catalog 5101, Orders 5102, payment 5103, web client 5104 and Inventory 5105. The dashboard runs on 15101.
@@ -415,6 +421,7 @@ One chapter for every block that is built. A database sits in the chapter of the
 - In `Container` mode the AppHost adds a SQL Server container with a named data volume and the databases `catalog`, `orders` and `inventory`. The services wait for their database. The `inventory` database also gets its SQL scripts, see [Inventory service](#inventory-service).
 - The services read `GetConnectionString("catalog")`, `GetConnectionString("orders")` and `GetConnectionString("inventory")` in both modes. They do not know which mode runs.
 - Orders gets the address of the gateway through service discovery. That switches on `CatalogPriceProvider`, `PaymentServiceProvider` and `InventoryStockReservation`, which call Catalog, the payment service and Inventory through the gateway.
+- The Azure Service Bus emulator runs next to them, see [Service Bus emulator](#service-bus-emulator). Orders and Inventory get its connection string as `messaging`, and Inventory waits for Orders.
 - Keycloak is a plain container on port 8180. The realm file `keycloak/cat-demo-realm.json` is mounted and imported at the start. The official Aspire Keycloak package is only a preview, so the demo does not use it.
 - The gateway runs on port 5100. It finds Catalog, Orders, the payment service and Inventory through service discovery. The AppHost gives the gateway and every service the address of the Keycloak realm.
 - The React client runs with Vite on the fixed port 5104, because the gateway lists that port as an allowed CORS origin.
@@ -593,6 +600,8 @@ erDiagram
   5. Take the payment and save it. If it is declined, cancel the order and stop. If the payment service cannot answer, cancel the order with `DEM-ORD-1006` and stop. Nothing is saved then.
   6. Confirm the order.
 - Confirmed and cancelled are events. Subscribers set the status, write an audit record and release the stock.
+- Confirming an order also tells the other services. `OrderSetStatusCommandHandler` sets the status, and when the new status is confirmed it publishes the message `OrderConfirmed` with `ICatMessageSender`. The message type lives in the `Contracts` project of Orders, in `Messages`. The outbox is on, so the sender does not send at once. It adds a row to the `CatOutbox` table in the same `OrderDbContext`, and the one `SaveChanges` of the handler saves the status and the message together. A background service of `Cat.Messaging.Outbox` sends the rows to the bus and marks them as sent, so a crash between the save and the send loses nothing. A message can be sent twice after such a crash, and the receiver handles that.
+- At startup, in `Development`, Orders creates the topic `OrderConfirmed` on the bus. Without the connection string `messaging`, a fake transport logs the message and sends nothing.
 - Stock, price and payment sit behind interfaces: `IStockReservation`, `IPriceProvider` and `IPaymentProvider`. For stock, `InventoryStockReservation` uses the generated `IInventoryClient` of `Cat.Demo.InventoryService.Api.Client`, which shares the `Contracts` project of Inventory. It reserves all lines with `POST /inventory/reservations`, with the ISBN of each book, and releases with `DELETE /inventory/reservations/{orderNumber}`. A 409 or a 404 means out of stock. Any other failure or a timeout means unavailable, and the workflow cancels the order with `DEM-ORD-1007`. A failed release is logged and not thrown, and a cancel because Inventory did not answer skips the release. `FakeStockReservation` answers without a gateway address. For prices, `CatalogPriceProvider` uses the generated `ICatalogClient` of `Cat.Demo.CatalogService.Api.Client`. It calls `GET /catalog/books/prices` through the gateway when the host gives Orders the address of the gateway, as the AppHost does. Without it, `FakePriceProvider` answers. For payments, `PaymentServiceProvider` uses the generated `IPaymentClient` of `Cat.Demo.PaymentService.Api.Client` in the same way, through the gateway, and `FakePaymentProvider` answers without an address. The payment route is not anonymous, so `ForwardBearerTokenHandler` passes the token of the user on to the call. A call without a request, such as a background job, has no token and gets a 401, which counts as unavailable. Run `Refresh-PaymentClient.ps1` in the client project after the payment service changes, and `Refresh-InventoryClient.ps1` after the inventory service changes.
 - `CatalogPriceProvider` wraps the call in `CatApiCall.ExecuteAsync`, so a failure arrives as an `ICatResponse`. A 200 gives the prices and a 404 becomes `PriceUnavailable`. Any other status, a network error or a timeout becomes an error response, because Orders never trusts a half answer. The resilience handler adds retries and a circuit breaker. Catalog reads are public, so the call sends no token. The unit tests use a fake `HttpMessageHandler` under the generated client, so they need no database and no running service. Run `Refresh-CatalogClient.ps1` in the client project to regenerate the client after Catalog changes. Catalog must run on port 5101 for it.
 - `ICurrentUser` tells the core service who is calling. With a login it reads the claims of the token (`sub`, `name`, `email` and the `admin` role). Without one, a development stub reads the `X-Demo-User` header. Orders of other users come back as not found.
@@ -636,7 +645,7 @@ Edge cases:
 | `DEM-ORD-1006` | `PaymentUnavailable` | `The payment service is not available. Order {OrderNumber} was cancelled. Try again later.` |
 | `DEM-ORD-1007` | `StockUnavailable` | `The inventory service is not available. Order {OrderNumber} was cancelled. Try again later.` |
 
-**Database.** The `orders` database is built. It is a SQL Server database that only Orders reads. In `Development` the service applies its EF Core migrations at startup and adds the three order statuses. All tables are regular entities that inherit `CatEntityBase`. `OrderNumber` is unique. `OrderLine` refers to a book with `BookId` and has no foreign key, because the book lives in the Catalog database. `DailyOrderCounter` has no relationship with the other tables. Only `Payment.PaidAt` can be empty, and the diagram marks it. Names and columns are not final.
+**Database.** The `orders` database is built. It is a SQL Server database that only Orders reads. In `Development` the service applies its EF Core migrations at startup and adds the three order statuses. All tables are regular entities that inherit `CatEntityBase`. `OrderNumber` is unique. `OrderLine` refers to a book with `BookId` and has no foreign key, because the book lives in the Catalog database. `DailyOrderCounter` has no relationship with the other tables. `CatOutbox` comes from `Cat.Messaging.Outbox.EFCore`, and has none either. Only `Payment.PaidAt` and four columns of the outbox (`SentAt`, `SessionId`, `ScheduledAt` and `PropertiesJson`) can be empty, and the diagram marks them. Names and columns are not final.
 
 ```mermaid
 erDiagram
@@ -688,6 +697,21 @@ erDiagram
         datetime Date UK "UTC day"
         int LastNumber
     }
+    CatOutbox {
+        Guid Id PK
+        datetime CreatedAt
+        datetime SentAt "nullable"
+        string EntityName
+        int Kind
+        bytes Body
+        string ContentType
+        Guid MessageId
+        Guid CorrelationId
+        string Subject
+        string SessionId "nullable"
+        datetime ScheduledAt "nullable"
+        string PropertiesJson "nullable"
+    }
 ```
 
 **CAT modules.**
@@ -699,10 +723,12 @@ erDiagram
 | `Cat.ServiceRequests`, `Cat.Queries`, `Cat.Commands`, `Cat.Validators`, `Cat.Responses` | Core service | The same use case shape as Catalog. |
 | `Cat.Minimal.Api` | Api | Endpoints and OpenAPI. |
 | `Cat.EFCore` | DataModels and Infrastructure | Entities with `Guid` ids and sequence ids. |
+| `Cat.Messaging`, `Cat.Messaging.AzureServiceBus`, `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore` | Contracts (the message), Infrastructure and Api | Publishes `OrderConfirmed` to the bus, and keeps the message in the outbox until it is sent. |
 | `Cat.Expressions` | Api | Compiled member access. |
 
 **Pros.**
 - The business process is one readable class.
+- The status and the message are saved in one `SaveChanges`, so an order never confirms without telling the others.
 - Events keep the status update, audit and cleanup out of the workflow.
 - Interfaces with fakes let the demo run without the other services.
 
@@ -712,6 +738,9 @@ erDiagram
 - A cancelled order keeps its approved payment, because there is no refund step.
 - A stock reservation can leak. A release that fails is logged and not retried, and a cancel because Inventory did not answer skips the release.
 - The state lives in the order status.
+- The message goes out only when the status command runs. If that command fails, the order stays pending and no message is sent.
+- A command handler in Infrastructure knows about messaging.
+- The outbox adds a table, a migration and a background service to Orders.
 
 **More.** Code in `demo/Cat.Demo.OrderService`. Requests in `OrderRequests.http`. [Events and interfaces](#events-and-interfaces).
 <!-- region end: OrdersService-->
@@ -728,6 +757,9 @@ erDiagram
 - The order number is the idempotency key. A second reserve call for the same order does nothing, and the retries of the resilience handler are safe. A release locks the rows, so a double release gives the stock back once.
 - Not enough stock gives a 409 with `DEM-INV-1000`. An unknown ISBN gives a 404 with `DEM-INV-1001`.
 - The generated client in `Cat.Demo.InventoryService.Api.Client` shares the `Contracts` project, so Orders and Inventory use the same request models. Run `Refresh-InventoryClient.ps1` in that project after the service changes, with the AppHost running.
+- Inventory also listens to the bus. The project `Cat.Demo.InventoryService.EventProcessor` declares the messages it receives, with `AddCatEventProcessor`. It receives `OrderConfirmed` from Orders, so the `CoreService` project references the `Contracts` project of Orders. The listener reads the subscription `inventory` on the topic `OrderConfirmed`.
+- `OrderConfirmedHandler` is the service request handler of the message. It runs `StockReservationConfirmCommand`, and the command handler sets `ConfirmedAt` on the reservations of the order that have none. A repeated message finds nothing to update and succeeds, so no inbox is needed. An order number without a reservation gives a not found response with `DEM-INV-1002`, and the failure table of `Cat.EventProcessor` dead letters the message.
+- At startup, in `Development`, Inventory creates its subscription. Orders creates the topic first, so Inventory waits for Orders in the AppHost. In `Development` the API has the endpoint `POST /dev/event-processor/OrderConfirmed`, which runs a message through the same pipeline without a bus. Without the connection string `messaging` Inventory does not listen.
 
 **Error codes.** `InventoryErrorDefinitions` defines them with the prefix `DEM-INV`:
 
@@ -735,8 +767,9 @@ erDiagram
 |------|------|---------|
 | `DEM-INV-1000` | `OutOfStock` | `Book {Isbn} is out of stock. Order {OrderNumber} got no stock.` |
 | `DEM-INV-1001` | `UnknownBook` | `Book {Isbn} is not in the warehouse. Order {OrderNumber} got no stock.` |
+| `DEM-INV-1002` | `UnknownOrder` | `Order {OrderNumber} has no reservation.` |
 
-**Database.** The `inventory` database comes from the SQL scripts in `Cat.Demo.InventoryService.Database`. A stock database often exists already, owned by a warehouse team, so the schema comes from SQL scripts and not from C# classes. In `Container` mode the AppHost creates the database and runs the scripts with `WithCreationScript`. The scripts can run again. In `Existing` mode it does nothing, because the owner of the database owns its schema, and the connection string `ConnectionStrings:inventory` points at it. The seed gives one warehouse and 50 copies of each of the 7 seed books. The entities are scaffolded with `dotnet ef dbcontext scaffold` into the Infrastructure project, and nobody edits the generated files. Run `Scaffold-InventoryModel.ps1` after a schema change. The entities do not inherit `CatEntityBase` and have no `SequenceId`. Two unique constraints span two columns: `(WarehouseId, Isbn)` on `StockItem` and `(StockItemId, OrderNumber)` on `StockReservation`. The diagram marks both columns of each. The second one makes a repeated reserve call safe.
+**Database.** The `inventory` database comes from the SQL scripts in `Cat.Demo.InventoryService.Database`. A stock database often exists already, owned by a warehouse team, so the schema comes from SQL scripts and not from C# classes. In `Container` mode the AppHost creates the database and runs the scripts with `WithCreationScript`. The scripts can run again. In `Existing` mode it does nothing, because the owner of the database owns its schema, and the connection string `ConnectionStrings:inventory` points at it. The seed gives one warehouse and 50 copies of each of the 7 seed books. The entities are scaffolded with `dotnet ef dbcontext scaffold` into the Infrastructure project, and nobody edits the generated files. Run `Scaffold-InventoryModel.ps1` after a schema change. The entities do not inherit `CatEntityBase` and have no `SequenceId`. Two unique constraints span two columns: `(WarehouseId, Isbn)` on `StockItem` and `(StockItemId, OrderNumber)` on `StockReservation`. The diagram marks both columns of each. The second one makes a repeated reserve call safe. The script `003-reservation-confirmed.sql` adds the column `ConfirmedAt`, which is empty until the message `OrderConfirmed` arrives. The diagram marks it as nullable. The scaffolded entity does not have the column until `Scaffold-InventoryModel.ps1` runs again, so the confirm handler uses SQL.
 
 ```mermaid
 erDiagram
@@ -760,6 +793,7 @@ erDiagram
         string OrderNumber "unique with StockItemId"
         int Quantity
         datetime ReservedAt
+        datetime ConfirmedAt "nullable"
     }
 ```
 
@@ -772,6 +806,8 @@ erDiagram
 | `Cat.Responses` | Core service | Out of stock and unknown ISBN are error definitions, not exceptions. |
 | `Cat.Minimal.Api` | Api | Maps the two endpoints with the response types they may return. |
 | `Cat.Api.Client` | Api.Client and Orders | The generated client and `CatApiCall` turn an HTTP answer back into a response. |
+| `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` and `Cat.EventProcessor.Minimal.Api` | EventProcessor project and Api | Receives `OrderConfirmed` from the bus as a service request, settles the message from the response, and adds the development endpoint and the health check. |
+| `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` | EventProcessor project | The connection to the bus and the name of the topic. |
 
 The service uses no entity base classes. It shows that you use only the modules you need.
 
@@ -852,3 +888,32 @@ Remove the secret to switch the failure off again. When you run the service on i
 
 **More.** `demo/Cat.Demo.PaymentService`, `PaymentServiceProvider` in `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Infrastructure/PaymentServices`.
 <!-- region end: PaymentService-->
+
+### Service Bus emulator
+<!-- region start: ServiceBusEmulator-->
+
+**What it is.** The Azure Service Bus emulator, started by the AppHost. It carries the message `OrderConfirmed` from Orders to Inventory. It runs in Docker with its own SQL Server container, so no Azure subscription is needed.
+
+**How it works.**
+- The AppHost adds it with `AddAzureServiceBus("messaging").RunAsEmulator()`. The message port is fixed to 5672 and the management port to 5300. Orders and Inventory get the connection string `messaging` and, as `Messaging:AdministrationConnectionString`, a second string for the management port.
+- The AppHost declares no queues or topics. The emulator forgets its entities at every restart, so the services create what they need at startup, in `Development`. Orders creates the topic `OrderConfirmed` with `ICatServiceBusTopology.EnsureTopologyAsync`. Inventory creates its subscription `inventory` with `ICatEventProcessorTopology.EnsureSubscriptionsAsync`. Creating them takes the administration client, which talks to the management port.
+- Messages and entities are gone after a restart of the container. The limits of the emulator apply: no partitioned entities, AMQP over TCP only, and at most 50 queues and topics.
+- The password of the development key is fixed and public. Do not use these settings outside the demo.
+
+**CAT modules.**
+
+| Module | Where | Why |
+|---|---|---|
+| `Cat.Messaging.AzureServiceBus` | Orders and Inventory | The transport and the creation of the topic. The administration connection string comes from the setting `Messaging:AdministrationConnectionString`. |
+
+**Pros.**
+- A real bus on your machine, with no cloud account.
+- The services create their own entities, so nobody keeps a configuration file of the emulator up to date.
+
+**Cons.**
+- Another container and a second SQL Server for the emulator, which takes memory.
+- Everything is gone after a restart, so a message that is not handled yet is lost with it.
+- The emulator is not the real service. Dead letters, sessions and scheduled messages are not tried against it yet.
+
+**More.** `demo/Cat.Demo.AppHost/Cat.Demo.AppHost/Program.cs`. [Orders service](#orders-service) and [Inventory service](#inventory-service).
+<!-- region end: ServiceBusEmulator-->
