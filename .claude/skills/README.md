@@ -20,7 +20,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 | [cat-internal-commit](cat-internal-commit/SKILL.md) | Commit the changes in logical blocks, with `(skip-pub)` when no code in `modules/` changed. Stops after a commit that publishes. Never pushes. | `/cat-internal-commit` |
 | [cat-internal-verify-docs](cat-internal-verify-docs/SKILL.md) | Check all markdown locally: links, anchors, letter case, code fences, markers and forbidden punctuation. | `/cat-internal-verify-docs` |
 | [cat-internal-create-demo-readme](cat-internal-create-demo-readme/SKILL.md) | Create and update `demo/README.md` from its template, and keep the demo architecture drawing in sync with the demo app. | `/cat-internal-create-demo-readme Inventory service built` |
-| [cat-internal-verify-code](cat-internal-verify-code/SKILL.md) | Build, test, check the regenerated namespaces pages and deploy a changed generator. | `/cat-internal-verify-code` |
+| [cat-internal-verify-code](cat-internal-verify-code/SKILL.md) | Build, test, check the regenerated namespaces pages and the error code areas, and deploy a changed generator. | `/cat-internal-verify-code` |
 | [cat-internal-template-concepts](cat-internal-template-concepts/SKILL.md) | The basic concepts of CAT templates: regions, template markers, placeholders. Other template skills load it first. | `/cat-internal-template-concepts` |
 | [cat-internal-create-header](cat-internal-create-header/SKILL.md) | Create or update the header of a template-based markdown file, and update every file that uses it. | `/cat-internal-create-header update` |
 | [cat-internal-create-plan](cat-internal-create-plan/SKILL.md) | Create, build and update a plan in `plans/` from the plan template. | `/cat-internal-create-plan create Cat.Caching` |
@@ -76,7 +76,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **Note:** `cat-internal-create-demo-readme/demo-blocks.json` lists the blocks, their drawing elements and the rule that says a block is built. Add new blocks there.
 
 ### cat-internal-verify-code
-- **What it does:** Runs the Cake `Debug` build, which regenerates the namespaces pages, and the tests, then checks the diff of the regenerated `namespaces/` pages. It reports passed and failed items and unexpected changes. It never edits generated files and never commits.
+- **What it does:** Runs the Cake `Debug` build, which regenerates the namespaces pages, and the tests, then checks the diff of the regenerated `namespaces/` pages. It also runs `check-error-areas.ps1`, which fails when two modules use the same error code prefix, like `CAT-VAL`. It reports passed and failed items and unexpected changes. It never edits generated files and never commits.
 - **How to use it:** Run it without arguments at the end of a task.
 - **When:** After changing code, XML docs, the documentation generator or a readme.
 
@@ -86,7 +86,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **When:** Only when you ask. It sends thousands of requests and needs the latest push to be published first.
 
 ### cat-internal-create-module
-- **What it does:** Creates the module projects, the test project and the solution entries, then runs `cat-internal-create-module-readme`, `cat-internal-create-readme` and `cat-internal-verify-code`. A new module starts as Building.
+- **What it does:** Creates the module projects, the test project and the solution entries, then runs `cat-internal-create-module-readme`, `cat-internal-create-readme` and `cat-internal-verify-code`. A new module that defines error codes gets its own `CAT-<AREA>` prefix, which `cat-internal-verify-code` checks. A new module starts as Building.
 - **How to use it:** Give it the module name and a short description. It asks about anything it cannot decide.
 - **When:** When a new CAT module is started.
 ### cat-internal-template-concepts
