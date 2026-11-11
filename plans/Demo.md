@@ -287,5 +287,10 @@ What do we do about the development certificate? The dashboard says "No trusted 
 #### Question 4
 Do all three failure switches of the payment service hold when the call goes through the gateway? The outage was tried live: with it on, the order ended after about 9 seconds. As far as we know, the latency and the error percentage were not tried through the gateway. Test them with one order each, and check that the gateway does not add its own timeout or retry that changes the result. Where do we write down the outcome: in the payment chapter of the demo readme?
 <!-- region end: Question 4-->
+
+<!-- region start: Question 5-->
+#### Question 5
+Should the health checks of the services cover their databases? Today every service answers `/health` (ready) and `/alive` (running) from one check, `self`, in `ServiceDefaults`, and that check is always healthy. The AppHost and the gateway watch `/health`, so a service with a database that is down still looks healthy. Add a database check per service, or keep the checks as they are?
+<!-- region end: Question 5-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 5-->
