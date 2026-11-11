@@ -24,25 +24,15 @@
 
 # Code Reference  
   
-##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client')
+##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatProblemDetails Class](CatProblemDetails.md 'Cat\.Api\.Client\.CatProblemDetails')
 
-## CatErrorResponse Class
+## CatProblemDetails\.CatTraceId Property
 
-The body of a failed answer of a CAT service, as a plain class\.
-It has the same JSON shape as `CatProblemDetails` of `Cat.Minimal.Api`, without the ASP\.NET Core base type\.
+The id to find the request in the logs of the service\.
 
 ```csharp
-public class CatErrorResponse
+public string? CatTraceId { get; set; }
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatErrorResponse
-
-| Properties | |
-| :--- | :--- |
-| [CatErrors](CatErrorResponse.CatErrors.md 'Cat\.Api\.Client\.CatErrorResponse\.CatErrors') | The errors of the failed response\. |
-| [CatTraceId](CatErrorResponse.CatTraceId.md 'Cat\.Api\.Client\.CatErrorResponse\.CatTraceId') | The id to find the request in the logs of the service\. |
-| [Detail](CatErrorResponse.Detail.md 'Cat\.Api\.Client\.CatErrorResponse\.Detail') | An explanation specific to this occurrence of the problem\. |
-| [Instance](CatErrorResponse.Instance.md 'Cat\.Api\.Client\.CatErrorResponse\.Instance') | The path of the request that failed\. |
-| [Status](CatErrorResponse.Status.md 'Cat\.Api\.Client\.CatErrorResponse\.Status') | The HTTP status code\. |
-| [Title](CatErrorResponse.Title.md 'Cat\.Api\.Client\.CatErrorResponse\.Title') | A short summary of the problem\. |
-| [Type](CatErrorResponse.Type.md 'Cat\.Api\.Client\.CatErrorResponse\.Type') | A link to the description of the problem type\. |
+#### Property Value
+[System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')

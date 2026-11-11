@@ -19,18 +19,18 @@ P:Cat.Api.Client.CatApiException`1.Result|CatApiException_TResult_.Result.md|Res
 P:Cat.Api.Client.CatApiException`1.ResultObject|CatApiException_TResult_.ResultObject.md|ResultObject
 M:Cat.Api.Client.CatApiException`1.#ctor(System.String,System.Int32,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IEnumerable{System.String}},`0,System.Exception)|CatApiException_TResult_..ctor.YR6XG7BA4V3UL8ZAC8AYJ5FQE.md|CatApiException(string, int, string, IReadOnlyDictionary<string,IEnumerable<string>>, TResult, Exception)
 T:Cat.Api.Client.CatApiException`1|CatApiException_TResult_.md|CatApiException<TResult>
-P:Cat.Api.Client.CatErrorResponse.Type|CatErrorResponse.Type.md|Type
-P:Cat.Api.Client.CatErrorResponse.Title|CatErrorResponse.Title.md|Title
-P:Cat.Api.Client.CatErrorResponse.Status|CatErrorResponse.Status.md|Status
-P:Cat.Api.Client.CatErrorResponse.Detail|CatErrorResponse.Detail.md|Detail
-P:Cat.Api.Client.CatErrorResponse.Instance|CatErrorResponse.Instance.md|Instance
-P:Cat.Api.Client.CatErrorResponse.CatErrors|CatErrorResponse.CatErrors.md|CatErrors
-P:Cat.Api.Client.CatErrorResponse.CatTraceId|CatErrorResponse.CatTraceId.md|CatTraceId
-T:Cat.Api.Client.CatErrorResponse|CatErrorResponse.md|CatErrorResponse
-P:Cat.Api.Client.CatErrorResponseItem.Code|CatErrorResponseItem.Code.md|Code
-P:Cat.Api.Client.CatErrorResponseItem.Message|CatErrorResponseItem.Message.md|Message
-P:Cat.Api.Client.CatErrorResponseItem.Arguments|CatErrorResponseItem.Arguments.md|Arguments
-T:Cat.Api.Client.CatErrorResponseItem|CatErrorResponseItem.md|CatErrorResponseItem
+P:Cat.Api.Client.CatProblemDetails.Type|CatProblemDetails.Type.md|Type
+P:Cat.Api.Client.CatProblemDetails.Title|CatProblemDetails.Title.md|Title
+P:Cat.Api.Client.CatProblemDetails.Status|CatProblemDetails.Status.md|Status
+P:Cat.Api.Client.CatProblemDetails.Detail|CatProblemDetails.Detail.md|Detail
+P:Cat.Api.Client.CatProblemDetails.Instance|CatProblemDetails.Instance.md|Instance
+P:Cat.Api.Client.CatProblemDetails.CatErrors|CatProblemDetails.CatErrors.md|CatErrors
+P:Cat.Api.Client.CatProblemDetails.CatTraceId|CatProblemDetails.CatTraceId.md|CatTraceId
+T:Cat.Api.Client.CatProblemDetails|CatProblemDetails.md|CatProblemDetails
+P:Cat.Api.Client.CatProblemDetailsItem.Code|CatProblemDetailsItem.Code.md|Code
+P:Cat.Api.Client.CatProblemDetailsItem.Message|CatProblemDetailsItem.Message.md|Message
+P:Cat.Api.Client.CatProblemDetailsItem.Arguments|CatProblemDetailsItem.Arguments.md|Arguments
+T:Cat.Api.Client.CatProblemDetailsItem|CatProblemDetailsItem.md|CatProblemDetailsItem
 M:Cat.Api.Client.Extensions.ServiceCollectionExtensions.AddCatApiClient``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)|ServiceCollectionExtensions.AddCatApiClient.S1XS8K6M1BY2OK7KEKD6F4JF8.md|AddCatApiClient<TClient,TImplementation>(this IServiceCollection, string)
 N:Cat.Api.Client.Extensions|Cat.Api.Client.Extensions.md|Cat.Api.Client.Extensions
 T:Cat.Api.Client.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

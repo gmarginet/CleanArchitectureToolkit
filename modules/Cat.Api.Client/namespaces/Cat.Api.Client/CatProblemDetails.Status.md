@@ -24,15 +24,15 @@
 
 # Code Reference  
   
-##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatErrorResponse Class](CatErrorResponse.md 'Cat\.Api\.Client\.CatErrorResponse')
+##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatProblemDetails Class](CatProblemDetails.md 'Cat\.Api\.Client\.CatProblemDetails')
 
-## CatErrorResponse\.Instance Property
+## CatProblemDetails\.Status Property
 
-The path of the request that failed\.
+The HTTP status code\.
 
 ```csharp
-public string? Instance { get; set; }
+public System.Nullable<int> Status { get; set; }
 ```
 
 #### Property Value
-[System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
+[System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')

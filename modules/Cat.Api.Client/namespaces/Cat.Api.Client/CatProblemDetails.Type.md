@@ -24,14 +24,14 @@
 
 # Code Reference  
   
-##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatErrorResponseItem Class](CatErrorResponseItem.md 'Cat\.Api\.Client\.CatErrorResponseItem')
+##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatProblemDetails Class](CatProblemDetails.md 'Cat\.Api\.Client\.CatProblemDetails')
 
-## CatErrorResponseItem\.Code Property
+## CatProblemDetails\.Type Property
 
-The stable code of the error\.
+A link to the description of the problem type\.
 
 ```csharp
-public string? Code { get; set; }
+public string? Type { get; set; }
 ```
 
 #### Property Value

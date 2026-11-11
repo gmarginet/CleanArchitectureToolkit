@@ -24,15 +24,20 @@
 
 # Code Reference  
   
-##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatErrorResponse Class](CatErrorResponse.md 'Cat\.Api\.Client\.CatErrorResponse')
+##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client')
 
-## CatErrorResponse\.Type Property
+## CatProblemDetailsItem Class
 
-A link to the description of the problem type\.
+One error in a [CatProblemDetails](CatProblemDetails.md 'Cat\.Api\.Client\.CatProblemDetails')\.
 
 ```csharp
-public string? Type { get; set; }
+public class CatProblemDetailsItem
 ```
 
-#### Property Value
-[System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatProblemDetailsItem
+
+| Properties | |
+| :--- | :--- |
+| [Arguments](CatProblemDetailsItem.Arguments.md 'Cat\.Api\.Client\.CatProblemDetailsItem\.Arguments') | The values for the placeholders of the message, in order\. |
+| [Code](CatProblemDetailsItem.Code.md 'Cat\.Api\.Client\.CatProblemDetailsItem\.Code') | The stable code of the error\. |
+| [Message](CatProblemDetailsItem.Message.md 'Cat\.Api\.Client\.CatProblemDetailsItem\.Message') | The message template\. It can hold placeholders that the arguments fill in\. |

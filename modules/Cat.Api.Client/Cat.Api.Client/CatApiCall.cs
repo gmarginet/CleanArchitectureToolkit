@@ -121,7 +121,7 @@ public static class CatApiCall
 
         try
         {
-            var problem = JsonSerializer.Deserialize<CatErrorResponse>(body!);
+            var problem = JsonSerializer.Deserialize<CatProblemDetails>(body!);
             return (problem?.CatErrors ?? [])
                 .Where(error => !string.IsNullOrEmpty(error.Code) || !string.IsNullOrEmpty(error.Message))
                 .Select(error => (ICatError)CatError.Create(

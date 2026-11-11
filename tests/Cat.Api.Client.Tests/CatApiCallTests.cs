@@ -74,13 +74,13 @@ public class CatApiCallTests
     public async Task ABodyThatTheGeneratedClientHasRead_IsFoundInTheModel()
     {
         // A generated client keeps no body text for a body it could read. It only keeps the model.
-        var model = new CatErrorResponse
+        var model = new CatProblemDetails
         {
-            CatErrors = [new CatErrorResponseItem { Code = "CAT-CTL-1001", Message = "Book {BookId} does not exist.", Arguments = ["b1"] }],
+            CatErrors = [new CatProblemDetailsItem { Code = "CAT-CTL-1001", Message = "Book {BookId} does not exist.", Arguments = ["b1"] }],
         };
 
         var response = await CatApiCall.ExecuteAsync<int>(
-            () => throw new CatApiException<CatErrorResponse>("Not Found", 404, string.Empty, NoHeaders, model, null),
+            () => throw new CatApiException<CatProblemDetails>("Not Found", 404, string.Empty, NoHeaders, model, null),
             ServiceName);
 
         var error = response.ErrorList.Single();

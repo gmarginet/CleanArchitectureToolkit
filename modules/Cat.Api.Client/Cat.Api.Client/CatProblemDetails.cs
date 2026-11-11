@@ -5,9 +5,10 @@ namespace Cat.Api.Client;
 
 /// <summary>
 /// The body of a failed answer of a CAT service, as a plain class.
-/// It has the same JSON shape as <c>CatProblemDetails</c> of <c>Cat.Minimal.Api</c>, without the ASP.NET Core base type.
+/// It has the same name and the same JSON shape as <c>CatProblemDetails</c> of <c>Cat.Minimal.Api</c>, without the ASP.NET Core base type.
+/// A generated client finds this class through the <c>Cat.Api.Client</c> namespace.
 /// </summary>
-public class CatErrorResponse
+public class CatProblemDetails
 {
     /// <summary>A link to the description of the problem type.</summary>
     [JsonPropertyName("type")]
@@ -31,7 +32,7 @@ public class CatErrorResponse
 
     /// <summary>The errors of the failed response.</summary>
     [JsonPropertyName("catErrors")]
-    public List<CatErrorResponseItem>? CatErrors { get; set; }
+    public List<CatProblemDetailsItem>? CatErrors { get; set; }
 
     /// <summary>The id to find the request in the logs of the service.</summary>
     [JsonPropertyName("catTraceId")]

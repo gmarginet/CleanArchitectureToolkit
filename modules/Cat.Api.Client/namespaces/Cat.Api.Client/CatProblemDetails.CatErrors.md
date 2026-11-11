@@ -24,15 +24,15 @@
 
 # Code Reference  
   
-##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatErrorResponseItem Class](CatErrorResponseItem.md 'Cat\.Api\.Client\.CatErrorResponseItem')
+##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatProblemDetails Class](CatProblemDetails.md 'Cat\.Api\.Client\.CatProblemDetails')
 
-## CatErrorResponseItem\.Message Property
+## CatProblemDetails\.CatErrors Property
 
-The message template\. It can hold placeholders that the arguments fill in\.
+The errors of the failed response\.
 
 ```csharp
-public string? Message { get; set; }
+public System.Collections.Generic.List<Cat.Api.Client.CatProblemDetailsItem>? CatErrors { get; set; }
 ```
 
 #### Property Value
-[System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
+[System\.Collections\.Generic\.List&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')[CatProblemDetailsItem](CatProblemDetailsItem.md 'Cat\.Api\.Client\.CatProblemDetailsItem')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')

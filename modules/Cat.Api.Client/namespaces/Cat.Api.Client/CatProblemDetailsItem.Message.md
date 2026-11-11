@@ -24,14 +24,14 @@
 
 # Code Reference  
   
-##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatErrorResponse Class](CatErrorResponse.md 'Cat\.Api\.Client\.CatErrorResponse')
+##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatProblemDetailsItem Class](CatProblemDetailsItem.md 'Cat\.Api\.Client\.CatProblemDetailsItem')
 
-## CatErrorResponse\.CatTraceId Property
+## CatProblemDetailsItem\.Message Property
 
-The id to find the request in the logs of the service\.
+The message template\. It can hold placeholders that the arguments fill in\.
 
 ```csharp
-public string? CatTraceId { get; set; }
+public string? Message { get; set; }
 ```
 
 #### Property Value

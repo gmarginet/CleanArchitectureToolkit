@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 namespace Cat.Api.Client;
 
 /// <summary>
-/// One error in a <see cref="CatErrorResponse"/>.
+/// One error in a <see cref="CatProblemDetails"/>.
 /// </summary>
-public class CatErrorResponseItem
+public class CatProblemDetailsItem
 {
     /// <summary>The stable code of the error.</summary>
     [JsonPropertyName("code")]

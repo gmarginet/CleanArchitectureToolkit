@@ -1,20 +1,21 @@
 using System.Text.Json;
 using Cat.Api.Client;
-using Cat.Minimal.Api;
 using Cat.Responses;
+
+using ServiceProblemDetails = Cat.Minimal.Api.CatProblemDetails;
 
 namespace Cat.Api.Client.Tests;
 
 /// <summary>
-/// Keeps <see cref="CatErrorResponse"/> equal to the body that <see cref="CatProblemDetails"/> sends.
+/// Keeps <see cref="CatProblemDetails"/> of the client equal to the body that <see cref="ServiceProblemDetails"/> of <c>Cat.Minimal.Api</c> sends.
 /// </summary>
 [TestFixture]
-public class CatErrorResponseTests
+public class CatProblemDetailsTests
 {
     [Test]
     public void ABodyOfAService_IsReadIntoTheClientClass()
     {
-        var sent = new CatProblemDetails
+        var sent = new ServiceProblemDetails
         {
             Type = "https://example.test/problem",
             Title = "Not Found",
@@ -26,7 +27,7 @@ public class CatErrorResponseTests
         };
 
         var json = JsonSerializer.Serialize(sent, new JsonSerializerOptions(JsonSerializerDefaults.Web));
-        var received = JsonSerializer.Deserialize<CatErrorResponse>(json);
+        var received = JsonSerializer.Deserialize<CatProblemDetails>(json);
 
         Assert.That(received, Is.Not.Null);
         Assert.That(received!.Type, Is.EqualTo(sent.Type));
@@ -45,10 +46,10 @@ public class CatErrorResponseTests
     public void TheClientClass_HasTheSamePropertyNamesAsTheBodyOfTheService()
     {
         var sent = JsonSerializer.Serialize(
-            new CatProblemDetails { Type = "t", Title = "t", Status = 1, Detail = "t", Instance = "t", CatErrors = [CatError.Create("c", "m")], CatTraceId = "t" },
+            new ServiceProblemDetails { Type = "t", Title = "t", Status = 1, Detail = "t", Instance = "t", CatErrors = [CatError.Create("c", "m")], CatTraceId = "t" },
             new JsonSerializerOptions(JsonSerializerDefaults.Web));
         var client = JsonSerializer.Serialize(
-            new CatErrorResponse { Type = "t", Title = "t", Status = 1, Detail = "t", Instance = "t", CatErrors = [new CatErrorResponseItem { Code = "c", Message = "m", Arguments = [] }], CatTraceId = "t" });
+            new CatProblemDetails { Type = "t", Title = "t", Status = 1, Detail = "t", Instance = "t", CatErrors = [new CatProblemDetailsItem { Code = "c", Message = "m", Arguments = [] }], CatTraceId = "t" });
 
         Assert.That(Names(client), Is.EquivalentTo(Names(sent)));
         Assert.That(Names(JsonDocument.Parse(client).RootElement.GetProperty("catErrors")[0]),

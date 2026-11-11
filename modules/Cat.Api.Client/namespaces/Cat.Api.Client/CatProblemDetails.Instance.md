@@ -24,14 +24,14 @@
 
 # Code Reference  
   
-##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatErrorResponse Class](CatErrorResponse.md 'Cat\.Api\.Client\.CatErrorResponse')
+##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatProblemDetails Class](CatProblemDetails.md 'Cat\.Api\.Client\.CatProblemDetails')
 
-## CatErrorResponse\.Title Property
+## CatProblemDetails\.Instance Property
 
-A short summary of the problem\.
+The path of the request that failed\.
 
 ```csharp
-public string? Title { get; set; }
+public string? Instance { get; set; }
 ```
 
 #### Property Value

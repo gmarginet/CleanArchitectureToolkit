@@ -137,7 +137,7 @@ services.AddCatApiClient<ICatalogClient, CatalogClient>(configuration["Gateway:A
 The address is a plain string. It can come from configuration, or it can be an address that service discovery resolves, such as `https+http://gateway`. The module does not reference service discovery.
 
 ### How errors map to a response
-All services share one error body. `CatErrorResponse` reads it. It has the same JSON shape as `CatProblemDetails` of `Cat.Minimal.Api`, without the ASP.NET Core base type. The helper keeps the errors of the service with their codes and arguments. A generated client keeps the body text only when it could not read the body, so the helper also reads the error body from the model that the client filled.
+All services share one error body. `CatProblemDetails` of `Cat.Api.Client` reads it. It has the same name and the same JSON shape as `CatProblemDetails` of `Cat.Minimal.Api`, without the ASP.NET Core base type. The helper keeps the errors of the service with their codes and arguments. A generated client keeps the body text only when it could not read the body, so the helper also reads the error body from the model that the client filled.
 
 | The call | The response |
 |----------|--------------|

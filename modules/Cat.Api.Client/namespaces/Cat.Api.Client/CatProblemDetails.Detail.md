@@ -24,9 +24,9 @@
 
 # Code Reference  
   
-##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatErrorResponse Class](CatErrorResponse.md 'Cat\.Api\.Client\.CatErrorResponse')
+##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatProblemDetails Class](CatProblemDetails.md 'Cat\.Api\.Client\.CatProblemDetails')
 
-## CatErrorResponse\.Detail Property
+## CatProblemDetails\.Detail Property
 
 An explanation specific to this occurrence of the problem\.
 

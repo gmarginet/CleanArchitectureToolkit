@@ -24,9 +24,9 @@
 
 # Code Reference  
   
-##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatErrorResponseItem Class](CatErrorResponseItem.md 'Cat\.Api\.Client\.CatErrorResponseItem')
+##### >> [Cat\.Api\.Client Assembly](index.md 'index') >> [Cat\.Api\.Client Namespace](Cat.Api.Client.md 'Cat\.Api\.Client') >> [CatProblemDetailsItem Class](CatProblemDetailsItem.md 'Cat\.Api\.Client\.CatProblemDetailsItem')
 
-## CatErrorResponseItem\.Arguments Property
+## CatProblemDetailsItem\.Arguments Property
 
 The values for the placeholders of the message, in order\.
 
