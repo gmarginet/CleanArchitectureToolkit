@@ -48,17 +48,7 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 - Demo service tests live in the service folder in `demo/`, as `ServiceName.CoreService.Tests`. `dotnet cake --target=Test` runs every `*.Tests.csproj` under `tests/` and `demo/`.
 - `tools/`: Tooling projects (e.g., XML doc markdown generators).
 - `modules/`: Contains the individual module-folders.
-- `plans/`: Plans for the demo, the tooling and the modules. See [Plans](#plans).
-
-### Plans
-The `plans/` folder holds the plans we make before we build: the demo, the tooling and the modules.
-
-- Put only decisions the owner made in the description of a phase. Everything else is an open question.
-- Remove a plan only when the owner agrees.
-- Use the `cat-internal-create-plan` skill to create, build or update a plan. It keeps the repo overview table of the readme in step, together with the `cat-internal-create-readme` skill.
-
-### Demo Folder Structure
-Every deployable unit in `demo/` gets its own folder. Use the `cat-internal-create-demo-unit` skill to add or restructure demo projects.
+- `plans/`: Plans for the demo, the tooling and the modules.
 
 ## 📦 Module Folder Blueprint
 Each module directory contains its C# projects, an auto-generated `namespaces/` markdown folder, and a local `README.md`.
@@ -67,37 +57,36 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
 - Never edit the files in `modules/*/namespaces/` by hand or with a script (sed and the like). They are generated.
 - To change them, change the XML docs, the generator (`tools/Cat.DefaultDocumentationPlugin/`) or the template, then follow the `cat-internal-verify-code` skill. Only a `Debug` build regenerates them.
 
-### Readmes
-- Use the `cat-internal-create-module-readme` skill for a module readme, the `cat-internal-create-demo-readme` skill for the demo readme and the `cat-internal-create-readme` skill for the readme.
-- The demo readme describes only what exists. Plans stay in `plans/Demo.md`.
-- Never remove a region marker in a file made from a template. Edit only inside a region.
-- Use the `cat-internal-create-module` skill to start a new module.
-
-## 📐 Drawings
-- Architecture and flow drawings are Excalidraw. Use the `cat-internal-create-excalidraw` skill.
-- ERD, UML class and sequence diagrams are Mermaid, inline in markdown. Use the `cat-internal-create-mermaid` skill.
-
-## 🔍 Verify
-- Use the `cat-internal-verify-code` skill at the end of a task that changed code, XML docs, the generator or a module readme. It builds, tests and checks the diff of the regenerated namespaces pages.
-- Use the `cat-internal-verify-docs` skill at the end of a task that changed markdown, a heading, a link target or a file name, and after every rename or move. It is local and fast.
-- Use the `cat-internal-verify-site` skill only when the owner asks for it. It sends thousands of requests.
-
 ## 🚀 Release
 - Releases are automatic after a push to `master`. `.github/workflows/build.yml` runs the tests and publishes the NuGet packages, with the version from MinVer and the `v` git tags. `.github/workflows/pages.yml` builds the GitHub Pages site from the markdown.
 - A commit message with `skip-ci` skips the build workflow. `skip-pub` runs only the tests and does not publish. The `cat-internal-commit` skill adds ` (skip-pub)` to commits without code in `modules/`.
 - This is why you never push unless asked.
 
-## 🧱 Templates
-- The plans, the readme, the demo readme and the module readmes are made from templates. Each file has a `TemplateSkill` region that names the skill, so `git grep` finds every file of a template.
-- Load the `cat-internal-template-concepts` skill first. It explains regions, templates and placeholders.
-- Use the `cat-internal-create-header` skill for the header of a template file. A change to the header template also changes the generator, and the skill says how.
-- Use the `cat-internal-create-template` skill to create a new template and its skill.
-- When a template changes, update the files that use it, with the skill of that template.
-
 ## 🧩 Skills
+Use the skill for the task and do not do its steps by hand.
+
 - Prefix `cat-internal-` is for skills for the owner of the toolkit. Prefix `cat-` is for skills for developers who use the toolkit.
 - When you add, rename, change or remove a skill in `.claude/skills/`, update the table and the entry for it in `.claude/skills/README.md` in the same change.
+- Plans: put only decisions the owner made in the description of a phase, and everything else is an open question. Remove a plan only when the owner agrees.
+- The demo readme describes only what exists. Plans stay in `plans/Demo.md`.
+- Template files: load `cat-internal-template-concepts` first. Never remove a region marker, and edit only inside a region.
 
+| Task | Skill |
+|---|---|
+| Commit | `cat-internal-commit` |
+| Plans | `cat-internal-create-plan` |
+| Readme, repo overview table | `cat-internal-create-readme` |
+| Module readme | `cat-internal-create-module-readme` |
+| Demo readme, demo drawing | `cat-internal-create-demo-readme` |
+| New module | `cat-internal-create-module` |
+| Demo project or folder | `cat-internal-create-demo-unit` |
+| Header of a template file | `cat-internal-create-header` |
+| New template | `cat-internal-create-template` |
+| Excalidraw drawing (architecture, flow) | `cat-internal-create-excalidraw` |
+| Mermaid diagram (ERD, UML, sequence) | `cat-internal-create-mermaid` |
+| After changes to code, XML docs or the generator | `cat-internal-verify-code` |
+| After changes to markdown, a heading or a file name, and after every rename or move | `cat-internal-verify-docs` |
+| Link check, only when the owner asks | `cat-internal-verify-site` |
 ## ✍️ Documentation & Comment Style
 When writing, modifying, or generating code comments, XML documentation, or markdown files, strictly adhere to these natural language rules:
 
