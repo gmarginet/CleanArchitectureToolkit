@@ -62,6 +62,31 @@ var keycloak = builder.AddContainer("keycloak", "quay.io/keycloak/keycloak", "26
     .WithBindMount("keycloak/cat-demo-realm.json", "/opt/keycloak/data/import/cat-demo-realm.json", isReadOnly: true)
     .WithArgs("start-dev", "--import-realm");
 
+// The Azure Service Bus emulator carries the messages between the services. It runs in Docker with its own SQL Server container.
+// The entities are not declared here. Orders creates the topic of its messages at startup, and Inventory creates its subscription,
+// because the emulator forgets its entities at every restart. Creating them takes the administration client, which uses the
+// management port 5300 of the emulator. The ports are fixed, so the services can reach both.
+// The key is the fixed development key of the emulator. Do not use these settings outside the demo.
+const int serviceBusPort = 5672;
+const int serviceBusManagementPort = 5300;
+const string serviceBusAdministrationConnection =
+    "Endpoint=sb://localhost:5300;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;";
+var bus = builder.AddAzureServiceBus("messaging")
+    .RunAsEmulator(emulator =>
+    {
+        emulator.WithHostPort(serviceBusPort);
+        emulator.WithEndpoint(port: serviceBusManagementPort, targetPort: 5300, name: "management", scheme: "http", isProxied: false);
+    });
+
+// Orders publishes OrderConfirmed through its outbox. Inventory listens to it, so it waits for Orders, which creates the topic.
+orders.WithReference(bus)
+    .WaitFor(bus)
+    .WithEnvironment("Messaging__AdministrationConnectionString", serviceBusAdministrationConnection);
+inventory.WithReference(bus)
+    .WaitFor(bus)
+    .WaitFor(orders)
+    .WithEnvironment("Messaging__AdministrationConnectionString", serviceBusAdministrationConnection);
+
 // The gateway is the single front door. The services are found by name through service discovery.
 var authority = $"http://localhost:{keycloakPort}/realms/cat-demo";
 catalog.WithEnvironment("Authentication__Authority", authority);

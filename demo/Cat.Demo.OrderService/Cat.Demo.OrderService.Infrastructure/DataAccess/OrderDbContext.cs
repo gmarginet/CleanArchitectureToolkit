@@ -1,5 +1,6 @@
 using Cat.Demo.OrderService.DataModels.Entities;
 using Cat.EFCore.Extensions;
+using Cat.Messaging.Outbox.EFCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cat.Demo.OrderService.Infrastructure.DataAccess;
@@ -67,5 +68,8 @@ public class OrderDbContext : DbContext
             e.Property(x => x.Date).HasColumnType("date");
             e.HasIndex(x => x.Date).IsUnique();
         });
+
+        // The outbox table holds the messages until the background sender has handed them to the bus.
+        modelBuilder.AddCatOutbox();
     }
 }

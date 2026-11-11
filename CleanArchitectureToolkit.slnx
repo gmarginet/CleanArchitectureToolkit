@@ -34,6 +34,7 @@
     <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.Contracts/Cat.Demo.InventoryService.Contracts.csproj" />
     <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.CoreService/Cat.Demo.InventoryService.CoreService.csproj" />
     <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.CoreService.Tests/Cat.Demo.InventoryService.CoreService.Tests.csproj" />
+    <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.EventProcessor/Cat.Demo.InventoryService.EventProcessor.csproj" />
     <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.Infrastructure/Cat.Demo.InventoryService.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/demo/Cat.Demo.OrderService/">

@@ -4,9 +4,11 @@ using Cat.Commands.Extensions;
 using Cat.Demo.InventoryService.Api.Extensions;
 using Cat.Demo.InventoryService.CoreService.ServiceRequestHandlers;
 using Cat.Demo.InventoryService.CoreService.Validators;
+using Cat.Demo.InventoryService.EventProcessor.Extensions;
 using Cat.Demo.InventoryService.Infrastructure.CommandHandlers;
 using Cat.Demo.InventoryService.Infrastructure.Extensions;
 using Cat.Demo.ServiceDefaults;
+using Cat.EventProcessor.Minimal.Api.Extensions;
 using Cat.Expressions.Extensions;
 using Cat.Minimal.Api.Extensions;
 using Cat.ServiceRequests.Decorators.ActivitySource.Extensions;
@@ -37,6 +39,9 @@ var connectionString = builder.Configuration.GetConnectionString("inventory")
     ?? throw new InvalidOperationException("Connection string 'inventory' is missing.");
 builder.Services.AddCatDemoInventoryDatabase(connectionString);
 
+// The listener for the messages of other services. It is on when the host gives Inventory the connection string "messaging".
+var eventProcessorOn = builder.Services.AddCatDemoInventoryEventProcessor(builder.Configuration);
+
 var authenticationOn = builder.AddDemoJwtAuthentication();
 
 var app = builder.Build();
@@ -52,6 +57,12 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+
+    if (eventProcessorOn)
+    {
+        await app.Services.InitializeInventoryEventProcessorAsync();
+        app.MapCatEventProcessor();
+    }
 }
 
 app.UseHttpsRedirection();

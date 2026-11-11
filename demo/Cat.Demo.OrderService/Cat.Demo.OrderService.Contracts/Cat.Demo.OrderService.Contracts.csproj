@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.Abstractions\Cat.Messaging.Abstractions.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Abstractions\Cat.ServiceRequests.Abstractions.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Validators\Cat.Validators.Abstractions\Cat.Validators.Abstractions.csproj" />
     </ItemGroup>

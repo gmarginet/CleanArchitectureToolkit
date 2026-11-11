@@ -9,4 +9,6 @@ public static class InventoryErrorDefinitions
     public static readonly CatErrorDefinition OutOfStock = CatErrorDefinition.Create(InventoryErrorCodePrefix, 1000, "Book {Isbn} is out of stock. Order {OrderNumber} got no stock.");
 
     public static readonly CatErrorDefinition UnknownBook = CatErrorDefinition.Create(InventoryErrorCodePrefix, 1001, "Book {Isbn} is not in the warehouse. Order {OrderNumber} got no stock.");
+
+    public static readonly CatErrorDefinition UnknownOrder = CatErrorDefinition.Create(InventoryErrorCodePrefix, 1002, "Order {OrderNumber} has no reservation.");
 }

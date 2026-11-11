@@ -60,6 +60,7 @@ builder.Services.AddCatFluentWorkflowsSteps(typeof(PriceLinesStep));
 var connectionString = builder.Configuration.GetConnectionString("orders")
     ?? throw new InvalidOperationException("Connection string 'orders' is missing.");
 builder.Services.AddCatDemoOrderDatabase(connectionString);
+builder.Services.AddCatDemoOrderMessaging(builder.Configuration);
 builder.Services.AddCatDemoOrderPriceProvider(builder.Configuration);
 builder.Services.AddCatDemoOrderPaymentProvider(builder.Configuration);
 builder.Services.AddCatDemoOrderStockReservation(builder.Configuration);
@@ -91,6 +92,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
     await app.Services.InitializeOrderDatabaseAsync();
+    await app.Services.InitializeOrderMessagingAsync();
 }
 
 app.UseHttpsRedirection();

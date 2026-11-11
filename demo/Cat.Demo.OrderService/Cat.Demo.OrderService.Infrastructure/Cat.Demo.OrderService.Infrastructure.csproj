@@ -7,6 +7,10 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\modules\Cat.Api.Client\Cat.Api.Client\Cat.Api.Client.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Extensions\Cat.EFCore.Extensions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging\Cat.Messaging.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.AzureServiceBus\Cat.Messaging.AzureServiceBus.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.Outbox.EFCore\Cat.Messaging.Outbox.EFCore.csproj" />
+      <ProjectReference Include="..\Cat.Demo.OrderService.Contracts\Cat.Demo.OrderService.Contracts.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.CatalogService\Cat.Demo.CatalogService.Api.Client\Cat.Demo.CatalogService.Api.Client.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.InventoryService\Cat.Demo.InventoryService.Api.Client\Cat.Demo.InventoryService.Api.Client.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.PaymentService\Cat.Demo.PaymentService.Api.Client\Cat.Demo.PaymentService.Api.Client.csproj" />
