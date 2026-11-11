@@ -32,7 +32,7 @@
 # Plans for `Cat.Commands` <!-- omit in toc -->  
 
 <!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catcommands)
+[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-catcommands)
 <!-- region end: StatusBadge-->
 
 ## Table of contents <!-- omit in toc -->  
@@ -46,7 +46,7 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-`Cat.Commands` already exists. This phase settles one question: may a command carry a result? Then it changes the README and the demo to match, and adds a typed command to the module if the owner wants it.
+`Cat.Commands` already exists. This phase settles one question: may a command carry a result? Then it changes the README and the demo to match, and adds a typed command to the module.
 
 #### The problem
 The module README says a command changes state and returns no data, only the outcome. Use a query to read data.
@@ -67,70 +67,34 @@ A real use case pushes against that. When a command creates an order, the caller
 - **Result properties.** The owner does not want result properties on the command. A developer cannot see what to fill in to run the command.
 - **Caller supplied IDs.** This is the preferred way to get an ID. The toolkit still gives developers other options, because not every developer will agree.
 - **README.** The README describes the chosen pattern, and the demo says the same.
-
-#### Recommendation for the module
-This is a recommendation, not a decision. Support three ways and write them in the README in this order:
-1. Caller supplied IDs as the default.
-2. A query after the command, when the database hands out a value.
-3. The typed command, for the cases that need the result right away, with the rule that it holds only what the command made.
-
-Result properties on the command are not documented, and the demo stops using them. The cost is that the typed command is a real change in the module, see step 2 below.
+- **Typed command.** `Cat.Commands` gets a typed command, `ICatCommand<TResult>`, handled by `ICatCommandHandler<TCommand, TResult>`, which returns an `ICatResponse<TResult>`. It has the same shape as `ICatQuery<TResult>` in `Cat.Queries`.
+- **Three ways in the README.** The README documents them in this order:
+  1. Caller supplied IDs as the default.
+  2. A query after the command, when the database hands out a value. It works well with caller supplied IDs, because the caller already knows the ID to ask for. The README says when it fits.
+  3. The typed command, for the cases that need the result right away.
+- **Limit for the typed command.** A rule in the README: the result holds only what the command made or decided, such as an ID, a number or a time. It is never a read model. It is the responsibility of the developer to follow it, and the developer team checks it in its own code reviews. There is no code that enforces it.
+- **The demo.** The order number comes from the database, so the caller cannot supply it. The demo shows the typed command, which returns an `OrderCreated` record.
+  - The demo IDs are GUIDs. The entity base creates the ID when the object is constructed, so the caller knows the order ID before the command runs.
+  - `PlacedAt` is also set before the command runs, so the caller supplies it too.
+  - So the command only has to return the order number. The record also holds the `OrderId`, as good practice. It does not hold `PlacedAt`.
+- **Result properties.** They are not documented, and the demo stops using them.
 
 #### What to build
-The module can be built in two steps. Only the typed command needs a decision first.
+The module is built in two steps.
 
-**Step 1, no module change.** It needs no answer to the open points.
-- Rewrite the README chapter on results: caller supplied IDs first, then the query after the command.
-- Change the demo: `PlaceOrderState` creates the `OrderId`, `OrderCreateCommand` carries it in, and a query step reads the order number. Today `OrderCreateCommand` has the result properties `OrderId`, `OrderNumber` and `PlacedAt`, and the workflow step copies them out with `Output`. Those go away.
-- A query by order ID is new in the Orders core service. Check that the workflow step for a query, `ProcessQuery`, can read it with `Output`, as the `Cat.FluentWorkflows` README says.
-
-**Step 2, the typed command, only when the owner wants it.** The work:
+**Step 1, the typed command in the module.** The work:
 - `ICatCommand<TResult>`, `ICatCommandHandler<TCommand, TResult>` and the processor methods for it in `Cat.Commands.Abstractions`.
 - The handler lookup in `CatCommandProcessor`, and the logging decorator for the typed handler.
 - A `ProcessCommand` overload in `Cat.FluentWorkflows` that exposes the result of the response. Check this in the module first.
-- Tests for each, and the README chapter.
+- Tests for each.
+
+**Step 2, the README and the demo.**
+- Rewrite the README chapter on results with the three ways in the order above, and the rule for the typed command.
+- Change the demo: `OrderCreateCommand` becomes a typed command that returns `OrderCreated`, and the workflow step uses the result instead of copying the properties out with `Output`. Today `OrderCreateCommand` has the result properties `OrderId`, `OrderNumber` and `PlacedAt`, and those go away. `OrderCreated` holds `OrderId` and `OrderNumber`. The demo needs step 1 first.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-Does `Cat.Commands` get a typed command? This is the blocking question. Questions 2 and 4 only matter when the answer is yes, and step 2 of the build waits for it.
 
-A typed command is `ICatCommand<TResult>`, handled by `ICatCommandHandler<TCommand, TResult>`, which returns an `ICatResponse<TResult>`. It is the same shape as `ICatQuery<TResult>` in `Cat.Queries`. The owner finds it a clean way to stay flexible, but it lets commands read data, which the owner does not like. The risk is a convention problem, not a technical one, since a handler could always read data.
-- **Yes, build it now.** The README documents three ways: caller supplied IDs, a query after the command, and the typed command. Cost: step 2 of the build, which touches the abstractions, the processor, the logging decorator, `Cat.FluentWorkflows` and the tests.
-- **Not now, add it when a real need shows up.** The README documents two ways. The demo needs only caller supplied IDs and a query after the command, so nothing in this repo is waiting for it. Cost: a developer who needs the result right away has no supported way until we build it. Adding it later is a new interface, not a breaking change.
-- **No, never.** The README says so and explains why. Cost: the toolkit forces a second round trip on developers who do not agree with the preferred way.
-
-Recommendation: Not now. Step 1 settles the problem the demo has, and nobody has asked for the typed command yet. This keeps the module small and the owner's preference intact, and the door stays open. Questions 2 and 4 then shrink, and question 2 moves to the day we build it.
-<!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-Only when question 1 is yes: which limit keeps the typed command from becoming a read model?
-- **A rule in the README.** The result holds only what the command made or decided: an ID, a number, a time. It is never a read model. Cost: nothing in code, and nobody checks it.
-- **A narrow result type.** The README suggests a small record per command, such as `OrderCreated(OrderId, OrderNumber, PlacedAt)`. It reads like the answer of a write. Cost: one more type per command.
-- **Both.** The rule explains the intent, and the record makes it visible in the code. Cost: the same as the record.
-
-Recommendation: Both. The rule costs nothing, and the record makes a wrong use easy to spot in a review.
-<!-- region end: Question 2-->
-
-<!-- region start: Question 3-->
-#### Question 3
-Do we document a query after the command as a supported way? The caller sends the command, then a query for the data. It works well together with caller supplied IDs, because the caller already knows the ID to ask for.
-- **Yes, as the second way.** The README lists it right after caller supplied IDs. Cost: a second round trip, and the README must say when it fits (a value the database hands out).
-- **No.** Only caller supplied IDs are documented. Cost: the order number in the demo has no clean answer, since the database creates it.
-
-Recommendation: Yes. The owner already prefers it for the demo (question 4), and step 1 of the build does not work without it.
-<!-- region end: Question 3-->
-
-<!-- region start: Question 4-->
-#### Question 4
-Which way does the demo show for the order number? The order number comes from the database, so the caller cannot supply it. The demo has two ways:
-1. The workflow creates the `OrderId`, sends the command, and a query step reads the number by that ID. It shows the preferred way. Cost: a new query in the Orders core service.
-2. A typed command returns the `OrderCreated` record. It shows the typed command. Cost: only possible after question 1 is yes.
-
-Recommendation: 1, because it is the owner's preferred way and it needs no change in the module. It also means the answer to question 4 is no longer blocked by question 1.
-<!-- region end: Question 4-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
