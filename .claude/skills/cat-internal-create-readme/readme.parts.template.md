@@ -3,7 +3,7 @@
 <!-- ==================== template end: RepoRow ====================-->
 
 <!-- ==================== template start: TypeBadge ====================-->
-[![[[Type]]](https://img.shields.io/badge/type-[[Type]]-blueviolet)](#repo-overview)
+[![[[Type]]](https://img.shields.io/badge/type-[[Type]]-yellow)]([[BadgeLink]])
 <!-- ==================== template end: TypeBadge ====================-->
 
 <!-- ==================== template start: NewBadge ====================-->

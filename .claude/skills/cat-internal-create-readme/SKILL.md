@@ -54,7 +54,7 @@ Name column:
 - `Cat.Demo` links to the demo readme, `./demo/README.md`.
 - An item that is not built yet links to its plan, `./plans/[[PlanFile]]`.
 
-Type badge: the `TypeBadge` template, with the type of the row. It comes first in the `Description` cell and links to the repo overview.
+Type badge: the `TypeBadge` template, with the type of the row. It comes first in the `Description` cell and links to the same target as the status badge.
 
 Status badge, from two facts: is the item built, and does it still have a plan in `plans/`. It comes after the type badge.
 - Not built: the `NewBadge` template. The badge links to the plan.
@@ -101,7 +101,8 @@ Use this when the owner changes the template and asks to update the readme.
 - [[Name]]: The name of the item, such as `Cat.Queries`, `Cat.Demo` or `Cat.Skills`.
 - [[NameLink]]: Where the name links to, see the name column above.
 - [[Type]]: `Module`, `Demo` or `Tooling`.
-- [[TypeBadge]]: The `TypeBadge` template.
+- [[TypeBadge]]: The TypeBadge template.
+- [[BadgeLink]]: Where the type badge links to. It is the same target as the status badge: the plan for a New or Building item, and the readme of the item for a Stable item.
 - [[StatusBadge]]: The `NewBadge`, `BuildingBadge` or `StableBadge` template.
 - [[Priority]]: The priority of the item, see the priority rules above. Empty for a stable item.
 - [[Description]]: One short sentence about what the item is used for.

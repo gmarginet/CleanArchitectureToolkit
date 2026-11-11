@@ -209,8 +209,8 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
     if ($start -ge 0 -and $end -gt $start) {
         for ($i = $start + 1; $i -lt $end; $i++) {
             # A row is: name | type badge, status badge, line break, description | priority
-            if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(([^)]+)\) \| \[!\[(\w+)\]\([^)]*\)\]\(#repo-overview\) (\[!\[[^\]]*\]\([^)]*\)\]\([^)]*\))<br>.+ \| (\d*) \|$') {
-                $rows.Add([pscustomobject]@{ Name = $Matches[1]; Link = $Matches[2]; Type = $Matches[3]; Badge = $Matches[4]; Priority = $Matches[5] })
+            if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(([^)]+)\) \| \[!\[(\w+)\]\([^)]*\)\]\(([^)]*)\) (\[!\[[^\]]*\]\([^)]*\)\]\(([^)]*)\))<br>.+ \| (\d*) \|$') {
+                $rows.Add([pscustomobject]@{ Name = $Matches[1]; Link = $Matches[2]; Type = $Matches[3]; TypeLink = $Matches[4]; Badge = $Matches[5]; BadgeLink = $Matches[6]; Priority = $Matches[7] })
             } elseif ($readme[$i] -match '^\| \[Cat\.') {
                 $errors.Add("README.md repo overview line $($i + 1): the row does not match name | type badge, status badge, <br>, description | priority.")
             }
@@ -222,6 +222,7 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
         if ($seen.ContainsKey($name)) { $errors.Add("README.md repo overview: $name has more than one row."); continue }
         $seen[$name] = $true
         if ($row.Type -notin 'Module', 'Demo', 'Tooling') { $errors.Add("README.md repo overview: $name has the type $($row.Type). Use Module, Demo or Tooling."); continue }
+        if ($row.TypeLink -ne $row.BadgeLink) { $errors.Add("README.md repo overview: $name has a type badge that links to $($row.TypeLink). It must link to the same target as the status badge, $($row.BadgeLink).") }
         $plan = if ($planOf.ContainsKey($name)) { $planOf[$name] } else { "$name.md" }
         $hasPlan = $planFiles -contains $plan
         $built = switch ($row.Type) { 'Module' { $moduleFolders -contains $name } 'Demo' { $true } default { $row.Badge -notlike '*badge/status-New-*' } }
