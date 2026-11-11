@@ -49,6 +49,7 @@ You decide which response types your handler returns. The OpenAPI description li
   - [Patch with a JSON Patch document](#patch-with-a-json-patch-document)
   - [What the endpoint returns](#what-the-endpoint-returns)
   - [The OpenAPI description](#the-openapi-description)
+  - [Name your endpoints](#name-your-endpoints)
   - [The problem details body](#the-problem-details-body)
   - [Errors and exceptions](#errors-and-exceptions)
     - [Unexpected exceptions](#unexpected-exceptions)
@@ -273,6 +274,20 @@ For the endpoints in the example above, the description lists:
 
 A consumer of your api reads the status codes the handler really uses, not a fixed list of everything the module supports.
 
+### Name your endpoints
+
+Give every endpoint a clear name with `WithName`. The module does not name them for you.
+
+The name becomes the `operationId` in the OpenAPI description. A client generator such as NSwag builds the method names from it. Without a name the generated methods get names like `BooksGETAsync`. With `WithName("GetBookPrices")` the method is `GetBookPricesAsync`.
+
+```csharp
+group.MapCatGetList<BookPriceListRequest, BookPriceModel>("/prices")
+    .WithName("GetBookPrices");
+```
+
+- **Pick names that say what the endpoint does.** A name that follows the service request, such as `GetBookPrices` for `BookPriceListRequest`, is easy to find again.
+- **Keep every name unique in the app.** ASP.NET Core requires it. Two endpoints with the same name start fine, and then the first request fails with a 500 and the message `Duplicate endpoint name`. Mapping the same request type twice, for example for GET and for PUT, needs two different names.
+- **Treat a name as part of your api.** A client generated from the description gets a new method name when you rename an endpoint.
 ### The problem details body
 
 A failed response is written as `CatProblemDetails`. It is a standard problem details object with two extra properties:
