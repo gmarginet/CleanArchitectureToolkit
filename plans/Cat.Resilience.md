@@ -127,7 +127,7 @@ Does the module tell `Cat.Telemetry` about every retry and break? Retries and br
 
 <!-- region start: Question 9-->
 #### Question 9
-`Cat.Api.Client` stays with the `HttpClient` handler of `ServiceDefaults` for now, see [Cat.Api.Client.md](Cat.Api.Client.md). How does a project without Aspire use this module with that client?
+`Cat.Api.Client` stays with the `HttpClient` handler of `ServiceDefaults` for now, see the [Resilience chapter](../modules/Cat.Api.Client/README.md#resilience) of the readme of `Cat.Api.Client`. How does a project without Aspire use this module with that client?
 <!-- region end: Question 9-->
 
 <!-- region start: Question 10-->
