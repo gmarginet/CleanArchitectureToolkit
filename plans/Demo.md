@@ -55,7 +55,8 @@ Messaging. `Cat.Messaging` and `Cat.EventProcessor`, the Service Bus emulator in
 #### Background
 - Every phase of this plan ends in a working demo. A phase is done when its "Done when" is true, the demo readme and the drawing are current (the `cat-internal-create-demo-readme` skill) and the tests pass.
 - The demo uses the Azure Service Bus emulator. It runs in Docker, so it fits the Aspire setup. The AppHost starts it next to SQL Server when `Cat.Messaging` arrives.
-- Orders publishes `OrderPlaced`. Inventory and Notifications consume it.
+- Orders publishes `OrderPlaced`. Inventory and Notifications consume it. Inventory comes in this phase. Notifications does not exist yet, so it comes in phase 2.
+- A handler that runs for a message has no current user yet. `Cat.Authorization` does not exist, and `Cat.Messaging` does not attach a token. The demo keeps its own `ICurrentUser` until phase 3, and the handlers of this phase must not need a user. Whether messages carry a token in the demo is question 10 of phase 3.
 - Orders keeps announcing facts inside the service with `Cat.EventAggregators`. A subscriber bridges an event to the bus. The event aggregator itself is in-process only and cannot carry a message to another service.
 - Inventory came before messaging on purpose. Reserving stock needs an answer, and a message gives none. So Orders calls Inventory over HTTP, and messages tell Inventory about the order afterwards.
 - The modules come from working code. The module is designed from what the demo shows, the way `CatalogPriceProvider` came before `Cat.Api.Client`.
@@ -106,6 +107,39 @@ Do we show nullability in the ERDs? `Payment.PaidAt` is nullable in the class. T
 
 Recommendation: mark only the nullable columns. Not null is the default, so the exceptions are what the reader needs.
 <!-- region end: Question 1-->
+<!-- region start: Question 6-->
+#### Question 6
+Who creates the queues, topics and subscriptions for the demo? The modules create nothing at startup. `ICatServiceBusTopology.EnsureTopologyAsync` creates the topic of an event or the queue of a command, and `ICatEventProcessorTopology.EnsureSubscriptionsAsync` creates the subscription of a service. Someone must call them, or the emulator must be told what to create. To check first: whether the emulator supports creating entities through the administration API. The owner may remember that it takes its entities from a configuration file. The options:
+- **A startup step in the services,** in the Development environment only, that calls the two methods. Cost: it works only if the emulator supports the administration API. The service needs the manage right.
+- **The configuration file of the emulator,** written in the AppHost. Cost: a second place that holds the names, and it can drift from the naming convention of `Cat.Messaging`. The two methods are not shown in the demo.
+- **A script that runs once.** Cost: one more thing for a developer to run, and it can be forgotten.
+
+Recommendation: check the emulator first. If it does not support the administration API, use its configuration file. If it does, use the startup step, because it shows the topology methods and cannot drift from the convention.
+<!-- region end: Question 6-->
+<!-- region start: Question 7-->
+#### Question 7
+Where does the `OrderPlaced` type live? It must be a message and a service request at the same time. The sender and the receiver need the same type name and the same JSON, because the name of the topic comes from the type name. The options:
+- **In the `Contracts` project of Orders,** and Inventory references it. Cost: Inventory references the `Contracts` of another service. The toolkit allows this, because sharing `Contracts` is the choice of the developer.
+- **Each service has its own type,** with the same name and the same properties. Cost: two types that must be kept equal by hand, and a mismatch shows only at runtime.
+
+Recommendation: the `Contracts` project of Orders. It is the least code and it shows the contract as one type. The demo readme can say what sharing costs.
+<!-- region end: Question 7-->
+<!-- region start: Question 8-->
+#### Question 8
+Does Orders publish `OrderPlaced` through the outbox? The subscriber that bridges the event of the event aggregator can send straight to the bus, or write the message to the outbox in the same `SaveChanges` as the order. The options:
+- **Through the outbox** (`Cat.Messaging.Outbox.EFCore`). Cost: a migration for the `CatOutbox` table in Orders, and one more moving part. A message is never lost when the order is saved.
+- **Straight to the bus.** Cost: a message can be lost when the order is saved but the send fails, or the other way round. The demo shows the weaker pattern.
+
+Recommendation: through the outbox. The outbox exists for this case, and the demo is where a developer sees how it works.
+<!-- region end: Question 8-->
+<!-- region start: Question 9-->
+#### Question 9
+Does Inventory use the inbox? Reserving stock is already safe to repeat, because of the unique `(StockItemId, OrderNumber)` constraint. The inbox (`Cat.EventProcessor.Inbox.EFCore`) is meant for a handler that cannot run twice. The options:
+- **No inbox.** Cost: the inbox is not shown or tested in the demo. The readme of the module is the only place that explains it.
+- **Use the inbox in Inventory.** Cost: a migration for the `CatInbox` table, and the same protection twice.
+
+Recommendation: no inbox in Inventory. The demo should show that an idempotent handler needs none. The inbox can come with a demo handler that cannot repeat, if one appears.
+<!-- region end: Question 9-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
 
@@ -209,6 +243,14 @@ Per module: the demo uses it and the readme says where.
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 10-->
+#### Question 10
+Do messages carry a token in the demo when `Cat.Authorization` exists? The decided rules in [Cat.EventProcessor.md](Cat.EventProcessor.md) say that a message sent for a user carries the token of that user, and a message sent without a user, such as one from the Scheduler, carries the token of the sending system. The listener then builds the `ICatUser` from the token. Neither the sender nor the listener does this yet. The options:
+- **Carry the token of the user,** and a client credentials token for the Scheduler, as decided. Cost: the token sits in the queue, the dead letter queue and the outbox table, so it needs short lived tokens, and a security review before production. The demo needs a client in the Keycloak realm for the system token.
+- **No token in the demo messages.** Cost: the demo does not show the identity rule. A handler that needs a user cannot be shown.
+
+Recommendation: carry the token, once `Cat.Authorization` and the sending side exist. It is the decided design, and the demo is the place that proves it. Until then, phase 1 and 2 need no user in their handlers.
+<!-- region end: Question 10-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 3-->
 
