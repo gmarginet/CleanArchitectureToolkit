@@ -42,7 +42,7 @@ Regions that every template has.
 Edit only inside a region. Never remove a region marker. A change to a heading changes the anchor, so search the old anchor with `git grep` and fix every link.
 
 ## Repo overview
-The `RepoOverview` region holds one table with a row for everything in the repository. The columns are `Name`, `Type`, a status column without a header text, and `Description`.
+The `RepoOverview` region holds one table with a row for everything in the repository. The columns are `Name`, `Type`, a status column without a header text, `Priority` and `Description`.
 
 Rows, in this order. Inside a group, sort by name.
 1. **Modules.** One row per module. Type `Module`.
@@ -62,6 +62,13 @@ Status column, from two facts: is the item built, and does it still have a plan 
 
 A module is built when its folder exists in `modules/`. The demo is built from the first stage on. A tooling item is built when its files exist.
 
+Priority column: a whole number for every item that is not stable, and empty for a stable item. 1 is the highest priority. The numbers are unique, so there is one order of work.
+- Rank first the items that are easy to finish or to build, even when the demo does not need them. A built item whose plan only has a small closing step is the easiest.
+- Then rank the items the demo needs, in the order of the phases of `plans/Demo.md`. The plan and the phase of the demo lead.
+- Then rank the rest. Within a group, the item with fewer open questions and a smaller scope comes first.
+- Recalculate the priorities every time a plan changes, an open question is answered, a plan is created or removed, or a build is finished. A stable item leaves the order, and the numbers after it move up.
+- The owner decides the order. Propose the new numbers with the reason when the order changes, and wait for the owner before you write them.
+
 Description column: one short sentence about what the item is used for. For a module, base it on the intro of the module readme.
 
 Other rules:
@@ -75,7 +82,7 @@ Steps:
 1. List the folders in `modules/` and the files in `plans/`.
 2. Read the intro of each module readme that needs a new or changed row.
 3. Edit the rows. Keep the existing rows untouched when nothing changed.
-4. Check that every module folder and every plan has exactly one row, that the order is right, and that every status badge matches the two facts.
+4. Check that every module folder and every plan has exactly one row, that the order is right, that every status badge matches the two facts, and that the priorities are up to date.
 5. Run the `cat-internal-verify-docs` skill.
 
 When a future module is started with the `cat-internal-create-module` skill, the row stays and its status and name link change. When a plan is removed, the status becomes stable. The `cat-internal-create-plan` skill describes where a plan is linked.
@@ -93,6 +100,7 @@ Use this when the owner changes the template and asks to update the readme.
 - [[NameLink]]: Where the name links to, see the name column above.
 - [[Type]]: `Module`, `Demo` or `Tooling`.
 - [[StatusBadge]]: The `NewBadge`, `InDevelopmentBadge` or `StableBadge` template.
+- [[Priority]]: The priority of the item, see the priority column above. Empty for a stable item.
 - [[Description]]: One short sentence about what the item is used for.
 - [[PlanFile]]: The file name of the plan in `plans/`, such as `Cat.Messaging.md` or `Demo.md`.
 - [[RootPath]]: The relative path to the root of the repository, used by the header. It is `.` for the readme.

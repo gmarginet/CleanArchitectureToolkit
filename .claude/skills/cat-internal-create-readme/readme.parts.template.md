@@ -1,5 +1,5 @@
 <!-- ==================== template start: RepoRow ====================-->
-| [[[Name]]]([[NameLink]]) | [[Type]] | [[StatusBadge]] | [[Description]] |
+| [[[Name]]]([[NameLink]]) | [[Type]] | [[StatusBadge]] | [[Priority]] | [[Description]] |
 <!-- ==================== template end: RepoRow ====================-->
 
 <!-- ==================== template start: NewBadge ====================-->

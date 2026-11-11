@@ -13,7 +13,7 @@ Scope
 Errors
 - A relative link or image points to a file or folder that does not exist, or the case of the path is wrong.
   The published site runs on Linux, where case matters.
-- The repo overview table of the readme does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the In development badge. A built row without a plan has the Stable badge. The rows are in order: modules, the demo, then tooling, each sorted by name.
+- The repo overview table of the readme does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the In development badge. A built row without a plan has the Stable badge. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has no priority, and every other row has a unique whole number as priority.
 - A link points to an anchor that no heading of the target markdown file has.
 - A code fence is not closed.
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or has no comment line with its `RootPath`.
@@ -208,8 +208,8 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
     $rows = [System.Collections.Generic.List[object]]::new()
     if ($start -ge 0 -and $end -gt $start) {
         for ($i = $start + 1; $i -lt $end; $i++) {
-            if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(([^)]+)\) \| (\w+) \| (.*?) \| ') {
-                $rows.Add([pscustomobject]@{ Name = $Matches[1]; Link = $Matches[2]; Type = $Matches[3]; Badge = $Matches[4] })
+            if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(([^)]+)\) \| (\w+) \| (.*?) \| (\d*) \| ') {
+                $rows.Add([pscustomobject]@{ Name = $Matches[1]; Link = $Matches[2]; Type = $Matches[3]; Badge = $Matches[4]; Priority = $Matches[5] })
             }
         }
     }
@@ -233,6 +233,18 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
             if ($row.Badge -notlike "*status-stable*]($($row.Link))*") { $errors.Add("README.md repo overview: $name has no plan. Its badge must be Stable and link to $($row.Link).") }
         }
         if ($row.Type -eq 'Module' -and $built -and $row.Link -ne "./modules/$name/README.md") { $errors.Add("README.md repo overview: $name is built. Its name must link to ./modules/$name/README.md.") }
+    }
+    $priorities = @{}
+    foreach ($row in $rows) {
+        if ($row.Badge -like '*status-stable*') {
+            if ($row.Priority -ne '') { $errors.Add("README.md repo overview: $($row.Name) is Stable. Its priority must be empty.") }
+        } elseif ($row.Priority -eq '' -or [int]$row.Priority -lt 1) {
+            $errors.Add("README.md repo overview: $($row.Name) is not Stable. It needs a priority, a whole number from 1.")
+        } elseif ($priorities.ContainsKey($row.Priority)) {
+            $errors.Add("README.md repo overview: the priority $($row.Priority) is used by $($priorities[$row.Priority]) and $($row.Name). Priorities are unique.")
+        } else {
+            $priorities[$row.Priority] = $row.Name
+        }
     }
     foreach ($name in $moduleFolders) {
         if (-not $seen.ContainsKey($name)) { $errors.Add("README.md repo overview: the module $name has no row.") }

@@ -26,7 +26,7 @@ Errors, which you must fix:
 - A link to an anchor that no heading of the target markdown file has. Anchors follow the GitHub rules: lowercase, punctuation removed, spaces become hyphens, and a repeated heading gets `-1`, `-2`.
 - A code fence that is never closed.
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or that has no comment line with its `RootPath`. Template files (`*.template.md`) are skipped.
-- A repo overview table in the readme that does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the In development badge. A built row without a plan has the Stable badge. The rows are in order: modules, the demo, then tooling, each sorted by name.
+- A repo overview table in the readme that does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the In development badge. A built row without a plan has the Stable badge. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has no priority, and every other row has a unique whole number as priority.
 - A missing or repeated `<!-- region start: RepoOverview-->` or `<!-- region end: RepoOverview-->` marker in the readme.
 - A skill folder without `SKILL.md`, with a `name` that differs from the folder, or without a row and an entry in `.claude/skills/README.md`.
 

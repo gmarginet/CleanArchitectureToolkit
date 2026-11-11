@@ -26,8 +26,8 @@
 > **In development** means built, with a plan for the work that is left. The badge links to the plan. Breaking changes are possible.  
 > **Stable** means built, with no plan left.  
 
-| Name | Type | | Description |
-|------|------|--------|-------------|
+| Name | Type | | Priority | Description |
+|------|------|--------|----------|-------------|
 
 <!-- region end: RepoOverview-->
 

@@ -25,7 +25,7 @@ Set up a new module so it matches the others. New modules start with the status 
    - Add `<Folder Name="/modules/<ModuleName>/">` with `<File Path="modules/<ModuleName>/README.md" />` and one `<Project>` entry per project. Keep the folders sorted by name.
    - Add the test project to the `/tests/` folder, sorted by name.
 5. **Module readme.** Run the `cat-internal-create-module-readme` skill for the new module.
-6. **Readme table.** Run the `cat-internal-create-readme` skill. The row of the module in the repo overview already exists when the module has a plan, so change its name link to the module readme and its status. A new module without a plan gets a new row. The `cat-internal-create-plan` skill describes this.
+6. **Readme table.** Run the `cat-internal-create-readme` skill. The row of the module in the repo overview already exists when the module has a plan, so change its name link to the module readme and its status. A new module without a plan gets a new row. Recalculate the priorities too. The `cat-internal-create-plan` skill describes this.
 7. **Verify.** Run the `cat-internal-verify-code` skill. The build generates the `namespaces/` pages for the new projects.
 8. **Check the generated pages.** They should appear in `modules/<ModuleName>/namespaces/`. If you need to change them, change the XML docs in the code and build again.
 

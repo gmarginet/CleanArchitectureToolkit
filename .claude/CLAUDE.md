@@ -58,7 +58,7 @@ The `plans/` folder holds the plans we make before we build.
 - Every plan is made from `plan.template.md` of the `cat-internal-create-plan` skill. It has a header, a status badge and one or more phases. Each phase has a description and numbered open questions.
 - Put only decisions the owner made in the description of a phase. Everything else is an open question.
 - Keep a plan current. When the owner answers a question, fold the answer into the phase description and fix the other plans that mention it.
-- Every plan has a row in the repo overview table of the readme. The status badge of the row links to the plan. A plan that is not built yet has the New badge, a built item with a plan has the In development badge, and a built item without a plan is Stable. The `cat-internal-create-readme` skill covers the table.
+- Every plan has a row in the repo overview table of the readme. The status badge of the row links to the plan. A plan that is not built yet has the New badge, a built item with a plan has the In development badge, and a built item without a plan is Stable. The table also has a priority per item that is not stable, and the priorities are recalculated every time a plan changes or a build is finished. The `cat-internal-create-readme` skill covers the table.
 - A module readme never links to the plan of its module. Only the readme links to a plan.
 - The readme of a module must in the end hold everything about how the module works and how to use it. Then the plan can go. Remove a plan only when the owner agrees.
 - Use the `cat-internal-create-plan` skill to create, build or update a plan. It also links the plan from the readme and keeps the other plans in sync. The `cat-internal-verify-docs` skill checks the README tables.
