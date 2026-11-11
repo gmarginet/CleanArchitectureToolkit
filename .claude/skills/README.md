@@ -17,7 +17,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 | [cat-internal-create-excalidraw](cat-internal-create-excalidraw/SKILL.md) | Create or edit an editable Excalidraw drawing in `resources/schemas`. | `/cat-internal-create-excalidraw add a drawing of the demo security setup` |
 | [cat-internal-create-mermaid](cat-internal-create-mermaid/SKILL.md) | Write or update an ERD, class or sequence diagram as inline Mermaid. | `/cat-internal-create-mermaid ERD for the Catalog service` |
 | [cat-internal-create-demo-unit](cat-internal-create-demo-unit/SKILL.md) | Add or restructure a service, client or Aspire project in `demo/`. | `/cat-internal-create-demo-unit service Orders` |
-| [cat-internal-commit](cat-internal-commit/SKILL.md) | Commit the changes in logical blocks, with `(skip-pub)` when no code in `modules/` changed. Never pushes. | `/cat-internal-commit` |
+| [cat-internal-commit](cat-internal-commit/SKILL.md) | Commit the changes in logical blocks, with `(skip-pub)` when no code in `modules/` changed. Stops after a commit that publishes. Never pushes. | `/cat-internal-commit` |
 | [cat-internal-verify-docs](cat-internal-verify-docs/SKILL.md) | Check all markdown locally: links, anchors, letter case, code fences, markers and forbidden punctuation. | `/cat-internal-verify-docs` |
 | [cat-internal-create-demo-readme](cat-internal-create-demo-readme/SKILL.md) | Create and update `demo/README.md` from its template, and keep the demo architecture drawing in sync with the demo app. | `/cat-internal-create-demo-readme Inventory service built` |
 | [cat-internal-verify-code](cat-internal-verify-code/SKILL.md) | Build, test, check the regenerated namespaces pages and deploy a changed generator. | `/cat-internal-verify-code` |
@@ -58,7 +58,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **When:** When a demo project is added, moved or renamed.
 
 ### cat-internal-commit
-- **What it does:** Splits the working tree into logical blocks and commits each one with a plain subject line. It runs `cat-internal-commit/commit-info.ps1` to group the changes by area and to decide per commit whether the subject must end with ` (skip-pub)`. That is the case when no code in `modules/` and no build file changed, so the build workflow does not publish NuGet packages. It never pushes, amends or rebases.
+- **What it does:** Splits the working tree into logical blocks and commits each one with a plain subject line. It runs `cat-internal-commit/commit-info.ps1` to group the changes by area and to decide per commit whether the subject must end with ` (skip-pub)`. That is the case when no code in `modules/` and no build file changed, so the build workflow does not publish NuGet packages. It never pushes, amends or rebases. After a commit without ` (skip-pub)` it stops and asks whether to push first, because only the newest commit of a push decides if the packages are published. It makes an empty commit when you ask for one, for example to start a publish.
 - **How to use it:** Ask for a commit. Add a hint if you want a certain split or wording.
 - **When:** Only when you ask for a commit.
 - **Note:** It runs `cat-internal-verify-docs` first when markdown changed, and it keeps generated, private and scratch files out of commits.
