@@ -99,7 +99,7 @@ Recommendation: keys for fixed lists, like order statuses and reference data, an
 
 <!-- region start: Question 5-->
 #### Question 5
-Do the error codes from `Cat.Responses` and `Cat.Validators` get localized messages through the localizer? This is the same point as question 4 in [Cat.Responses.md](Cat.Responses.md), so answer it once, here. The options:
+Do the error codes from `Cat.Responses` and `Cat.Validators` get localized messages through the localizer? The owner decided in the Responses plan that localization is not the responsibility of `Cat.Responses` and that `Cat.Responses` does not change because of it, so the second option below is out. The options:
 - **No.** The server returns the code and an English message, and the client picks the text from the code. Cost: every client needs its own table of messages.
 - **Yes, in `Cat.Responses`.** The message is looked up by the code as the key. Cost: it couples `Cat.Responses` to this module, which the toolbox rule does not like.
 - **Yes, only in the Api layer.** `Cat.Minimal.Api` translates the messages while it writes the response, and `Cat.Responses` stays as it is. Cost: the Api module gets an optional dependency on the localizer abstractions.

@@ -32,7 +32,7 @@
 # Plans for `Cat.Responses` <!-- omit in toc -->  
 
 <!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catresponses)
+[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-catresponses)
 <!-- region end: StatusBadge-->
 
 ## Table of contents <!-- omit in toc -->  
@@ -70,80 +70,27 @@ From the demo:
 - **Demo codes.** `DEM` is the `<APPLICATION>` part. The `<AREA>` part is a 3 letter acronym or abbreviation of the service name, such as `CTL`, `ORD` and `INV`. This settles the question on the demo prefixes: they change from `CAT-` to `DEM-`.
 - **Own codes.** A developer is not obliged to follow the convention. Every valid string is allowed.
 - **Lists of codes.** Every module README lists the error codes the module can return. The demo README lists all the errors of the demo services.
+- **Where codes are defined.** Every module has a single place where its error codes are defined, like `CatValidatorErrorDefinitions` in `Cat.Validators`. How a developer defines their own codes is theirs to decide.
+- **Demo files.** The demo follows the same rule with one definitions class per service, with the prefix `DEM-<AREA>`: `DEM-CTL`, `DEM-ORD` and `DEM-INV`. The services stay independent and share no project.
+- **Helper.** A second `CatErrorDefinition.Create` overload takes the prefix, the number and the message and builds the code, for example `Create("DEM-ORD", 1001, "...")`. It does not check the shape of the prefix, because the free choice of the developer is decided. `CatGeneralErrorDefinitions` and `CatValidatorErrorDefinitions` use it too. Their codes do not change.
+- **Area clashes.** There is no table of area abbreviations. The `cat-internal-verify-code` skill checks that two modules do not use the same area. At the end of a code change it lists the area of every error definitions class in `modules/` and fails when two modules share one. The `cat-internal-create-module` skill points to that check when it picks the area of a new module.
+- **Numbers.** There are no ranges for kinds of errors. In CAT the numbers start at 1000 and count up, and a number is unique within the module, so unique within the prefix. The demo follows the same rules. A developer is not obliged to use the code or the number this way.
+- **Localization.** Localization is not the responsibility of `Cat.Responses`, and `Cat.Responses` does not change because of it. How the messages are localized is designed with `Cat.Localizations`.
 
 #### What to build
-What is decided is a convention and documentation. It needs no new design. The helper and the texts wait for the open questions. The work, in order:
-1. **Rename the demo codes.** `CAT-CTL-`, `CAT-ORD-` and `CAT-INV-` become `DEM-CTL-`, `DEM-ORD-` and `DEM-INV-`. This touches the three `*ErrorDefinitions` classes, the `.http` files, the unit tests of Orders, the web client tests, `tests/Cat.Api.Client.Tests` (they use the codes as sample data), `demo/README.md` and `plans/Demo.md`. Search with `git grep` for every old prefix.
-2. **Change the example codes in the module READMEs.** `CAT-DEM-1000` in `Cat.Responses` and `Cat.Minimal.Api` clashes with the convention, because `DEM` is now an application. The short examples `ORD-1001` and `ORD-1002` in `Cat.Responses` and `Cat.FluentWorkflows` do not follow it either. Use `DEM-ORD-1001` style codes.
-3. **Add the error code lists.** `Cat.Responses` already has a table for `CAT-GEN-`. `Cat.Validators` documents `CAT-VAL-1001` to `CAT-VAL-1017` in its README, check that all of them are in a list. `Cat.ServiceRequests` and `Cat.Api.Client` only return `CAT-GEN-1001`, so they point to the `Cat.Responses` list. `Cat.Commands` and `Cat.Queries` say that the application defines the codes, so they need no list.
-4. **Write the convention in the `Cat.Responses` README**, with the table of area abbreviations once it is decided.
-5. **List the demo errors in `demo/README.md`**, one table per service, built from the three definition classes.
+What is decided is a convention, a helper, documentation and a check in a skill. The work, in order:
+1. **Add the helper.** A second `CatErrorDefinition.Create` overload in `Cat.Responses` that takes the prefix, the number and the message and builds the code, without a check of the prefix. Move `CatGeneralErrorDefinitions` and `CatValidatorErrorDefinitions` to it, and check that the tests that compare their codes still pass. Add tests for the overload.
+2. **Rename the demo codes.** `CAT-CTL-`, `CAT-ORD-` and `CAT-INV-` become `DEM-CTL-`, `DEM-ORD-` and `DEM-INV-`. This touches the three `*ErrorDefinitions` classes, the `.http` files, the unit tests of Orders, the web client tests, `tests/Cat.Api.Client.Tests` (they use the codes as sample data), `demo/README.md` and `plans/Demo.md`. Search with `git grep` for every old prefix.
+3. **Change the example codes in the module READMEs.** `CAT-DEM-1000` in `Cat.Responses` and `Cat.Minimal.Api` clashes with the convention, because `DEM` is now an application. The short examples `ORD-1001` and `ORD-1002` in `Cat.Responses` and `Cat.FluentWorkflows` do not follow it either. Use `DEM-ORD-1001` style codes.
+4. **Add the error code lists.** `Cat.Responses` already has a table for `CAT-GEN-`. `Cat.Validators` documents `CAT-VAL-1000` to `CAT-VAL-1020` in its README, check that all of them are in a list. `Cat.ServiceRequests` and `Cat.Api.Client` only return `CAT-GEN-1001`, so they point to the `Cat.Responses` list. `Cat.Commands` and `Cat.Queries` say that the application defines the codes, so they need no list.
+5. **Write the convention in the `Cat.Responses` README.**
+6. **List the demo errors in `demo/README.md`**, one table per service, built from the three definition classes.
+7. **Add the area check to the `cat-internal-verify-code` skill**, and a pointer to it in the `cat-internal-create-module` skill. Update the table and the entries in `.claude/skills/README.md` in the same change.
 
-The `cat-internal-create-module-readme` and `cat-internal-create-demo-readme` skills cover the README work. Do the rename (step 1) in its own commit, before the documentation.
+The `cat-internal-create-module-readme` and `cat-internal-create-demo-readme` skills cover the README work. Do the helper (step 1) and the rename (step 2) each in their own commit, before the documentation.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-Do we reserve number ranges for kinds of errors, or keep counting up from 1000?
-
-The convention names the prefix, not the number. Today every code starts at 1000 and counts up (`CAT-GEN-1001`, `CAT-VAL-1000` to `CAT-VAL-1017`, and the demo codes). The options:
-- **No ranges.** Count up from 1000 and never reuse a number. Cost: the number says nothing about the kind of error.
-- **Ranges per kind.** For example 1000 for unknown, 1001 and up for rules. Cost: a debate about every new error, and ranges that fill up.
-
-Recommendation: no ranges. The code is only an identifier, and a range invites a debate about every new error. Keep counting up from 1000 and never reuse a number.
-<!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-Where does the list of taken area abbreviations live?
-
-Three letters run out fast, and two modules can pick the same ones. `Cat.EventAggregators` and `Cat.EventProcessor` could both choose `EVE` or `EVT`, for example. The options:
-- **One table in the `Cat.Responses` README.** It has the area, the module and the range in use. Cost: someone must keep it up to date, and a module owner can forget.
-- **One table in the plan, until the convention is final.** Cost: the table moves later, and developers cannot see it.
-- **No list.** Clashes are found in review. Cost: two modules can pick the same area without anybody noticing.
-
-Recommendation: one table in the `Cat.Responses` README, with the area, the module and the range in use. A module owner adds a row when the module gets its first code.
-<!-- region end: Question 2-->
-
-<!-- region start: Question 3-->
-#### Question 3
-Do we add a helper for building codes, and which option: a second `Create` overload, a prefix object, or nothing?
-
-All three demo services repeat the same shape. A private constant holds the prefix, and every line builds the code with string interpolation. The options, with what each one costs:
-- **Option 1, a second `Create` overload.** The prefix and the number go in as separate arguments, and the code is built for you.
-
-  ```csharp
-  public static class OrderErrorDefinitions
-  {
-      public static readonly CatErrorDefinition PriceUnavailable =
-          CatErrorDefinition.Create("DEM-ORD", 1001, "The price of book {BookId} is not available.");
-  }
-  ```
-
-  It is one method in `Cat.Responses`, with no new type. It can check the shape, 3 + 3 uppercase characters, and fail at startup when a developer types a wrong prefix. The check would also have to allow the free choice of the developer, so it can only warn or must be left out.
-- **Option 2, a prefix object.** A small class holds the prefix, and every definition asks it.
-
-  ```csharp
-  public static class OrderErrorDefinitions
-  {
-      private static readonly CatErrorCodePrefix Prefix = new("DEM", "ORD");
-
-      public static readonly CatErrorDefinition PriceUnavailable =
-          Prefix.Define(1001, "The price of book {BookId} is not available.");
-  }
-  ```
-
-  It reads a bit cleaner when a class has many definitions, and the prefix is written once. It costs a new public type.
-- **Option 3, nothing.** Keep the private constant. It is two lines per class and everybody understands it.
-
-Recommendation: Option 1. It saves the interpolation, and it is the smallest change. Option 3 is a fair choice, because the gain is small.
-<!-- region end: Question 3-->
-
-<!-- region start: Question 4-->
-#### Question 4
-Parked, not blocking: do the codes get localized messages through `Cat.Localizations`? The owner decided to wait until it is clearer how `Cat.Localizations` works. This is the same point as question 5 in [Cat.Localizations.md](Cat.Localizations.md), so answer it once, there. Nothing in this phase depends on it, and the rename and the lists of codes can go ahead.
-<!-- region end: Question 4-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
