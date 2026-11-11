@@ -17,4 +17,9 @@
         <ProjectReference Include="..\..\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <!-- The package ships the NSwag settings template and the targets file that copies it. Both are off by default. -->
+        <None Update="build\**" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
 </Project>

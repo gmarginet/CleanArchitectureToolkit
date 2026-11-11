@@ -1,0 +1,20 @@
+<Project>
+
+    <!--
+        Copies the NSwag settings template to nswag.json in the project folder.
+        It is off by default. Set CatApiClientNswagTemplate to true in the client project to turn it on.
+        An nswag.json that already exists is never overwritten.
+    -->
+    <PropertyGroup>
+        <CatApiClientNswagTemplateFile>$(MSBuildThisFileDirectory)nswag.template.json</CatApiClientNswagTemplateFile>
+    </PropertyGroup>
+
+    <Target Name="CatApiClientCopyNswagTemplate"
+            BeforeTargets="BeforeBuild"
+            Condition="'$(CatApiClientNswagTemplate)' == 'true'">
+        <Copy SourceFiles="$(CatApiClientNswagTemplateFile)"
+              DestinationFiles="$(MSBuildProjectDirectory)/nswag.json"
+              Condition="!Exists('$(MSBuildProjectDirectory)/nswag.json')" />
+    </Target>
+
+</Project>

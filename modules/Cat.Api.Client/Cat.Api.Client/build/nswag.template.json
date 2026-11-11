@@ -1,0 +1,31 @@
+{
+  "runtime": "Net100",
+  "documentGenerator": {
+    "fromDocument": {
+      "json": "service.openapi.json",
+      "url": "",
+      "output": null
+    }
+  },
+  "codeGenerators": {
+    "openApiToCSharpClient": {
+      "clientBaseClass": null,
+      "generateClientClasses": true,
+      "generateClientInterfaces": true,
+      "generateDtoTypes": true,
+      "excludedTypeNames": [ "CatProblemDetails", "ICatError" ],
+      "injectHttpClient": true,
+      "useBaseUrl": false,
+      "disposeHttpClient": false,
+      "generateExceptionClasses": false,
+      "exceptionClass": "CatApiException",
+      "additionalNamespaceUsages": [ "Cat.Api.Client" ],
+      "jsonLibrary": "SystemTextJson",
+      "generateNullableReferenceTypes": true,
+      "operationGenerationMode": "SingleClientFromOperationId",
+      "className": "ServiceClient",
+      "namespace": "Service.Api.Client",
+      "output": "ServiceClient.cs"
+    }
+  }
+}
