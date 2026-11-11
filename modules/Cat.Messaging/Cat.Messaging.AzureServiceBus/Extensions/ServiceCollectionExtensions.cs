@@ -26,7 +26,8 @@ public static class ServiceCollectionExtensions
         services.AddOptions<CatServiceBusOptions>().Configure(configure);
 
         services.TryAddSingleton(provider => new ServiceBusClient(provider.GetRequiredService<IOptions<CatServiceBusOptions>>().Value.ConnectionString));
-        services.TryAddSingleton(provider => new ServiceBusAdministrationClient(provider.GetRequiredService<IOptions<CatServiceBusOptions>>().Value.ConnectionString));
+        services.TryAddSingleton(provider => new ServiceBusAdministrationClient(
+            provider.GetRequiredService<IOptions<CatServiceBusOptions>>().Value.ResolveAdministrationConnectionString()));
         services.TryAddSingleton<ICatMessageTransport, ServiceBusMessageTransport>();
         services.TryAddSingleton<ICatServiceBusTopology, ServiceBusTopology>();
 

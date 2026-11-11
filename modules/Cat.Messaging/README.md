@@ -190,7 +190,7 @@ var topology = app.Services.GetRequiredService<ICatServiceBusTopology>();
 var created = await topology.EnsureTopologyAsync([typeof(OrderPlaced).Assembly]);
 ```
 
-It makes a queue for every command message and a topic for every event in the assemblies, and it skips what exists. Call it from a deployment step, a small tool or a test. It needs the manage right on the namespace, so most production services should not run it. A subscription belongs to the service that receives the message, so this method does not create subscriptions.
+It makes a queue for every command message and a topic for every event in the assemblies, and it skips what exists. The administration client uses `AdministrationConnectionString` when you set it, and `ConnectionString` otherwise. The emulator needs the first one, because it answers management calls on port 5300 and messages on another port. Call it from a deployment step, a small tool or a test. It needs the manage right on the namespace, so most production services should not run it. A subscription belongs to the service that receives the message, so this method does not create subscriptions.
 
 You can also create the entities with a script. A sample with the Azure CLI:
 

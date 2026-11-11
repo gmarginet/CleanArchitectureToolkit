@@ -38,4 +38,9 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Properties | |
 | :--- | :--- |
+| [AdministrationConnectionString](CatServiceBusOptions.AdministrationConnectionString.md 'Cat\.Messaging\.AzureServiceBus\.CatServiceBusOptions\.AdministrationConnectionString') | The connection string for the administration client, which creates the queues, topics and subscriptions\. Leave it empty to use [ConnectionString](CatServiceBusOptions.ConnectionString.md 'Cat\.Messaging\.AzureServiceBus\.CatServiceBusOptions\.ConnectionString')\. The emulator needs its own, because it answers management calls on a different port than the messages\. |
 | [ConnectionString](CatServiceBusOptions.ConnectionString.md 'Cat\.Messaging\.AzureServiceBus\.CatServiceBusOptions\.ConnectionString') | The connection string of the namespace, for the real service and for the emulator\. |
+
+| Methods | |
+| :--- | :--- |
+| [ResolveAdministrationConnectionString\(\)](CatServiceBusOptions.ResolveAdministrationConnectionString().md 'Cat\.Messaging\.AzureServiceBus\.CatServiceBusOptions\.ResolveAdministrationConnectionString\(\)') | |
