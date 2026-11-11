@@ -22,6 +22,10 @@ Run this skill only when the owner asks for a commit. Asking for the skill is th
 - **No shortcuts.** Never use `--no-verify`, never skip signing, never amend, rebase or force unless the owner asks. If a hook fails, fix the cause.
 
 ## Steps
+0. Check for a publish that is waiting. Run `git log @{u}..HEAD --format='%h %s'`. These are the commits that are not pushed yet. When one of them has no ` (skip-pub)` in its subject, a push publishes only when the newest commit also has none. A new commit with ` (skip-pub)` would hide the waiting publish. So warn the owner first, before you commit anything:
+   - Name the waiting publishing commits.
+   - Ask whether to push them first, or to make the new commit a publishing one, or to accept that nothing is published.
+   - Commit only after the owner answers. Never decide this alone.
 1. Start from an empty index. `git mv` stages a rename at once, and that would leak into the wrong commit. `git restore --staged .` only unstages and is safe. A rename is found again when you stage both paths of it. Then look at the whole change.
    ```
    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/cat-internal-commit/commit-info.ps1 -Mode Status
