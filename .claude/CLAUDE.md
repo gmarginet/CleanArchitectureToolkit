@@ -58,7 +58,7 @@ The `plans/` folder holds the plans we make before we build.
 - Every plan is made from `plan.template.md` of the `cat-internal-create-plan` skill. It has a header, a status badge and one or more phases. Each phase has a description and numbered open questions.
 - Put only decisions the owner made in the description of a phase. Everything else is an open question.
 - Keep a plan current. When the owner answers a question, fold the answer into the phase description and fix the other plans that mention it.
-- Link a future module plan from the Future modules table in the readme. Link the plan of an existing module from the Plans column of the module overview. The `readme-module-table` skill covers that column.
+- Link a future module plan from the Future modules table in the readme. Link the plan of an existing module from the Plans column of the module overview. The `cat-internal-create-readme` skill covers that column.
 - A module readme never links to the plan of its module. Only the readme links to a plan.
 - The readme of a module must in the end hold everything about how the module works and how to use it. Then the plan can go. Remove a plan only when the owner agrees.
 - Use the `cat-internal-create-plan` skill to create, build or update a plan. It also links the plan from the readme and keeps the other plans in sync. The `cat-internal-verify-docs` skill checks the README tables.
@@ -79,7 +79,7 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
 ### Readmes
 - Use the `cat-internal-create-module-readme` skill when you create or change a module `README.md`. It follows `module-readme.template.md` in the skill folder.
 - Use the `demo-readme` skill when you change the demo app, start or finish a block of the demo architecture, or edit `demo/README.md`. It keeps the demo readme and the hatched and solid boxes of the drawing current.
-- Use the `readme-module-table` skill when you change the module table in the readme.
+- Use the `cat-internal-create-readme` skill when you change the readme, such as the module table, a table of future work or a chapter. It follows `readme.template.md` in the skill folder.
 - Never remove the `<!-- Modules start-->` and `<!-- Modules end-->` markers in the readme.
 - Use the `cat-internal-create-module` skill to start a new module.
 

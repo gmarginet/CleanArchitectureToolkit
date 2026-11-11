@@ -65,7 +65,7 @@ Use this when the owner changes `module-readme.template.md` or `module-readme.pa
 
 ## Afterwards
 - Check that every project in the module has a row in the NuGet and Namespaces tables.
-- If the module is new or its description changed, run the `readme-module-table` skill so the readme row matches the intro.
+- If the module is new or its description changed, run the `cat-internal-create-readme` skill so the readme row matches the intro.
 - Check that the module folder has its `README.md` in `CleanArchitectureToolkit.slnx`.
 
 ## Placeholders
