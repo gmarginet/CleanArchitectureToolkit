@@ -88,7 +88,7 @@ Without Aspire stock is pretend. Any line of more than 50 copies is out of stock
 ## Architecture
 <!-- region start: Architecture-->
 
-The demo is a small system of services, each with its own database. The services are built the same way, with the project structure from the root [README](../README.md#service-project-structure). A client talks to them through an API gateway, which checks the login. Services call each other through the gateway.
+The demo is a small system of services, each with its own database. The services are built the same way, with the project structure from the [readme](../README.md#service-project-structure). A client talks to them through an API gateway, which checks the login. Services call each other through the gateway.
 
 ![Architecture](../resources/schemas/CatDemoArchitecture.excalidraw.svg)
 
