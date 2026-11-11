@@ -50,5 +50,6 @@ Implements [System\.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api
 
 | Methods | |
 | :--- | :--- |
-| [Create\(string, string\)](CatErrorDefinition.Create.Y0S1RWZVWY7EIAVA1URQ5FOD8.md 'Cat\.Responses\.CatErrorDefinition\.Create\(string, string\)') | Creates a new error definition\. |
+| [Create\(string, int, string\)](CatErrorDefinition.Create.md#Cat.Responses.CatErrorDefinition.Create(string,int,string) 'Cat\.Responses\.CatErrorDefinition\.Create\(string, int, string\)') | Creates a new error definition and builds the code from a prefix and a number, as `prefix-number`\. The prefix is not checked, so you are free to choose your own\. CAT itself uses `APPLICATION-AREA`, like `CAT-VAL`\. |
+| [Create\(string, string\)](CatErrorDefinition.Create.md#Cat.Responses.CatErrorDefinition.Create(string,string) 'Cat\.Responses\.CatErrorDefinition\.Create\(string, string\)') | Creates a new error definition\. |
 | [CreateCatError\(object\[\]\)](CatErrorDefinition.CreateCatError.5WX0CKR3WJOIDHOM83UIBF54.md 'Cat\.Responses\.CatErrorDefinition\.CreateCatError\(object\[\]\)') | Creates an [ICatError](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatError.md 'Cat\.Responses\.Abstractions\.ICatError') from this definition, with the given values filled into the message's placeholders\. |

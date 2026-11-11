@@ -60,7 +60,7 @@ public class InventoryStockReservationTests
     public async Task AConflict_ShouldBeOutOfStockForTheBookOfTheIsbnInTheError()
     {
         var handler = new StubHandler(_ => Task.FromResult(Json(HttpStatusCode.Conflict,
-            """{"status":409,"catErrors":[{"code":"CAT-INV-1000","message":"Not enough stock for {Isbn}.","arguments":["9780261103573"]}]}""")));
+            """{"status":409,"catErrors":[{"code":"DEM-INV-1000","message":"Not enough stock for {Isbn}.","arguments":["9780261103573"]}]}""")));
 
         var result = await Reservation(handler).ReserveAsync("20261106-0001", Lines);
 

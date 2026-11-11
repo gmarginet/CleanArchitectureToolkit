@@ -99,7 +99,7 @@ describe('OrderDetailPage', () => {
 
   it('shows the error of a refused cancel', () => {
     vi.mocked(useOrder).mockReturnValue({ isSuccess: true, data: { id: 'o1', orderNumber: 'A-1', status: 'Shipped', lines: [] } } as never)
-    cancelState({ isError: true, error: toApiError(409, { catErrors: [{ code: 'CAT-ORD-1', message: 'Too late.' }] }) })
+    cancelState({ isError: true, error: toApiError(409, { catErrors: [{ code: 'DEM-ORD-1', message: 'Too late.' }] }) })
     renderDetail()
 
     expect(screen.getByRole('alert')).toHaveTextContent('Too late.')

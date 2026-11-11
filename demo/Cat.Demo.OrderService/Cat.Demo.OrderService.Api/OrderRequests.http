@@ -33,7 +33,7 @@ grant_type=password&client_id=cat-demo-cli&username=admin&password=admin
 ### The token picks the user: alice, bob or admin. Without the AppHost, a plain dotnet run has no login and uses the X-Demo-User header, so these requests need the AppHost.
 ### Stock comes from a fake: a line of more than 50 copies is out of stock.
 ### Under the AppHost the payment is taken at the payment service, and a total above 500 euro is declined.
-### Without the AppHost a fake does the same. When the payment service is down, the order is cancelled with CAT-ORD-1006.
+### Without the AppHost a fake does the same. When the payment service is down, the order is cancelled with DEM-ORD-1006.
 ### Prices come from Catalog when Orders runs under the AppHost. Without the AppHost a fake makes the price from the book id.
 
 ### BookSearchRequest (Catalog) => OK (the seeded books, whose ids the orders below use)
@@ -73,7 +73,7 @@ Authorization: Bearer {{bob.response.body.$.access_token}}
 GET {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}
 Authorization: Bearer {{admin.response.body.$.access_token}}
 
-### PlaceOrderRequest => Bad request, out of stock (CAT-ORD-1002). The order is saved with status Cancelled.
+### PlaceOrderRequest => Bad request, out of stock (DEM-ORD-1002). The order is saved with status Cancelled.
 POST {{OrderApi_HostAddress}}/orders HTTP/1.1
 Authorization: Bearer {{alice.response.body.$.access_token}}
 Content-Type: application/json
@@ -84,7 +84,7 @@ Content-Type: application/json
   ]
 }
 
-### PlaceOrderRequest => Bad request, the payment is declined (CAT-ORD-1003). The order is saved with status Cancelled.
+### PlaceOrderRequest => Bad request, the payment is declined (DEM-ORD-1003). The order is saved with status Cancelled.
 ### 100 copies cost far more than the 500 euro limit of the fake, whatever the books cost.
 POST {{OrderApi_HostAddress}}/orders HTTP/1.1
 Authorization: Bearer {{alice.response.body.$.access_token}}
@@ -122,7 +122,7 @@ Content-Type: application/json
 POST {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}/cancel
 Authorization: Bearer {{alice.response.body.$.access_token}}
 
-### CancelOrderRequest => Conflict, the order is already cancelled (CAT-ORD-1004)
+### CancelOrderRequest => Conflict, the order is already cancelled (DEM-ORD-1004)
 POST {{OrderApi_HostAddress}}/orders/{{placed.response.body.$.id}}/cancel
 Authorization: Bearer {{alice.response.body.$.access_token}}
 

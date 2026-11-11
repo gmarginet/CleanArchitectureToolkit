@@ -29,7 +29,7 @@
 ## CatGeneralErrorDefinitions\.GeneralErrorCodePrefix Field
 
 ```csharp
-private const string GeneralErrorCodePrefix = "CAT-GEN-";
+private const string GeneralErrorCodePrefix = "CAT-GEN";
 ```
 
 #### Field Value

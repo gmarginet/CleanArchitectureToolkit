@@ -19,7 +19,7 @@ public class CatApiCallTests
           "title": "Not Found",
           "status": 404,
           "catErrors": [
-            { "code": "CAT-ORD-1005", "message": "Book {BookId} has no price.", "arguments": ["b1", 3, true, null] }
+            { "code": "DEM-ORD-1005", "message": "Book {BookId} has no price.", "arguments": ["b1", 3, true, null] }
           ],
           "catTraceId": "trace-1"
         }
@@ -65,7 +65,7 @@ public class CatApiCallTests
         var response = await CatApiCall.ExecuteAsync<int>(() => throw Failure(404, NotFoundBody), ServiceName);
 
         var error = response.ErrorList.Single();
-        Assert.That(error.Code, Is.EqualTo("CAT-ORD-1005"));
+        Assert.That(error.Code, Is.EqualTo("DEM-ORD-1005"));
         Assert.That(error.Message, Is.EqualTo("Book {BookId} has no price."));
         Assert.That(error.Arguments, Is.EqualTo(new object?[] { "b1", 3L, true, null }));
     }
@@ -76,7 +76,7 @@ public class CatApiCallTests
         // A generated client keeps no body text for a body it could read. It only keeps the model.
         var model = new CatProblemDetails
         {
-            CatErrors = [new CatProblemDetailsItem { Code = "CAT-CTL-1001", Message = "Book {BookId} does not exist.", Arguments = ["b1"] }],
+            CatErrors = [new CatProblemDetailsItem { Code = "DEM-CTL-1001", Message = "Book {BookId} does not exist.", Arguments = ["b1"] }],
         };
 
         var response = await CatApiCall.ExecuteAsync<int>(
@@ -85,7 +85,7 @@ public class CatApiCallTests
 
         var error = response.ErrorList.Single();
         Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.NotFound>());
-        Assert.That(error.Code, Is.EqualTo("CAT-CTL-1001"));
+        Assert.That(error.Code, Is.EqualTo("DEM-CTL-1001"));
         Assert.That(error.Arguments, Is.EqualTo(new object?[] { "b1" }));
     }
 

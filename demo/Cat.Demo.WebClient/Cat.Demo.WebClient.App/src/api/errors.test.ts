@@ -36,12 +36,12 @@ describe('toApiError', () => {
     const error = toApiError(400, {
       title: 'Bad Request',
       catTraceId: 'trace-1',
-      catErrors: [{ code: 'CAT-ORD-1006', message: 'The payment service is unavailable.', arguments: [] }],
+      catErrors: [{ code: 'DEM-ORD-1006', message: 'The payment service is unavailable.', arguments: [] }],
     })
 
     expect(error.status).toBe(400)
     expect(error.message).toBe('The payment service is unavailable.')
-    expect(error.errors).toEqual([{ code: 'CAT-ORD-1006', message: 'The payment service is unavailable.' }])
+    expect(error.errors).toEqual([{ code: 'DEM-ORD-1006', message: 'The payment service is unavailable.' }])
     expect(error.traceId).toBe('trace-1')
   })
 

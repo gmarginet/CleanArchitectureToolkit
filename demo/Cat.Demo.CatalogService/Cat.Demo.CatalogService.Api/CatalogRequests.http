@@ -82,7 +82,7 @@ Content-Type: application/json
   "author": "{{search.response.body.$[0].author}}"
 }
 
-### BookSaveRequest => Bad request, the ISBN is already used by another book (CAT-CTL-1000)
+### BookSaveRequest => Bad request, the ISBN is already used by another book (DEM-CTL-1000)
 POST {{CatalogApi_HostAddress}}/catalog/books HTTP/1.1
 Authorization: Bearer {{admin.response.body.$.access_token}}
 Content-Type: application/json
@@ -130,7 +130,7 @@ hello
 ### BookPriceListRequest => OK (the current price of the first two books of the search above)
 GET {{CatalogApi_HostAddress}}/catalog/books/prices?bookIds={{search.response.body.$[0].id}}&bookIds={{search.response.body.$[1].id}}
 
-### BookPriceListRequest => Not Found, the book does not exist or has no price (CAT-CTL-1001)
+### BookPriceListRequest => Not Found, the book does not exist or has no price (DEM-CTL-1001)
 GET {{CatalogApi_HostAddress}}/catalog/books/prices?bookIds=00000000-0000-0000-0000-000000000001
 
 ### BookPriceListRequest => Bad request, no book ids

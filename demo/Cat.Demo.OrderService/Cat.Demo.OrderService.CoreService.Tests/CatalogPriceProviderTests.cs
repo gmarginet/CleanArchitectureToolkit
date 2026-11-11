@@ -51,7 +51,7 @@ public class CatalogPriceProviderTests
     public async Task NotFound_ReturnsAFailedResponseWithPriceUnavailableForTheMissingBook()
     {
         var handler = new StubHandler(_ => Json(HttpStatusCode.NotFound,
-            $$"""{"status":404,"catErrors":[{"code":"CAT-CTL-1001","message":"Book {BookId} does not exist or has no price.","arguments":["{{BookB}}"]}]}"""));
+            $$"""{"status":404,"catErrors":[{"code":"DEM-CTL-1001","message":"Book {BookId} does not exist or has no price.","arguments":["{{BookB}}"]}]}"""));
 
         var response = await CreateProvider(handler).GetPricesAsync([BookA, BookB]);
 

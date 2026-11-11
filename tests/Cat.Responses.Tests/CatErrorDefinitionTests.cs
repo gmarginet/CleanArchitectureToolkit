@@ -14,6 +14,37 @@ public class CatErrorDefinitionTests
     }
 
     [Test]
+    public void Create_WithAPrefixAndANumber_BuildsTheCodeWithADash()
+    {
+        var definition = CatErrorDefinition.Create("DEM-ORD", 1001, "Price of {book} is missing");
+
+        Assert.That(definition.Code, Is.EqualTo("DEM-ORD-1001"));
+        Assert.That(definition.Message, Is.EqualTo("Price of {book} is missing"));
+    }
+
+    [TestCase("APP")]
+    [TestCase("dem-ord")]
+    [TestCase("Some.Own_Style")]
+    [TestCase("")]
+    public void Create_WithAPrefixAndANumber_DoesNotCheckTheShapeOfThePrefix(string prefix)
+    {
+        var definition = CatErrorDefinition.Create(prefix, 7, "text");
+
+        Assert.That(definition.Code, Is.EqualTo($"{prefix}-7"));
+    }
+
+    [Test]
+    public void Create_WithAPrefixAndANumber_CreatesErrorsWithTheBuiltCode()
+    {
+        var definition = CatErrorDefinition.Create("DEM-ORD", 1001, "Price of {book} is missing");
+
+        var error = definition.CreateCatError("Dune");
+
+        Assert.That(error.Code, Is.EqualTo("DEM-ORD-1001"));
+        Assert.That(error.Arguments, Is.EqualTo(new object?[] { "Dune" }));
+    }
+
+    [Test]
     public void CreateCatError_UsesTheCodeTheMessageAndTheArguments()
     {
         var error = Definition.CreateCatError("Chair");

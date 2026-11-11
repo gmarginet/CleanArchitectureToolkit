@@ -29,7 +29,7 @@
 ## CatValidatorErrorDefinitions\.ValidatorErrorCodePrefix Field
 
 ```csharp
-private const string ValidatorErrorCodePrefix = "CAT-VAL-";
+private const string ValidatorErrorCodePrefix = "CAT-VAL";
 ```
 
 #### Field Value

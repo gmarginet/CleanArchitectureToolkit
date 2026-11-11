@@ -26,6 +26,49 @@
   
 ##### >> [Cat\.Responses Assembly](index.md 'index') >> [Cat\.Responses Namespace](Cat.Responses.md 'Cat\.Responses') >> [CatErrorDefinition Class](CatErrorDefinition.md 'Cat\.Responses\.CatErrorDefinition')
 
+## CatErrorDefinition\.Create Method
+
+| Overloads | |
+| :--- | :--- |
+| [Create\(string, int, string\)](CatErrorDefinition.Create.md#Cat.Responses.CatErrorDefinition.Create(string,int,string) 'Cat\.Responses\.CatErrorDefinition\.Create\(string, int, string\)') | Creates a new error definition and builds the code from a prefix and a number, as `prefix-number`\. The prefix is not checked, so you are free to choose your own\. CAT itself uses `APPLICATION-AREA`, like `CAT-VAL`\. |
+| [Create\(string, string\)](CatErrorDefinition.Create.md#Cat.Responses.CatErrorDefinition.Create(string,string) 'Cat\.Responses\.CatErrorDefinition\.Create\(string, string\)') | Creates a new error definition\. |
+
+<a name='Cat.Responses.CatErrorDefinition.Create(string,int,string)'></a>
+
+## CatErrorDefinition\.Create\(string, int, string\) Method
+
+Creates a new error definition and builds the code from a prefix and a number, as `prefix-number`\.
+The prefix is not checked, so you are free to choose your own\. CAT itself uses `APPLICATION-AREA`, like `CAT-VAL`\.
+
+```csharp
+public static Cat.Responses.CatErrorDefinition Create(string prefix, int number, string message);
+```
+#### Parameters
+
+<a name='Cat.Responses.CatErrorDefinition.Create(string,int,string).prefix'></a>
+
+`prefix` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
+
+The prefix of the code, without the closing dash, such as `DEM-ORD`\.
+
+<a name='Cat.Responses.CatErrorDefinition.Create(string,int,string).number'></a>
+
+`number` [System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')
+
+The number of the error\. Keep it unique within the prefix\.
+
+<a name='Cat.Responses.CatErrorDefinition.Create(string,int,string).message'></a>
+
+`message` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
+
+The message template\. Can contain placeholders filled in when [CreateCatError\(object\[\]\)](CatErrorDefinition.CreateCatError.5WX0CKR3WJOIDHOM83UIBF54.md 'Cat\.Responses\.CatErrorDefinition\.CreateCatError\(object\[\]\)') is called\.
+
+#### Returns
+[CatErrorDefinition](CatErrorDefinition.md 'Cat\.Responses\.CatErrorDefinition')  
+The new error definition, with the code `prefix-number`\.
+
+<a name='Cat.Responses.CatErrorDefinition.Create(string,string)'></a>
+
 ## CatErrorDefinition\.Create\(string, string\) Method
 
 Creates a new error definition\.

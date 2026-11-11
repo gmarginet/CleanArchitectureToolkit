@@ -115,14 +115,14 @@ describe('BasketPage', () => {
     order({
       isError: true,
       error: toApiError(400, {
-        catErrors: [{ code: 'CAT-ORD-1006', message: 'The payment service is unavailable.' }],
+        catErrors: [{ code: 'DEM-ORD-1006', message: 'The payment service is unavailable.' }],
       }),
     })
 
     renderPage()
 
     expect(screen.getByRole('alert')).toHaveTextContent('The payment service is unavailable.')
-    expect(screen.getByText('CAT-ORD-1006')).toBeInTheDocument()
+    expect(screen.getByText('DEM-ORD-1006')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Dune' })).toBeInTheDocument()
   })
 

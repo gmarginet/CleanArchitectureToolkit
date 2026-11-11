@@ -46,4 +46,17 @@ public record CatErrorDefinition
     {
         return new CatErrorDefinition(code, message);
     }
+
+    /// <summary>
+    /// Creates a new error definition and builds the code from a prefix and a number, as <c>prefix-number</c>.
+    /// The prefix is not checked, so you are free to choose your own. CAT itself uses <c>APPLICATION-AREA</c>, like <c>CAT-VAL</c>.
+    /// </summary>
+    /// <param name="prefix">The prefix of the code, without the closing dash, such as <c>DEM-ORD</c>.</param>
+    /// <param name="number">The number of the error. Keep it unique within the prefix.</param>
+    /// <param name="message">The message template. Can contain placeholders filled in when <see cref="CreateCatError"/> is called.</param>
+    /// <returns>The new error definition, with the code <c>prefix-number</c>.</returns>
+    public static CatErrorDefinition Create(string prefix, int number, string message)
+    {
+        return new CatErrorDefinition($"{prefix}-{number}", message);
+    }
 }

@@ -22,7 +22,7 @@ public class CatProblemDetailsTests
             Status = 404,
             Detail = "Look at the CatErrors property.",
             Instance = "/catalog/books/1",
-            CatErrors = [CatError.Create("CAT-CTL-1001", "Book {Id} was not found.", "Id", "b1")],
+            CatErrors = [CatError.Create("DEM-CTL-1001", "Book {Id} was not found.", "Id", "b1")],
             CatTraceId = "trace-1",
         };
 
@@ -37,7 +37,7 @@ public class CatProblemDetailsTests
         Assert.That(received.Instance, Is.EqualTo(sent.Instance));
         Assert.That(received.CatTraceId, Is.EqualTo(sent.CatTraceId));
         Assert.That(received.CatErrors, Has.Count.EqualTo(1));
-        Assert.That(received.CatErrors![0].Code, Is.EqualTo("CAT-CTL-1001"));
+        Assert.That(received.CatErrors![0].Code, Is.EqualTo("DEM-CTL-1001"));
         Assert.That(received.CatErrors[0].Message, Is.EqualTo("Book {Id} was not found."));
         Assert.That(received.CatErrors[0].Arguments, Has.Count.EqualTo(2));
     }

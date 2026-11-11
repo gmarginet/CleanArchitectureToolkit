@@ -7,13 +7,13 @@ describe('ErrorMessage', () => {
   it('shows the message, the code and the trace id', () => {
     const error = toApiError(400, {
       catTraceId: 'trace-7',
-      catErrors: [{ code: 'CAT-ORD-1006', message: 'The payment service is unavailable.' }],
+      catErrors: [{ code: 'DEM-ORD-1006', message: 'The payment service is unavailable.' }],
     })
 
     render(<ErrorMessage error={error} />)
 
     expect(screen.getByRole('alert')).toHaveTextContent('The payment service is unavailable.')
-    expect(screen.getByText('CAT-ORD-1006')).toBeInTheDocument()
+    expect(screen.getByText('DEM-ORD-1006')).toBeInTheDocument()
     expect(screen.getByText('Trace id: trace-7')).toBeInTheDocument()
   })
 
