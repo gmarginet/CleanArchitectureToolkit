@@ -93,7 +93,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **What it does:** Explains the shared concepts of CAT templates: regions, template markers, placeholders and indentation. It holds no task of its own.
 - **How to use it:** You do not run it. Every skill that works with a template file loads it first.
 - **When:** Whenever a template is used or created.
-- **Note:** Skills for the owner of the toolkit start with `cat-internal-`. Skills for developers who use the toolkit start with `cat-`. The older skills are not renamed yet.
+- **Note:** Skills for the owner of the toolkit start with `cat-internal-`. Skills for developers who use the toolkit start with `cat-`.
 
 ### cat-internal-create-header
 - **What it does:** Fills the `Header` region of a new file from `cat-internal-create-header/header.template.md`. When the header template changes, it finds every file that uses it and replaces their `Header` regions. It also covers the generated pages and the `#repo-overview` anchor.
