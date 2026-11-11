@@ -191,7 +191,7 @@ Recommendation: only the first for now. A data filter depends on the data model,
 #### Question 10
 Which `ICatResponse` do we use for no login (401) and for no permission (403)? `Cat.Responses` has both `Unauthorized` and `Forbidden`, and `Cat.Minimal.Api` maps them. The options:
 - **Use them as they are.** `Unauthorized` when `IsAuthenticated` is false, and `Forbidden` when the rule says no. Cost: none.
-- **Add error codes** under a module area such as `CAT-AUT-` (see [Cat.Responses.md](Cat.Responses.md)). Cost: a short list of codes to document, and a clearer message for the client.
+- **Add error codes** under a module area such as `CAT-AUT-` (see [the error code convention](../modules/Cat.Responses/README.md#the-error-code-convention)). Cost: a short list of codes to document, and a clearer message for the client.
 
 Recommendation: use them as they are, with the codes `CAT-AUT-1000` and `CAT-AUT-1001` so a client can match on them like on other errors. This follows the convention of the responses plan.
 <!-- region end: Question 10-->

@@ -123,7 +123,7 @@ Ideas only. None of them is decided. The names are suggestions.
 
 **Data**
 - `cat-add-entity`: an entity on the `Cat.EFCore` base classes, with its configuration and migration.
-- `cat-error-codes`: define error codes with a prefix and keep them unique. See [Cat.Responses.md](Cat.Responses.md).
+- `cat-error-codes`: define error codes with a prefix and keep them unique. See [the error code convention](../modules/Cat.Responses/README.md#the-error-code-convention).
 
 **Check and migrate**
 - `cat-review`: check a service against the conventions: references, registration, response handling.

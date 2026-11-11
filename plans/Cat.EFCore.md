@@ -72,7 +72,7 @@ From the demo:
 - Catalog has query handlers such as `BookSearchQueryHandler` and `BookGetQueryHandler`, and a command handler `BookSaveCommandHandler`.
 - Orders has handlers for customers, orders, payments and the daily counter. `OrderCreateCommandHandler` increases the counter with raw SQL and saves the order and its lines in one transaction. If saving fails, the counter rolls back too. This is the demo case for transactions.
 - The place order workflow runs several commands one after the other: customer, order, payment. They are separate units today. A failed payment cancels the order with a new command and does not roll back.
-- The Catalog save handler catches the unique index error and returns a failed response with `CAT-CTL-1000`. That is a common pattern a base class could offer.
+- The Catalog save handler catches the unique index error and returns a failed response with `DEM-CTL-1000`. That is a common pattern a base class could offer.
 - The demo registers its `DbContext` with a connection string and applies migrations at startup in `Development`.
 - Inventory is database first. Its handlers would use a scaffolded `DbContext` that does not inherit the CAT entity classes.
 
@@ -156,7 +156,7 @@ Recommendation: the overridable property. It matches question 8, where the isola
 
 <!-- region start: Question 4-->
 #### Question 4
-Which database errors become standard responses, and how does the handler name the response? The standard mapping covers errors such as unique key, foreign key and concurrency. The `CAT-CTL-1000` handler in Catalog is one example (the code will become `DEM-CTL-1000`, see [Cat.Responses.md](Cat.Responses.md)). The Inventory reserve catches the SQL Server errors 2627 and 2601 to make a repeated call safe, which is a second example. The options:
+Which database errors become standard responses, and how does the handler name the response? The standard mapping covers errors such as unique key, foreign key and concurrency. The `DEM-CTL-1000` handler in Catalog is one example. The Inventory reserve catches the SQL Server errors 2627 and 2601 to make a repeated call safe, which is a second example. The options:
 - **The handler does it, the base class only offers helpers.** Such as `IsUniqueViolation(exception)`. Cost: every handler writes its own catch.
 - **A virtual method that maps an exception to a response.** The base class catches `DbUpdateException` and calls `MapException`, and the handler returns its own `CatErrorDefinition`. Cost: one more method to learn.
 - **A declared map.** The handler lists "unique key means this definition". Cost: the most code in the base class, and the handler's special cases (the idempotent reserve is a success, not a failure) do not fit.
