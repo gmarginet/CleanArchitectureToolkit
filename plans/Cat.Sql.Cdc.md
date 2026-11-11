@@ -79,7 +79,7 @@ From the `Cat.Auditing` plan:
 #### What exists today
 - The module does not exist yet. It is listed in the repo overview of the readme with the status New.
 - Nothing in the code or the demo uses CDC. No other readme or plan mentions it.
-- `Cat.Messaging` and `Cat.EventProcessor` do not exist yet either.
+- `Cat.Messaging` and `Cat.EventProcessor` exist now.
 - The demo has two possible tables for a showcase. Catalog keeps the price history in a temporal table (`BookPrice`). Inventory has its own database project with SQL scripts.
 
 #### Decided

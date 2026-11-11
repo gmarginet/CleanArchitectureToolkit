@@ -65,7 +65,7 @@ Messaging. `Cat.Messaging` and `Cat.EventProcessor`, the Service Bus emulator in
 - The Service Bus emulator is not in the AppHost, and the box in the drawing is hatched. The demo readme lists it as planned.
 - Orders publishes no `OrderPlaced`. Its event subscribers handle the order events inside the service: the status update, the audit record and the stock release.
 - Inventory has no message listener. The demo readme says it does not listen to `OrderPlaced` yet.
-- `Cat.EventProcessor` does not exist yet. Its plan is [Cat.EventProcessor.md](Cat.EventProcessor.md). `Cat.Messaging` exists, and its plan [Cat.Messaging.md](Cat.Messaging.md) holds the tests against the emulator.
+- `Cat.EventProcessor` and `Cat.Messaging` exist. Their plans, [Cat.EventProcessor.md](Cat.EventProcessor.md) and [Cat.Messaging.md](Cat.Messaging.md), hold what is left, such as the tests against the emulator and the identity from the token.
 
 #### Needs
 The module plans [Cat.Messaging.md](Cat.Messaging.md) and [Cat.EventProcessor.md](Cat.EventProcessor.md) answered and built.

@@ -122,7 +122,7 @@ Claude read the engine in `modules/Cat.FluentWorkflows`.
   - The state lives in the order status. The statuses are `Pending`, `Confirmed` and `Cancelled`.
   - `IPaymentProvider` is answered by the separate payment service, `Cat.Demo.PaymentService`, through `PaymentServiceProvider`. Without an address in the configuration the `FakePaymentProvider` answers.
   - The comment on `IPaymentProvider` points to this plan for a later flow over the Service Bus.
-- `Cat.Messaging`, `Cat.EventProcessor` and `Cat.Scheduling` do not exist yet.
+- `Cat.Messaging` and `Cat.EventProcessor` exist now. `Cat.Scheduling` does not exist yet.
 
 #### What goes where
 This is the proposal for option C, see Question 1.
@@ -155,7 +155,7 @@ The instance record holds: instance id, workflow type name, workflow version, st
 |---|---|
 | `Cat.FluentWorkflows` | The engine to suspend and resume. |
 | `Cat.Messaging` (future) | The wait step sends the request message through it. |
-| `Cat.EventProcessor` (future) | Incoming answers come in through it. |
+| `Cat.EventProcessor` | Incoming answers come in through it. |
 | `Cat.Scheduling` (future) | Looks for instances whose wait timed out. |
 | `Cat.EFCore` (new transaction project) | Saves the state and the outgoing message together. |
 | `Cat.EFCore` | The store. |
