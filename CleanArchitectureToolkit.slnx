@@ -84,6 +84,14 @@
     <Project Path="modules/Cat.EventAggregators/Cat.EventAggregators.Abstractions/Cat.EventAggregators.Abstractions.csproj" />
     <Project Path="modules/Cat.EventAggregators/Cat.EventAggregators/Cat.EventAggregators.csproj" />
   </Folder>
+  <Folder Name="/modules/Cat.EventProcessor/">
+    <File Path="modules/Cat.EventProcessor/README.md" />
+    <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.Abstractions/Cat.EventProcessor.Abstractions.csproj" />
+    <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.AzureServiceBus/Cat.EventProcessor.AzureServiceBus.csproj" />
+    <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.Inbox.EFCore/Cat.EventProcessor.Inbox.EFCore.csproj" />
+    <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.Minimal.Api/Cat.EventProcessor.Minimal.Api.csproj" />
+    <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor/Cat.EventProcessor.csproj" />
+  </Folder>
   <Folder Name="/modules/Cat.Expressions/">
     <File Path="modules/Cat.Expressions/README.md" />
     <Project Path="modules/Cat.Expressions/Cat.Expressions.Abstractions/Cat.Expressions.Abstractions.csproj" />
@@ -153,6 +161,7 @@
     <Project Path="tests/Cat.Commands.Tests/Cat.Commands.Tests.csproj" />
     <Project Path="tests/Cat.Decorators.Tests/Cat.Decorators.Tests.csproj" />
     <Project Path="tests/Cat.EventAggregators.Tests/Cat.EventAggregators.Tests.csproj" />
+    <Project Path="tests/Cat.EventProcessor.Tests/Cat.EventProcessor.Tests.csproj" />
     <Project Path="tests/Cat.Expressions.Tests/Cat.Expressions.Tests.csproj" />
     <Project Path="tests/Cat.Extensions.Tests/Cat.Extensions.Tests.csproj" />
     <Project Path="tests/Cat.FluentWorkflows.Tests/Cat.FluentWorkflows.Tests.csproj" />

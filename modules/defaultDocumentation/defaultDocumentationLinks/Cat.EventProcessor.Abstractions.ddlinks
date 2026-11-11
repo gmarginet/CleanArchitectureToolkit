@@ -1,0 +1,41 @@
+../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/
+P:Cat.EventProcessor.Abstractions.CatIncomingMessage.Body|CatIncomingMessage.Body.md|Body
+P:Cat.EventProcessor.Abstractions.CatIncomingMessage.ContentType|CatIncomingMessage.ContentType.md|ContentType
+P:Cat.EventProcessor.Abstractions.CatIncomingMessage.MessageId|CatIncomingMessage.MessageId.md|MessageId
+P:Cat.EventProcessor.Abstractions.CatIncomingMessage.DeliveryCount|CatIncomingMessage.DeliveryCount.md|DeliveryCount
+P:Cat.EventProcessor.Abstractions.CatIncomingMessage.Properties|CatIncomingMessage.Properties.md|Properties
+N:Cat.EventProcessor.Abstractions|Cat.EventProcessor.Abstractions.md|Cat.EventProcessor.Abstractions
+T:Cat.EventProcessor.Abstractions.CatIncomingMessage|CatIncomingMessage.md|CatIncomingMessage
+F:Cat.EventProcessor.Abstractions.CatMessageContext.CurrentData|CatMessageContext.CurrentData.md|CurrentData
+P:Cat.EventProcessor.Abstractions.CatMessageContext.Current|CatMessageContext.Current.md|Current
+M:Cat.EventProcessor.Abstractions.CatMessageContext.Begin(System.String,System.Int32)|CatMessageContext.Begin.TT5MV4TYP2A7CI4Y46UXF0YGC.md|Begin(string, int)
+M:Cat.EventProcessor.Abstractions.CatMessageContext.#cctor|CatMessageContext.CatMessageContext().md|CatMessageContext()
+T:Cat.EventProcessor.Abstractions.CatMessageContext|CatMessageContext.md|CatMessageContext
+P:Cat.EventProcessor.Abstractions.CatMessageContextData.MessageId|CatMessageContextData.MessageId.md|MessageId
+P:Cat.EventProcessor.Abstractions.CatMessageContextData.DeliveryCount|CatMessageContextData.DeliveryCount.md|DeliveryCount
+M:Cat.EventProcessor.Abstractions.CatMessageContextData.#ctor(System.String,System.Int32)|CatMessageContextData..ctor.P9CX3E3OM944GPBH8K1DZ8659.md|CatMessageContextData(string, int)
+T:Cat.EventProcessor.Abstractions.CatMessageContextData|CatMessageContextData.md|CatMessageContextData
+P:Cat.EventProcessor.Abstractions.CatReceiveOptions.MaxConcurrentCalls|CatReceiveOptions.MaxConcurrentCalls.md|MaxConcurrentCalls
+P:Cat.EventProcessor.Abstractions.CatReceiveOptions.FailureOverrides|CatReceiveOptions.FailureOverrides.md|FailureOverrides
+T:Cat.EventProcessor.Abstractions.CatReceiveOptions|CatReceiveOptions.md|CatReceiveOptions
+P:Cat.EventProcessor.Abstractions.CatReceiveRegistration.MessageType|CatReceiveRegistration.MessageType.md|MessageType
+P:Cat.EventProcessor.Abstractions.CatReceiveRegistration.Options|CatReceiveRegistration.Options.md|Options
+M:Cat.EventProcessor.Abstractions.CatReceiveRegistration.#ctor(System.Type,Cat.EventProcessor.Abstractions.CatReceiveOptions)|CatReceiveRegistration..ctor.YRMTKB5PTTP9B0K9MZEP4O9G4.md|CatReceiveRegistration(Type, CatReceiveOptions)
+T:Cat.EventProcessor.Abstractions.CatReceiveRegistration|CatReceiveRegistration.md|CatReceiveRegistration
+F:Cat.EventProcessor.Abstractions.CatSettlement.Complete|CatSettlement.md#Cat.EventProcessor.Abstractions.CatSettlement.Complete|Complete
+F:Cat.EventProcessor.Abstractions.CatSettlement.Abandon|CatSettlement.md#Cat.EventProcessor.Abstractions.CatSettlement.Abandon|Abandon
+F:Cat.EventProcessor.Abstractions.CatSettlement.DeadLetter|CatSettlement.md#Cat.EventProcessor.Abstractions.CatSettlement.DeadLetter|DeadLetter
+T:Cat.EventProcessor.Abstractions.CatSettlement|CatSettlement.md|CatSettlement
+P:Cat.EventProcessor.Abstractions.CatSettlementResult.Settlement|CatSettlementResult.Settlement.md|Settlement
+P:Cat.EventProcessor.Abstractions.CatSettlementResult.Reason|CatSettlementResult.Reason.md|Reason
+P:Cat.EventProcessor.Abstractions.CatSettlementResult.Description|CatSettlementResult.Description.md|Description
+M:Cat.EventProcessor.Abstractions.CatSettlementResult.#ctor(Cat.EventProcessor.Abstractions.CatSettlement,System.String,System.String)|CatSettlementResult..ctor.8L1211XEWVENYM40Q5RLHWTC.md|CatSettlementResult(CatSettlement, string, string)
+T:Cat.EventProcessor.Abstractions.CatSettlementResult|CatSettlementResult.md|CatSettlementResult
+M:Cat.EventProcessor.Abstractions.ICatMessageReceiver.ReceiveAsync(System.Type,Cat.EventProcessor.Abstractions.CatIncomingMessage,System.Threading.CancellationToken)|ICatMessageReceiver.ReceiveAsync.UJS0V9JE5RJ3PJ8Y16HANUS24.md|ReceiveAsync(Type, CatIncomingMessage, CancellationToken)
+T:Cat.EventProcessor.Abstractions.ICatMessageReceiver|ICatMessageReceiver.md|ICatMessageReceiver
+P:Cat.EventProcessor.Abstractions.ICatReceiveRegistry.Registrations|ICatReceiveRegistry.Registrations.md|Registrations
+T:Cat.EventProcessor.Abstractions.ICatReceiveRegistry|ICatReceiveRegistry.md|ICatReceiveRegistry
+F:Cat.EventProcessor.Abstractions.CatMessageContext.Scope._previous|CatMessageContext.Scope._previous.md|_previous
+M:Cat.EventProcessor.Abstractions.CatMessageContext.Scope.#ctor(Cat.EventProcessor.Abstractions.CatMessageContextData)|CatMessageContext.Scope..ctor.X5O3Y60XKFKTDITNP99YRLW94.md|Scope(CatMessageContextData)
+M:Cat.EventProcessor.Abstractions.CatMessageContext.Scope.Dispose|CatMessageContext.Scope.Dispose().md|Dispose()
+T:Cat.EventProcessor.Abstractions.CatMessageContext.Scope|CatMessageContext.Scope.md|Scope

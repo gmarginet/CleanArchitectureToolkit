@@ -1,0 +1,23 @@
+../../../Cat.EventProcessor/namespaces/Cat.EventProcessor/
+F:Cat.EventProcessor.CatEventProcessorBuilder._registrations|CatEventProcessorBuilder._registrations.md|_registrations
+P:Cat.EventProcessor.CatEventProcessorBuilder.Registrations|CatEventProcessorBuilder.Registrations.md|Registrations
+M:Cat.EventProcessor.CatEventProcessorBuilder.Receive``1(System.Action{Cat.EventProcessor.Abstractions.CatReceiveOptions})|CatEventProcessorBuilder.Receive.FO1Z0GKCKQIMQV1EOMJQ71GB2.md|Receive<TMessage>(Action<CatReceiveOptions>)
+N:Cat.EventProcessor|Cat.EventProcessor.md|Cat.EventProcessor
+T:Cat.EventProcessor.CatEventProcessorBuilder|CatEventProcessorBuilder.md|CatEventProcessorBuilder
+M:Cat.EventProcessor.CatFailureTable.Settle(Cat.Responses.Abstractions.ICatResponse,Cat.EventProcessor.Abstractions.CatReceiveOptions)|CatFailureTable.Settle.L1B9M3KZE5XQ7WSABXXBA7NF2.md|Settle(ICatResponse, CatReceiveOptions)
+M:Cat.EventProcessor.CatFailureTable.DefaultFor(Cat.Responses.Abstractions.CatResponseType)|CatFailureTable.DefaultFor.18UN3XXOX96NR8A4VC7B9EO2C.md|DefaultFor(CatResponseType)
+T:Cat.EventProcessor.CatFailureTable|CatFailureTable.md|CatFailureTable
+F:Cat.EventProcessor.CatMessageReceiver.JsonOptions|CatMessageReceiver.JsonOptions.md|JsonOptions
+F:Cat.EventProcessor.CatMessageReceiver._scopeFactory|CatMessageReceiver._scopeFactory.md|_scopeFactory
+F:Cat.EventProcessor.CatMessageReceiver._registry|CatMessageReceiver._registry.md|_registry
+M:Cat.EventProcessor.CatMessageReceiver.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Cat.EventProcessor.Abstractions.ICatReceiveRegistry)|CatMessageReceiver..ctor.VN7OKZXDRMLEW4KHL6MVCRJA.md|CatMessageReceiver(IServiceScopeFactory, ICatReceiveRegistry)
+M:Cat.EventProcessor.CatMessageReceiver.ReceiveAsync(System.Type,Cat.EventProcessor.Abstractions.CatIncomingMessage,System.Threading.CancellationToken)|CatMessageReceiver.ReceiveAsync.TZBJRK81OY0USJ9WUK29A6AZ9.md|ReceiveAsync(Type, CatIncomingMessage, CancellationToken)
+M:Cat.EventProcessor.CatMessageReceiver.FindOptions(System.Type)|CatMessageReceiver.FindOptions.8TDFTR0NF9XO6ODARQMCYSZW1.md|FindOptions(Type)
+T:Cat.EventProcessor.CatMessageReceiver|CatMessageReceiver.md|CatMessageReceiver
+P:Cat.EventProcessor.ReceiveRegistry.Registrations|ReceiveRegistry.Registrations.md|Registrations
+M:Cat.EventProcessor.ReceiveRegistry.#ctor(System.Collections.Generic.IReadOnlyList{Cat.EventProcessor.Abstractions.CatReceiveRegistration})|ReceiveRegistry..ctor.41HDQ4S13QOWQ93C0BZPDCUB3.md|ReceiveRegistry(IReadOnlyList<CatReceiveRegistration>)
+T:Cat.EventProcessor.ReceiveRegistry|ReceiveRegistry.md|ReceiveRegistry
+F:Cat.EventProcessor.Extensions.ServiceCollectionExtensions.ConfigurationSectionName|ServiceCollectionExtensions.ConfigurationSectionName.md|ConfigurationSectionName
+M:Cat.EventProcessor.Extensions.ServiceCollectionExtensions.AddCatEventProcessor(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Action{Cat.EventProcessor.CatEventProcessorBuilder})|ServiceCollectionExtensions.AddCatEventProcessor.PM7EA6GDJ2N7DJRJL7KBGSO94.md|AddCatEventProcessor(this IServiceCollection, IConfiguration, Action<CatEventProcessorBuilder>)
+N:Cat.EventProcessor.Extensions|Cat.EventProcessor.Extensions.md|Cat.EventProcessor.Extensions
+T:Cat.EventProcessor.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

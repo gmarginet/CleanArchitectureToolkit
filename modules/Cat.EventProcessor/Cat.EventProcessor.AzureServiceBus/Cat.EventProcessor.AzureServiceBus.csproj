@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Azure.Messaging.ServiceBus" />
+        <PackageReference Include="DefaultDocumentation">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Options" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Cat.EventProcessor.Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Cat.Messaging\Cat.Messaging.AzureServiceBus\Cat.Messaging.AzureServiceBus.csproj" />
+        <ProjectReference Include="..\Cat.EventProcessor.Abstractions\Cat.EventProcessor.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="DefaultDocumentation">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+        <PackageReference Include="System.Text.Json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Cat.EventProcessor.Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Cat.Messaging\Cat.Messaging.Abstractions\Cat.Messaging.Abstractions.csproj" />
+        <ProjectReference Include="..\..\Cat.Responses\Cat.Responses.Abstractions\Cat.Responses.Abstractions.csproj" />
+        <ProjectReference Include="..\..\Cat.ServiceRequests\Cat.ServiceRequests.Abstractions\Cat.ServiceRequests.Abstractions.csproj" />
+        <ProjectReference Include="..\Cat.EventProcessor.Abstractions\Cat.EventProcessor.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>
