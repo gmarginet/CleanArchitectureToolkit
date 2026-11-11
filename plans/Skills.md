@@ -156,7 +156,7 @@ Which skills do we build first? The options:
 - **Only the daily work skills** (`cat-add-command`, `cat-add-query`, `cat-add-validator`). Cost: no start skill, but they do not depend on the template (question 3).
 - **The check skill first** (`cat-review`). Cost: it depends on conventions being stable.
 
-Recommendation: the daily work skills first: `cat-add-command`, `cat-add-query` and `cat-add-validator`. All three modules exist and are documented, and nothing blocks them. Add `cat-new-service` when question 3 is answered. Question 1 in [Cat.Commands.md](Cat.Commands.md) changes what `cat-add-command` teaches about results, so build that skill after it is answered.
+Recommendation: the daily work skills first: `cat-add-command`, `cat-add-query` and `cat-add-validator`. All three modules exist and are documented, and nothing blocks them. Add `cat-new-service` when question 3 is answered. The way a command returns a result is decided now, see [Get a result from a command](../modules/Cat.Commands/README.md#get-a-result-from-a-command). `cat-add-command` teaches caller supplied IDs first, a query after the command second, and the typed command third.
 <!-- region end: Question 2-->
 
 <!-- region start: Question 3-->

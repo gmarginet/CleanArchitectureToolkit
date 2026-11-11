@@ -60,7 +60,7 @@ From the readme:
 From the demo:
 - The demo services wrote their own `FakeCommandProcessor` (Catalog, Inventory and Orders) and `FakeQueryProcessor` (Catalog and Orders). They are close to each other and not the same:
   - Catalog: one response for every command, and a list of the commands that were processed.
-  - Orders: a response per command type, a list of the commands, defaults that fill result properties like the new order id and number, and an `Of<T>()` helper.
+  - Orders: a response per command type, a list of the commands, a default answer for the typed create order command that returns the order id and number, and an `Of<T>()` helper.
 - Orders also has `TestDoubles.cs` with fakes for the event aggregator and the other interfaces.
 - The tests check workflows, validators, event subscribers, order statuses and the service request handlers.
 
@@ -149,9 +149,9 @@ Recommendation: the proposed names. They follow the Decided list and keep every 
 
 <!-- region start: Question 3-->
 #### Question 3
-How does the generic fake handle the result properties on a command? Orders fills result properties on commands, as a real handler would. The owner said this depends on how [Cat.Commands.md](Cat.Commands.md) ends. The generic fake can take a function per command type, `Respond<TCommand>(command => response)`, instead of only a fixed response. A function can change the command, so it covers result properties if they stay, and it works for a typed command as well.
+How does the generic fake handle a typed command, one that returns a result? The Commands plan decided on the typed command, and the result properties on commands are gone. The Orders fake now answers the typed create order command with the order id and number, and it has a second pair of `Process` methods for a command with a result. The generic fake can take a function per command type, `Respond<TCommand>(command => response)`, instead of only a fixed response. A function also works for a typed command, since it can build the result from the command.
 
-Recommendation: build the function overload. It is small, and then this question no longer waits for the commands plan.
+Recommendation: build the function overload. It is small, and it covers both command shapes.
 <!-- region end: Question 3-->
 
 <!-- region start: Question 4-->

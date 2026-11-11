@@ -66,7 +66,7 @@ From the readme:
 
 From the existing modules:
 - `Cat.Queries` and `Cat.Commands` define the handler interfaces and the processors. Handlers are registered by scanning assemblies and run through decorators from `Cat.Decorators`. The command module ships a logging decorator you switch on when you need it.
-- A command returns no data, only the outcome as a `ICatResponse`. A failed response is the normal way to say something went wrong, so a transaction decorator has two signals: a failed response and an exception.
+- A command returns an `ICatResponse`, or an `ICatResponse<TResult>` for a typed command. A failed response is the normal way to say something went wrong, so a transaction decorator has two signals: a failed response and an exception. A decorator for commands has to cover both handler shapes, `ICatCommandHandler<TCommand>` and `ICatCommandHandler<TCommand, TResult>`.
 
 From the demo:
 - Catalog has query handlers such as `BookSearchQueryHandler` and `BookGetQueryHandler`, and a command handler `BookSaveCommandHandler`.
