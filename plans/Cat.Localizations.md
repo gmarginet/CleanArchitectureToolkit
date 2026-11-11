@@ -66,29 +66,56 @@
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-What is left before the module is stable? In other words, what must be true before we drop the "Building" badge?
-<!-- region end: Question 1-->
-
 <!-- region start: Question 2-->
 #### Question 2
-Which real implementation do we ship or document first: resource files, `IStringLocalizer` from ASP.NET Core, or a database? Each one is a project a developer can pick or skip.
+Which real provider do we ship or document first? This is the blocking question, and questions 1, 3 and 4 depend on it. Each provider is its own project, so a developer can pick it or skip it.
+- **Resource files (`.resx`) through a small adapter.** Familiar to most .NET developers, works offline, and a translator can edit the files. Cost: strings are compiled in, so a change needs a deploy.
+- **`IStringLocalizer` from ASP.NET Core.** One adapter project over what the framework already has, so the developer gets all its sources. Cost: the project targets the latest .NET instead of `netstandard2.0`, and it pulls in `Microsoft.Extensions.Localization`.
+- **A database provider.** Strings can change without a deploy, and it fits data that lives in the database (question 4). Cost: the most work, a schema and caching, and a choice between `Cat.EFCore` and `Cat.Dapper`.
+- **Only document how to write your own.** The module readme already shows this. Cost: the module stays a contract plus a no-op.
+
+Recommendation: the `IStringLocalizer` adapter first. It is the smallest project, it reuses what developers already know, and it covers resx files too. The database provider can follow when the demo needs it.
 <!-- region end: Question 2-->
 
 <!-- region start: Question 3-->
 #### Question 3
-Where does the current culture come from: the request, the user, or a parameter?
+Where does the current culture come from? Today `ICatLocalizer` has no culture parameter, so the provider must find it itself. The options:
+- **The provider reads `CultureInfo.CurrentUICulture`.** The host sets it per request (ASP.NET Core request localization does this) and the contract stays as it is. Cost: it is implicit, and background work such as a message handler must set the culture by hand.
+- **An `ICatCultureProvider` in `Cat.Localizations.Abstractions`.** The provider asks it, and the developer can plug in the request, the user profile or a fixed value. Cost: one more interface and a default implementation.
+- **A culture parameter on every call.** Explicit. Cost: it changes the contract and clutters every call site.
+
+Recommendation: start with `CurrentUICulture`, because it is the .NET convention and needs no new type. Add the culture provider when the demo needs the user profile, for example in the planned Notifications service, which sends texts without a request.
 <!-- region end: Question 3-->
 
 <!-- region start: Question 4-->
 #### Question 4
-Category names live in the database. How do we localize data that sits in the database: through keys, or by storing a translation per language?
+Category names live in the database. How do we localize data that sits in the database? The options:
+- **Keys.** The database stores a key such as `category.fantasy`, and the localizer turns it into text. Cost: a new category needs a new translation entry too, which is awkward when an admin creates categories.
+- **A translation per language in the database.** A translation table or a column per language. Cost: a schema change in the demo, and the localizer does not help, so it is a pattern for `Cat.EFCore` rather than for this module.
+- **Not localized.** Data stays in one language, and only fixed texts (statuses, emails, messages) go through the localizer. Cost: the demo shows less.
+
+Recommendation: keys for fixed lists, like order statuses and reference data, and no localization for free data like book titles. Category names then become reference data, which already fits `Cat.EFCore`. The owner decides, because it also affects `Cat.EFCore`.
 <!-- region end: Question 4-->
 
 <!-- region start: Question 5-->
 #### Question 5
-Do the codes from `Cat.Responses` and `Cat.Validators` get localized messages through the localizer? See [Cat.Responses.md](Cat.Responses.md).
+Do the error codes from `Cat.Responses` and `Cat.Validators` get localized messages through the localizer? This is the same point as question 4 in [Cat.Responses.md](Cat.Responses.md), so answer it once, here. The options:
+- **No.** The server returns the code and an English message, and the client picks the text from the code. Cost: every client needs its own table of messages.
+- **Yes, in `Cat.Responses`.** The message is looked up by the code as the key. Cost: it couples `Cat.Responses` to this module, which the toolbox rule does not like.
+- **Yes, only in the Api layer.** `Cat.Minimal.Api` translates the messages while it writes the response, and `Cat.Responses` stays as it is. Cost: the Api module gets an optional dependency on the localizer abstractions.
+
+Recommendation: the Api layer option, once there is a real provider (question 2). Park it until then.
 <!-- region end: Question 5-->
+
+<!-- region start: Question 1-->
+#### Question 1
+What must be true before the Building badge goes? Here is a checklist as the exit criteria. Tell Claude what to add or remove:
+- At least one real provider is built and tested (question 2).
+- The culture rule is written in the module readme (question 3).
+- The demo uses the module for at least one text, such as the order statuses.
+- Tests exist for the placeholder logic and for the provider.
+
+Recommendation: keep these four. The module readme then holds everything, and the plan can go.
+<!-- region end: Question 1-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

@@ -95,33 +95,42 @@ The module can be built in two steps. Only the typed command needs a decision fi
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 1-->
 #### Question 1
-Does `Cat.Commands` get a typed command, or only caller supplied IDs and a query after the command?
+Does `Cat.Commands` get a typed command? This is the blocking question. Questions 2 and 4 only matter when the answer is yes, and step 2 of the build waits for it.
 
-A typed command is `ICatCommand<TResult>`, handled by `ICatCommandHandler<TCommand, TResult>`, which returns an `ICatResponse<TResult>`. The owner finds it the cleanest way to stay flexible, but it lets commands read data, which the owner does not like. The risk is a convention problem, not a technical one, since a handler could always read data.
+A typed command is `ICatCommand<TResult>`, handled by `ICatCommandHandler<TCommand, TResult>`, which returns an `ICatResponse<TResult>`. It is the same shape as `ICatQuery<TResult>` in `Cat.Queries`. The owner finds it a clean way to stay flexible, but it lets commands read data, which the owner does not like. The risk is a convention problem, not a technical one, since a handler could always read data.
+- **Yes, build it now.** The README documents three ways: caller supplied IDs, a query after the command, and the typed command. Cost: step 2 of the build, which touches the abstractions, the processor, the logging decorator, `Cat.FluentWorkflows` and the tests.
+- **Not now, add it when a real need shows up.** The README documents two ways. The demo needs only caller supplied IDs and a query after the command, so nothing in this repo is waiting for it. Cost: a developer who needs the result right away has no supported way until we build it. Adding it later is a new interface, not a breaking change.
+- **No, never.** The README says so and explains why. Cost: the toolkit forces a second round trip on developers who do not agree with the preferred way.
 
-Without a typed command, the toolkit supports caller supplied IDs and a query after the command, and nothing else.
+Recommendation: Not now. Step 1 settles the problem the demo has, and nobody has asked for the typed command yet. This keeps the module small and the owner's preference intact, and the door stays open. Questions 2 and 4 then shrink, and question 2 moves to the day we build it.
 <!-- region end: Question 1-->
 
 <!-- region start: Question 2-->
 #### Question 2
-If `Cat.Commands` gets a typed command, which limit do we use to keep it from becoming a read model?
+Only when question 1 is yes: which limit keeps the typed command from becoming a read model?
 - **A rule in the README.** The result holds only what the command made or decided: an ID, a number, a time. It is never a read model. Cost: nothing in code, and nobody checks it.
 - **A narrow result type.** The README suggests a small record per command, such as `OrderCreated(OrderId, OrderNumber, PlacedAt)`. It reads like the answer of a write. Cost: one more type per command.
-- Or both.
+- **Both.** The rule explains the intent, and the record makes it visible in the code. Cost: the same as the record.
+
+Recommendation: Both. The rule costs nothing, and the record makes a wrong use easy to spot in a review.
 <!-- region end: Question 2-->
 
 <!-- region start: Question 3-->
 #### Question 3
-Do we document a query after the command as a supported way? The caller sends the command, then a query for the data. It works well together with caller supplied IDs, because the caller already knows the ID to ask for. Cost: a second round trip. There is no answer yet.
+Do we document a query after the command as a supported way? The caller sends the command, then a query for the data. It works well together with caller supplied IDs, because the caller already knows the ID to ask for.
+- **Yes, as the second way.** The README lists it right after caller supplied IDs. Cost: a second round trip, and the README must say when it fits (a value the database hands out).
+- **No.** Only caller supplied IDs are documented. Cost: the order number in the demo has no clean answer, since the database creates it.
+
+Recommendation: Yes. The owner already prefers it for the demo (question 4), and step 1 of the build does not work without it.
 <!-- region end: Question 3-->
 
 <!-- region start: Question 4-->
 #### Question 4
 Which way does the demo show for the order number? The order number comes from the database, so the caller cannot supply it. The demo has two ways:
-1. The workflow creates the `OrderId`, sends the command, and a query step reads the number by that ID. It shows the preferred way.
-2. A typed command returns the `OrderCreated` record. It shows the typed command.
+1. The workflow creates the `OrderId`, sends the command, and a query step reads the number by that ID. It shows the preferred way. Cost: a new query in the Orders core service.
+2. A typed command returns the `OrderCreated` record. It shows the typed command. Cost: only possible after question 1 is yes.
 
-Recommendation: 1, because it is the owner's preferred way and it needs no change in the module.
+Recommendation: 1, because it is the owner's preferred way and it needs no change in the module. It also means the answer to question 4 is no longer blocked by question 1.
 <!-- region end: Question 4-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

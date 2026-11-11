@@ -117,7 +117,7 @@ The demo has fakes that are not doubles of a CAT interface: `FakePriceProvider`,
 #### Can the module be built?
 Yes, in steps, with no open question blocking the first ones.
 
-1. **Create the module** with the `cat-internal-create-module` skill: the projects `Cat.UnitTesting.Commands` and `Cat.UnitTesting.Queries`, the test project of the module, the solution entries, the readme and the readme row. The module is in the repo overview with the status New now. The row changes to In development and links to the module readme, and the plan stays until the readme says everything.
+1. **Create the module** with the `cat-internal-create-module` skill: the projects `Cat.UnitTesting.Commands` and `Cat.UnitTesting.Queries`, the test project of the module, the solution entries, the readme and the readme row. The module is in the repo overview with the status New now. The row changes to Building and links to the module readme, and the plan stays until the readme says everything.
 2. **Move `Cat.NUnit`.** `git mv tests/Cat.NUnit` to the new project `Cat.UnitTesting.NUnit`, and fix the project reference in 14 repository test projects and 3 demo test projects, and in `CleanArchitectureToolkit.slnx`. Search the old name with `git grep`. It touches every test project, so it is a commit of its own.
 3. **The command and query fakes**, from the demo versions. Replace the three copies in the demo test projects with the package projects.
 4. **The event fakes and the response asserts.**
@@ -140,7 +140,11 @@ Recommendation: only what is needed now, as the list shows. Order: the move of `
 
 <!-- region start: Question 2-->
 #### Question 2
-Do we agree with the project names? The list of doubles proposes `Cat.UnitTesting.<Module>` per module and `Cat.UnitTesting.NUnit` for the base class.
+Do we agree with the project names? The list of doubles proposes `Cat.UnitTesting.<Module>` per module and `Cat.UnitTesting.NUnit` for the base class. It matters because the names become package names. The options:
+- **`Cat.UnitTesting.<Module>`,** for example `Cat.UnitTesting.Commands`. It matches the module name `Cat.UnitTesting`, and the namespace folder structure stays simple. Cost: a long name, and `Cat.UnitTesting.Responses` reads close to the responses module.
+- **`Cat.<Module>.Testing`,** for example `Cat.Commands.Testing`. The fake lives next to the module it fakes. Cost: it spreads the fakes over the other modules, and a module owns test code. It also breaks the decision to have one module named `Cat.UnitTesting`.
+
+Recommendation: the proposed names. They follow the Decided list and keep every fake in one module.
 <!-- region end: Question 2-->
 
 <!-- region start: Question 3-->
@@ -166,7 +170,12 @@ Recommendation: both. The repository tests are the first consumers of the packag
 
 <!-- region start: Question 6-->
 #### Question 6
-Does the moved `Cat.NUnit` become a package in this module? It is not packable today. It targets `net10.0` and references NUnit. Which target framework do the NUnit parts use? The NUnit parts may need the latest .NET, and the neutral parts target `netstandard2.0` where possible.
+Does the moved `Cat.NUnit` become a package in this module? It is not packable today. It targets `net10.0` and references NUnit. Which target framework do the NUnit parts use? The NUnit parts may need the latest .NET, and the neutral parts target `netstandard2.0` where possible. The options:
+- **Yes, a package targeting the latest stable .NET.** `Cat.UnitTesting.NUnit` is packable and holds `UnitTestBase`. Cost: the base class pulls in a service provider and NUnit as dependencies of a package.
+- **Yes, targeting `netstandard2.0`.** Cost: NUnit 4 and `Microsoft.Extensions.DependencyInjection` both work with it, but it limits the code to older APIs for no gain.
+- **No, stay repository only.** Cost: a developer must copy `UnitTestBase`, which this module exists to avoid.
+
+Recommendation: yes, a package targeting the latest stable .NET, as the rule for projects that need more than `netstandard2.0` says. The neutral fakes stay on `netstandard2.0`.
 <!-- region end: Question 6-->
 
 <!-- region start: Question 7-->

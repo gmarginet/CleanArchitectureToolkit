@@ -137,7 +137,12 @@ Recommendation: the table as the default, and the override in the registration, 
 
 <!-- region start: Question 3-->
 #### Question 3
-Does the bus alone retry, with the default count and no delay in the first version? The suggestion: the bus retries, and the module adds no retry loop of its own in the first version. Azure Service Bus redelivers an abandoned message up to its maximum delivery count, which is 10 by default (to check), and then dead letters it. The developer can change the count in the configuration of the service, as decided for the failures in [Cat.Messaging.md](Cat.Messaging.md). Two retry layers multiply, as the plan of [Cat.Resilience.md](Cat.Resilience.md) says about HTTP.
+Does the bus alone retry, with the default count and no delay in the first version? The options:
+- **The bus alone.** Cost: a failing dependency is hit up to ten times in a second.
+- **The bus plus a delay between tries,** by resending the message with a scheduled time. Cost: more code, and it needs scheduled delivery (question 13 in [Cat.Messaging.md](Cat.Messaging.md)).
+- **A retry loop in the module.** Cost: two retry layers multiply, as in the HTTP case.
+
+Recommendation: the bus alone in the first version, the delay later. The suggestion: the bus retries, and the module adds no retry loop of its own in the first version. Azure Service Bus redelivers an abandoned message up to its maximum delivery count, which is 10 by default (to check), and then dead letters it. The developer can change the count in the configuration of the service, as decided for the failures in [Cat.Messaging.md](Cat.Messaging.md). Two retry layers multiply, as the plan of [Cat.Resilience.md](Cat.Resilience.md) says about HTTP.
 
 One cost: the bus redelivers at once and with no delay by default, so a failing dependency gets hit ten times in a second. Waiting between tries needs a delay, which can come later, for example by resending the message with a scheduled time.
 <!-- region end: Question 3-->
@@ -203,7 +208,7 @@ Recommendation: this module only does what is the same for every message: find t
 
 <!-- region start: Question 12-->
 #### Question 12
-Do we build this together with `Cat.Messaging`, and is it one module with two packages or two modules? This is the same question as Question 10 in [Cat.Messaging.md](Cat.Messaging.md).
+Do we build this together with `Cat.Messaging`, and is it one module with two packages or two modules? This is the same question as Question 10 in [Cat.Messaging.md](Cat.Messaging.md), with the options and the recommendation (two modules, built in one phase). Answer it there, and close this one with it.
 <!-- region end: Question 12-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

@@ -88,7 +88,9 @@ The `cat-internal-create-module-readme` and `cat-internal-create-demo-readme` sk
 #### Question 1
 Do we reserve number ranges for kinds of errors, or keep counting up from 1000?
 
-The convention names the prefix, not the number. Today every code starts at 1000 and counts up. A range would reserve numbers for kinds of errors, such as 1000 for unknown and 1001 and up for rules.
+The convention names the prefix, not the number. Today every code starts at 1000 and counts up (`CAT-GEN-1001`, `CAT-VAL-1000` to `CAT-VAL-1017`, and the demo codes). The options:
+- **No ranges.** Count up from 1000 and never reuse a number. Cost: the number says nothing about the kind of error.
+- **Ranges per kind.** For example 1000 for unknown, 1001 and up for rules. Cost: a debate about every new error, and ranges that fill up.
 
 Recommendation: no ranges. The code is only an identifier, and a range invites a debate about every new error. Keep counting up from 1000 and never reuse a number.
 <!-- region end: Question 1-->
@@ -97,7 +99,10 @@ Recommendation: no ranges. The code is only an identifier, and a range invites a
 #### Question 2
 Where does the list of taken area abbreviations live?
 
-Three letters run out fast, and two modules can pick the same ones. `Cat.EventAggregators` and `Cat.EventProcessor` could both choose `EVE` or `EVT`, for example.
+Three letters run out fast, and two modules can pick the same ones. `Cat.EventAggregators` and `Cat.EventProcessor` could both choose `EVE` or `EVT`, for example. The options:
+- **One table in the `Cat.Responses` README.** It has the area, the module and the range in use. Cost: someone must keep it up to date, and a module owner can forget.
+- **One table in the plan, until the convention is final.** Cost: the table moves later, and developers cannot see it.
+- **No list.** Clashes are found in review. Cost: two modules can pick the same area without anybody noticing.
 
 Recommendation: one table in the `Cat.Responses` README, with the area, the module and the range in use. A module owner adds a row when the module gets its first code.
 <!-- region end: Question 2-->
@@ -138,7 +143,7 @@ Recommendation: Option 1. It saves the interpolation, and it is the smallest cha
 
 <!-- region start: Question 4-->
 #### Question 4
-Do codes go with localized messages through `Cat.Localizations`? The owner decided to wait until it is clearer how `Cat.Localizations` works. See [Cat.Localizations.md](Cat.Localizations.md).
+Parked, not blocking: do the codes get localized messages through `Cat.Localizations`? The owner decided to wait until it is clearer how `Cat.Localizations` works. This is the same point as question 5 in [Cat.Localizations.md](Cat.Localizations.md), so answer it once, there. Nothing in this phase depends on it, and the rename and the lists of codes can go ahead.
 <!-- region end: Question 4-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

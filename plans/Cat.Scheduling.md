@@ -180,7 +180,10 @@ Recommendation: any time zone of `TimeZoneInfo`, set per job, with UTC as the de
 
 <!-- region start: Question 13-->
 #### Question 13
-Do we build the timeout part together with `Cat.Sagas`, or first?
+Do we build the timeout part together with `Cat.Sagas`, or first? This follows from question 1, so answer that one first. The options:
+- **Together with `Cat.Sagas`.** Cost: the saga module waits for a scheduler feature that the bus can do better.
+- **First, in this module.** Cost: a second timer next to the bus, and the loop that looks for stored moments.
+- **Neither, the bus holds the timers.** Cost: depends on scheduled messages in `Cat.Messaging` (question 13 there).
 
 Recommendation: neither. Timeouts wait for scheduled messages in `Cat.Messaging`. This module goes first with recurring jobs, because the demo needs the counter cleanup.
 <!-- region end: Question 13-->

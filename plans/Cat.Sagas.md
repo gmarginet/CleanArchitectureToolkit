@@ -228,52 +228,85 @@ Recommendation: **Option C, with Option A as the first step.**
 
 <!-- region start: Question 2-->
 #### Question 2
-What is the name of the module: `Cat.Sagas` or `Cat.WorkflowPersistence`? The saga name says what it is for, but the module also covers any long running workflow. The owner decides.
+What is the name of the module: `Cat.Sagas` or `Cat.WorkflowPersistence`? The name is in the package id, the readme row and the namespaces, so it is costly to change later. The options:
+- **`Cat.Sagas`.** Short, and it says what the demo does (a payment over messages). Cost: the module also covers any long running workflow, such as one that waits for a person, and "saga" suggests compensation, which it does not offer in the first version (question 10).
+- **`Cat.WorkflowPersistence`.** Accurate: it stores and resumes workflows. Cost: long, and it hides the main use, the wait for a message.
+- **`Cat.LongRunningWorkflows`.** Says what a developer wants. Cost: the longest of the three.
+
+Recommendation: `Cat.Sagas`, with a readme sentence that says it covers any long running workflow. The name is the one developers search for, and the first use is a saga.
 <!-- region end: Question 2-->
 
 <!-- region start: Question 3-->
 #### Question 3
-Do we accept an engine change in `Cat.FluentWorkflows` that touches every container step? Do suspend and resume ship before the saga module? See [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md).
+Do we accept an engine change in `Cat.FluentWorkflows` that touches every container step, and do suspend and resume ship before the saga module? This is the same point as question 1 in [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md), where the options and the recommendation (yes, first, tested in memory) are. Answer it there, and this one closes with it.
 <!-- region end: Question 3-->
 
 <!-- region start: Question 4-->
 #### Question 4
-Which step addresses do we use: index paths only, explicit step names, or both? Explicit names are safer but more typing.
+Which step addresses do we use? The address is how a checkpoint says "I stopped at this step". The options:
+- **Index paths only,** such as `3/then/1`. No typing for the developer. Cost: adding a step before the saved one moves the address.
+- **Explicit names only.** Safe when a workflow changes. Cost: every step needs a name, even the ones that never suspend.
+- **Both.** Index paths by default, and a name where the developer gives one. The name wins when it exists. Cost: two rules to explain.
+
+Recommendation: both, with names only required on steps that suspend (the wait steps). That is where a stored address matters, and it keeps the typing small. The change check belongs to question 3 in [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md).
 <!-- region end: Question 4-->
 
 <!-- region start: Question 5-->
 #### Question 5
-What is the version policy? Do we support more than one version of a workflow at the same time, or only fail clearly on a mismatch? May we fail on a workflow version mismatch, or must two versions run side by side?
+What is the version policy for a workflow that changes while instances are stored? This is the same point as question 3 in [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md), where the options are. Answer it there. What stays here is the part of the module: the instance record holds a workflow version, and the module reads it on resume.
+
+Recommendation: the one in the engine plan (fail clearly on a mismatch, no side by side versions in the first version).
 <!-- region end: Question 5-->
 
 <!-- region start: Question 6-->
 #### Question 6
-Which serializer: `System.Text.Json` only, or pluggable from day one? The messaging plan has the same question, see [Cat.Messaging.md](Cat.Messaging.md).
+Which serializer: `System.Text.Json` only, or pluggable from day one? The messaging plan has the same question, see question 2 in [Cat.Messaging.md](Cat.Messaging.md), with the same options. The saga module also serializes the state and the checkpoint, so it follows the answer there. The options:
+- **`System.Text.Json` only,** behind a small internal interface. Cost: a state class that needs polymorphism needs attributes.
+- **Pluggable from day one.** Cost: a seam in every module that serializes, and a test matrix.
+
+Recommendation: `System.Text.Json` only, and an `ISerializer` interface in `Cat.Sagas.Abstractions` so a swap is possible later. Decide again with the messaging plan.
 <!-- region end: Question 6-->
 
 <!-- region start: Question 7-->
 #### Question 7
-Do we need to wait for more than one answer at the same time in the first version? The engine has no parallel branches today. A saga waiting for two answers at once (payment and stock) needs either a wait for several messages or parallel branches. Is it out of scope for the first version?
+Do we need to wait for more than one answer at the same time in the first version? This is the same point as question 2 in [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md), where the options are. Answer it there.
+
+Recommendation: out of the first version. A process that needs payment and stock waits for them one after another, and the demo has no case for two at once.
 <!-- region end: Question 7-->
 
 <!-- region start: Question 8-->
 #### Question 8
-Is it fine that Orders works with Option A until the saga work is ready? Orders already works this way: the state lives in the order status and the payment is an interface. Does it stay like this until the saga work arrives, or must it wait for it?
+Is it fine that Orders works with option A until the saga work is ready? Orders already works this way: the state lives in the order status and the payment is an interface. The options:
+- **Yes, Orders stays as it is** until the saga module is built. Cost: the demo shows the payment as a call, not as a message flow, until step 6 of the build order.
+- **No, Orders waits.** Cost: the demo has no payment at all in the meantime. This is not realistic, because Orders is built and tested already.
+
+Recommendation: yes. Nothing waits for this plan, and the move to a message flow is step 6 of the build order.
 <!-- region end: Question 8-->
 
 <!-- region start: Question 9-->
 #### Question 9
-Who owns the outbox: this module, `Cat.EFCore` or `Cat.Messaging`? The messaging plan proposes outbox projects in `Cat.Messaging`, see [Cat.Messaging.md](Cat.Messaging.md).
+Who owns the outbox: this module, `Cat.EFCore` or `Cat.Messaging`? This is the same point as question 6 in [Cat.Messaging.md](Cat.Messaging.md) and question 9 in [Cat.EFCore.md](Cat.EFCore.md). Answer it once in the messaging plan, where the options are. The saga module only needs the answer: it saves the instance and the outgoing message in one `SaveChanges`, through whichever project owns the outbox.
+
+Recommendation: the messaging plan's recommendation (outbox projects in `Cat.Messaging`, in the first version).
 <!-- region end: Question 9-->
 
 <!-- region start: Question 10-->
 #### Question 10
-How do we handle compensation? Explicit steps in the failure branch for now, and a dedicated feature later?
+How do we handle compensation, for example releasing a stock reservation when the payment fails? The options:
+- **Explicit steps in the failure branch,** written by the developer. Cost: the developer writes the undo steps, but nothing new is needed in the engine.
+- **A dedicated compensation feature,** where a step registers its own undo. Cost: a big design, and the order of the undo steps needs rules.
+
+Recommendation: explicit steps now, and a dedicated feature only when the explicit steps become repetitive. The demo has one case, and explicit steps show it clearly.
 <!-- region end: Question 10-->
 
 <!-- region start: Question 11-->
 #### Question 11
-Do timeouts wait for `Cat.Scheduling`, or does the first version go without them? The scheduling plan recommends that one-off timeouts go through scheduled messages of the bus, not through the scheduler, see [Cat.Scheduling.md](Cat.Scheduling.md). That changes the assumption in the hard problems above that the Scheduler looks for instances past their timeout.
+Do timeouts wait for `Cat.Scheduling`, or does the first version go without them? The scheduling plan recommends that one-off timeouts go through scheduled messages of the bus, not through the scheduler, see question 1 in [Cat.Scheduling.md](Cat.Scheduling.md). That changes the assumption in the hard problems above that the Scheduler looks for instances past their timeout. The options:
+- **Scheduled messages of the bus.** The wait step sends a timeout message with a delivery time, and the answer or the timeout wins. Cost: it depends on scheduled delivery in `Cat.Messaging` (question 13 there), and a scheduled message cannot easily be changed once sent.
+- **The Scheduler looks for instances past their moment.** Cost: it needs `Cat.Scheduling` to support one-off moments, which that plan recommends against.
+- **No timeouts in the first version.** Cost: a saga that never gets its answer waits for ever.
+
+Recommendation: scheduled messages of the bus, and the first saga version may go without timeouts if the bus support is not ready. This follows the scheduling plan, and steps 1 to 3 of the build order do not need it.
 <!-- region end: Question 11-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

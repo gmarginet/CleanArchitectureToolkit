@@ -93,67 +93,124 @@ From the architecture:
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 1-->
 #### Question 1
-Is it a module at all? What does it add beyond a few lines of OpenTelemetry setup? Maybe naming rules, metric definitions and the propagation over messages. It could also become documentation. The module is for projects without Aspire. What is the minimum setup it must give them, and what only extends `ServiceDefaults`?
+Is it a module at all? This is the blocking question. What does it add beyond a few lines of OpenTelemetry setup? The module is for projects without Aspire, so it needs a minimum setup, and the rest only extends `ServiceDefaults`. The options:
+- **A real module.** One extension method sets up traces, metrics and logs with the `Cat.*` sources, the filters and the exporter. Cost: it repeats what `ServiceDefaults` does, and has to keep up with OpenTelemetry versions.
+- **A small module with only what Aspire lacks.** The naming constants, the trace context over messages (question 6), the personal data filter (question 10) and the `Cat.*` source list. The setup stays a few documented lines. Cost: the module is thin.
+- **Documentation only.** A readme chapter with the setup. Cost: no code to reuse, and developers copy and paste.
+
+Recommendation: the small module. The setup is a few lines that every developer knows from the OpenTelemetry docs, and the real value is the shared names and the propagation. It still gives one `AddCatTelemetry` call as a convenience.
 <!-- region end: Question 1-->
 
 <!-- region start: Question 2-->
 #### Question 2
-What is the foundation: OpenTelemetry only, or other backends too? How much of the OpenTelemetry API do we hide, and how much do we expose?
+What is the foundation: OpenTelemetry only, or other backends too? How much of the OpenTelemetry API do we hide, and how much do we expose? The options:
+- **OpenTelemetry only, nothing hidden.** The module uses `ActivitySource` and `Meter` from .NET and the OpenTelemetry SDK. Cost: none, and it is the standard.
+- **Our own abstraction** over tracing. Cost: a lot of surface for no gain, since `System.Diagnostics` is already the abstraction.
+
+Recommendation: OpenTelemetry only, with `System.Diagnostics` as the API in the modules. Other backends plug in as OpenTelemetry exporters.
 <!-- region end: Question 2-->
 
 <!-- region start: Question 3-->
 #### Question 3
-Which exporters do we support: OTLP, and Azure Monitor or Application Insights for Container Apps? Which are built in, and which is the application's choice? Which telemetry backend will you really use in Azure: Application Insights, Grafana, something else?
+Which exporters do we support, and which telemetry backend will you really use in Azure? The options:
+- **OTLP only.** Every backend (Grafana, Aspire dashboard, Azure Monitor through a collector) takes OTLP. Cost: the developer sets up a collector for Azure Monitor.
+- **OTLP plus the Azure Monitor exporter** as an optional project. Cost: one more project, and it targets the latest .NET.
+- **Leave exporters to the application.** The module only sets up the sources. Cost: none, and it is what `ServiceDefaults` does with its OTLP switch.
+
+Recommendation: OTLP built in (switched on by `OTEL_EXPORTER_OTLP_ENDPOINT`, like `ServiceDefaults`), the rest the application's choice. This needs the owner's answer for Azure: Application Insights, Grafana or something else decides whether the optional Azure project is worth it.
 <!-- region end: Question 3-->
 
 <!-- region start: Question 4-->
 #### Question 4
-Which metrics, for which parts? Counts and durations per service request, per command, per query, per workflow, or only what is asked for? Which metrics matter to you first?
+Which metrics, for which parts? The options:
+- **Counts and durations per service request only,** since the service request decorator already has an activity.
+- **Per command, query and workflow too.** Cost: more instruments and more cardinality.
+- **Only on request by the developer,** with a switch per part. Cost: a setting per part.
+
+Recommendation: counts, durations and failure counts per service request, and the same for command and query as an option in the registration. The owner decides which metrics matter first, and this is the recommended minimum.
 <!-- region end: Question 4-->
 
 <!-- region start: Question 5-->
 #### Question 5
-Do we want one naming scheme for activity sources, meters, tags and span names? The `Cat.*` prefix is the start.
+Do we want one naming scheme for activity sources, meters, tags and span names? The `Cat.*` prefix is the start, and today it is not consistent: the workflow source is `Cat.FluentWorkFlows` (see question 4 in [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md)). The options:
+- **Yes, one scheme:** source and meter names equal the module name (`Cat.Messaging`), tags in a `cat.` prefix (`cat.job.name`). Cost: a rename of a few existing names.
+- **No scheme,** each module picks. Cost: a developer cannot predict names.
+
+Recommendation: yes, the module name as the source and meter name, and a short tag list in the module readme. The rename of the workflow source goes with the FluentWorkflows answer.
 <!-- region end: Question 5-->
 
 <!-- region start: Question 6-->
 #### Question 6
-Who carries the trace context over the Service Bus: this module or `Cat.Messaging`?
+Who carries the trace context over the Service Bus: this module or `Cat.Messaging`? The Service Bus SDK already puts the trace context (`Diagnostic-Id`) on a message, see question 5 in [Cat.Messaging.md](Cat.Messaging.md). The options:
+- **`Cat.Messaging`,** since the SDK does it and the module sets the properties. Cost: none for `Cat.Telemetry`.
+- **This module** with a helper that writes and reads the context. Cost: messaging then depends on telemetry, which the toolbox rule does not like.
+
+Recommendation: `Cat.Messaging`. `Cat.Telemetry` only makes sure the `Cat.Messaging` source is listed.
 <!-- region end: Question 6-->
 
 <!-- region start: Question 7-->
 #### Question 7
-How do logs relate to traces? Think of correlation ids and the link between logs and traces.
+How do logs relate to traces? The options:
+- **The built-in .NET link.** The logger adds the trace id and span id to every log record while an activity is on. Cost: none, if the OpenTelemetry logging provider is on.
+- **A correlation id in every log scope too.** Cost: one more id to carry, and the `CorrelationId` of a message (see [Cat.Messaging.md](Cat.Messaging.md)) already covers a business flow.
+
+Recommendation: the built-in link by default, and the correlation id of the message as a log scope in the event processor.
 <!-- region end: Question 7-->
 
 <!-- region start: Question 8-->
 #### Question 8
-What are the defaults and the configuration for sampling?
+What are the defaults and the configuration for sampling? The options:
+- **Always on** (the default of OpenTelemetry in a demo). Cost: expensive in production.
+- **A ratio based sampler,** configured in `appsettings`. Cost: a setting.
+- **Left to the application.** Cost: none, but no default.
+
+Recommendation: always on by default, with the ratio in a setting (`Cat:Telemetry:SamplingRatio`). A demo needs all traces, and a real service sets a ratio.
 <!-- region end: Question 8-->
 
 <!-- region start: Question 9-->
 #### Question 9
-Are health checks in scope or not? `ServiceDefaults` has them today. Should the module add them, or leave them out?
+Are health checks in scope or not? `ServiceDefaults` has them today (the `self` check only). The options:
+- **Out of scope.** They are not telemetry. Cost: a project without Aspire must write its own.
+- **In scope** as an optional project with the readiness and liveness endpoints. Cost: scope creep, and it overlaps with the optional health check in [Cat.EventProcessor.md](Cat.EventProcessor.md).
+
+Recommendation: out of scope. The name is `Cat.Telemetry`, and a health check is a separate concern. Other modules offer their own `IHealthCheck`.
 <!-- region end: Question 9-->
 
 <!-- region start: Question 10-->
 #### Question 10
-Do we want a rule for personal data in telemetry? Personal data must stay out of tags. Is that a guideline or a filter?
+Do we want a rule for personal data in telemetry? Personal data must stay out of tags. The options:
+- **A guideline in the readme.** Cost: nobody enforces it.
+- **A filter** that removes known tags (such as `user.email`) before export. Cost: a list of names that is never complete.
+- **Both.**
+
+Recommendation: both, with a small filter on a short list of tag names. It also helps with question 5 in [Cat.Auditing.md](Cat.Auditing.md).
 <!-- region end: Question 10-->
 
 <!-- region start: Question 11-->
 #### Question 11
-Do we also adopt the tracing filters of `ServiceDefaults`, such as the `/health` paths, in the module?
+Do we also adopt the tracing filters of `ServiceDefaults`, such as the `/health` paths, in the module? The options:
+- **Yes, the same filters,** for health checks and alive endpoints. Cost: none, and the traces look the same in both setups.
+- **No.** Cost: a project without Aspire gets noisy traces.
+
+Recommendation: yes, the same filters, with the paths as a setting.
 <!-- region end: Question 11-->
 
 <!-- region start: Question 12-->
 #### Question 12
-Should the existing activity sources move into this module, or stay in their own decorators?
+Should the existing activity sources move into this module, or stay in their own decorators? The options:
+- **Stay.** Each module owns its source, and this module only lists them. Cost: none.
+- **Move.** Cost: every module that traces then depends on `Cat.Telemetry`, which breaks the toolbox rule.
+
+Recommendation: stay. This module lists the `Cat.*` sources in one place and sets the naming scheme (question 5).
 <!-- region end: Question 12-->
 
 <!-- region start: Question 13-->
 #### Question 13
-In the demo, how do we show "one order across all services" before every service exists? Catalog, Orders, Payment and Inventory exist today. Notifications does not.
+In the demo, how do we show "one order across all services" before every service exists? Catalog, Orders, Payment and Inventory exist today, and Notifications does not. The options:
+- **Show the trace of a place order call** across Orders, Catalog, Inventory and Payment in the Aspire dashboard now. Cost: none, `ServiceDefaults` already does it. It shows the HTTP part, and the message part comes with `Cat.Messaging`.
+- **Wait until Notifications exists.** Cost: no trace story in the demo for a while.
+
+Recommendation: show it now and add a section in the demo readme with a screenshot or the steps. The Notifications and message hops join the same trace later.
 <!-- region end: Question 13-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

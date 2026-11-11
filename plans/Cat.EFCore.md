@@ -82,7 +82,7 @@ From the saga plan:
 #### What exists today
 - `Cat.EFCore` has `Cat.EFCore.Entities` (base classes for regular, temporal and reference data) and `Cat.EFCore.Extensions` (model builder extensions). It has no dependencies on other CAT modules.
 - None of the new projects exist yet: `Cat.EFCore.Queries`, `Cat.EFCore.Commands` and `Cat.EFCore.Commands.Decorators`.
-- In the demo, `OrderCreateCommandHandler` opens its own transaction, saves the order and raises the counter with raw SQL. It is the only handler that needs one.
+- In the demo, three handlers open their own transaction: `OrderCreateCommandHandler` in Orders (the order and the counter, raw SQL), and `StockReserveCommandHandler` and `StockReleaseCommandHandler` in Inventory (conditional updates with raw SQL, and a failed response for out of stock that must undo the lines already reserved). Inventory also catches the unique key errors 2627 and 2601 to make the reserve safe to repeat.
 
 #### Decided
 - **Scope.** Base handlers for queries and commands on EF Core, and a transaction decorator for commands. See question 1, which the owner questions.
@@ -98,8 +98,8 @@ From the saga plan:
 
 #### What the code says about transactions
 These facts were checked for the note of the owner behind question 1.
-- **`SaveChanges` is atomic.** EF Core saves all pending changes in one transaction. A handler that changes entities and calls `SaveChanges` once needs no transaction of its own. Every demo handler but one works this way.
-- **Where `SaveChanges` is not enough.** `ExecuteSql` and `ExecuteUpdate` run at once, outside that transaction, and a handler that calls `SaveChanges` twice makes two units. Only `OrderCreateCommandHandler` in Orders needs an explicit transaction, because the counter is raised with raw SQL before the order is saved.
+- **`SaveChanges` is atomic.** EF Core saves all pending changes in one transaction. A handler that changes entities and calls `SaveChanges` once needs no transaction of its own. The Catalog handlers and most Orders handlers work this way.
+- **Where `SaveChanges` is not enough.** `ExecuteSql` and `ExecuteUpdate` run at once, outside that transaction, and a handler that calls `SaveChanges` twice makes two units. Three demo handlers need an explicit transaction: `OrderCreateCommandHandler` in Orders, because the counter is raised with raw SQL before the order is saved, and the two stock handlers in Inventory, which use raw SQL for every line. The Inventory reserve also returns a failed response after it changed some lines, so a failed response must roll back when the handler opted in to a transaction.
 - **Every command has its own scope.** `CatCommandProcessor` creates a new DI scope for every command it processes. So a command that runs a command, or a workflow that runs several commands, gets a `DbContext` for each. They cannot share a transaction, and "join the outer transaction" does not exist unless something ambient is added, such as `TransactionScope` over several connections. That can escalate to a distributed transaction, which we do not want. To check before it is used.
 - **A decorator does not know the context.** A decorator on `ICatCommandHandler<TCommand>` is open over the command, not over the `DbContext`. A service with two contexts needs a decorator per context, or a marker on the command that names the context.
 - **An outbox needs no decorator.** A row in the outbox table, added to the same `DbContext` as the entities, is saved by the same `SaveChanges`.
@@ -123,13 +123,13 @@ The projects target the latest stable .NET, because they use EF Core. Check this
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 1-->
 #### Question 1
-Do we drop the transaction decorator from the first version, and make the command handler the unit of work, as in option A?
+Do we drop the transaction decorator from the first version, and make the command handler the unit of work, as in option A? This is the blocking question. Questions 2, 3, 8 and 11 follow from it, and `Cat.EFCore.Commands.Decorators` waits for it.
 
-The note of the owner: every decorator wraps every handler, so a transaction decorator would put every command in a transaction. But `SaveChanges` is already the unit of work. Is the decorator needed? Is the command handler the unit of work? What if a command runs a command? See "What the code says about transactions" in the description.
+The note of the owner: every decorator wraps every handler, so a transaction decorator would put every command in a transaction. But `SaveChanges` is already the unit of work. Is the decorator needed? Is the command handler the unit of work? What if a command runs a command? See "What the code says about transactions" in the description. The demo has three handlers that need an explicit transaction today (`OrderCreateCommandHandler`, `StockReserveCommandHandler` and `StockReleaseCommandHandler`), so the case is real.
 
 Options:
-- **A. The command handler is the unit of work, in the base class.** `Cat.EFCore.Commands` has a base class with an abstract method that does the work. The base class calls `SaveChanges` once after a successful response, and saves nothing for a failed one, so a failed response needs no rollback. A handler that needs an explicit transaction opts in, for example with an overridable property. The base class then opens the transaction, runs the work inside the execution strategy of EF Core, and commits on success. Cost: no decorator project, and the transaction logic sits in one place that knows the context type. A handler that does not inherit from the base class gets no transaction.
-- **B. A transaction decorator, as planned.** It wraps every command handler, or only the commands marked with an attribute or an interface. Cost: the context problem above, the nesting question for commands that run commands, and a transaction for commands that do not need one. With the marker it is opt-in, and then it only does what option A does with a property.
+- **A. The command handler is the unit of work, in the base class.** `Cat.EFCore.Commands` has a base class with an abstract method that does the work. The base class calls `SaveChanges` once after a successful response, and saves nothing for a failed one. A handler that needs an explicit transaction opts in, for example with an overridable property. The base class then opens the transaction, runs the work inside the execution strategy of EF Core, and commits on success. It rolls back on a failed response, which the Inventory reserve needs. Cost: no decorator project, and the transaction logic sits in one place that knows the context type. A handler that does not inherit from the base class gets no transaction.
+- **B. A transaction decorator, as planned.** It wraps every command handler, or only the commands marked with an attribute or an interface. Cost: the context problem (a decorator is open over the command, not over the `DbContext`), the nesting question for commands that run commands, and a transaction for commands that do not need one. With the marker it is opt-in, and then it only does what option A does with a property.
 - **C. Both.** The base class saves once. The decorator exists for the few handlers that need more, and is off unless marked. Cost: two ways to do one thing.
 
 Recommendation: A. It follows from the owner's own conclusion that the handler is the unit of work, and from the scope per command. Leave `Cat.EFCore.Commands.Decorators` out of the first version, and add it when a real case needs a transaction around code that is not a base class handler. A workflow with several commands then stays several units, with the cancel on failure approach of the demo. That is also the way a saga thinks: compensate, not roll back. If the owner agrees, the project name `Cat.EFCore.Commands.Decorators` leaves the Decided list.
@@ -137,71 +137,127 @@ Recommendation: A. It follows from the owner's own conclusion that the handler i
 
 <!-- region start: Question 2-->
 #### Question 2
-Does the command base class call `SaveChanges` once after a success response, and can a developer switch that off? The recommendation in question 1 says yes to the first part.
+Does the command base class call `SaveChanges` once after a success response, and can a developer switch that off? Only relevant with option A of question 1. The Inventory handlers call `SaveChanges` themselves today, in the middle of their own transaction. The options:
+- **Always once, no switch.** `SaveChanges` with no pending changes does nothing, so a handler that used `ExecuteUpdate` only pays nothing. Cost: a handler that saves in steps (two `SaveChanges` calls) cannot stop the base class from saving a third time, which is harmless but surprising.
+- **Once, with an overridable property to turn it off.** Cost: one more property that most developers never touch.
+
+Recommendation: always once, no switch. Add the switch when a real handler needs it.
 <!-- region end: Question 2-->
 
 <!-- region start: Question 3-->
 #### Question 3
-How does a handler ask for an explicit transaction: an overridable property, an attribute or a method call? With option A of question 1, an overridable property is the example.
+How does a handler ask for an explicit transaction? Only relevant with option A of question 1. The options:
+- **An overridable property,** such as `protected virtual bool UseTransaction => false`. Cost: a handler cannot decide at run time, but that is rarely needed.
+- **An attribute on the handler class.** Cost: reflection, and the setting is away from the code that needs it.
+- **A method call in the handler,** such as `await InTransactionAsync(work)`. Cost: the handler controls where the transaction starts, which is flexible, but the base class can no longer promise a rollback on a failed response.
+
+Recommendation: the overridable property. It matches question 8, where the isolation level is a property too, and it keeps the base class in control of the commit and the rollback.
 <!-- region end: Question 3-->
 
 <!-- region start: Question 4-->
 #### Question 4
-Which database errors become standard responses, and how does the handler name the response?
+Which database errors become standard responses, and how does the handler name the response? The standard mapping covers errors such as unique key, foreign key and concurrency. The `CAT-CTL-1000` handler in Catalog is one example (the code will become `DEM-CTL-1000`, see [Cat.Responses.md](Cat.Responses.md)). The Inventory reserve catches the SQL Server errors 2627 and 2601 to make a repeated call safe, which is a second example. The options:
+- **The handler does it, the base class only offers helpers.** Such as `IsUniqueViolation(exception)`. Cost: every handler writes its own catch.
+- **A virtual method that maps an exception to a response.** The base class catches `DbUpdateException` and calls `MapException`, and the handler returns its own `CatErrorDefinition`. Cost: one more method to learn.
+- **A declared map.** The handler lists "unique key means this definition". Cost: the most code in the base class, and the handler's special cases (the idempotent reserve is a success, not a failure) do not fit.
 
-The standard mapping covers errors such as unique key, foreign key and concurrency. The `CAT-CTL-1000` handler in Catalog is the first example. The base class could catch the exception and map it, if the handler names the error definition. The code of an error follows the convention of [Cat.Responses.md](Cat.Responses.md).
+Recommendation: the virtual method with the helpers. The Inventory example shows that a developer must be able to turn a unique violation into a success, so a fixed map is too rigid. The SQL Server error numbers live in the helpers, see question 12.
 <!-- region end: Question 4-->
 
 <!-- region start: Question 5-->
 #### Question 5
-Do we handle optimistic concurrency from the start? This means row versions and the retry or conflict response. It is part of the error mapping in question 4.
+Do we handle optimistic concurrency from the start? It means row versions and a response when two writers collide. It is part of the error mapping in question 4. The options:
+- **A conflict response only.** A `DbUpdateConcurrencyException` becomes a failed `Conflict` response, and the caller decides what to do. Cost: no retry.
+- **A conflict response plus a retry.** The base class reloads and tries again a set number of times. Cost: a retry changes the meaning of a command, and it needs a rule for what to merge.
+- **Not in the first version.** Cost: a developer writes the catch alone.
+
+Recommendation: the conflict response only. A retry decides business rules, so it stays with the developer.
 <!-- region end: Question 5-->
 
 <!-- region start: Question 6-->
 #### Question 6
-Must it work with database first services and scaffolded contexts that do not use the CAT entity classes? The generic context type from the decisions should make it work, if the base class asks for `DbContext` only. To check with Inventory.
+Must the base classes work with database first services and scaffolded contexts that do not use the CAT entity classes? The check is done now: `InventoryDbContext` is a scaffolded `partial class` that inherits from `DbContext` only. So a base class that asks for `TDbContext : DbContext` works for all three demo services. The options:
+- **Yes, constrain to `DbContext` only.** Cost: the base class cannot rely on CAT entity features such as audit columns.
+- **No, require the CAT entities.** Cost: Inventory cannot use it, and the toolbox rule is broken.
+
+Recommendation: yes. It is the smallest constraint, and it is what the Decided list already says. As proof, convert one Inventory handler to the base class when it is built.
 <!-- region end: Question 6-->
 
 <!-- region start: Question 7-->
 #### Question 7
-Which paging, sorting and filtering do we need, and do we want it here or in `Cat.Queries`? Also: do we want projection to a result type without loading the entity?
+Which paging, sorting and filtering do we need, and do we want it here or in `Cat.Queries`? Also: do we want projection to a result type without loading the entity? A paged result type already exists: `ICatPagedList` in `Cat.Responses`. The options:
+- **Only the query handler base class now.** Paging comes later. Cost: every handler writes its own `Skip` and `Take`.
+- **A paging extension on `IQueryable`** in `Cat.EFCore.Queries`, which returns an `ICatPagedList`. Cost: one more extension class, and it is EF Core specific, which is fine because the project is.
+- **A paging concept in `Cat.Queries` too** (a paged query interface). Cost: it grows an abstraction that `Cat.Dapper` must follow as well.
+
+Recommendation: the extension on `IQueryable` in `Cat.EFCore.Queries`, and leave `Cat.Queries` as it is. Sorting and filtering stay in the handler. Projection is plain `Select` and needs no support. This does not block the first build.
 <!-- region end: Question 7-->
 
 <!-- region start: Question 8-->
 #### Question 8
-What isolation level is the default, and how can it change per command? With option A of question 1 it is a property of the handler.
+What isolation level is the default, and how can it change per command? Only relevant with option A of question 1. The options:
+- **The database default** (`ReadCommitted` on SQL Server), with an overridable property per handler. Cost: none.
+- **A stricter default** such as `Serializable`. Cost: deadlocks and slow handlers for work that does not need it.
+
+Recommendation: the database default, with the property. Inventory's conditional updates already stay correct at that level.
 <!-- region end: Question 8-->
 
 <!-- region start: Question 9-->
 #### Question 9
-Is an outbox part of the first version, and does it live here or in `Cat.Messaging`?
+Is an outbox part of the first version, and does it live here or in `Cat.Messaging`? The outbox is a table in the service database written by the same `SaveChanges`, a background sender, and inbox IDs on the receiving side. See [Cat.Messaging.md](Cat.Messaging.md), which has the same question, and question 9 in [Cat.Sagas.md](Cat.Sagas.md). Answer it once, in the messaging plan. The options:
+- **In `Cat.Messaging`,** as outbox projects next to the bus project. Cost: the outbox projects reference EF Core, so they target the latest .NET.
+- **In `Cat.EFCore`.** Cost: `Cat.EFCore` then knows what a message is, which the toolbox rule does not like.
+- **Not in the first version.** Cost: a crash between the save and the send can lose a message.
 
-The outbox is a table in the service database written by the same `SaveChanges`, a background sender, and inbox IDs on the receiving side. See [Cat.Messaging.md](Cat.Messaging.md).
+Recommendation: not in the first version of `Cat.EFCore`. It is a messaging concern, and the messaging plan decides it. The base command handler leaves room for it, because a row added to the same context is saved by the same `SaveChanges`.
 <!-- region end: Question 9-->
 
 <!-- region start: Question 10-->
 #### Question 10
-How should `Cat.Dapper` and EF Core share a transaction, or is that left to the handler? A Dapper command has its own scope too, so it would need the connection and the transaction of the EF handler passed in. See [Cat.Dapper.md](Cat.Dapper.md).
+How should `Cat.Dapper` and EF Core share a transaction, or is that left to the handler? A Dapper command has its own scope too, so it would need the connection and the transaction of the EF handler passed in. See [Cat.Dapper.md](Cat.Dapper.md), question 2, and answer it once, there. The options:
+- **Left to the handler.** The handler passes `DbContext.Database.GetDbConnection()` and the current transaction to Dapper. Cost: every developer writes the same lines.
+- **A helper in `Cat.EFCore.Commands`** that exposes the current connection and transaction to the handler. Cost: a small new member on the base class, and Dapper stays unaware of EF Core.
+- **A shared connection factory** in both modules. Cost: a new abstraction and a dependency between the two modules.
+
+Recommendation: the helper on the base class. It keeps the modules apart and costs one property.
 <!-- region end: Question 10-->
 
 <!-- region start: Question 11-->
 #### Question 11
-Does the place order workflow stay several units with the cancel on failure approach, or must it become one transaction? Today the workflow runs the commands for customer, order and payment as separate units, and a failed payment cancels the order with a new command.
+Does the place order workflow stay several units with the cancel on failure approach, or must it become one transaction? Today the workflow runs the commands for customer, order and payment as separate units, and a failed payment cancels the order with a new command. Payment is a call to another service, so it can never join a database transaction anyway.
+- **Stay several units.** Cost: a failed step needs an explicit cancel step, which the demo already has.
+- **One transaction.** Cost: it needs an ambient transaction over several scopes, which can escalate to a distributed transaction, and the payment call cannot take part.
+
+Recommendation: stay several units. It follows from question 1 and from the saga idea of compensating instead of rolling back.
 <!-- region end: Question 11-->
 
 <!-- region start: Question 12-->
 #### Question 12
-Is SQL Server the only database to test against? Temporal tables already tie the demo to it.
+Is SQL Server the only database to test against? Temporal tables already tie the demo to it, and the Inventory handlers use SQL Server error numbers and T-SQL. The options:
+- **SQL Server only,** and say so in the module readme. Cost: a developer on PostgreSQL has no tested path.
+- **SQL Server plus one more,** such as PostgreSQL in a container. Cost: a second test setup and an error mapping per provider.
+- **Provider neutral base classes, SQL Server helpers in a separate project.** Cost: one more project.
+
+Recommendation: SQL Server only for now, with the error number helpers in a clearly named place so another provider can add its own later.
 <!-- region end: Question 12-->
 
 <!-- region start: Question 13-->
 #### Question 13
-How much of the demo handler code moves into the module? Do we start by refactoring the demo handlers, as the Aspire plan does for the API client?
+How much of the demo handler code moves into the module? Do we start by refactoring the demo handlers, as the Aspire plan does for the API client? The modules come from working code, so the demo is the first user. The options:
+- **Refactor first.** Convert `BookSaveCommandHandler` and `OrderCreateCommandHandler` to the new base class in the same change that builds it. Cost: a bigger change.
+- **Build the module, then convert the demo.** Cost: the design is not proven by a real use until later.
+- **Leave the demo handlers as they are.** Cost: the demo does not show the module.
+
+Recommendation: build the module and convert the demo in the same phase, one handler at a time, so every base class is proven by a real handler. Start with the query side, which is not blocked.
 <!-- region end: Question 13-->
 
 <!-- region start: Question 14-->
 #### Question 14
-Does the module use `Cat.Expressions` for compiled member access?
+Does the module use `Cat.Expressions` for compiled member access? `Cat.Expressions` exists, with a compiled member expression cache. The options:
+- **No.** Cost: none, and the module keeps no dependency on it.
+- **Yes, for sorting and member selection by name.** Cost: a dependency, only worth it if the module offers sorting by property name (question 7).
+
+Recommendation: no, until question 7 asks for sorting by name. A module must not force another module on the developer.
 <!-- region end: Question 14-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

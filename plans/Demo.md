@@ -81,16 +81,30 @@ Orders publishes `OrderPlaced` and Inventory consumes it. The emulator box in th
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 1-->
 #### Question 1
-What do the ERDs in the demo readme show? The three ERDs (Catalog, Orders, Inventory) in `demo/README.md` were checked against the entity classes, the `DbContext` indexes, the EF migration and the Inventory SQL scripts. Tables, columns, types and relations all match. One fix is done: `OrderStatus.Code` has a unique index in `OrderDbContext`, so the Orders ERD marks it `UK`. Three points are left for the owner to decide.
+What do the ERDs in the demo readme show? The three ERDs (Catalog, Orders, Inventory) in `demo/README.md` were checked against the entity classes, the `DbContext` indexes, the EF migration and the Inventory SQL scripts. Tables, columns, types and relations all match. One fix is done: `OrderStatus.Code` has a unique index in `OrderDbContext`, so the Orders ERD marks it `UK`. Three small points are left. None of them blocks the phase, and all three are about the same thing: how much detail an ERD shows. Answer them in one go with the recommendation if you agree.
 
 ##### Question 1.1
-Do we keep the `BookPrice` validity columns in the ERD? The Catalog ERD shows `ValidFrom` and `ValidUntil` on `BookPrice`. They are columns in the database but not properties of the class yet, because the class gets them after the release of EF Core 11. The ERD shows the database, so they stay. Keep it that way, or show only the properties of the class?
+Do we keep the `BookPrice` validity columns in the ERD? The Catalog ERD shows `ValidFrom` and `ValidUntil` on `BookPrice`. They are columns in the database but not properties of the class yet, because the class gets them after the release of EF Core 11. The demo uses EF Core 10.0.14 today.
+- **Keep them.** The ERD shows the database. Cost: the ERD and the class differ until EF Core 11.
+- **Remove them.** The ERD shows only the class. Cost: the ERD hides the temporal table, which is the interesting part of `BookPrice`.
+
+Recommendation: keep them, with a comment on the attribute that says the class does not map them yet. Remove the comment when the class gets the properties.
 
 ##### Question 1.2
-Do we make the composite unique constraints in Inventory visible? The scripts have two: `(WarehouseId, Isbn)` on `StockItem` and `(StockItemId, OrderNumber)` on `StockReservation`. The second one makes a repeated reserve call safe. An ERD cannot mark a composite key with `UK`. Do we add a comment on the entity to make it visible?
+Do we make the composite unique constraints in Inventory visible? The scripts have two: `(WarehouseId, Isbn)` on `StockItem` and `(StockItemId, OrderNumber)` on `StockReservation`. The second one makes a repeated reserve call safe. An ERD cannot mark a composite key with `UK`. The options:
+- **A comment on each attribute.** For example a comment "unique with Isbn" on `WarehouseId`. Cost: the comment sits on two attributes.
+- **A sentence under the ERD.** Cost: it is easy to miss, and it can drift away from the diagram.
+- **Leave it out.** Cost: the idempotent reserve is not explained.
+
+Recommendation: a comment on each attribute. It stays with the diagram, and it explains why the repeated reserve call is safe.
 
 ##### Question 1.3
-Do we show nullability in the ERDs? `Payment.PaidAt` is nullable in the class. The ERD does not show nullability for any column.
+Do we show nullability in the ERDs? `Payment.PaidAt` is nullable in the class. The ERD does not show nullability for any column. The options:
+- **Mark only the nullable columns,** with a comment "nullable". Cost: a little noise on a few columns.
+- **Mark every column.** Cost: noise on every column, and the diagram gets harder to read.
+- **Do not show it.** Cost: a reader cannot see that `PaidAt` is empty until the payment is done.
+
+Recommendation: mark only the nullable columns. Not null is the default, so the exceptions are what the reader needs.
 <!-- region end: Question 1-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
@@ -134,7 +148,12 @@ An order confirmed mail is written in the language of the customer. The nightly 
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 1-->
 #### Question 1
-How is Notifications built, and where does it store its data? The decision is made once the Scheduling module is designed. It is not decided yet whether the service has a database, or whether it is built code first or database first.
+Where does Notifications store its data, and how is it built? This is the blocking question of the phase. The decision waits for the design of `Cat.Scheduling` (see [Cat.Scheduling.md](Cat.Scheduling.md)), but it can be made earlier if the answer is "no database". What does Notifications need to remember? Probably which mail was sent for which order, so a repeated message does not send a second mail. The options:
+- **A.** No database. The service sends a mail for every message it gets. Cost: a repeated message sends a second mail, and the service shows nothing about what it sent.
+- **B.** A database, built code first with EF Core migrations, like Orders. Cost: a migration and a schema to keep, but it follows the pattern of the other services.
+- **C.** A database, built database first with scaffolding, like Inventory. Cost: SQL scripts to maintain. It shows the other style, and the demo already has that style in Inventory.
+
+Recommendation: B. It shows idempotent handling (a sent mail table keyed by order and kind), and the code first style is the one the toolkit's `Cat.EFCore` module supports. Pick A if you want Notifications to stay small. Pick C only if you want a second database first example, which Inventory already is.
 <!-- region end: Question 1-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->
@@ -227,7 +246,12 @@ Recommendation: A first, B later if the form should match.
 
 <!-- region start: Question 2-->
 #### Question 2
-Does the sign-in page show the demo users `alice`, `bob` and `admin`, and where do they come from? The passwords are in the demo readme today.
+Does the sign-in page show the demo users `alice`, `bob` and `admin`, and where do they come from? The passwords are in the demo readme today. It only matters for option A or B of question 1. The options:
+- **Show them as buttons that fill the login hint.** A visitor picks a user and the Keycloak form opens with the name filled in. The list comes from the readme values, written into a constant of the app. Cost: the list and the realm can differ.
+- **Show a text only.** The page says where to find the users, with a link to the demo readme. Cost: one more click for a visitor.
+- **Show nothing.** Cost: a visitor must read the readme first.
+
+Recommendation: show them as buttons, but only in the Development environment, because the passwords are known and public. Keep the readme as the source and add a test that the list matches the realm file.
 <!-- region end: Question 2-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 4-->
@@ -257,40 +281,55 @@ The module plans [Cat.Resilience.md](Cat.Resilience.md) and [Cat.Telemetry.md](C
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-When does the demo use `Cat.Resilience`: never, or in a part that runs without Aspire? The demo readme says the demo does not use `Cat.Resilience`, because `ServiceDefaults` covers it.
-<!-- region end: Question 1-->
-
 <!-- region start: Question 2-->
 #### Question 2
-What if the demo treats payment as a service we do not control, like a real payment provider? The answers from the code:
+What if the demo treats payment as a service we do not control, like a real payment provider? This is the blocking question, because question 1 follows from it. The answers from the code:
 - **`ServiceDefaults`.** It is a project in our own solution. A service we do not control does not use it, and does not have to. What matters is the caller. Orders calls `AddServiceDefaults`, so every `HttpClient` in Orders gets the resilience handler, service discovery and the HTTP client tracing, whoever answers. We are not obliged to implement anything in the outside service.
 - **Tracing.** The call shows as a client span in the trace of Orders, with its duration and status. The outside service joins the trace only when it understands the W3C `traceparent` header. A real provider often does not, so the trace stops at the edge. That is realistic and worth showing.
 - **Resilience and tracing with CAT modules.** Yes, this is a good showcase, because retry, timeout and circuit breaker matter most for a service we cannot fix. The payment service would then run without `ServiceDefaults`, and Orders would swap the `ServiceDefaults` handler for `Cat.Resilience` on that one client. `UseFastFailResilience` in Orders already removes the default handler, so the spot exists.
 - **`Cat.Api.Client`.** Yes, with limits. `AddCatApiClient` takes any address as a plain string, and the generated client needs only the OpenAPI document of the provider. Three things change. The call would not go through our gateway, so the rule "services never call each other directly" needs an exception for outside services. The error body of an outside service is not `CatErrorResponse`, so the helper keeps the status code but loses the error codes and arguments. The token of the user must not be forwarded to a third party. A provider key or its own token is used instead.
 
 The options:
-- **A.** Keep payment as it is, a service of ours behind the gateway.
-- **B.** Make payment outside: no `ServiceDefaults`, no gateway, its own error format, and Orders uses `Cat.Resilience` and `Cat.Telemetry` for that call.
-- **C.** Do B later as a second payment provider next to the first, selected by configuration.
+- **A.** Keep payment as it is, a service of ours behind the gateway. Cost: the demo never shows `Cat.Resilience` or `Cat.Telemetry`, and phase 5 shrinks to documentation.
+- **B.** Make payment outside: no `ServiceDefaults`, no gateway, its own error format, and Orders uses `Cat.Resilience` and `Cat.Telemetry` for that call. Cost: the first provider changes, and the error codes of payment are lost to the client.
+- **C.** Do B later as a second payment provider next to the first, selected by configuration. Cost: a second provider to build and a switch to maintain.
 
-Recommendation: C. The `IPaymentProvider` interface already hides the provider, so a second one costs little. The first provider stays as it is and keeps working. The outside variant becomes the showcase for `Cat.Resilience` and `Cat.Telemetry` once those modules exist. It also answers the question above on when the demo uses `Cat.Resilience`.
+Recommendation: C. The `IPaymentProvider` interface already hides the provider, so a second one costs little. The first provider stays as it is and keeps working. The outside variant becomes the showcase for `Cat.Resilience` and `Cat.Telemetry` once those modules exist.
 <!-- region end: Question 2-->
+
+<!-- region start: Question 1-->
+#### Question 1
+When does the demo use `Cat.Resilience`: never, or in a part that runs without Aspire? The demo readme says the demo does not use `Cat.Resilience`, because `ServiceDefaults` covers it. This follows from question 2: with option A the answer is never, with option C it is the outside payment provider. Answer question 2 and this one is closed. The demo readme then needs one sentence about it.
+<!-- region end: Question 1-->
 
 <!-- region start: Question 3-->
 #### Question 3
-What do we do about the development certificate? The dashboard says "No trusted development certificate was found" when the machine has not run `dotnet dev-certs https --trust`. It is harmless now, because the AppHost, the dashboard and the services all run on HTTP. It matters once something uses HTTPS. Do the run steps of the demo readme then tell a developer to trust the certificate, and does the AppHost keep `ASPIRE_ALLOW_UNSECURED_TRANSPORT`?
+What do we do about the development certificate? The dashboard says "No trusted development certificate was found" when the machine has not run `dotnet dev-certs https --trust`. It is harmless now, because the AppHost, the dashboard and the services all run on HTTP (the AppHost launch settings set `ASPIRE_ALLOW_UNSECURED_TRANSPORT`). It matters once something uses HTTPS. The options:
+- **Keep HTTP and add one note.** The run steps of the demo readme say the warning is harmless. Cost: the demo shows no HTTPS.
+- **Tell the developer to trust the certificate** (`dotnet dev-certs https --trust`) and move the demo to HTTPS. Cost: one more setup step, and the unsecured transport setting goes away.
+- **Do nothing.** Cost: a new developer sees the warning and wonders.
+
+Recommendation: keep HTTP with one note in the run steps. The warning goes away by itself when something needs HTTPS, and then the step moves to the run steps.
 <!-- region end: Question 3-->
 
 <!-- region start: Question 4-->
 #### Question 4
-Do all three failure switches of the payment service hold when the call goes through the gateway? The outage was tried live: with it on, the order ended after about 9 seconds. As far as we know, the latency and the error percentage were not tried through the gateway. Test them with one order each, and check that the gateway does not add its own timeout or retry that changes the result. Where do we write down the outcome: in the payment chapter of the demo readme?
+Do all three failure switches of the payment service hold when the call goes through the gateway? The outage was tried live: with it on, the order ended after about 9 seconds. As far as we know, the latency and the error percentage were not tried through the gateway. The work is one order each, and a check that the gateway does not add its own timeout or retry that changes the result. Where do we write down the outcome?
+- **In the payment chapter of the demo readme.** Cost: the readme gets a table of results that can go out of date.
+- **As a test.** An integration test through the gateway. Cost: it needs the AppHost, so it is slow.
+- **Not at all.** Check once and move on. Cost: nobody knows later what was tried.
+
+Recommendation: check once by hand, and write the three results as one line each in the payment chapter of the demo readme. This needs the owner to run the AppHost, as Claude does not start it.
 <!-- region end: Question 4-->
 
 <!-- region start: Question 5-->
 #### Question 5
-Should the health checks of the services cover their databases? Today every service answers `/health` (ready) and `/alive` (running) from one check, `self`, in `ServiceDefaults`, and that check is always healthy. The AppHost and the gateway watch `/health`, so a service with a database that is down still looks healthy. Add a database check per service, or keep the checks as they are?
+Should the health checks of the services cover their databases? Today every service answers `/health` (ready) and `/alive` (running) from one check, `self`, in `ServiceDefaults`, and that check is always healthy. The AppHost and the gateway watch `/health`, so a service with a database that is down still looks healthy. The options:
+- **Add a database check per service,** on the ready endpoint only. Cost: a package per service (`AspNetCore.HealthChecks.SqlServer` or the EF Core check), and the services restart or stay out of the gateway while the database starts.
+- **Add one check in `ServiceDefaults` that takes any `DbContext`.** Cost: `ServiceDefaults` must know about EF Core, and Inventory is built database first.
+- **Keep it as it is.** Cost: a service shows healthy while its database is down.
+
+Recommendation: a database check per service on `/health` only, and keep `/alive` as it is. It is a real pattern for developers to copy, and it is small. Do it in this phase only if the owner wants it, since it does not need the modules.
 <!-- region end: Question 5-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 5-->

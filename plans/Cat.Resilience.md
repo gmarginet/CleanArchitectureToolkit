@@ -87,57 +87,110 @@ From the module conventions:
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 1-->
 #### Question 1
-The module is for projects without Aspire. May we depend on Polly for that? The foundation can be Polly and `Microsoft.Extensions.Resilience`, or our own small policies. Polly is the standard, but it is a dependency.
+The module is for projects without Aspire. May we depend on Polly for that? This is the blocking question, and questions 4, 6, 8 and 11 follow from it. `Microsoft.Extensions.Http.Resilience`, which `ServiceDefaults` uses, is built on Polly v8 already, and `Polly.Core` targets `netstandard2.0` (to verify when the project is added). The options:
+- **Polly v8 (`Polly.Core`) directly.** The standard, well known, supports retry, circuit breaker, timeout and fallback as one pipeline. Cost: a dependency, and its API leaks into any extension point we expose.
+- **`Microsoft.Extensions.Resilience`** (Polly with the .NET registration and telemetry). Cost: the latest .NET, and a bigger set of packages.
+- **Our own small policies.** Cost: a lot of subtle code (jitter, breaker states) that Polly already solved.
+
+Recommendation: Polly v8 behind our own small settings classes, so the decorators expose `CatRetryOptions` and not Polly types. The toolbox rule is satisfied because a developer who does not use the module pulls in nothing.
 <!-- region end: Question 1-->
 
 <!-- region start: Question 2-->
 #### Question 2
-Do we want the decorators on handlers, on `HttpClient`, or both? If on handlers: query and command handlers in the infrastructure, which is where integrations live, or service requests?
+Do we want the decorators on handlers, on `HttpClient`, or both? The options:
+- **On handlers** (query and command handlers in the infrastructure, which is where integrations live). Cost: a retry of a whole handler, which may include a database write.
+- **On service requests.** Cost: too coarse, because a request can contain several calls.
+- **On `HttpClient`** (a message handler). Cost: only covers HTTP, and it is what `ServiceDefaults` does already.
+- **Both handlers and `HttpClient`.** Cost: the retry on retry problem (question 5).
+
+Recommendation: decorators on query and command handlers in the infrastructure, which is the layer that talks to integrations, and an optional `HttpClient` helper in a separate project for projects without Aspire. Nothing on service requests.
 <!-- region end: Question 2-->
 
 <!-- region start: Question 3-->
 #### Question 3
-How should a command say it is safe to retry? A retried command may run twice. Only queries and idempotent commands may be retried.
+How should a command say it is safe to retry? A retried command may run twice. Only queries and idempotent commands may be retried. The options:
+- **A marker on the command,** such as `ICatRetryable`. Cost: the command depends on this module, or on a shared abstraction.
+- **A registration,** such as `AddRetry<PaymentCommand>()`. Cost: the rule is away from the command, but the core stays free of the module.
+- **Queries only.** Cost: a command to an unreliable service gets no retry.
+
+Recommendation: the registration, and queries by default. A command is never retried unless a developer lists it, which is the safe default, and it follows the rule that the core knows no modules.
 <!-- region end: Question 3-->
 
 <!-- region start: Question 4-->
 #### Question 4
-Which failures count: exceptions, failed responses, or specific error codes? A 404 should not be retried.
+Which failures count: exceptions, failed responses, or specific error codes? A 404 should not be retried. The options:
+- **Exceptions only.** Cost: a failed `ICatResponse` such as `InternalServerError` is not retried, though it is often transient.
+- **Exceptions and the failed response types that are transient** (`InternalServerError` and a gateway timeout, not `NotFound`, `BadRequest`, `Conflict`). Cost: a table to document, like the one in [Cat.EventProcessor.md](Cat.EventProcessor.md) for failed messages.
+- **A predicate per policy.** Cost: more code per policy.
+
+Recommendation: exceptions plus `InternalServerError`, with a predicate override. It matches the table of the event processor plan, so a developer learns one rule for "which failures are transient".
 <!-- region end: Question 4-->
 
 <!-- region start: Question 5-->
 #### Question 5
-How do we prevent retries on retries with the `ServiceDefaults` handler? The `HttpClient` handler retries, and this decorator retries on top. Three times three is nine calls. Should the module detect it, or do we document it?
+How do we prevent retries on retries with the `ServiceDefaults` handler? The `HttpClient` handler retries, and this decorator retries on top. Three times three is nine calls. The options:
+- **Document it.** One layer per call: with Aspire use the handler of `ServiceDefaults`, without Aspire use this module. Cost: a developer can still mix them.
+- **Detect it.** The module checks whether the `HttpClient` has the standard handler and warns at startup. Cost: it must know about `Microsoft.Extensions.Http.Resilience`.
+- **A shared "already retried" marker** on the request. Cost: a convention across layers.
+
+Recommendation: document it, plus a startup warning when the module is registered next to the standard handler. This follows the rule in the Decided list (with Aspire skip the module).
 <!-- region end: Question 5-->
 
 <!-- region start: Question 6-->
 #### Question 6
-Do we need fallbacks and timeouts in the first version, or only retry and circuit breaker?
+Do we need fallbacks and timeouts in the first version, or only retry and circuit breaker? The options:
+- **Retry and circuit breaker only,** as the goal says. Cost: a developer adds a timeout with the framework.
+- **Add a timeout.** Cost: small, and Polly has it as a strategy.
+- **Add a fallback too.** Cost: a fallback is business logic (what is a good default?), so it needs a design.
+
+Recommendation: retry, circuit breaker and timeout. A call without a timeout is not safe to retry, and Polly makes it small. Leave the fallback out.
 <!-- region end: Question 6-->
 
 <!-- region start: Question 7-->
 #### Question 7
-Where do policies live: attributes, code or `appsettings`? Is there one default, named policies, or a policy per handler type?
+Where do policies live: attributes, code or `appsettings`? Is there one default, named policies, or a policy per handler type? The options:
+- **Code in the registration,** with defaults. Cost: a change needs a deploy.
+- **`appsettings` with named policies,** and the registration refers to a name. Cost: a settings class and names to keep in step.
+- **Attributes on the handler.** Cost: the handler depends on this module.
+
+Recommendation: one default policy, named policies in `appsettings`, and the registration says which name a handler uses. This is the same pattern as the schedule settings in [Cat.Scheduling.md](Cat.Scheduling.md) (code default, configuration override).
 <!-- region end: Question 7-->
 
 <!-- region start: Question 8-->
 #### Question 8
-Does the module tell `Cat.Telemetry` about every retry and break? Retries and breaker changes are logged. Metrics and traces depend on `Cat.Telemetry`.
+Does the module tell `Cat.Telemetry` about every retry and break? Retries and breaker changes are logged. Metrics and traces depend on `Cat.Telemetry`. The options:
+- **Log only.** Cost: no numbers.
+- **Metrics through `System.Diagnostics.Metrics`** with the source name `Cat.Resilience`, no dependency on `Cat.Telemetry`. Cost: a small meter class.
+
+Recommendation: logs plus the metrics, and no dependency on `Cat.Telemetry`. Any OpenTelemetry setup picks them up, as in the plans of `Cat.Messaging` and `Cat.Caching`.
 <!-- region end: Question 8-->
 
 <!-- region start: Question 9-->
 #### Question 9
-`Cat.Api.Client` stays with the `HttpClient` handler of `ServiceDefaults` for now, see the [Resilience chapter](../modules/Cat.Api.Client/README.md#resilience) of the readme of `Cat.Api.Client`. How does a project without Aspire use this module with that client?
+`Cat.Api.Client` stays with the `HttpClient` handler of `ServiceDefaults` for now, see the [Resilience chapter](../modules/Cat.Api.Client/README.md#resilience) of the readme of `Cat.Api.Client`. How does a project without Aspire use this module with that client? The options:
+- **The `HttpClient` helper of question 2.** The developer adds it to the builder that `AddCatApiClient` returns. Cost: it needs `AddCatApiClient` to return the `IHttpClientBuilder` (check this).
+- **A decorator on the handler that uses the client.** Cost: a retry of the whole handler.
+
+Recommendation: the `HttpClient` helper. It is the same place `ServiceDefaults` hooks in, so the project without Aspire gets the same shape.
 <!-- region end: Question 9-->
 
 <!-- region start: Question 10-->
 #### Question 10
-What is the scope of the circuit breaker state: per process, per handler or per target? Shared across instances is probably not needed.
+What is the scope of the circuit breaker state: per process, per handler or per target? Shared across instances is probably not needed. The options:
+- **Per target** (a service address or integration name). A failing service opens its own circuit and the others stay closed. This is how `ServiceDefaults` works too (see [Demo.md](Demo.md#phase-5)). Cost: a key to define.
+- **Per handler type.** Cost: two handlers that call the same service have separate circuits.
+- **Per process, one for all.** Cost: one failing service opens the circuit for all.
+
+Recommendation: per target, per process. It fits what `ServiceDefaults` does, and sharing across instances is not needed for a first version.
 <!-- region end: Question 10-->
 
 <!-- region start: Question 11-->
 #### Question 11
-Tests need to move time. How do we support `TimeProvider`?
+Tests need to move time. How do we support `TimeProvider`? The options:
+- **Pass the `TimeProvider` into the Polly pipeline** (Polly v8 supports it). Tests use `FakeTimeProvider`. Cost: none.
+- **Not supported.** Cost: tests wait for real delays.
+
+Recommendation: pass it in. It is the same answer as question 11 in [Cat.Scheduling.md](Cat.Scheduling.md), and `Cat.UnitTesting` points to the Microsoft `FakeTimeProvider`.
 <!-- region end: Question 11-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

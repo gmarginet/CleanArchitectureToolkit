@@ -89,32 +89,29 @@ The module cannot be built yet. The mechanism and the default order need the own
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 1-->
 #### Question 1
-Which mechanism do we use to say where a decorator belongs: an order number on the registration, an attribute or named stages?
+Which mechanism do we use to say where a decorator belongs: an order number on the registration, an attribute or named stages? This is the blocking question. Questions 2, 4 and 5 assume option A.
 
 The convention needs a position per decorator. Options:
 - **A. An order number on the registration.** `AddDecorator` gets an `order` argument. The module that ships a decorator passes its default. The factory sorts by order, and by the sequence of the calls when the numbers are equal. The numbers come from named constants in `Cat.Decorators.Abstractions`, spaced out (such as 100, 200, 300), so a developer can slot an own decorator in between. Cost: a new argument, and a list of constants that every module shares.
 - **B. An attribute on the decorator class.** `[CatDecoratorOrder(...)]` sits with the class, so the position is next to the code it describes. Registration stays as it is. Cost: the factory reads attributes by reflection, and an override still needs a second path.
-- **C. Named stages instead of numbers.** A small enum such as `Tracing`, `Logging`, `Authorization`, `Validation`, `Caching` and `Transaction`. Reads well, but a developer cannot slot something between two stages, unless the enum has an `Order` offset as well.
+- **C. Named stages instead of numbers.** A small enum such as `Tracing`, `Logging`, `Authorization`, `Validation`, `Caching` and `Transaction`. Reads well, but a developer cannot slot something between two stages, unless the enum has an `Order` offset as well. Cost: the enum lives in the abstractions, so every new kind of decorator needs a new release of that project.
 
 Recommendation: A. It is the smallest change and the same mechanism does both jobs: the default of a module and the override of a developer. B hides the order in a class, which makes an override harder to see.
 <!-- region end: Question 1-->
 
 <!-- region start: Question 2-->
 #### Question 2
-How does a developer override the order: an optional argument on the `Add...Decorator` method, a builder call, or both?
-
-With A, two ways, and the developer could have both:
-- the `Add...Decorator` method of a module takes an optional `order`, such as `AddCatServiceRequestsModuleValidationDecorator(order: 250)`,
-- or the builder has a call that changes the order of a decorator type already added, `SetDecoratorOrder(typeof(ValidationDecorator<,>), 250)`.
+How does a developer override the order? Only relevant with option A of question 1. The options:
+- **An optional `order` argument on the `Add...Decorator` method,** such as `AddCatServiceRequestsModuleValidationDecorator(order: 250)`. Cost: every module extension needs the argument.
+- **A builder call that changes the order of a decorator type already added,** such as `SetDecoratorOrder(typeof(ValidationDecorator<,>), 250)`. Cost: a second way to do the same thing, and a call that fails when the type was not added yet.
+- **Both.** Cost: two ways to learn and to document.
 
 Recommendation: the optional `order` argument. It is the only one a developer needs to find, and it shows at the place where the decorator is added.
 <!-- region end: Question 2-->
 
 <!-- region start: Question 3-->
 #### Question 3
-Is the proposed default order right: tracing, logging, authorization, validation, caching, transaction?
-
-A first proposal, from the outside in, from what the plans say:
+Is the proposed default order right: tracing, logging, authorization, validation, caching, transaction? From the outside in, from what the plans say:
 1. tracing (`ActivitySource`),
 2. logging,
 3. authorization, before validation does any work (see [Cat.Authorization.md](Cat.Authorization.md)),
@@ -122,28 +119,41 @@ A first proposal, from the outside in, from what the plans say:
 5. caching, for queries only,
 6. transaction, for commands only and next to the handler, so it never wraps the cache (see [Cat.EFCore.md](Cat.EFCore.md)).
 
-The demo adds validation, logging and tracing in that sequence today, which gives tracing, logging, validation from the outside in. So this proposal matches what the demo does now. Auditing has no place yet, see the plan of that module. Confirm or change this order.
+The demo adds validation, logging and tracing in that sequence today, which gives tracing, logging, validation from the outside in. So the proposal matches what the demo does now. Two points are worth a look before you confirm:
+- **Auditing has no place yet.** The plan of `Cat.Auditing` does not say. It probably belongs after authorization and next to the transaction, so a failed save is not recorded as a change. Cost of guessing now: a wrong constant later is a breaking change in behavior.
+- **Resilience has no place yet.** A retry decorator must wrap the transaction or sit outside it, never inside, or a retry runs in a rolled back transaction. See [Cat.Resilience.md](Cat.Resilience.md).
+
+Recommendation: confirm the six, leave a gap in the numbers for auditing and resilience (such as 100 for tracing, 200 for logging, 300 for authorization, 400 for validation, 500 for caching, 600 for transaction, and nothing yet at the gaps), and decide those two when their plans are answered.
 <!-- region end: Question 3-->
 
 <!-- region start: Question 4-->
 #### Question 4
-Which position gets a decorator of the developer without an order? Options: next to the handler, as the innermost, or at a middle number.
+Which position gets a decorator of the developer without an order? Only relevant with option A of question 1. The options:
+- **Next to the handler, the innermost.** Cost: it sees the same transaction, but it runs after caching, so it does not see cached queries.
+- **A middle number,** after validation and before the transaction. It sees valid input and runs inside the transaction. Cost: a developer must know the number to move it.
+- **The outermost.** Cost: it runs before authorization and validation, so it sees invalid and unauthorized requests.
 
-Recommendation: a middle number, after validation and before the transaction, so it sees valid input and runs inside the transaction. A developer who wants another place passes an order.
+Recommendation: a middle number, after validation and before the transaction. A developer who wants another place passes an order.
 <!-- region end: Question 4-->
 
 <!-- region start: Question 5-->
 #### Question 5
-Do we add a startup check, and should it warn about equal order numbers?
+Do we add a startup check, and should it warn about equal order numbers? A decorator mistake shows up at the first request today. The options:
+- **A startup check for valid registrations only.** Cost: it has to build every decorator type once at startup, which can be slow.
+- **A check plus a warning for equal numbers.** With order numbers, two decorators with the same number are sorted by call sequence, which is easy to forget. Cost: a warning can be noise when the equal numbers are intended.
+- **No check.** Cost: the first request finds the mistake, as today.
 
-The check would test that the registered decorators are valid, instead of failing at the first request. With order numbers it could also warn about two decorators with the same number, since the sequence then decides.
+Recommendation: the check for valid registrations, with the warning for equal numbers written to the log only. It is opt in as a call on the builder, so no developer pays for it by default.
 <!-- region end: Question 5-->
 
 <!-- region start: Question 6-->
 #### Question 6
-Where does the recommended order live: the `Cat.Decorators` README only, or in every module README too?
+Where does the recommended order live? The options:
+- **The `Cat.Decorators` README only.** One place that every module points to. Cost: a developer reading a module readme has to follow a link.
+- **Every module README too.** Each module README with a decorator says its default order. Cost: a number can drift from the one in `Cat.Decorators`.
+- **The XML docs of the constants.** The named constants hold the order, and the namespace pages are generated from them. Cost: the order is spread over the constants, with no overview.
 
-The proposal goes into the `Cat.Decorators` README as the one place that every module points to. The README of every module with a decorator says its default order.
+Recommendation: the `Cat.Decorators` README holds the table, and the module readmes name their constant and link to the table, without repeating the number. The generated pages then show the numbers with the constants.
 <!-- region end: Question 6-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
