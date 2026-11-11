@@ -18,7 +18,7 @@
     <tr>
         <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
 
-&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](../README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
 
 </td>
 </tr>
@@ -80,7 +80,7 @@ From the module conventions:
 - The processing side lives in `Cat.EventProcessor`, the worker of the service project structure. This module is the sending side and the shared contracts.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the readme.
+- The module does not exist yet. It is listed in the repo overview of the readme with the status New.
 - The demo has no Service Bus emulator in the AppHost, no `OrderPlaced` message and no outbox. The demo readme says Inventory does not listen to `OrderPlaced` yet. That comes with the messaging stage.
 - Orders announces facts inside the service with `Cat.EventAggregators`. `OrderAuditSubscriber` handles the order events. That is the place where a bridge to the bus would come.
 - The comment on `IPaymentProvider` says the payment call may go over the Service Bus later.

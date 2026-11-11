@@ -19,20 +19,17 @@
 <!-- region start: AboutThisProject-->
 <!-- region end: AboutThisProject-->
 
-## Module overview
-<!-- region start: ModuleOverview-->
+## Repo overview
+<!-- region start: RepoOverview-->
 
-> Modules with the status in development are still being built.  
-> Expect breaking changes in them before they are stable.  
+> **New** means not built yet. The badge links to the plan.  
+> **In development** means built, with a plan for the work that is left. The badge links to the plan. Expect breaking changes.  
+> **Stable** means built, with no plan left.  
 
-| Module | | Description | Plans |
-|--------|--------|-------------|-------|
+| Name | Type | | Description |
+|------|------|--------|-------------|
 
-<!-- region end: ModuleOverview-->
-
-## Demo
-<!-- region start: Demo-->
-<!-- region end: Demo-->
+<!-- region end: RepoOverview-->
 
 ## Application Architecture
 <!-- region start: ApplicationArchitecture-->
@@ -41,24 +38,3 @@
 ## Service Project structure
 <!-- region start: ServiceProjectStructure-->
 <!-- region end: ServiceProjectStructure-->
-
-## Future modules
-<!-- region start: FutureModules-->
-
-These modules do not exist in this repository yet.  
-They are ideas to support the application architecture and the service project structure even more.  
-
-| Module | Idea |
-|--------|------|
-
-<!-- region end: FutureModules-->
-
-## Other future things
-<!-- region start: OtherFutureThings-->
-
-These are not modules, but we plan them too.  
-
-| Item | Idea |
-|------|------|
-
-<!-- region end: OtherFutureThings-->

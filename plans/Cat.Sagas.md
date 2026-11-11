@@ -18,7 +18,7 @@
     <tr>
         <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
 
-&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](../README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
 
 </td>
 </tr>
@@ -115,7 +115,7 @@ Claude read the engine in `modules/Cat.FluentWorkflows`.
 | Handling a workflow that changed while instances were stored | Both |
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the readme.
+- The module does not exist yet. It is listed in the repo overview of the readme with the status New.
 - The engine in `Cat.FluentWorkflows` is as described in the findings. It has no suspend, no checkpoint and no `ResumeAsync`.
 - Orders already works as phase 0 of the build order below:
   - The place order workflow has a `TakePaymentStep` that calls `IPaymentProvider`.

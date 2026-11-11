@@ -18,7 +18,7 @@
     <tr>
         <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
 
-&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](../README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
 
 </td>
 </tr>
@@ -77,7 +77,7 @@ From the `Cat.Auditing` plan:
 - Temporal tables answer "what was the price then" but not "who changed it". CDC has the same limit, since it does not record the user.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the readme.
+- The module does not exist yet. It is listed in the repo overview of the readme with the status New.
 - Nothing in the code or the demo uses CDC. No other readme or plan mentions it.
 - `Cat.Messaging` and `Cat.EventProcessor` do not exist yet either.
 - The demo has two possible tables for a showcase. Catalog keeps the price history in a temporal table (`BookPrice`). Inventory has its own database project with SQL scripts.

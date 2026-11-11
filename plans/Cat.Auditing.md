@@ -18,7 +18,7 @@
     <tr>
         <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
 
-&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](../README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
 
 </td>
 </tr>
@@ -70,7 +70,7 @@ From the architecture:
 - Important events also go out on the Service Bus.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the readme.
+- The module does not exist yet. It is listed in the repo overview of the readme with the status New.
 - The demo has `OrderAuditSubscriber` in the core service of Orders, and its own `ICurrentUser`.
 - `ICatUser` does not exist yet. It is planned in `Cat.Authorization.Abstractions`, see [Cat.Authorization.md](Cat.Authorization.md).
 - `Cat.EFCore.Entities` has a temporal entity base class, which keeps the history of the entity.

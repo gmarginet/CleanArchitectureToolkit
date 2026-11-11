@@ -18,7 +18,7 @@
     <tr>
         <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
 
-&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](../README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
 
 </td>
 </tr>
@@ -73,7 +73,7 @@ From the existing modules:
 - Tests of the future modules will need fakes for their parts too: messages, the clock and the user (`ICatUser` from `Cat.Authorization.Abstractions`).
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the readme.
+- The module does not exist yet. It is listed in the repo overview of the readme with the status New.
 - `tests/Cat.NUnit` targets `net10.0` and references NUnit. It is not packable. 14 repository test projects and the 3 demo `CoreService.Tests` projects (Catalog, Inventory and Orders) reference it.
 - The copies of the fakes in the demo test projects exist as the plan says:
   - `FakeCommandProcessor` in Catalog, Inventory and Orders.
@@ -117,7 +117,7 @@ The demo has fakes that are not doubles of a CAT interface: `FakePriceProvider`,
 #### Can the module be built?
 Yes, in steps, with no open question blocking the first ones.
 
-1. **Create the module** with the `cat-internal-create-module` skill: the projects `Cat.UnitTesting.Commands` and `Cat.UnitTesting.Queries`, the test project of the module, the solution entries, the readme and the readme row. The module is in the Future modules table now. It moves to the module overview, and the plan stays until the readme says everything.
+1. **Create the module** with the `cat-internal-create-module` skill: the projects `Cat.UnitTesting.Commands` and `Cat.UnitTesting.Queries`, the test project of the module, the solution entries, the readme and the readme row. The module is in the repo overview with the status New now. The row changes to In development and links to the module readme, and the plan stays until the readme says everything.
 2. **Move `Cat.NUnit`.** `git mv tests/Cat.NUnit` to the new project `Cat.UnitTesting.NUnit`, and fix the project reference in 14 repository test projects and 3 demo test projects, and in `CleanArchitectureToolkit.slnx`. Search the old name with `git grep`. It touches every test project, so it is a commit of its own.
 3. **The command and query fakes**, from the demo versions. Replace the three copies in the demo test projects with the package projects.
 4. **The event fakes and the response asserts.**

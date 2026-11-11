@@ -18,7 +18,7 @@
     <tr>
         <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
 
-&#124;&nbsp;&nbsp;&nbsp;[HOME](./README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](./README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](./demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
+&#124;&nbsp;&nbsp;&nbsp;[HOME](./README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](./README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](./demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
 
 </td>
 </tr>
@@ -35,8 +35,7 @@
 <!-- region start: TableOfContents-->
 - [Getting Started](#getting-started)
 - [About this project](#about-this-project)
-- [Module overview](#module-overview)
-- [Demo](#demo)
+- [Repo overview](#repo-overview)
 - [Application Architecture](#application-architecture)
   - [Clients](#clients)
   - [API gateway](#api-gateway)
@@ -57,8 +56,6 @@
   - [ServiceName.Infrastructure.DataAccessTooling](#servicenameinfrastructuredataaccesstooling)
   - [ServiceName.CoreService.Tests](#servicenamecoreservicetests)
   - [Reference rules](#reference-rules)
-- [Future modules](#future-modules)
-- [Other future things](#other-future-things)
 <!-- region end: TableOfContents-->
 
 ## Getting Started
@@ -93,41 +90,47 @@ Some modules depend on other modules, in the documentation of each module you ca
 > <div style="height: 1px;"></div>
 <!-- region end: AboutThisProject-->
 
-## Module overview
-<!-- region start: ModuleOverview-->
+## Repo overview
+<!-- region start: RepoOverview-->
 
-> Modules with the status in development are still being built.  
-> Expect breaking changes in them before they are stable.  
+> **New** means not built yet. The badge links to the plan.  
+> **In development** means built, with a plan for the work that is left. The badge links to the plan. Expect breaking changes.  
+> **Stable** means built, with no plan left.  
 
-| Module | | Description | Plans |
-|--------|--------|-------------|-------|
-| [Cat.Api.Client](./modules/Cat.Api.Client/README.md) | [![In development](https://img.shields.io/badge/status-in%20development-orange)](#module-overview) | Call another service through the API gateway with a typed client, and get the outcome back as a response. | [Plans](./plans/Cat.Api.Client.md) |
-| [Cat.Api.Gateway](./modules/Cat.Api.Gateway/README.md) | | The single front door of an application. It routes the calls of clients and services to the right service, checks the token in one place and builds on YARP. | |
-| [Cat.Commands](./modules/Cat.Commands/README.md) | | Change state through one entry point. Describe a change as a command, write one handler for it, and let the processor find the handler. | [Plans](./plans/Cat.Commands.md) |
-| [Cat.Decorators](./modules/Cat.Decorators/README.md) | | Wrap handlers in decorators for cross-cutting work like logging, validation or tracing. | [Plans](./plans/Cat.Decorators.md) |
-| [Cat.EFCore](./modules/Cat.EFCore/README.md) | | Configure Entity Framework Core entities the same way every time, with base classes for regular, temporal and reference data. | [Plans](./plans/Cat.EFCore.md) |
-| [Cat.EventAggregators](./modules/Cat.EventAggregators/README.md) | | Let parts of your app talk to each other through in-process events, without direct dependencies. | |
-| [Cat.Expressions](./modules/Cat.Expressions/README.md) | | Compile member access expressions once and reuse them, so repeated calls stay fast. | |
-| [Cat.Extensions](./modules/Cat.Extensions/README.md) | | Small extension method libraries for enumerables, expressions, objects, service collections and strings. | |
-| [Cat.FluentWorkflows](./modules/Cat.FluentWorkflows/README.md) | | Describe a business process as a list of steps in plain C#. | [Plans](./plans/Cat.FluentWorkflows.md) |
-| [Cat.Localizations](./modules/Cat.Localizations/README.md) | [![In development](https://img.shields.io/badge/status-in%20development-orange)](#module-overview) | Look up localized strings by key, without tying your app to one localization provider. | [Plans](./plans/Cat.Localizations.md) |
-| [Cat.Minimal.Api](./modules/Cat.Minimal.Api/README.md) | | Map service requests to minimal API endpoints that document the responses they return and share one error shape. | |
-| [Cat.Queries](./modules/Cat.Queries/README.md) | | Read data through one entry point. Describe a read as a query, write one handler for it, and let the processor find the handler. | |
-| [Cat.Responses](./modules/Cat.Responses/README.md) | | Return the outcome of an operation as a response, either succeeded with a value or failed with errors. | [Plans](./plans/Cat.Responses.md) |
-| [Cat.ServiceRequests](./modules/Cat.ServiceRequests/README.md) | | Run application use cases through one entry point, with validation, logging and tracing decorators. | |
-| [Cat.Validators](./modules/Cat.Validators/README.md) | | Check a model against fluent rules and get every problem back in one response. | |
+| Name | Type | | Description |
+|------|------|--------|-------------|
+| [Cat.Api.Client](./modules/Cat.Api.Client/README.md) | Module | [![In development](https://img.shields.io/badge/status-in%20development-orange)](./plans/Cat.Api.Client.md) | Call another service through the API gateway with a typed client, and get the outcome back as a response. |
+| [Cat.Api.Gateway](./modules/Cat.Api.Gateway/README.md) | Module | [![Stable](https://img.shields.io/badge/status-stable-green)](#repo-overview) | The single front door of an application. It routes the calls of clients and services to the right service, checks the token in one place and builds on YARP. |
+| [Cat.Auditing](./plans/Cat.Auditing.md) | Module | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.Auditing.md) | Records who changed what and when. |
+| [Cat.Authorization](./plans/Cat.Authorization.md) | Module | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.Authorization.md) | A decorator that checks permissions before a service request runs. |
+| [Cat.Caching](./plans/Cat.Caching.md) | Module | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.Caching.md) | A caching decorator for queries. |
+| [Cat.Commands](./modules/Cat.Commands/README.md) | Module | [![In development](https://img.shields.io/badge/status-in%20development-orange)](./plans/Cat.Commands.md) | Change state through one entry point. Describe a change as a command, write one handler for it, and let the processor find the handler. |
+| [Cat.Dapper](./plans/Cat.Dapper.md) | Module | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.Dapper.md) | Base query and command handlers for Dapper, including bulk operations. |
+| [Cat.Decorators](./modules/Cat.Decorators/README.md) | Module | [![In development](https://img.shields.io/badge/status-in%20development-orange)](./plans/Cat.Decorators.md) | Wrap handlers in decorators for cross-cutting work like logging, validation or tracing. |
+| [Cat.EFCore](./modules/Cat.EFCore/README.md) | Module | [![In development](https://img.shields.io/badge/status-in%20development-orange)](./plans/Cat.EFCore.md) | Configure Entity Framework Core entities the same way every time, with base classes for regular, temporal and reference data. |
+| [Cat.EventAggregators](./modules/Cat.EventAggregators/README.md) | Module | [![Stable](https://img.shields.io/badge/status-stable-green)](#repo-overview) | Let parts of your app talk to each other through in-process events, without direct dependencies. |
+| [Cat.EventProcessor](./plans/Cat.EventProcessor.md) | Module | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.EventProcessor.md) | Worker support that turns incoming messages into service requests. |
+| [Cat.Expressions](./modules/Cat.Expressions/README.md) | Module | [![Stable](https://img.shields.io/badge/status-stable-green)](#repo-overview) | Compile member access expressions once and reuse them, so repeated calls stay fast. |
+| [Cat.Extensions](./modules/Cat.Extensions/README.md) | Module | [![Stable](https://img.shields.io/badge/status-stable-green)](#repo-overview) | Small extension method libraries for enumerables, expressions, objects, service collections and strings. |
+| [Cat.FluentWorkflows](./modules/Cat.FluentWorkflows/README.md) | Module | [![In development](https://img.shields.io/badge/status-in%20development-orange)](./plans/Cat.FluentWorkflows.md) | Describe a business process as a list of steps in plain C#. |
+| [Cat.Localizations](./modules/Cat.Localizations/README.md) | Module | [![In development](https://img.shields.io/badge/status-in%20development-orange)](./plans/Cat.Localizations.md) | Look up localized strings by key, without tying your app to one localization provider. |
+| [Cat.Messaging](./plans/Cat.Messaging.md) | Module | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.Messaging.md) | Publish and consume messages on Azure Service Bus with the same handler style as the other modules. |
+| [Cat.Minimal.Api](./modules/Cat.Minimal.Api/README.md) | Module | [![Stable](https://img.shields.io/badge/status-stable-green)](#repo-overview) | Map service requests to minimal API endpoints that document the responses they return and share one error shape. |
+| [Cat.Queries](./modules/Cat.Queries/README.md) | Module | [![Stable](https://img.shields.io/badge/status-stable-green)](#repo-overview) | Read data through one entry point. Describe a read as a query, write one handler for it, and let the processor find the handler. |
+| [Cat.Resilience](./plans/Cat.Resilience.md) | Module | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.Resilience.md) | Retry and circuit breaker decorators for calls to other services and integrations. |
+| [Cat.Responses](./modules/Cat.Responses/README.md) | Module | [![In development](https://img.shields.io/badge/status-in%20development-orange)](./plans/Cat.Responses.md) | Return the outcome of an operation as a response, either succeeded with a value or failed with errors. |
+| [Cat.Sagas](./plans/Cat.Sagas.md) | Module | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.Sagas.md) | Long running workflows that send a message, wait for the answer and carry on. |
+| [Cat.Scheduling](./plans/Cat.Scheduling.md) | Module | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.Scheduling.md) | Worker support that turns schedules into service requests. |
+| [Cat.ServiceRequests](./modules/Cat.ServiceRequests/README.md) | Module | [![Stable](https://img.shields.io/badge/status-stable-green)](#repo-overview) | Run application use cases through one entry point, with validation, logging and tracing decorators. |
+| [Cat.Sql.Cdc](./plans/Cat.Sql.Cdc.md) | Module | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.Sql.Cdc.md) | Turns SQL Server change data capture changes into service bus calls. |
+| [Cat.Telemetry](./plans/Cat.Telemetry.md) | Module | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.Telemetry.md) | Shared tracing and metrics setup for all services. |
+| [Cat.UnitTesting](./plans/Cat.UnitTesting.md) | Module | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.UnitTesting.md) | Helpers for unit tests, like test doubles for processors and responses, in small projects you pick from. |
+| [Cat.Validators](./modules/Cat.Validators/README.md) | Module | [![Stable](https://img.shields.io/badge/status-stable-green)](#repo-overview) | Check a model against fluent rules and get every problem back in one response. |
+| [Cat.Demo](./demo/README.md) | Demo | [![In development](https://img.shields.io/badge/status-in%20development-orange)](./plans/Demo.md) | A small bookshop with a Catalog service and an Order service. Run it locally and read the code as a working example of the modules. |
+| [Cat.Skills](./plans/Skills.md) | Tooling | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Skills.md) | Claude Code skills, shipped as a plugin, that teach Claude the CAT conventions in the projects of the developers who use the toolkit. |
+| [Cat.Templates](./plans/Cat.Templates.md) | Tooling | [![New](https://img.shields.io/badge/status-new-blue)](./plans/Cat.Templates.md) | `dotnet new` templates that create a new service with this project structure. |
 
-<!-- region end: ModuleOverview-->
-
-## Demo
-<!-- region start: Demo-->
-
-A small bookshop that shows how the modules work together.  
-It has a Catalog service and an Order service, built with the application architecture and the service project structure described below.  
-Run them locally, try the endpoints and read the code as a working example.
-
-See the [demo README](./demo/README.md) for what is in it and how to run it.
-<!-- region end: Demo-->
+<!-- region end: RepoOverview-->
 
 ## Application Architecture
 <!-- region start: ApplicationArchitecture-->
@@ -399,38 +402,3 @@ This project holds the unit tests of the business logic.
 - The API is the only place where everything is wired together.  
 - The `Contracts` project stays small and free of service internals.  
 <!-- region end: ServiceProjectStructure-->
-
-## Future modules
-<!-- region start: FutureModules-->
-
-These modules do not exist in this repository yet.  
-They are ideas to support the application architecture and the service project structure even more.  
-
-| Module                      | Idea                                                                                       |
-|-----------------------------|--------------------------------------------------------------------------------------------|
-| [Cat.Messaging](./plans/Cat.Messaging.md) | Publish and consume messages on Azure Service Bus with the same handler style as the other modules. |
-| [Cat.EventProcessor](./plans/Cat.EventProcessor.md) | Worker support that turns incoming messages into service requests. |
-| [Cat.Scheduling](./plans/Cat.Scheduling.md) | Worker support that turns schedules into service requests. |
-| [Cat.Sagas](./plans/Cat.Sagas.md) | Long running workflows that send a message, wait for the answer and carry on. |
-| [Cat.Dapper](./plans/Cat.Dapper.md) | Base query and command handlers for Dapper, including bulk operations. |
-| [Cat.Auditing](./plans/Cat.Auditing.md) | Records who changed what and when. |
-| [Cat.Sql.Cdc](./plans/Cat.Sql.Cdc.md) | Turns SQL Server change data capture changes into service bus calls. |
-| [Cat.Caching](./plans/Cat.Caching.md) | A caching decorator for queries. |
-| [Cat.Authorization](./plans/Cat.Authorization.md) | A decorator that checks permissions before a service request runs. |
-| [Cat.Resilience](./plans/Cat.Resilience.md) | Retry and circuit breaker decorators for calls to other services and integrations. |
-| [Cat.Telemetry](./plans/Cat.Telemetry.md) | Shared tracing and metrics setup for all services. |
-| [Cat.UnitTesting](./plans/Cat.UnitTesting.md) | Helpers for unit tests, like test doubles for processors and responses, in small projects you pick from. |
-| [Cat.Templates](./plans/Cat.Templates.md) | `dotnet new` templates that create a new service with this project structure. |
-
-<!-- region end: FutureModules-->
-
-## Other future things
-<!-- region start: OtherFutureThings-->
-
-These are not modules, but we plan them too.  
-
-| Item                        | Idea                                                                                       |
-|-----------------------------|--------------------------------------------------------------------------------------------|
-| [CAT skills for developers](./plans/Skills.md) | Claude Code skills, shipped as a plugin, that teach Claude the CAT conventions in the projects of the developers who use the toolkit. |
-
-<!-- region end: OtherFutureThings-->

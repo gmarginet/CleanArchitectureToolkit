@@ -1,19 +1,15 @@
-<!-- ==================== template start: ModuleRow ====================-->
-| [[[ModuleName]]](./modules/[[ModuleName]]/README.md) | [[StatusBadge]] | [[ModuleDescription]] | [[PlansLink]] |
-<!-- ==================== template end: ModuleRow ====================-->
+<!-- ==================== template start: RepoRow ====================-->
+| [[[Name]]]([[NameLink]]) | [[Type]] | [[StatusBadge]] | [[Description]] |
+<!-- ==================== template end: RepoRow ====================-->
+
+<!-- ==================== template start: NewBadge ====================-->
+[![New](https://img.shields.io/badge/status-new-blue)](./plans/[[PlanFile]])
+<!-- ==================== template end: NewBadge ====================-->
 
 <!-- ==================== template start: InDevelopmentBadge ====================-->
-[![In development](https://img.shields.io/badge/status-in%20development-orange)](#module-overview)
+[![In development](https://img.shields.io/badge/status-in%20development-orange)](./plans/[[PlanFile]])
 <!-- ==================== template end: InDevelopmentBadge ====================-->
 
-<!-- ==================== template start: PlansLink ====================-->
-[Plans](./plans/[[ModuleName]].md)
-<!-- ==================== template end: PlansLink ====================-->
-
-<!-- ==================== template start: FutureModuleRow ====================-->
-| [[[ModuleName]]](./plans/[[ModuleName]].md) | [[ModuleIdea]] |
-<!-- ==================== template end: FutureModuleRow ====================-->
-
-<!-- ==================== template start: OtherFutureRow ====================-->
-| [[[ItemName]]](./plans/[[PlanFile]]) | [[ItemIdea]] |
-<!-- ==================== template end: OtherFutureRow ====================-->
+<!-- ==================== template start: StableBadge ====================-->
+[![Stable](https://img.shields.io/badge/status-stable-green)](#repo-overview)
+<!-- ==================== template end: StableBadge ====================-->

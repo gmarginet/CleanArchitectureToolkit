@@ -13,7 +13,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 | Skill | Use it for | Example |
 |-------|------------|---------|
 | [cat-internal-create-module-readme](cat-internal-create-module-readme/SKILL.md) | Create or update a module readme from the module readme template. | `/cat-internal-create-module-readme Cat.EFCore` |
-| [cat-internal-create-readme](cat-internal-create-readme/SKILL.md) | Keep the module overview and the tables of future work in the readme in sync, and find a chapter by its region. | `/cat-internal-create-readme modules Cat.EFCore stable` |
+| [cat-internal-create-readme](cat-internal-create-readme/SKILL.md) | Keep the repo overview table in the readme in sync, and find a chapter by its region. | `/cat-internal-create-readme overview Cat.EFCore` |
 | [cat-internal-create-excalidraw](cat-internal-create-excalidraw/SKILL.md) | Create or edit an editable Excalidraw drawing in `resources/schemas`. | `/cat-internal-create-excalidraw add a drawing of the demo security setup` |
 | [cat-internal-create-mermaid](cat-internal-create-mermaid/SKILL.md) | Write or update an ERD, class or sequence diagram as inline Mermaid. | `/cat-internal-create-mermaid ERD for the Catalog service` |
 | [demo-structure](demo-structure/SKILL.md) | Add or restructure a service, client or Aspire project in `demo/`. | `/demo-structure service Orders` |
@@ -37,9 +37,9 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **Note:** The header comes from `cat-internal-create-header`, with `RootPath` `../..`.
 
 ### cat-internal-create-readme
-- **What it does:** Keeps the readme in sync with `readme.template.md`. It holds one row per module folder in the module overview, with the In development badge where it applies, and the Future modules and Other future things tables. The chapters with static text have their own region, so you can ask Claude to look at or change one chapter.
-- **How to use it:** Give it a module and a status (`stable` or `development`), or run it without arguments to resync the tables. Name a chapter to look at or change it.
-- **When:** After adding or removing a module, changing a module intro or status, changing the future work tables, or changing the readme template.
+- **What it does:** Keeps the readme in sync with `readme.template.md`. The repo overview table has one row per module, the demo and the tooling, with a New, In development or Stable badge that follows from the plans. The chapters with static text have their own region, so you can ask Claude to look at or change one chapter.
+- **How to use it:** Give it an item such as a module, or run it without arguments to resync the table. Name a chapter to look at or change it.
+- **When:** After adding or removing a module, a plan or a tooling item, changing a module intro, or changing the readme template.
 
 ### cat-internal-create-excalidraw
 - **What it does:** Builds a `*.excalidraw.svg` in the house style, with the scene embedded so you can open it in Excalidraw and edit it. It renders a preview with headless Chrome to check the result.

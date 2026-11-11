@@ -50,7 +50,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 - `Usage`: Code examples and the explanation of how to use the module.
 
 ## Rules
-- Always wrap a badge in a link to a heading anchor on the same page (`#nuget-packages`, `#getting-started` or `#module-overview`). An unlinked image becomes a link to a blank page with only the badge.
+- Always wrap a badge in a link to a heading anchor on the same page (`#nuget-packages`, `#getting-started` or `#repo-overview`). An unlinked image becomes a link to a blank page with only the badge.
 - Always leave a blank line between a region marker and the table or text below it, and between the last table row and the end marker of the region. Without the blank lines Jekyll shows the table as plain text.
 - Keep the table of contents up to date with the chapters that exist in the readme. Ignore the chapters marked with `<!-- omit in toc -->`.
 - Follow the documentation style in CLAUDE.md: plain and direct, short sentences, no long dashes, no ellipses.

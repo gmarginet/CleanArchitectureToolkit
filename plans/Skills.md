@@ -18,7 +18,7 @@
     <tr>
         <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
 
-&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](../README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
 
 </td>
 </tr>
@@ -63,7 +63,7 @@ From the repository:
 
 #### What exists today
 - No skill for developers exists yet. The folders `plugins/` and `.claude-plugin/` do not exist.
-- The readme lists the idea under `Other future things`.
+- The readme lists the idea in the repo overview, as `Cat.Skills` with the type Tooling and the status New.
 - The skills in `.claude/skills/` are all for the owner. Four of them already use the `cat-internal-` prefix: `cat-internal-create-header`, `cat-internal-create-plan`, `cat-internal-create-template` and `cat-internal-template-concepts`.
 - The other skills for the owner are not renamed yet, except `cat-verify`, which is now `cat-internal-verify-code`. The rest get renamed when we look at the existing skills one by one.
 - The repository has a `_plugins` folder. It belongs to the Jekyll site and is not related to this plan.
@@ -134,7 +134,7 @@ Ideas only. None of them is decided. The names are suggestions.
 - Skills for the planned modules, such as messaging, sagas, scheduling and authorization. They wait for the modules.
 
 #### Decided
-- **Idea.** Create skills for the developers who use the toolkit. Plan them here and list them in the readme under `Other future things`.
+- **Idea.** Create skills for the developers who use the toolkit. Plan them here and list them in the repo overview of the readme.
 - **Skill prefix.** Skills for the owner of the toolkit start with `cat-internal-`. Skills for developers who use the toolkit start with `cat-`. New skills use the right prefix from now on. The existing skills are not renamed yet. We look at them one by one later.
 <!-- region end: PhaseDescription-->
 

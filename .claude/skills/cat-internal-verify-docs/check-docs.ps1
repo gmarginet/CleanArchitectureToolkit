@@ -13,11 +13,11 @@ Scope
 Errors
 - A relative link or image points to a file or folder that does not exist, or the case of the path is wrong.
   The published site runs on Linux, where case matters.
-- A module plan (plans/Cat.*.md) has no place in the readme, or a row links to the wrong plan. A module that exists has a Plans link in the module overview. A module that does not exist yet has a row in the Future modules table, and a module is never in both.
+- The repo overview table of the readme does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the In development badge. A built row without a plan has the Stable badge. The rows are in order: modules, the demo, then tooling, each sorted by name.
 - A link points to an anchor that no heading of the target markdown file has.
 - A code fence is not closed.
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or has no comment line with its `RootPath`.
-- The readme lost its <!-- region start: ModuleOverview--> or <!-- region end: ModuleOverview--> region marker.
+- The readme lost its <!-- region start: RepoOverview--> or <!-- region end: RepoOverview--> region marker.
 - A skill folder has no SKILL.md, has a name that differs from the folder, or is missing from .claude/skills/README.md.
 
 Warnings
@@ -186,66 +186,67 @@ if (Test-Path $headerTemplateFile) {
     }
 }
 
-# Region markers of the module overview in the readme
+# Region markers of the repo overview in the readme
 $readmeFile = Join-Path $root 'README.md'
 if (Test-Path $readmeFile) {
     $content = [System.IO.File]::ReadAllText($readmeFile)
-    foreach ($marker in '<!-- region start: ModuleOverview-->', '<!-- region end: ModuleOverview-->') {
+    foreach ($marker in '<!-- region start: RepoOverview-->', '<!-- region end: RepoOverview-->') {
         $count = ([regex]::Matches($content, [regex]::Escape($marker))).Count
         if ($count -ne 1) { $errors.Add("README.md: the marker $marker must appear once. Found $count.") }
     }
 }
 
-# Plans and the tables of the readme
+# The repo overview table: one row per module folder and per plan, with the right badge, link and order
 $plansRoot = Join-Path $root 'plans'
 if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
     $readme = [System.IO.File]::ReadAllLines($readmeFile)
-    $moduleFolders = @(Get-ChildItem (Join-Path $root 'modules') -Directory | ForEach-Object { $_.Name })
-    $planNames = @(Get-ChildItem $plansRoot -Filter 'Cat.*.md' -File | ForEach-Object { $_.BaseName })
-
-    # Future modules table: [Cat.X](./plans/Cat.X.md), no backticks, and no module folder yet
-    $futureRows = @{}
-    $futureStart = [array]::IndexOf($readme, '## Future modules')
-    if ($futureStart -ge 0) {
-        for ($i = $futureStart + 1; $i -lt $readme.Count; $i++) {
-            if ($readme[$i] -like '## *') { break }
-            if ($readme[$i] -match '^\| \[`?(Cat\.[\w.]+)`?\]\(\./plans/([^)]+)\)') {
-                $futureRows[$Matches[1]] = $Matches[2]
-            } elseif ($readme[$i] -match '^\| `(Cat\.[\w.]+)`') {
-                $errors.Add("README.md Future modules: $($Matches[1]) has no link to a plan.")
-            }
-        }
-    }
-    foreach ($name in $futureRows.Keys) {
-        if ($futureRows[$name] -ne "$name.md") { $errors.Add("README.md Future modules: $name links to $($futureRows[$name]). Expected $name.md.") }
-        if ($moduleFolders -contains $name) { $errors.Add("README.md Future modules: $name exists in modules/. Remove it from the Future modules table.") }
-    }
-
-    # Plans column of the module overview: [Plans](./plans/Cat.X.md)
-    $planCells = @{}
-    $start = [array]::IndexOf($readme, '<!-- region start: ModuleOverview-->')
-    $end = [array]::IndexOf($readme, '<!-- region end: ModuleOverview-->')
+    $moduleFolders = @(Get-ChildItem (Join-Path $root 'modules') -Directory | Where-Object { Test-Path (Join-Path $_.FullName 'README.md') } | ForEach-Object { $_.Name })
+    $planFiles = @(Get-ChildItem $plansRoot -Filter '*.md' -File | ForEach-Object { $_.Name })
+    $planOf = @{ 'Cat.Demo' = 'Demo.md'; 'Cat.Skills' = 'Skills.md' }
+    $start = [array]::IndexOf($readme, '<!-- region start: RepoOverview-->')
+    $end = [array]::IndexOf($readme, '<!-- region end: RepoOverview-->')
+    $rows = [System.Collections.Generic.List[object]]::new()
     if ($start -ge 0 -and $end -gt $start) {
         for ($i = $start + 1; $i -lt $end; $i++) {
-            if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(\./modules/' -and $readme[$i] -match '\[Plans\]\(\./plans/([^)]+)\)') {
-                $planCells[[regex]::Match($readme[$i], '^\| \[(Cat\.[\w.]+)\]').Groups[1].Value] = $Matches[1]
+            if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(([^)]+)\) \| (\w+) \| (.*?) \| ') {
+                $rows.Add([pscustomobject]@{ Name = $Matches[1]; Link = $Matches[2]; Type = $Matches[3]; Badge = $Matches[4] })
             }
         }
     }
-    foreach ($name in $planCells.Keys) {
-        if ($planCells[$name] -ne "$name.md") { $errors.Add("README.md module overview: $name links to $($planCells[$name]). Expected $name.md.") }
-    }
-
-    # Every module plan has exactly one place in the README
-    foreach ($name in $planNames) {
-        if ($moduleFolders -contains $name) {
-            if (-not $planCells.ContainsKey($name)) { $errors.Add("plans\${name}.md: $name exists, but its row in the module overview has no Plans link.") }
-        } elseif (-not $futureRows.ContainsKey($name)) {
-            $errors.Add("plans\${name}.md: $name does not exist yet and is not in the Future modules table of the readme.")
+    $seen = @{}
+    foreach ($row in $rows) {
+        $name = $row.Name
+        if ($seen.ContainsKey($name)) { $errors.Add("README.md repo overview: $name has more than one row."); continue }
+        $seen[$name] = $true
+        if ($row.Type -notin 'Module', 'Demo', 'Tooling') { $errors.Add("README.md repo overview: $name has the type $($row.Type). Use Module, Demo or Tooling."); continue }
+        $plan = if ($planOf.ContainsKey($name)) { $planOf[$name] } else { "$name.md" }
+        $hasPlan = $planFiles -contains $plan
+        $built = switch ($row.Type) { 'Module' { $moduleFolders -contains $name } 'Demo' { $true } default { $row.Badge -notlike '*status-new*' } }
+        if ($row.Type -eq 'Module' -and -not $built -and $row.Link -like './modules/*') { $errors.Add("README.md repo overview: $name has no folder in modules/.") }
+        if (-not $built) {
+            if (-not $hasPlan) { $errors.Add("README.md repo overview: $name is not built and has no plan plans\$plan.") }
+            if ($row.Badge -notlike "*status-new*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name is not built. Its badge must be New and link to ./plans/$plan.") }
+            if ($row.Link -ne "./plans/$plan") { $errors.Add("README.md repo overview: $name is not built. Its name must link to ./plans/$plan.") }
+        } elseif ($hasPlan) {
+            if ($row.Badge -notlike "*status-in%20development*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name has a plan. Its badge must be In development and link to ./plans/$plan.") }
+        } else {
+            if ($row.Badge -notlike '*status-stable*](#repo-overview)*') { $errors.Add("README.md repo overview: $name has no plan. Its badge must be Stable and link to #repo-overview.") }
         }
+        if ($row.Type -eq 'Module' -and $built -and $row.Link -ne "./modules/$name/README.md") { $errors.Add("README.md repo overview: $name is built. Its name must link to ./modules/$name/README.md.") }
+    }
+    foreach ($name in $moduleFolders) {
+        if (-not $seen.ContainsKey($name)) { $errors.Add("README.md repo overview: the module $name has no row.") }
+    }
+    foreach ($plan in $planFiles) {
+        $name = if ($plan -eq 'Demo.md') { 'Cat.Demo' } elseif ($plan -eq 'Skills.md') { 'Cat.Skills' } else { [System.IO.Path]::GetFileNameWithoutExtension($plan) }
+        if (-not $seen.ContainsKey($name)) { $errors.Add("plans\${plan}: $name has no row in the repo overview of the readme.") }
+    }
+    $rank = @{ 'Module' = 0; 'Demo' = 1; 'Tooling' = 2 }
+    $ordered = @($rows | Where-Object { $rank.ContainsKey($_.Type) } | Sort-Object @{ Expression = { $rank[$_.Type] } }, @{ Expression = { $_.Name } })
+    for ($i = 0; $i -lt $ordered.Count; $i++) {
+        if ($ordered[$i].Name -ne $rows[$i].Name) { $errors.Add("README.md repo overview: the rows are not in order. Expected modules, then the demo, then tooling, each sorted by name. First difference: $($rows[$i].Name), expected $($ordered[$i].Name)."); break }
     }
 }
-
 # Skills and the skills overview
 $skillsRoot = Join-Path $root '.claude\skills'
 $skillsReadme = Join-Path $skillsRoot 'README.md'

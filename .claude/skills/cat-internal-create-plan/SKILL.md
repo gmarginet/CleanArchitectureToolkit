@@ -16,7 +16,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 - The header comes from the `cat-internal-create-header` skill.
 
 ## Creating a plan
-1. Check that no plan exists yet. Check the name against the folders in `modules/`, the files in `plans/` and the Future modules table of the readme.
+1. Check that no plan exists yet. Check the name against the folders in `modules/`, the files in `plans/` and the repo overview table of the readme.
 2. Read the sources, see [Where the facts come from](#where-the-facts-come-from). Search them for the module name and its idea.
 3. Copy `plan.template.md` to `plans/<PlanName>.md`. The plan file is named after the plan, such as `Cat.Messaging.md` or `Demo.md`.
 4. Replace `[[PlanName]]`.
@@ -42,9 +42,9 @@ Read these before you write, and search them for the module name:
 
 ## Where a module plan is linked
 Only plans of modules (`plans/Cat.*.md`) are linked from the readme. `Demo.md` and `Skills.md` are not.
-- A module that does not exist yet: a row in the Future modules table. The module name in the row links to the plan, written as `[Cat.X](./plans/Cat.X.md)`. Put no backticks around the name. A code span inside a link does not look like a link on the published site.
-- A module that exists: the Plans column of its row in the module overview, `[Plans](./plans/Cat.X.md)`. The `cat-internal-create-readme` skill covers that column. The row must not be in the Future modules table.
-- When a future module is started with the `cat-internal-create-module` skill, move it: remove the row from the Future modules table and add the Plans link to the module overview.
+- Every plan has a row in the repo overview table of the readme. `Demo.md` belongs to the row `Cat.Demo` and `Skills.md` to the row `Cat.Skills`.
+- An item that is not built yet has the New badge and its name links to the plan. A built item with a plan has the In development badge. The badge links to the plan in both cases. The `cat-internal-create-readme` skill covers the table.
+- When a future module is started with the `cat-internal-create-module` skill, its row changes from New to In development and its name links to the module readme.
 - Keep the plan until the module has done everything in it and the owner agrees that it can go. When the plan goes, remove its link from the readme too.
 - A module readme never links to the plan. Only the readme does. A module readme grows until it holds everything about how the module works and how to use it, so the plan can be removed.
 - The `cat-internal-verify-docs` skill checks that every module plan has exactly one place in the readme.

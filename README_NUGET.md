@@ -3,7 +3,7 @@
 Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.  
 It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.  
 
-[Home](https://gmarginet.github.io/CleanArchitectureToolkit/) | [Module overview](https://gmarginet.github.io/CleanArchitectureToolkit/#module-overview) | [GitHub](https://github.com/gmarginet/CleanArchitectureToolkit)
+[Home](https://gmarginet.github.io/CleanArchitectureToolkit/) | [Repo overview](https://gmarginet.github.io/CleanArchitectureToolkit/#repo-overview) | [GitHub](https://github.com/gmarginet/CleanArchitectureToolkit)
 
 ## Part of the Clean Architecture Toolkit
 

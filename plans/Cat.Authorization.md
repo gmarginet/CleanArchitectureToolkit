@@ -18,7 +18,7 @@
     <tr>
         <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
 
-&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[MODULE OVERVIEW](../README.md#module-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;
 
 </td>
 </tr>
@@ -66,7 +66,7 @@ From the module conventions:
 - The `Contracts` project stays small and free of service internals, so a permission attribute on a request needs a home that `Contracts` can reference.
 
 #### What exists today
-- The module does not exist yet. It is listed under the future modules in the readme.
+- The module does not exist yet. It is listed in the repo overview of the readme with the status New.
 - Keycloak runs in the demo, started by the AppHost. `AddDemoJwtAuthentication` in `ServiceDefaults` adds JWT bearer authentication when `Authentication:Authority` is set. The role claim is `roles`, and the `admin` policy requires the `admin` role.
 - `ICurrentUser` lives in `Cat.Demo.OrderService.CoreService`, with two implementations in the Api project:
   - `TokenCurrentUser` reads the user from the claims of the token. It is used when authentication is on.
