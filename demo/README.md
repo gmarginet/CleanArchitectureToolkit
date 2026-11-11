@@ -46,11 +46,10 @@ A small bookshop that shows how the Clean Architecture Toolkit modules work toge
   - [React client](#react-client)
   - [Aspire AppHost and dashboard](#aspire-apphost-and-dashboard)
   - [API Gateway](#api-gateway)
-  - [Service Bus emulator](#service-bus-emulator)
+  - [Keycloak](#keycloak)
   - [Catalog service](#catalog-service)
   - [Orders service](#orders-service)
   - [Inventory service](#inventory-service)
-  - [Notifications service](#notifications-service)
   - [Aspire ServiceDefaults](#aspire-servicedefaults)
   - [Payment service](#payment-service)
 <!-- region end: TableOfContents-->
@@ -84,20 +83,16 @@ When you start the shop with Aspire, the order asks the catalog for the real pri
 
 Without Aspire stock is pretend. Any line of more than 50 copies is out of stock.
 
-What comes later:
-
-- Emails when an order is confirmed or shipped.
-- Nightly jobs, such as cancelling orders that are not paid.
 <!-- region end: WhatTheBookshopDoes-->
 
 ## Architecture
 <!-- region start: Architecture-->
 
-The demo is a small system of services, each with its own database. The services are built the same way, with the project structure from the root [README](../README.md#service-project-structure). A client talks to them through an API gateway, which checks the login. Services tell each other about events through a message bus.
+The demo is a small system of services, each with its own database. The services are built the same way, with the project structure from the root [README](../README.md#service-project-structure). A client talks to them through an API gateway, which checks the login. Services call each other through the gateway.
 
 ![Architecture](../resources/schemas/CatDemoArchitecture.excalidraw.svg)
 
-Hatched boxes are not built yet. Solid boxes are. The drawing and the status of every block are kept in sync with the code.
+Hatched boxes are not built yet. Solid boxes are. The drawing is kept in sync with the code.
 
 ### How the pieces fit
 <!-- region start: HowThePiecesFit-->
@@ -106,7 +101,7 @@ Hatched boxes are not built yet. Solid boxes are. The drawing and the status of 
 - **Login.** Keycloak runs as a container and holds the users. The gateway and each service check the token. A service does not trust the network. See [Things to know](#things-to-know).
 - **Services** own their data. A service never reads the database of another service. Where one needs data of another, it asks through an interface. Orders asks Catalog for prices, Inventory for stock and the payment service for payments, all through the gateway when you run through Aspire.
 - **Contracts.** Sharing the contracts of a service is a choice per connection. The React client and the price call from Orders to Catalog keep their own models. The stock call from Orders to Inventory shares the `Contracts` project of Inventory, so the demo shows both. See [Sharing contracts](#sharing-contracts).
-- **Events** between services will travel over the Service Bus. Inside a service, events stay in memory.
+- **Events** stay in memory inside a service. Services do not tell each other about events.
 - **Databases.** Every service has its own SQL Server database.
 - **Aspire** starts everything with one command: the gateway, the services, Keycloak and SQL Server in containers, and the dashboard. You can still start a service on its own.
 <!-- region end: HowThePiecesFit-->
@@ -154,7 +149,7 @@ How a call travels:
 4. The inner service validates the JWT itself. It does not trust the network.
 5. The service authorizes on the claims. Alice only loads her own orders, and the orders of Bob come back as not found. An admin edits the catalog through a role claim.
 
-Calls from one service to another forward the same token. Work without a person behind it, such as a scheduled job, would need a client credentials token. The demo has no such work yet.
+Calls from one service to another forward the same token.
 
 In the code:
 
@@ -174,14 +169,12 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 |---|---|---|
 | Reserve stock, take payment | An interface (`IStockReservation`, `IPaymentProvider`), called from a workflow step | Yes |
 | Order confirmed, order cancelled | An event on `ICatEventAggregator` | No |
-| Telling other services | A subscriber that bridges the event to the Service Bus | No |
 
 - The workflow publishes `OrderConfirmed` and `OrderCancelled`. It knows only the aggregator, not the subscribers.
-- Subscribers today: a status updater, an audit logger and the stock release.
+- Subscribers: a status updater, an audit logger and the stock release.
 - Events cannot drive the process. `PublishAsync` returns no answer and rethrows the exception of a failing handler.
 - Calls whose answer decides the next step go through an interface. A fake sits behind it when there is no host address.
 - Subscribers are long lived singletons, because the aggregator holds them with weak references. A subscriber that needs a scoped service such as the `DbContext` opens its own scope.
-- The bridge to the Service Bus does not exist yet. Telling other services will use messages.
 <!-- region end: EventsAndInterfaces-->
 
 ### Where the CAT modules sit
@@ -319,7 +312,7 @@ In `Development` both services apply their EF Core migrations at startup. Catalo
   - A total above 500 euro is declined, by the payment service under the AppHost and by a fake without it.
 - **Payment failures.** The payment service can fail on purpose, to show the retries and the circuit breaker. See [Payment service](#payment-service) for the settings.
 - **Currency.** All amounts are in euro.
-- **Order numbers** look like `20261105-0001`. The counter restarts every UTC day. The development endpoint `POST /development/scheduler/clean-up-order-counters` removes the counters of earlier days. The scheduler will do that every night.
+- **Order numbers** look like `20261105-0001`. The counter restarts every UTC day. The development endpoint `POST /development/scheduler/clean-up-order-counters` removes the counters of earlier days.
 <!-- region end: ThingsToKnow-->
 
 ### Health checks
@@ -348,27 +341,23 @@ dotnet cake --target=Test
 ## Building blocks
 <!-- region start: BlockOverview-->
 
-One chapter for every box in the drawing. A database sits in the chapter of the service that owns it.
+One chapter for every block that is built. A database sits in the chapter of the service that owns it.
 
-| Block | Status | What it is |
-|---|---|---|
-| [React client](#react-client) | Built | The web shop. It shows the books, has a login, takes orders and shows them, and lets an admin edit books. |
-| [Aspire AppHost and dashboard](#aspire-apphost-and-dashboard) | Built | Starts the whole system and shows how it runs. |
-| [API Gateway](#api-gateway) | Built | The one door for clients. |
-| [Keycloak](#keycloak) | Built | The identity provider that holds the users and signs the tokens. |
-| [Service Bus emulator](#service-bus-emulator) | Planned | Messages between services. |
-| [Catalog service](#catalog-service) | Built | Books, categories and prices. |
-| [Orders service](#orders-service) | Built | Placing and following orders. |
-| [Inventory service](#inventory-service) | Built | Stock levels and reservations. |
-| [Notifications service](#notifications-service) | Planned | Messages to customers and scheduled jobs. |
-| [Aspire ServiceDefaults](#aspire-servicedefaults) | Built | Shared telemetry, health checks and resilience. |
-| [Payment service](#payment-service) | Built | A separate pretend payment service that can fail on purpose. |
+| Block | What it is |
+|---|---|
+| [React client](#react-client) | The web shop. It shows the books, has a login, takes orders and shows them, and lets an admin edit books. |
+| [Aspire AppHost and dashboard](#aspire-apphost-and-dashboard) | Starts the whole system and shows how it runs. |
+| [API Gateway](#api-gateway) | The one door for clients. |
+| [Keycloak](#keycloak) | The identity provider that holds the users and signs the tokens. |
+| [Catalog service](#catalog-service) | Books, categories and prices. |
+| [Orders service](#orders-service) | Placing and following orders. |
+| [Inventory service](#inventory-service) | Stock levels and reservations. |
+| [Aspire ServiceDefaults](#aspire-servicedefaults) | Shared telemetry, health checks and resilience. |
+| [Payment service](#payment-service) | A separate pretend payment service that can fail on purpose. |
 <!-- region end: BlockOverview-->
 
 ### React client
 <!-- region start: ReactClient-->
-
-**Status:** Built
 
 **What it is.** A thin web client with a book list, a basket, an order overview and an admin screen for books. It uses React with TypeScript, built with Vite.
 
@@ -418,9 +407,7 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 ### Aspire AppHost and dashboard
 <!-- region start: AspireAppHostAndDashboard-->
 
-**Status:** Built
-
-**What it is.** One project that describes the system: the gateway, Catalog, Orders, Inventory, the payment service, Keycloak, SQL Server and the React client. The Aspire dashboard shows logs, traces, metrics and health checks. The Service Bus emulator joins later.
+**What it is.** One project that describes the system: the gateway, Catalog, Orders, Inventory, the payment service, Keycloak, SQL Server and the React client. The Aspire dashboard shows logs, traces, metrics and health checks.
 
 **How it works.**
 - `demo/Cat.Demo.AppHost/Cat.Demo.AppHost` adds the Api project of each service. The services keep their fixed ports with no Aspire proxy: gateway 5100, Catalog 5101, Orders 5102, payment 5103, web client 5104 and Inventory 5105. The dashboard runs on 15101.
@@ -451,8 +438,6 @@ One chapter for every box in the drawing. A database sits in the chapter of the 
 
 ### API Gateway
 <!-- region start: ApiGateway-->
-
-**Status:** Built
 
 **What it is.** The one door for clients. It checks the token and forwards calls to Catalog, Orders, the payment service and Inventory. It holds no business logic. The block is a small host project on top of the `Cat.Api.Gateway` module.
 
@@ -488,8 +473,6 @@ The gateway only option of the module is not used in the demo. The services chec
 ### Keycloak
 <!-- region start: Keycloak-->
 
-**Status:** Built
-
 **What it is.** The identity provider of the demo. It holds the users, checks passwords and signs the access tokens. Any OpenID Connect provider would do. Keycloak is only the demo choice.
 
 **How it works.**
@@ -512,36 +495,8 @@ The gateway only option of the module is not used in the demo. The services chec
 **More.** `demo/Cat.Demo.AppHost/Cat.Demo.AppHost/keycloak`. [Login and tokens](#login-and-tokens).
 <!-- region end: Keycloak-->
 
-### Service Bus emulator
-<!-- region start: ServiceBusEmulator-->
-
-**Status:** Planned
-
-**What it is.** The Azure Service Bus emulator, started by the AppHost. Services publish events such as `OrderPlaced` on it, and other services listen.
-
-**CAT modules.** All planned.
-
-| Module | Where | Why |
-|---|---|---|
-| `Cat.Messaging` (future) | Publishing and consuming | Same handler style as the other modules. |
-| `Cat.EventProcessor` (future) | Inventory and Notifications | Turns incoming messages into service requests. |
-| `Cat.Sagas` (future) | Orders | A workflow that waits for a message. |
-
-**Pros.**
-- Services do not need to know each other.
-- A slow service does not block an order.
-
-**Cons.**
-- It runs in Docker.
-- Failures are harder to follow than a direct call.
-
-**More.** [Events and interfaces](#events-and-interfaces), [Cat.Sagas](../plans/Cat.Sagas.md).
-<!-- region end: ServiceBusEmulator-->
-
 ### Catalog service
 <!-- region start: CatalogService-->
-
-**Status:** Built
 
 **What it is.** Books, categories and prices. Mostly reads, with a small admin part. It is the first service of the demo and is built code first.
 
@@ -607,15 +562,13 @@ erDiagram
 **Cons.**
 - Many small types for a small service: a request, a handler, a query, a query handler and a validator.
 - Temporal tables tie the demo to SQL Server.
-- Category names are plain text. `Cat.Localizations` is not used yet.
+- Category names are plain text.
 
 **More.** Code in `demo/Cat.Demo.CatalogService`. Requests in `CatalogRequests.http`.
 <!-- region end: CatalogService-->
 
 ### Orders service
 <!-- region start: OrdersService-->
-
-**Status:** Built
 
 **What it is.** The main service. Customers place and track orders. Built code first.
 
@@ -661,7 +614,7 @@ Edge cases:
 - **Past 9999.** The request fails with `CAT-ORD-1000`. It never produces `10000`.
 - **Cancelled orders.** They keep their number. Numbers are never reused.
 
-**Counter cleanup.** The table grows by one row per day, and only today's row matters. The `CleanUpOrderCounters` service request deletes every row before today (UTC) and creates today's row with `LastNumber = 0` when it is missing. It lives in `Orders.Contracts` and `Orders.CoreService`, like every other request, and a second run changes nothing. A development endpoint triggers it: `POST /development/scheduler/clean-up-order-counters`. It exists in `Development` only. The development endpoints have a group per background worker, and this one is the group of the future scheduler.
+**Counter cleanup.** The table grows by one row per day, and only today's row matters. The `CleanUpOrderCounters` service request deletes every row before today (UTC) and creates today's row with `LastNumber = 0` when it is missing. It lives in `Orders.Contracts` and `Orders.CoreService`, like every other request, and a second run changes nothing. A development endpoint triggers it: `POST /development/scheduler/clean-up-order-counters`. It exists in `Development` only. The development endpoints have a group per background worker. This one is the `scheduler` group.
 
 **Database.** The `orders` database is built. It is a SQL Server database that only Orders reads. In `Development` the service applies its EF Core migrations at startup and adds the three order statuses. All tables are regular entities that inherit `CatEntityBase`. `OrderNumber` is unique. `OrderLine` refers to a book with `BookId` and has no foreign key, because the book lives in the Catalog database. `DailyOrderCounter` has no relationship with the other tables. Names and columns are not final.
 
@@ -736,17 +689,15 @@ erDiagram
 **Cons.**
 - Events cannot drive the process. They return no answer, and a failing subscriber throws. Calls that decide the next step go through interfaces instead.
 - Subscribers live as long as the app, because the aggregator holds them with weak references. A subscriber that needs the `DbContext` opens its own scope.
-- A cancelled order keeps its approved payment, because there is no refund step yet.
+- A cancelled order keeps its approved payment, because there is no refund step.
 - A stock reservation can leak. A release that fails is logged and not retried, and a cancel because Inventory did not answer skips the release.
-- The state lives in the order status. A payment over messages needs `Cat.Sagas`.
+- The state lives in the order status.
 
 **More.** Code in `demo/Cat.Demo.OrderService`. Requests in `OrderRequests.http`. [Events and interfaces](#events-and-interfaces).
 <!-- region end: OrdersService-->
 
 ### Inventory service
 <!-- region start: InventoryService-->
-
-**Status:** Built
 
 **What it is.** Tracks stock and reserves it when an order comes in. It is built database first, with SQL scripts that the AppHost runs.
 
@@ -757,7 +708,6 @@ erDiagram
 - The order number is the idempotency key. A second reserve call for the same order does nothing, and the retries of the resilience handler are safe. A release locks the rows, so a double release gives the stock back once.
 - Not enough stock gives a 409 with `CAT-INV-1000`. An unknown ISBN gives a 404 with `CAT-INV-1001`.
 - The generated client in `Cat.Demo.InventoryService.Api.Client` shares the `Contracts` project, so Orders and Inventory use the same request models. Run `Refresh-InventoryClient.ps1` in that project after the service changes, with the AppHost running.
-- It does not listen to `OrderPlaced` yet. That comes with messaging.
 
 **Database.** The `inventory` database comes from the SQL scripts in `Cat.Demo.InventoryService.Database`. A stock database often exists already, owned by a warehouse team, so the schema comes from SQL scripts and not from C# classes. In `Container` mode the AppHost creates the database and runs the scripts with `WithCreationScript`. The scripts can run again. In `Existing` mode it does nothing, because the owner of the database owns its schema, and the connection string `ConnectionStrings:inventory` points at it. The seed gives one warehouse and 50 copies of each of the 7 seed books. The entities are scaffolded with `dotnet ef dbcontext scaffold` into the Infrastructure project, and nobody edits the generated files. Run `Scaffold-InventoryModel.ps1` after a schema change. The entities do not inherit `CatEntityBase` and have no `SequenceId`.
 
@@ -805,26 +755,8 @@ The service uses no entity base classes. It shows that you use only the modules 
 **More.** Code in `demo/Cat.Demo.InventoryService`. Requests in `InventoryRequests.http`.
 <!-- region end: InventoryService-->
 
-### Notifications service
-<!-- region start: NotificationsService-->
-
-**Status:** Planned
-
-**What it is.** Sends the order confirmed and order shipped messages. It also runs scheduled jobs, such as the nightly clean up of order counters and cancelling unpaid orders.
-
-**CAT modules.** Planned: `Cat.Scheduling`, `Cat.EventProcessor` and `Cat.Localizations` for texts in several languages.
-
-**Pros.** A natural place for scheduled work and for the localization module.
-
-**Cons.** Not decided yet where it stores its data.
-
-**More.** [Cat.Scheduling](../plans/Cat.Scheduling.md), [Cat.EventProcessor](../plans/Cat.EventProcessor.md) and [Cat.Localizations](../plans/Cat.Localizations.md).
-<!-- region end: NotificationsService-->
-
 ### Aspire ServiceDefaults
 <!-- region start: AspireServiceDefaults-->
-
-**Status:** Built
 
 **What it is.** A shared project with the defaults every service uses. Only the demo uses it. The CAT modules never reference it.
 
@@ -841,16 +773,13 @@ The service uses no entity base classes. It shows that you use only the modules 
 - It shows that CAT sits next to the standard .NET tools.
 
 **Cons.**
-- The demo uses Aspire, so it does not use the future `Cat.Telemetry` and `Cat.Resilience` modules.
-- The health checks only say that the process runs. They check no database yet.
+- The health checks only say that the process runs. They check no database.
 
 **More.** `demo/Cat.Demo.ServiceDefaults`.
 <!-- region end: AspireServiceDefaults-->
 
 ### Payment service
 <!-- region start: PaymentService-->
-
-**Status:** Built
 
 **What it is.** A small separate service, `Cat.Demo.PaymentService`, that pretends to be a payment provider. Orders calls it over HTTP through the gateway, so retry and circuit breaker have a real call to protect. It has no database. Under the AppHost it checks the token like the other services.
 
@@ -883,7 +812,6 @@ Remove the secret to switch the failure off again. When you run the service on i
 | Module | Where | Why |
 |---|---|---|
 | `Cat.FluentWorkflows` | The step in Orders that calls it | The workflow only knows the interface. |
-| `Cat.Resilience` (future) | Around the client in Orders | Retry and circuit breaker on a call that can really fail. The demo uses the ServiceDefaults handler for now. |
 
 **Pros.**
 - Retry and circuit breaker have a real call to protect, and you can switch the failures on in a demo.
@@ -894,5 +822,5 @@ Remove the secret to switch the failure off again. When you run the service on i
 - The service forgets its answers when it restarts. It is a fake, so it stays simple on purpose.
 - The service is still pretend. It proves nothing about a real provider.
 
-**More.** `demo/Cat.Demo.PaymentService`, `PaymentServiceProvider` in `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Infrastructure/PaymentServices`. [Cat.Resilience](../plans/Cat.Resilience.md).
+**More.** `demo/Cat.Demo.PaymentService`, `PaymentServiceProvider` in `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Infrastructure/PaymentServices`.
 <!-- region end: PaymentService-->

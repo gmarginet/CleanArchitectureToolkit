@@ -58,7 +58,7 @@ The block chapters follow the `BlockChapter` template of the parts file, in this
 - **Cons.** What it costs: more dependencies, more ceremony, limits. Be honest, a demo that only praises helps nobody.
 - **More.** Links to the code folder.
 
-A block chapter describes what exists. It has no status line and no future text.
+A block chapter describes what exists. It has no status line and no future text. A block that is not built has no chapter. Its box in the drawing is hatched, and its entry in [demo-blocks.json](demo-blocks.json) has `"chapter": null`. The chapter comes when the block is built, see [Adding a block](#blocks).
 
 Adding a block:
 1. Add the chapter with the `BlockChapter` template, after the last block chapter. Name the region after the block.

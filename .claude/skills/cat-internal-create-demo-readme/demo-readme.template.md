@@ -29,7 +29,7 @@
 ## Building blocks
 <!-- region start: BlockOverview-->
 
-One chapter for every box in the drawing. A database sits in the chapter of the service that owns it.
+One chapter for every block that is built. A database sits in the chapter of the service that owns it.
 
 | Block | What it is |
 |---|---|
