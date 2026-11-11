@@ -3,13 +3,13 @@
 <!-- ==================== template end: RepoRow ====================-->
 
 <!-- ==================== template start: NewBadge ====================-->
-[![New](https://img.shields.io/badge/status-new-blue)](./plans/[[PlanFile]])
+[![New](https://img.shields.io/badge/-New-blue)](./plans/[[PlanFile]])
 <!-- ==================== template end: NewBadge ====================-->
 
-<!-- ==================== template start: InDevelopmentBadge ====================-->
-[![In development](https://img.shields.io/badge/status-in%20development-orange)](./plans/[[PlanFile]])
-<!-- ==================== template end: InDevelopmentBadge ====================-->
+<!-- ==================== template start: BuildingBadge ====================-->
+[![Building](https://img.shields.io/badge/-Building-orange)](./plans/[[PlanFile]])
+<!-- ==================== template end: BuildingBadge ====================-->
 
 <!-- ==================== template start: StableBadge ====================-->
-[![Stable](https://img.shields.io/badge/status-stable-green)]([[NameLink]])
+[![Stable](https://img.shields.io/badge/-Stable-green)]([[NameLink]])
 <!-- ==================== template end: StableBadge ====================-->

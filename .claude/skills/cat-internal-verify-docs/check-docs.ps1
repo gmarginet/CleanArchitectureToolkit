@@ -13,7 +13,7 @@ Scope
 Errors
 - A relative link or image points to a file or folder that does not exist, or the case of the path is wrong.
   The published site runs on Linux, where case matters.
-- The repo overview table of the readme does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the In development badge. A built row without a plan has the Stable badge. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has no priority, and every other row has a unique whole number as priority.
+- The repo overview table of the readme does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the Building badge. A built row without a plan has the Stable badge. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has no priority, and every other row has a unique whole number as priority.
 - A link points to an anchor that no heading of the target markdown file has.
 - A code fence is not closed.
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or has no comment line with its `RootPath`.
@@ -221,22 +221,22 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
         if ($row.Type -notin 'Module', 'Demo', 'Tooling') { $errors.Add("README.md repo overview: $name has the type $($row.Type). Use Module, Demo or Tooling."); continue }
         $plan = if ($planOf.ContainsKey($name)) { $planOf[$name] } else { "$name.md" }
         $hasPlan = $planFiles -contains $plan
-        $built = switch ($row.Type) { 'Module' { $moduleFolders -contains $name } 'Demo' { $true } default { $row.Badge -notlike '*status-new*' } }
+        $built = switch ($row.Type) { 'Module' { $moduleFolders -contains $name } 'Demo' { $true } default { $row.Badge -notlike '*badge/-New-*' } }
         if ($row.Type -eq 'Module' -and -not $built -and $row.Link -like './modules/*') { $errors.Add("README.md repo overview: $name has no folder in modules/.") }
         if (-not $built) {
             if (-not $hasPlan) { $errors.Add("README.md repo overview: $name is not built and has no plan plans\$plan.") }
-            if ($row.Badge -notlike "*status-new*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name is not built. Its badge must be New and link to ./plans/$plan.") }
+            if ($row.Badge -notlike "*badge/-New-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name is not built. Its badge must be New and link to ./plans/$plan.") }
             if ($row.Link -ne "./plans/$plan") { $errors.Add("README.md repo overview: $name is not built. Its name must link to ./plans/$plan.") }
         } elseif ($hasPlan) {
-            if ($row.Badge -notlike "*status-in%20development*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name has a plan. Its badge must be In development and link to ./plans/$plan.") }
+            if ($row.Badge -notlike "*badge/-Building-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name has a plan. Its badge must be Building and link to ./plans/$plan.") }
         } else {
-            if ($row.Badge -notlike "*status-stable*]($($row.Link))*") { $errors.Add("README.md repo overview: $name has no plan. Its badge must be Stable and link to $($row.Link).") }
+            if ($row.Badge -notlike "*badge/-Stable-*]($($row.Link))*") { $errors.Add("README.md repo overview: $name has no plan. Its badge must be Stable and link to $($row.Link).") }
         }
         if ($row.Type -eq 'Module' -and $built -and $row.Link -ne "./modules/$name/README.md") { $errors.Add("README.md repo overview: $name is built. Its name must link to ./modules/$name/README.md.") }
     }
     $priorities = @{}
     foreach ($row in $rows) {
-        if ($row.Badge -like '*status-stable*') {
+        if ($row.Badge -like '*badge/-Stable-*') {
             if ($row.Priority -ne '') { $errors.Add("README.md repo overview: $($row.Name) is Stable. Its priority must be empty.") }
         } elseif ($row.Priority -eq '' -or [int]$row.Priority -lt 1) {
             $errors.Add("README.md repo overview: $($row.Name) is not Stable. It needs a priority, a whole number from 1.")

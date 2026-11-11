@@ -46,14 +46,14 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-`Cat.Localizations` already exists and is marked in development. This phase finishes the module and uses it in the demo.
+`Cat.Localizations` already exists and is marked Building. This phase finishes the module and uses it in the demo.
 
 #### What exists today
 - `Cat.Localizations.Abstractions` holds `ICatLocalizer`. It is a contract to look up a localized string by key, so the rest of the app does not depend on one provider.
 - `Cat.Localizations` holds the no-op localizer and the module registration `AddCatNoLocalizationLocalizer`.
 - The no-op localizer returns the key itself. It fills in placeholders when the key contains them, in the order of the arguments.
 - The module readme shows how to write your own `ICatLocalizer`.
-- The readme marks the module as in development.
+- The readme marks the module as Building.
 
 #### What we want to build
 - A real provider, so the module is useful beyond the no-op localizer. Which one comes first is open (see question 2). Each provider is a project that a developer can pick or skip.
@@ -68,7 +68,7 @@
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 1-->
 #### Question 1
-What is left before the module is stable? In other words, what must be true before we drop the "in development" badge?
+What is left before the module is stable? In other words, what must be true before we drop the "Building" badge?
 <!-- region end: Question 1-->
 
 <!-- region start: Question 2-->

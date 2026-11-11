@@ -6,7 +6,7 @@ argument-hint: "[ModuleName] [short description]"
 
 # New module
 
-Set up a new module so it matches the others. New modules start with the status in development.
+Set up a new module so it matches the others. New modules start with the status Building.
 
 ## Before you start
 - Ask the owner for anything you cannot decide yourself: the module name, what it is for, and which projects it needs.
@@ -32,7 +32,7 @@ Set up a new module so it matches the others. New modules start with the status 
 ## Done when
 - All projects and the test project build and the tests pass.
 - The module has a readme with all blocks filled and a correct table of contents.
-- The readme has a row for the module with the In development badge.
+- The readme has a row for the module with the Building badge.
 - The solution file lists the folder, the readme, the projects and the test project.
 
 Do not commit unless the owner asks for it.

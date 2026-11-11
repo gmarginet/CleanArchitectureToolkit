@@ -56,7 +56,7 @@ Name column:
 
 Status column, from two facts: is the item built, and does it still have a plan in `plans/`.
 - Not built: the `NewBadge` template. The badge links to the plan.
-- Built, and the plan file exists: the `InDevelopmentBadge` template. The badge links to the plan. Breaking changes are possible.
+- Built, and the plan file exists: the `BuildingBadge` template. The badge links to the plan. Breaking changes are possible.
 - Built, and no plan file: the `StableBadge` template. The badge links to the readme of the item, the same target as the name link.
 - A plan goes only when the owner agrees. That is the moment an item becomes stable.
 
@@ -99,7 +99,7 @@ Use this when the owner changes the template and asks to update the readme.
 - [[Name]]: The name of the item, such as `Cat.Queries`, `Cat.Demo` or `Cat.Skills`.
 - [[NameLink]]: Where the name links to, see the name column above.
 - [[Type]]: `Module`, `Demo` or `Tooling`.
-- [[StatusBadge]]: The `NewBadge`, `InDevelopmentBadge` or `StableBadge` template.
+- [[StatusBadge]]: The `NewBadge`, `BuildingBadge` or `StableBadge` template.
 - [[Priority]]: The priority of the item, see the priority column above. Empty for a stable item.
 - [[Description]]: One short sentence about what the item is used for.
 - [[PlanFile]]: The file name of the plan in `plans/`, such as `Cat.Messaging.md` or `Demo.md`.
