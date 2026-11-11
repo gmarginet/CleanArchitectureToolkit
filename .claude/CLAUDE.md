@@ -65,7 +65,7 @@ The `plans/` folder holds the plans we make before we build.
 
 ### Demo Folder Structure
 Every deployable unit in `demo/` gets its own folder. Never put project folders directly in `demo/`.
-Use the `demo-structure` skill to add or restructure demo projects. It also keeps `CleanArchitectureToolkit.slnx` in sync.
+Use the `cat-internal-create-demo-unit` skill to add or restructure demo projects. It also keeps `CleanArchitectureToolkit.slnx` in sync.
 
 ## 📦 Module Folder Blueprint
 Each module directory contains its C# projects, an auto-generated `namespaces/` markdown folder, and a local `README.md`.

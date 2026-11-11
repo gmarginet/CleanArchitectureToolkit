@@ -16,7 +16,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 | [cat-internal-create-readme](cat-internal-create-readme/SKILL.md) | Keep the repo overview table in the readme in sync, and find a chapter by its region. | `/cat-internal-create-readme overview Cat.EFCore` |
 | [cat-internal-create-excalidraw](cat-internal-create-excalidraw/SKILL.md) | Create or edit an editable Excalidraw drawing in `resources/schemas`. | `/cat-internal-create-excalidraw add a drawing of the demo security setup` |
 | [cat-internal-create-mermaid](cat-internal-create-mermaid/SKILL.md) | Write or update an ERD, class or sequence diagram as inline Mermaid. | `/cat-internal-create-mermaid ERD for the Catalog service` |
-| [demo-structure](demo-structure/SKILL.md) | Add or restructure a service, client or Aspire project in `demo/`. | `/demo-structure service Orders` |
+| [cat-internal-create-demo-unit](cat-internal-create-demo-unit/SKILL.md) | Add or restructure a service, client or Aspire project in `demo/`. | `/cat-internal-create-demo-unit service Orders` |
 | [cat-internal-commit](cat-internal-commit/SKILL.md) | Commit the changes in logical blocks, with `(skip-pub)` when no code in `modules/` changed. Never pushes. | `/cat-internal-commit` |
 | [cat-internal-verify-docs](cat-internal-verify-docs/SKILL.md) | Check all markdown locally: links, anchors, letter case, code fences, markers and forbidden punctuation. | `/cat-internal-verify-docs` |
 | [demo-readme](demo-readme/SKILL.md) | Keep `demo/README.md` and the demo architecture drawing in sync with the demo app. | `/demo-readme Inventory service started` |
@@ -52,7 +52,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **How to use it:** Describe the diagram and name the file or service it belongs to.
 - **When:** When a data model, class or sequence diagram is added or changed. Architecture and flow drawings use `cat-internal-create-excalidraw`.
 
-### demo-structure
+### cat-internal-create-demo-unit
 - **What it does:** Applies the demo folder rules: one folder per deployable unit, one subfolder per project, and a matching solution folder in `CleanArchitectureToolkit.slnx`.
 - **How to use it:** Give it the kind of unit (`service`, `client`, `apphost` or `servicedefaults`) and a name.
 - **When:** When a demo project is added, moved or renamed.

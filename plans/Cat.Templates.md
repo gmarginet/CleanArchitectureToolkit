@@ -60,7 +60,7 @@ From the readme:
 - `Cat.Demo.CatalogService` is a small working example of the structure.
 
 From the repository:
-- The `demo-structure` skill describes the folder and solution rules for demo services, including `CleanArchitectureToolkit.slnx`.
+- The `cat-internal-create-demo-unit` skill describes the folder and solution rules for demo services, including `CleanArchitectureToolkit.slnx`.
 - `demo/Directory.Build.props` sets the language version and nullable context.
 - The demo services show the startup wiring: `AddServiceDefaults`, `AddCatMinimalApiModule`, `AddCatServiceRequestsModule` with the decorators, queries, commands, validators and the database registration.
 

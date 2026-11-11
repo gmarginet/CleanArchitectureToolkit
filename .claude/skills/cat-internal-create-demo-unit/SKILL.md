@@ -1,5 +1,5 @@
 ---
-name: demo-structure
+name: cat-internal-create-demo-unit
 description: Add or restructure a deployable unit in demo/ (service, client, Aspire AppHost or Aspire ServiceDefaults) and keep CleanArchitectureToolkit.slnx in sync. Use when a demo project is added, moved or renamed.
 argument-hint: "[service|client|apphost|servicedefaults] [Name]"
 ---
