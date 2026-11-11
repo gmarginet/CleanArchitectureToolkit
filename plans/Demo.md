@@ -32,7 +32,7 @@
 # Plans for `Demo` <!-- omit in toc -->  
 
 <!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-demo)
+[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-demo)
 <!-- region end: StatusBadge-->
 
 ## Table of contents <!-- omit in toc -->  
@@ -50,96 +50,44 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-Messaging. `Cat.Messaging` and `Cat.EventProcessor`, the Service Bus emulator in the AppHost, and the `OrderPlaced` bridge in Orders.
+Messaging. `Cat.Messaging` and `Cat.EventProcessor`, the Service Bus emulator in the AppHost, and the `OrderConfirmed` bridge in Orders.
 
 #### Background
 - Every phase of this plan ends in a working demo. A phase is done when its "Done when" is true, the demo readme and the drawing are current (the `cat-internal-create-demo-readme` skill) and the tests pass.
 - The demo uses the Azure Service Bus emulator. It runs in Docker, so it fits the Aspire setup. The AppHost starts it next to SQL Server when `Cat.Messaging` arrives.
-- Orders publishes `OrderPlaced`. Inventory and Notifications consume it. Inventory comes in this phase. Notifications does not exist yet, so it comes in phase 2.
+- Orders publishes `OrderConfirmed`. Inventory and Notifications consume it. Inventory comes in this phase. Notifications does not exist yet, so it comes in phase 2.
 - A handler that runs for a message has no current user yet. `Cat.Authorization` does not exist, and `Cat.Messaging` does not attach a token. The demo keeps its own `ICurrentUser` until phase 3, and the handlers of this phase must not need a user. Whether messages carry a token in the demo is question 10 of phase 3.
 - Orders keeps announcing facts inside the service with `Cat.EventAggregators`. A subscriber bridges an event to the bus. The event aggregator itself is in-process only and cannot carry a message to another service.
 - Inventory came before messaging on purpose. Reserving stock needs an answer, and a message gives none. So Orders calls Inventory over HTTP, and messages tell Inventory about the order afterwards.
 - The modules come from working code. The module is designed from what the demo shows, the way `CatalogPriceProvider` came before `Cat.Api.Client`.
 - The modules must not depend on Aspire.
+- EF Core 11 is released. Phase 2 of [Cat.EFCore.md](Cat.EFCore.md) upgrades the toolkit and the demo. It moves the Catalog and Orders Infrastructure projects and the three Api projects to `net11.0`, and it checks that the Catalog creates no new migration. The migration for the outbox table made in this phase is easier to make after that upgrade. The order of the two is question 16 of that plan.
 
 #### What exists today
 - The Service Bus emulator is not in the AppHost, and the box in the drawing is hatched. The demo readme lists it as planned.
-- Orders publishes no `OrderPlaced`. Its event subscribers handle the order events inside the service: the status update, the audit record and the stock release.
-- Inventory has no message listener. The demo readme says it does not listen to `OrderPlaced` yet.
+- Orders publishes no `OrderConfirmed`. Its event subscribers handle the order events inside the service: the status update, the audit record and the stock release.
+- Inventory has no message listener.
 - `Cat.EventProcessor` and `Cat.Messaging` exist. Their plans, [Cat.EventProcessor.md](Cat.EventProcessor.md) and [Cat.Messaging.md](Cat.Messaging.md), hold what is left, such as the tests against the emulator and the identity from the token.
 
 #### Needs
 The module plans [Cat.Messaging.md](Cat.Messaging.md) and [Cat.EventProcessor.md](Cat.EventProcessor.md) answered and built.
 
 #### Done when
-Orders publishes `OrderPlaced` and Inventory consumes it. The emulator box in the drawing is solid.
+Orders publishes `OrderConfirmed` and Inventory consumes it and marks its reservations as confirmed. The emulator box in the drawing is solid.
 
 #### Decided
 - **Messaging.** The Azure Service Bus emulator, started by the AppHost.
+- **ERDs.** The ERDs show the database. The Catalog ERD keeps `ValidFrom` and `ValidUntil` on `BookPrice`, with a comment on the attribute that says the class does not map them yet. The comment goes when the class gets the properties. The Inventory ERD gets a comment on each attribute of a composite unique constraint, such as "unique with Isbn" on `WarehouseId`. The ERDs mark nullable columns with a comment "nullable", and show nothing else about nullability.
+- **Order message.** The message is `OrderConfirmed`, and Orders publishes it when the order is confirmed, which is also the moment of the outbox row. It was called `OrderPlaced` before. A consumer never sees an order that was cancelled before the confirmation.
+- **Message type.** A message type lives in the `Contracts` project of the sender. That is the base idea, and an exception is allowed. `OrderConfirmed` lives in the `Contracts` project of Orders, and Inventory references it.
+- **Topology.** The services create their own queues, topics and subscriptions at startup, in the Development environment only, with `ICatServiceBusTopology.EnsureTopologyAsync` and `ICatEventProcessorTopology.EnsureSubscriptionsAsync`. The emulator tests of [Cat.Messaging.md](Cat.Messaging.md) prove it first. If port 5300 is not exposed or the call fails, the demo uses the configuration file of the emulator instead.
+- **Outbox.** Orders publishes `OrderConfirmed` through the outbox (`Cat.Messaging.Outbox.EFCore`). The row is written in the command that confirms the order, in the same `SaveChanges` as the status, so the row and the status are saved together. The bridge subscriber goes away or only triggers that command. Orders gets a migration for the `CatOutbox` table.
+- **Inventory handler.** Inventory marks the reservations of the order as confirmed, with a column such as `ConfirmedAt` on `StockReservation`, set by the handler. The SQL scripts and the scaffolded model change for it. Setting it twice changes nothing. An unknown order number gives a failed response, which the failure table of `Cat.EventProcessor` dead letters.
+- **Inbox.** Inventory does not use the inbox. The reserve is already safe to repeat, and the demo shows that an idempotent handler needs none. The inbox can come with a demo handler that cannot repeat, if one appears.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-What do the ERDs in the demo readme show? The three ERDs (Catalog, Orders, Inventory) in `demo/README.md` were checked against the entity classes, the `DbContext` indexes, the EF migration and the Inventory SQL scripts. Tables, columns, types and relations all match. One fix is done: `OrderStatus.Code` has a unique index in `OrderDbContext`, so the Orders ERD marks it `UK`. Three small points are left. None of them blocks the phase, and all three are about the same thing: how much detail an ERD shows. Answer them in one go with the recommendation if you agree.
-
-##### Question 1.1
-Do we keep the `BookPrice` validity columns in the ERD? The Catalog ERD shows `ValidFrom` and `ValidUntil` on `BookPrice`. They are columns in the database but not properties of the class yet, because the class gets them after the release of EF Core 11. The demo uses EF Core 10.0.14 today.
-- **Keep them.** The ERD shows the database. Cost: the ERD and the class differ until EF Core 11.
-- **Remove them.** The ERD shows only the class. Cost: the ERD hides the temporal table, which is the interesting part of `BookPrice`.
-
-Recommendation: keep them, with a comment on the attribute that says the class does not map them yet. Remove the comment when the class gets the properties.
-
-##### Question 1.2
-Do we make the composite unique constraints in Inventory visible? The scripts have two: `(WarehouseId, Isbn)` on `StockItem` and `(StockItemId, OrderNumber)` on `StockReservation`. The second one makes a repeated reserve call safe. An ERD cannot mark a composite key with `UK`. The options:
-- **A comment on each attribute.** For example a comment "unique with Isbn" on `WarehouseId`. Cost: the comment sits on two attributes.
-- **A sentence under the ERD.** Cost: it is easy to miss, and it can drift away from the diagram.
-- **Leave it out.** Cost: the idempotent reserve is not explained.
-
-Recommendation: a comment on each attribute. It stays with the diagram, and it explains why the repeated reserve call is safe.
-
-##### Question 1.3
-Do we show nullability in the ERDs? `Payment.PaidAt` is nullable in the class. The ERD does not show nullability for any column. The options:
-- **Mark only the nullable columns,** with a comment "nullable". Cost: a little noise on a few columns.
-- **Mark every column.** Cost: noise on every column, and the diagram gets harder to read.
-- **Do not show it.** Cost: a reader cannot see that `PaidAt` is empty until the payment is done.
-
-Recommendation: mark only the nullable columns. Not null is the default, so the exceptions are what the reader needs.
-<!-- region end: Question 1-->
-<!-- region start: Question 6-->
-#### Question 6
-Who creates the queues, topics and subscriptions for the demo? The modules create nothing at startup. `ICatServiceBusTopology.EnsureTopologyAsync` creates the topic of an event or the queue of a command, and `ICatEventProcessorTopology.EnsureSubscriptionsAsync` creates the subscription of a service. Someone must call them, or the emulator must be told what to create. To check first: whether the emulator supports creating entities through the administration API. The owner may remember that it takes its entities from a configuration file. The options:
-- **A startup step in the services,** in the Development environment only, that calls the two methods. Cost: it works only if the emulator supports the administration API. The service needs the manage right.
-- **The configuration file of the emulator,** written in the AppHost. Cost: a second place that holds the names, and it can drift from the naming convention of `Cat.Messaging`. The two methods are not shown in the demo.
-- **A script that runs once.** Cost: one more thing for a developer to run, and it can be forgotten.
-
-Recommendation: check the emulator first. If it does not support the administration API, use its configuration file. If it does, use the startup step, because it shows the topology methods and cannot drift from the convention.
-<!-- region end: Question 6-->
-<!-- region start: Question 7-->
-#### Question 7
-Where does the `OrderPlaced` type live? It must be a message and a service request at the same time. The sender and the receiver need the same type name and the same JSON, because the name of the topic comes from the type name. The options:
-- **In the `Contracts` project of Orders,** and Inventory references it. Cost: Inventory references the `Contracts` of another service. The toolkit allows this, because sharing `Contracts` is the choice of the developer.
-- **Each service has its own type,** with the same name and the same properties. Cost: two types that must be kept equal by hand, and a mismatch shows only at runtime.
-
-Recommendation: the `Contracts` project of Orders. It is the least code and it shows the contract as one type. The demo readme can say what sharing costs.
-<!-- region end: Question 7-->
-<!-- region start: Question 8-->
-#### Question 8
-Does Orders publish `OrderPlaced` through the outbox? The subscriber that bridges the event of the event aggregator can send straight to the bus, or write the message to the outbox in the same `SaveChanges` as the order. The options:
-- **Through the outbox** (`Cat.Messaging.Outbox.EFCore`). Cost: a migration for the `CatOutbox` table in Orders, and one more moving part. A message is never lost when the order is saved.
-- **Straight to the bus.** Cost: a message can be lost when the order is saved but the send fails, or the other way round. The demo shows the weaker pattern.
-
-Recommendation: through the outbox. The outbox exists for this case, and the demo is where a developer sees how it works.
-<!-- region end: Question 8-->
-<!-- region start: Question 9-->
-#### Question 9
-Does Inventory use the inbox? Reserving stock is already safe to repeat, because of the unique `(StockItemId, OrderNumber)` constraint. The inbox (`Cat.EventProcessor.Inbox.EFCore`) is meant for a handler that cannot run twice. The options:
-- **No inbox.** Cost: the inbox is not shown or tested in the demo. The readme of the module is the only place that explains it.
-- **Use the inbox in Inventory.** Cost: a migration for the `CatInbox` table, and the same protection twice.
-
-Recommendation: no inbox in Inventory. The demo should show that an idempotent handler needs none. The inbox can come with a demo handler that cannot repeat, if one appears.
-<!-- region end: Question 9-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
 
@@ -152,7 +100,7 @@ Recommendation: no inbox in Inventory. The demo should show that an idempotent h
 Notifications and scheduling. The Notifications service, `Cat.Scheduling` and `Cat.Localizations` for the texts. The nightly clean up of the order counters, the cancel of unpaid orders and a nightly low stock report.
 
 #### Background
-- Notifications sends the order confirmed and order shipped messages. It also runs the scheduled jobs. It consumes `OrderPlaced`.
+- Notifications sends the order confirmed and order shipped messages. It also runs the scheduled jobs. It consumes `OrderConfirmed`.
 - The scheduled jobs of the demo:
   - Clean up the daily order counters every night, shortly after midnight UTC.
   - Cancel unpaid orders after 24 hours.
