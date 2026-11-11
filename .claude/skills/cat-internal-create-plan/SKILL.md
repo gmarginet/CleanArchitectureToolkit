@@ -34,6 +34,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 - `Decided` in a phase description holds only what the owner decided, or what the existing docs state. Name the document when it comes from one. Everything else is an open question. Never invent a decision.
 - Facts in the description come from documents and code that you read. Do not add facts you did not check. Mark a guess as something to check.
 - One decision per open question, answerable in a sentence. Put the blocking questions first.
+- When a question or a sub question offers options, write the options as a list. Ask the question first, then give one bullet per option, each with a short label and what it costs. Never run the options together in a sentence. Always end with a line that starts with "Recommendation:", which names the option Claude recommends and says why. Claude always has one when it offers options. The owner still decides.
 - A plan never says a module "will" exist in a certain version or on a date. It only says what is decided.
 - Follow the style rules in CLAUDE.md.
 
@@ -151,7 +152,7 @@ Use this when the owner changes `plan.template.md` or `plan.parts.template.md` a
   - This number never changes, so even if a question gets deleted after it is answered, all other questions keep their number.
   - The first question of a plan gets number 1.
   - A new question gets the highest question number in the file plus 1.
-- [[Question]]: The actual question.
+- [[Question]]: The actual question. When it offers options, they follow as a list, see [Rules for the content](#rules-for-the-content).
 - [[SubQuestionNumber]]: The number of a sub question.
   - It is the number of the question the sub question belongs to, concatenated with a dot and then a number that is unique within the question it belongs to.
   - That number never changes, so even if a question gets deleted after it is answered, all other questions keep their number.

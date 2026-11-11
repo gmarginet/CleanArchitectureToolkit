@@ -25,7 +25,7 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 - Avoid reading entire large source files directly via standard shell tools; query the Roslyn MCP server instead to optimize token usage.
 
 ## Working with the owner
-- The owner decides design. Propose options with their costs and a recommendation, and do not decide on your own. Write down only what the owner decided. Open points go in the plan as open questions.
+- The owner decides design. Propose options with their costs and a recommendation with the reason, and do not decide on your own. Write down only what the owner decided. Open points go in the plan as open questions.
 - CAT is a toolbox. A developer picks the modules and the projects they want, and a module never forces another one on them.
 - A module splits into an `Abstractions` project, the implementation and optional parts such as decorators. The core of a service only references abstractions.
 - Modules never depend on Aspire or on the demo `ServiceDefaults`.
