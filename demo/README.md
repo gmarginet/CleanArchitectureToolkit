@@ -519,7 +519,7 @@ The gateway only option of the module is not used in the demo. The services chec
 | `DEM-CTL-1000` | `IsbnAlreadyExists` | `A book with ISBN {Isbn} already exists.` |
 | `DEM-CTL-1001` | `BookPriceNotFound` | `Book {BookId} does not exist or has no price.` |
 
-**Database.** The `catalog` database is built. It is a SQL Server database that only Catalog reads. In `Development` the service applies its EF Core migrations at startup and adds 4 categories and 7 books when the tables are empty. Every entity inherits `CatEntityBase`, so each has a `Guid` `Id` as non-clustered primary key and an identity `SequenceId` that holds the clustered index. `BookPrice` inherits `CatTemporalEntityBase`. SQL Server keeps every old price in a history table, and `ValidFrom` and `ValidUntil` are the period columns. Names and columns are not final.
+**Database.** The `catalog` database is built. It is a SQL Server database that only Catalog reads. In `Development` the service applies its EF Core migrations at startup and adds 4 categories and 7 books when the tables are empty. Every entity inherits `CatEntityBase`, so each has a `Guid` `Id` as non-clustered primary key and an identity `SequenceId` that holds the clustered index. `BookPrice` inherits `CatTemporalEntityBase`. SQL Server keeps every old price in a history table, and `ValidFrom` and `ValidUntil` are the period columns. The class does not map them yet. Names and columns are not final.
 
 ```mermaid
 erDiagram
@@ -544,8 +544,8 @@ erDiagram
         int SequenceId
         Guid BookId FK
         decimal Amount
-        datetime ValidFrom
-        datetime ValidUntil
+        datetime ValidFrom "Column only, the class does not map it yet"
+        datetime ValidUntil "Column only, the class does not map it yet"
     }
 ```
 
@@ -636,7 +636,7 @@ Edge cases:
 | `DEM-ORD-1006` | `PaymentUnavailable` | `The payment service is not available. Order {OrderNumber} was cancelled. Try again later.` |
 | `DEM-ORD-1007` | `StockUnavailable` | `The inventory service is not available. Order {OrderNumber} was cancelled. Try again later.` |
 
-**Database.** The `orders` database is built. It is a SQL Server database that only Orders reads. In `Development` the service applies its EF Core migrations at startup and adds the three order statuses. All tables are regular entities that inherit `CatEntityBase`. `OrderNumber` is unique. `OrderLine` refers to a book with `BookId` and has no foreign key, because the book lives in the Catalog database. `DailyOrderCounter` has no relationship with the other tables. Names and columns are not final.
+**Database.** The `orders` database is built. It is a SQL Server database that only Orders reads. In `Development` the service applies its EF Core migrations at startup and adds the three order statuses. All tables are regular entities that inherit `CatEntityBase`. `OrderNumber` is unique. `OrderLine` refers to a book with `BookId` and has no foreign key, because the book lives in the Catalog database. `DailyOrderCounter` has no relationship with the other tables. Only `Payment.PaidAt` can be empty, and the diagram marks it. Names and columns are not final.
 
 ```mermaid
 erDiagram
@@ -680,7 +680,7 @@ erDiagram
         Guid OrderId FK
         decimal Amount
         string Status
-        datetime PaidAt
+        datetime PaidAt "nullable"
     }
     DailyOrderCounter {
         Guid Id PK
@@ -736,7 +736,7 @@ erDiagram
 | `DEM-INV-1000` | `OutOfStock` | `Book {Isbn} is out of stock. Order {OrderNumber} got no stock.` |
 | `DEM-INV-1001` | `UnknownBook` | `Book {Isbn} is not in the warehouse. Order {OrderNumber} got no stock.` |
 
-**Database.** The `inventory` database comes from the SQL scripts in `Cat.Demo.InventoryService.Database`. A stock database often exists already, owned by a warehouse team, so the schema comes from SQL scripts and not from C# classes. In `Container` mode the AppHost creates the database and runs the scripts with `WithCreationScript`. The scripts can run again. In `Existing` mode it does nothing, because the owner of the database owns its schema, and the connection string `ConnectionStrings:inventory` points at it. The seed gives one warehouse and 50 copies of each of the 7 seed books. The entities are scaffolded with `dotnet ef dbcontext scaffold` into the Infrastructure project, and nobody edits the generated files. Run `Scaffold-InventoryModel.ps1` after a schema change. The entities do not inherit `CatEntityBase` and have no `SequenceId`.
+**Database.** The `inventory` database comes from the SQL scripts in `Cat.Demo.InventoryService.Database`. A stock database often exists already, owned by a warehouse team, so the schema comes from SQL scripts and not from C# classes. In `Container` mode the AppHost creates the database and runs the scripts with `WithCreationScript`. The scripts can run again. In `Existing` mode it does nothing, because the owner of the database owns its schema, and the connection string `ConnectionStrings:inventory` points at it. The seed gives one warehouse and 50 copies of each of the 7 seed books. The entities are scaffolded with `dotnet ef dbcontext scaffold` into the Infrastructure project, and nobody edits the generated files. Run `Scaffold-InventoryModel.ps1` after a schema change. The entities do not inherit `CatEntityBase` and have no `SequenceId`. Two unique constraints span two columns: `(WarehouseId, Isbn)` on `StockItem` and `(StockItemId, OrderNumber)` on `StockReservation`. The diagram marks both columns of each. The second one makes a repeated reserve call safe.
 
 ```mermaid
 erDiagram
@@ -750,14 +750,14 @@ erDiagram
     }
     StockItem {
         int Id PK
-        int WarehouseId FK
-        string Isbn
+        int WarehouseId FK "unique with Isbn"
+        string Isbn "unique with WarehouseId"
         int QuantityOnHand
     }
     StockReservation {
         int Id PK
-        int StockItemId FK
-        string OrderNumber
+        int StockItemId FK "unique with OrderNumber"
+        string OrderNumber "unique with StockItemId"
         int Quantity
         datetime ReservedAt
     }
