@@ -273,7 +273,7 @@ builder.Run(s =>
     if (s.Lines.Count == 0)
     {
         return CatResponse.BadRequest<CatStepExecutionResult>(
-            CatError.Create("ORD-1001", "An order needs at least one line."));
+            CatError.Create("DEM-ORD-1001", "An order needs at least one line."));
     }
 
     return CatResponse.Ok(CatStepExecutionResult.Continue);
@@ -692,7 +692,7 @@ public class CheckStockStep : CatStepBodyAsync<OrderState>
 
                 return CatWorkflowResponse.Failed(
                     CatStepExecutionResult.BreakCascade,
-                    CatError.Create("ORD-1002", "Product '{productId}' is out of stock.", line.ProductId));
+                    CatError.Create("DEM-ORD-1002", "Product '{productId}' is out of stock.", line.ProductId));
             }
         }
 

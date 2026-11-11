@@ -314,7 +314,7 @@ The processor never turns a failure into an exception for you. What you get back
 | The handler returns `BadRequest`, `NotFound`, `Unauthorized`, `Forbidden`, `Conflict` or `InternalServerError` | A failed response with the errors the handler passed. It has no payload. |
 | The validation decorator finds an invalid request | A `BadRequest` response with one error for each failed rule. The handler never runs. See the rule codes in [Cat.Validators](../Cat.Validators/README.md#rules). |
 | The validation decorator is on with `validationRequired: true` and the request has no validator | An `InvalidOperationException` from the service provider, because the validator for the request isn't registered. |
-| The validator processor returns a response that is neither succeeded nor failed | An `InternalServerError` with `CAT-GEN-1001` and the message `An unexpected response was returned. ({Service})`. This should not happen with the built-in processor. |
+| The validator processor returns a response that is neither succeeded nor failed | An `InternalServerError` with `CAT-GEN-1001` and the message `An unexpected response was returned. ({Service})`. This should not happen with the built-in processor. The `CAT-GEN` codes are listed in [Cat.Responses](../Cat.Responses/README.md#define-and-raise-errors). |
 | No handler is registered for the request | An `InvalidOperationException` with the message `No decorated service found for service type ICatServiceRequestHandler<YourRequest>`. Check that `AddCatServiceRequestsModule` got a type from the handler's assembly. |
 | The handler throws | The original exception reaches the caller as it is. It isn't wrapped in a `TargetInvocationException`. |
 

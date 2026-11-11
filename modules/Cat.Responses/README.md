@@ -276,22 +276,27 @@ Define reusable errors once, as static fields, instead of building `CatError` in
 ```csharp
 using Cat.Responses;
 
-public static class CatDemoErrorDefinitions
+public static class OrderErrorDefinitions
 {
+    private const string OrderErrorCodePrefix = "DEM-ORD";
+
     public static readonly CatErrorDefinition NotFound = CatErrorDefinition.Create(
-        "CAT-DEM-1000",
+        OrderErrorCodePrefix,
+        1000,
         "{ResourceName} with id {id} could not be found.");
 }
 
 // Raise it with the values for the placeholders
-var error = CatDemoErrorDefinitions.NotFound.CreateCatError("Todo", 42);
+var error = OrderErrorDefinitions.NotFound.CreateCatError("Book", 42);
 ```
+
+`Create(prefix, number, message)` builds the code as `DEM-ORD-1000`. It does not check the prefix. If you prefer, pass the whole code as one string with `Create(code, message)`.
 
 For a one-off error, build it directly:
 
 ```csharp
-var error = CatError.Create("ORD-1001", "An order needs at least one line.");
-var errorWithArguments = CatError.Create("ORD-1002", "Product '{productId}' is out of stock.", productId);
+var error = CatError.Create("DEM-ORD-1001", "An order needs at least one line.");
+var errorWithArguments = CatError.Create("DEM-ORD-1002", "Product '{productId}' is out of stock.", productId);
 ```
 
 The module also ships three definitions for common cases:
@@ -302,7 +307,17 @@ The module also ships three definitions for common cases:
 | `CatGeneralErrorDefinitions.UnexpectedResponse` | `CAT-GEN-1001` | `An unexpected response was returned. ({Service})` | `Service` |
 | `CatGeneralErrorDefinitions.ResourceNotFound` | `CAT-GEN-1002` | `The requested {ResourceName} with id {ResourceId} was not found.` | `ResourceName`, `ResourceId` |
 
-Cat.Validators has its own definitions with the `CAT-VAL-` prefix, so its codes never clash with these. Give your application errors a prefix of your own, like `CAT-DEM-` in the demo.
+Cat.Validators has its own definitions with the `CAT-VAL` prefix, so its codes never clash with these.
+
+#### The error code convention
+
+Clients match on the code, not on the text, so a code is stable. CAT follows these rules:
+
+- **Pattern:** `<APPLICATION>-<AREA>-<number>`. The application and the area are 3 uppercase characters each, like `CAT-VAL-1001` or `DEM-ORD-1001`.
+- **CAT codes:** `CAT` is the application. The area is a 3 letter acronym of the module, like `GEN` for this module and `VAL` for Cat.Validators.
+- **Numbers:** They start at 1000 and count up. A number is unique within its prefix and is never reused. There are no ranges for kinds of errors.
+- **One place per module:** A module defines its codes in one class, like `CatGeneralErrorDefinitions`, and its readme lists them.
+- **Your own codes:** You are not obliged to follow the convention. Any valid string works. Use a prefix of your own, like `DEM-ORD` in the demo, so your codes never clash with the `CAT-` codes.
 
 ### Log the errors of a response
 
@@ -335,7 +350,7 @@ Check `IsFailed` or `IsSucceeded` before you cast, as in the cast example above.
 
 The failures a response reports are errors, not exceptions. Which codes you can get depends on the module that produced the response:
 
-- **Cat.Validators:** `BadRequest` with the `CAT-VAL-1001` to `CAT-VAL-1017` rule errors.
+- **Cat.Validators:** `BadRequest` with the `CAT-VAL-1001` to `CAT-VAL-1020` rule errors.
 - **Cat.ServiceRequests validation decorator:** `InternalServerError` with `CAT-GEN-1001`, when the validator returns neither a succeeded nor a failed response.
 - **Cat.Minimal.Api:** maps each failed type to an HTTP status. See [Cat.Minimal.Api](../Cat.Minimal.Api/README.md).
 - **Your handlers:** the codes you define yourself.

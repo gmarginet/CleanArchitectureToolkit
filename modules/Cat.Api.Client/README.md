@@ -243,6 +243,8 @@ All services share one error body. `CatProblemDetails` of `Cat.Api.Client` reads
 | Answers without usable errors | The status picks the type, and the error is `CAT-GEN-1001`, an unexpected response from the named service. |
 | Cannot connect, times out or reads a body it does not understand | `InternalServerError` with `CAT-GEN-1001`. |
 
+The `CAT-GEN` codes, such as `CAT-GEN-1001`, are listed in [Cat.Responses](../Cat.Responses/README.md#define-and-raise-errors).
+
 An exception that is not about the call, such as a bug in your own code, is not caught.
 
 ### Resilience

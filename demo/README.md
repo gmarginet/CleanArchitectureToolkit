@@ -381,8 +381,8 @@ One chapter for every block that is built. A database sits in the chapter of the
 - Every call to the gateway carries the token when a person is logged in. Catalog reads need none.
 - The basket lives in the local storage of the browser, so a refresh or the trip to the login does not empty it. A line holds the book, the title, the price of the list and the quantity from 1 to 50. A book without a price cannot be added.
 - Place order sends only the book and the quantity. The shop decides price, stock and payment. A visitor who is not logged in is sent to the login first and returns to the basket. After a success the screen shows the order number, status and total, and the basket is emptied. A failed order is never retried by the client, so nobody is charged twice by a retry.
-- The order overview lists the orders of the person, newest first. The order detail shows the lines with the book titles, which come from the catalog, and a Cancel button that is always shown. The client holds no list of the statuses that allow a cancel. A refused cancel shows the message of the service, such as `CAT-ORD-1004`. Another person's order comes back as not found.
-- The admin screens `/admin/books/new` and `/admin/books/:id` hold a form for ISBN, title, author, category and price. The links to them show only when the ID token has the `admin` role in its `roles` claim. That only decides what the screen shows. The catalog checks the role again on every save, so a non admin who opens the address gets the 403 of the service. A duplicate ISBN shows `CAT-CTL-1000`.
+- The order overview lists the orders of the person, newest first. The order detail shows the lines with the book titles, which come from the catalog, and a Cancel button that is always shown. The client holds no list of the statuses that allow a cancel. A refused cancel shows the message of the service, such as `DEM-ORD-1004`. Another person's order comes back as not found.
+- The admin screens `/admin/books/new` and `/admin/books/:id` hold a form for ISBN, title, author, category and price. The links to them show only when the ID token has the `admin` role in its `roles` claim. That only decides what the screen shows. The catalog checks the role again on every save, so a non admin who opens the address gets the 403 of the service. A duplicate ISBN shows `DEM-CTL-1000`.
 - A failed call shows its CAT errors: the code and the message with the arguments filled in, and the trace id. The validators put the field name in front of the arguments, and the client skips it. The basket stays, so the person can try again.
 - Log out ends the Keycloak session as well.
 - It has no shared code with the services. The types come from a saved copy of the OpenAPI documents of the services.
@@ -512,6 +512,13 @@ The gateway only option of the module is not used in the demo. The services chec
 - Saving a book checks that the ISBN is unique.
 - The folder is `demo/Cat.Demo.CatalogService`, with the projects of the service project structure.
 
+**Error codes.** `CatalogErrorDefinitions` defines them with the prefix `DEM-CTL`:
+
+| Code | Name | Message |
+|------|------|---------|
+| `DEM-CTL-1000` | `IsbnAlreadyExists` | `A book with ISBN {Isbn} already exists.` |
+| `DEM-CTL-1001` | `BookPriceNotFound` | `Book {BookId} does not exist or has no price.` |
+
 **Database.** The `catalog` database is built. It is a SQL Server database that only Catalog reads. In `Development` the service applies its EF Core migrations at startup and adds 4 categories and 7 books when the tables are empty. Every entity inherits `CatEntityBase`, so each has a `Guid` `Id` as non-clustered primary key and an identity `SequenceId` that holds the clustered index. `BookPrice` inherits `CatTemporalEntityBase`. SQL Server keeps every old price in a history table, and `ValidFrom` and `ValidUntil` are the period columns. Names and columns are not final.
 
 ```mermaid
@@ -583,10 +590,10 @@ erDiagram
   2. Look up the price of every line and add up the total.
   3. Create the order. It gets its number and the status `Pending` in one transaction. The workflow supplies the order ID and the time before the command runs. `OrderCreateCommand` is a typed command, and it returns an `OrderCreated` with the ID and the order number, which only the database can hand out.
   4. Reserve the stock. If a book is out of stock, cancel the order and stop.
-  5. Take the payment and save it. If it is declined, cancel the order and stop. If the payment service cannot answer, cancel the order with `CAT-ORD-1006` and stop. Nothing is saved then.
+  5. Take the payment and save it. If it is declined, cancel the order and stop. If the payment service cannot answer, cancel the order with `DEM-ORD-1006` and stop. Nothing is saved then.
   6. Confirm the order.
 - Confirmed and cancelled are events. Subscribers set the status, write an audit record and release the stock.
-- Stock, price and payment sit behind interfaces: `IStockReservation`, `IPriceProvider` and `IPaymentProvider`. For stock, `InventoryStockReservation` uses the generated `IInventoryClient` of `Cat.Demo.InventoryService.Api.Client`, which shares the `Contracts` project of Inventory. It reserves all lines with `POST /inventory/reservations`, with the ISBN of each book, and releases with `DELETE /inventory/reservations/{orderNumber}`. A 409 or a 404 means out of stock. Any other failure or a timeout means unavailable, and the workflow cancels the order with `CAT-ORD-1007`. A failed release is logged and not thrown, and a cancel because Inventory did not answer skips the release. `FakeStockReservation` answers without a gateway address. For prices, `CatalogPriceProvider` uses the generated `ICatalogClient` of `Cat.Demo.CatalogService.Api.Client`. It calls `GET /catalog/books/prices` through the gateway when the host gives Orders the address of the gateway, as the AppHost does. Without it, `FakePriceProvider` answers. For payments, `PaymentServiceProvider` uses the generated `IPaymentClient` of `Cat.Demo.PaymentService.Api.Client` in the same way, through the gateway, and `FakePaymentProvider` answers without an address. The payment route is not anonymous, so `ForwardBearerTokenHandler` passes the token of the user on to the call. A call without a request, such as a background job, has no token and gets a 401, which counts as unavailable. Run `Refresh-PaymentClient.ps1` in the client project after the payment service changes, and `Refresh-InventoryClient.ps1` after the inventory service changes.
+- Stock, price and payment sit behind interfaces: `IStockReservation`, `IPriceProvider` and `IPaymentProvider`. For stock, `InventoryStockReservation` uses the generated `IInventoryClient` of `Cat.Demo.InventoryService.Api.Client`, which shares the `Contracts` project of Inventory. It reserves all lines with `POST /inventory/reservations`, with the ISBN of each book, and releases with `DELETE /inventory/reservations/{orderNumber}`. A 409 or a 404 means out of stock. Any other failure or a timeout means unavailable, and the workflow cancels the order with `DEM-ORD-1007`. A failed release is logged and not thrown, and a cancel because Inventory did not answer skips the release. `FakeStockReservation` answers without a gateway address. For prices, `CatalogPriceProvider` uses the generated `ICatalogClient` of `Cat.Demo.CatalogService.Api.Client`. It calls `GET /catalog/books/prices` through the gateway when the host gives Orders the address of the gateway, as the AppHost does. Without it, `FakePriceProvider` answers. For payments, `PaymentServiceProvider` uses the generated `IPaymentClient` of `Cat.Demo.PaymentService.Api.Client` in the same way, through the gateway, and `FakePaymentProvider` answers without an address. The payment route is not anonymous, so `ForwardBearerTokenHandler` passes the token of the user on to the call. A call without a request, such as a background job, has no token and gets a 401, which counts as unavailable. Run `Refresh-PaymentClient.ps1` in the client project after the payment service changes, and `Refresh-InventoryClient.ps1` after the inventory service changes.
 - `CatalogPriceProvider` wraps the call in `CatApiCall.ExecuteAsync`, so a failure arrives as an `ICatResponse`. A 200 gives the prices and a 404 becomes `PriceUnavailable`. Any other status, a network error or a timeout becomes an error response, because Orders never trusts a half answer. The resilience handler adds retries and a circuit breaker. Catalog reads are public, so the call sends no token. The unit tests use a fake `HttpMessageHandler` under the generated client, so they need no database and no running service. Run `Refresh-CatalogClient.ps1` in the client project to regenerate the client after Catalog changes. Catalog must run on port 5101 for it.
 - `ICurrentUser` tells the core service who is calling. With a login it reads the claims of the token (`sub`, `name`, `email` and the `admin` role). Without one, a development stub reads the `X-Demo-User` header. Orders of other users come back as not found.
 - Order numbers come from a `DailyOrderCounter` table, increased in one atomic statement in the same transaction that saves the order. The part **Order numbers** below explains it.
@@ -611,10 +618,23 @@ Why it never hands out a duplicate:
 Edge cases:
 
 - **First order of the day.** Two first orders can both try the insert. The unique key on `Date` stops one of them, and that one retries the `UPDATE`. The cleanup below creates the row of today ahead of time, which makes this rare.
-- **Past 9999.** The request fails with `CAT-ORD-1000`. It never produces `10000`.
+- **Past 9999.** The request fails with `DEM-ORD-1000`. It never produces `10000`.
 - **Cancelled orders.** They keep their number. Numbers are never reused.
 
 **Counter cleanup.** The table grows by one row per day, and only today's row matters. The `CleanUpOrderCounters` service request deletes every row before today (UTC) and creates today's row with `LastNumber = 0` when it is missing. It lives in `Orders.Contracts` and `Orders.CoreService`, like every other request, and a second run changes nothing. A development endpoint triggers it: `POST /development/scheduler/clean-up-order-counters`. It exists in `Development` only. The development endpoints have a group per background worker. This one is the `scheduler` group.
+
+**Error codes.** `OrderErrorDefinitions` defines them with the prefix `DEM-ORD`:
+
+| Code | Name | Message |
+|------|------|---------|
+| `DEM-ORD-1000` | `DailyLimitReached` | `No more orders can be placed today. The limit is {Limit} orders a day.` |
+| `DEM-ORD-1001` | `PriceUnavailable` | `The price of book {BookId} is not available.` |
+| `DEM-ORD-1002` | `OutOfStock` | `Book {BookId} is out of stock. Order {OrderNumber} was cancelled.` |
+| `DEM-ORD-1003` | `PaymentDeclined` | `The payment of order {OrderNumber} was declined. The order was cancelled.` |
+| `DEM-ORD-1004` | `CannotCancel` | `Order {OrderNumber} has status {Status} and cannot be cancelled.` |
+| `DEM-ORD-1005` | `NotAuthenticated` | `You must be logged in to do this.` |
+| `DEM-ORD-1006` | `PaymentUnavailable` | `The payment service is not available. Order {OrderNumber} was cancelled. Try again later.` |
+| `DEM-ORD-1007` | `StockUnavailable` | `The inventory service is not available. Order {OrderNumber} was cancelled. Try again later.` |
 
 **Database.** The `orders` database is built. It is a SQL Server database that only Orders reads. In `Development` the service applies its EF Core migrations at startup and adds the three order statuses. All tables are regular entities that inherit `CatEntityBase`. `OrderNumber` is unique. `OrderLine` refers to a book with `BookId` and has no foreign key, because the book lives in the Catalog database. `DailyOrderCounter` has no relationship with the other tables. Names and columns are not final.
 
@@ -706,8 +726,15 @@ erDiagram
 - `POST /inventory/reservations` reserves all lines of an order or none. `DELETE /inventory/reservations/{orderNumber}` gives the stock back. The gateway has a restricted route, so a call needs a valid token. The service checks the token again.
 - `StockReserveCommandHandler` and `StockReleaseCommandHandler` in `Cat.Demo.InventoryService.Infrastructure` hold the SQL. A reservation is one conditional `UPDATE ... WHERE QuantityOnHand >= @quantity` per line, inside one transaction. The database decides who gets the last copy, so parallel orders never oversell. A check constraint keeps the stock at zero or more as well.
 - The order number is the idempotency key. A second reserve call for the same order does nothing, and the retries of the resilience handler are safe. A release locks the rows, so a double release gives the stock back once.
-- Not enough stock gives a 409 with `CAT-INV-1000`. An unknown ISBN gives a 404 with `CAT-INV-1001`.
+- Not enough stock gives a 409 with `DEM-INV-1000`. An unknown ISBN gives a 404 with `DEM-INV-1001`.
 - The generated client in `Cat.Demo.InventoryService.Api.Client` shares the `Contracts` project, so Orders and Inventory use the same request models. Run `Refresh-InventoryClient.ps1` in that project after the service changes, with the AppHost running.
+
+**Error codes.** `InventoryErrorDefinitions` defines them with the prefix `DEM-INV`:
+
+| Code | Name | Message |
+|------|------|---------|
+| `DEM-INV-1000` | `OutOfStock` | `Book {Isbn} is out of stock. Order {OrderNumber} got no stock.` |
+| `DEM-INV-1001` | `UnknownBook` | `Book {Isbn} is not in the warehouse. Order {OrderNumber} got no stock.` |
 
 **Database.** The `inventory` database comes from the SQL scripts in `Cat.Demo.InventoryService.Database`. A stock database often exists already, owned by a warehouse team, so the schema comes from SQL scripts and not from C# classes. In `Container` mode the AppHost creates the database and runs the scripts with `WithCreationScript`. The scripts can run again. In `Existing` mode it does nothing, because the owner of the database owns its schema, and the connection string `ConnectionStrings:inventory` points at it. The seed gives one warehouse and 50 copies of each of the 7 seed books. The entities are scaffolded with `dotnet ef dbcontext scaffold` into the Infrastructure project, and nobody edits the generated files. Run `Scaffold-InventoryModel.ps1` after a schema change. The entities do not inherit `CatEntityBase` and have no `SequenceId`.
 
@@ -787,9 +814,10 @@ The service uses no entity base classes. It shows that you use only the modules 
 - `POST /payment/payments` takes an order number and an amount. It answers 200 with `approved` and a `reference`. An amount up to 500 euro is approved. A higher amount is declined, which is an answer and not an error. Bad input gets a 400.
 - The order number is the idempotency key. The service remembers the answer per order number in memory. A retried call gets the same answer and nothing is charged twice.
 - The service runs on port 5103. The AppHost starts it and gives the gateway its address. The gateway has a restricted route for it, so a call needs a valid token. Orders reaches it through the gateway, `services:gateway:*`, like Catalog.
-- In Orders, `PaymentServiceProvider` implements `IPaymentProvider` with the generated client and `CatApiCall`. The resilience handler gives the client one retry, a timeout and a circuit breaker. The Orders clients for payment and Inventory replace the default handler with a shorter one: 5 seconds per try and 12 in total, so a stopped service gets an answer well before the gateway gives up at 30. When no answer comes, the provider says the payment is unavailable. The place order workflow then cancels the order with `CAT-ORD-1006`, saves no payment and releases the stock.
+- In Orders, `PaymentServiceProvider` implements `IPaymentProvider` with the generated client and `CatApiCall`. The resilience handler gives the client one retry, a timeout and a circuit breaker. The Orders clients for payment and Inventory replace the default handler with a shorter one: 5 seconds per try and 12 in total, so a stopped service gets an answer well before the gateway gives up at 30. When no answer comes, the provider says the payment is unavailable. The place order workflow then cancels the order with `DEM-ORD-1006`, saves no payment and releases the stock.
 - Without the AppHost, `FakePaymentProvider` answers in the process, the way `FakePriceProvider` does for prices.
 - The `Cat.Demo.PaymentService.CoreService` project holds the rules and the failure switches. The `Api` project is one endpoint.
+- The service defines no CAT error codes. Bad input gets a plain 400, and the failure switch gives a 503.
 
 **Failures on purpose.** The settings of the service switch them on. A call cannot ask for a failure. All are off by default.
 
@@ -805,7 +833,7 @@ Under the AppHost, set `Payment:Latency`, `Payment:ErrorPercentage` or `Payment:
 dotnet user-secrets set "Payment:Outage" "true" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost
 ```
 
-Remove the secret to switch the failure off again. When you run the service on its own, change `PaymentFailures` in its `appsettings.json` or set `PaymentFailures__Outage=true`. A running service reads a changed setting again. Place an order and open the trace in the dashboard to see the retries. In the web shop the order ends with `CAT-ORD-1006` and the text "Try again later" after 6 to 10 seconds, the time of the retries, and the basket stays. The circuit only opens under a burst of calls. A person who clicks Place order now and then does not open it.
+Remove the secret to switch the failure off again. When you run the service on its own, change `PaymentFailures` in its `appsettings.json` or set `PaymentFailures__Outage=true`. A running service reads a changed setting again. Place an order and open the trace in the dashboard to see the retries. In the web shop the order ends with `DEM-ORD-1006` and the text "Try again later" after 6 to 10 seconds, the time of the retries, and the basket stays. The circuit only opens under a burst of calls. A person who clicks Place order now and then does not open it.
 
 **CAT modules.** The service uses none on purpose. It is a plain stand-in for something outside the toolkit.
 

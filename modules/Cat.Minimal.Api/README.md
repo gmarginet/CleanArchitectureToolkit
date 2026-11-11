@@ -304,7 +304,7 @@ A failed response is written as `CatProblemDetails`. It is a standard problem de
   "instance": "/todo/99999",
   "catErrors": [
     {
-      "code": "CAT-DEM-1000",
+      "code": "DEM-TOD-1000",
       "message": "{ResourceName} with id {id} could not be found.",
       "arguments": [ "Todo", 99999 ]
     }
@@ -334,7 +334,7 @@ Every failure reaches the client as a problem details body with the `catErrors` 
 | A response type the endpoint doesn't list | 500 | `An unexpected error occurred.` | Depends on the environment, see below. | An empty list. |
 | An unexpected exception | 500 | `An unexpected error occurred.` | Depends on the environment, see below. | An empty list. |
 
-The failed responses you can get depend on the handler and its decorators. A request that fails validation gives the rule errors of [Cat.Validators](../Cat.Validators/README.md#rules) in `catErrors`, with `CAT-VAL-` codes. A handler that returns `NotFound` gives the code and message it chose, like `CAT-DEM-1000` in the demo.
+The failed responses you can get depend on the handler and its decorators. A request that fails validation gives the rule errors of [Cat.Validators](../Cat.Validators/README.md#rules) in `catErrors`, with `CAT-VAL-` codes. A handler that returns `NotFound` gives the code and message it chose, like `DEM-TOD-1000` in the example above.
 
 A client can branch on the status first, then on the `code` of each error:
 
