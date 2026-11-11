@@ -230,7 +230,7 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
         } elseif ($hasPlan) {
             if ($row.Badge -notlike "*status-in%20development*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name has a plan. Its badge must be In development and link to ./plans/$plan.") }
         } else {
-            if ($row.Badge -notlike '*status-stable*](#repo-overview)*') { $errors.Add("README.md repo overview: $name has no plan. Its badge must be Stable and link to #repo-overview.") }
+            if ($row.Badge -notlike "*status-stable*]($($row.Link))*") { $errors.Add("README.md repo overview: $name has no plan. Its badge must be Stable and link to $($row.Link).") }
         }
         if ($row.Type -eq 'Module' -and $built -and $row.Link -ne "./modules/$name/README.md") { $errors.Add("README.md repo overview: $name is built. Its name must link to ./modules/$name/README.md.") }
     }

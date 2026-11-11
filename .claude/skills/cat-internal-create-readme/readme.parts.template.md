@@ -11,5 +11,5 @@
 <!-- ==================== template end: InDevelopmentBadge ====================-->
 
 <!-- ==================== template start: StableBadge ====================-->
-[![Stable](https://img.shields.io/badge/status-stable-green)](#repo-overview)
+[![Stable](https://img.shields.io/badge/status-stable-green)]([[NameLink]])
 <!-- ==================== template end: StableBadge ====================-->

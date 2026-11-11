@@ -57,7 +57,7 @@ Name column:
 Status column, from two facts: is the item built, and does it still have a plan in `plans/`.
 - Not built: the `NewBadge` template. The badge links to the plan.
 - Built, and the plan file exists: the `InDevelopmentBadge` template. The badge links to the plan. Breaking changes are possible.
-- Built, and no plan file: the `StableBadge` template.
+- Built, and no plan file: the `StableBadge` template. The badge links to the readme of the item, the same target as the name link.
 - A plan goes only when the owner agrees. That is the moment an item becomes stable.
 
 A module is built when its folder exists in `modules/`. The demo is built from the first stage on. A tooling item is built when its files exist.
