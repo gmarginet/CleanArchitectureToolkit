@@ -46,7 +46,7 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-Test the Azure Service Bus project against the Service Bus emulator, and change the code or the module readme where the emulator shows a problem.
+Test the Azure Service Bus project against the Service Bus emulator, and change the code or the module readme where the emulator shows a problem. Also turn on duplicate detection in the topology helper.
 
 #### What exists today
 - Phase 1 is built: see the [module readme](../modules/Cat.Messaging/README.md). It was tested without the emulator.
@@ -54,6 +54,7 @@ Test the Azure Service Bus project against the Service Bus emulator, and change 
 
 #### Decided
 - **Emulator facts.** The official page (Microsoft Learn, "Overview of the Azure Service Bus emulator") says nothing about dead letter queues, sessions, scheduled messages or reading message counts. These four are tested once the emulator is in the AppHost.
+- **Duplicate detection.** `EnsureTopologyAsync` turns on duplicate detection on the queues and topics it creates, so the bus drops a repeated message with the same `MessageId` inside a time window. That removes the duplicates of an outbox that sends a row twice. It is decided in [Cat.EventProcessor.md](Cat.EventProcessor.md), and it is a setting that is made when the queue or topic is created.
 - **Scope.** Only the Azure project is affected.
 
 #### What to test
@@ -61,6 +62,13 @@ Test the Azure Service Bus project against the Service Bus emulator, and change 
 2. A queue with sessions: `RequiresSession` and `ICatSessionMessage` work together.
 3. A message with a `scheduledAt` is delivered at that moment.
 4. The dead letter metric can read the counts of a queue and of a subscription.
+5. A message with the same `MessageId` that is sent twice reaches the receiver once, on a queue and on a topic that `EnsureTopologyAsync` created.
+
+#### Still to check
+- **Delivery delay.** The owner remembers that a delay between redeliveries of a failed message is a setting of the queue or topic, made when it is created. Check in the Azure Service Bus docs whether that setting exists, and whether the emulator supports it. If it does, ask the owner whether `EnsureTopologyAsync` should set it, and with which default. The event processor relies on the bus alone for retries, see [Cat.EventProcessor.md](Cat.EventProcessor.md).
+
+#### What to build
+- Duplicate detection in `ServiceBusTopology`, with a test of the creation options. The module readme says so in the chapter about creating the queues and topics, and the sample script gets the matching Azure CLI option.
 
 #### Can the phase be built?
 Not yet. It waits for the emulator in the AppHost.
