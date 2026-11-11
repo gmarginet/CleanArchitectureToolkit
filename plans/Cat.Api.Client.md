@@ -76,8 +76,12 @@ From the demo and the code:
 - The mapping table of the Aspire plan was the start of the error mapping: 200 gives an Ok response, 404 a failed response, 400 and other statuses an error response, a network error or timeout an error response.
 
 #### What exists today
-- The project `Cat.Api.Client` holds `CatApiCall`, `CatApiException`, `CatErrorResponse` and `CatErrorResponseItem`, and the registration extensions.
-- The module has 27 tests.
+- The project `Cat.Api.Client` holds `CatApiCall`, `CatApiException`, `CatProblemDetails` and `CatProblemDetailsItem`, and the registration extensions.
+- The module has 32 tests.
+- The package ships the NSwag settings template and the targets file that copies it, off by default. A test packs the project and checks that both files sit in `build`.
+- Every endpoint of the demo services has a name with `WithName`, so the three generated clients have clear method names such as `GetBookPricesAsync` and `TakePaymentAsync`.
+- The three demo clients use the template settings. They no longer define `CatProblemDetails` and `ICatError`, and Orders imports the client namespaces without aliases.
+- The trace check is done, see the decision "Tracing".
 - The shared `Contracts` variant is checked with the Inventory client. Its `nswag.json` lists `StockReservationModel` and `StockLineModel` in `excludedTypeNames` and adds the namespace of `Contracts` to `additionalNamespaceUsages`. The generated `InventoryClient.cs` does not define the two models and only imports the namespace. The client project references `Cat.Api.Client` and the `Contracts` project of Inventory.
 - Orders uses three generated clients: Catalog, payment and Inventory. Each has a `ServiceName.Api.Client` project with a refresh script, such as `Refresh-CatalogClient.ps1`.
 - Orders forwards the token of the caller with its own `ForwardBearerTokenHandler`.
@@ -103,7 +107,7 @@ From the demo and the code:
 - **Resilience.** For now the client relies on the `HttpClient` handler from `ServiceDefaults`. Later, a developer who does not use Aspire should be able to use `Cat.Resilience` instead. That is looked at together with the plan of that module, see [Cat.Resilience.md](Cat.Resilience.md).
 - **Refresh.** A script refreshes the saved OpenAPI document and runs the generation, like `api:refresh` of the React client. The output is checked in. Other ways, such as an MSBuild step, can come later.
 - **Use.** The typed client is used inside a query or command handler in the infrastructure, as the readmes describe the architecture. A developer who wants to use it directly from a request handler can do so. The module does not forbid it.
-- **Tracing.** The trace continues across the call. Whether the `HttpClient` instrumentation is enough for that is checked when the first call works.
+- **Tracing.** The trace continues across the call. It was checked with a placed order in the Aspire dashboard: one trace holds the spans of the gateway, Orders, Catalog, Inventory, payment and Keycloak, so the `HttpClient` instrumentation is enough.
 - **First version.** No versioned APIs. JSON with GET and POST only, without file uploads and streaming.
 - **First client.** Catalog, for the price call of Orders.
 - **Direct calls.** Services never call each other directly, the payment service included. Every call goes through the gateway. The drawing of the demo shows this.
@@ -115,20 +119,7 @@ From the demo and the code:
 - **Operation names.** The developer names the endpoints with `WithName` of ASP.NET Core, and the generator uses the name as the operation id, so the generated methods get clear names instead of `BooksGETAsync`. `Cat.Minimal.Api` does not set a default name. Endpoint names must be unique in the app, and a request type can be mapped more than once, so a default from the request type would fail with a 500 on the first request of an existing service. The module readme of `Cat.Minimal.Api` recommends `WithName`. In the demo every endpoint gets a clear name, as an example of that recommendation.
 
 #### What to build
-The module itself is built. What is left is the documentation and the close out.
-
-**Error class:**
-- Rename `CatErrorResponse` to `CatProblemDetails` and `CatErrorResponseItem` to `CatProblemDetailsItem` in `CatApiCall`, the test, the readme and the generated pages. This is a breaking change of two public types, and it changes code in `modules/`.
-- The settings template lists `CatProblemDetails` and `ICatError` in `excludedTypeNames`.
-- The three demo clients use the template and are generated again. Their aliases for these two types go.
-
-**Settings template:**
-- The package ships the template and the `build/Cat.Api.Client.targets` file, with the opt-in property.
-- A test or a check that a project without the property gets no file, and a project with it gets the file once.
-
-**Operation names in the demo:**
-- Every endpoint of the demo services gets a name with `WithName`. Inventory has its two already.
-- The saved OpenAPI documents and the generated clients are refreshed, and the code in Orders that calls the renamed methods is adjusted.
+The module itself is built, and so are the settings template and the demo changes. What is left is the documentation and the close out.
 
 **The readme lacks these decisions of the plan:**
 - The error class `CatProblemDetails` and why the clients need no alias for it and for `ICatError`.
@@ -140,7 +131,7 @@ The module itself is built. What is left is the documentation and the close out.
 - The audience: the clients are for .NET code, and the React client generates TypeScript from the same documents.
 - The shared `Contracts` variant, which the Inventory client of the demo uses.
 
-**When both checks of question 1 are settled:**
+**When the readme chapters are written and the owner calls the module stable:**
 - The readme gets these chapters.
 - The roadmap stage 3b is marked done. It is not yet.
 - The status of the module in the repo overview becomes Stable.
@@ -151,10 +142,7 @@ The module itself is built. What is left is the documentation and the close out.
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 1-->
 #### Question 1
-Is the module stable? The module is built and 27 tests pass. Orders uses it for three generated clients (Catalog, payment and Inventory). One thing from the decisions is still open, so the module is not called stable, and the badge, the roadmap and this plan are untouched. It is the owner's call once these are settled.
-
-##### Question 1.2
-Does the trace continue across the call? The decision says to check this. Check it in the Aspire dashboard with one placed order.
+Is the module stable? The module is built and 27 tests pass. Orders uses it for three generated clients (Catalog, payment and Inventory). Both checks of the decisions are done, the shared `Contracts` variant and the trace. What is left is the readme chapters. The badge, the roadmap and this plan are untouched until the owner calls the module stable.
 <!-- region end: Question 1-->
 
 <!-- region end: PhaseOpenQuestions-->
