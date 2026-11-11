@@ -26,8 +26,17 @@ Use this when the owner changes the header template and asks to update the files
 1. Find the files with `git grep --untracked -l "Header template: @"`. Skip the files in the `.claude` folder. They only describe the header.
 2. Read the `RootPath` from the comment line of each file.
 3. Replace the whole `Header` region with the `Header` region of the template, using that `RootPath`.
-4. Run the `cat-internal-verify-docs` skill. It reports every `Header` region that differs from the template.
+4. Update the generated pages too, see [Generated pages](#generated-pages).
+5. Run the `cat-internal-verify-docs` skill. It reports every `Header` region that differs from the template. It does not check the generated pages.
 
+## Generated pages
+The pages in `modules/*/namespaces` have the same header, but they are generated. The generator holds its own copy of the header in `tools/Cat.DefaultDocumentationPlugin/CatHeaderSection.cs`. Use this when the header template changes.
+1. Make the same change in `CatHeaderSection.cs`. The generator builds the header lines in code, with the paths of a generated page.
+2. Run `tools\Cat.DefaultDocumentationPlugin\BuildAndDeployPlugin.cmd`. It copies the plugin DLLs to `resources/defaultDocumentationPlugins/`.
+3. Run `dotnet cake --target=Build --configuration=Debug`. Only a Debug build regenerates the pages.
+4. Check the diff of the pages. Every page should differ only in the changed header line.
+5. Never edit the generated pages by hand.
+6. Commit the change to `tools/`, the DLLs and the regenerated pages together. The commit changes code, so it gets no ` (skip-pub)`. A push to `master` publishes the NuGet packages.
 ## Placeholders
 - [[RootPath]]: The relative path from the file to the root of the repository.
   - It is `..` for a file in the `plans` folder.
