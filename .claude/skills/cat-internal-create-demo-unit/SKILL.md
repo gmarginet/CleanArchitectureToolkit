@@ -38,10 +38,10 @@ Mirror the structure in `CleanArchitectureToolkit.slnx`.
 - Keep the `/demo/` folder entry with `demo/Directory.Build.props` and `demo/README.md`.
 
 ## Steps
-1. Read the Service Project structure chapter in the readme and `plans/Demo.md`.
-2. Decide which projects the unit needs. Start from the required ones and add optional ones only when the plan asks for them.
+1. Read the Service Project structure chapter in the readme and the phase of `plans/Demo.md` that asks for the unit.
+2. Decide which projects the unit needs. Start from the required ones and add optional ones only when the phase description asks for them.
 3. Create the folders and project files. Use `dotnet new` or copy a project from an existing unit.
 4. Move files with `git mv` so the history stays intact.
 5. Update the project references and `CleanArchitectureToolkit.slnx`.
 6. Run `dotnet cake --target=Build` to check that everything still builds. The `cat-internal-verify-code` skill does this and reports the result.
-7. Run the `demo-readme` skill. It updates `demo/README.md` and the hatched and solid boxes of the architecture drawing.
+7. Run the `cat-internal-create-demo-readme` skill. It updates `demo/README.md` and the hatched and solid boxes of the architecture drawing.

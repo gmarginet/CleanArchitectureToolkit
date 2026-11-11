@@ -19,7 +19,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 | [cat-internal-create-demo-unit](cat-internal-create-demo-unit/SKILL.md) | Add or restructure a service, client or Aspire project in `demo/`. | `/cat-internal-create-demo-unit service Orders` |
 | [cat-internal-commit](cat-internal-commit/SKILL.md) | Commit the changes in logical blocks, with `(skip-pub)` when no code in `modules/` changed. Never pushes. | `/cat-internal-commit` |
 | [cat-internal-verify-docs](cat-internal-verify-docs/SKILL.md) | Check all markdown locally: links, anchors, letter case, code fences, markers and forbidden punctuation. | `/cat-internal-verify-docs` |
-| [demo-readme](demo-readme/SKILL.md) | Keep `demo/README.md` and the demo architecture drawing in sync with the demo app. | `/demo-readme Inventory service started` |
+| [cat-internal-create-demo-readme](cat-internal-create-demo-readme/SKILL.md) | Create and update `demo/README.md` from its template, and keep the demo architecture drawing in sync with the demo app. | `/cat-internal-create-demo-readme Inventory service built` |
 | [cat-internal-verify-code](cat-internal-verify-code/SKILL.md) | Build, test and check the regenerated namespaces pages. | `/cat-internal-verify-code` |
 | [cat-internal-template-concepts](cat-internal-template-concepts/SKILL.md) | The basic concepts of CAT templates: regions, template markers, placeholders. Other template skills load it first. | `/cat-internal-template-concepts` |
 | [cat-internal-create-header](cat-internal-create-header/SKILL.md) | Create or update the header of a template-based markdown file, and update every file that uses it. | `/cat-internal-create-header update` |
@@ -69,11 +69,11 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **When:** At the end of a task that changed markdown, a heading or a file name, and after every rename or move.
 - **Note:** `cat-internal-verify-site` is the slow crawl of the published site with external links, and runs only on request.
 
-### demo-readme
-- **What it does:** Keeps `demo/README.md` current: the functional description, the architecture, the how to run steps and one chapter per block of the architecture drawing. It runs `demo-readme/sync-demo-architecture.ps1`, which switches the boxes of the drawing to hatched (not built) or solid (built) by checking what exists in `demo/`.
+### cat-internal-create-demo-readme
+- **What it does:** Keeps `demo/README.md` current, from `demo-readme.template.md`. The readme describes only what exists, with no status and no plans. It has a region for every chapter, sub chapter and block, so you can ask Claude to look at or change one part. It runs `cat-internal-create-demo-readme/sync-demo-architecture.ps1`, which switches the boxes of the drawing to hatched (not built) or solid (built) by checking what exists in `demo/`. The drawing is the only place with status.
 - **How to use it:** Describe what changed, or run it without arguments to resync.
-- **When:** After any change to the demo app, and when a block of the drawing is started or finished.
-- **Note:** `demo-readme/demo-blocks.json` lists the blocks, their drawing elements and the rule that says a block is built. Add new blocks there.
+- **When:** After any change to the demo app, and when a block of the drawing is built. The `cat-internal-create-plan` skill uses it when a demo phase is built. It never changes a plan.
+- **Note:** `cat-internal-create-demo-readme/demo-blocks.json` lists the blocks, their drawing elements and the rule that says a block is built. Add new blocks there.
 
 ### cat-internal-verify-code
 - **What it does:** Runs the Cake `Debug` build, which regenerates the namespaces pages, and the tests, then checks the diff of the regenerated `namespaces/` pages. It reports passed and failed items and unexpected changes. It never edits generated files and never commits.

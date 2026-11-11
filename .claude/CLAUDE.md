@@ -78,7 +78,7 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
 
 ### Readmes
 - Use the `cat-internal-create-module-readme` skill when you create or change a module `README.md`. It follows `module-readme.template.md` in the skill folder.
-- Use the `demo-readme` skill when you change the demo app, start or finish a block of the demo architecture, or edit `demo/README.md`. It keeps the demo readme and the hatched and solid boxes of the drawing current.
+- Use the `cat-internal-create-demo-readme` skill when you change the demo app, build a block of the demo architecture, or edit `demo/README.md`. It follows `demo-readme.template.md` in the skill folder and keeps the hatched and solid boxes of the drawing current. The demo readme describes only what exists. Plans stay in `plans/Demo.md`.
 - Use the `cat-internal-create-readme` skill when you change the readme, such as the repo overview table or a chapter. It follows `readme.template.md` in the skill folder.
 - Never remove a region marker in the readme. The chapters and the tables each have a region.
 - Use the `cat-internal-create-module` skill to start a new module.

@@ -69,7 +69,7 @@ Use this when an answer or a decision changes more than one plan, and when a mod
 - If the check finds nothing open, Claude puts the plan in the `ReadyToStartBuildingBadge` status before the build starts.
 - When new questions come in view during the build, Claude adds them to the phase it is building and puts the plan back in the `PlanningBadge` status.
 - When the phase is fully built, Claude does the following in this order:
-  1. Update the README of the module or demo the plan belongs to, using the `cat-internal-create-module-readme` or `demo-readme` skill, so it incorporates all the info from the phase description.
+  1. Update the README of the module or demo the plan belongs to, using the `cat-internal-create-module-readme` or `cat-internal-create-demo-readme` skill, so it incorporates all the info from the phase description.
   2. Search the other markdown files for mentions of what the phase changed (`git grep --untracked -l`, without the generated `namespaces` pages) and update the READMEs and plans that are now out of date.
   3. Remove the phase.
 - If no phases are left after removing a phase that was built, Claude can ask if it can remove the plan file.

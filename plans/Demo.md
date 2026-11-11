@@ -53,7 +53,7 @@
 Messaging. `Cat.Messaging` and `Cat.EventProcessor`, the Service Bus emulator in the AppHost, and the `OrderPlaced` bridge in Orders.
 
 #### Background
-- Every phase of this plan ends in a working demo. A phase is done when its "Done when" is true, the demo readme and the drawing are current (the `demo-readme` skill) and the tests pass.
+- Every phase of this plan ends in a working demo. A phase is done when its "Done when" is true, the demo readme and the drawing are current (the `cat-internal-create-demo-readme` skill) and the tests pass.
 - The demo uses the Azure Service Bus emulator. It runs in Docker, so it fits the Aspire setup. The AppHost starts it next to SQL Server when `Cat.Messaging` arrives.
 - Orders publishes `OrderPlaced`. Inventory and Notifications consume it.
 - Orders keeps announcing facts inside the service with `Cat.EventAggregators`. A subscriber bridges an event to the bus. The event aggregator itself is in-process only and cannot carry a message to another service.
