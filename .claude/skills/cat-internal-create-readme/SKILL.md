@@ -42,7 +42,7 @@ Regions that every template has.
 Edit only inside a region. Never remove a region marker. A change to a heading changes the anchor, so search the old anchor with `git grep` and fix every link.
 
 ## Repo overview
-The `RepoOverview` region holds one table with a row for everything in the repository. The columns are `Name`, `Type`, a status column without a header text, `Priority` and `Description`.
+The `RepoOverview` region holds one table with a row for everything in the repository. The columns are `Name`, `Description` and `#`. The `#` column holds the priority. The `Description` cell starts with the type badge and the status badge, then a `<br>`, then the description. The badges sit in the wide column, because a badge in a narrow column is scaled down until it is unreadable.
 
 Rows, in this order. Inside a group, sort by name.
 1. **Modules.** One row per module. Type `Module`.
@@ -54,7 +54,9 @@ Name column:
 - `Cat.Demo` links to the demo readme, `./demo/README.md`.
 - An item that is not built yet links to its plan, `./plans/[[PlanFile]]`.
 
-Status column, from two facts: is the item built, and does it still have a plan in `plans/`.
+Type badge: the `TypeBadge` template, with the type of the row. It comes first in the `Description` cell and links to the repo overview.
+
+Status badge, from two facts: is the item built, and does it still have a plan in `plans/`. It comes after the type badge.
 - Not built: the `NewBadge` template. The badge links to the plan.
 - Built, and the plan file exists: the `BuildingBadge` template. The badge links to the plan. Breaking changes are possible.
 - Built, and no plan file: the `StableBadge` template. The badge links to the readme of the item, the same target as the name link.
@@ -62,14 +64,14 @@ Status column, from two facts: is the item built, and does it still have a plan 
 
 A module is built when its folder exists in `modules/`. The demo is built from the first stage on. A tooling item is built when its files exist.
 
-Priority column: a whole number for every item that is not stable, and empty for a stable item. 1 is the highest priority. The numbers are unique, so there is one order of work.
+Priority column, with the header `#`: a whole number for every item that is not stable, and empty for a stable item. 1 is the highest priority. The numbers are unique, so there is one order of work.
 - Rank first the items that are easy to finish or to build, even when the demo does not need them. A built item whose plan only has a small closing step is the easiest.
 - Then rank the items the demo needs, in the order of the phases of `plans/Demo.md`. The plan and the phase of the demo lead.
 - Then rank the rest. Within a group, the item with fewer open questions and a smaller scope comes first.
 - Recalculate the priorities every time a plan changes, an open question is answered, a plan is created or removed, or a build is finished. A stable item leaves the order, and the numbers after it move up.
 - The owner decides the order. Propose the new numbers with the reason when the order changes, and wait for the owner before you write them.
 
-Description column: one short sentence about what the item is used for. For a module, base it on the intro of the module readme.
+Description: one short sentence about what the item is used for. For a module, base it on the intro of the module readme.
 
 Other rules:
 - Use the `RepoRow` template for a row.
@@ -99,8 +101,9 @@ Use this when the owner changes the template and asks to update the readme.
 - [[Name]]: The name of the item, such as `Cat.Queries`, `Cat.Demo` or `Cat.Skills`.
 - [[NameLink]]: Where the name links to, see the name column above.
 - [[Type]]: `Module`, `Demo` or `Tooling`.
+- [[TypeBadge]]: The `TypeBadge` template.
 - [[StatusBadge]]: The `NewBadge`, `BuildingBadge` or `StableBadge` template.
-- [[Priority]]: The priority of the item, see the priority column above. Empty for a stable item.
+- [[Priority]]: The priority of the item, see the priority rules above. Empty for a stable item.
 - [[Description]]: One short sentence about what the item is used for.
 - [[PlanFile]]: The file name of the plan in `plans/`, such as `Cat.Messaging.md` or `Demo.md`.
 - [[RootPath]]: The relative path to the root of the repository, used by the header. It is `.` for the readme.

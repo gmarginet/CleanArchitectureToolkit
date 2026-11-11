@@ -208,8 +208,11 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
     $rows = [System.Collections.Generic.List[object]]::new()
     if ($start -ge 0 -and $end -gt $start) {
         for ($i = $start + 1; $i -lt $end; $i++) {
-            if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(([^)]+)\) \| (\w+) \| (.*?) \| (\d*) \| ') {
+            # A row is: name | type badge, status badge, line break, description | priority
+            if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(([^)]+)\) \| \[!\[(\w+)\]\([^)]*\)\]\(#repo-overview\) (\[!\[[^\]]*\]\([^)]*\)\]\([^)]*\))<br>.+ \| (\d*) \|$') {
                 $rows.Add([pscustomobject]@{ Name = $Matches[1]; Link = $Matches[2]; Type = $Matches[3]; Badge = $Matches[4]; Priority = $Matches[5] })
+            } elseif ($readme[$i] -match '^\| \[Cat\.') {
+                $errors.Add("README.md repo overview line $($i + 1): the row does not match name | type badge, status badge, <br>, description | priority.")
             }
         }
     }
@@ -221,22 +224,22 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
         if ($row.Type -notin 'Module', 'Demo', 'Tooling') { $errors.Add("README.md repo overview: $name has the type $($row.Type). Use Module, Demo or Tooling."); continue }
         $plan = if ($planOf.ContainsKey($name)) { $planOf[$name] } else { "$name.md" }
         $hasPlan = $planFiles -contains $plan
-        $built = switch ($row.Type) { 'Module' { $moduleFolders -contains $name } 'Demo' { $true } default { $row.Badge -notlike '*badge/-New-*' } }
+        $built = switch ($row.Type) { 'Module' { $moduleFolders -contains $name } 'Demo' { $true } default { $row.Badge -notlike '*badge/status-New-*' } }
         if ($row.Type -eq 'Module' -and -not $built -and $row.Link -like './modules/*') { $errors.Add("README.md repo overview: $name has no folder in modules/.") }
         if (-not $built) {
             if (-not $hasPlan) { $errors.Add("README.md repo overview: $name is not built and has no plan plans\$plan.") }
-            if ($row.Badge -notlike "*badge/-New-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name is not built. Its badge must be New and link to ./plans/$plan.") }
+            if ($row.Badge -notlike "*badge/status-New-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name is not built. Its badge must be New and link to ./plans/$plan.") }
             if ($row.Link -ne "./plans/$plan") { $errors.Add("README.md repo overview: $name is not built. Its name must link to ./plans/$plan.") }
         } elseif ($hasPlan) {
-            if ($row.Badge -notlike "*badge/-Building-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name has a plan. Its badge must be Building and link to ./plans/$plan.") }
+            if ($row.Badge -notlike "*badge/status-Building-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name has a plan. Its badge must be Building and link to ./plans/$plan.") }
         } else {
-            if ($row.Badge -notlike "*badge/-Stable-*]($($row.Link))*") { $errors.Add("README.md repo overview: $name has no plan. Its badge must be Stable and link to $($row.Link).") }
+            if ($row.Badge -notlike "*badge/status-Stable-*]($($row.Link))*") { $errors.Add("README.md repo overview: $name has no plan. Its badge must be Stable and link to $($row.Link).") }
         }
         if ($row.Type -eq 'Module' -and $built -and $row.Link -ne "./modules/$name/README.md") { $errors.Add("README.md repo overview: $name is built. Its name must link to ./modules/$name/README.md.") }
     }
     $priorities = @{}
     foreach ($row in $rows) {
-        if ($row.Badge -like '*badge/-Stable-*') {
+        if ($row.Badge -like '*badge/status-Stable-*') {
             if ($row.Priority -ne '') { $errors.Add("README.md repo overview: $($row.Name) is Stable. Its priority must be empty.") }
         } elseif ($row.Priority -eq '' -or [int]$row.Priority -lt 1) {
             $errors.Add("README.md repo overview: $($row.Name) is not Stable. It needs a priority, a whole number from 1.")
