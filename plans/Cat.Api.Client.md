@@ -78,6 +78,7 @@ From the demo and the code:
 #### What exists today
 - The project `Cat.Api.Client` holds `CatApiCall`, `CatApiException`, `CatErrorResponse` and `CatErrorResponseItem`, and the registration extensions.
 - The module has 27 tests.
+- The shared `Contracts` variant is checked with the Inventory client. Its `nswag.json` lists `StockReservationModel` and `StockLineModel` in `excludedTypeNames` and adds the namespace of `Contracts` to `additionalNamespaceUsages`. The generated `InventoryClient.cs` does not define the two models and only imports the namespace. The client project references `Cat.Api.Client` and the `Contracts` project of Inventory.
 - Orders uses three generated clients: Catalog, payment and Inventory. Each has a `ServiceName.Api.Client` project with a refresh script, such as `Refresh-CatalogClient.ps1`.
 - Orders forwards the token of the caller with its own `ForwardBearerTokenHandler`.
 - The module readme covers the layout of a client project, the NSwag settings, the call helper, the registration, the error mapping and resilience.
@@ -96,7 +97,7 @@ From the demo and the code:
 - **Models.** By default the client has its own generated models. Sharing the `Contracts` project of the service is the choice of the developer, see the readme.
 - **Shared Contracts.** The generated class and its methods are the same with and without shared `Contracts`. When the developer shares `Contracts`, the generator skips the models and imports the namespace of `Contracts`, and the client project references `Contracts`. The module is referenced in both cases, because it holds the base class, the exception type, the wrapper to `ICatResponse` and the NSwag settings template. The Inventory client of the demo uses this variant. Its `nswag.json` lists the models that `Contracts` already holds in `excludedTypeNames` and adds the namespace of `Contracts` to `additionalNamespaceUsages`. The Catalog and payment clients use their own models.
 - **Token.** The client forwards the token of the caller. A client credentials token waits until a call needs it, because the realm has no client for that.
-- **Error class.** The error body shape for clients is a plain class, for example `CatErrorResponse`, in `Cat.Api.Client`. Only the client uses it, so it is not shared and needs no project of its own. It has the same JSON shape as `CatProblemDetails` and a concrete error item. `CatProblemDetails` stays in `Cat.Minimal.Api`, because it needs the ASP.NET Core `ProblemDetails` base. A test keeps the two shapes equal. The wrapper of the module reads the body text of a failed call into the class, so it does not depend on the generated models.
+- **Error class.** The error body shape for clients is a plain class named `CatProblemDetails` in the namespace `Cat.Api.Client`. It replaces `CatErrorResponse`, which is renamed. Only the client uses it, so it is not shared and needs no project of its own. It has the same JSON shape as `CatProblemDetails` of `Cat.Minimal.Api` and a concrete error item, `CatProblemDetailsItem`, which replaces `CatErrorResponseItem`. The type in `Cat.Minimal.Api` stays, because it needs the ASP.NET Core `ProblemDetails` base. The two have the same name in different namespaces. The generated clients import only `Cat.Api.Client`, so they see one. A test keeps the two shapes equal. The wrapper of the module reads the body text of a failed call into the class, so it does not depend on the generated models.
 - **Address.** The address of the gateway can come from configuration or from service discovery. Both work, and the module works without Aspire.
 - **Serializer.** The generated code uses System.Text.Json, so the client has no extra package.
 - **Resilience.** For now the client relies on the `HttpClient` handler from `ServiceDefaults`. Later, a developer who does not use Aspire should be able to use `Cat.Resilience` instead. That is looked at together with the plan of that module, see [Cat.Resilience.md](Cat.Resilience.md).
@@ -109,11 +110,30 @@ From the demo and the code:
 - **Order of the calls.** The call to Catalog came first. The payment call followed.
 - **Payment call.** Orders calls the payment service through the gateway, with a generated client like the Catalog one. The gateway has a restricted route for `payment`, so a token is needed. Orders forwards the token of the user with a handler of its own, and the payment service validates the same token. Client credentials are not built, because no call without a user exists yet.
 - **Audience.** The clients are for .NET code. The React client does not use the module. It generates TypeScript from the same OpenAPI documents.
+- **Clashing types.** A developer needs no aliases for `CatProblemDetails` and `ICatError`. The settings template lists both in `excludedTypeNames`, so the generator does not write them, and the generated code finds `CatProblemDetails` through the `Cat.Api.Client` namespace that the template imports. Checked on a scratch copy of the Catalog client: the build had 0 errors. Aliases remain the way for other clashes, such as the alias for `IPaymentClient` in Orders.
+- **Settings template.** The `Cat.Api.Client` package ships the NSwag settings template and a `build/Cat.Api.Client.targets` file that copies the template to `nswag.json` in the project folder when that file is missing, and never overwrites an existing one. It is off by default, so no project gets the file unasked. A project that wants it turns it on with an MSBuild property. The property name is picked when it is built, for example `CatApiClientNswagTemplate`. The module readme explains how to turn it on. A file in `contentFiles` alone does not reach the project folder, which is why the targets file is needed. This was checked in a scratch package.
+- **Operation names.** The developer names the endpoints with `WithName` of ASP.NET Core, and the generator uses the name as the operation id, so the generated methods get clear names instead of `BooksGETAsync`. `Cat.Minimal.Api` does not set a default name. Endpoint names must be unique in the app, and a request type can be mapped more than once, so a default from the request type would fail with a 500 on the first request of an existing service. The module readme of `Cat.Minimal.Api` recommends `WithName`. In the demo every endpoint gets a clear name, as an example of that recommendation.
 
 #### What to build
 The module itself is built. What is left is the documentation and the close out.
 
+**Error class:**
+- Rename `CatErrorResponse` to `CatProblemDetails` and `CatErrorResponseItem` to `CatProblemDetailsItem` in `CatApiCall`, the test, the readme and the generated pages. This is a breaking change of two public types, and it changes code in `modules/`.
+- The settings template lists `CatProblemDetails` and `ICatError` in `excludedTypeNames`.
+- The three demo clients use the template and are generated again. Their aliases for these two types go.
+
+**Settings template:**
+- The package ships the template and the `build/Cat.Api.Client.targets` file, with the opt-in property.
+- A test or a check that a project without the property gets no file, and a project with it gets the file once.
+
+**Operation names in the demo:**
+- Every endpoint of the demo services gets a name with `WithName`. Inventory has its two already.
+- The saved OpenAPI documents and the generated clients are refreshed, and the code in Orders that calls the renamed methods is adjusted.
+
 **The readme lacks these decisions of the plan:**
+- The error class `CatProblemDetails` and why the clients need no alias for it and for `ICatError`.
+- The settings template and how to turn it on with the property.
+- Operation names. A short pointer to the chapter "Name your endpoints" in the readme of `Cat.Minimal.Api`, because the method names of a generated client depend on it.
 - The token. The module does not forward it. The demo does that with its own `ForwardBearerTokenHandler` in Orders. A reader needs to know that, and how to add such a handler.
 - The refresh script that downloads the OpenAPI document and runs the generation, such as `Refresh-CatalogClient.ps1`.
 - The first version limits: no versioned APIs, GET and POST with JSON only, no uploads or streaming.
@@ -131,28 +151,11 @@ The module itself is built. What is left is the documentation and the close out.
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 1-->
 #### Question 1
-Is the module stable? The module is built and 27 tests pass. Orders uses it for three generated clients (Catalog, payment and Inventory). Two things from the decisions are still open, so the module is not called stable, and the badge, the roadmap and this plan are untouched. It is the owner's call once these are settled.
-
-##### Question 1.1
-Is the check of the shared `Contracts` variant done? The decision says to check that NSwag skips the models and imports the namespace of `Contracts`. The Inventory client of the demo does it. It references the `Contracts` project of Inventory, and Orders calls Inventory with it. What is left is the readme of the module, which only describes the default.
+Is the module stable? The module is built and 27 tests pass. Orders uses it for three generated clients (Catalog, payment and Inventory). One thing from the decisions is still open, so the module is not called stable, and the badge, the roadmap and this plan are untouched. It is the owner's call once these are settled.
 
 ##### Question 1.2
 Does the trace continue across the call? The decision says to check this. Check it in the Aspire dashboard with one placed order.
 <!-- region end: Question 1-->
 
-<!-- region start: Question 2-->
-#### Question 2
-Where does the NSwag settings template live? The decisions say the module holds a settings template, but the module has no such file today. The three `nswag.json` files of the demo are copies of each other with small changes. A developer who adds a client for a new service has to copy one by hand. Options: ship the template inside the package as a content file, document it in the module readme only, or let the `Refresh-*Client.ps1` script create the file when it is missing.
-<!-- region end: Question 2-->
-
-<!-- region start: Question 3-->
-#### Question 3
-Can the generated names get better? The generated methods have names like `BooksGETAsync`, because most endpoints have no operation id in their OpenAPI documents. Options: give every endpoint a clear name in the service, so the generator uses it, or set an NSwag option that builds the names from the route. Which one, and does `Cat.Minimal.Api` set the name for the developer?
-<!-- region end: Question 3-->
-
-<!-- region start: Question 4-->
-#### Question 4
-How do we handle generated types that clash with other types, such as `ICatError`? A generated client brings its own interface and model types. Orders keeps them apart with alias imports, for example `using IPaymentClient = Cat.Demo.PaymentService.Api.Client.IPaymentClient;`. Does the module readme describe aliases as the way to do it, or does the NSwag settings template exclude or rename the clashing types, so a developer needs no aliases?
-<!-- region end: Question 4-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
