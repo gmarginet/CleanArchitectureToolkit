@@ -43,5 +43,5 @@ Mirror the structure in `CleanArchitectureToolkit.slnx`.
 3. Create the folders and project files. Use `dotnet new` or copy a project from an existing unit.
 4. Move files with `git mv` so the history stays intact.
 5. Update the project references and `CleanArchitectureToolkit.slnx`.
-6. Run `dotnet cake --target=Build` to check that everything still builds. The `cat-verify` skill does this and reports the result.
+6. Run `dotnet cake --target=Build` to check that everything still builds. The `cat-internal-verify-code` skill does this and reports the result.
 7. Run the `demo-readme` skill. It updates `demo/README.md` and the hatched and solid boxes of the architecture drawing.

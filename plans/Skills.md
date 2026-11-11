@@ -55,17 +55,17 @@ A skill for a developer teaches Claude the CAT conventions inside the repository
 
 #### Background
 From the repository:
-- `.claude/skills/` holds the skills for the owner, such as `new-module`, `cat-internal-create-module-readme`, `docs-check` and `git-commit`. They are listed in `.claude/skills/README.md`.
+- `.claude/skills/` holds the skills for the owner, such as `cat-internal-create-module`, `cat-internal-create-module-readme`, `cat-internal-verify-docs` and `cat-internal-commit`. They are listed in `.claude/skills/README.md`.
 - The readme describes the conventions a skill would teach: the service project structure, the `Abstractions` split, handler registration, `ICatResponse` and error codes.
 - [Cat.Templates.md](Cat.Templates.md) plans `dotnet new` templates for the project structure. A scaffold skill overlaps with it.
-- `docs-check` checks all markdown in the repository, and `pages.yml` builds the GitHub Pages site from the markdown.
+- `cat-internal-verify-docs` checks all markdown in the repository, and `pages.yml` builds the GitHub Pages site from the markdown.
 - `skip-pub` goes at the end of a commit subject when no code in `modules/` changed. Files under `plugins/` would not be published as NuGet packages.
 
 #### What exists today
 - No skill for developers exists yet. The folders `plugins/` and `.claude-plugin/` do not exist.
 - The readme lists the idea under `Other future things`.
 - The skills in `.claude/skills/` are all for the owner. Four of them already use the `cat-internal-` prefix: `cat-internal-create-header`, `cat-internal-create-plan`, `cat-internal-create-template` and `cat-internal-template-concepts`.
-- The other skills for the owner are not renamed yet. `cat-verify` starts with `cat-`, which is the prefix of the developer skills, so it needs a rename to `cat-internal-verify` when we look at the existing skills one by one.
+- The other skills for the owner are not renamed yet, except `cat-verify`, which is now `cat-internal-verify-code`. The rest get renamed when we look at the existing skills one by one.
 - The repository has a `_plugins` folder. It belongs to the Jekyll site and is not related to this plan.
 
 #### Why it fits and what the risks are
@@ -101,7 +101,7 @@ plugins/cat/skills/...
 ```
 
 Things to check when we build it:
-- **Markdown checks.** `docs-check` and the skills overview rule in `CLAUDE.md` need to cover the new folder, or exclude it on purpose.
+- **Markdown checks.** `cat-internal-verify-docs` and the skills overview rule in `CLAUDE.md` need to cover the new folder, or exclude it on purpose.
 - **Pages site.** `pages.yml` builds the Jekyll site from the markdown. Decide whether the skill files should appear there.
 - **Commit messages.** A commit that only touches `plugins/` gets ` (skip-pub)`.
 
@@ -172,7 +172,7 @@ Does the plugin have its own version, or does it follow the module versions?
 
 <!-- region start: Question 7-->
 #### Question 7
-Does `docs-check` cover `plugins/`, and should the skill files appear on the Pages site?
+Does `cat-internal-verify-docs` cover `plugins/`, and should the skill files appear on the Pages site?
 <!-- region end: Question 7-->
 
 <!-- region start: Question 8-->

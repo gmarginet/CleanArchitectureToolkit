@@ -18,7 +18,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 1. Copy `[[TemplateFile]]` to the place where the new [[FileKind]] belongs.
 2. Replace the placeholders.
 3. Fill the `Header` region by following the `cat-internal-create-header` skill.
-4. Run the `docs-check` skill.
+4. Run the `cat-internal-verify-docs` skill.
 
 ## Regions
 - `Header`: The header of the [[FileKind]], filled by the `cat-internal-create-header` skill.
@@ -30,6 +30,6 @@ Use this when the owner changes the template and asks to update the files that u
 2. Work out from the change what differs between the old and the new template. Apply that change to each file with an edit.
 3. Never change the content the owner wrote.
 4. For the header, follow the `cat-internal-create-header` skill.
-5. Run the `docs-check` skill.
+5. Run the `cat-internal-verify-docs` skill.
 
 ## Placeholders

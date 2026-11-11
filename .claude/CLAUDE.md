@@ -18,7 +18,7 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 - Never create a branch on your own. The owner creates feature branches before starting work when they want one.
 - Do not push unless asked.
 - Commit one topic per commit, and only when asked. Do not mix renames, new content and tooling in one commit.
-- Use the `git-commit` skill to commit. It splits the changes into logical commits and ends the subject with ` (skip-pub)` when a commit changes no code in `modules/`.
+- Use the `cat-internal-commit` skill to commit. It splits the changes into logical commits and ends the subject with ` (skip-pub)` when a commit changes no code in `modules/`.
 
 ## Tools & Capabilities
 - **Roslyn MCP Connected:** Use `cwm-roslyn-navigator` tools for deep codebase indexing, finding references, tracking hierarchies, and listing symbols.
@@ -61,7 +61,7 @@ The `plans/` folder holds the plans we make before we build.
 - Link a future module plan from the Future modules table in the readme. Link the plan of an existing module from the Plans column of the module overview. The `readme-module-table` skill covers that column.
 - A module readme never links to the plan of its module. Only the readme links to a plan.
 - The readme of a module must in the end hold everything about how the module works and how to use it. Then the plan can go. Remove a plan only when the owner agrees.
-- Use the `cat-internal-create-plan` skill to create, build or update a plan. It also links the plan from the readme and keeps the other plans in sync. The `docs-check` skill checks the README tables.
+- Use the `cat-internal-create-plan` skill to create, build or update a plan. It also links the plan from the readme and keeps the other plans in sync. The `cat-internal-verify-docs` skill checks the README tables.
 
 ### Demo Folder Structure
 Every deployable unit in `demo/` gets its own folder. Never put project folders directly in `demo/`.
@@ -81,22 +81,22 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
 - Use the `demo-readme` skill when you change the demo app, start or finish a block of the demo architecture, or edit `demo/README.md`. It keeps the demo readme and the hatched and solid boxes of the drawing current.
 - Use the `readme-module-table` skill when you change the module table in the readme.
 - Never remove the `<!-- Modules start-->` and `<!-- Modules end-->` markers in the readme.
-- Use the `new-module` skill to start a new module.
+- Use the `cat-internal-create-module` skill to start a new module.
 
 ## 📐 Drawings
-- Architecture and flow drawings are Excalidraw. Use the `excalidraw-svg` skill.
-- ERD, UML class and sequence diagrams are Mermaid, inline in markdown. Use the `mermaid-diagram` skill.
+- Architecture and flow drawings are Excalidraw. Use the `cat-internal-create-excalidraw` skill.
+- ERD, UML class and sequence diagrams are Mermaid, inline in markdown. Use the `cat-internal-create-mermaid` skill.
 
 ## 🔍 Docs Check
-- Use the `docs-check` skill at the end of a task that changed markdown, a heading, a link target or a file name, and after every rename or move. It is local and fast.
+- Use the `cat-internal-verify-docs` skill at the end of a task that changed markdown, a heading, a link target or a file name, and after every rename or move. It is local and fast.
 
 ## 🚀 Release
 - Releases are automatic after a push to `master`. `.github/workflows/build.yml` runs the tests and publishes the NuGet packages, with the version from MinVer and the `v` git tags. `.github/workflows/pages.yml` builds the GitHub Pages site from the markdown.
-- A commit message with `skip-ci` skips the build workflow. `skip-pub` runs only the tests and does not publish. The `git-commit` skill adds ` (skip-pub)` to commits without code in `modules/`.
+- A commit message with `skip-ci` skips the build workflow. `skip-pub` runs only the tests and does not publish. The `cat-internal-commit` skill adds ` (skip-pub)` to commits without code in `modules/`.
 - This is why you never push unless asked.
 
 ## 🔗 Link Check
-- Use the `link-check` skill, and only when the owner asks for it. It sends thousands of requests.
+- Use the `cat-internal-verify-site` skill, and only when the owner asks for it. It sends thousands of requests.
 
 ## 🧩 Skills
 - When you add, rename, change or remove a skill in `.claude/skills/`, update the table and the entry for it in `.claude/skills/README.md` in the same change.

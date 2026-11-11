@@ -24,7 +24,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 6. Fill the `StatusBadge` region with the `NotStartedBadge` template.
 7. Add phase 1 with the `Phase` template, at the end of the file, and its `PhaseListLine` in the `Phases` region. Put what you found in the `PhaseDescription` region and the unknowns in numbered open questions.
 8. Link the plan from the readme, see [Where a module plan is linked](#where-a-module-plan-is-linked).
-9. Run the `docs-check` skill.
+9. Run the `cat-internal-verify-docs` skill.
 
 ## Rules for the content
 - `Decided` in a phase description holds only what the owner decided, or what the existing docs state. Name the document when it comes from one. Everything else is an open question. Never invent a decision.
@@ -44,17 +44,17 @@ Read these before you write, and search them for the module name:
 Only plans of modules (`plans/Cat.*.md`) are linked from the readme. `Demo.md` and `Skills.md` are not.
 - A module that does not exist yet: a row in the Future modules table. The module name in the row links to the plan, written as `[Cat.X](./plans/Cat.X.md)`. Put no backticks around the name. A code span inside a link does not look like a link on the published site.
 - A module that exists: the Plans column of its row in the module overview, `[Plans](./plans/Cat.X.md)`. The `readme-module-table` skill covers that column. The row must not be in the Future modules table.
-- When a future module is started with the `new-module` skill, move it: remove the row from the Future modules table and add the Plans link to the module overview.
+- When a future module is started with the `cat-internal-create-module` skill, move it: remove the row from the Future modules table and add the Plans link to the module overview.
 - Keep the plan until the module has done everything in it and the owner agrees that it can go. When the plan goes, remove its link from the readme too.
 - A module readme never links to the plan. Only the readme does. A module readme grows until it holds everything about how the module works and how to use it, so the plan can be removed.
-- The `docs-check` skill checks that every module plan has exactly one place in the readme.
+- The `cat-internal-verify-docs` skill checks that every module plan has exactly one place in the readme.
 
 ## Keeping the other documents in step
 Use this when an answer or a decision changes more than one plan, and when a module is renamed, merged or dropped.
 1. Search every plan, the readme, `demo/README.md` and the module readmes for the module name and for the topic. Use `git grep --untracked -l`, without the generated `namespaces` pages.
 2. Fix what no longer matches. A single decision often touches several plans, for example who owns the outbox or where an interface lives.
 3. When a module is renamed, merged or dropped: rename or delete the plan file with `git mv` or `git rm`, fix the README tables, fix the links in the other plans and say so in the plan that took over.
-4. Run the `docs-check` skill.
+4. Run the `cat-internal-verify-docs` skill.
 
 ## Phases
 - Every plan has at least one phase. Every phase gets its own chapter and number.
@@ -129,7 +129,7 @@ Use this when the owner changes `plan.template.md` or `plan.parts.template.md` a
 2. Work out from the change what differs between the old and the new template. Apply that change to each plan with an edit.
 3. Never change the content of a phase, such as its description or its questions.
 4. For the header, follow the `cat-internal-create-header` skill.
-5. Run the `docs-check` skill.
+5. Run the `cat-internal-verify-docs` skill.
 
 <!-- region start: PlanConversion-->
 ## Converting an old plan

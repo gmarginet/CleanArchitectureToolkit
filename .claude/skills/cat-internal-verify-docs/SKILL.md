@@ -1,17 +1,17 @@
 ---
-name: docs-check
+name: cat-internal-verify-docs
 description: Check the markdown of the repository locally and fast, with no web requests. Finds broken relative links, wrong letter case in paths, missing anchors, unclosed code fences, a lost readme marker, skills missing from the skills overview, and forbidden punctuation. Use at the end of a task that changed markdown, a link target, a heading or a file name, and after every rename or move.
 argument-hint: "[folder or file to limit the check]"
 ---
 
 # Docs check
 
-A local check of all markdown. It takes a few seconds and sends no requests. The `link-check` skill is the slow crawl of the published site and runs only when the owner asks. This one runs whenever docs or file names change.
+A local check of all markdown. It takes a few seconds and sends no requests. The `cat-internal-verify-site` skill is the slow crawl of the published site and runs only when the owner asks. This one runs whenever docs or file names change.
 
 ## Run
 
 ```
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/docs-check/check-docs.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/cat-internal-verify-docs/check-docs.ps1
 ```
 
 - Add `-Path <file or folder>` to limit the check, for example `-Path plans`.
@@ -34,7 +34,7 @@ Warnings, which you should fix unless there is a reason:
 - A long dash, `--` or an ellipsis in text. Code spans and code blocks are skipped. CLAUDE.md and template files are skipped.
 
 ## What it does not check
-- External links. Use `link-check` for those, when the owner asks.
+- External links. Use `cat-internal-verify-site` for those, when the owner asks.
 - Anchors of the Jekyll site. The check follows the GitHub rules. Jekyll can generate a different id for a heading with unusual characters.
 - Whether the text is true or reads well.
 - Mermaid syntax. Render it to be sure.

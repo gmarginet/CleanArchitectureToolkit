@@ -1,5 +1,5 @@
 ---
-name: cat-verify
+name: cat-internal-verify-code
 description: Build and test the solution with Cake, then check the diff of the regenerated namespaces pages. Use at the end of a task, after changing code, XML docs, the documentation generator or a module readme.
 allowed-tools: Bash(dotnet cake:*), PowerShell(dotnet cake:*), PowerShell(git status:*), PowerShell(git diff:*)
 ---

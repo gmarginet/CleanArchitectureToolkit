@@ -1,5 +1,5 @@
 ---
-name: git-commit
+name: cat-internal-commit
 description: Commit the current changes to Git in logical blocks, with a clear message for each block and " (skip-pub)" at the end of the subject when no code in modules/ changed. Never pushes. Use when the owner asks to commit, and never without being asked.
 argument-hint: "[optional hint about how to split or what to say]"
 ---
@@ -22,17 +22,17 @@ Run this skill only when the owner asks for a commit. Asking for the skill is th
 ## Steps
 1. Start from an empty index. `git mv` stages a rename at once, and that would leak into the wrong commit. `git restore --staged .` only unstages and is safe. A rename is found again when you stage both paths of it. Then look at the whole change.
    ```
-   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/git-commit/commit-info.ps1 -Mode Status
+   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/cat-internal-commit/commit-info.ps1 -Mode Status
    git diff --stat
    ```
    Read the diff of anything you do not recognize. The `Status` mode groups files by area and marks the areas with code.
-2. Check the markdown first. If any markdown, heading or file name changed, run the `docs-check` skill without `-Path` and fix errors. Do not commit broken links.
+2. Check the markdown first. If any markdown, heading or file name changed, run the `cat-internal-verify-docs` skill without `-Path` and fix errors. Do not commit broken links.
 3. Plan the blocks. Write the list down before you stage anything. See [Splitting](#splitting).
 4. For each block, in order:
    1. Stage only its files with `git add -- <paths>`. A renamed file needs both the old path (the deletion) and the new path. Use `git add -A -- <paths>` for that.
    2. Check what is staged.
       ```
-      powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/git-commit/commit-info.ps1 -Mode Staged
+      powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/cat-internal-commit/commit-info.ps1 -Mode Staged
       git diff --cached --stat
       ```
       It says whether to add ` (skip-pub)`, and warns about files that must not be committed.

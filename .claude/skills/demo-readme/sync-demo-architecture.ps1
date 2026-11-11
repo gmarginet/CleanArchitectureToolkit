@@ -23,7 +23,7 @@ $utf8 = New-Object System.Text.UTF8Encoding($false)
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
 $config = Get-Content (Join-Path $PSScriptRoot 'demo-blocks.json') -Raw | ConvertFrom-Json
 $svgPath = Join-Path $root $config.drawing
-$payloadScript = Join-Path $root '.claude\skills\excalidraw-svg\excalidraw-payload.ps1'
+$payloadScript = Join-Path $root '.claude\skills\cat-internal-create-excalidraw\excalidraw-payload.ps1'
 $jsonPath = Join-Path $WorkDir 'demo-architecture-scene.json'
 
 function Format-Number([double]$n) { return $n.ToString('0.##', [System.Globalization.CultureInfo]::InvariantCulture) }

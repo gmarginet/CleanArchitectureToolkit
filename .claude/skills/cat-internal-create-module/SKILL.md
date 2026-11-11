@@ -1,5 +1,5 @@
 ---
-name: new-module
+name: cat-internal-create-module
 description: Scaffold a new module end to end. Creates the projects in modules/, the test project, the solution entries, the module readme and the readme row. Use when a new CAT module is started.
 argument-hint: "[ModuleName] [short description]"
 ---
@@ -26,7 +26,7 @@ Set up a new module so it matches the others. New modules start with the status 
    - Add the test project to the `/tests/` folder, sorted by name.
 5. **Module readme.** Run the `cat-internal-create-module-readme` skill for the new module.
 6. **Readme table.** Run the `readme-module-table` skill. Add the row with the In development badge. If the module had a row in the Future modules table of the readme, remove that row and put the Plans link in the new row. The `cat-internal-create-plan` skill describes this.
-7. **Verify.** Run the `cat-verify` skill. The build generates the `namespaces/` pages for the new projects.
+7. **Verify.** Run the `cat-internal-verify-code` skill. The build generates the `namespaces/` pages for the new projects.
 8. **Check the generated pages.** They should appear in `modules/<ModuleName>/namespaces/`. If you need to change them, change the XML docs in the code and build again.
 
 ## Done when

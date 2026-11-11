@@ -30,7 +30,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 5. Add a row to the `NuGet` region with the `NuGetRow` template and one to the `Namespaces` region with the `NamespaceRow` template, for every project.
 6. Fill the `Dependencies` region: a row with the `DependencyRow` template for every dependency, or the `NoDependencies` template instead of the table.
 7. Write the `Usage` region. Add the chapters of the usage to the table of contents.
-8. Run the `docs-check` skill.
+8. Run the `cat-internal-verify-docs` skill.
 
 ## Plans
 - Never link to `plans/` from a module readme. Only the readme links to a plan.
@@ -61,7 +61,7 @@ Use this when the owner changes `module-readme.template.md` or `module-readme.pa
 2. Work out from the change what differs between the old and the new template. Apply that change to each readme with an edit.
 3. Never change the intro or the usage text.
 4. For the header, follow the `cat-internal-create-header` skill.
-5. Run the `docs-check` skill.
+5. Run the `cat-internal-verify-docs` skill.
 
 ## Afterwards
 - Check that every project in the module has a row in the NuGet and Namespaces tables.

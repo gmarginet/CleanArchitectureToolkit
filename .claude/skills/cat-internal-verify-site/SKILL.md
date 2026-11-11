@@ -1,9 +1,9 @@
 ---
-name: link-check
+name: cat-internal-verify-site
 description: Crawl the published GitHub Pages site and report broken pages, files and anchors. Only run it when the owner asks for it, because it sends thousands of requests.
 argument-hint: "[--external]"
 disable-model-invocation: true
-allowed-tools: Bash(node .claude/skills/link-check/check-links.mjs:*), PowerShell(node .claude/skills/link-check/check-links.mjs:*)
+allowed-tools: Bash(node .claude/skills/cat-internal-verify-site/check-links.mjs:*), PowerShell(node .claude/skills/cat-internal-verify-site/check-links.mjs:*)
 ---
 
 # Link check
@@ -15,7 +15,7 @@ Run the link checker against the published site at https://gmarginet.github.io/C
 - Never push for the owner.
 
 ## Steps
-1. Run `node .claude/skills/link-check/check-links.mjs`. Add `--external` when the owner asks for external links too.
+1. Run `node .claude/skills/cat-internal-verify-site/check-links.mjs`. Add `--external` when the owner asks for external links too.
 2. Wait for it to finish. A full crawl takes a while.
 3. Group the findings: broken pages, broken files, broken anchors, and external links if checked.
 4. For each finding, find the source file in the repo that holds the link, when you can.

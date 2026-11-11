@@ -1,5 +1,5 @@
 ---
-name: excalidraw-svg
+name: cat-internal-create-excalidraw
 description: Create or edit a *.excalidraw.svg drawing in resources/schemas, in the house style, with the Excalidraw scene embedded so the owner can edit it later. Use when a diagram or schema drawing is added or changed.
 argument-hint: "[drawing name and what it should show]"
 ---

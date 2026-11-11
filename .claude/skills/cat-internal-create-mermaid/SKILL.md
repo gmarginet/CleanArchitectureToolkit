@@ -1,17 +1,17 @@
 ---
-name: mermaid-diagram
-description: Write or update a Mermaid diagram (ERD, UML class, sequence) inside a markdown file, in the house style. Use when a data model, class or sequence diagram is added or changed. Architecture and flow drawings use the excalidraw-svg skill instead.
+name: cat-internal-create-mermaid
+description: Write or update a Mermaid diagram (ERD, UML class, sequence) inside a markdown file, in the house style. Use when a data model, class or sequence diagram is added or changed. Architecture and flow drawings use the cat-internal-create-excalidraw skill instead.
 argument-hint: "[diagram type and what it should show]"
 ---
 
 # Mermaid diagrams
 
-Mermaid is for diagrams where the structure matters more than the exact position of the boxes. The renderer places them. For architecture and flow drawings where position carries meaning, use the `excalidraw-svg` skill.
+Mermaid is for diagrams where the structure matters more than the exact position of the boxes. The renderer places them. For architecture and flow drawings where position carries meaning, use the `cat-internal-create-excalidraw` skill.
 
 | Diagram | Tool |
 |---|---|
 | ERD, UML class, sequence | Mermaid (this skill) |
-| Architecture, flow, layered or deployment drawings | Excalidraw (`excalidraw-svg` skill) |
+| Architecture, flow, layered or deployment drawings | Excalidraw (`cat-internal-create-excalidraw` skill) |
 
 ## Where it lives
 - Inline in the markdown file that needs it, in a fenced block with the language `mermaid`.

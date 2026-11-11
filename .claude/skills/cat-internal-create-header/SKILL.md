@@ -19,14 +19,14 @@ Load the `cat-internal-template-concepts` skill first. It explains regions and p
 1. Open [header.template.md](header.template.md) and copy the whole `Header` region, including the region markers and the comment line.
 2. Replace `[[RootPath]]` everywhere in the copy with the relative path from the new file to the repository root.
 3. Put the copy in the empty `Header` region at the top of the new file.
-4. Run the `docs-check` skill.
+4. Run the `cat-internal-verify-docs` skill.
 
 ## Update
 Use this when the owner changes the header template and asks to update the files that use it.
 1. Find the files with `git grep --untracked -l "Header template: @"`. Skip the files in the `.claude` folder. They only describe the header.
 2. Read the `RootPath` from the comment line of each file.
 3. Replace the whole `Header` region with the `Header` region of the template, using that `RootPath`.
-4. Run the `docs-check` skill. It reports every `Header` region that differs from the template.
+4. Run the `cat-internal-verify-docs` skill. It reports every `Header` region that differs from the template.
 
 ## Placeholders
 - [[RootPath]]: The relative path from the file to the root of the repository.
