@@ -4,14 +4,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cat.Api.Client;
+using Cat.Demo.CatalogService.Api.Client;
 using Cat.Demo.OrderService.CoreService;
 using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 using Microsoft.Extensions.Logging;
-
-// The generated models of the client have an ICatError of their own, so only the client itself is imported.
-using ICatalogClient = Cat.Demo.CatalogService.Api.Client.ICatalogClient;
 
 namespace Cat.Demo.OrderService.Infrastructure.Catalog;
 
@@ -36,7 +34,7 @@ public class CatalogPriceProvider : IPriceProvider
     public async Task<ICatResponse<IReadOnlyDictionary<Guid, BookPrice>>> GetPricesAsync(IReadOnlyCollection<Guid> bookIds, CancellationToken cancellationToken = default)
     {
         var response = await CatApiCall.ExecuteAsync(
-            () => _catalogClient.PricesAsync(bookIds, cancellationToken),
+            () => _catalogClient.GetBookPricesAsync(bookIds, cancellationToken),
             ServiceName,
             cancellationToken);
 

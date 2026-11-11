@@ -4,13 +4,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cat.Api.Client;
+using Cat.Demo.InventoryService.Api.Client;
 using Cat.Demo.InventoryService.Contracts.Models;
 using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Responses.Abstractions;
 using Microsoft.Extensions.Logging;
-
-// The generated client has an ICatError of its own, so only the client itself is imported.
-using IInventoryClient = Cat.Demo.InventoryService.Api.Client.IInventoryClient;
 
 namespace Cat.Demo.OrderService.Infrastructure.Inventory;
 

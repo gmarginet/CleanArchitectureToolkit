@@ -15,6 +15,7 @@
         "tags": [
           "Cat.Demo.CatalogService.Api"
         ],
+        "operationId": "SearchBooks",
         "parameters": [
           {
             "name": "Text",
@@ -72,6 +73,7 @@
         "tags": [
           "Cat.Demo.CatalogService.Api"
         ],
+        "operationId": "SaveBook",
         "requestBody": {
           "content": {
             "application/json": {
@@ -124,6 +126,7 @@
         "tags": [
           "Cat.Demo.CatalogService.Api"
         ],
+        "operationId": "GetBookPrices",
         "parameters": [
           {
             "name": "BookIds",
@@ -190,6 +193,7 @@
         "tags": [
           "Cat.Demo.CatalogService.Api"
         ],
+        "operationId": "GetBook",
         "parameters": [
           {
             "name": "bookId",
@@ -250,6 +254,7 @@
         "tags": [
           "Cat.Demo.CatalogService.Api"
         ],
+        "operationId": "GetCategories",
         "responses": {
           "200": {
             "description": "OK",

@@ -13,7 +13,7 @@
       "generateClientClasses": true,
       "generateClientInterfaces": true,
       "generateDtoTypes": true,
-      "excludedTypeNames": [ "StockReservationModel", "StockLineModel" ],
+      "excludedTypeNames": [ "CatProblemDetails", "ICatError", "StockReservationModel", "StockLineModel" ],
       "injectHttpClient": true,
       "useBaseUrl": false,
       "disposeHttpClient": false,

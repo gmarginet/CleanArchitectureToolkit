@@ -33,48 +33,48 @@ namespace Cat.Demo.CatalogService.Api.Client
     {
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookModel>> BooksAllAsync(string? text, System.Guid? categoryId);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookModel>> SearchBooksAsync(string? text, System.Guid? categoryId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookModel>> BooksAllAsync(string? text, System.Guid? categoryId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookModel>> SearchBooksAsync(string? text, System.Guid? categoryId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task BooksPOSTAsync(BookModel body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>OK</returns>
-        /// <exception cref="CatApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task BooksPOSTAsync(BookModel body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>OK</returns>
-        /// <exception cref="CatApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookPriceModel>> PricesAsync(System.Collections.Generic.IEnumerable<System.Guid> bookIds);
+        System.Threading.Tasks.Task SaveBookAsync(BookModel body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookPriceModel>> PricesAsync(System.Collections.Generic.IEnumerable<System.Guid> bookIds, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task SaveBookAsync(BookModel body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<BookModel> BooksGETAsync(System.Guid bookId);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>OK</returns>
-        /// <exception cref="CatApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<BookModel> BooksGETAsync(System.Guid bookId, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>OK</returns>
-        /// <exception cref="CatApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CategoryModel>> CategoriesAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookPriceModel>> GetBookPricesAsync(System.Collections.Generic.IEnumerable<System.Guid> bookIds);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CategoryModel>> CategoriesAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookPriceModel>> GetBookPricesAsync(System.Collections.Generic.IEnumerable<System.Guid> bookIds, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>OK</returns>
+        /// <exception cref="CatApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<BookModel> GetBookAsync(System.Guid bookId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="CatApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<BookModel> GetBookAsync(System.Guid bookId, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>OK</returns>
+        /// <exception cref="CatApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CategoryModel>> GetCategoriesAsync();
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="CatApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CategoryModel>> GetCategoriesAsync(System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -112,15 +112,15 @@ namespace Cat.Demo.CatalogService.Api.Client
 
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookModel>> BooksAllAsync(string? text, System.Guid? categoryId)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookModel>> SearchBooksAsync(string? text, System.Guid? categoryId)
         {
-            return BooksAllAsync(text, categoryId, System.Threading.CancellationToken.None);
+            return SearchBooksAsync(text, categoryId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookModel>> BooksAllAsync(string? text, System.Guid? categoryId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookModel>> SearchBooksAsync(string? text, System.Guid? categoryId, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -220,15 +220,15 @@ namespace Cat.Demo.CatalogService.Api.Client
 
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task BooksPOSTAsync(BookModel body)
+        public virtual System.Threading.Tasks.Task SaveBookAsync(BookModel body)
         {
-            return BooksPOSTAsync(body, System.Threading.CancellationToken.None);
+            return SaveBookAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task BooksPOSTAsync(BookModel body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task SaveBookAsync(BookModel body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -329,15 +329,15 @@ namespace Cat.Demo.CatalogService.Api.Client
 
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookPriceModel>> PricesAsync(System.Collections.Generic.IEnumerable<System.Guid> bookIds)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookPriceModel>> GetBookPricesAsync(System.Collections.Generic.IEnumerable<System.Guid> bookIds)
         {
-            return PricesAsync(bookIds, System.Threading.CancellationToken.None);
+            return GetBookPricesAsync(bookIds, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookPriceModel>> PricesAsync(System.Collections.Generic.IEnumerable<System.Guid> bookIds, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BookPriceModel>> GetBookPricesAsync(System.Collections.Generic.IEnumerable<System.Guid> bookIds, System.Threading.CancellationToken cancellationToken)
         {
             if (bookIds == null)
                 throw new System.ArgumentNullException("bookIds");
@@ -443,15 +443,15 @@ namespace Cat.Demo.CatalogService.Api.Client
 
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<BookModel> BooksGETAsync(System.Guid bookId)
+        public virtual System.Threading.Tasks.Task<BookModel> GetBookAsync(System.Guid bookId)
         {
-            return BooksGETAsync(bookId, System.Threading.CancellationToken.None);
+            return GetBookAsync(bookId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<BookModel> BooksGETAsync(System.Guid bookId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<BookModel> GetBookAsync(System.Guid bookId, System.Threading.CancellationToken cancellationToken)
         {
             if (bookId == null)
                 throw new System.ArgumentNullException("bookId");
@@ -555,15 +555,15 @@ namespace Cat.Demo.CatalogService.Api.Client
 
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CategoryModel>> CategoriesAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CategoryModel>> GetCategoriesAsync()
         {
-            return CategoriesAsync(System.Threading.CancellationToken.None);
+            return GetCategoriesAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CategoryModel>> CategoriesAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CategoryModel>> GetCategoriesAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -853,66 +853,6 @@ namespace Cat.Demo.CatalogService.Api.Client
         [System.Text.Json.Serialization.JsonPropertyName("name")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Name { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class CatProblemDetails
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("type")]
-        public string? Type { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("title")]
-        public string? Title { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("status")]
-        public int? Status { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("detail")]
-        public string? Detail { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("instance")]
-        public string? Instance { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("catErrors")]
-        public System.Collections.Generic.ICollection<ICatError>? CatErrors { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("catTraceId")]
-        public string? CatTraceId { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ICatError
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("code")]
-        public string? Code { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("message")]
-        public string? Message { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("arguments")]
-        public System.Collections.Generic.ICollection<object>? Arguments { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 

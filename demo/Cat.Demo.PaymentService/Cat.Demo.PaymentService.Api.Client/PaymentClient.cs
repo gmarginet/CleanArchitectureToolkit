@@ -33,12 +33,12 @@ namespace Cat.Demo.PaymentService.Api.Client
     {
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<PaymentResponse> PaymentsAsync(PaymentRequest body);
+        System.Threading.Tasks.Task<PaymentResponse> TakePaymentAsync(PaymentRequest body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<PaymentResponse> PaymentsAsync(PaymentRequest body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<PaymentResponse> TakePaymentAsync(PaymentRequest body, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -76,15 +76,15 @@ namespace Cat.Demo.PaymentService.Api.Client
 
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<PaymentResponse> PaymentsAsync(PaymentRequest body)
+        public virtual System.Threading.Tasks.Task<PaymentResponse> TakePaymentAsync(PaymentRequest body)
         {
-            return PaymentsAsync(body, System.Threading.CancellationToken.None);
+            return TakePaymentAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="CatApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<PaymentResponse> PaymentsAsync(PaymentRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<PaymentResponse> TakePaymentAsync(PaymentRequest body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");

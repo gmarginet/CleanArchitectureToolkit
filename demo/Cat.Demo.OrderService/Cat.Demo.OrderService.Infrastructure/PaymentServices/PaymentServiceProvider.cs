@@ -4,11 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cat.Api.Client;
 using Cat.Demo.OrderService.CoreService.Abstractions;
+using Cat.Demo.PaymentService.Api.Client;
 using Microsoft.Extensions.Logging;
-
-// The generated models of the client have an ICatError of their own, so only the types we need are imported.
-using IPaymentClient = Cat.Demo.PaymentService.Api.Client.IPaymentClient;
-using PaymentRequest = Cat.Demo.PaymentService.Api.Client.PaymentRequest;
 
 namespace Cat.Demo.OrderService.Infrastructure.PaymentServices;
 
@@ -36,7 +33,7 @@ public class PaymentServiceProvider : IPaymentProvider
         try
         {
             var response = await CatApiCall.ExecuteAsync(
-                () => _paymentClient.PaymentsAsync(new PaymentRequest { OrderNumber = orderNumber, Amount = (double)amount }, cancellationToken),
+                () => _paymentClient.TakePaymentAsync(new PaymentRequest { OrderNumber = orderNumber, Amount = (double)amount }, cancellationToken),
                 ServiceName,
                 cancellationToken);
 

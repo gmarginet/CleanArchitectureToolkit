@@ -15,6 +15,7 @@
         "tags": [
           "Cat.Demo.PaymentService.Api"
         ],
+        "operationId": "TakePayment",
         "requestBody": {
           "content": {
             "application/json": {
