@@ -70,7 +70,7 @@ From the repository:
 From the existing modules:
 - `Cat.Responses` has `ICatResponse` and `CatResponse` with succeeded and failed outcomes and errors.
 - `Cat.Commands`, `Cat.Queries`, `Cat.ServiceRequests` and `Cat.EventAggregators` each have abstractions with a processor or aggregator interface.
-- Tests of the future modules will need fakes for their parts too: messages, the clock and the user (`ICatUser` from `Cat.Authorization.Abstractions`).
+- Tests of the future modules will need fakes for their parts too: messages, the clock and the user (`ICatUser` from `Cat.Users.Abstractions`).
 
 #### What exists today
 - The module does not exist yet. It is listed in the repo overview of the readme with the status New.
@@ -114,7 +114,7 @@ Checked in the test projects of the demo and the repository. "Needed now" means 
 | Recording event subscriber, fake event aggregator | `ICatHandleEvent<T>`, the aggregator | `Cat.UnitTesting.EventAggregators` | Yes: Orders has `RecordingSubscriber` | Records the events it got. A fake aggregator is foreseen, for a test of code that publishes events. |
 | Response asserts | `ICatResponse` | `Cat.UnitTesting.Responses` | Partly: the tests check responses by hand | Succeeded, failed, the type and an error code. Stand alone, with an NUnit part only if needed. |
 | Fake workflow and validator processors | `ICatWorkflowProcessor`, `ICatStepProcessor`, `ICatValidatorProcessor` | `Cat.UnitTesting.FluentWorkflows` | Not clear | Foreseen. Check how the workflow tests of Orders set up their steps before deciding. |
-| Fake user | `ICatUser` of `Cat.Authorization.Abstractions` | `Cat.UnitTesting.Authorization` | Yes, as `FakeCurrentUser` in Orders, which is the demo interface `ICurrentUser` | Waits for `Cat.Authorization`. |
+| Fake user | `ICatUser` of `Cat.Users.Abstractions` | `Cat.UnitTesting.Authorization` | Yes, as `FakeCurrentUser` in Orders, which is the demo interface `ICurrentUser` | Waits for `Cat.Users`. |
 | Fake clock | `TimeProvider` | None | No | .NET has `FakeTimeProvider` in the `Microsoft.Extensions.TimeProvider.Testing` package. Recommendation: do not write our own. Point to it in the readme. |
 | Fake message publisher | `Cat.Messaging` | `Cat.UnitTesting.Messaging` | No | Foreseen, waits for the module. |
 | Base class with a service provider | `UnitTestBase` | `Cat.UnitTesting.NUnit` | Yes: 14 test projects of the repository and the 3 demo test projects use `Cat.NUnit` | Moves from `tests/Cat.NUnit`. |
@@ -131,7 +131,7 @@ Yes, in steps, with no open question blocking the first ones.
 5. **Own tests** for every fake.
 6. **The readme** of the module with a table of the projects, as the other modules have.
 
-The fake user waits for `Cat.Authorization`, and the messaging fake for `Cat.Messaging`.
+The fake user waits for `Cat.Users`, and the messaging fake for `Cat.Messaging`.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions

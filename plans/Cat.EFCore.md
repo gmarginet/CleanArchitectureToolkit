@@ -97,7 +97,7 @@ From the saga plan:
 - **Sharing a transaction with Dapper.** Settled in [Cat.Dapper.md](Cat.Dapper.md), question 2. The developer has an easy way to start a transaction, and the mechanism that shares the connection is still open there. If it needs a factory that builds a `DbContext` from a shared connection, that factory lives in this module.
 - **Place order workflow.** It stays several units, with the cancel on failure approach. Payment is a call to another service and can never join a database transaction. Every command still has its own scope.
 - **Cat.Expressions.** Not used. Sorting and filtering stay in the handler, so nothing needs compiled member access.
-- **Who changed a row.** Temporal tables answer what a value was and when. A developer who also wants to see who did it adds a `LastUpdatedBy` type of column. `Cat.Auditing` was dropped for this reason.
+- **Who changed a row.** Temporal tables answer what a value was and when. A developer who also wants to see who did it adds a `LastUpdatedBy` type of column. `Cat.Auditing` was dropped for this reason. The demo fills the column in the command handler from `ICatUser`, see [Demo.md](Demo.md). A `SaveChanges` interceptor that does it is not decided.
 - **Temporal properties.** The upgrade of phase 2 goes first, so the two temporal period properties are switched on where the class lives today. The move to the SQL Server projects follows with phase 1.
 - **Home.** One module, `Cat.EFCore`, with several projects. A developer picks what they want to use.
 - **No separate transactions module.** There is no `Cat.Transactions`. Transactions are part of `Cat.EFCore`.

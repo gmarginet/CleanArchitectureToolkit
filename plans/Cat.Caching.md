@@ -111,7 +111,7 @@ Recommendation: short lifetimes in the first version, and tags in the second, th
 <!-- region start: Question 4-->
 #### Question 4
 How do we guarantee that per user results do not leak? The options:
-- **The key always includes the user,** from `ICatUser`, unless a query is marked as shared. Cost: more cache entries, and a dependency on `Cat.Authorization.Abstractions`.
+- **The key always includes the user,** from `ICatUser`, unless a query is marked as shared. Cost: more cache entries, and a dependency on `Cat.Users.Abstractions`.
 - **The key never includes the user,** and the developer marks queries that vary. Cost: a leak if a developer forgets.
 - **The key includes the user for queries that carry a user id,** because the query holds the external customer id (as in Orders). Cost: it relies on the query design.
 
