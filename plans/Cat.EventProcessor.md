@@ -38,6 +38,7 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 - [Phase 2](#phase-2)
+- [Phase 3](#phase-3)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 2-->
@@ -72,3 +73,38 @@ Phase 1 is built. The module readme `modules/Cat.EventProcessor/README.md` holds
 <!-- region start: PhaseOpenQuestions-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->
+
+<!-- region start: Phase 3-->
+## Phase 3
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+Let a developer switch the inbox on for one message type, and not for all message types at once.
+
+#### What exists today
+The store `ICatInboxStore` and its EF Core implementation live in `Cat.EventProcessor.Inbox.EFCore`. The inbox used to be a decorator that every message handler got, with no way to pick the message types. That decorator and `UseCatEventProcessorInbox` are removed, so nothing calls the store until this phase is built and no message is skipped for now.
+
+The receiver `CatMessageReceiver` opens one DI scope per message and handles the message in it. The store is scoped on the `DbContext` of the handler, so the row of the inbox and the work of the handler are saved together. The receiver also knows the options of the message type through `CatReceiveOptions`.
+
+#### Decided
+- **Per message type.** The inbox is switched on per message type, with a setting on `CatReceiveOptions`, set in code as `Receive<TMessage>(options => ...)`. A message type without the setting has no inbox.
+- **Configuration.** The configuration of the service can change the setting, like the other receive options.
+- **Not a decorator.** The inbox runs where the receiver handles the message, and no longer as a decorator. So it has no number in the decorator order.
+- **Optional.** The inbox project stays optional. A developer who does not use it pulls in nothing.
+- **How the receiver calls the inbox.** `ICatInboxStore` moves to `Cat.EventProcessor.Abstractions`. When the setting is on, the receiver resolves the store from the scope of the message, checks the message id and adds the row before the handler runs.
+- **Missing store.** When a message type has the setting on and no store is registered, the listener fails at startup, before it starts.
+- **Decorator.** The decorator and `UseCatEventProcessorInbox` are removed. `AddCatEventProcessorInbox<TDbContext>` stays and registers the store. This is a breaking change for a developer who called `UseCatEventProcessorInbox`.
+
+#### What to build
+1. The setting on `CatReceiveOptions`, and the configuration override.
+2. `ICatInboxStore` in `Cat.EventProcessor.Abstractions`, and the call in `CatMessageReceiver`.
+3. The startup check for a missing store.
+4. Tests for a new message, a repeated message, a message type without the setting and the startup check. The tests of the old decorator are gone, so write them again for the receiver.
+5. The inbox chapter of the module readme.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 3-->
