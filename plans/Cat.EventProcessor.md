@@ -38,7 +38,19 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 - [Phase 2](#phase-2)
+  - [Description](#description)
+    - [Goal](#goal)
+    - [What exists today](#what-exists-today)
+    - [Decided](#decided)
+    - [What is not built](#what-is-not-built)
+    - [Still to check](#still-to-check)
+  - [Open Questions](#open-questions)
 - [Phase 3](#phase-3)
+  - [Description](#description-1)
+    - [Goal](#goal-1)
+    - [What exists today](#what-exists-today-1)
+    - [Decided](#decided-1)
+  - [Open Questions](#open-questions-1)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 2-->
@@ -89,32 +101,15 @@ The receiver `CatMessageReceiver` opens one DI scope per message and handles the
 The owner decided this in [Cat.Users.md](Cat.Users.md): authorization is done at the entrance of the service, and for a message that is the receiving side.
 - **Policy system.** The module reuses the ASP.NET Core policy system, so one set of policies serves the endpoints and the messages. The receiver builds a `ClaimsPrincipal` from the token of the message and asks `IAuthorizationService` for the policy of the message type.
 - **Per message type.** The policy name is a setting on `CatReceiveOptions`, set in code as `Receive<TMessage>(options => ...)`. The configuration of the service can change it, like the other settings.
-- **Inline rule.** Besides the policy name, a message type can state a simple rule inline, such as `options.RequireRole("admin")`, so a developer does not have to define a policy by name first. It uses `IAuthorizationService` behind the scenes, so there is still one policy system. The owner chose to build it.
+- **Inline rule.** Besides the policy name, a message type can state a simple rule inline, such as a required role, so a developer does not have to define a policy by name first. It uses `IAuthorizationService` behind the scenes, so there is still one policy system. The owner chose to build it. The shortcut is one callback that takes the `AuthorizationPolicyBuilder` of ASP.NET Core, such as `options.Require(policy => policy.RequireRole("admin"))`, so every rule of ASP.NET Core works and we write no rule API of our own. The `Require` method is an extension method in the optional authorization project. `CatReceiveOptions` in the abstractions keeps the rules as a neutral list, so the abstractions stay free of ASP.NET Core.
 - **Contract.** `Cat.EventProcessor.Abstractions` holds a small contract that the receiver calls before the handler runs.
 - **Optional project.** An optional project implements the contract with `IAuthorizationService`. A developer who does not use it pulls in nothing. A message type with a policy and no implementation fails at startup, as for the inbox. It is a project of this module, such as `Cat.EventProcessor.Authorization`, next to the inbox project. The owner decided this in [Cat.Users.md](Cat.Users.md).
 - **Entrances without a rule.** The listener logs the message types without a policy at startup, and a setting makes the receiver deny them. The setting is off by default, so existing services keep working. The owner decided this in [Cat.Users.md](Cat.Users.md). The receiver does not retry a message that fails the check. It dead letters the message, because retrying gives the same answer.
+- **Policy before the inbox.** The policy check runs before the inbox check. A message that is not allowed leaves no trace in the inbox. The check runs again for a repeated message, which is cheap.
 - **Needs Phase 2.** The token of the message and the identity built from it come from Phase 2.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-Does the policy check run before or after the inbox check? The options:
-- **Policy first.** A message that fails the check never gets a row in the inbox. Cost: the check runs again for every repeated message, and the check of a repeated message may fail even though the first one passed.
-- **Inbox first.** A repeated message completes at once, without a check. Cost: a rejected message may get a row in the inbox, depending on when the row is saved.
-
-Recommendation: policy first. A message that is not allowed must leave no trace in the inbox, and the extra check is cheap.
-<!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-Which inline rules does the message setting offer? The owner chose to build the shortcut. The options:
-- **A. Only a required role,** `RequireRole("admin")`. Cost: a rule on a claim still needs a named policy.
-- **B. Role, claim and logged in,** `RequireRole`, `RequireClaim` and `RequireAuthenticatedUser`. Cost: more API to document and test.
-- **C. A callback that builds the policy,** `options.Require(policy => policy.RequireRole("admin"))`, which takes the `AuthorizationPolicyBuilder` of ASP.NET Core. Cost: the options type depends on the ASP.NET Core policy builder.
-
-Recommendation: C. It offers everything ASP.NET Core offers without a second API of our own. It needs the optional authorization project to hold the type, so the abstractions stay free of ASP.NET Core.
-<!-- region end: Question 2-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 3-->
