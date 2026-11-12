@@ -1,0 +1,23 @@
+../../../Cat.Users/namespaces/Cat.Users/
+F:Cat.Users.CatClaimsUser._principal|CatClaimsUser._principal.md|_principal
+F:Cat.Users.CatClaimsUser._options|CatClaimsUser._options.md|_options
+P:Cat.Users.CatClaimsUser.IsAuthenticated|CatClaimsUser.IsAuthenticated.md|IsAuthenticated
+P:Cat.Users.CatClaimsUser.UserId|CatClaimsUser.UserId.md|UserId
+P:Cat.Users.CatClaimsUser.Name|CatClaimsUser.Name.md|Name
+M:Cat.Users.CatClaimsUser.#ctor(System.Security.Claims.ClaimsPrincipal,Cat.Users.CatUsersOptions)|CatClaimsUser..ctor.NULFIZ8KZ9AGZ17CTEO2TEWT9.md|CatClaimsUser(ClaimsPrincipal, CatUsersOptions)
+M:Cat.Users.CatClaimsUser.IsInRole(System.String)|CatClaimsUser.IsInRole.ZUJ9ID74P60IO2GVTLQ6YO20B.md|IsInRole(string)
+N:Cat.Users|Cat.Users.md|Cat.Users
+T:Cat.Users.CatClaimsUser|CatClaimsUser.md|CatClaimsUser
+F:Cat.Users.CatUserAccessor._httpContextAccessor|CatUserAccessor._httpContextAccessor.md|_httpContextAccessor
+F:Cat.Users.CatUserAccessor._options|CatUserAccessor._options.md|_options
+F:Cat.Users.CatUserAccessor._user|CatUserAccessor._user.md|_user
+P:Cat.Users.CatUserAccessor.User|CatUserAccessor.User.md|User
+M:Cat.Users.CatUserAccessor.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.Extensions.Options.IOptions{Cat.Users.CatUsersOptions})|CatUserAccessor..ctor.NWJCRIJUA2W2WR4D00Q20REPE.md|CatUserAccessor(IHttpContextAccessor, IOptions<CatUsersOptions>)
+T:Cat.Users.CatUserAccessor|CatUserAccessor.md|CatUserAccessor
+P:Cat.Users.CatUsersOptions.UserIdClaimType|CatUsersOptions.UserIdClaimType.md|UserIdClaimType
+P:Cat.Users.CatUsersOptions.NameClaimType|CatUsersOptions.NameClaimType.md|NameClaimType
+P:Cat.Users.CatUsersOptions.RoleClaimType|CatUsersOptions.RoleClaimType.md|RoleClaimType
+T:Cat.Users.CatUsersOptions|CatUsersOptions.md|CatUsersOptions
+M:Cat.Users.Extensions.ServiceCollectionExtensions.AddCatUsers(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Cat.Users.CatUsersOptions})|ServiceCollectionExtensions.AddCatUsers.WBCXPA85Q8DWQNA7CZ4Z22795.md|AddCatUsers(this IServiceCollection, Action<CatUsersOptions>)
+N:Cat.Users.Extensions|Cat.Users.Extensions.md|Cat.Users.Extensions
+T:Cat.Users.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

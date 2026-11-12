@@ -1,0 +1,19 @@
+../../../Cat.Users/namespaces/Cat.Users.Abstractions/
+F:Cat.Users.Abstractions.CatUser.SystemRole|CatUser.SystemRole.md|SystemRole
+F:Cat.Users.Abstractions.CatUser._roles|CatUser._roles.md|_roles
+P:Cat.Users.Abstractions.CatUser.Anonymous|CatUser.Anonymous.md|Anonymous
+P:Cat.Users.Abstractions.CatUser.UserId|CatUser.UserId.md|UserId
+P:Cat.Users.Abstractions.CatUser.Name|CatUser.Name.md|Name
+P:Cat.Users.Abstractions.CatUser.IsAuthenticated|CatUser.IsAuthenticated.md|IsAuthenticated
+M:Cat.Users.Abstractions.CatUser.#ctor(System.String,System.String,System.Boolean,System.Collections.Generic.IEnumerable{System.String})|CatUser..ctor.FFW49Z4GO9FSHH3MSHG7V3DV2.md|CatUser(string, string, bool, IEnumerable<string>)
+M:Cat.Users.Abstractions.CatUser.System(System.String)|CatUser.System.YH6UTGHVYBPJEIMY9ZWQI1152.md|System(string)
+M:Cat.Users.Abstractions.CatUser.IsInRole(System.String)|CatUser.IsInRole.M6LLTHKDV4SBDGEHU7DDB8QW1.md|IsInRole(string)
+N:Cat.Users.Abstractions|Cat.Users.Abstractions.md|Cat.Users.Abstractions
+T:Cat.Users.Abstractions.CatUser|CatUser.md|CatUser
+P:Cat.Users.Abstractions.ICatUser.UserId|ICatUser.UserId.md|UserId
+P:Cat.Users.Abstractions.ICatUser.Name|ICatUser.Name.md|Name
+P:Cat.Users.Abstractions.ICatUser.IsAuthenticated|ICatUser.IsAuthenticated.md|IsAuthenticated
+M:Cat.Users.Abstractions.ICatUser.IsInRole(System.String)|ICatUser.IsInRole.AAQMPF0AY4605MAN4H5R139PB.md|IsInRole(string)
+T:Cat.Users.Abstractions.ICatUser|ICatUser.md|ICatUser
+P:Cat.Users.Abstractions.ICatUserAccessor.User|ICatUserAccessor.User.md|User
+T:Cat.Users.Abstractions.ICatUserAccessor|ICatUserAccessor.md|ICatUserAccessor

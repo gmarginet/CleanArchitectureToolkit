@@ -1,0 +1,4 @@
+../../../Cat.Users/namespaces/Cat.Users.JwtBearer/
+M:Cat.Users.JwtBearer.Extensions.ServiceCollectionExtensions.AddCatUsersJwtBearer(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)|ServiceCollectionExtensions.AddCatUsersJwtBearer.O8VHHZEC3I64CRQZF176JO1MA.md|AddCatUsersJwtBearer(this IServiceCollection, string)
+N:Cat.Users.JwtBearer.Extensions|Cat.Users.JwtBearer.Extensions.md|Cat.Users.JwtBearer.Extensions
+T:Cat.Users.JwtBearer.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

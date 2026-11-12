@@ -150,6 +150,12 @@
     <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests.Minimal.Api/Cat.ServiceRequests.Minimal.Api.csproj" />
     <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests/Cat.ServiceRequests.csproj" />
   </Folder>
+  <Folder Name="/modules/Cat.Users/">
+    <File Path="modules/Cat.Users/README.md" />
+    <Project Path="modules/Cat.Users/Cat.Users.Abstractions/Cat.Users.Abstractions.csproj" />
+    <Project Path="modules/Cat.Users/Cat.Users.JwtBearer/Cat.Users.JwtBearer.csproj" />
+    <Project Path="modules/Cat.Users/Cat.Users/Cat.Users.csproj" />
+  </Folder>
   <Folder Name="/modules/Cat.Validators/">
     <File Path="modules/Cat.Validators/README.md" />
     <Project Path="modules/Cat.Validators/Cat.Validators.Abstractions/Cat.Validators.Abstractions.csproj" />
@@ -173,6 +179,7 @@
     <Project Path="tests/Cat.Queries.Tests/Cat.Queries.Tests.csproj" />
     <Project Path="tests/Cat.Responses.Tests/Cat.Responses.Tests.csproj" />
     <Project Path="tests/Cat.ServiceRequests.Tests/Cat.ServiceRequests.Tests.csproj" />
+    <Project Path="tests/Cat.Users.Tests/Cat.Users.Tests.csproj" />
     <Project Path="tests/Cat.Validators.Tests/Cat.Validators.Tests.csproj" />
   </Folder>
   <Folder Name="/tools/">
