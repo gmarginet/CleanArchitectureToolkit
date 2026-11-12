@@ -913,7 +913,7 @@ Remove the secret to switch the failure off again. When you run the service on i
 **Cons.**
 - Another container and a second SQL Server for the emulator, which takes memory.
 - Everything is gone after a restart, so a message that is not handled yet is lost with it.
-- The emulator is not the real service. Dead letters, sessions and scheduled messages are not tried against it yet.
+- The emulator is not the real service. It reports 0 for every message count, so the dead letter metric of `Cat.Messaging` shows 0 against it. Dead letters, sessions, scheduled messages and duplicate detection work, see the module readme of `Cat.Messaging`.
 
 **More.** `demo/Cat.Demo.AppHost/Cat.Demo.AppHost/Program.cs`. [Orders service](#orders-service) and [Inventory service](#inventory-service).
 <!-- region end: ServiceBusEmulator-->
