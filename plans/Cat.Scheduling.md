@@ -89,7 +89,7 @@ From the architecture:
 - **Business logic.** None in the worker.
 - **Time zone.** The demo counter cleanup uses UTC.
 - **Testing.** A development endpoint triggers a run, in debug mode only.
-- **Kinds of schedule.** Only recurring jobs. A one-off moment, such as a saga timeout or "cancel after 24 hours", is done with a scheduled message of the bus, see [Cat.Messaging.md](Cat.Messaging.md) and [Cat.Sagas.md](Cat.Sagas.md). The handler of such a message first checks the order and does nothing when it was paid.
+- **Kinds of schedule.** Only recurring jobs. A one-off moment, such as a saga timeout or "cancel after 24 hours", is done with a scheduled message of the bus, see [Cat.Messaging.md](../modules/Cat.Messaging/README.md) and [Cat.Sagas.md](Cat.Sagas.md). The handler of such a message first checks the order and does nothing when it was paid.
 - **Library.** A small cron parser and our own loop. `Cronos` is the candidate: check its target framework, its licence and that it is maintained. No Quartz.NET and no Hangfire.
 - **One instance runs a job.** A claim in the database of the service. Before a run an instance inserts a row with the job name and the due time, with a unique key on the two. The instance whose insert succeeds runs the job. It sits behind a small interface, so a blob lease can follow later. A service without a database, or with one instance, uses an in-memory version. Container Apps cron jobs do not fit, since the worker runs inside the API.
 - **Missed runs.** A job runs once on startup when the due time passed, not once for every missed time. A setting per job, `RunOnce` or `Skip`, with `RunOnce` as the default. Service requests of a schedule must be safe to run more than once.

@@ -195,7 +195,7 @@ Steps 1 to 3 do not depend on the other future modules, so they can start before
 #### Decided
 - **Orders now.** Orders keeps its state in the order status. The payment is an interface.
 - **Messaging.** The wait step goes through the messaging abstractions, not through `Cat.EventAggregators`.
-- **Outbox.** The outbox lives in `Cat.Messaging`, see [Cat.Messaging.md](Cat.Messaging.md). The saga module saves the instance and the outgoing message in one `SaveChanges`, through `Cat.Messaging.Outbox.EFCore`.
+- **Outbox.** The outbox lives in `Cat.Messaging`, see [Cat.Messaging.md](../modules/Cat.Messaging/README.md). The saga module saves the instance and the outgoing message in one `SaveChanges`, through `Cat.Messaging.Outbox.EFCore`.
 - **Order of work.** The engine change comes first and needs no other future module. The module itself follows `Cat.Messaging` and `Cat.EventProcessor`.
 - **Approach.** Option C: a small engine change in `Cat.FluentWorkflows` plus a new module around it. Option A is how Orders works until then. The engine change is decided in [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md): it ships before the saga module and is tested in memory.
 - **Name.** `Cat.Sagas`. The module readme says that it covers any long running workflow.
@@ -205,7 +205,7 @@ Steps 1 to 3 do not depend on the other future modules, so they can start before
 - **Waiting for several answers.** Parallel waits come from the `Parallel` step of the engine, see [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md). The checkpoint of the module must hold the state of every branch.
 - **Orders until then.** Orders stays as it is, with the state in the order status and the payment as an interface, until step 6 of the build order.
 - **Compensation.** Explicit steps in the failure branch of the workflow, written by the developer. A dedicated compensation feature comes only when the explicit steps become repetitive.
-- **Timeouts.** Scheduled messages of the bus, see [Cat.Messaging.md](Cat.Messaging.md) and [Cat.Scheduling.md](Cat.Scheduling.md). The first version of the module may go without timeouts if the bus support is not ready.
+- **Timeouts.** Scheduled messages of the bus, see [Cat.Messaging.md](../modules/Cat.Messaging/README.md) and [Cat.Scheduling.md](Cat.Scheduling.md). The first version of the module may go without timeouts if the bus support is not ready.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions

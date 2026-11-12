@@ -141,7 +141,7 @@ Recommendation: yes, the module name as the source and meter name, and a short t
 
 <!-- region start: Question 6-->
 #### Question 6
-Who carries the trace context over the Service Bus: this module or `Cat.Messaging`? The Service Bus SDK already puts the trace context (`Diagnostic-Id`) on a message, see [Cat.Messaging.md](Cat.Messaging.md). The options:
+Who carries the trace context over the Service Bus: this module or `Cat.Messaging`? The Service Bus SDK already puts the trace context (`Diagnostic-Id`) on a message, see [Cat.Messaging.md](../modules/Cat.Messaging/README.md). The options:
 - **`Cat.Messaging`,** since the SDK does it and the module sets the properties. Cost: none for `Cat.Telemetry`.
 - **This module** with a helper that writes and reads the context. Cost: messaging then depends on telemetry, which the toolbox rule does not like.
 
@@ -152,7 +152,7 @@ Recommendation: `Cat.Messaging`. `Cat.Telemetry` only makes sure the `Cat.Messag
 #### Question 7
 How do logs relate to traces? The options:
 - **The built-in .NET link.** The logger adds the trace id and span id to every log record while an activity is on. Cost: none, if the OpenTelemetry logging provider is on.
-- **A correlation id in every log scope too.** Cost: one more id to carry, and the `CorrelationId` of a message (see [Cat.Messaging.md](Cat.Messaging.md)) already covers a business flow.
+- **A correlation id in every log scope too.** Cost: one more id to carry, and the `CorrelationId` of a message (see [Cat.Messaging.md](../modules/Cat.Messaging/README.md)) already covers a business flow.
 
 Recommendation: the built-in link by default, and the correlation id of the message as a log scope in the event processor.
 <!-- region end: Question 7-->

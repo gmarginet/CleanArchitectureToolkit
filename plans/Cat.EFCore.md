@@ -108,7 +108,7 @@ From the saga plan:
 - **DbContext.** The base classes use a generic context type.
 - **Tracking.** Queries use `AsNoTracking` by convention. A developer can override it per query type.
 - **Demo case.** Saving an order and its lines in one go.
-- **Outbox.** Not in this module. It lives in `Cat.Messaging`, as `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore`, see [Cat.Messaging.md](Cat.Messaging.md). The base command handler leaves room for it, because a row added to the same context is saved by the same `SaveChanges`.
+- **Outbox.** Not in this module. It lives in `Cat.Messaging`, as `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore`, see [Cat.Messaging.md](../modules/Cat.Messaging/README.md). The base command handler leaves room for it, because a row added to the same context is saved by the same `SaveChanges`.
 
 #### What the code says about transactions
 These facts were checked for the note of the owner about the transaction decorator.
