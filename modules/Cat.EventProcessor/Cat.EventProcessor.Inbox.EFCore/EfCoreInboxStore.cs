@@ -1,3 +1,4 @@
+using Cat.EventProcessor.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cat.EventProcessor.Inbox.EFCore;

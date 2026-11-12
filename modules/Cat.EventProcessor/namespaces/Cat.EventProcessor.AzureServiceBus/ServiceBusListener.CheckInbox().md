@@ -24,21 +24,10 @@
 
 # Code Reference  
   
-##### >> [Cat\.EventProcessor\.Inbox\.EFCore Assembly](index.md 'index') >> [Cat\.EventProcessor\.Inbox\.EFCore Namespace](Cat.EventProcessor.Inbox.EFCore.md 'Cat\.EventProcessor\.Inbox\.EFCore')
+##### >> [Cat\.EventProcessor\.AzureServiceBus Assembly](index.md 'index') >> [Cat\.EventProcessor\.AzureServiceBus Namespace](Cat.EventProcessor.AzureServiceBus.md 'Cat\.EventProcessor\.AzureServiceBus') >> [ServiceBusListener Class](ServiceBusListener.md 'Cat\.EventProcessor\.AzureServiceBus\.ServiceBusListener')
 
-## ICatInboxStore Interface
-
-Remembers which messages the service handled\. The store works on the context of the current scope,
-the same one the handler uses, so the row is saved by the `SaveChanges` of the handler\.
+## ServiceBusListener\.CheckInbox\(\) Method
 
 ```csharp
-public interface ICatInboxStore
+private void CheckInbox();
 ```
-
-Derived  
-↳ [EfCoreInboxStore&lt;TDbContext&gt;](EfCoreInboxStore_TDbContext_.md 'Cat\.EventProcessor\.Inbox\.EFCore\.EfCoreInboxStore\<TDbContext\>')
-
-| Methods | |
-| :--- | :--- |
-| [Add\(string, string\)](ICatInboxStore.Add.E78XPY2J7TFSJKJORTWQCOT35.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ICatInboxStore\.Add\(string, string\)') | Adds the message to the inbox\. It does not save by itself\. The `SaveChanges` of the handler saves it with the work\. |
-| [ExistsAsync\(string, CancellationToken\)](ICatInboxStore.ExistsAsync.QC5LOHD4KJ154DHEHFTW8YY27.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ICatInboxStore\.ExistsAsync\(string, System\.Threading\.CancellationToken\)') | Tells whether the message was handled before\. |

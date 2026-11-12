@@ -1,6 +1,7 @@
 using Azure.Messaging.ServiceBus;
 using Cat.EventProcessor.Abstractions;
 using Cat.Messaging.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -22,6 +23,7 @@ internal sealed class ServiceBusListener : IHostedService, IAsyncDisposable
     private readonly IOptions<CatEventProcessorServiceBusOptions> _options;
     private readonly ListenerStatus _status;
     private readonly ILogger<ServiceBusListener> _logger;
+    private readonly IServiceProviderIsService _serviceProviderIsService;
     private readonly List<Func<CancellationToken, Task>> _stoppers = new();
     private readonly List<IAsyncDisposable> _disposables = new();
 
@@ -35,10 +37,12 @@ internal sealed class ServiceBusListener : IHostedService, IAsyncDisposable
     /// <param name="options">The settings of the listener.</param>
     /// <param name="status">The state of the listeners, for the health check.</param>
     /// <param name="logger">The logger.</param>
+    /// <param name="serviceProviderIsService">Tells whether the service registered an inbox store.</param>
     public ServiceBusListener(ServiceBusClient client, ICatReceiveRegistry registry, ICatMessageNameResolver nameResolver,
         ICatMessageReceiver receiver, IOptions<CatEventProcessorServiceBusOptions> options, ListenerStatus status,
-        ILogger<ServiceBusListener> logger)
+        ILogger<ServiceBusListener> logger, IServiceProviderIsService serviceProviderIsService)
     {
+        _serviceProviderIsService = serviceProviderIsService;
         _client = client;
         _registry = registry;
         _nameResolver = nameResolver;
@@ -51,6 +55,8 @@ internal sealed class ServiceBusListener : IHostedService, IAsyncDisposable
     /// <inheritdoc />
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        CheckInbox();
+
         foreach (var registration in _registry.Registrations)
         {
             await StartListenerAsync(registration, cancellationToken);
@@ -66,6 +72,22 @@ internal sealed class ServiceBusListener : IHostedService, IAsyncDisposable
         foreach (var stop in _stoppers)
         {
             await stop(cancellationToken);
+        }
+    }
+
+    private void CheckInbox()
+    {
+        if (_serviceProviderIsService.IsService(typeof(ICatInboxStore)))
+        {
+            return;
+        }
+
+        var names = _registry.Registrations.Where(registration => registration.Options.UseInbox)
+            .Select(registration => registration.MessageType.Name).ToList();
+        if (names.Count > 0)
+        {
+            throw new InvalidOperationException(
+                $"The inbox is on for {string.Join(", ", names)}, but no ICatInboxStore is registered. Register a store, such as AddCatEventProcessorInbox.");
         }
     }
 

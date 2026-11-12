@@ -1,3 +1,4 @@
+using Cat.EventProcessor.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

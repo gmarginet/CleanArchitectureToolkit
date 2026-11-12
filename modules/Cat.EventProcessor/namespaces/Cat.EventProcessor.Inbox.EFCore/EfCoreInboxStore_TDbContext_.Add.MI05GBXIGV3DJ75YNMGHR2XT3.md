@@ -47,4 +47,4 @@ The ID of the message\.
 
 The name of the message type\.
 
-Implements [Add\(string, string\)](ICatInboxStore.Add.E78XPY2J7TFSJKJORTWQCOT35.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ICatInboxStore\.Add\(string, string\)')
+Implements [Add\(string, string\)](../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/ICatInboxStore.Add.UU452UCKDNFMMBAMI19088PP6.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore\.Add\(System\.String,System\.String\)')

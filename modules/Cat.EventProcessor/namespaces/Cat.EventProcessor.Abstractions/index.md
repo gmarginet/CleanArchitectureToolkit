@@ -30,4 +30,4 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.EventProcessor\.Abstractions](Cat.EventProcessor.Abstractions.md 'Cat\.EventProcessor\.Abstractions') | The contracts of the event processor: the incoming message, the settlement of a message, the receiver and the settings per message type\. A broker project, such as the one for Azure Service Bus, calls the receiver and settles the message with the result\. |
+| [Cat\.EventProcessor\.Abstractions](Cat.EventProcessor.Abstractions.md 'Cat\.EventProcessor\.Abstractions') | The contracts of the event processor: the incoming message, the settlement of a message, the receiver, the contract of the inbox store and the settings per message type\. A broker project, such as the one for Azure Service Bus, calls the receiver and settles the message with the result\. |

@@ -24,29 +24,25 @@
 
 # Code Reference  
   
-##### >> [Cat\.EventProcessor\.Inbox\.EFCore Assembly](index.md 'index') >> [Cat\.EventProcessor\.Inbox\.EFCore Namespace](Cat.EventProcessor.Inbox.EFCore.md 'Cat\.EventProcessor\.Inbox\.EFCore') >> [ICatInboxStore Interface](ICatInboxStore.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ICatInboxStore')
+##### >> [Cat\.EventProcessor\.Abstractions Assembly](index.md 'index') >> [Cat\.EventProcessor\.Abstractions Namespace](Cat.EventProcessor.Abstractions.md 'Cat\.EventProcessor\.Abstractions') >> [ICatInboxStore Interface](ICatInboxStore.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore')
 
-## ICatInboxStore\.ExistsAsync\(string, CancellationToken\) Method
+## ICatInboxStore\.Add\(string, string\) Method
 
-Tells whether the message was handled before\.
+Adds the message to the inbox\. It does not save by itself\. The `SaveChanges` of the handler saves it with the work\.
 
 ```csharp
-System.Threading.Tasks.Task<bool> ExistsAsync(string messageId, System.Threading.CancellationToken cancellationToken=default(System.Threading.CancellationToken));
+void Add(string messageId, string messageType);
 ```
 #### Parameters
 
-<a name='Cat.EventProcessor.Inbox.EFCore.ICatInboxStore.ExistsAsync(string,System.Threading.CancellationToken).messageId'></a>
+<a name='Cat.EventProcessor.Abstractions.ICatInboxStore.Add(string,string).messageId'></a>
 
 `messageId` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
 
 The ID of the message\.
 
-<a name='Cat.EventProcessor.Inbox.EFCore.ICatInboxStore.ExistsAsync(string,System.Threading.CancellationToken).cancellationToken'></a>
+<a name='Cat.EventProcessor.Abstractions.ICatInboxStore.Add(string,string).messageType'></a>
 
-`cancellationToken` [System\.Threading\.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System\.Threading\.CancellationToken')
+`messageType` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
 
-Token to cancel the work\.
-
-#### Returns
-[System\.Threading\.Tasks\.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')[System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')  
-True when the inbox holds the message\.
+The name of the message type\.

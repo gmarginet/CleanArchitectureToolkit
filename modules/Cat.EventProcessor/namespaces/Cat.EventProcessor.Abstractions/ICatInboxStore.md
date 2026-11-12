@@ -24,25 +24,19 @@
 
 # Code Reference  
   
-##### >> [Cat\.EventProcessor\.Inbox\.EFCore Assembly](index.md 'index') >> [Cat\.EventProcessor\.Inbox\.EFCore Namespace](Cat.EventProcessor.Inbox.EFCore.md 'Cat\.EventProcessor\.Inbox\.EFCore') >> [ICatInboxStore Interface](ICatInboxStore.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ICatInboxStore')
+##### >> [Cat\.EventProcessor\.Abstractions Assembly](index.md 'index') >> [Cat\.EventProcessor\.Abstractions Namespace](Cat.EventProcessor.Abstractions.md 'Cat\.EventProcessor\.Abstractions')
 
-## ICatInboxStore\.Add\(string, string\) Method
+## ICatInboxStore Interface
 
-Adds the message to the inbox\. It does not save by itself\. The `SaveChanges` of the handler saves it with the work\.
+Remembers which messages the service handled\. The receiver calls it for a message type that has
+[UseInbox](CatReceiveOptions.UseInbox.md 'Cat\.EventProcessor\.Abstractions\.CatReceiveOptions\.UseInbox') on\. The store works on the context of the current scope,
+the same one the handler uses, so the row is saved by the `SaveChanges` of the handler\.
 
 ```csharp
-void Add(string messageId, string messageType);
+public interface ICatInboxStore
 ```
-#### Parameters
 
-<a name='Cat.EventProcessor.Inbox.EFCore.ICatInboxStore.Add(string,string).messageId'></a>
-
-`messageId` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
-
-The ID of the message\.
-
-<a name='Cat.EventProcessor.Inbox.EFCore.ICatInboxStore.Add(string,string).messageType'></a>
-
-`messageType` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
-
-The name of the message type\.
+| Methods | |
+| :--- | :--- |
+| [Add\(string, string\)](ICatInboxStore.Add.UU452UCKDNFMMBAMI19088PP6.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore\.Add\(string, string\)') | Adds the message to the inbox\. It does not save by itself\. The `SaveChanges` of the handler saves it with the work\. |
+| [ExistsAsync\(string, CancellationToken\)](ICatInboxStore.ExistsAsync.4N8X6TCE59U7MPLFMFY3AFQ59.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore\.ExistsAsync\(string, System\.Threading\.CancellationToken\)') | Tells whether the message was handled before\. |

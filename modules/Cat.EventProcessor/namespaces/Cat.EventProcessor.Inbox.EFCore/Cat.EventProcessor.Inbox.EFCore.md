@@ -34,9 +34,5 @@ It stores the ID of a handled message in the same `SaveChanges` as the work of t
 | Classes | |
 | :--- | :--- |
 | [CatInboxMessage](CatInboxMessage.md 'Cat\.EventProcessor\.Inbox\.EFCore\.CatInboxMessage') | One row of the inbox table: a message that the service handled\. |
-| [EfCoreInboxStore&lt;TDbContext&gt;](EfCoreInboxStore_TDbContext_.md 'Cat\.EventProcessor\.Inbox\.EFCore\.EfCoreInboxStore\<TDbContext\>') | [ICatInboxStore](ICatInboxStore.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ICatInboxStore') on a `DbContext` of the service\. |
+| [EfCoreInboxStore&lt;TDbContext&gt;](EfCoreInboxStore_TDbContext_.md 'Cat\.EventProcessor\.Inbox\.EFCore\.EfCoreInboxStore\<TDbContext\>') | [ICatInboxStore](../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/ICatInboxStore.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore') on a `DbContext` of the service\. |
 | [ModelBuilderExtensions](ModelBuilderExtensions.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ModelBuilderExtensions') | Adds the inbox table to the model of a `DbContext`\. |
-
-| Interfaces | |
-| :--- | :--- |
-| [ICatInboxStore](ICatInboxStore.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ICatInboxStore') | Remembers which messages the service handled\. The store works on the context of the current scope, the same one the handler uses, so the row is saved by the `SaveChanges` of the handler\. |

@@ -28,10 +28,10 @@
 
 ## EfCoreInboxStore\<TDbContext\> Class
 
-[ICatInboxStore](ICatInboxStore.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ICatInboxStore') on a `DbContext` of the service\.
+[ICatInboxStore](../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/ICatInboxStore.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore') on a `DbContext` of the service\.
 
 ```csharp
-internal sealed class EfCoreInboxStore<TDbContext> : Cat.EventProcessor.Inbox.EFCore.ICatInboxStore
+internal sealed class EfCoreInboxStore<TDbContext> : Cat.EventProcessor.Abstractions.ICatInboxStore
     where TDbContext : Microsoft.EntityFrameworkCore.DbContext
 ```
 #### Type parameters
@@ -44,7 +44,7 @@ The context that holds the inbox table, see [AddCatInbox\(this ModelBuilder\)](M
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → EfCoreInboxStore\<TDbContext\>
 
-Implements [ICatInboxStore](ICatInboxStore.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ICatInboxStore')
+Implements [ICatInboxStore](../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/ICatInboxStore.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore')
 
 | Constructors | |
 | :--- | :--- |

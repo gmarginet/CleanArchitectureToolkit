@@ -77,7 +77,7 @@ The module settles every message for you. A handler that succeeds completes the 
 
 | Namespace | What it holds |
 |-----------|---------------|
-| [Cat.EventProcessor.Abstractions](namespaces/Cat.EventProcessor.Abstractions/index.md) | The incoming message, the settlement, the receiver and the settings per message type. |
+| [Cat.EventProcessor.Abstractions](namespaces/Cat.EventProcessor.Abstractions/index.md) | The incoming message, the settlement, the receiver, the contract of the inbox store and the settings per message type. |
 | [Cat.EventProcessor](namespaces/Cat.EventProcessor/index.md) | The receiver, the failure table, the builder for the message types and the module registration. |
 | [Cat.EventProcessor.AzureServiceBus](namespaces/Cat.EventProcessor.AzureServiceBus/index.md) | The Azure Service Bus listener, the health check and the creation of the subscriptions. |
 | [Cat.EventProcessor.Minimal.Api](namespaces/Cat.EventProcessor.Minimal.Api/index.md) | The development endpoint that simulates an incoming message. |
@@ -296,9 +296,24 @@ public class InventoryDbContext : DbContext
 builder.Services.AddCatEventProcessorInbox<InventoryDbContext>();
 ```
 
-Add a migration afterwards, so the `CatInbox` table exists. What to know:
-- The package holds the table and the store. Nothing calls the store yet, so no message is skipped for now. The inbox will be switched on per message type, not for every handler.
-- The sender also helps: it sets the message ID, and duplicate detection of the queue or topic can drop a repeated message.
+Add a migration afterwards, so the `CatInbox` table exists. Then switch the inbox on for the message types that need it:
+
+```csharp
+builder.Services.AddCatEventProcessor(builder.Configuration, events => events
+    .Receive<OrderPlaced>(options => options.UseInbox = true)
+    .Receive<StockCounted>());
+```
+
+What to know:
+- **Per message type.** `UseInbox` is false by default. Only a message type with it on gets the inbox, so you pick the types and not every handler.
+- **Configuration.** The configuration of the service wins over the code, like the other settings: `CatEventProcessor:Messages:OrderPlaced:UseInbox`.
+- **Where it runs.** The receiver does the work, not a decorator. Before the handler runs it asks the store for the message ID. A repeated message completes without running the handler. A new message gets its row in the context of the handler, so the `SaveChanges` of the handler saves the row with the work, or neither is saved.
+- **Two copies at once.** The key of the table fails the second save, the message is abandoned, and the next delivery finds the row and skips it.
+- **No message ID.** A message without an ID is handled without the inbox.
+- **Missing store.** The listener fails at startup when a message type has `UseInbox` on and no `ICatInboxStore` is registered.
+- **Other stores.** `ICatInboxStore` lives in `Cat.EventProcessor.Abstractions`, so you can register a store of your own.
+- **The sender helps.** It sets the message ID, and duplicate detection of the queue or topic can drop a repeated message.
+
 ### Competing consumers and shutdown
 
 Several instances of the same service can listen to the same subscription, and the bus gives a message to one of them. The module never assumes one instance. The order of messages is not guaranteed, unless the message type needs sessions, see `Cat.Messaging`.

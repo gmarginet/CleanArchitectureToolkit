@@ -16,6 +16,7 @@ P:Cat.EventProcessor.Abstractions.CatMessageContextData.DeliveryCount|CatMessage
 M:Cat.EventProcessor.Abstractions.CatMessageContextData.#ctor(System.String,System.Int32)|CatMessageContextData..ctor.P9CX3E3OM944GPBH8K1DZ8659.md|CatMessageContextData(string, int)
 T:Cat.EventProcessor.Abstractions.CatMessageContextData|CatMessageContextData.md|CatMessageContextData
 P:Cat.EventProcessor.Abstractions.CatReceiveOptions.MaxConcurrentCalls|CatReceiveOptions.MaxConcurrentCalls.md|MaxConcurrentCalls
+P:Cat.EventProcessor.Abstractions.CatReceiveOptions.UseInbox|CatReceiveOptions.UseInbox.md|UseInbox
 P:Cat.EventProcessor.Abstractions.CatReceiveOptions.FailureOverrides|CatReceiveOptions.FailureOverrides.md|FailureOverrides
 T:Cat.EventProcessor.Abstractions.CatReceiveOptions|CatReceiveOptions.md|CatReceiveOptions
 P:Cat.EventProcessor.Abstractions.CatReceiveRegistration.MessageType|CatReceiveRegistration.MessageType.md|MessageType
@@ -31,6 +32,9 @@ P:Cat.EventProcessor.Abstractions.CatSettlementResult.Reason|CatSettlementResult
 P:Cat.EventProcessor.Abstractions.CatSettlementResult.Description|CatSettlementResult.Description.md|Description
 M:Cat.EventProcessor.Abstractions.CatSettlementResult.#ctor(Cat.EventProcessor.Abstractions.CatSettlement,System.String,System.String)|CatSettlementResult..ctor.8L1211XEWVENYM40Q5RLHWTC.md|CatSettlementResult(CatSettlement, string, string)
 T:Cat.EventProcessor.Abstractions.CatSettlementResult|CatSettlementResult.md|CatSettlementResult
+M:Cat.EventProcessor.Abstractions.ICatInboxStore.ExistsAsync(System.String,System.Threading.CancellationToken)|ICatInboxStore.ExistsAsync.4N8X6TCE59U7MPLFMFY3AFQ59.md|ExistsAsync(string, CancellationToken)
+M:Cat.EventProcessor.Abstractions.ICatInboxStore.Add(System.String,System.String)|ICatInboxStore.Add.UU452UCKDNFMMBAMI19088PP6.md|Add(string, string)
+T:Cat.EventProcessor.Abstractions.ICatInboxStore|ICatInboxStore.md|ICatInboxStore
 M:Cat.EventProcessor.Abstractions.ICatMessageReceiver.ReceiveAsync(System.Type,Cat.EventProcessor.Abstractions.CatIncomingMessage,System.Threading.CancellationToken)|ICatMessageReceiver.ReceiveAsync.UJS0V9JE5RJ3PJ8Y16HANUS24.md|ReceiveAsync(Type, CatIncomingMessage, CancellationToken)
 T:Cat.EventProcessor.Abstractions.ICatMessageReceiver|ICatMessageReceiver.md|ICatMessageReceiver
 P:Cat.EventProcessor.Abstractions.ICatReceiveRegistry.Registrations|ICatReceiveRegistry.Registrations.md|Registrations

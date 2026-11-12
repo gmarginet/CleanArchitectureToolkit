@@ -47,7 +47,7 @@ The ID of the message\.
 
 Token to cancel the work\.
 
-Implements [ExistsAsync\(string, CancellationToken\)](ICatInboxStore.ExistsAsync.QC5LOHD4KJ154DHEHFTW8YY27.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ICatInboxStore\.ExistsAsync\(string, System\.Threading\.CancellationToken\)')
+Implements [ExistsAsync\(string, CancellationToken\)](../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/ICatInboxStore.ExistsAsync.4N8X6TCE59U7MPLFMFY3AFQ59.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore\.ExistsAsync\(System\.String,System\.Threading\.CancellationToken\)')
 
 #### Returns
 [System\.Threading\.Tasks\.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')[System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')  

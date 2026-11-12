@@ -28,7 +28,7 @@
 
 ## Cat\.EventProcessor\.Abstractions Namespace
 
-The contracts of the event processor: the incoming message, the settlement of a message, the receiver and the settings per message type\.
+The contracts of the event processor: the incoming message, the settlement of a message, the receiver, the contract of the inbox store and the settings per message type\.
 A broker project, such as the one for Azure Service Bus, calls the receiver and settles the message with the result\.
 
 | Classes | |
@@ -43,6 +43,7 @@ A broker project, such as the one for Azure Service Bus, calls the receiver and 
 
 | Interfaces | |
 | :--- | :--- |
+| [ICatInboxStore](ICatInboxStore.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore') | Remembers which messages the service handled\. The receiver calls it for a message type that has [UseInbox](CatReceiveOptions.UseInbox.md 'Cat\.EventProcessor\.Abstractions\.CatReceiveOptions\.UseInbox') on\. The store works on the context of the current scope, the same one the handler uses, so the row is saved by the `SaveChanges` of the handler\. |
 | [ICatMessageReceiver](ICatMessageReceiver.md 'Cat\.EventProcessor\.Abstractions\.ICatMessageReceiver') | Turns one incoming message into a service request, runs it and tells the broker what to do with the message\. |
 | [ICatReceiveRegistry](ICatReceiveRegistry.md 'Cat\.EventProcessor\.Abstractions\.ICatReceiveRegistry') | The message types the service receives, as declared in the `EventProcessor` project\. |
 
