@@ -47,7 +47,7 @@ The service collection to add to\.
 
 `configure` [System\.Action&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')[CatServiceBusOptions](CatServiceBusOptions.md 'Cat\.Messaging\.AzureServiceBus\.CatServiceBusOptions')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')
 
-Sets the connection string\.
+Sets the connection string, and the optional callbacks that change the options of the SDK\.
 
 #### Returns
 [Microsoft\.Extensions\.DependencyInjection\.IServiceCollection](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection 'Microsoft\.Extensions\.DependencyInjection\.IServiceCollection')  

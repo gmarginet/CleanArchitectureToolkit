@@ -55,10 +55,23 @@ internal sealed class EventProcessorTopology : ICatEventProcessorTopology
                 continue;
             }
 
-            await _admin.CreateSubscriptionAsync(new CreateSubscriptionOptions(topic, subscription), cancellationToken);
+            await _admin.CreateSubscriptionAsync(
+                BuildSubscriptionOptions(topic, subscription, _options.Value.ConfigureSubscription), cancellationToken);
             created.Add($"subscription:{topic}/{subscription}");
         }
 
         return created;
+    }
+
+    /// <summary>
+    /// Builds the options of a subscription. The module sets only the names, so the defaults of Azure Service Bus apply
+    /// until the callback changes them.
+    /// </summary>
+    internal static CreateSubscriptionOptions BuildSubscriptionOptions(string topic, string subscription,
+        Action<CreateSubscriptionOptions>? configure = null)
+    {
+        var options = new CreateSubscriptionOptions(topic, subscription);
+        configure?.Invoke(options);
+        return options;
     }
 }

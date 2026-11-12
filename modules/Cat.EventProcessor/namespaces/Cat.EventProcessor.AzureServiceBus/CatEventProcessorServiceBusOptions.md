@@ -29,6 +29,8 @@
 ## CatEventProcessorServiceBusOptions Class
 
 Settings of the Azure Service Bus listener\.
+The listener starts from the defaults of Azure Service Bus\. Every `Configure` callback gets the SDK options
+after the listener has filled in its own values, so you can change anything\.
 
 ```csharp
 public class CatEventProcessorServiceBusOptions
@@ -38,4 +40,7 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Properties | |
 | :--- | :--- |
+| [ConfigureProcessor](CatEventProcessorServiceBusOptions.ConfigureProcessor.md 'Cat\.EventProcessor\.AzureServiceBus\.CatEventProcessorServiceBusOptions\.ConfigureProcessor') | Changes the options of the processor of a message type that does not need sessions, such as the prefetch count\. The first argument is the message type\. The listener sets the concurrency of the message type before the callback runs, so the callback wins\. The listener sets [Azure\.Messaging\.ServiceBus\.ServiceBusProcessorOptions\.AutoCompleteMessages](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.servicebusprocessoroptions.autocompletemessages 'Azure\.Messaging\.ServiceBus\.ServiceBusProcessorOptions\.AutoCompleteMessages') to false after the callback, because it settles every message itself\. |
+| [ConfigureSessionProcessor](CatEventProcessorServiceBusOptions.ConfigureSessionProcessor.md 'Cat\.EventProcessor\.AzureServiceBus\.CatEventProcessorServiceBusOptions\.ConfigureSessionProcessor') | Changes the options of the processor of a message type that needs sessions\. The first argument is the message type\. The listener sets the number of sessions of the message type before the callback runs, so the callback wins\. The listener sets [Azure\.Messaging\.ServiceBus\.ServiceBusSessionProcessorOptions\.AutoCompleteMessages](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.servicebussessionprocessoroptions.autocompletemessages 'Azure\.Messaging\.ServiceBus\.ServiceBusSessionProcessorOptions\.AutoCompleteMessages') to false after the callback, because it settles every message itself\. |
+| [ConfigureSubscription](CatEventProcessorServiceBusOptions.ConfigureSubscription.md 'Cat\.EventProcessor\.AzureServiceBus\.CatEventProcessorServiceBusOptions\.ConfigureSubscription') | Changes the options of a subscription that the topology helper creates, such as the lock duration or the maximum delivery count\. The subscription options hold the names of the topic and the subscription\. |
 | [SubscriptionName](CatEventProcessorServiceBusOptions.SubscriptionName.md 'Cat\.EventProcessor\.AzureServiceBus\.CatEventProcessorServiceBusOptions\.SubscriptionName') | The name of the subscription this service uses on the topic of every event, usually the name of the service\. Command messages come from a queue, so they need no subscription\. |

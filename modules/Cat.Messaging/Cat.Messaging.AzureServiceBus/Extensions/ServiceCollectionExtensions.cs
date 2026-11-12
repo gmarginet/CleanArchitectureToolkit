@@ -18,20 +18,33 @@ public static class ServiceCollectionExtensions
     /// The administration client connects only when it is used, so a service that never creates entities needs no manage right.
     /// </summary>
     /// <param name="services">The service collection to add to.</param>
-    /// <param name="configure">Sets the connection string.</param>
+    /// <param name="configure">Sets the connection string, and the optional callbacks that change the options of the SDK.</param>
     /// <returns>The same service collection, so calls can be chained.</returns>
     public static IServiceCollection AddCatMessagingAzureServiceBus(this IServiceCollection services,
         Action<CatServiceBusOptions> configure)
     {
         services.AddOptions<CatServiceBusOptions>().Configure(configure);
 
-        services.TryAddSingleton(provider => new ServiceBusClient(provider.GetRequiredService<IOptions<CatServiceBusOptions>>().Value.ConnectionString));
-        services.TryAddSingleton(provider => new ServiceBusAdministrationClient(
-            provider.GetRequiredService<IOptions<CatServiceBusOptions>>().Value.ResolveAdministrationConnectionString()));
+        services.TryAddSingleton(provider => CreateClient(provider.GetRequiredService<IOptions<CatServiceBusOptions>>().Value));
+        services.TryAddSingleton(provider => CreateAdministrationClient(provider.GetRequiredService<IOptions<CatServiceBusOptions>>().Value));
         services.TryAddSingleton<ICatMessageTransport, ServiceBusMessageTransport>();
         services.TryAddSingleton<ICatServiceBusTopology, ServiceBusTopology>();
 
         return services;
+    }
+
+    internal static ServiceBusClient CreateClient(CatServiceBusOptions options)
+    {
+        var clientOptions = new ServiceBusClientOptions();
+        options.ConfigureClient?.Invoke(clientOptions);
+        return new ServiceBusClient(options.ConnectionString, clientOptions);
+    }
+
+    internal static ServiceBusAdministrationClient CreateAdministrationClient(CatServiceBusOptions options)
+    {
+        var clientOptions = new ServiceBusAdministrationClientOptions();
+        options.ConfigureAdministrationClient?.Invoke(clientOptions);
+        return new ServiceBusAdministrationClient(options.ResolveAdministrationConnectionString(), clientOptions);
     }
 
     /// <summary>

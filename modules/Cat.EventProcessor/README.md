@@ -50,6 +50,7 @@ The module settles every message for you. A handler that succeeds completes the 
   - [Settings per message type](#settings-per-message-type)
   - [What happens to a message](#what-happens-to-a-message)
   - [Create the subscriptions](#create-the-subscriptions)
+  - [Change the options of Azure Service Bus](#change-the-options-of-azure-service-bus)
   - [Try a message in development](#try-a-message-in-development)
   - [Add the health check](#add-the-health-check)
   - [Turn the inbox on](#turn-the-inbox-on)
@@ -217,6 +218,38 @@ It creates the subscription of this service on the topic of every declared event
 ```powershell
 az servicebus topic subscription create --resource-group <group> --namespace-name <namespace> --topic-name OrderPlaced --name inventory
 ```
+
+### Change the options of Azure Service Bus
+
+The listener starts from the defaults of Azure Service Bus and sets only what it needs. You can change any other option with a callback on `CatEventProcessorServiceBusOptions`. The listener builds the SDK options with its own values first, and then calls your callback, so your callback wins. The callbacks for the client, the administration client, the queues and the topics are on the options of `Cat.Messaging`, see its module readme.
+
+| Callback | Changes | When it runs |
+|---|---|---|
+| `ConfigureProcessor` | `ServiceBusProcessorOptions` | For every message type that does not need sessions, when the listener starts. |
+| `ConfigureSessionProcessor` | `ServiceBusSessionProcessorOptions` | For every message type that needs sessions, when the listener starts. |
+| `ConfigureSubscription` | `CreateSubscriptionOptions` | For every subscription that `EnsureSubscriptionsAsync` creates. |
+
+The two processor callbacks get the message type as the first argument, so you can tune one message type:
+
+```csharp
+builder.Services.AddCatEventProcessorAzureServiceBus(options =>
+{
+    options.SubscriptionName = "inventory";
+    options.ConfigureProcessor = (messageType, processor) =>
+    {
+        if (messageType == typeof(OrderPlaced))
+        {
+            processor.PrefetchCount = 20;
+        }
+    };
+    options.ConfigureSubscription = subscription => subscription.MaxDeliveryCount = 5;
+});
+```
+
+Things to know:
+- **The callback wins over the settings per message type.** The listener sets `MaxConcurrentCalls`, or the number of sessions, from the declaration and the configuration first. A callback that sets it again replaces that value.
+- **The listener settles every message itself.** It sets `AutoCompleteMessages` to false after your callback runs, so a callback cannot turn it on. The table in [What happens to a message](#what-happens-to-a-message) depends on it.
+- **A subscription gets the defaults.** The listener sets only the names of the topic and the subscription.
 
 ### Try a message in development
 

@@ -33,7 +33,7 @@ It starts one processor per declared message type, settles every message and off
 
 | Classes | |
 | :--- | :--- |
-| [CatEventProcessorServiceBusOptions](CatEventProcessorServiceBusOptions.md 'Cat\.EventProcessor\.AzureServiceBus\.CatEventProcessorServiceBusOptions') | Settings of the Azure Service Bus listener\. |
+| [CatEventProcessorServiceBusOptions](CatEventProcessorServiceBusOptions.md 'Cat\.EventProcessor\.AzureServiceBus\.CatEventProcessorServiceBusOptions') | Settings of the Azure Service Bus listener\. The listener starts from the defaults of Azure Service Bus\. Every `Configure` callback gets the SDK options after the listener has filled in its own values, so you can change anything\. |
 | [EventProcessorHealthCheck](EventProcessorHealthCheck.md 'Cat\.EventProcessor\.AzureServiceBus\.EventProcessorHealthCheck') | Health check of the listeners\. It is unhealthy when a listener has stopped, for example after a fatal error, and degraded for a minute after a listener reported an error while it keeps processing\. The Azure SDK restarts the connection by itself\. |
 | [EventProcessorTopology](EventProcessorTopology.md 'Cat\.EventProcessor\.AzureServiceBus\.EventProcessorTopology') | Default [ICatEventProcessorTopology](ICatEventProcessorTopology.md 'Cat\.EventProcessor\.AzureServiceBus\.ICatEventProcessorTopology'), on the administration client\. |
 | [ListenerStatus](ListenerStatus.md 'Cat\.EventProcessor\.AzureServiceBus\.ListenerStatus') | Tracks the state of the listeners, for the health check\. |

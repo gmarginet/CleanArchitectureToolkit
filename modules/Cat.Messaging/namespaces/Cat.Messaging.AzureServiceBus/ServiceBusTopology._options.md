@@ -26,23 +26,11 @@
   
 ##### >> [Cat\.Messaging\.AzureServiceBus Assembly](index.md 'index') >> [Cat\.Messaging\.AzureServiceBus Namespace](Cat.Messaging.AzureServiceBus.md 'Cat\.Messaging\.AzureServiceBus') >> [ServiceBusTopology Class](ServiceBusTopology.md 'Cat\.Messaging\.AzureServiceBus\.ServiceBusTopology')
 
-## ServiceBusTopology\(ServiceBusAdministrationClient, ICatMessageNameResolver\) Constructor
-
-Creates the topology helper\.
+## ServiceBusTopology\.\_options Field
 
 ```csharp
-public ServiceBusTopology(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient admin, Cat.Messaging.Abstractions.ICatMessageNameResolver nameResolver);
+private readonly IOptions<CatServiceBusOptions> _options;
 ```
-#### Parameters
 
-<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.ServiceBusTopology(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient,Cat.Messaging.Abstractions.ICatMessageNameResolver).admin'></a>
-
-`admin` [Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClient](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.servicebusadministrationclient 'Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClient')
-
-The administration client\. It needs the manage right\.
-
-<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.ServiceBusTopology(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient,Cat.Messaging.Abstractions.ICatMessageNameResolver).nameResolver'></a>
-
-`nameResolver` [ICatMessageNameResolver](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessageNameResolver.md 'Cat\.Messaging\.Abstractions\.ICatMessageNameResolver')
-
-Finds the entity name and the kind of a message type\.
+#### Field Value
+[Microsoft\.Extensions\.Options\.IOptions&lt;](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.options.ioptions-1 'Microsoft\.Extensions\.Options\.IOptions\`1')[CatServiceBusOptions](CatServiceBusOptions.md 'Cat\.Messaging\.AzureServiceBus\.CatServiceBusOptions')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.options.ioptions-1 'Microsoft\.Extensions\.Options\.IOptions\`1')

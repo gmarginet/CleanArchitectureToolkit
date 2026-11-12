@@ -51,4 +51,5 @@ Implements [ICatEventProcessorTopology](ICatEventProcessorTopology.md 'Cat\.Even
 
 | Methods | |
 | :--- | :--- |
+| [BuildSubscriptionOptions\(string, string, Action&lt;CreateSubscriptionOptions&gt;\)](EventProcessorTopology.BuildSubscriptionOptions.I97E2YGYRSC9P8XOPK04PGS5D.md 'Cat\.EventProcessor\.AzureServiceBus\.EventProcessorTopology\.BuildSubscriptionOptions\(string, string, System\.Action\<Azure\.Messaging\.ServiceBus\.Administration\.CreateSubscriptionOptions\>\)') | Builds the options of a subscription\. The module sets only the names, so the defaults of Azure Service Bus apply until the callback changes them\. |
 | [EnsureSubscriptionsAsync\(CancellationToken\)](EventProcessorTopology.EnsureSubscriptionsAsync.WPZKOWE2CD1DA50DA4WAH79X5.md 'Cat\.EventProcessor\.AzureServiceBus\.EventProcessorTopology\.EnsureSubscriptionsAsync\(System\.Threading\.CancellationToken\)') | Creates the subscription of this service on the topic of every declared event, and skips what exists\. The topic must exist already\. |

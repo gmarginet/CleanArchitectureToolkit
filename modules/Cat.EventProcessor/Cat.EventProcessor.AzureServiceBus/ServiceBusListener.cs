@@ -83,11 +83,7 @@ internal sealed class ServiceBusListener : IHostedService, IAsyncDisposable
 
         if (_nameResolver.RequiresSession(type))
         {
-            var sessionOptions = new ServiceBusSessionProcessorOptions { AutoCompleteMessages = false };
-            if (registration.Options.MaxConcurrentCalls is { } sessions)
-            {
-                sessionOptions.MaxConcurrentSessions = sessions;
-            }
+            var sessionOptions = BuildSessionProcessorOptions(type, registration.Options.MaxConcurrentCalls, _options.Value.ConfigureSessionProcessor);
 
             var processor = kind == CatMessageKind.Event
                 ? _client.CreateSessionProcessor(name, subscription, sessionOptions)
@@ -103,11 +99,7 @@ internal sealed class ServiceBusListener : IHostedService, IAsyncDisposable
         }
         else
         {
-            var processorOptions = new ServiceBusProcessorOptions { AutoCompleteMessages = false };
-            if (registration.Options.MaxConcurrentCalls is { } calls)
-            {
-                processorOptions.MaxConcurrentCalls = calls;
-            }
+            var processorOptions = BuildProcessorOptions(type, registration.Options.MaxConcurrentCalls, _options.Value.ConfigureProcessor);
 
             var processor = kind == CatMessageKind.Event
                 ? _client.CreateProcessor(name, subscription, processorOptions)
@@ -123,6 +115,42 @@ internal sealed class ServiceBusListener : IHostedService, IAsyncDisposable
         }
 
         _logger.LogInformation("Listening for {MessageType} on {Entity}", type.Name, kind == CatMessageKind.Event ? $"{name}/{subscription}" : name);
+    }
+
+    /// <summary>
+    /// Builds the options of a processor. The concurrency of the message type is set first, then the callback runs,
+    /// and <c>AutoCompleteMessages</c> is set to false after it, because the listener settles every message itself.
+    /// </summary>
+    internal static ServiceBusProcessorOptions BuildProcessorOptions(Type messageType, int? maxConcurrentCalls,
+        Action<Type, ServiceBusProcessorOptions>? configure)
+    {
+        var options = new ServiceBusProcessorOptions();
+        if (maxConcurrentCalls is { } calls)
+        {
+            options.MaxConcurrentCalls = calls;
+        }
+
+        configure?.Invoke(messageType, options);
+        options.AutoCompleteMessages = false;
+        return options;
+    }
+
+    /// <summary>
+    /// Builds the options of a session processor. The number of sessions of the message type is set first, then the callback runs,
+    /// and <c>AutoCompleteMessages</c> is set to false after it, because the listener settles every message itself.
+    /// </summary>
+    internal static ServiceBusSessionProcessorOptions BuildSessionProcessorOptions(Type messageType, int? maxConcurrentSessions,
+        Action<Type, ServiceBusSessionProcessorOptions>? configure)
+    {
+        var options = new ServiceBusSessionProcessorOptions();
+        if (maxConcurrentSessions is { } sessions)
+        {
+            options.MaxConcurrentSessions = sessions;
+        }
+
+        configure?.Invoke(messageType, options);
+        options.AutoCompleteMessages = false;
+        return options;
     }
 
     private async Task HandleAsync(Type messageType, ServiceBusReceivedMessage received,

@@ -24,25 +24,16 @@
 
 # Code Reference  
   
-##### >> [Cat\.Messaging\.AzureServiceBus Assembly](index.md 'index') >> [Cat\.Messaging\.AzureServiceBus Namespace](Cat.Messaging.AzureServiceBus.md 'Cat\.Messaging\.AzureServiceBus') >> [ServiceBusTopology Class](ServiceBusTopology.md 'Cat\.Messaging\.AzureServiceBus\.ServiceBusTopology')
+##### >> [Cat\.Messaging\.AzureServiceBus Assembly](index.md 'index') >> [Cat\.Messaging\.AzureServiceBus Namespace](Cat.Messaging.AzureServiceBus.md 'Cat\.Messaging\.AzureServiceBus') >> [CatServiceBusOptions Class](CatServiceBusOptions.md 'Cat\.Messaging\.AzureServiceBus\.CatServiceBusOptions')
 
-## ServiceBusTopology\.BuildQueueOptions\(string, bool\) Method
+## CatServiceBusOptions\.ConfigureAdministrationClient Property
 
-Builds the options of a queue\. Duplicate detection is on, so the bus drops a repeated message with the same
-message ID\. The time window keeps the default of Azure Service Bus\.
+Changes the options of the [Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClient](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.servicebusadministrationclient 'Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClient')\.
+The module sets nothing here, so the defaults of the SDK apply\.
 
 ```csharp
-internal static Azure.Messaging.ServiceBus.Administration.CreateQueueOptions BuildQueueOptions(string name, bool requiresSession);
+public System.Action<Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClientOptions>? ConfigureAdministrationClient { get; set; }
 ```
-#### Parameters
 
-<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.BuildQueueOptions(string,bool).name'></a>
-
-`name` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
-
-<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.BuildQueueOptions(string,bool).requiresSession'></a>
-
-`requiresSession` [System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')
-
-#### Returns
-[Azure\.Messaging\.ServiceBus\.Administration\.CreateQueueOptions](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.createqueueoptions 'Azure\.Messaging\.ServiceBus\.Administration\.CreateQueueOptions')
+#### Property Value
+[System\.Action&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')[Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClientOptions](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.servicebusadministrationclientoptions 'Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClientOptions')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')

@@ -24,21 +24,16 @@
 
 # Code Reference  
   
-##### >> [Cat\.Messaging\.AzureServiceBus Assembly](index.md 'index') >> [Cat\.Messaging\.AzureServiceBus Namespace](Cat.Messaging.AzureServiceBus.md 'Cat\.Messaging\.AzureServiceBus') >> [ServiceBusTopology Class](ServiceBusTopology.md 'Cat\.Messaging\.AzureServiceBus\.ServiceBusTopology')
+##### >> [Cat\.Messaging\.AzureServiceBus Assembly](index.md 'index') >> [Cat\.Messaging\.AzureServiceBus Namespace](Cat.Messaging.AzureServiceBus.md 'Cat\.Messaging\.AzureServiceBus') >> [CatServiceBusOptions Class](CatServiceBusOptions.md 'Cat\.Messaging\.AzureServiceBus\.CatServiceBusOptions')
 
-## ServiceBusTopology\.BuildTopicOptions\(string\) Method
+## CatServiceBusOptions\.ConfigureTopic Property
 
-Builds the options of a topic\. Duplicate detection is on, so the bus drops a repeated message with the same
-message ID\. The time window keeps the default of Azure Service Bus\.
+Changes the options of a topic that the topology helper creates\.
+The module turns duplicate detection on before the callback runs, so the callback can turn it off\.
 
 ```csharp
-internal static Azure.Messaging.ServiceBus.Administration.CreateTopicOptions BuildTopicOptions(string name);
+public System.Action<Azure.Messaging.ServiceBus.Administration.CreateTopicOptions>? ConfigureTopic { get; set; }
 ```
-#### Parameters
 
-<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.BuildTopicOptions(string).name'></a>
-
-`name` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
-
-#### Returns
-[Azure\.Messaging\.ServiceBus\.Administration\.CreateTopicOptions](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.createtopicoptions 'Azure\.Messaging\.ServiceBus\.Administration\.CreateTopicOptions')
+#### Property Value
+[System\.Action&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')[Azure\.Messaging\.ServiceBus\.Administration\.CreateTopicOptions](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.createtopicoptions 'Azure\.Messaging\.ServiceBus\.Administration\.CreateTopicOptions')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')

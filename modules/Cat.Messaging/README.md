@@ -49,6 +49,7 @@ The outbox is optional. With it, a message is saved in the same `SaveChanges` as
   - [Send a message](#send-a-message)
   - [Names and sessions](#names-and-sessions)
   - [Create the queues and topics](#create-the-queues-and-topics)
+  - [Change the options of Azure Service Bus](#change-the-options-of-azure-service-bus)
   - [Turn the outbox on](#turn-the-outbox-on)
   - [Watch the dead letters](#watch-the-dead-letters)
   - [Where to publish from](#where-to-publish-from)
@@ -201,6 +202,32 @@ az servicebus topic subscription create --resource-group <group> --namespace-nam
 ```
 
 Add `--enable-session true` to the queue command for a queue with sessions.
+
+### Change the options of Azure Service Bus
+
+The module starts from the defaults of Azure Service Bus and sets only what it needs. You can change any other option with a callback on `CatServiceBusOptions`. The module builds the SDK options with its own values first, and then calls your callback, so your callback wins.
+
+| Callback | Changes | When it runs |
+|---|---|---|
+| `ConfigureClient` | `ServiceBusClientOptions` | When the client is created. |
+| `ConfigureAdministrationClient` | `ServiceBusAdministrationClientOptions` | When the administration client is created. |
+| `ConfigureQueue` | `CreateQueueOptions` | For every queue that `EnsureTopologyAsync` creates. |
+| `ConfigureTopic` | `CreateTopicOptions` | For every topic that `EnsureTopologyAsync` creates. |
+
+```csharp
+builder.Services.AddCatMessagingAzureServiceBus(options =>
+{
+    options.ConnectionString = builder.Configuration.GetConnectionString("servicebus")!;
+    options.ConfigureClient = client => client.RetryOptions.MaxRetries = 5;
+    options.ConfigureQueue = queue => queue.MaxDeliveryCount = 5;
+});
+```
+
+Things to know:
+- **The module sets little.** On a queue it sets duplicate detection and `RequiresSession`, on a topic it sets duplicate detection, and on the clients it sets nothing. Your callback can turn duplicate detection off.
+- **The message type decides sessions.** The module sets `RequiresSession` on a queue after your callback runs, so a callback cannot break how sessions work.
+- **The retry options of the client are not a redelivery delay.** They cover failed calls to the bus, such as a timeout or a busy namespace. The SDK defaults are 3 retries, exponential back-off, a base delay of 0.8 seconds and a maximum delay of 60 seconds. A message that fails in a receiver still comes back at once, see [Watch the dead letters](#watch-the-dead-letters).
+- **The event processor has its own callbacks.** The subscriptions and the processors belong to the service that receives the message, so their callbacks are in the module readme of `Cat.EventProcessor`.
 
 ### Turn the outbox on
 
