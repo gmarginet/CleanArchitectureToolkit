@@ -326,5 +326,5 @@ The trace of the sender continues in the service. The Azure Service Bus SDK read
 
 ### What is not built yet
 
-The identity of the sender is not carried by the message yet. It waits for `Cat.Authorization`, which does not exist yet. A handler that runs for a message has no current user. The plan holds the decisions about the token.
+The identity of the sender is not carried by the message yet. It waits for `Cat.Users`, which does not exist yet. A handler that runs for a message has no current user. The plan holds the decisions about the token.
 <!-- region end: Usage-->
