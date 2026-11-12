@@ -65,7 +65,6 @@ Phase 1 is built. The module readme `modules/Cat.EventProcessor/README.md` holds
 - Which arrival time the bus sets for a scheduled message.
 - How the API gateway validates tokens.
 - Whether the bus encrypts data at rest.
-- Whether a delay between redeliveries is a setting of the queue or topic, see [Cat.Messaging.md](Cat.Messaging.md).
 - `MaxConcurrentCalls` is the number of sessions at the same time for a message type that needs sessions. Check that this fits what a developer expects.
 <!-- region end: PhaseDescription-->
 

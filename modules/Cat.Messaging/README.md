@@ -236,7 +236,7 @@ What to know:
 
 ### Watch the dead letters
 
-A message that keeps failing goes to the dead letter queue. The defaults of Azure Service Bus apply. Looking at the dead letter queue is the job of whoever runs the service. The module can publish a metric that helps. It is off by default, because reading the counts needs the manage right on the namespace.
+A message that keeps failing goes to the dead letter queue. The defaults of Azure Service Bus apply. The bus has no setting for a delay between two deliveries. A message that fails comes back at once, until it has been delivered `MaxDeliveryCount` times (10 by default) and then goes to the dead letter queue. A receiver that needs a pause must add it itself. Looking at the dead letter queue is the job of whoever runs the service. The module can publish a metric that helps. It is off by default, because reading the counts needs the manage right on the namespace.
 
 ```csharp
 using Cat.Messaging.AzureServiceBus.Extensions;
