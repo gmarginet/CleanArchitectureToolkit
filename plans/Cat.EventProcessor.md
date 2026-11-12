@@ -56,6 +56,7 @@ Phase 1 is built. The module readme `modules/Cat.EventProcessor/README.md` holds
 - **Token at rest.** The token stays in the message, so it is in the queue, the dead letter queue and the outbox table. The risk is kept small with short lived tokens, the lifetime check above, no message bodies in the logs and small rights on the queues. These rules go in the readme of the module. That the bus encrypts the data at rest is still to check. A person who knows security looks at the result before the module is used in production.
 - **User.** The listener builds the `ICatUser` of the request from the token. This is open in [Cat.Authorization.md](Cat.Authorization.md) as "No user".
 - **Identity.** It depends on the context of the sender. A message sent for a user carries the token of that user. A message sent without a user, such as one from the scheduler, carries the token of the sending system. Every system that sends messages without a user has its own token.
+- **Overrides.** The processors and the subscriptions follow the callbacks of [Cat.Messaging.md](Cat.Messaging.md) phase 3. The listener sets `AutoCompleteMessages = false` after the callback, so a developer cannot break how it settles messages.
 
 #### What is not built
 - **Identity from the token.** `ICatUser` and `Cat.Authorization` do not exist, and `Cat.Messaging` does not attach a token to a message yet. A handler that runs for a message has no current user. The readme of the module says so.

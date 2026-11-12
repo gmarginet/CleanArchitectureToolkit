@@ -38,6 +38,7 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 - [Phase 2](#phase-2)
+- [Phase 3](#phase-3)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 2-->
@@ -76,3 +77,40 @@ Yes. The emulator is in the AppHost, and nothing is open. Nothing in the docs ru
 <!-- region start: PhaseOpenQuestions-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->
+
+<!-- region start: Phase 3-->
+## Phase 3
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+Let a developer override every Azure Service Bus option of the Azure project. The Microsoft defaults stay the convention of CAT, and the module sets only what it needs.
+
+#### What exists today
+- The module builds the objects with the Microsoft defaults. It sets the connection string on `ServiceBusClient` and on `ServiceBusAdministrationClient`, and `RequiresSession` on a queue it creates. The topics it creates get no setting.
+- A developer can replace the client or the administration client by registering their own before the module, because the module uses `TryAddSingleton`. Nothing else can be changed.
+- The processors of the event processor set `AutoCompleteMessages = false` and the concurrency. See [Cat.EventProcessor.md](Cat.EventProcessor.md).
+
+#### Decided
+- **Convention.** The defaults of Azure Service Bus are the defaults of CAT. A developer can override every option.
+- **Callbacks.** `CatServiceBusOptions` gets one callback per SDK object: the client, the administration client, a queue, a topic, a subscription and a processor. The module builds the SDK object with its own values, then calls the callback, so the developer can change anything.
+- **Values the module owns.** The module sets `AutoCompleteMessages` and `RequiresSession` after the callback runs, so a callback cannot break how the module settles messages or how sessions work. The module readme lists these values.
+- **Scope.** The client, the administration client, the queues and the topics are in `Cat.Messaging.AzureServiceBus`. The processors and the subscriptions are in `Cat.EventProcessor.AzureServiceBus`, see [Cat.EventProcessor.md](Cat.EventProcessor.md).
+- **Client retry options.** They are part of the client callback. The SDK defaults are 3 retries, exponential back-off, a base delay of 0.8 seconds and a maximum delay of 60 seconds. They cover failed calls to the bus, and not the redelivery of a message, see "No redelivery delay" in phase 2.
+
+#### What to build
+- The callbacks on `CatServiceBusOptions`, used where the module creates the SDK objects, with tests that a callback changes an option and that the module values win.
+- The module readme chapter with the callbacks, an example of a retry override, and the list of values the module owns.
+
+#### Still to check
+- The names of the callbacks.
+- Whether the processor callback runs for every message type or per message type.
+
+#### Can the phase be built?
+Yes, after the names are chosen. It follows phase 2.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 3-->
