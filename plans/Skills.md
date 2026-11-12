@@ -119,7 +119,7 @@ Ideas only. None of them is decided. The names are suggestions.
 - `cat-add-validator`: validation rules for a request, with codes and messages.
 - `cat-add-workflow`: a workflow with its state and steps.
 - `cat-add-event`: an event and its subscriber with the event aggregator.
-- `cat-add-decorator`: an open generic decorator and its registration, in the right order. See [Cat.Decorators.md](Cat.Decorators.md).
+- `cat-add-decorator`: an open generic decorator and its registration, with its order number. See [Decorator order](../modules/Cat.Decorators/README.md#decorator-order).
 
 **Data**
 - `cat-add-entity`: an entity on the `Cat.EFCore` base classes, with its configuration and migration.
