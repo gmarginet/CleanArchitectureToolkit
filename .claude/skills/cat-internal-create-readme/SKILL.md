@@ -65,9 +65,13 @@ Status badge, from two facts: is the item built, and does it still have a plan i
 A module is built when its folder exists in `modules/`. The demo is built from the first stage on. A tooling item is built when its files exist.
 
 Priority column, with the header `#`: a whole number for every item that is not stable, and empty for a stable item. 1 is the highest priority. The numbers are unique, so there is one order of work.
-- Rank first the items that are easy to finish or to build, even when the demo does not need them. A built item whose plan only has a small closing step is the easiest.
-- Then rank the items the demo needs, in the order of the phases of `plans/Demo.md`. The plan and the phase of the demo lead.
-- Then rank the rest. Within a group, the item with fewer open questions and a smaller scope comes first.
+- Rank first the plans where the first phase can be built, which means the first phase has no open questions. They rank above the demo, unless the next rule applies.
+- A plan that only the other phases of the demo need ranks below the demo, also when its first phase can be built.
+- Rank the plans that the first phase of the demo needs, even when their first phase cannot be built yet, above the demo and above the other plans.
+- Then rank the demo, followed by the other plans.
+- A plan that the first phase of another plan needs ranks above that other plan. Only the first phase counts. A need of a later phase does not change the order.
+- Rank the plans further by the number of open questions in their first phase. The plan with fewer open questions comes first. On a tie, the plan that the earlier phase of the demo needs comes first.
+- The first phase of a plan is the first phase in its file.
 - Recalculate the priorities every time a plan changes, an open question is answered, a plan is created or removed, or a build is finished. A stable item leaves the order, and the numbers after it move up.
 - The owner decides the order. Propose the new numbers with the reason when the order changes, and wait for the owner before you write them.
 
