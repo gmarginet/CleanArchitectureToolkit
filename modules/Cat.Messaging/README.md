@@ -190,13 +190,13 @@ var topology = app.Services.GetRequiredService<ICatServiceBusTopology>();
 var created = await topology.EnsureTopologyAsync([typeof(OrderPlaced).Assembly]);
 ```
 
-It makes a queue for every command message and a topic for every event in the assemblies, and it skips what exists. The administration client uses `AdministrationConnectionString` when you set it, and `ConnectionString` otherwise. The emulator needs the first one, because it answers management calls on port 5300 and messages on another port. Call it from a deployment step, a small tool or a test. It needs the manage right on the namespace, so most production services should not run it. A subscription belongs to the service that receives the message, so this method does not create subscriptions.
+It makes a queue for every command message and a topic for every event in the assemblies, and it skips what exists. Duplicate detection is on for every queue and topic it creates, so the bus drops a repeated message with the same `MessageId` inside the time window. That helps when the outbox sends a row twice. The window keeps the default of Azure Service Bus, 10 minutes. It is a setting of the entity, made when it is created, so an entity that exists already keeps its own setting. The administration client uses `AdministrationConnectionString` when you set it, and `ConnectionString` otherwise. The emulator needs the first one, because it answers management calls on port 5300 and messages on another port. Call it from a deployment step, a small tool or a test. It needs the manage right on the namespace, so most production services should not run it. A subscription belongs to the service that receives the message, so this method does not create subscriptions.
 
 You can also create the entities with a script. A sample with the Azure CLI:
 
 ```powershell
-az servicebus queue create --resource-group <group> --namespace-name <namespace> --name ReserveStock
-az servicebus topic create --resource-group <group> --namespace-name <namespace> --name OrderPlaced
+az servicebus queue create --resource-group <group> --namespace-name <namespace> --name ReserveStock --enable-duplicate-detection true
+az servicebus topic create --resource-group <group> --namespace-name <namespace> --name OrderPlaced --enable-duplicate-detection true
 az servicebus topic subscription create --resource-group <group> --namespace-name <namespace> --topic-name OrderPlaced --name Inventory
 ```
 
@@ -262,5 +262,17 @@ An event subscriber of `Cat.EventAggregators` can also bridge an in-process even
 
 The Azure Service Bus emulator works for local development, with limits. It does not support partitioned entities, and it supports AMQP over TCP only. Entities and data are gone after a restart of the container. The settings in its `config.json` override entities that were created with the administration client at startup. The limits are 50 queues and topics per namespace and 50 subscriptions per topic.
 
-Dead letter queues, sessions, scheduled messages and reading the counts for the metric are not tested against the emulator yet.
+The Azure project has tests that run against the emulator, in `tests/Cat.Messaging.Tests/EmulatorTests.cs`. They are explicit, so the normal test run and the build workflow skip them. Start the demo AppHost, then run:
+
+```powershell
+dotnet test tests/Cat.Messaging.Tests --filter "TestCategory=Emulator"
+```
+
+What they show:
+- A message that keeps failing is dead lettered with the reason `MaxDeliveryCountExceeded`, after 10 deliveries by default.
+- A queue that requires sessions delivers a message to its session.
+- A message with a scheduled time arrives at that moment, and not before.
+- A message with the same `MessageId` that is sent twice reaches a queue once, and a topic subscription once.
+
+The emulator reports 0 for every message count, also when the dead letter queue holds a message. So the dead letter metric shows 0 against the emulator, and the test that checks the values is skipped there. Check the metric against a real namespace.
 <!-- region end: Usage-->

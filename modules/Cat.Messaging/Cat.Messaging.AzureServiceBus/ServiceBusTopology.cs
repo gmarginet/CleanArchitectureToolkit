@@ -40,7 +40,7 @@ internal sealed class ServiceBusTopology : ICatServiceBusTopology
                 }
 
                 await _admin.CreateQueueAsync(
-                    new CreateQueueOptions(name) { RequiresSession = _nameResolver.RequiresSession(type) },
+                    BuildQueueOptions(name, _nameResolver.RequiresSession(type)),
                     cancellationToken);
                 created.Add($"queue:{name}");
             }
@@ -51,13 +51,27 @@ internal sealed class ServiceBusTopology : ICatServiceBusTopology
                     continue;
                 }
 
-                await _admin.CreateTopicAsync(new CreateTopicOptions(name), cancellationToken);
+                await _admin.CreateTopicAsync(BuildTopicOptions(name), cancellationToken);
                 created.Add($"topic:{name}");
             }
         }
 
         return created;
     }
+
+    /// <summary>
+    /// Builds the options of a queue. Duplicate detection is on, so the bus drops a repeated message with the same
+    /// message ID. The time window keeps the default of Azure Service Bus.
+    /// </summary>
+    internal static CreateQueueOptions BuildQueueOptions(string name, bool requiresSession) =>
+        new(name) { RequiresSession = requiresSession, RequiresDuplicateDetection = true };
+
+    /// <summary>
+    /// Builds the options of a topic. Duplicate detection is on, so the bus drops a repeated message with the same
+    /// message ID. The time window keeps the default of Azure Service Bus.
+    /// </summary>
+    internal static CreateTopicOptions BuildTopicOptions(string name) =>
+        new(name) { RequiresDuplicateDetection = true };
 
     /// <summary>
     /// Finds the concrete message types. Two types with the same name give one entity.

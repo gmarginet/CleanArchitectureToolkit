@@ -1,4 +1,5 @@
 using System.Reflection;
+using Azure.Messaging.ServiceBus.Administration;
 using Cat.Messaging.Abstractions;
 using Cat.Messaging.AzureServiceBus;
 
@@ -34,6 +35,35 @@ public class AzureServiceBusTests
         Assert.That(message.ScheduledEnqueueTime, Is.EqualTo(at));
         Assert.That(message.Body.ToArray(), Is.EqualTo(new byte[] { 1, 2, 3 }));
         Assert.That(message.ApplicationProperties["tenant"], Is.EqualTo("a"));
+    }
+
+    [Test]
+    public void Topology_QueueOptions_TurnDuplicateDetectionOn()
+    {
+        var options = ServiceBusTopology.BuildQueueOptions("ReserveStock", requiresSession: true);
+
+        Assert.That(options.Name, Is.EqualTo("ReserveStock"));
+        Assert.That(options.RequiresSession, Is.True);
+        Assert.That(options.RequiresDuplicateDetection, Is.True);
+    }
+
+    [Test]
+    public void Topology_QueueOptions_KeepTheDefaultWindowAndNoSession()
+    {
+        var options = ServiceBusTopology.BuildQueueOptions("ReserveStock", requiresSession: false);
+
+        Assert.That(options.RequiresSession, Is.False);
+        Assert.That(options.DuplicateDetectionHistoryTimeWindow, Is.EqualTo(new CreateQueueOptions("x").DuplicateDetectionHistoryTimeWindow));
+    }
+
+    [Test]
+    public void Topology_TopicOptions_TurnDuplicateDetectionOn()
+    {
+        var options = ServiceBusTopology.BuildTopicOptions("OrderPlaced");
+
+        Assert.That(options.Name, Is.EqualTo("OrderPlaced"));
+        Assert.That(options.RequiresDuplicateDetection, Is.True);
+        Assert.That(options.DuplicateDetectionHistoryTimeWindow, Is.EqualTo(new CreateTopicOptions("x").DuplicateDetectionHistoryTimeWindow));
     }
 
     [Test]
