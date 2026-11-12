@@ -46,10 +46,10 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-A new module, `Cat.Authorization`, with a decorator that checks permissions before a service request runs. It also owns the shared user abstraction `ICatUser`, in `Cat.Authorization.Abstractions`.
+A new module, `Cat.Authorization`, that checks permissions before a service request runs. It also owns the shared user abstraction `ICatUser`, in `Cat.Authorization.Abstractions`.
 
 #### The idea
-Who may do what is a business rule, and it should live in the core service, where it can be tested without HTTP. A decorator on service requests can check the rule before the handler runs. A caller without permission gets a clear response, and the handler never starts.
+Who may do what is a business rule, and it should live in the core service, where it can be tested without HTTP. A check can run before the handler does. Whether that check is a decorator on service requests is still open, see question 17. A caller without permission gets a clear response, and the handler never starts.
 
 #### Background
 From the demo plan:
@@ -61,7 +61,7 @@ From the demo plan:
 - The demo plan sketches an admin check on the Catalog save as a decorator on `BookSaveRequest` over the current user, so the rule is testable in `CoreService`, plus a test that a user who is not an admin gets a 403.
 
 From the module conventions:
-- `Cat.ServiceRequests` runs handlers through decorators for logging, tracing and validation. Authorization would be another one.
+- `Cat.ServiceRequests` runs handlers through decorators for logging, tracing and validation. Authorization could be another one, or work in another way, see question 17.
 - `Cat.Minimal.Api` documents the responses of an endpoint. Orders endpoints already declare `CatResponseType.Unauthorized`.
 - The `Contracts` project stays small and free of service internals, so a permission attribute on a request needs a home that `Contracts` can reference.
 
@@ -79,7 +79,6 @@ From the module conventions:
 - No `ICatUser`, no `Cat.Authorization.Abstractions` and no authorization decorator exist.
 
 #### Decided
-- **Place.** A decorator on service requests.
 - **Identity.** The business logic only knows the user abstraction, never `HttpContext`.
 - **User abstraction.** `ICatUser` lives in `Cat.Authorization.Abstractions`, renamed from `ICurrentUser` of the demo. This module owns it. Other modules reference that project. The core service may reference it, because it only references abstractions. `Contracts` does not.
 - **Two layers.** The gateway and the service both validate the token.
@@ -164,8 +163,6 @@ Options for selecting the requests:
 - **D. A change in `Cat.Decorators`.** The factory gets a condition per decorator, such as "only when the request type has a rule". Cost: a change in another module for a gain that the small lookup cost does not justify.
 
 Recommendation: A and B together, one mechanism with two ways to fill it. The rule class is the real thing, and the registration with a lambda is a shortcut that creates one. The decorator wraps every handler and passes the request on when there is no rule. Leave out the attribute and the change in `Cat.Decorators`.
-
-The position of the decorator is set in [Cat.Decorators.md](Cat.Decorators.md), where the proposal puts authorization after tracing and logging and before validation.
 <!-- region end: Question 7-->
 
 <!-- region start: Question 8-->
@@ -238,7 +235,7 @@ Recommendation: any OpenID Connect provider. The module reads a token and makes 
 #### Question 15
 Do we build the module against the real Keycloak claims now? Keycloak and real claims are in the demo now (see "What exists today"), so the old question whether to wait for them is answered. What is left is the order of work. The options:
 - **Now, abstractions first** (question 5), then the decorator, using Keycloak in the demo as the test bed. Cost: none.
-- **Wait for the decorators plan** ([Cat.Decorators.md](Cat.Decorators.md)), since the order mechanism changes how the decorator is added. Cost: the decorator waits.
+- **Wait for the order mechanism** ([Decorator order](../modules/Cat.Decorators/README.md#decorator-order)), since the order mechanism changes how the decorator is added. Cost: the decorator waits.
 
 Recommendation: now, abstractions first. The decorator can use the current order of adding and take the new mechanism when it exists.
 <!-- region end: Question 15-->
@@ -251,5 +248,15 @@ Does the Catalog admin save become the first use case? The endpoint already requ
 
 Recommendation: yes. It is the smallest case that shows the rule class, the decorator and the test without HTTP.
 <!-- region end: Question 16-->
+<!-- region start: Question 17-->
+#### Question 17
+Is a decorator the way to apply authorization? The owner is not sure, for the same reason as the inbox of `Cat.EventProcessor`: a decorator wraps every handler of a service type, so it is all or nothing. Questions 7, 8 and 14 assume a decorator, so look at them again after this answer. The options:
+- **A. A decorator with a lookup per request type.** It wraps every handler and passes the request on when there is no rule, as the validation decorator does. Cost: every handler is wrapped, the decorator needs a number in the order of `Cat.Decorators`, and a forgotten rule means no check.
+- **B. A decorator that a developer switches on per request type.** It needs a condition in `Cat.Decorators`, so the factory wraps only some request types. Cost: a change in another module.
+- **C. No decorator. The handler or the base class calls the check.** Cost: a developer has to call it, so it is easy to forget, but it is visible, per handler and testable without a pipeline.
+- **D. A setting per request type, applied by the host that receives the request.** The way the inbox of `Cat.EventProcessor` works. Cost: it needs a host for every kind of caller, and a service request has more than one.
+
+Recommendation: A, as question 7 assumes, because a check that runs for every request is the safe default and the pass-through cost is small. This is the owner's call, and the discussion stays open.
+<!-- region end: Question 17-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

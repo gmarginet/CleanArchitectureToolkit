@@ -46,10 +46,10 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-A new module, `Cat.Resilience`, with retry and circuit breaker decorators for calls to other services and integrations.
+A new module, `Cat.Resilience`, with retry and circuit breaker for calls to other services and integrations.
 
 #### The idea
-Calls to other services and to external systems fail now and then. A retry fixes a short glitch. A circuit breaker stops hammering something that is down. Decorators can add both to a handler without touching its code.
+Calls to other services and to external systems fail now and then. A retry fixes a short glitch. A circuit breaker stops hammering something that is down. A decorator could add both to a handler without touching its code, but whether decorators are the way is still open, see question 12.
 
 #### Background
 From the readme:
@@ -68,7 +68,7 @@ From the Aspire plan:
 - The `CatalogPriceProvider` gets its retries from the `HttpClient` handler. `Cat.Api.Client` has to work together with this module.
 
 From the module conventions:
-- Handlers of `Cat.Commands`, `Cat.Queries` and `Cat.ServiceRequests` run through decorators from `Cat.Decorators`.
+- Handlers of `Cat.Commands`, `Cat.Queries` and `Cat.ServiceRequests` run through decorators from `Cat.Decorators`. Whether resilience uses them is open, see question 12.
 
 #### What exists today
 - The module does not exist yet. It is listed in the repo overview of the readme with the status New.
@@ -77,7 +77,6 @@ From the module conventions:
 - The Orders tests include `FastFailResilienceTests`.
 
 #### Decided
-- **Place.** Decorators on handlers that call other services and integrations.
 - **Independence.** The module works without Aspire and never references it.
 - **Overlap.** With Aspire, use `ServiceDefaults` and skip this module. The module exists for projects without Aspire. It may also hold extensions of `ServiceDefaults`.
 - **Demo stand-in.** The payment call in the demo goes to a separate, flaky `Cat.Demo.PaymentService`, so the module has something to show.
@@ -192,5 +191,15 @@ Tests need to move time. How do we support `TimeProvider`? The options:
 
 Recommendation: pass it in. It is the same answer as the decision on time in [Cat.Scheduling.md](Cat.Scheduling.md), and `Cat.UnitTesting` points to the Microsoft `FakeTimeProvider`.
 <!-- region end: Question 11-->
+<!-- region start: Question 12-->
+#### Question 12
+Are decorators the way to apply retry and circuit breaker? The owner is not sure, for the same reason as the inbox of `Cat.EventProcessor`: a decorator wraps every handler of a service type, so it is all or nothing, and a retry on a handler that does not call another service is useless. Questions 2 and 5 assume decorators, so look at them again after this answer. The options:
+- **A. A decorator with a lookup per handler or request type.** It wraps every handler and passes the call on when the type has no resilience setting. Cost: every handler is wrapped, and the decorator needs a number in the order of `Cat.Decorators`.
+- **B. A decorator that a developer switches on per handler.** It needs a condition in `Cat.Decorators`. Cost: a change in another module.
+- **C. No decorator. The handler runs the call inside a pipeline from the module.** Cost: the handler code changes, but the retry covers only the call that needs it and not a database write, which answers the worry in question 2.
+- **D. Only an `HttpClient` helper.** Cost: it covers HTTP only, which is what `ServiceDefaults` does already.
+
+Recommendation: C. The retry belongs around one call to another service and not around a whole handler, so the handler decides where it starts and ends. This is the owner's call, and the discussion stays open.
+<!-- region end: Question 12-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

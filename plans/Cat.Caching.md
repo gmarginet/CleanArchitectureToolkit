@@ -46,16 +46,16 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-A new module, `Cat.Caching`, with a caching decorator for queries. The first use is the Catalog queries in the demo.
+A new module, `Cat.Caching`, with caching for queries. The first use is the Catalog queries in the demo.
 
 #### The idea
-Many reads ask the same question again and again. A book list, a category list. A decorator can answer from a cache and skip the database. The query handler stays as it is, because the decorator wraps it.
+Many reads ask the same question again and again. A book list, a category list. A cache in front of the handler can answer and skip the database. If the cache is a decorator, the query handler stays as it is, because the decorator wraps it. Whether it is a decorator is still open, see question 16.
 
 #### Background
 From the module conventions:
 - `Cat.Queries` runs handlers through decorators from `Cat.Decorators`. A decorator is an open generic class that wraps `ICatQueryHandler<,>`. The module already ships a logging decorator you switch on only when you need it.
 - A query is a plain type that holds the data the handler needs. A query handler returns an `ICatResponse` with the result.
-- Decorators are applied in an order. Cache placement relative to logging and tracing needs a decision.
+- Decorators are applied in an order. If the cache is a decorator, its place relative to logging and tracing needs a decision.
 
 From the demo plan:
 - Cached catalog queries are the demo case. Catalog is mostly reads, with a small admin part.
@@ -72,7 +72,6 @@ From the architecture:
 - Nothing in the modules or the demo caches query results yet.
 
 #### Decided
-- **Place.** A decorator on query handlers.
 - **First use.** The Catalog queries in the demo.
 <!-- region end: PhaseDescription-->
 
@@ -140,11 +139,11 @@ Recommendation: no, memory only in the first version, with the swap point ready.
 
 <!-- region start: Question 7-->
 #### Question 7
-Where in the decorator order does the cache sit, relative to logging and validation? This is part of question 3 in [Cat.Decorators.md](Cat.Decorators.md), where the proposed default order puts caching after validation (tracing, logging, authorization, validation, caching). Answer it there, once. The options in short:
+If the cache is a decorator (question 16), where does it sit in the decorator order, relative to logging and validation? Cat.Decorators has numbers for tracing, logging and validation only. The options in short:
 - **After validation, before the handler.** Invalid and unauthorized requests never reach the cache. Cost: none.
-- **Before authorization.** Cost: a cached answer reaches a user who may not read it.
+- **Before an authorization check.** Cost: a cached answer reaches a user who may not read it.
 
-Recommendation: after validation, as the decorators plan proposes.
+Recommendation: after validation, and after an authorization check if there is one.
 <!-- region end: Question 7-->
 
 <!-- region start: Question 8-->
@@ -223,5 +222,15 @@ HTTP output caching in `Cat.Minimal.Api` is a different layer. Is that out of sc
 
 Recommendation: out of scope. It is a different module's job and ASP.NET Core already has it.
 <!-- region end: Question 15-->
+<!-- region start: Question 16-->
+#### Question 16
+Is a decorator the way to apply caching? The owner is not sure, for the same reason as the inbox of `Cat.EventProcessor`: a decorator wraps every handler of a service type, so it is all or nothing. Question 7 assumes a decorator, so look at it again after this answer. The options:
+- **A. A decorator with a lookup per query type.** It wraps every query handler and passes the query on when the type has no cache setting. Cost: every handler is wrapped, and the decorator needs a number in the order of `Cat.Decorators`.
+- **B. A decorator that a developer switches on per query type.** It needs a condition in `Cat.Decorators`. Cost: a change in another module.
+- **C. No decorator. The handler asks a cache service.** Cost: the handler code changes, but the cache call is visible and testable without a pipeline.
+- **D. A cache around the handler, set up in the registration of the handler.** Cost: a new way to register handlers, in `Cat.Queries`.
+
+Recommendation: A, as question 7 assumes, because the handler stays as it is and only the queries with a setting are cached. This is the owner's call, and the discussion stays open.
+<!-- region end: Question 16-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
