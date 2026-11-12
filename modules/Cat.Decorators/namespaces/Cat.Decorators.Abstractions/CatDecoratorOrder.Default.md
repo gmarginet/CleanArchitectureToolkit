@@ -16,7 +16,7 @@
     <tr>
         <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
 
-&#124;&nbsp;&nbsp;&nbsp;[HOME](../../../../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../../../../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../../../../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[CAT.EVENTPROCESSOR](../../README.md)&nbsp;&nbsp;&nbsp;&#124;
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../../../../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../../../../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../../../../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[CAT.DECORATORS](../../README.md)&nbsp;&nbsp;&nbsp;&#124;
 
 </td>
 </tr>
@@ -24,13 +24,15 @@
 
 # Code Reference  
   
-##### >> [Cat\.EventProcessor\.Inbox\.EFCore Assembly](index.md 'index') >> [Cat\.EventProcessor\.Inbox\.EFCore Namespace](Cat.EventProcessor.Inbox.EFCore.md 'Cat\.EventProcessor\.Inbox\.EFCore') >> [InboxDecorator Class](InboxDecorator.md 'Cat\.EventProcessor\.Inbox\.EFCore\.InboxDecorator') >> [CatServiceRequestHandler&lt;TRequest&gt; Class](InboxDecorator.CatServiceRequestHandler_TRequest_.md 'Cat\.EventProcessor\.Inbox\.EFCore\.InboxDecorator\.CatServiceRequestHandler\<TRequest\>')
+##### >> [Cat\.Decorators\.Abstractions Assembly](index.md 'index') >> [Cat\.Decorators\.Abstractions Namespace](Cat.Decorators.Abstractions.md 'Cat\.Decorators\.Abstractions') >> [CatDecoratorOrder Class](CatDecoratorOrder.md 'Cat\.Decorators\.Abstractions\.CatDecoratorOrder')
 
-## InboxDecorator\.CatServiceRequestHandler\<TRequest\>\.\_store Field
+## CatDecoratorOrder\.Default Field
+
+The number of a decorator that is added without an order, after validation\. It sees valid input\.
 
 ```csharp
-private readonly ICatInboxStore _store;
+public const int Default = 450;
 ```
 
 #### Field Value
-[ICatInboxStore](ICatInboxStore.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ICatInboxStore')
+[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')

@@ -35,8 +35,6 @@ It stores the ID of a handled message in the same `SaveChanges` as the work of t
 | :--- | :--- |
 | [CatInboxMessage](CatInboxMessage.md 'Cat\.EventProcessor\.Inbox\.EFCore\.CatInboxMessage') | One row of the inbox table: a message that the service handled\. |
 | [EfCoreInboxStore&lt;TDbContext&gt;](EfCoreInboxStore_TDbContext_.md 'Cat\.EventProcessor\.Inbox\.EFCore\.EfCoreInboxStore\<TDbContext\>') | [ICatInboxStore](ICatInboxStore.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ICatInboxStore') on a `DbContext` of the service\. |
-| [InboxDecorator](InboxDecorator.md 'Cat\.EventProcessor\.Inbox\.EFCore\.InboxDecorator') | Skips a message that was handled before\. It runs only for a request that came from a message, and passes every other request, such as an HTTP call, straight on\. A repeated message completes without running the handler\. A new message gets a row in the context of the handler before the handler runs, so the `SaveChanges` of the handler saves the row with the work, or neither is saved\. If two copies of a message run at the same moment, the key of the table fails the second save, the message is abandoned, and the next delivery finds the row and skips it\. |
-| [InboxDecorator\.CatServiceRequestHandler&lt;TRequest&gt;](InboxDecorator.CatServiceRequestHandler_TRequest_.md 'Cat\.EventProcessor\.Inbox\.EFCore\.InboxDecorator\.CatServiceRequestHandler\<TRequest\>') | |
 | [ModelBuilderExtensions](ModelBuilderExtensions.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ModelBuilderExtensions') | Adds the inbox table to the model of a `DbContext`\. |
 
 | Interfaces | |

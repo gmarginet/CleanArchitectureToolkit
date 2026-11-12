@@ -21,9 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Cat.Decorators\Cat.Decorators.Abstractions\Cat.Decorators.Abstractions.csproj" />
-        <ProjectReference Include="..\..\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
-        <ProjectReference Include="..\..\Cat.ServiceRequests\Cat.ServiceRequests.Abstractions\Cat.ServiceRequests.Abstractions.csproj" />
         <ProjectReference Include="..\Cat.EventProcessor.Abstractions\Cat.EventProcessor.Abstractions.csproj" />
     </ItemGroup>
 

@@ -28,7 +28,7 @@
 
 ## CatDecoratorInfo Class
 
-Describes one registered decorator: its open generic type and the constructor values to pass to it\.
+Describes one registered decorator: its open generic type, its order and the constructor values to pass to it\.
 
 ```csharp
 public record CatDecoratorInfo : System.IEquatable<Cat.Decorators.CatDecoratorInfo>
@@ -40,9 +40,11 @@ Implements [System\.IEquatable&lt;](https://learn.microsoft.com/en-us/dotnet/api
 
 | Constructors | |
 | :--- | :--- |
-| [CatDecoratorInfo\(Type, IDictionary&lt;string,object&gt;\)](CatDecoratorInfo..ctor.7N6RUQYPU2QAFERC8RWFG9II1.md 'Cat\.Decorators\.CatDecoratorInfo\.CatDecoratorInfo\(System\.Type, System\.Collections\.Generic\.IDictionary\<string,object\>\)') | Creates the description\. |
+| [CatDecoratorInfo\(Type, IDictionary&lt;string,object&gt;\)](CatDecoratorInfo.CatDecoratorInfo.md#Cat.Decorators.CatDecoratorInfo.CatDecoratorInfo(System.Type,System.Collections.Generic.IDictionary_string,object_) 'Cat\.Decorators\.CatDecoratorInfo\.CatDecoratorInfo\(System\.Type, System\.Collections\.Generic\.IDictionary\<string,object\>\)') | Creates the description with the order [Default](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/CatDecoratorOrder.Default.md 'Cat\.Decorators\.Abstractions\.CatDecoratorOrder\.Default')\. |
+| [CatDecoratorInfo\(Type, IDictionary&lt;string,object&gt;, int\)](CatDecoratorInfo.CatDecoratorInfo.md#Cat.Decorators.CatDecoratorInfo.CatDecoratorInfo(System.Type,System.Collections.Generic.IDictionary_string,object_,int) 'Cat\.Decorators\.CatDecoratorInfo\.CatDecoratorInfo\(System\.Type, System\.Collections\.Generic\.IDictionary\<string,object\>, int\)') | Creates the description\. |
 
 | Properties | |
 | :--- | :--- |
 | [DecoratorGenericTypeDefinition](CatDecoratorInfo.DecoratorGenericTypeDefinition.md 'Cat\.Decorators\.CatDecoratorInfo\.DecoratorGenericTypeDefinition') | The open generic decorator type\. |
 | [DecoratorParameterDictionary](CatDecoratorInfo.DecoratorParameterDictionary.md 'Cat\.Decorators\.CatDecoratorInfo\.DecoratorParameterDictionary') | Constructor values by parameter name, or `null` for none\. |
+| [Order](CatDecoratorInfo.Order.md 'Cat\.Decorators\.CatDecoratorInfo\.Order') | The order of the decorator, from the outside in\. A lower number is the outer decorator\. |

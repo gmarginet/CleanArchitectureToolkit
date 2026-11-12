@@ -1,14 +1,21 @@
 ../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/
+F:Cat.Decorators.Abstractions.CatDecoratorOrder.Tracing|CatDecoratorOrder.Tracing.md|Tracing
+F:Cat.Decorators.Abstractions.CatDecoratorOrder.Logging|CatDecoratorOrder.Logging.md|Logging
+F:Cat.Decorators.Abstractions.CatDecoratorOrder.Validation|CatDecoratorOrder.Validation.md|Validation
+F:Cat.Decorators.Abstractions.CatDecoratorOrder.Default|CatDecoratorOrder.Default.md|Default
+N:Cat.Decorators.Abstractions|Cat.Decorators.Abstractions.md|Cat.Decorators.Abstractions
+T:Cat.Decorators.Abstractions.CatDecoratorOrder|CatDecoratorOrder.md|CatDecoratorOrder
 M:Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService``1(System.IServiceProvider)|ICatDecoratorFactory.GetRequiredDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService_TService_(System.IServiceProvider)|GetRequiredDecoratedService<TService>(IServiceProvider)
 M:Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService(System.IServiceProvider,System.Type)|ICatDecoratorFactory.GetRequiredDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService(System.IServiceProvider,System.Type)|GetRequiredDecoratedService(IServiceProvider, Type)
 M:Cat.Decorators.Abstractions.ICatDecoratorFactory.GetDecoratedService``1(System.IServiceProvider)|ICatDecoratorFactory.GetDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetDecoratedService_TService_(System.IServiceProvider)|GetDecoratedService<TService>(IServiceProvider)
 M:Cat.Decorators.Abstractions.ICatDecoratorFactory.GetDecoratedService(System.IServiceProvider,System.Type)|ICatDecoratorFactory.GetDecoratedService.md#Cat.Decorators.Abstractions.ICatDecoratorFactory.GetDecoratedService(System.IServiceProvider,System.Type)|GetDecoratedService(IServiceProvider, Type)
-N:Cat.Decorators.Abstractions|Cat.Decorators.Abstractions.md|Cat.Decorators.Abstractions
 T:Cat.Decorators.Abstractions.ICatDecoratorFactory|ICatDecoratorFactory.md|ICatDecoratorFactory
-M:Cat.Decorators.Abstractions.ICatDecoratorFactoryBuilder.AddDecorator(System.Type,System.Type,Cat.Decorators.Abstractions.ICatDecoratorParameter[])|ICatDecoratorFactoryBuilder.AddDecorator.U7RFRRWBEQRWWXAQT8CHUXGO.md|AddDecorator(Type, Type, ICatDecoratorParameter[])
+M:Cat.Decorators.Abstractions.ICatDecoratorFactoryBuilder.AddDecorator(System.Type,System.Type,Cat.Decorators.Abstractions.ICatDecoratorParameter[])|ICatDecoratorFactoryBuilder.AddDecorator.md#Cat.Decorators.Abstractions.ICatDecoratorFactoryBuilder.AddDecorator(System.Type,System.Type,Cat.Decorators.Abstractions.ICatDecoratorParameter[])|AddDecorator(Type, Type, ICatDecoratorParameter[])
+M:Cat.Decorators.Abstractions.ICatDecoratorFactoryBuilder.AddDecorator(System.Type,System.Type,System.Int32,Cat.Decorators.Abstractions.ICatDecoratorParameter[])|ICatDecoratorFactoryBuilder.AddDecorator.md#Cat.Decorators.Abstractions.ICatDecoratorFactoryBuilder.AddDecorator(System.Type,System.Type,int,Cat.Decorators.Abstractions.ICatDecoratorParameter[])|AddDecorator(Type, Type, int, ICatDecoratorParameter[])
 T:Cat.Decorators.Abstractions.ICatDecoratorFactoryBuilder|ICatDecoratorFactoryBuilder.md|ICatDecoratorFactoryBuilder
 P:Cat.Decorators.Abstractions.ICatDecoratorParameter.Name|ICatDecoratorParameter.Name.md|Name
 P:Cat.Decorators.Abstractions.ICatDecoratorParameter.Value|ICatDecoratorParameter.Value.md|Value
 T:Cat.Decorators.Abstractions.ICatDecoratorParameter|ICatDecoratorParameter.md|ICatDecoratorParameter
 ?:Cat.Decorators.Abstractions.ICatDecoratorFactory.GetRequiredDecoratedService|ICatDecoratorFactory.GetRequiredDecoratedService.md|GetRequiredDecoratedService
 ?:Cat.Decorators.Abstractions.ICatDecoratorFactory.GetDecoratedService|ICatDecoratorFactory.GetDecoratedService.md|GetDecoratedService
+?:Cat.Decorators.Abstractions.ICatDecoratorFactoryBuilder.AddDecorator|ICatDecoratorFactoryBuilder.AddDecorator.md|AddDecorator

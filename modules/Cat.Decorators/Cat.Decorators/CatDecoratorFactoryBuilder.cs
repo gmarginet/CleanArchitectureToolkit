@@ -24,6 +24,12 @@ public class CatDecoratorFactoryBuilder : ICatDecoratorFactoryBuilder
     /// <inheritdoc />
     public void AddDecorator(Type serviceType, Type decoratorType, params ICatDecoratorParameter[] decoratorParameters)
     {
-        _catDecoratorFactory.AddDecorator(serviceType, decoratorType, decoratorParameters.ToDictionary(x => x.Name, x => x.Value));
+        AddDecorator(serviceType, decoratorType, CatDecoratorOrder.Default, decoratorParameters);
+    }
+
+    /// <inheritdoc />
+    public void AddDecorator(Type serviceType, Type decoratorType, int order, params ICatDecoratorParameter[] decoratorParameters)
+    {
+        _catDecoratorFactory.AddDecorator(serviceType, decoratorType, order, decoratorParameters.ToDictionary(x => x.Name, x => x.Value));
     }
 }

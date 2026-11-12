@@ -52,6 +52,7 @@ CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scru
   - [Pass fixed values](#pass-fixed-values)
   - [Get a decorated service](#get-a-decorated-service)
   - [Decorator order](#decorator-order)
+  - [Check the decorators at startup](#check-the-decorators-at-startup)
   - [Errors and exceptions](#errors-and-exceptions)
 
 ## NuGet packages
@@ -142,6 +143,8 @@ var decoratorBuilder = app.Services.GetRequiredService<ICatDecoratorFactoryBuild
 decoratorBuilder.AddDecorator(typeof(IHandler<,>), typeof(LoggingDecorator<,>));
 ```
 
+Add an `order` argument to choose where the decorator sits, see [Decorator order](#decorator-order).
+
 ### Pass fixed values
 
 Some decorators need a value that doesn't come from DI, like a flag. Pass it as a `CatDecoratorParameter`. The factory matches it to the constructor parameter by name and type.
@@ -200,14 +203,47 @@ Pick the method that fits:
 
 ### Decorator order
 
-The first decorator you add is the innermost one. Each later decorator wraps the one before it, so the last one you add runs first on the way in and last on the way out.
+Every decorator has an order number. A lower number is outer, so it runs first on the way in and last on the way out. A higher number is closer to the handler. The order does not depend on the sequence of your `Add` calls.
+
+The CAT decorator modules pick their number from `CatDecoratorOrder`, in `Cat.Decorators.Abstractions`.
+
+| Constant | Number | Decorator |
+|----------|--------|-----------|
+| `Tracing` | 100 | Activity source tracing |
+| `Logging` | 200 | Logging |
+| `Validation` | 400 | Validation |
+| `Default` | 450 | A decorator without a number, such as your own |
+
+Pass your own number as the `order` argument. Lower numbers wrap higher ones.
 
 ```csharp
-decoratorBuilder.AddDecorator(typeof(IHandler<,>), typeof(ValidationDecorator<,>)); // innermost
-decoratorBuilder.AddDecorator(typeof(IHandler<,>), typeof(LoggingDecorator<,>));    // outermost
+decoratorBuilder.AddDecorator(typeof(IHandler<,>), typeof(ValidationDecorator<,>), CatDecoratorOrder.Validation);
+decoratorBuilder.AddDecorator(typeof(IHandler<,>), typeof(LoggingDecorator<,>), CatDecoratorOrder.Logging);
 ```
 
-Here a call runs logging, then validation, then your handler.
+Here a call runs logging, then validation, then your handler, whichever line comes first.
+
+Rules:
+- **Equal numbers:** The decorator you added first is the innermost one. This is how the module worked before it had numbers.
+- **No number:** `AddDecorator` without `order` uses `CatDecoratorOrder.Default`. It sits after validation.
+- **CAT decorator modules:** Their `Add...Decorator` methods take an optional `order` argument that replaces their default. The readme of each module names its constant.
+
+### Check the decorators at startup
+
+Call `CheckCatDecorators` on the built service provider, once, after you added every decorator. It is opt in.
+
+```csharp
+var app = builder.Build();
+
+app.Services.CheckCatDecorators();
+```
+
+The check throws one `InvalidOperationException` that lists every problem:
+- A decorator with a different number of type arguments than its service.
+- A decorator without exactly one public constructor.
+- A decorator without a constructor parameter for the service it wraps.
+
+Two decorators of one service with the same number are not an error. The check logs a warning for them when an `ILoggerFactory` is registered, because the order is then the order of your `Add` calls.
 
 ### Errors and exceptions
 
@@ -221,6 +257,7 @@ The module reports every problem as an exception. It has no response types, beca
 | `GetDecoratedService` can't find the service | `null`. No exception. |
 | A decorator has no public constructor, or more than one | An `InvalidOperationException` from the factory when it builds the decorator. |
 | A decorator constructor asks for a service the provider can't resolve | An `InvalidOperationException` from the service provider, naming the missing service. |
+| `CheckCatDecorators` finds a broken decorator | An `InvalidOperationException` with the message `The decorators are not valid:` and every problem. |
 
-The factory only wraps a service when you ask for it. A mistake in a decorator therefore shows up the first time something requests the decorated service, not at startup.
+The factory only wraps a service when you ask for it. A mistake in a decorator therefore shows up the first time something requests the decorated service, unless you call `CheckCatDecorators` at startup.
 <!-- region end: Usage-->

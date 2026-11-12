@@ -1,7 +1,7 @@
 ../../../Cat.Commands/namespaces/Cat.Commands.Decorators.Logging/
 N:Cat.Commands.Decorators.Logging|Cat.Commands.Decorators.Logging.md|Cat.Commands.Decorators.Logging
 T:Cat.Commands.Decorators.Logging.LoggingDecorator|LoggingDecorator.md|LoggingDecorator
-M:Cat.Commands.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatCommandsModuleLoggingDecorator(System.IServiceProvider)|ServiceCollectionExtensions.AddCatCommandsModuleLoggingDecorator.UKETB5C345O0609V5YADR9Q25.md|AddCatCommandsModuleLoggingDecorator(this IServiceProvider)
+M:Cat.Commands.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatCommandsModuleLoggingDecorator(System.IServiceProvider,System.Nullable{System.Int32})|ServiceCollectionExtensions.AddCatCommandsModuleLoggingDecorator.Y9BXRO85BPGW2INFC372WVNL8.md|AddCatCommandsModuleLoggingDecorator(this IServiceProvider, Nullable<int>)
 N:Cat.Commands.Decorators.Logging.Extensions|Cat.Commands.Decorators.Logging.Extensions.md|Cat.Commands.Decorators.Logging.Extensions
 T:Cat.Commands.Decorators.Logging.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
 F:Cat.Commands.Decorators.Logging.LoggingDecorator.CatCommandHandler`1._innerHandler|LoggingDecorator.CatCommandHandler_TCommand_._innerHandler.md|_innerHandler

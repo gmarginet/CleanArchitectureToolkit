@@ -273,7 +273,7 @@ app.Services.AddCatServiceRequestsModuleLoggingDecorator();
 app.Services.AddCatServiceRequestsModuleActivitySourceDecorator();
 ```
 
-With this order a request runs the activity, then logging, then validation, then your handler. Register only the ones you need.
+Each decorator has an order number, so the sequence of these calls does not matter. A request runs the activity (`CatDecoratorOrder.Tracing`), then logging (`CatDecoratorOrder.Logging`), then validation (`CatDecoratorOrder.Validation`), then your handler. Pass `order` to a call to use another number. See [Decorator order](../Cat.Decorators/README.md#decorator-order) for the table. Register only the ones you need.
 
 #### Validation
 

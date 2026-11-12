@@ -12,15 +12,8 @@ T:Cat.EventProcessor.Inbox.EFCore.EfCoreInboxStore`1|EfCoreInboxStore_TDbContext
 M:Cat.EventProcessor.Inbox.EFCore.ICatInboxStore.ExistsAsync(System.String,System.Threading.CancellationToken)|ICatInboxStore.ExistsAsync.QC5LOHD4KJ154DHEHFTW8YY27.md|ExistsAsync(string, CancellationToken)
 M:Cat.EventProcessor.Inbox.EFCore.ICatInboxStore.Add(System.String,System.String)|ICatInboxStore.Add.E78XPY2J7TFSJKJORTWQCOT35.md|Add(string, string)
 T:Cat.EventProcessor.Inbox.EFCore.ICatInboxStore|ICatInboxStore.md|ICatInboxStore
-T:Cat.EventProcessor.Inbox.EFCore.InboxDecorator|InboxDecorator.md|InboxDecorator
 M:Cat.EventProcessor.Inbox.EFCore.ModelBuilderExtensions.AddCatInbox(Microsoft.EntityFrameworkCore.ModelBuilder)|ModelBuilderExtensions.AddCatInbox.E9EHKR34AM1DFIZQXF0V8XE9A.md|AddCatInbox(this ModelBuilder)
 T:Cat.EventProcessor.Inbox.EFCore.ModelBuilderExtensions|ModelBuilderExtensions.md|ModelBuilderExtensions
 M:Cat.EventProcessor.Inbox.EFCore.Extensions.ServiceCollectionExtensions.AddCatEventProcessorInbox``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatEventProcessorInbox.F32HS6QJ7RHMBOH0NTSFNY6H4.md|AddCatEventProcessorInbox<TDbContext>(this IServiceCollection)
-M:Cat.EventProcessor.Inbox.EFCore.Extensions.ServiceCollectionExtensions.UseCatEventProcessorInbox(System.IServiceProvider)|ServiceCollectionExtensions.UseCatEventProcessorInbox.9O8PEZ49E818LW3Y72IIATU4F.md|UseCatEventProcessorInbox(this IServiceProvider)
 N:Cat.EventProcessor.Inbox.EFCore.Extensions|Cat.EventProcessor.Inbox.EFCore.Extensions.md|Cat.EventProcessor.Inbox.EFCore.Extensions
 T:Cat.EventProcessor.Inbox.EFCore.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
-F:Cat.EventProcessor.Inbox.EFCore.InboxDecorator.CatServiceRequestHandler`1._innerHandler|InboxDecorator.CatServiceRequestHandler_TRequest_._innerHandler.md|_innerHandler
-F:Cat.EventProcessor.Inbox.EFCore.InboxDecorator.CatServiceRequestHandler`1._store|InboxDecorator.CatServiceRequestHandler_TRequest_._store.md|_store
-M:Cat.EventProcessor.Inbox.EFCore.InboxDecorator.CatServiceRequestHandler`1.#ctor(Cat.ServiceRequests.Abstractions.ICatServiceRequestHandler{`0},Cat.EventProcessor.Inbox.EFCore.ICatInboxStore)|InboxDecorator.CatServiceRequestHandler_TRequest_..ctor.OU558TLI696NE4Y0AB5BG4378.md|CatServiceRequestHandler(ICatServiceRequestHandler<TRequest>, ICatInboxStore)
-M:Cat.EventProcessor.Inbox.EFCore.InboxDecorator.CatServiceRequestHandler`1.HandleAsync(`0,System.Threading.CancellationToken)|InboxDecorator.CatServiceRequestHandler_TRequest_.HandleAsync.KQBIUFQAL95YNPURNQ3QU4IIA.md|HandleAsync(TRequest, CancellationToken)
-T:Cat.EventProcessor.Inbox.EFCore.InboxDecorator.CatServiceRequestHandler`1|InboxDecorator.CatServiceRequestHandler_TRequest_.md|CatServiceRequestHandler<TRequest>

@@ -26,23 +26,13 @@
   
 ##### >> [Cat\.Decorators Assembly](index.md 'index') >> [Cat\.Decorators Namespace](Cat.Decorators.md 'Cat\.Decorators') >> [CatDecoratorInfo Class](CatDecoratorInfo.md 'Cat\.Decorators\.CatDecoratorInfo')
 
-## CatDecoratorInfo\(Type, IDictionary\<string,object\>\) Constructor
+## CatDecoratorInfo\.Order Property
 
-Creates the description\.
+The order of the decorator, from the outside in\. A lower number is the outer decorator\.
 
 ```csharp
-public CatDecoratorInfo(System.Type decoratorGenericTypeDefinition, System.Collections.Generic.IDictionary<string,object>? decoratorParameterDictionary);
+public int Order { get; }
 ```
-#### Parameters
 
-<a name='Cat.Decorators.CatDecoratorInfo.CatDecoratorInfo(System.Type,System.Collections.Generic.IDictionary_string,object_).decoratorGenericTypeDefinition'></a>
-
-`decoratorGenericTypeDefinition` [System\.Type](https://learn.microsoft.com/en-us/dotnet/api/system.type 'System\.Type')
-
-The open generic decorator type\.
-
-<a name='Cat.Decorators.CatDecoratorInfo.CatDecoratorInfo(System.Type,System.Collections.Generic.IDictionary_string,object_).decoratorParameterDictionary'></a>
-
-`decoratorParameterDictionary` [System\.Collections\.Generic\.IDictionary&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.idictionary-2 'System\.Collections\.Generic\.IDictionary\`2')[System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')[,](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.idictionary-2 'System\.Collections\.Generic\.IDictionary\`2')[System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.idictionary-2 'System\.Collections\.Generic\.IDictionary\`2')
-
-Constructor values by parameter name, or `null` for none\.
+#### Property Value
+[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')

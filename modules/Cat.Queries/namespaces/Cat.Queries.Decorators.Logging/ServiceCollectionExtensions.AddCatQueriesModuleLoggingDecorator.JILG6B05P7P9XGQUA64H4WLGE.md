@@ -26,17 +26,23 @@
   
 ##### >> [Cat\.Queries\.Decorators\.Logging Assembly](index.md 'index') >> [Cat\.Queries\.Decorators\.Logging\.Extensions Namespace](Cat.Queries.Decorators.Logging.Extensions.md 'Cat\.Queries\.Decorators\.Logging\.Extensions') >> [ServiceCollectionExtensions Class](ServiceCollectionExtensions.md 'Cat\.Queries\.Decorators\.Logging\.Extensions\.ServiceCollectionExtensions')
 
-## ServiceCollectionExtensions\.AddCatQueriesModuleLoggingDecorator\(this IServiceProvider\) Method
+## ServiceCollectionExtensions\.AddCatQueriesModuleLoggingDecorator\(this IServiceProvider, Nullable\<int\>\) Method
 
 Adds the logging decorator to all query handlers\.
 
 ```csharp
-public static void AddCatQueriesModuleLoggingDecorator(this System.IServiceProvider serviceProvider);
+public static void AddCatQueriesModuleLoggingDecorator(this System.IServiceProvider serviceProvider, System.Nullable<int> order=null);
 ```
 #### Parameters
 
-<a name='Cat.Queries.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatQueriesModuleLoggingDecorator(thisSystem.IServiceProvider).serviceProvider'></a>
+<a name='Cat.Queries.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatQueriesModuleLoggingDecorator(thisSystem.IServiceProvider,System.Nullable_int_).serviceProvider'></a>
 
 `serviceProvider` [System\.IServiceProvider](https://learn.microsoft.com/en-us/dotnet/api/system.iserviceprovider 'System\.IServiceProvider')
 
 Must be able to resolve [ICatDecoratorFactoryBuilder](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorFactoryBuilder.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactoryBuilder')\.
+
+<a name='Cat.Queries.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatQueriesModuleLoggingDecorator(thisSystem.IServiceProvider,System.Nullable_int_).order'></a>
+
+`order` [System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')
+
+Where the decorator sits, from the outside in\. The default is [Logging](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/CatDecoratorOrder.Logging.md 'Cat\.Decorators\.Abstractions\.CatDecoratorOrder\.Logging')\.

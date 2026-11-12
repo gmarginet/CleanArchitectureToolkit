@@ -53,7 +53,7 @@ The module settles every message for you. A handler that succeeds completes the 
   - [Change the options of Azure Service Bus](#change-the-options-of-azure-service-bus)
   - [Try a message in development](#try-a-message-in-development)
   - [Add the health check](#add-the-health-check)
-  - [Turn the inbox on](#turn-the-inbox-on)
+  - [The inbox](#the-inbox)
   - [Competing consumers and shutdown](#competing-consumers-and-shutdown)
   - [Traces](#traces)
   - [What is not built yet](#what-is-not-built-yet)
@@ -81,7 +81,7 @@ The module settles every message for you. A handler that succeeds completes the 
 | [Cat.EventProcessor](namespaces/Cat.EventProcessor/index.md) | The receiver, the failure table, the builder for the message types and the module registration. |
 | [Cat.EventProcessor.AzureServiceBus](namespaces/Cat.EventProcessor.AzureServiceBus/index.md) | The Azure Service Bus listener, the health check and the creation of the subscriptions. |
 | [Cat.EventProcessor.Minimal.Api](namespaces/Cat.EventProcessor.Minimal.Api/index.md) | The development endpoint that simulates an incoming message. |
-| [Cat.EventProcessor.Inbox.EFCore](namespaces/Cat.EventProcessor.Inbox.EFCore/index.md) | The inbox table and the decorator that skips a message that was handled before. |
+| [Cat.EventProcessor.Inbox.EFCore](namespaces/Cat.EventProcessor.Inbox.EFCore/index.md) | The inbox table and its store. |
 
 <!-- region end: Namespaces-->
 
@@ -93,7 +93,6 @@ The module settles every message for you. A handler that succeeds completes the 
 | [Cat.Messaging](../Cat.Messaging/README.md) | The message types, the name convention and the Azure Service Bus connection. |
 | [Cat.ServiceRequests](../Cat.ServiceRequests/README.md) | The message is the service request, and its handler runs through the service request processor. |
 | [Cat.Responses](../Cat.Responses/README.md) | The response of the handler decides what happens to the message. |
-| [Cat.Decorators](../Cat.Decorators/README.md) | The inbox is a decorator on the service request handler. |
 
 <!-- region end: Dependencies-->
 
@@ -130,7 +129,7 @@ public class OrderPlacedHandler : ICatServiceRequestHandler<OrderPlaced>
 }
 ```
 
-Write the handler so that it can run twice for the same message. The bus delivers a message at least once. See [Turn the inbox on](#turn-the-inbox-on) for a handler that cannot do that.
+Write the handler so that it can run twice for the same message. The bus delivers a message at least once. See [The inbox](#the-inbox) for a handler that cannot do that.
 
 ### Register the module
 
@@ -276,11 +275,11 @@ builder.Services.AddHealthChecks().AddCatEventProcessorHealthCheck();
 
 It is unhealthy when a listener has stopped, and degraded for a minute after a listener reported an error while it keeps processing.
 
-### Turn the inbox on
+### The inbox
 
 Use the inbox only when a handler cannot run twice for the same message. It stores the ID of a handled message in the service database, in the same `SaveChanges` as the work of the handler. A repeated message hits the key of the table and is skipped.
 
-Add the `Cat.EventProcessor.Inbox.EFCore` package. Map the table in the context that the handlers use, register the store and switch the decorator on:
+Add the `Cat.EventProcessor.Inbox.EFCore` package. Map the table in the context that the handlers use and register the store:
 
 ```csharp
 using Cat.EventProcessor.Inbox.EFCore;
@@ -295,17 +294,11 @@ public class InventoryDbContext : DbContext
 }
 
 builder.Services.AddCatEventProcessorInbox<InventoryDbContext>();
-
-var app = builder.Build();
-app.Services.UseCatEventProcessorInbox();
 ```
 
 Add a migration afterwards, so the `CatInbox` table exists. What to know:
-- The decorator adds the row before the handler runs. The handler must call `SaveChanges` on the same context, so the row and the work are saved together. A handler that does not save leaves no row.
-- A request that does not come from a message, such as an HTTP call, passes the decorator untouched.
-- Two copies of a message that run at the same moment: the key fails the second save, the message is abandoned, and the next delivery finds the row and skips it.
+- The package holds the table and the store. Nothing calls the store yet, so no message is skipped for now. The inbox will be switched on per message type, not for every handler.
 - The sender also helps: it sets the message ID, and duplicate detection of the queue or topic can drop a repeated message.
-
 ### Competing consumers and shutdown
 
 Several instances of the same service can listen to the same subscription, and the bus gives a message to one of them. The module never assumes one instance. The order of messages is not guaranteed, unless the message type needs sessions, see `Cat.Messaging`.

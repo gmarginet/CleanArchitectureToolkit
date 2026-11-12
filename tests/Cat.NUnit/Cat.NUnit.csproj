@@ -11,4 +11,8 @@
       <PackageReference Include="NUnit"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\modules\Cat.Decorators\Cat.Decorators.Abstractions\Cat.Decorators.Abstractions.csproj" />
+    </ItemGroup>
+
 </Project>

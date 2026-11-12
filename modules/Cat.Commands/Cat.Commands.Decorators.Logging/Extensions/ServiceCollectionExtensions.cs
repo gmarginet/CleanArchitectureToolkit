@@ -16,10 +16,12 @@ public static class ServiceCollectionExtensions
     /// Adds the logging decorator to all command handlers, with or without a result.
     /// </summary>
     /// <param name="serviceProvider">Must be able to resolve <see cref="ICatDecoratorFactoryBuilder"/>.</param>
-    public static void AddCatCommandsModuleLoggingDecorator(this IServiceProvider serviceProvider)
+    /// <param name="order">Where the decorator sits, from the outside in. The default is <see cref="CatDecoratorOrder.Logging"/>.</param>
+    public static void AddCatCommandsModuleLoggingDecorator(this IServiceProvider serviceProvider, int? order = null)
     {
         var decoratorFactory = serviceProvider.GetRequiredService<ICatDecoratorFactoryBuilder>();
-        decoratorFactory.AddDecorator(typeof(ICatCommandHandler<>), typeof(LoggingDecorator.CatCommandHandler<>));
-        decoratorFactory.AddDecorator(typeof(ICatCommandHandler<,>), typeof(LoggingDecorator.CatCommandHandler<,>));
+        var decoratorOrder = order ?? CatDecoratorOrder.Logging;
+        decoratorFactory.AddDecorator(typeof(ICatCommandHandler<>), typeof(LoggingDecorator.CatCommandHandler<>), decoratorOrder);
+        decoratorFactory.AddDecorator(typeof(ICatCommandHandler<,>), typeof(LoggingDecorator.CatCommandHandler<,>), decoratorOrder);
     }
 }

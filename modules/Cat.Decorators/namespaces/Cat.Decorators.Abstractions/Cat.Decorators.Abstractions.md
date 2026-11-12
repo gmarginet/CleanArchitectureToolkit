@@ -31,6 +31,10 @@
 Defines the contracts for decorators: the factory that returns a decorated service,
 the builder that registers decorators, and the parameters you can pass to a decorator\.
 
+| Classes | |
+| :--- | :--- |
+| [CatDecoratorOrder](CatDecoratorOrder.md 'Cat\.Decorators\.Abstractions\.CatDecoratorOrder') | The default order of the decorators, from the outside in\. A lower number runs first on the way in and last on the way out\. Every module that ships a decorator uses one of these numbers as its default, so the order is the same whatever the sequence in which you add the decorators\. The numbers are spaced out in steps of 100, so you can slot a decorator of your own in between, for example 250\. |
+
 | Interfaces | |
 | :--- | :--- |
 | [ICatDecoratorFactory](ICatDecoratorFactory.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactory') | Gets a service wrapped in the decorators registered for it\. The service type must be a closed generic type, like `IHandler<MyRequest>`\. |

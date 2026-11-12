@@ -38,4 +38,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Methods | |
 | :--- | :--- |
-| [AddCatServiceRequestsModuleLoggingDecorator\(this IServiceProvider\)](ServiceCollectionExtensions.AddCatServiceRequestsModuleLoggingDecorator.ASTEGMP817ISXMNRQ0RK8E3GD.md 'Cat\.ServiceRequests\.Decorators\.Logging\.Extensions\.ServiceCollectionExtensions\.AddCatServiceRequestsModuleLoggingDecorator\(this System\.IServiceProvider\)') | Adds the logging decorator to all service request handlers\. |
+| [AddCatServiceRequestsModuleLoggingDecorator\(this IServiceProvider, Nullable&lt;int&gt;\)](ServiceCollectionExtensions.AddCatServiceRequestsModuleLoggingDecorator.FY1R9AHG8HI6QEUSHSFYEW9KD.md 'Cat\.ServiceRequests\.Decorators\.Logging\.Extensions\.ServiceCollectionExtensions\.AddCatServiceRequestsModuleLoggingDecorator\(this System\.IServiceProvider, System\.Nullable\<int\>\)') | Adds the logging decorator to all service request handlers\. |

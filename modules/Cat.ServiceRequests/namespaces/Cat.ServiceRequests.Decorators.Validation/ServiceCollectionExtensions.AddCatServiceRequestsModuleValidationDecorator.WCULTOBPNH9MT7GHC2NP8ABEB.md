@@ -26,26 +26,32 @@
   
 ##### >> [Cat\.ServiceRequests\.Decorators\.Validation Assembly](index.md 'index') >> [Cat\.ServiceRequests\.Decorators\.Validation\.Extensions Namespace](Cat.ServiceRequests.Decorators.Validation.Extensions.md 'Cat\.ServiceRequests\.Decorators\.Validation\.Extensions') >> [ServiceCollectionExtensions Class](ServiceCollectionExtensions.md 'Cat\.ServiceRequests\.Decorators\.Validation\.Extensions\.ServiceCollectionExtensions')
 
-## ServiceCollectionExtensions\.AddCatServiceRequestsModuleValidationDecorator\(this IServiceProvider, bool\) Method
+## ServiceCollectionExtensions\.AddCatServiceRequestsModuleValidationDecorator\(this IServiceProvider, bool, Nullable\<int\>\) Method
 
 Adds the validation decorator to all service request handlers\.
 
 ```csharp
-public static System.IServiceProvider AddCatServiceRequestsModuleValidationDecorator(this System.IServiceProvider serviceProvider, bool validationRequired=false);
+public static System.IServiceProvider AddCatServiceRequestsModuleValidationDecorator(this System.IServiceProvider serviceProvider, bool validationRequired=false, System.Nullable<int> order=null);
 ```
 #### Parameters
 
-<a name='Cat.ServiceRequests.Decorators.Validation.Extensions.ServiceCollectionExtensions.AddCatServiceRequestsModuleValidationDecorator(thisSystem.IServiceProvider,bool).serviceProvider'></a>
+<a name='Cat.ServiceRequests.Decorators.Validation.Extensions.ServiceCollectionExtensions.AddCatServiceRequestsModuleValidationDecorator(thisSystem.IServiceProvider,bool,System.Nullable_int_).serviceProvider'></a>
 
 `serviceProvider` [System\.IServiceProvider](https://learn.microsoft.com/en-us/dotnet/api/system.iserviceprovider 'System\.IServiceProvider')
 
 Must be able to resolve [ICatDecoratorFactoryBuilder](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/ICatDecoratorFactoryBuilder.md 'Cat\.Decorators\.Abstractions\.ICatDecoratorFactoryBuilder')\.
 
-<a name='Cat.ServiceRequests.Decorators.Validation.Extensions.ServiceCollectionExtensions.AddCatServiceRequestsModuleValidationDecorator(thisSystem.IServiceProvider,bool).validationRequired'></a>
+<a name='Cat.ServiceRequests.Decorators.Validation.Extensions.ServiceCollectionExtensions.AddCatServiceRequestsModuleValidationDecorator(thisSystem.IServiceProvider,bool,System.Nullable_int_).validationRequired'></a>
 
 `validationRequired` [System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')
 
 When `true`, a request without a validator counts as a failure\.
+
+<a name='Cat.ServiceRequests.Decorators.Validation.Extensions.ServiceCollectionExtensions.AddCatServiceRequestsModuleValidationDecorator(thisSystem.IServiceProvider,bool,System.Nullable_int_).order'></a>
+
+`order` [System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')
+
+Where the decorator sits, from the outside in\. The default is [Validation](../../../Cat.Decorators/namespaces/Cat.Decorators.Abstractions/CatDecoratorOrder.Validation.md 'Cat\.Decorators\.Abstractions\.CatDecoratorOrder\.Validation')\.
 
 #### Returns
 [System\.IServiceProvider](https://learn.microsoft.com/en-us/dotnet/api/system.iserviceprovider 'System\.IServiceProvider')  

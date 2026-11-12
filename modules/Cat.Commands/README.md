@@ -274,6 +274,8 @@ var app = builder.Build();
 app.Services.AddCatCommandsModuleLoggingDecorator();
 ```
 
+The decorator uses `CatDecoratorOrder.Logging`. Pass `order` to use another number. See [Decorator order](../Cat.Decorators/README.md#decorator-order) for the table.
+
 What the logging decorator does:
 
 - **Start and end:** Logs `Start handling Command {commandName}` and `Finished handling Command {commandName}` at debug level for every handler.

@@ -1,7 +1,7 @@
 ../../../Cat.Queries/namespaces/Cat.Queries.Decorators.Logging/
 N:Cat.Queries.Decorators.Logging|Cat.Queries.Decorators.Logging.md|Cat.Queries.Decorators.Logging
 T:Cat.Queries.Decorators.Logging.LoggingDecorator|LoggingDecorator.md|LoggingDecorator
-M:Cat.Queries.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatQueriesModuleLoggingDecorator(System.IServiceProvider)|ServiceCollectionExtensions.AddCatQueriesModuleLoggingDecorator.UDX00CWZ9O6EWJZIO2BK5PZC5.md|AddCatQueriesModuleLoggingDecorator(this IServiceProvider)
+M:Cat.Queries.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatQueriesModuleLoggingDecorator(System.IServiceProvider,System.Nullable{System.Int32})|ServiceCollectionExtensions.AddCatQueriesModuleLoggingDecorator.JILG6B05P7P9XGQUA64H4WLGE.md|AddCatQueriesModuleLoggingDecorator(this IServiceProvider, Nullable<int>)
 N:Cat.Queries.Decorators.Logging.Extensions|Cat.Queries.Decorators.Logging.Extensions.md|Cat.Queries.Decorators.Logging.Extensions
 T:Cat.Queries.Decorators.Logging.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
 F:Cat.Queries.Decorators.Logging.LoggingDecorator.CatQueryHandler`2._innerHandler|LoggingDecorator.CatQueryHandler_TQuery,TQueryResult_._innerHandler.md|_innerHandler

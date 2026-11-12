@@ -38,4 +38,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Methods | |
 | :--- | :--- |
-| [AddCatCommandsModuleLoggingDecorator\(this IServiceProvider\)](ServiceCollectionExtensions.AddCatCommandsModuleLoggingDecorator.UKETB5C345O0609V5YADR9Q25.md 'Cat\.Commands\.Decorators\.Logging\.Extensions\.ServiceCollectionExtensions\.AddCatCommandsModuleLoggingDecorator\(this System\.IServiceProvider\)') | Adds the logging decorator to all command handlers, with or without a result\. |
+| [AddCatCommandsModuleLoggingDecorator\(this IServiceProvider, Nullable&lt;int&gt;\)](ServiceCollectionExtensions.AddCatCommandsModuleLoggingDecorator.Y9BXRO85BPGW2INFC372WVNL8.md 'Cat\.Commands\.Decorators\.Logging\.Extensions\.ServiceCollectionExtensions\.AddCatCommandsModuleLoggingDecorator\(this System\.IServiceProvider, System\.Nullable\<int\>\)') | Adds the logging decorator to all command handlers, with or without a result\. |

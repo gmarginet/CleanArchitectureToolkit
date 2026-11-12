@@ -17,12 +17,14 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="serviceProvider">Must be able to resolve <see cref="ICatDecoratorFactoryBuilder"/>.</param>
     /// <param name="validationRequired">When <c>true</c>, a request without a validator counts as a failure.</param>
+    /// <param name="order">Where the decorator sits, from the outside in. The default is <see cref="CatDecoratorOrder.Validation"/>.</param>
     /// <returns>The same service provider, so calls can be chained.</returns>
-    public static IServiceProvider AddCatServiceRequestsModuleValidationDecorator(this IServiceProvider serviceProvider, bool validationRequired = false)
+    public static IServiceProvider AddCatServiceRequestsModuleValidationDecorator(this IServiceProvider serviceProvider, bool validationRequired = false, int? order = null)
     {
         var decoratorFactory = serviceProvider.GetRequiredService<ICatDecoratorFactoryBuilder>();
-        decoratorFactory.AddDecorator(typeof(ICatServiceRequestHandler<>), typeof(ValidationDecorator.CatServiceRequestHandler<>), new CatDecoratorParameter("validationRequired", validationRequired));
-        decoratorFactory.AddDecorator(typeof(ICatServiceRequestHandler<,>), typeof(ValidationDecorator.CatServiceRequestHandler<,>), new CatDecoratorParameter("validationRequired", validationRequired));
+        var decoratorOrder = order ?? CatDecoratorOrder.Validation;
+        decoratorFactory.AddDecorator(typeof(ICatServiceRequestHandler<>), typeof(ValidationDecorator.CatServiceRequestHandler<>), decoratorOrder, new CatDecoratorParameter("validationRequired", validationRequired));
+        decoratorFactory.AddDecorator(typeof(ICatServiceRequestHandler<,>), typeof(ValidationDecorator.CatServiceRequestHandler<,>), decoratorOrder, new CatDecoratorParameter("validationRequired", validationRequired));
         return serviceProvider;
     }
 }

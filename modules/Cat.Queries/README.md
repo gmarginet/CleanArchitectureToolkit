@@ -231,6 +231,8 @@ var app = builder.Build();
 app.Services.AddCatQueriesModuleLoggingDecorator();
 ```
 
+The decorator uses `CatDecoratorOrder.Logging`. Pass `order` to use another number. See [Decorator order](../Cat.Decorators/README.md#decorator-order) for the table.
+
 What the logging decorator does:
 
 - **Start and end:** Logs the start and the end of every handler at debug level, with the name of the query.

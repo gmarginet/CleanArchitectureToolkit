@@ -38,4 +38,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Methods | |
 | :--- | :--- |
-| [AddCatServiceRequestsModuleValidationDecorator\(this IServiceProvider, bool\)](ServiceCollectionExtensions.AddCatServiceRequestsModuleValidationDecorator.EFUMT7SWB0UT2U0WC4YIBCWE7.md 'Cat\.ServiceRequests\.Decorators\.Validation\.Extensions\.ServiceCollectionExtensions\.AddCatServiceRequestsModuleValidationDecorator\(this System\.IServiceProvider, bool\)') | Adds the validation decorator to all service request handlers\. |
+| [AddCatServiceRequestsModuleValidationDecorator\(this IServiceProvider, bool, Nullable&lt;int&gt;\)](ServiceCollectionExtensions.AddCatServiceRequestsModuleValidationDecorator.WCULTOBPNH9MT7GHC2NP8ABEB.md 'Cat\.ServiceRequests\.Decorators\.Validation\.Extensions\.ServiceCollectionExtensions\.AddCatServiceRequestsModuleValidationDecorator\(this System\.IServiceProvider, bool, System\.Nullable\<int\>\)') | Adds the validation decorator to all service request handlers\. |

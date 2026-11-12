@@ -30,7 +30,6 @@
 
 Registers the inbox store on the given context\.
 The context must call [AddCatInbox\(this ModelBuilder\)](ModelBuilderExtensions.AddCatInbox.E9EHKR34AM1DFIZQXF0V8XE9A.md 'Cat\.EventProcessor\.Inbox\.EFCore\.ModelBuilderExtensions\.AddCatInbox\(this Microsoft\.EntityFrameworkCore\.ModelBuilder\)') in `OnModelCreating`\.
-Call [UseCatEventProcessorInbox\(this IServiceProvider\)](ServiceCollectionExtensions.UseCatEventProcessorInbox.9O8PEZ49E818LW3Y72IIATU4F.md 'Cat\.EventProcessor\.Inbox\.EFCore\.Extensions\.ServiceCollectionExtensions\.UseCatEventProcessorInbox\(this System\.IServiceProvider\)') on the built service provider to switch the decorator on\.
 
 ```csharp
 public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddCatEventProcessorInbox<TDbContext>(this Microsoft.Extensions.DependencyInjection.IServiceCollection services)

@@ -1,7 +1,7 @@
 ../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Decorators.Logging/
 N:Cat.ServiceRequests.Decorators.Logging|Cat.ServiceRequests.Decorators.Logging.md|Cat.ServiceRequests.Decorators.Logging
 T:Cat.ServiceRequests.Decorators.Logging.LoggingDecorator|LoggingDecorator.md|LoggingDecorator
-M:Cat.ServiceRequests.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatServiceRequestsModuleLoggingDecorator(System.IServiceProvider)|ServiceCollectionExtensions.AddCatServiceRequestsModuleLoggingDecorator.ASTEGMP817ISXMNRQ0RK8E3GD.md|AddCatServiceRequestsModuleLoggingDecorator(this IServiceProvider)
+M:Cat.ServiceRequests.Decorators.Logging.Extensions.ServiceCollectionExtensions.AddCatServiceRequestsModuleLoggingDecorator(System.IServiceProvider,System.Nullable{System.Int32})|ServiceCollectionExtensions.AddCatServiceRequestsModuleLoggingDecorator.FY1R9AHG8HI6QEUSHSFYEW9KD.md|AddCatServiceRequestsModuleLoggingDecorator(this IServiceProvider, Nullable<int>)
 N:Cat.ServiceRequests.Decorators.Logging.Extensions|Cat.ServiceRequests.Decorators.Logging.Extensions.md|Cat.ServiceRequests.Decorators.Logging.Extensions
 T:Cat.ServiceRequests.Decorators.Logging.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
 F:Cat.ServiceRequests.Decorators.Logging.LoggingDecorator.CatServiceRequestHandler`1._innerHandler|LoggingDecorator.CatServiceRequestHandler_TRequest_._innerHandler.md|_innerHandler

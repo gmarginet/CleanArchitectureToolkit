@@ -38,4 +38,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Methods | |
 | :--- | :--- |
-| [AddCatServiceRequestsModuleActivitySourceDecorator\(this IServiceProvider\)](ServiceCollectionExtensions.AddCatServiceRequestsModuleActivitySourceDecorator.7ZCAOEB1KRNMK86JYYB0BVIA9.md 'Cat\.ServiceRequests\.Decorators\.ActivitySource\.Extensions\.ServiceCollectionExtensions\.AddCatServiceRequestsModuleActivitySourceDecorator\(this System\.IServiceProvider\)') | Adds the activity source decorator to all service request handlers\. |
+| [AddCatServiceRequestsModuleActivitySourceDecorator\(this IServiceProvider, Nullable&lt;int&gt;\)](ServiceCollectionExtensions.AddCatServiceRequestsModuleActivitySourceDecorator.78AFY0KETM5K8NFAII55I5QA4.md 'Cat\.ServiceRequests\.Decorators\.ActivitySource\.Extensions\.ServiceCollectionExtensions\.AddCatServiceRequestsModuleActivitySourceDecorator\(this System\.IServiceProvider, System\.Nullable\<int\>\)') | Adds the activity source decorator to all service request handlers\. |

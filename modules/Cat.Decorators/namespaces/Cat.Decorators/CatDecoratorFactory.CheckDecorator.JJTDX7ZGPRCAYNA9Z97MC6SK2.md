@@ -26,34 +26,20 @@
   
 ##### >> [Cat\.Decorators Assembly](index.md 'index') >> [Cat\.Decorators Namespace](Cat.Decorators.md 'Cat\.Decorators') >> [CatDecoratorFactory Class](CatDecoratorFactory.md 'Cat\.Decorators\.CatDecoratorFactory')
 
-## CatDecoratorFactory\.AddDecorator\(Type, Type, Dictionary\<string,object\>\) Method
-
-Adds a decorator for a service\. The first decorator you add is the innermost one\.
+## CatDecoratorFactory\.CheckDecorator\(Type, Type\) Method
 
 ```csharp
-public void AddDecorator(System.Type serviceType, System.Type decoratorType, System.Collections.Generic.Dictionary<string,object>? decoratorParameterDictionary);
+private static string? CheckDecorator(System.Type serviceType, System.Type decoratorType);
 ```
 #### Parameters
 
-<a name='Cat.Decorators.CatDecoratorFactory.AddDecorator(System.Type,System.Type,System.Collections.Generic.Dictionary_string,object_).serviceType'></a>
+<a name='Cat.Decorators.CatDecoratorFactory.CheckDecorator(System.Type,System.Type).serviceType'></a>
 
 `serviceType` [System\.Type](https://learn.microsoft.com/en-us/dotnet/api/system.type 'System\.Type')
 
-The open generic service type\.
-
-<a name='Cat.Decorators.CatDecoratorFactory.AddDecorator(System.Type,System.Type,System.Collections.Generic.Dictionary_string,object_).decoratorType'></a>
+<a name='Cat.Decorators.CatDecoratorFactory.CheckDecorator(System.Type,System.Type).decoratorType'></a>
 
 `decoratorType` [System\.Type](https://learn.microsoft.com/en-us/dotnet/api/system.type 'System\.Type')
 
-The open generic decorator type\. It needs exactly one public constructor\.
-
-<a name='Cat.Decorators.CatDecoratorFactory.AddDecorator(System.Type,System.Type,System.Collections.Generic.Dictionary_string,object_).decoratorParameterDictionary'></a>
-
-`decoratorParameterDictionary` [System\.Collections\.Generic\.Dictionary&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2 'System\.Collections\.Generic\.Dictionary\`2')[System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')[,](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2 'System\.Collections\.Generic\.Dictionary\`2')[System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2 'System\.Collections\.Generic\.Dictionary\`2')
-
-Constructor values by parameter name, or `null` for none\.
-
-#### Exceptions
-
-[System\.ArgumentException](https://learn.microsoft.com/en-us/dotnet/api/system.argumentexception 'System\.ArgumentException')  
-The service type or the decorator type isn't an open generic type\.
+#### Returns
+[System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
