@@ -132,7 +132,7 @@ Recommendation: counts, durations and failure counts per service request, and th
 
 <!-- region start: Question 5-->
 #### Question 5
-Do we want one naming scheme for activity sources, meters, tags and span names? The `Cat.*` prefix is the start, and today it is not consistent: the workflow source is `Cat.FluentWorkFlows` (see question 4 in [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md)). The options:
+Do we want one naming scheme for activity sources, meters, tags and span names? The `Cat.*` prefix is the start, and today it is not consistent: the workflow source is `Cat.FluentWorkFlows`, which is renamed to `Cat.FluentWorkflows` as decided in [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md). The options:
 - **Yes, one scheme:** source and meter names equal the module name (`Cat.Messaging`), tags in a `cat.` prefix (`cat.job.name`). Cost: a rename of a few existing names.
 - **No scheme,** each module picks. Cost: a developer cannot predict names.
 
@@ -183,7 +183,7 @@ Do we want a rule for personal data in telemetry? Personal data must stay out of
 - **A filter** that removes known tags (such as `user.email`) before export. Cost: a list of names that is never complete.
 - **Both.**
 
-Recommendation: both, with a small filter on a short list of tag names. It also helps with question 5 in [Cat.Auditing.md](Cat.Auditing.md).
+Recommendation: both, with a small filter on a short list of tag names.
 <!-- region end: Question 10-->
 
 <!-- region start: Question 11-->

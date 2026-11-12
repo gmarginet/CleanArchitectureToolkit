@@ -190,7 +190,7 @@ Tests need to move time. How do we support `TimeProvider`? The options:
 - **Pass the `TimeProvider` into the Polly pipeline** (Polly v8 supports it). Tests use `FakeTimeProvider`. Cost: none.
 - **Not supported.** Cost: tests wait for real delays.
 
-Recommendation: pass it in. It is the same answer as question 11 in [Cat.Scheduling.md](Cat.Scheduling.md), and `Cat.UnitTesting` points to the Microsoft `FakeTimeProvider`.
+Recommendation: pass it in. It is the same answer as the decision on time in [Cat.Scheduling.md](Cat.Scheduling.md), and `Cat.UnitTesting` points to the Microsoft `FakeTimeProvider`.
 <!-- region end: Question 11-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

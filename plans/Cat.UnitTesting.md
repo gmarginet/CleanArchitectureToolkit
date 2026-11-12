@@ -32,7 +32,7 @@
 # Plans for `Cat.UnitTesting` <!-- omit in toc -->  
 
 <!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catunittesting)
+[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-catunittesting)
 <!-- region end: StatusBadge-->
 
 ## Table of contents <!-- omit in toc -->  
@@ -95,6 +95,13 @@ From the existing modules:
 - **No database.** The unit tests never need a database.
 - **Integration tests.** Out of scope for now. If integration testing comes, it is a separate module.
 - **Own tests.** The fakes have tests of their own.
+- **Order of the doubles.** Only what a test needs now, as the list shows. The order is the move of `Cat.NUnit`, then the command and query fakes, then the event ones, then the response asserts. The other doubles follow when the module that owns the interface gets built or a test needs them.
+- **Project names.** `Cat.UnitTesting.<Module>` for a fake, such as `Cat.UnitTesting.Commands`, and `Cat.UnitTesting.NUnit` for the base class.
+- **Typed commands.** The generic fake has a function overload, `Respond<TCommand>(command => response)`, next to a fixed response. It covers both command shapes.
+- **Fakes stay dumb.** A fake returns what the test says. It fills no ids and sets no timestamps.
+- **Audience.** Developers who use the toolkit, and the repository tests. The repository tests are the first consumers, as the demo is for the other modules.
+- **Cat.UnitTesting.NUnit.** A package that targets the latest stable .NET and holds `UnitTestBase`. The neutral fakes stay on `netstandard2.0`.
+- **Clock.** No clock of our own. Tests use `FakeTimeProvider` of Microsoft, and the readme points to it. The two `FakeTime` copies in the test projects are replaced.
 
 #### The list of doubles
 Checked in the test projects of the demo and the repository. "Needed now" means one of our test projects has its own copy today.
@@ -129,60 +136,5 @@ The fake user waits for `Cat.Authorization`, and the messaging fake for `Cat.Mes
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-Which doubles do we build first? Do we build the fakes for every module that has abstractions, or only the main ones?
-- **Everything up front.** A project for every module with a processor or an aggregator, before a test needs it. Cost: a lot of code nobody uses yet, and a design that follows guesses.
-- **Only what a test needs now.** Start with the doubles marked "Needed now" in the list of doubles, and add the others when the module that owns the interface gets built or a test needs it. The Aspire plan did the same for the API client.
-
-Recommendation: only what is needed now, as the list shows. Order: the move of `Cat.NUnit`, then the command and query fakes, then the event ones, then the response asserts.
-<!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-Do we agree with the project names? The list of doubles proposes `Cat.UnitTesting.<Module>` per module and `Cat.UnitTesting.NUnit` for the base class. It matters because the names become package names. The options:
-- **`Cat.UnitTesting.<Module>`,** for example `Cat.UnitTesting.Commands`. It matches the module name `Cat.UnitTesting`, and the namespace folder structure stays simple. Cost: a long name, and `Cat.UnitTesting.Responses` reads close to the responses module.
-- **`Cat.<Module>.Testing`,** for example `Cat.Commands.Testing`. The fake lives next to the module it fakes. Cost: it spreads the fakes over the other modules, and a module owns test code. It also breaks the decision to have one module named `Cat.UnitTesting`.
-
-Recommendation: the proposed names. They follow the Decided list and keep every fake in one module.
-<!-- region end: Question 2-->
-
-<!-- region start: Question 3-->
-#### Question 3
-How does the generic fake handle a typed command, one that returns a result? The Commands plan decided on the typed command, and the result properties on commands are gone. The Orders fake now answers the typed create order command with the order id and number, and it has a second pair of `Process` methods for a command with a result. The generic fake can take a function per command type, `Respond<TCommand>(command => response)`, instead of only a fixed response. A function also works for a typed command, since it can build the result from the command.
-
-Recommendation: build the function overload. It is small, and it covers both command shapes.
-<!-- region end: Question 3-->
-
-<!-- region start: Question 4-->
-#### Question 4
-Do the fakes act like the real thing, by filling ids and setting timestamps? The owner said the developer controls the output.
-
-Recommendation: stay dumb on purpose. The fake returns what the test says, and the test fills what it needs. Then a fake never hides a bug in a test.
-<!-- region end: Question 4-->
-
-<!-- region start: Question 5-->
-#### Question 5
-Who is the audience: developers who use the toolkit, the repository tests, or both?
-
-Recommendation: both. The repository tests are the first consumers of the package, the same way the demo is the first consumer of the other modules.
-<!-- region end: Question 5-->
-
-<!-- region start: Question 6-->
-#### Question 6
-Does the moved `Cat.NUnit` become a package in this module? It is not packable today. It targets `net10.0` and references NUnit. Which target framework do the NUnit parts use? The NUnit parts may need the latest .NET, and the neutral parts target `netstandard2.0` where possible. The options:
-- **Yes, a package targeting the latest stable .NET.** `Cat.UnitTesting.NUnit` is packable and holds `UnitTestBase`. Cost: the base class pulls in a service provider and NUnit as dependencies of a package.
-- **Yes, targeting `netstandard2.0`.** Cost: NUnit 4 and `Microsoft.Extensions.DependencyInjection` both work with it, but it limits the code to older APIs for no gain.
-- **No, stay repository only.** Cost: a developer must copy `UnitTestBase`, which this module exists to avoid.
-
-Recommendation: yes, a package targeting the latest stable .NET, as the rule for projects that need more than `netstandard2.0` says. The neutral fakes stay on `netstandard2.0`.
-<!-- region end: Question 6-->
-
-<!-- region start: Question 7-->
-#### Question 7
-Do we use `FakeTimeProvider` of Microsoft and write no clock of our own? Two test projects have their own `FakeTime` today.
-
-Recommendation: yes.
-<!-- region end: Question 7-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

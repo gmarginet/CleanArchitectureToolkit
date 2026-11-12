@@ -32,7 +32,7 @@
 # Plans for `Demo` <!-- omit in toc -->  
 
 <!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-demo)
+[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-demo)
 <!-- region end: StatusBadge-->
 
 ## Table of contents <!-- omit in toc -->  
@@ -69,26 +69,18 @@ Notifications and scheduling. The Notifications service and `Cat.Scheduling`. Th
 - `Cat.Scheduling` does not exist yet. Its plan is [Cat.Scheduling.md](Cat.Scheduling.md). The plan recommends that a one-off timeout, such as the cancel after 24 hours, goes through a scheduled message of the bus and not through the Scheduler.
 
 #### Needs
-The module plan [Cat.Scheduling.md](Cat.Scheduling.md) answered and built. A decision on where Notifications stores its data.
+The module plan [Cat.Scheduling.md](Cat.Scheduling.md) built.
 
 #### Done when
 An order confirmed mail is sent. The nightly jobs run from the Scheduler, and the development endpoint can go.
 
 #### Decided
 - **Counter cleanup.** The Scheduler runs the `CleanUpOrderCounters` service request every night. Until the Scheduler exists, the development endpoint triggers it.
+- **Notifications data.** Notifications has a database, built code first with EF Core migrations, like Orders. A table of sent mails, keyed by order and kind, makes a repeated message safe and shows idempotent handling. The scheduler can use the same database for its claim table and run history, see [Cat.Scheduling.md](Cat.Scheduling.md).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-Where does Notifications store its data, and how is it built? This is the blocking question of the phase. The decision waits for the design of `Cat.Scheduling` (see [Cat.Scheduling.md](Cat.Scheduling.md)), but it can be made earlier if the answer is "no database". What does Notifications need to remember? Probably which mail was sent for which order, so a repeated message does not send a second mail. The options:
-- **A.** No database. The service sends a mail for every message it gets. Cost: a repeated message sends a second mail, and the service shows nothing about what it sent.
-- **B.** A database, built code first with EF Core migrations, like Orders. Cost: a migration and a schema to keep, but it follows the pattern of the other services.
-- **C.** A database, built database first with scaffolding, like Inventory. Cost: SQL scripts to maintain. It shows the other style, and the demo already has that style in Inventory.
-
-Recommendation: B. It shows idempotent handling (a sent mail table keyed by order and kind), and the code first style is the one the toolkit's `Cat.EFCore` module supports. Pick A if you want Notifications to stay small. Pick C only if you want a second database first example, which Inventory already is.
-<!-- region end: Question 1-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->
 
@@ -105,7 +97,6 @@ The showcases:
 - `Cat.Caching`: cached catalog queries.
 - `Cat.Dapper`: fast read-only order overview queries, next to EF Core for writes.
 - `Cat.EFCore` transactions: saving an order and its lines in one go.
-- `Cat.Auditing`: who changed a price or cancelled an order.
 - `Cat.Authorization`: customers see their own orders, and admins edit the catalog.
 - `Cat.Sagas`: a payment over messages.
 - `Cat.UnitTesting`: the unit tests of the demo.
@@ -114,7 +105,7 @@ Every module is designed from what the demo shows, and the module plan of each i
 
 #### What exists today
 - None of these modules exists yet. Each has a plan with the same name in this folder, such as [Cat.Caching.md](Cat.Caching.md).
-- Orders has an event subscriber, `OrderAuditSubscriber`, that writes an audit record when an order event happens. It is a first sketch of what `Cat.Auditing` could replace.
+- Orders has an event subscriber, `OrderAuditSubscriber`, that writes an audit record when an order event happens. It stays as the example of an event subscriber. `Cat.Auditing` was dropped. A developer who wants to see who changed a row adds a `LastUpdatedBy` column to the temporal table.
 - Catalog keeps every old price in a temporal table, which answers "what was the price then". It does not say who changed it.
 - Ownership of orders is a filter in the queries, and the demo has its own `ICurrentUser` in the core service of Orders.
 - The Catalog save endpoint requires the `admin` policy. A decorator on `BookSaveRequest` and a test that a user who is not an admin gets a 403 in `CoreService` do not exist yet.

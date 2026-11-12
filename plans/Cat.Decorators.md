@@ -59,7 +59,7 @@ From the module README:
 - `AddDecorator(serviceType, decoratorType, parameters)` only appends to a list, and the factory wraps in list order. There is no way to give a decorator a position.
 
 From the other plans:
-- [Cat.EFCore.md](Cat.EFCore.md) plans a transaction decorator for commands.
+- [Cat.EFCore.md](Cat.EFCore.md) planned a transaction decorator for commands. The owner decided that the command base class only gives the handler the `DbContext`, and the developer owns the transaction. Whether the decorator stays is open, see question 1.1 there. The question in this plan about the default order of the decorators names a transaction decorator, so it depends on that answer.
 - [Cat.Authorization.md](Cat.Authorization.md) suggests an admin check as a decorator on a service request.
 
 From the demo:
@@ -120,10 +120,10 @@ Is the proposed default order right: tracing, logging, authorization, validation
 6. transaction, for commands only and next to the handler, so it never wraps the cache (see [Cat.EFCore.md](Cat.EFCore.md)).
 
 The demo adds validation, logging and tracing in that sequence today, which gives tracing, logging, validation from the outside in. So the proposal matches what the demo does now. Two points are worth a look before you confirm:
-- **Auditing has no place yet.** The plan of `Cat.Auditing` does not say. It probably belongs after authorization and next to the transaction, so a failed save is not recorded as a change. Cost of guessing now: a wrong constant later is a breaking change in behavior.
+- **Auditing has no place.** `Cat.Auditing` was dropped, so no decorator needs a place for it.
 - **Resilience has no place yet.** A retry decorator must wrap the transaction or sit outside it, never inside, or a retry runs in a rolled back transaction. See [Cat.Resilience.md](Cat.Resilience.md).
 
-Recommendation: confirm the six, leave a gap in the numbers for auditing and resilience (such as 100 for tracing, 200 for logging, 300 for authorization, 400 for validation, 500 for caching, 600 for transaction, and nothing yet at the gaps), and decide those two when their plans are answered.
+Recommendation: confirm the six, leave a gap in the numbers for resilience (such as 100 for tracing, 200 for logging, 300 for authorization, 400 for validation, 500 for caching, 600 for transaction, and nothing yet at the gaps), and decide it when its plan is answered.
 <!-- region end: Question 3-->
 
 <!-- region start: Question 4-->

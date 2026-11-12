@@ -81,7 +81,7 @@ From the module conventions:
 #### Decided
 - **Place.** A decorator on service requests.
 - **Identity.** The business logic only knows the user abstraction, never `HttpContext`.
-- **User abstraction.** `ICatUser` lives in `Cat.Authorization.Abstractions`, renamed from `ICurrentUser` of the demo. This module owns it. `Cat.Auditing` and other modules reference that project. The core service may reference it, because it only references abstractions. `Contracts` does not.
+- **User abstraction.** `ICatUser` lives in `Cat.Authorization.Abstractions`, renamed from `ICurrentUser` of the demo. This module owns it. Other modules reference that project. The core service may reference it, because it only references abstractions. `Contracts` does not.
 - **Two layers.** The gateway and the service both validate the token.
 - **Until the module exists.** The demo keeps its own `ICurrentUser` and an owner filter in the queries. When `Cat.Authorization.Abstractions` exists, the demo switches to `ICatUser`.
 <!-- region end: PhaseDescription-->
@@ -90,7 +90,7 @@ From the module conventions:
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 1-->
 #### Question 1
-Which members does `ICatUser` get? This is the blocking question, because `Cat.Auditing`, `Cat.UnitTesting`, the demo and the event processor all build on it. The demo has `UserId`, `Name`, `Email` and `IsAdmin`. `IsAdmin` is a demo rule. The `sub` of Keycloak is a string, and the demo stores it in `Customer.ExternalId`. The options:
+Which members does `ICatUser` get? This is the blocking question, because `Cat.UnitTesting`, the demo and the event processor all build on it. The demo has `UserId`, `Name`, `Email` and `IsAdmin`. `IsAdmin` is a demo rule. The `sub` of Keycloak is a string, and the demo stores it in `Customer.ExternalId`. The options:
 - **A small fixed set:** `UserId` (string), `Name`, `IsAuthenticated` and `IsInRole(string)`. Cost: no access to other claims, so a rule on a custom claim cannot be written.
 - **The small set plus `Claims`** (a read only list of claims). Cost: the abstraction exposes the claim concept of .NET, and a rule can depend on a claim name, which makes it less portable.
 - **The demo set as it is,** with `Email` and `IsAdmin`. Cost: `IsAdmin` is a demo rule, and `Email` is personal data that auditing does not want.
@@ -100,7 +100,7 @@ Recommendation: the small set plus `Claims`. `Email` and `IsAdmin` stay as exten
 
 <!-- region start: Question 2-->
 #### Question 2
-`Cat.Auditing` references `Cat.Authorization.Abstractions` only to know who the user is. That is fine while the project stays tiny. If it grows, a neutral name may be better. The options:
+Other modules reference `Cat.Authorization.Abstractions` only to know who the user is. That is fine while the project stays tiny. If it grows, a neutral name may be better. The options:
 - **Keep the name.** The toolbox rule says a shared abstraction lives in the `Abstractions` project of the module that owns it, and this module owns `ICatUser`. Cost: a reader may think a package called Authorization is heavy.
 - **A neutral project, such as `Cat.Users.Abstractions`.** Cost: a new module just for one interface, and it breaks the rule above.
 
@@ -129,11 +129,11 @@ Recommendation: the ASP.NET Core project, plus a small accessor that a worker us
 
 <!-- region start: Question 5-->
 #### Question 5
-The abstractions project is small. Do we build it first, before the decorator, so the demo, `Cat.Auditing` and `Cat.UnitTesting` can use it early? The options:
+The abstractions project is small. Do we build it first, before the decorator, so the demo and `Cat.UnitTesting` can use it early? The options:
 - **Yes, first.** `Cat.Authorization.Abstractions` with `ICatUser` alone, and the demo switches to it. Cost: the module is half built for a while, which is fine for a toolbox.
-- **Together with the decorator.** Cost: three other plans wait for it.
+- **Together with the decorator.** Cost: other plans wait for it.
 
-Recommendation: yes, first. It depends on question 1 only, and it unblocks three plans.
+Recommendation: yes, first. It depends on question 1 only, and it unblocks other plans.
 <!-- region end: Question 5-->
 
 <!-- region start: Question 6-->

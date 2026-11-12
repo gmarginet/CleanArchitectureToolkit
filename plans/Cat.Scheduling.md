@@ -32,12 +32,13 @@
 # Plans for `Cat.Scheduling` <!-- omit in toc -->  
 
 <!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catscheduling)
+[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-catscheduling)
 <!-- region end: StatusBadge-->
 
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 - [Phase 1](#phase-1)
+- [Phase 2](#phase-2)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 1-->
@@ -68,8 +69,8 @@ From the demo plan:
 - Work without a user, such as the scheduler, uses a client credentials token.
 
 From the saga plan:
-- A saga needs timeouts, such as "cancel after 24 hours without payment". The scheduler looks for instances whose wait is over and resumes them with a timeout result.
-- That is a moment stored next to the data, not a fixed recurring job. It is a different kind of schedule from a nightly job.
+- A saga needs timeouts, such as "cancel after 24 hours without payment".
+- That is a moment stored next to the data, not a fixed recurring job. It is a different kind of schedule from a nightly job, so it does not belong in this module. See the decision on timeouts below.
 
 From the architecture:
 - Services run as containers in Azure Container Apps. A service can run several instances, so a job must not run twice at the same time.
@@ -88,104 +89,49 @@ From the architecture:
 - **Business logic.** None in the worker.
 - **Time zone.** The demo counter cleanup uses UTC.
 - **Testing.** A development endpoint triggers a run, in debug mode only.
+- **Kinds of schedule.** Only recurring jobs. A one-off moment, such as a saga timeout or "cancel after 24 hours", is done with a scheduled message of the bus, see [Cat.Messaging.md](Cat.Messaging.md) and [Cat.Sagas.md](Cat.Sagas.md). The handler of such a message first checks the order and does nothing when it was paid.
+- **Library.** A small cron parser and our own loop. `Cronos` is the candidate: check its target framework, its licence and that it is maintained. No Quartz.NET and no Hangfire.
+- **One instance runs a job.** A claim in the database of the service. Before a run an instance inserts a row with the job name and the due time, with a unique key on the two. The instance whose insert succeeds runs the job. It sits behind a small interface, so a blob lease can follow later. A service without a database, or with one instance, uses an in-memory version. Container Apps cron jobs do not fit, since the worker runs inside the API.
+- **Missed runs.** A job runs once on startup when the due time passed, not once for every missed time. A setting per job, `RunOnce` or `Skip`, with `RunOnce` as the default. Service requests of a schedule must be safe to run more than once.
+- **Overlap.** When a run is still busy at the next due time, the new run is skipped and a warning is logged. A setting can allow overlap. The claim row has a status, and a time after which a busy row counts as dead.
+- **Run history.** The claim row keeps the job, the due time, the status, the start and end time and the error code. It lives in the service database in an optional project that uses EF Core, like the outbox, and the module works without it in memory. The next due time is computed from the cron expression and is not stored. A history screen is not the job of the module.
+- **User.** A scheduled service request runs as a named system user, such as the service name, so `ICatUser` always has a value, see [Cat.Authorization.md](Cat.Authorization.md). A client credentials token is only for calls to other services. The module knows nothing about the token.
+- **Tracing.** Every run starts a trace activity with the job name, under the source name `Cat.Scheduling`. A metric holds the time of the last run. A health check is optional.
+- **Time.** The module uses `TimeProvider`, and tests use `FakeTimeProvider` of Microsoft, see [Cat.UnitTesting.md](Cat.UnitTesting.md).
+- **Time zones.** Any time zone of `TimeZoneInfo`, set per job, with UTC as the default. The docs say what a job does when daylight saving makes a local time happen twice or not at all. `Cronos` handles it.
+- **Where the jobs are declared.** The module holds a set of extension methods that the API project calls to configure the scheduled jobs, the same way as the API gateway and the event processor.
+- **Override per environment.** `appsettings` can change the cron expression of a job or switch it off with an enabled flag per environment.
+- **Failed runs.** By default a failed `ICatResponse` waits for the next run. The failed response is logged with its error codes and counted in a metric, which is the alert.
+- **Retry in this phase.** A small retry setting per job in this module: a number of retries and a delay, with a growing delay as an option. The default is no retry. A failed run stays failed after the last retry until the next due time. A retry is a new run of the same due time and uses the same claim row, so two instances never retry the same job together. Retry through `Cat.Resilience` comes in phase 2.
+- **Timeouts.** Not part of this module. They wait for scheduled messages in `Cat.Messaging`. This module goes first with recurring jobs, because the demo needs the counter cleanup.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
-Every question has a recommendation. The recommendations are not decisions. They fit with each other, so the owner can say yes or no to each one.
-
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-Which kinds of schedule belong in this module? There are recurring jobs (cron like) and one-off moments (a timeout 24 hours from now). Do both belong here, or only recurring jobs in the first version?
-
-Recommendation: only recurring jobs. A one-off moment is better done by the bus. Azure Service Bus can hold a message until a given time, so Orders sends a "payment expired" message when it places an order, and the event processor delivers it as a service request after 24 hours. The bus keeps the timer, it survives a restart, and with several instances only one gets the message. The handler first checks the order, and does nothing when it was paid, which is how it must work anyway, since the handlers are idempotent. This asks `Cat.Messaging` for scheduled messages, scheduled delivery is decided in [Cat.Messaging.md](Cat.Messaging.md). It also changes the assumption in [Cat.Sagas.md](Cat.Sagas.md) that the scheduler looks for instances past their timeout. Cost: a saga timeout depends on the messaging module, and a scheduled message cannot easily be changed once it is sent.
-<!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-Where do schedules live: in code, in configuration, or stored in a database? Can a job be switched off per environment, for example in development?
-
-Recommendation: in code, with an override in configuration. The `Scheduler` project of the service declares its jobs and a default cron expression, in the style of the endpoints of an API. `appsettings` can change the expression or switch a job off with an enabled flag per environment. In development the development endpoint triggers a run by hand. A database is not needed for the first version. Cost: a change of a schedule in production needs a configuration change, which is fine.
-<!-- region end: Question 2-->
-
-<!-- region start: Question 3-->
-#### Question 3
-Which scheduling library, if any, do we build on? Do we build on an existing one, or write the small part we need?
-
-Recommendation: use a small parser and write our own loop. `Cronos` parses cron expressions, gives the next time and knows time zones. Check its target framework, its licence and that it is maintained. Do not build on Quartz.NET or Hangfire. They bring their own storage and concepts, which fits badly with a toolbox of small parts.
-<!-- region end: Question 3-->
-
-<!-- region start: Question 4-->
-#### Question 4
-How do we make sure only one instance runs a job when a service has several instances? A database lock, a blob lease or a bus message? What do we run in Container Apps?
-
-Recommendation: a claim in the database of the service. Before a run, an instance inserts a row with the job name and the due time, with a unique key on the two. The instance whose insert succeeds runs the job, and the others skip it. This costs one table, and it gives the run history and the missed run check for free, see the next questions. Put it behind a small interface, so a blob lease can follow later. A service without a database, or one that runs one instance, uses an in-memory version. A blob lease needs a storage account and a bus message needs a sender that is itself only once, so both are heavier. Azure Container Apps also has cron jobs as a separate kind of resource. They are not a worker in the API, so they do not fit this module. The worker runs inside the API, as decided, so there is no separate job resource.
-<!-- region end: Question 4-->
-
-<!-- region start: Question 5-->
-#### Question 5
-If the service was down at midnight, does the job run on startup? What happens after a missed run?
-
-Recommendation: run it once on startup when the due time passed. Not once for every missed time. Make it a setting per job, `RunOnce` or `Skip`, with `RunOnce` as the default, since service requests of a schedule must be safe to run more than once, as the counter cleanup is. The claim table tells the module what was missed.
-<!-- region end: Question 5-->
-
-<!-- region start: Question 6-->
-#### Question 6
-What if a run is still busy when the next is due?
-
-Recommendation: skip the new run and write a warning to the log. Two runs of one job at the same time are rarely what a developer wants. A setting can allow it. The claim row has a status, so the module knows a run is busy. A crashed instance would leave the row busy for ever, so the row needs a time after which it counts as dead.
-<!-- region end: Question 6-->
-
-<!-- region start: Question 7-->
-#### Question 7
-A failed `ICatResponse` means what for the schedule: try again soon, wait for the next run, or alert?
-
-Recommendation: wait for the next run by default. Log the failed response with its error codes and count it in a metric, which is the alert. A setting per job, such as a retry after some minutes, can come later. Immediate retries risk a storm against a broken dependency. The bus is not involved, so the retry rules of the event processor do not apply.
-<!-- region end: Question 7-->
-
-<!-- region start: Question 8-->
-#### Question 8
-Does the module keep run history and the next due time? Where? Is run history something the module must store?
-
-Recommendation: keep the small amount that the claim needs: the job, the due time, the status, the start and end time and the error code. It lives in the service database in an optional project that uses EF Core, like the outbox, and the module works without it in memory. The next due time is computed from the cron expression and is not stored. A rich history screen is not the job of the module. Where the notifications service stores its own data is a separate decision, see the demo plan.
-<!-- region end: Question 8-->
-
-<!-- region start: Question 9-->
-#### Question 9
-Which user does a scheduled service request run as? A system user, or a client credentials token?
-
-Recommendation: both, for different things. Inside the service the request runs as a named system user, such as the service name, so `ICatUser` always has a value, see [Cat.Authorization.md](Cat.Authorization.md). A client credentials token is only for calls to other services, as the demo plan says, and the owner decided that a system that sends messages without a user has its own token, see [Cat.EventProcessor.md](Cat.EventProcessor.md). The Keycloak realm of the demo has no client for that yet. The scheduler module needs to know nothing about the token. The client call that sends it does.
-<!-- region end: Question 9-->
-
-<!-- region start: Question 10-->
-#### Question 10
-Does a run show up in traces, and does a missed run show up in health checks?
-
-Recommendation: every run starts a trace activity with the job name, under the source name `Cat.Scheduling`, so it shows in the dashboard like the other CAT modules. The service request inside it is traced already. A health check is optional: unhealthy when a job has not run for twice its interval. The metric with the time of the last run is cheaper and it is enough at first.
-<!-- region end: Question 10-->
-
-<!-- region start: Question 11-->
-#### Question 11
-Do we use `TimeProvider`, so tests can move time?
-
-Recommendation: yes. It is the standard way. Tests use `FakeTimeProvider` of Microsoft, see [Cat.UnitTesting.md](Cat.UnitTesting.md).
-<!-- region end: Question 11-->
-
-<!-- region start: Question 12-->
-#### Question 12
-Which time zones must we support besides UTC?
-
-Recommendation: any time zone of `TimeZoneInfo`, set per job, with UTC as the default. Daylight saving makes a local time happen twice or not at all, so the docs must say what a job does then. `Cronos` handles it.
-<!-- region end: Question 12-->
-
-<!-- region start: Question 13-->
-#### Question 13
-Do we build the timeout part together with `Cat.Sagas`, or first? This follows from question 1, so answer that one first. The options:
-- **Together with `Cat.Sagas`.** Cost: the saga module waits for a scheduler feature that the bus can do better.
-- **First, in this module.** Cost: a second timer next to the bus, and the loop that looks for stored moments.
-- **Neither, the bus holds the timers.** Cost: depends on scheduled messages in `Cat.Messaging` (question 13 there).
-
-Recommendation: neither. Timeouts wait for scheduled messages in `Cat.Messaging`. This module goes first with recurring jobs, because the demo needs the counter cleanup.
-<!-- region end: Question 13-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
+
+<!-- region start: Phase 2-->
+## Phase 2
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+Retry of a failed scheduled run through `Cat.Resilience`.
+
+#### Decided
+- **Retry.** Retry of a failed run goes through `Cat.Resilience`, see [Cat.Resilience.md](Cat.Resilience.md). Phase 1 has a small retry setting per job in this module.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 14-->
+#### Question 14
+What happens to the retry setting of phase 1 when the retry goes through `Cat.Resilience`? The options:
+- **The setting goes away.** A job gets its retry from the decorator of `Cat.Resilience`. Cost: a breaking change in the settings of the module, which is fine while it is in alpha.
+- **The setting stays** as a short way to switch the decorator on for a job. Cost: two ways to do one thing.
+
+Recommendation: the setting goes away. Two retry concepts in one module is what the owner wanted to avoid, and breaking changes are not an issue yet.
+<!-- region end: Question 14-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 2-->
