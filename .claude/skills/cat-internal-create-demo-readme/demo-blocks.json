@@ -9,7 +9,7 @@
     { "name": "Catalog",                "element": "WDRzsEBbpFT88vZ0Z4Ct0", "chapter": "Catalog service",        "detect": { "path": "demo/Cat.Demo.CatalogService" } },
     { "name": "Orders",                 "element": "iCI-Jn38YpZ23TWuRfmWE", "chapter": "Orders service",         "detect": { "path": "demo/Cat.Demo.OrderService" } },
     { "name": "Inventory",              "element": "BMOS81ArgqLkvdO0QLPWe", "chapter": "Inventory service",      "detect": { "path": "demo/Cat.Demo.InventoryService" } },
-    { "name": "Notifications",          "element": "aHCq3RL3oGvk7MusMjO9z", "chapter": null,  "detect": { "path": "demo/Cat.Demo.NotificationService" } },
+    { "name": "Notifications",          "element": "aHCq3RL3oGvk7MusMjO9z", "chapter": "Notification service",  "detect": { "path": "demo/Cat.Demo.NotificationService" } },
     { "name": "Aspire ServiceDefaults", "element": "PPBv5TJU-cIX3XvSVPErx", "chapter": "Aspire ServiceDefaults", "detect": { "path": "demo/Cat.Demo.ServiceDefaults" } },
     { "name": "catalog database",       "element": "JtMvjFgw4gyfTUO20EniT", "chapter": "Catalog service",              "detect": { "path": "demo/Cat.Demo.CatalogService" } },
     { "name": "orders database",        "element": "e8SQo7ftm199fmG9MK9Al", "chapter": "Orders service",              "detect": { "path": "demo/Cat.Demo.OrderService" } },
