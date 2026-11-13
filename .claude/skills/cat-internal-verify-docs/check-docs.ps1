@@ -152,11 +152,12 @@ foreach ($file in $files) {
         if ($inFence) { continue }
 
         # A Markdown table that touches an HTML comment is not rendered on the published site. Keep an empty line between them.
-        if ($inComment) {
+        # Any line with a comment marker counts: a one-line comment, the start or the end of a multi-line comment,
+        # and a comment on the same line as text. The lines inside a multi-line comment are skipped.
+        if ($inComment -and $raw -notmatch '-->') {
             $prevKind = 'other'
         } else {
-            $one = $raw.Trim()
-            $kind = if ($one.StartsWith('<!--') -and $one.EndsWith('-->')) { 'comment' } elseif ($one.StartsWith('|')) { 'table' } else { 'other' }
+            $kind = if ($raw.Trim().StartsWith('|')) { 'table' } elseif ($raw -match '<!--|-->') { 'comment' } else { 'other' }
             if ($prevKind -eq 'comment' -and $kind -eq 'table') { $errors.Add("${file}:$($n - 1) an HTML comment is directly above a table. Put an empty line between them.") }
             if ($prevKind -eq 'table' -and $kind -eq 'comment') { $errors.Add("${file}:$n an HTML comment is directly below a table. Put an empty line between them.") }
             $prevKind = $kind
