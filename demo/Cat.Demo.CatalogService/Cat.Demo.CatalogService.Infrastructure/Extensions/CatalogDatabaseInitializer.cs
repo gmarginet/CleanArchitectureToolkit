@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cat.Demo.CatalogService.DataModels.Entities;
 using Cat.Demo.CatalogService.Infrastructure.DataAccess;
+using Cat.Users.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +12,9 @@ namespace Cat.Demo.CatalogService.Infrastructure.Extensions;
 
 public static class CatalogDatabaseInitializer
 {
+    // The seed is not a person. Its prices belong to the named system user of the service.
+    private static readonly CatUser SeedUser = CatUser.System("catalog");
+
     /// <summary>
     /// Applies the migrations and fills an empty database with a few categories and books.
     /// Call it in development only.
@@ -54,7 +58,7 @@ public static class CatalogDatabaseInitializer
             Title = title,
             Author = author
         };
-        book.BookPrice = new BookPrice { BookId = book.Id, Amount = price };
+        book.BookPrice = new BookPrice { BookId = book.Id, Amount = price, LastUpdatedBy = SeedUser.UserId };
         return book;
     }
 }

@@ -20,7 +20,8 @@ public class BookValidationTests : UnitTestBase
     private readonly FakeQueryProcessor _queryProcessor = new();
     private ICatValidatorProcessor _validatorProcessor = null!;
 
-    protected override void ConfigureServices(ServiceCollection services)
+    // Fully qualified, because the namespace Cat.ServiceCollection.Extensions is in scope through the Api project.
+    protected override void ConfigureServices(Microsoft.Extensions.DependencyInjection.ServiceCollection services)
     {
         services.AddCatCompiledMemberExpressionCache();
         services.AddCatValidatorsModule(typeof(BookModelValidator));

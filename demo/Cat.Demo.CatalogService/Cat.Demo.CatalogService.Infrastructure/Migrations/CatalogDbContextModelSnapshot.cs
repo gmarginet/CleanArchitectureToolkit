@@ -82,6 +82,11 @@ namespace Cat.Demo.CatalogService.Infrastructure.Migrations
                     b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("LastUpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<int>("SequenceId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");

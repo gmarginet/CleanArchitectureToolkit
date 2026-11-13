@@ -7,6 +7,7 @@ using Cat.Demo.CatalogService.DataModels.Entities;
 using Cat.Demo.CatalogService.Infrastructure.DataAccess;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
+using Cat.Users.Abstractions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,10 +19,12 @@ public class BookSaveCommandHandler : ICatCommandHandler<BookSaveCommand>
     private const int UniqueIndexViolation = 2601;
 
     private readonly CatalogDbContext _dbContext;
+    private readonly ICatUser _user;
 
-    public BookSaveCommandHandler(CatalogDbContext dbContext)
+    public BookSaveCommandHandler(CatalogDbContext dbContext, ICatUser user)
     {
         _dbContext = dbContext;
+        _user = user;
     }
 
     public async Task<ICatResponse> HandleAsync(BookSaveCommand command, CancellationToken cancellationToken = default)
@@ -49,12 +52,13 @@ public class BookSaveCommandHandler : ICatCommandHandler<BookSaveCommand>
         {
             if (book.BookPrice is null)
             {
-                book.BookPrice = new BookPrice { BookId = book.Id, Amount = price };
+                book.BookPrice = new BookPrice { BookId = book.Id, Amount = price, LastUpdatedBy = _user.UserId };
             }
             else if (book.BookPrice.Amount != price)
             {
-                // The update is enough. The temporal table keeps the old amount in its history.
+                // The update is enough. The temporal table keeps the old amount and who set it in its history.
                 book.BookPrice.Amount = price;
+                book.BookPrice.LastUpdatedBy = _user.UserId;
             }
         }
 

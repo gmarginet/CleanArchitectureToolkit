@@ -22,12 +22,17 @@
     </ItemGroup>
 
     <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\modules\Cat.Expressions\Cat.Expressions\Cat.Expressions.csproj" />
       <ProjectReference Include="..\..\..\tests\Cat.NUnit\Cat.NUnit.csproj" />
+      <ProjectReference Include="..\Cat.Demo.CatalogService.Api\Cat.Demo.CatalogService.Api.csproj" />
       <ProjectReference Include="..\Cat.Demo.CatalogService.CoreService\Cat.Demo.CatalogService.CoreService.csproj" />
     </ItemGroup>
 

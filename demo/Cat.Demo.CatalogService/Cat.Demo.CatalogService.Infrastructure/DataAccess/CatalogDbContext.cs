@@ -34,6 +34,7 @@ public class CatalogDbContext : DbContext
         modelBuilder.ConfigureCatTemporalEntity<BookPrice>("BookPrice", e =>
         {
             e.Property(x => x.Amount).HasPrecision(10, 2);
+            e.Property(x => x.LastUpdatedBy).HasMaxLength(100);
             e.HasOne<Book>()
                 .WithOne(x => x.BookPrice)
                 .HasForeignKey<BookPrice>(x => x.BookId);

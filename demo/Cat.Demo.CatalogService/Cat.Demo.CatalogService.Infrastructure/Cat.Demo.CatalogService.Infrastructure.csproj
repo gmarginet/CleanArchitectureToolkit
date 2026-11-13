@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Extensions\Cat.EFCore.Extensions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Users\Cat.Users.Abstractions\Cat.Users.Abstractions.csproj" />
       <ProjectReference Include="..\Cat.Demo.CatalogService.CoreService\Cat.Demo.CatalogService.CoreService.csproj" />
       <ProjectReference Include="..\Cat.Demo.CatalogService.DataModels\Cat.Demo.CatalogService.DataModels.csproj" />
     </ItemGroup>

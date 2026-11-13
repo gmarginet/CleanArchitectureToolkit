@@ -17,6 +17,7 @@ using Cat.ServiceRequests.Decorators.ActivitySource.Extensions;
 using Cat.ServiceRequests.Decorators.Logging.Extensions;
 using Cat.ServiceRequests.Decorators.Validation.Extensions;
 using Cat.ServiceRequests.Extensions;
+using Cat.Users.Extensions;
 using Cat.Validators.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -47,6 +48,11 @@ var connectionString = builder.Configuration.GetConnectionString("catalog")
 builder.Services.AddCatDemoCatalogDatabase(connectionString);
 
 var authenticationOn = builder.AddDemoJwtAuthentication();
+if (!authenticationOn)
+{
+    // A plain dotnet run has no token, so every call is the anonymous user.
+    builder.Services.AddCatUsers();
+}
 
 var app = builder.Build();
 app.UseCatMinimalApiModule();
