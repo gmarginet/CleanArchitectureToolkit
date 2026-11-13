@@ -48,7 +48,6 @@
 - [Service Project structure](#service-project-structure)
   - [Overview](#overview)
   - [ServiceName.Api](#servicenameapi)
-  - [Background workers](#background-workers)
   - [ServiceName.CoreService](#servicenamecoreservice)
   - [ServiceName.Infrastructure](#servicenameinfrastructure)
   - [ServiceName.Contracts](#servicenamecontracts)
@@ -293,28 +292,15 @@ It lets you try out the service without the real triggers.
 - Those endpoints simulate a request from the scheduler or from the event processor.  
 - Call one and the service handles it as if the worker triggered it.  
 
-### Background workers
-
-Not all work comes in over HTTP.  
-Background workers handle work that starts on its own, like a timer or a message.  
-
-A worker is not a host and not a project. It has no executable and no project of its own.  
-It is a module that the API switches on with extension methods, and it runs inside the API.  
-
-Like the API, a worker contains no business logic.  
-Every unit of work becomes a service request that the core handles.  
-
 **Scheduler**  
 - Runs work on a schedule, like a nightly cleanup or a periodic import.  
 - Every run triggers a service request.  
-- The API registers it with an extension method.  
+- The API registers it with the extension methods of [Cat.Scheduling](./plans/Cat.Scheduling.md).  
 
 **Event processor**  
 - Listens to Azure Service Bus.  
 - Every incoming message triggers a service request.  
 - The API registers it with the extension methods of [Cat.EventProcessor](./modules/Cat.EventProcessor/README.md).  
-
-Both are optional. Add them only when the service needs them.  
 
 ### ServiceName.CoreService
 
