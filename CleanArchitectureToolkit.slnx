@@ -70,6 +70,10 @@
     <Project Path="modules/Cat.Commands/Cat.Commands.Decorators.Logging/Cat.Commands.Decorators.Logging.csproj" />
     <Project Path="modules/Cat.Commands/Cat.Commands/Cat.Commands.csproj" />
   </Folder>
+  <Folder Name="/modules/Cat.Db.Errors/">
+    <File Path="modules/Cat.Db.Errors/README.md" />
+    <Project Path="modules/Cat.Db.Errors/Cat.Db.Errors.SqlServer/Cat.Db.Errors.SqlServer.csproj" />
+  </Folder>
   <Folder Name="/modules/Cat.Decorators/">
     <File Path="modules/Cat.Decorators/README.md" />
     <Project Path="modules/Cat.Decorators/Cat.Decorators.Abstractions/Cat.Decorators.Abstractions.csproj" />
@@ -166,6 +170,7 @@
     <Project Path="tests/Cat.Api.Client.Tests/Cat.Api.Client.Tests.csproj" />
     <Project Path="tests/Cat.Api.Gateway.Tests/Cat.Api.Gateway.Tests.csproj" />
     <Project Path="tests/Cat.Commands.Tests/Cat.Commands.Tests.csproj" />
+    <Project Path="tests/Cat.Db.Errors.SqlServer.Tests/Cat.Db.Errors.SqlServer.Tests.csproj" />
     <Project Path="tests/Cat.Decorators.Tests/Cat.Decorators.Tests.csproj" />
     <Project Path="tests/Cat.EventAggregators.Tests/Cat.EventAggregators.Tests.csproj" />
     <Project Path="tests/Cat.EventProcessor.Tests/Cat.EventProcessor.Tests.csproj" />

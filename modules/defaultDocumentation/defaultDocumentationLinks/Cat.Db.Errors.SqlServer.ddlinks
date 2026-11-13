@@ -1,0 +1,15 @@
+../../../Cat.Db.Errors/namespaces/Cat.Db.Errors.SqlServer/
+M:Cat.Db.Errors.SqlServer.CatSqlServerErrorExtensions.FindSqlException(System.Exception)|CatSqlServerErrorExtensions.FindSqlException.V1YNFT3D1JTT9U8EDJNXILCQE.md|FindSqlException(this Exception)
+M:Cat.Db.Errors.SqlServer.CatSqlServerErrorExtensions.IsUniqueViolation(System.Exception)|CatSqlServerErrorExtensions.IsUniqueViolation.8S9X048VFG96OYFTBOESC9GK5.md|IsUniqueViolation(this Exception)
+M:Cat.Db.Errors.SqlServer.CatSqlServerErrorExtensions.IsForeignKeyViolation(System.Exception)|CatSqlServerErrorExtensions.IsForeignKeyViolation.UDWP5VIC679B0WO73VQEEIH85.md|IsForeignKeyViolation(this Exception)
+M:Cat.Db.Errors.SqlServer.CatSqlServerErrorExtensions.IsDeadlock(System.Exception)|CatSqlServerErrorExtensions.IsDeadlock.5UGPJW1SFBZQL76AI11B33IX4.md|IsDeadlock(this Exception)
+M:Cat.Db.Errors.SqlServer.CatSqlServerErrorExtensions.IsTimeout(System.Exception)|CatSqlServerErrorExtensions.IsTimeout.4OWR5SDU0DLV4541UR4VZ0YI4.md|IsTimeout(this Exception)
+N:Cat.Db.Errors.SqlServer|Cat.Db.Errors.SqlServer.md|Cat.Db.Errors.SqlServer
+T:Cat.Db.Errors.SqlServer.CatSqlServerErrorExtensions|CatSqlServerErrorExtensions.md|CatSqlServerErrorExtensions
+F:Cat.Db.Errors.SqlServer.CatSqlServerErrorNumbers.UniqueKeyViolation|CatSqlServerErrorNumbers.UniqueKeyViolation.md|UniqueKeyViolation
+F:Cat.Db.Errors.SqlServer.CatSqlServerErrorNumbers.UniqueIndexViolation|CatSqlServerErrorNumbers.UniqueIndexViolation.md|UniqueIndexViolation
+F:Cat.Db.Errors.SqlServer.CatSqlServerErrorNumbers.ForeignKeyViolation|CatSqlServerErrorNumbers.ForeignKeyViolation.md|ForeignKeyViolation
+F:Cat.Db.Errors.SqlServer.CatSqlServerErrorNumbers.Deadlock|CatSqlServerErrorNumbers.Deadlock.md|Deadlock
+F:Cat.Db.Errors.SqlServer.CatSqlServerErrorNumbers.CommandTimeout|CatSqlServerErrorNumbers.CommandTimeout.md|CommandTimeout
+F:Cat.Db.Errors.SqlServer.CatSqlServerErrorNumbers.LockRequestTimeout|CatSqlServerErrorNumbers.LockRequestTimeout.md|LockRequestTimeout
+T:Cat.Db.Errors.SqlServer.CatSqlServerErrorNumbers|CatSqlServerErrorNumbers.md|CatSqlServerErrorNumbers
