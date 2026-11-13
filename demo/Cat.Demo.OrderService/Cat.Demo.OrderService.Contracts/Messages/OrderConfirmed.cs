@@ -13,4 +13,10 @@ public class OrderConfirmed : CatEventMessage, ICatServiceRequest
     public Guid OrderId { get; set; }
     public string OrderNumber { get; set; } = string.Empty;
     public decimal Total { get; set; }
+
+    /// <summary>The name of the customer who placed the order. Notifications greets the customer with it.</summary>
+    public string CustomerName { get; set; } = string.Empty;
+
+    /// <summary>The email address of the customer. Notifications sends the confirmation mail to it. Empty when the customer has none.</summary>
+    public string CustomerEmail { get; set; } = string.Empty;
 }

@@ -45,6 +45,20 @@ var inventory = builder.AddProject<Projects.Cat_Demo_InventoryService_Api>("inve
     .WithHttpEndpoint(port: 5105, name: "http", isProxied: false)
     .WithHttpHealthCheck("/health");
 
+// Notifications sends the order confirmed mail. It has no route in the gateway, because only messages reach it.
+// Mailpit is a small SMTP server that keeps every mail in a web inbox at http://localhost:8025. Nothing leaves the machine.
+const int smtpPort = 1025;
+const int mailInboxPort = 8025;
+var mailpit = builder.AddContainer("mailpit", "axllent/mailpit")
+    .WithEndpoint(port: smtpPort, targetPort: 1025, name: "smtp", scheme: "tcp", isProxied: false)
+    .WithHttpEndpoint(port: mailInboxPort, targetPort: 8025, name: "http", isProxied: false);
+var notifications = builder.AddProject<Projects.Cat_Demo_NotificationService_Api>("notifications")
+    .WithHttpEndpoint(port: 5106, name: "http", isProxied: false)
+    .WithHttpHealthCheck("/health")
+    .WithEnvironment("Smtp__Host", "localhost")
+    .WithEnvironment("Smtp__Port", smtpPort.ToString())
+    .WaitFor(mailpit);
+
 // Orders asks Catalog for prices and the payment service for payments through the gateway, so it references the gateway
 // and not the services.
 // The gateway waits for Orders, so Orders must not wait for the gateway.
@@ -83,6 +97,10 @@ orders.WithReference(bus)
     .WaitFor(bus)
     .WithEnvironment("Messaging__AdministrationConnectionString", serviceBusAdministrationConnection);
 inventory.WithReference(bus)
+    .WaitFor(bus)
+    .WaitFor(orders)
+    .WithEnvironment("Messaging__AdministrationConnectionString", serviceBusAdministrationConnection);
+notifications.WithReference(bus)
     .WaitFor(bus)
     .WaitFor(orders)
     .WithEnvironment("Messaging__AdministrationConnectionString", serviceBusAdministrationConnection);
@@ -145,6 +163,9 @@ if (useContainer)
     catalog.WithReference(catalogDb, connectionName: "catalog").WaitFor(catalogDb);
     orders.WithReference(ordersDb, connectionName: "orders").WaitFor(ordersDb);
 
+    var notificationsDb = sql.AddDatabase("notifications-db", databaseName: "notifications");
+    notifications.WithReference(notificationsDb, connectionName: "notifications").WaitFor(notificationsDb);
+
     // The inventory database is database first. The creation script creates the database and runs the SQL scripts
     // of the Database folder. The scripts only create what is missing, so they can run at every start.
     var inventoryDb = sql.AddDatabase("inventory-db", databaseName: "inventory")
@@ -157,6 +178,8 @@ else
         ?? throw new InvalidOperationException("ConnectionStrings:catalog is missing.");
     var ordersConnection = builder.Configuration["ConnectionStrings:orders"]
         ?? throw new InvalidOperationException("ConnectionStrings:orders is missing.");
+    var notificationsConnection = builder.Configuration["ConnectionStrings:notifications"]
+        ?? throw new InvalidOperationException("ConnectionStrings:notifications is missing.");
 
     // The owner of an existing inventory database owns its schema. In this mode the AppHost does not run the scripts.
     var inventoryConnection = builder.Configuration["ConnectionStrings:inventory"]
@@ -164,6 +187,7 @@ else
 
     catalog.WithEnvironment("ConnectionStrings__catalog", catalogConnection);
     orders.WithEnvironment("ConnectionStrings__orders", ordersConnection);
+    notifications.WithEnvironment("ConnectionStrings__notifications", notificationsConnection);
     inventory.WithEnvironment("ConnectionStrings__inventory", inventoryConnection);
 }
 

@@ -19,6 +19,7 @@
         <ProjectReference Include="..\..\Cat.Demo.Api.Gateway\Cat.Demo.Api.Gateway\Cat.Demo.Api.Gateway.csproj" />
         <ProjectReference Include="..\..\Cat.Demo.CatalogService\Cat.Demo.CatalogService.Api\Cat.Demo.CatalogService.Api.csproj" />
         <ProjectReference Include="..\..\Cat.Demo.InventoryService\Cat.Demo.InventoryService.Api\Cat.Demo.InventoryService.Api.csproj" />
+        <ProjectReference Include="..\..\Cat.Demo.NotificationService\Cat.Demo.NotificationService.Api\Cat.Demo.NotificationService.Api.csproj" />
         <ProjectReference Include="..\..\Cat.Demo.OrderService\Cat.Demo.OrderService.Api\Cat.Demo.OrderService.Api.csproj" />
         <ProjectReference Include="..\..\Cat.Demo.PaymentService\Cat.Demo.PaymentService.Api\Cat.Demo.PaymentService.Api.csproj" />
     </ItemGroup>

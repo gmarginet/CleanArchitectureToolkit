@@ -21,7 +21,7 @@ public class OrderSetStatusCommandHandler(OrderDbContext dbContext, ICatMessageS
 {
     public override async Task<ICatResponse> HandleAsync(OrderSetStatusCommand command, CancellationToken cancellationToken = default)
     {
-        var order = await DbContext.Orders.FirstOrDefaultAsync(x => x.Id == command.OrderId, cancellationToken);
+        var order = await DbContext.Orders.Include(x => x.Customer).FirstOrDefaultAsync(x => x.Id == command.OrderId, cancellationToken);
         if (order is null)
         {
             return CatResponse.NotFound(
@@ -37,7 +37,14 @@ public class OrderSetStatusCommandHandler(OrderDbContext dbContext, ICatMessageS
         if (command.StatusCode == OrderStatuses.ConfirmedCode)
         {
             await messageSender.PublishAsync(
-                new OrderConfirmed { OrderId = order.Id, OrderNumber = order.OrderNumber, Total = order.Total },
+                new OrderConfirmed
+                {
+                    OrderId = order.Id,
+                    OrderNumber = order.OrderNumber,
+                    Total = order.Total,
+                    CustomerName = order.Customer?.Name ?? string.Empty,
+                    CustomerEmail = order.Customer?.Email ?? string.Empty
+                },
                 cancellationToken: cancellationToken);
         }
 

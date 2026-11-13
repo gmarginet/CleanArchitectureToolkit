@@ -36,6 +36,13 @@
     <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.CoreService.Tests/Cat.Demo.InventoryService.CoreService.Tests.csproj" />
     <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.Infrastructure/Cat.Demo.InventoryService.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/demo/Cat.Demo.NotificationService/">
+    <Project Path="demo/Cat.Demo.NotificationService/Cat.Demo.NotificationService.Api/Cat.Demo.NotificationService.Api.csproj" />
+    <Project Path="demo/Cat.Demo.NotificationService/Cat.Demo.NotificationService.CoreService/Cat.Demo.NotificationService.CoreService.csproj" />
+    <Project Path="demo/Cat.Demo.NotificationService/Cat.Demo.NotificationService.CoreService.Tests/Cat.Demo.NotificationService.CoreService.Tests.csproj" />
+    <Project Path="demo/Cat.Demo.NotificationService/Cat.Demo.NotificationService.DataModels/Cat.Demo.NotificationService.DataModels.csproj" />
+    <Project Path="demo/Cat.Demo.NotificationService/Cat.Demo.NotificationService.Infrastructure/Cat.Demo.NotificationService.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/demo/Cat.Demo.OrderService/">
     <Project Path="demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Api/Cat.Demo.OrderService.Api.csproj" />
     <Project Path="demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Contracts/Cat.Demo.OrderService.Contracts.csproj" />
