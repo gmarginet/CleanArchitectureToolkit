@@ -136,7 +136,7 @@ Per module: the demo uses it and the readme says where.
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 10-->
 #### Question 10
-Do messages carry a token in the demo when `Cat.Users` exists? The decided rules in [Cat.EventProcessor.md](Cat.EventProcessor.md) say that a message sent for a user carries the token of that user, and a message sent without a user, such as one from the Scheduler, carries the token of the sending system. The listener then builds the `ICatUser` from the token. Neither the sender nor the listener does this yet. The options:
+Do messages carry a token in the demo when `Cat.Users` exists? The [module readme of Cat.EventProcessor](../modules/Cat.EventProcessor/README.md) and the [module readme of Cat.Messaging](../modules/Cat.Messaging/README.md) say that a message sent for a user carries the token of that user, and a message with a scheduled time carries the token of the sending system. The listener then builds the `ICatUser` from the token. The modules do this now, when the host implements `ICatTokenProvider` and registers `AddCatEventProcessorAuthorization`. The demo does neither yet. The options:
 - **Carry the token of the user,** and a client credentials token for the Scheduler, as decided. Cost: the token sits in the queue, the dead letter queue and the outbox table, so it needs short lived tokens, and a security review before production. The demo needs a client in the Keycloak realm for the system token.
 - **No token in the demo messages.** Cost: the demo does not show the identity rule. A handler that needs a user cannot be shown.
 

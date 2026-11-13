@@ -119,7 +119,7 @@ Recommendation: the registration, and queries by default. A command is never ret
 #### Question 4
 Which failures count: exceptions, failed responses, or specific error codes? A 404 should not be retried. The options:
 - **Exceptions only.** Cost: a failed `ICatResponse` such as `InternalServerError` is not retried, though it is often transient.
-- **Exceptions and the failed response types that are transient** (`InternalServerError` and a gateway timeout, not `NotFound`, `BadRequest`, `Conflict`). Cost: a table to document, like the one in [Cat.EventProcessor.md](Cat.EventProcessor.md) for failed messages.
+- **Exceptions and the failed response types that are transient** (`InternalServerError` and a gateway timeout, not `NotFound`, `BadRequest`, `Conflict`). Cost: a table to document, like the one in the [module readme of Cat.EventProcessor](../modules/Cat.EventProcessor/README.md) for failed messages.
 - **A predicate per policy.** Cost: more code per policy.
 
 Recommendation: exceptions plus `InternalServerError`, with a predicate override. It matches the table of the event processor plan, so a developer learns one rule for "which failures are transient".

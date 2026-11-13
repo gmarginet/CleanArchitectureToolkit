@@ -171,7 +171,7 @@ Recommendation: always on by default, with the ratio in a setting (`Cat:Telemetr
 #### Question 9
 Are health checks in scope or not? `ServiceDefaults` has them today (the `self` check only). The options:
 - **Out of scope.** They are not telemetry. Cost: a project without Aspire must write its own.
-- **In scope** as an optional project with the readiness and liveness endpoints. Cost: scope creep, and it overlaps with the optional health check in [Cat.EventProcessor.md](Cat.EventProcessor.md).
+- **In scope** as an optional project with the readiness and liveness endpoints. Cost: scope creep, and it overlaps with the optional health check in the [module readme of Cat.EventProcessor](../modules/Cat.EventProcessor/README.md).
 
 Recommendation: out of scope. The name is `Cat.Telemetry`, and a health check is a separate concern. Other modules offer their own `IHealthCheck`.
 <!-- region end: Question 9-->
