@@ -97,7 +97,9 @@ public class NswagTemplateTests
         var project = Path.Combine(_projectFolder, "Client.proj");
         File.WriteAllText(project, $"<Project>{optInProperty}<Import Project=\"{targets}\" /></Project>");
 
-        Run("msbuild", project, "-t:CatApiClientCopyNswagTemplate", "-nologo", "-v:minimal");
+        // No node reuse. On Linux the MSBuild worker nodes stay alive for 15 minutes and keep the output pipes open,
+        // so every run would wait for them.
+        Run("msbuild", project, "-t:CatApiClientCopyNswagTemplate", "-nologo", "-v:minimal", "-nodeReuse:false");
     }
 
     /// <summary>
@@ -110,6 +112,7 @@ public class NswagTemplateTests
             RedirectStandardOutput = true,
             RedirectStandardError = true,
         };
+        start.Environment["MSBUILDDISABLENODEREUSE"] = "1";
         foreach (var argument in arguments)
             start.ArgumentList.Add(argument);
 
