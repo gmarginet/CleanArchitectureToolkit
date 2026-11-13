@@ -187,7 +187,7 @@ A failed `ICatResponse` is logged with its error codes and counted in a metric. 
 A retry is a new try of the same due time and uses the same claim, so two instances never retry the same job together. A run stays failed after the last try, until the next due time.
 
 ### Overlap
-When a run is still busy at the next due time, the new run is skipped and a warning is logged. Set `AllowOverlap` to let them run together. A busy claim older than `DeadAfter` counts as dead, so a crashed instance does not block the job forever.
+When a run is still busy at the next due time, the new run is skipped and a warning is logged. Set `AllowOverlap` to let them run together. A busy claim older than `DeadAfter` counts as dead, so a crashed instance does not block the job forever. The default is 1 hour. Raise it for a job that can run longer, or a second run may start while the first is still working.
 
 ### Missed runs
 When an instance starts and a due time passed, the job runs once, not once for every missed time. Set `MissedRuns` to `Skip` to wait for the next due time instead. Write service requests that are safe to run more than once.

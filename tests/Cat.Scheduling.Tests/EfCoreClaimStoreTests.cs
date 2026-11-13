@@ -16,6 +16,7 @@ public class EfCoreClaimStoreTests
     private SqliteConnection _connection = null!;
     private ServiceProvider _provider = null!;
     private ICatJobClaimStore _store = null!;
+    private readonly List<ServiceProvider> _extraProviders = new List<ServiceProvider>();
 
     [SetUp]
     public void SetUp()
@@ -39,6 +40,12 @@ public class EfCoreClaimStoreTests
     [TearDown]
     public void TearDown()
     {
+        foreach (var provider in _extraProviders)
+        {
+            provider.Dispose();
+        }
+
+        _extraProviders.Clear();
         _provider.Dispose();
         _connection.Dispose();
     }
@@ -173,12 +180,85 @@ public class EfCoreClaimStoreTests
         Assert.That(provider.GetRequiredService<ICatJobClaimStore>(), Is.TypeOf<EfCoreJobClaimStore<SchedulingDbContext>>());
     }
 
+    [Test]
+    public async Task TryClaim_AnotherInstanceInsertsBetweenTheCheckAndTheInsert_IsTakenByOther()
+    {
+        // The other instance wins the race: its row lands after our check and before our insert.
+        var store = BuildStoreWithInterceptor(new BeforeSaveInterceptor(() => InsertRowAsync("job", Due)));
+
+        var result = await store.TryClaimAsync("job", Due, Now, false, TimeSpan.FromHours(1));
+
+        Assert.That(result.Status, Is.EqualTo(CatJobClaimStatus.TakenByOther));
+        Assert.That((await ReadRowAsync("job", Due)).StartedAt, Is.EqualTo(Now.AddMinutes(-5).UtcDateTime), "The row of the other instance stays.");
+    }
+
+    [Test]
+    public void TryClaim_TheInsertFailsForAnotherReason_TheErrorIsNotHidden()
+    {
+        var store = BuildStoreWithInterceptor(new BeforeSaveInterceptor(() => throw new DbUpdateException("The database is down.")));
+
+        Assert.That(() => store.TryClaimAsync("job", Due, Now, false, TimeSpan.FromHours(1)),
+            Throws.TypeOf<DbUpdateException>().With.Message.EqualTo("The database is down."));
+    }
+
+    private ICatJobClaimStore BuildStoreWithInterceptor(BeforeSaveInterceptor interceptor)
+    {
+        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        services.AddDbContext<SchedulingDbContext>(options => options.UseSqlite(_connection).AddInterceptors(interceptor));
+        services.AddCatSchedulingEFCore<SchedulingDbContext>();
+        var provider = services.BuildServiceProvider();
+        _extraProviders.Add(provider);
+        return provider.GetRequiredService<ICatJobClaimStore>();
+    }
+
+    private async Task InsertRowAsync(string job, DateTimeOffset due)
+    {
+        var options = new DbContextOptionsBuilder<SchedulingDbContext>().UseSqlite(_connection).Options;
+        await using var context = new SchedulingDbContext(options);
+        context.Set<CatJobRun>().Add(new CatJobRun
+        {
+            JobName = job,
+            DueTime = due.UtcDateTime,
+            Status = CatJobRunStatus.Running,
+            StartedAt = Now.AddMinutes(-5).UtcDateTime,
+        });
+        await context.SaveChangesAsync();
+    }
+
     private async Task<CatJobRun> ReadRowAsync(string job, DateTimeOffset due)
     {
         using var scope = _provider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<SchedulingDbContext>();
         var utc = due.UtcDateTime;
         return await context.Set<CatJobRun>().AsNoTracking().SingleAsync(row => row.JobName == job && row.DueTime == utc);
+    }
+
+    /// <summary>
+    /// Runs an action once, right before the first save. It plays the other instance in a race.
+    /// </summary>
+    private sealed class BeforeSaveInterceptor : Microsoft.EntityFrameworkCore.Diagnostics.SaveChangesInterceptor
+    {
+        private readonly Func<Task> _before;
+        private bool _done;
+
+        public BeforeSaveInterceptor(Func<Task> before)
+        {
+            _before = before;
+        }
+
+        public override async ValueTask<Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult<int>> SavingChangesAsync(
+            Microsoft.EntityFrameworkCore.Diagnostics.DbContextEventData eventData,
+            Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult<int> result,
+            CancellationToken cancellationToken = default)
+        {
+            if (!_done)
+            {
+                _done = true;
+                await _before();
+            }
+
+            return result;
+        }
     }
 
     private sealed class SchedulingDbContext : DbContext
