@@ -32,7 +32,7 @@
 # Plans for `Demo` <!-- omit in toc -->  
 
 <!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-demo)
+[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-demo)
 <!-- region end: StatusBadge-->
 
 ## Table of contents <!-- omit in toc -->  
@@ -77,18 +77,11 @@ An order confirmed mail is sent.
 #### Decided
 - **Notifications data.** Notifications has a database, built code first with EF Core migrations, like Orders. A table of sent mails, keyed by order and kind, makes a repeated message safe and shows idempotent handling.
 - **Database.** SQL Server, like the other services. The MySQL showcase of [Phase 13](#phase-13) moves Notifications to MySQL later.
+- **Entities.** Notifications uses the CAT base entities and `ConfigureCatEntity`, like the other services, with no temporal tables and no raw SQL Server code. The move in [Phase 13](#phase-13) waits for the neutral `Cat.EFCore.Extensions` of [Cat.EFCore.md](Cat.EFCore.md), and that change must keep these calls source compatible.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 16-->
-#### Question 16
-How do we keep the move to MySQL small? `Cat.EFCore.Extensions` works on SQL Server only today. `ConfigureCatEntity` calls `IsClustered` and `UseIdentityColumn`, and the schema falls back to `dbo`. The module plan [Cat.EFCore.md](Cat.EFCore.md) makes it provider neutral. The options:
-- **Use the CAT base entities and `ConfigureCatEntity`, like the other services.** No temporal tables and no raw SQL Server code. Cost: the move in [Phase 13](#phase-13) waits for the neutral `Cat.EFCore.Extensions`, and that change must keep these calls source compatible.
-- **Plain EF Core entities without the CAT base.** Cost: Notifications no longer shows the base entities, and its tables differ from the other services.
-
-Recommendation: the first option. The demo should show the same base entities everywhere, and a neutral `Cat.EFCore.Extensions` is needed for MySQL anyway.
-<!-- region end: Question 16-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->
 
@@ -98,13 +91,12 @@ Recommendation: the first option. The demo should show the same base entities ev
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-Scheduled jobs. Show `Cat.Scheduling`: the nightly clean up of the order counters, the cancel of unpaid orders, the sweep of stuck orders and a nightly low stock report.
+Scheduled jobs. Show `Cat.Scheduling`: the nightly clean up of the order counters, the sweep of stuck orders and a nightly low stock report.
 
 #### Background
 - The scheduled jobs of the demo:
   - Clean up the daily order counters every night, shortly after midnight UTC.
-  - Cancel unpaid orders after 24 hours.
-  - Cancel orders that stay Pending too long, the sweep. See Decided and [Question 15](#question-15).
+  - Cancel orders that stay Pending longer than 15 minutes, the sweep. See Decided.
   - A nightly low stock report, sent as a mail by the Notifications service of [Phase 2](#phase-2).
 - Work without a user, such as the Scheduler, uses a client credentials token.
 - The Scheduler is the worker of a service, as the readme describes it. In debug mode the API has a development endpoint group with a sub group per worker.
@@ -116,38 +108,21 @@ Scheduled jobs. Show `Cat.Scheduling`: the nightly clean up of the order counter
 - Catalog keeps every old price in a temporal table, and `BookPrice` has a `LastUpdatedBy` column. The seed of Catalog already sets the named system user.
 
 #### Needs
-[Phase 2](#phase-2), for the Notifications service and its database. The module `Cat.Scheduling`, which is built.
+[Phase 2](#phase-2), for the Notifications service that sends the mail of the low stock report. The module `Cat.Scheduling`, which is built.
 
 #### Done when
 The nightly jobs run from the Scheduler, and the development endpoint stays, so a developer can try a job without the Scheduler.
 
 #### Decided
 - **Counter cleanup.** The Scheduler runs the `CleanUpOrderCounters` service request every night. The development endpoint triggers it without the Scheduler.
-- **Claim table.** The scheduler can use the database of Notifications for its claim table and run history, see [Cat.Scheduling.md](Cat.Scheduling.md).
-- **Sweep of stuck orders.** The place order handler of Orders cancels the order when the caller gives up after the order is created, for example on a gateway timeout. That does not cover a crash of the service in the middle of the workflow. A scheduled job cancels the orders that stay Pending too long and covers the rest. A cancel through the sweep publishes the same cancelled event, so the stock is released too. How long an order may stay Pending, and whether this is the job that cancels unpaid orders, is [Question 15](#question-15).
+- **Jobs per service.** Each service runs the jobs of its own data. The counter cleanup and the sweep run in Orders, and the low stock report runs in Inventory. Notifications only sends the mail. This follows what is built, since Orders already runs the Scheduler.
+- **Claim table.** Each service that runs a job keeps the claim table and the run history of the scheduler in its own database, see [Cat.Scheduling.md](Cat.Scheduling.md). Inventory is database first, so a new SQL script in its `Database` folder creates the table, written like the other scripts so it can run at every start. It runs only in the container mode. The owner of an existing inventory database creates the table by hand, and the demo readme says how.
+- **Sweep of stuck orders.** The place order handler of Orders cancels the order when the caller gives up after the order is created, for example on a gateway timeout. That does not cover a crash of the service in the middle of the workflow. A scheduled job cancels the orders that stay Pending too long and covers the rest. A cancel through the sweep publishes the same cancelled event, so the stock is released too. One job cancels every Pending order older than 15 minutes, which is longer than the slowest normal order. A Pending order is the only unpaid state of the workflow, so the cancel of unpaid orders after 24 hours is dropped.
 - **System user for jobs.** A price changed by a job gets the named system user, `CatUser.System`, see the [module readme of Cat.Users](../modules/Cat.Users/README.md).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 15-->
-#### Question 15
-How long may an order stay Pending before the sweep cancels it, and is the sweep the same job as the cancel of unpaid orders after 24 hours? The place order workflow takes the payment in the same request, so a Pending order is either in progress for a few seconds or stuck. The options:
-- **One job with a short limit,** for example 15 minutes, that cancels every Pending order older than the limit. The "unpaid after 24 hours" job goes, because a Pending order is the only unpaid state the workflow has. Cost: a limit that is too short could cancel an order that is slow but alive, and the demo loses the 24 hour example of a one-off timeout.
-- **Two jobs.** The sweep with a short limit, and the 24 hour cancel kept as the showcase of a scheduled bus message, as [Cat.Scheduling.md](Cat.Scheduling.md) recommends for a one-off timeout. Cost: two ways to cancel a Pending order, and the 24 hour job never finds an order that the sweep did not catch.
-
-Recommendation: one job with a limit that is longer than the slowest normal order, such as 15 minutes. A Pending order older than that is stuck, and the 24 hour wait protects nobody. If the owner wants a showcase of the scheduled message, give it a real one-off timeout, such as a reminder mail for an unpaid order.
-<!-- region end: Question 15-->
-
-<!-- region start: Question 17-->
-#### Question 17
-Which service runs which job? The earlier text of this plan said Notifications runs the scheduled jobs. Orders already switches on the Scheduler for the counter cleanup. The options:
-- **Notifications runs all jobs** and calls the owning service through service requests. Cost: Notifications depends on the contracts of the other services, and the counter cleanup moves out of Orders.
-- **Each service runs the jobs of its own data.** The counter cleanup and the sweep run in Orders, and the low stock report runs in Inventory. Notifications only sends the mail. Cost: more than one Scheduler in the demo, and each one needs its own claim table.
-- **Notifications runs the report and the other services run their own jobs.** Cost: two rules to explain.
-
-Recommendation: each service runs the jobs of its own data. It follows what is built, since Orders already runs the Scheduler, and it shows the module as a worker of a service. Notifications stays a service that only sends mails.
-<!-- region end: Question 17-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 3-->
 
@@ -195,31 +170,19 @@ Show `Cat.Sql.Cdc` with the low stock case in Inventory. A change of the stock i
 - Inventory changes the stock in `StockReserveCommandHandler` and `StockReleaseCommandHandler`, with one conditional `UPDATE` in a transaction.
 
 #### Needs
-The module `Cat.Sql.Cdc`, which is built. Whether the phase also needs [Phase 2](#phase-2) is [Question 18](#question-18).
+The module `Cat.Sql.Cdc`, which is built. [Phase 2](#phase-2), for the Notifications service that sends the mail. A check, before the build, that the SQL Server container image of the AppHost can run the SQL Server Agent. The demo has not used the Agent so far, and nobody has checked this.
 
 #### Done when
-A stock that drops below the limit becomes a message that the demo handles. The readme says where.
+A stock that drops below the limit becomes a low stock message, and the Notifications service sends a mail to the admin. The readme says where.
+
+#### Decided
+- **Result.** A low stock mail. The change becomes a low stock message, and the Notifications service of [Phase 2](#phase-2) sends a mail to the admin. This shows the whole chain from a database row to a person.
+- **Stock limit.** One setting for all books, a number in the configuration. A column per book can come when the demo needs different limits.
+- **Switching it on.** A new SQL script in the `Database` folder of Inventory calls `sys.sp_cdc_enable_table` for the stock table, written like the other scripts so it can run at every start. It runs only in the container mode. A developer with an existing inventory database enables it by hand, and the demo readme says how.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 18-->
-#### Question 18
-What is the result of the showcase? The options:
-- **A low stock mail.** The change becomes a low stock message, and the Notifications service of [Phase 2](#phase-2) sends a mail to the admin. Cost: the phase needs Notifications, and the mail needs a limit per book.
-- **A message that only shows in the logs and a test.** Cost: no visible result in the demo, and it never shows the whole chain.
-
-Recommendation: the mail. It shows the chain from a database row to a person, and it reuses Notifications.
-<!-- region end: Question 18-->
-
-<!-- region start: Question 19-->
-#### Question 19
-How is change data capture switched on for the Inventory tables, and how does the SQL Server container get its Agent? The options:
-- **A new SQL script in the `Database` folder** that calls `sys.sp_cdc_enable_table` for the stock table, in the same way as the other scripts. Cost: it must be safe to run at every start, and it runs only in the container mode. A developer with an existing database enables it by hand.
-- **Only the readme describes the call.** Cost: the demo does not run the module out of the box.
-
-Recommendation: a new script in the `Database` folder. The Agent in the container must be checked first, because the demo has not used it so far. The readme says what a developer does with an existing database.
-<!-- region end: Question 19-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 5-->
 
