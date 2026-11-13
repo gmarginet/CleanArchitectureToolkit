@@ -236,7 +236,7 @@ Content-Type: application/json-patch+json
 
 A request without a patch document in its body gets a 400. A request with another content type gets a 415.
 
-The patch types come from `Microsoft.AspNetCore.JsonPatch.SystemTextJson`, which supports `net10.0` and up.
+The patch types come from `Microsoft.AspNetCore.JsonPatch.SystemTextJson`, which supports `net11.0` and up.
 
 ### What the endpoint returns
 

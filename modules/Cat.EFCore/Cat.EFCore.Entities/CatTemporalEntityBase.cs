@@ -6,7 +6,15 @@ namespace Cat.EFCore.Entities;
 /// </summary>
 public class CatTemporalEntityBase : CatEntityBase
 {
-    // TODO: Uncomment next 2 lines after release of EF Core 11
-    // public DateTime ValidFrom { get; set; }
-    // public DateTime ValidUntil { get; set; }
+    /// <summary>
+    /// The start of the period in which this version of the row was current.
+    /// EF Core and the database set it. Do not set it yourself.
+    /// </summary>
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// The end of the period in which this version of the row was current.
+    /// EF Core and the database set it. Do not set it yourself.
+    /// </summary>
+    public DateTime ValidUntil { get; set; }
 }

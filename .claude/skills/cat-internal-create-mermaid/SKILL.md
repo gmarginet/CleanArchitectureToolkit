@@ -29,7 +29,7 @@ Mermaid is for diagrams where the structure matters more than the exact position
 - Attribute types are C# style: `Guid`, `int`, `decimal`, `string`, `datetime`.
 - Show the inherited columns of the `Cat.EFCore` base classes. Check `modules/Cat.EFCore/Cat.EFCore.Entities/` for the current members.
   - `CatEntityBase` (regular entities): `Guid Id PK` and `int SequenceId`.
-  - `CatTemporalEntityBase` (temporal data): the same as `CatEntityBase`. Its `ValidFrom` and `ValidUntil` are not active yet.
+  - `CatTemporalEntityBase` (temporal data): the same as `CatEntityBase`, plus `datetime ValidFrom` and `datetime ValidUntil`. They are the period columns of the temporal table.
   - `CatReferenceEntityBase` (a table owned by another service): only `Guid Id PK`, no `SequenceId`. It appears in a diagram only when the services share a database. See the foreign key rules below.
   - Database first entities (scaffolded, like the Inventory service) inherit none of these. Show only the columns of the existing database, with its own key types and names, and say so in the sentence above the diagram.
   - Say in the sentence above the diagram which base class each entity uses.

@@ -36,3 +36,8 @@ public class CatTemporalEntityBase : Cat.EFCore.Entities.CatEntityBase
 ```
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatEntityBase](CatEntityBase.md 'Cat\.EFCore\.Entities\.CatEntityBase') → CatTemporalEntityBase
+
+| Properties | |
+| :--- | :--- |
+| [ValidFrom](CatTemporalEntityBase.ValidFrom.md 'Cat\.EFCore\.Entities\.CatTemporalEntityBase\.ValidFrom') | The start of the period in which this version of the row was current\. EF Core and the database set it\. Do not set it yourself\. |
+| [ValidUntil](CatTemporalEntityBase.ValidUntil.md 'Cat\.EFCore\.Entities\.CatTemporalEntityBase\.ValidUntil') | The end of the period in which this version of the row was current\. EF Core and the database set it\. Do not set it yourself\. |

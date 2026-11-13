@@ -21,10 +21,12 @@ jobs:
         uses: codebeltnet/git-checkout@v1
 
       - name: Install .NET
-        uses: codebeltnet/install-dotnet@v1
+        uses: codebeltnet/install-dotnet@v3
 
       - name: Install MinVer
         uses: codebeltnet/dotnet-tool-install-minver@v1
+        with:
+          version: 8.0.0
 
       - name: Run MinVer
         id: minver

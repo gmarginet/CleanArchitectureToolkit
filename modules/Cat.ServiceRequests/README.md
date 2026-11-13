@@ -220,7 +220,7 @@ To expose a request as an HTTP endpoint, see [Cat.Minimal.Api](../Cat.Minimal.Ap
 
 The `Cat.ServiceRequests.Minimal.Api` package holds `PatchDocumentRequest<TRouteParameters, TModel>`. It is a request that carries a JSON Patch document and the route values that identify the resource. [Cat.Minimal.Api](../Cat.Minimal.Api/README.md#patch-with-a-json-patch-document) maps it with `MapCatPatchDocument`.
 
-The package targets `net10.0`, because the patch types come from `Microsoft.AspNetCore.JsonPatch.SystemTextJson`.
+The package targets `net11.0`, because the patch types come from `Microsoft.AspNetCore.JsonPatch.SystemTextJson`.
 
 Write a handler for the request like any other. Apply the patch to the model you loaded, then save it:
 

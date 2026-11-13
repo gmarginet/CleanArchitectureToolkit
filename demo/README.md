@@ -558,8 +558,8 @@ erDiagram
         Guid BookId FK
         decimal Amount
         string LastUpdatedBy
-        datetime ValidFrom "Column only, the class does not map it yet"
-        datetime ValidUntil "Column only, the class does not map it yet"
+        datetime ValidFrom
+        datetime ValidUntil
     }
 ```
 

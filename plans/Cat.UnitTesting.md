@@ -74,7 +74,7 @@ From the existing modules:
 
 #### What exists today
 - The module does not exist yet. It is listed in the repo overview of the readme with the status New.
-- `tests/Cat.NUnit` targets `net10.0` and references NUnit. It is not packable. 14 repository test projects and the 3 demo `CoreService.Tests` projects (Catalog, Inventory and Orders) reference it.
+- `tests/Cat.NUnit` targets `net11.0` and references NUnit. It is not packable. 14 repository test projects and the 3 demo `CoreService.Tests` projects (Catalog, Inventory and Orders) reference it.
 - The copies of the fakes in the demo test projects exist as the plan says:
   - `FakeCommandProcessor` in Catalog, Inventory and Orders.
   - `FakeQueryProcessor` in Catalog and Orders.

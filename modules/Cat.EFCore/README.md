@@ -66,6 +66,7 @@ Inherit from a base class, call one extension method in `OnModelCreating`, and g
 ## Dependencies
 <!-- region start: Dependencies-->
 Cat.EFCore has no dependencies on other CAT modules.  
+`Cat.EFCore.Entities` targets `netstandard2.0` and has no reference to EF Core. `Cat.EFCore.Extensions` uses EF Core 11 and targets `net11.0`.  
 <!-- region end: Dependencies-->
 
 ## Usage
@@ -118,7 +119,7 @@ A temporal table is a SQL Server feature. It keeps the full history of your data
 
 - SQL Server stores the current rows in the table itself.
 - Every update or delete moves the old row to a history table.
-- Two period columns, `ValidFrom` and `ValidUntil`, say when a row version was valid.
+- Two period columns, `ValidFrom` and `ValidUntil`, say when a row version was valid. `CatTemporalEntityBase` has them as properties, so you can read them in a query. EF Core and SQL Server set the values, so never set them yourself.
 - You can query the data as it was at any point in time.
 - Only SQL Server supports them. Read the [overview of temporal tables](https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal/overview?view=sql-server-ver17) for the details.
 

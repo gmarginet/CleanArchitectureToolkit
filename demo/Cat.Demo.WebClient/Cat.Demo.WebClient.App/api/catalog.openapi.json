@@ -1,12 +1,12 @@
 {
-  "openapi": "3.1.1",
+  "openapi": "3.2.0",
   "info": {
     "title": "Cat.Demo.CatalogService.Api | v1",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://localhost:5101/"
+      "url": "http://localhost:5101"
     }
   ],
   "paths": {
@@ -331,7 +331,7 @@
               "null",
               "number"
             ],
-            "format": "double"
+            "format": "decimal"
           }
         }
       },
@@ -347,7 +347,7 @@
           },
           "price": {
             "type": "number",
-            "format": "double"
+            "format": "decimal"
           }
         }
       },
@@ -421,22 +421,13 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": [
-              "null",
-              "string"
-            ]
+            "type": "string"
           },
           "message": {
-            "type": [
-              "null",
-              "string"
-            ]
+            "type": "string"
           },
           "arguments": {
-            "type": [
-              "null",
-              "array"
-            ]
+            "type": "array"
           }
         }
       }

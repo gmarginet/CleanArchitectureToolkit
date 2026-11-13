@@ -5,4 +5,6 @@ N:Cat.EFCore.Entities|Cat.EFCore.Entities.md|Cat.EFCore.Entities
 T:Cat.EFCore.Entities.CatEntityBase|CatEntityBase.md|CatEntityBase
 P:Cat.EFCore.Entities.CatReferenceEntityBase.Id|CatReferenceEntityBase.Id.md|Id
 T:Cat.EFCore.Entities.CatReferenceEntityBase|CatReferenceEntityBase.md|CatReferenceEntityBase
+P:Cat.EFCore.Entities.CatTemporalEntityBase.ValidFrom|CatTemporalEntityBase.ValidFrom.md|ValidFrom
+P:Cat.EFCore.Entities.CatTemporalEntityBase.ValidUntil|CatTemporalEntityBase.ValidUntil.md|ValidUntil
 T:Cat.EFCore.Entities.CatTemporalEntityBase|CatTemporalEntityBase.md|CatTemporalEntityBase

@@ -38,7 +38,6 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 - [Phase 1](#phase-1)
-- [Phase 2](#phase-2)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 1-->
@@ -98,7 +97,7 @@ From the saga plan:
 - **Place order workflow.** It stays several units, with the cancel on failure approach. Payment is a call to another service and can never join a database transaction. Every command still has its own scope.
 - **Cat.Expressions.** Not used. Sorting and filtering stay in the handler, so nothing needs compiled member access.
 - **Who changed a row.** Temporal tables answer what a value was and when. A developer who also wants to see who did it adds a `LastUpdatedBy` type of column. `Cat.Auditing` was dropped for this reason. The demo fills the column in the command handler from `ICatUser`, see [Demo.md](Demo.md). A `SaveChanges` interceptor that does it is not decided.
-- **Temporal properties.** The upgrade of phase 2 goes first, so the two temporal period properties are switched on where the class lives today. The move to the SQL Server projects follows with phase 1.
+- **Temporal properties.** `CatTemporalEntityBase` has the two period properties `ValidFrom` and `ValidUntil`, mapped with `HasPeriodStart` and `HasPeriodEnd`. The move to the SQL Server projects follows with this phase.
 - **Home.** One module, `Cat.EFCore`, with several projects. A developer picks what they want to use.
 - **No separate transactions module.** There is no `Cat.Transactions`. Transactions are part of `Cat.EFCore`.
 - **Entities.** The entity base classes stay in `Cat.EFCore.Entities`.
@@ -138,67 +137,3 @@ The projects target the latest stable .NET, because they use EF Core. Check this
 <!-- region start: PhaseOpenQuestions-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
-
-<!-- region start: Phase 2-->
-## Phase 2
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Upgrade the toolkit and the demo to EF Core 11, and switch on the temporal period properties that were waiting for it: `ValidFrom` and `ValidUntil` on `CatTemporalEntityBase`.
-
-#### Background
-- `CatTemporalEntityBase` has two commented out properties, `ValidFrom` and `ValidUntil`, with a TODO to uncomment them after the release of EF Core 11. `ModelBuilderExtensions.ConfigureCatTemporalEntity` has the matching TODO. Today it names the period columns with strings, and the two columns are shadow properties.
-- EF Core 11.0.0 is on NuGet. The Microsoft docs say EF Core 11 needs the .NET 11 SDK to build and the .NET 11 runtime to run. The SQL Server provider package has only a `net11.0` target. A `net10.0` project cannot reference it.
-- The Microsoft docs describe the new mapping: `HasPeriodStart(x => x.ValidFrom)` and `HasPeriodEnd(x => x.ValidUntil)`. EF sets the values itself on insert and update, and a developer must not set them. Without CLR properties the period columns stay shadow properties.
-- The pages I read still say the feature is "in preview" and that EF Core 11 is "in development". They look out of date, so the status is still to check.
-- The projects target `net10.0`, except the 42 libraries on `netstandard2.0`. The project instructions say a project that needs more than `netstandard2.0`, such as one that uses EF Core, targets the latest stable .NET.
-
-#### What exists today
-- `Directory.Packages.props` pins EF Core 10.0.14 and `Microsoft.Extensions.*` 10.0.14 (and 10.11.0 for some). Only .NET SDK 10.0.403 is installed on the machine of the owner. `global.json` rolls forward to a newer SDK.
-- These projects reference EF Core, or reference a project that does, and are on `net10.0`:
-  - Modules: `Cat.EFCore.Extensions`, `Cat.Messaging.Outbox.EFCore` and `Cat.EventProcessor.Inbox.EFCore`.
-  - Demo: the Catalog and Orders Infrastructure projects, the Catalog, Inventory and Orders Api projects, and `Cat.Demo.OrderService.CoreService.Tests`.
-  - Tests: `Cat.Messaging.Tests` and `Cat.EventProcessor.Tests`.
-- `Cat.EFCore.Entities` is on `netstandard2.0` and keeps no reference to EF Core, so the two properties are plain `DateTime`.
-- The Catalog model snapshot and migration already list `ValidFrom` and `ValidUntil` as shadow properties, with `datetime2` columns.
-- `BookPrice` in the Catalog demo is the only temporal entity. The Catalog ERD in `demo/README.md` already shows both columns. Question 1.1 of [Demo.md](Demo.md) asks whether to keep them in the ERD.
-
-#### Decided
-- **Breaking changes.** Breaking changes in the modules are not an issue. Nobody uses them outside this repository yet.
-- **Scope.** The upgrade to EF Core 11, and the two period properties.
-- **Which projects.** Every `net10.0` project moves to `net11.0`, not only the ones that reference EF Core. The solution gets one framework and one package version.
-- **Order.** The upgrade is done before phase 1 is built, so the new projects of phase 1 start on `net11.0` and EF Core 11.
-
-#### What the upgrade changes
-- **Target framework.** Every `net10.0` project moves to `net11.0`. The libraries on `netstandard2.0` stay.
-- **Package versions.** EF Core 11 needs `Microsoft.Extensions.*` 11.0.0. A pinned 10.0.14 in a project that also references EF Core gives a package downgrade error, so those packages move to 11 as well. Packages that are not used next to EF Core can stay.
-- **Code.**
-  - Uncomment the two properties in `CatTemporalEntityBase`.
-  - Replace the two string lines in `ConfigureCatTemporalEntity` with `HasPeriodStart(x => x.ValidFrom)` and `HasPeriodEnd(x => x.ValidUntil)`. The `HasColumnName` calls can go, because the column name follows the property name.
-  - Update the XML docs, so they say a developer must not set the two values.
-- **Docs.** The temporal note in the `cat-internal-create-mermaid` skill, the `Cat.EFCore` readme, the demo readme and the Catalog ERD. Question 1.1 of [Demo.md](Demo.md) is answered by this phase.
-- **Smaller breaking changes of EF Core 11 that touch us,** as the Microsoft docs list them:
-  - The default SQL Server compatibility level is 160. The demo SQL Server container is probably fine. Check the image version.
-  - `Migrate()` throws when no migrations are found. The demo has migrations.
-  - The EF tools packages no longer reference `Microsoft.EntityFrameworkCore.Design`. Check that the projects that need it reference it directly.
-  - `Microsoft.Data.SqlClient` is version 7. Entra ID sign in needs an extra package. The demo uses no Entra sign in that I found.
-  - The model snapshot now records the latest migration ID, so two branches with a migration each give a merge conflict in the snapshot.
-
-#### Still to check while building
-- Install the .NET 11 SDK, and check that `.github/workflows/build.yml` installs it too.
-- Whether Aspire 13.6.x, the Cake tools and the documentation generator (`tools/Cat.DefaultDocumentationPlugin`) work with .NET 11.
-- Whether the Catalog migration is empty after the two shadow properties become CLR properties. Run `dotnet ef migrations add` on the Catalog and read the result. If it is not empty, the migration must not drop and recreate the columns or the history.
-- Whether the temporal period mapping is final in EF Core 11.0.0, or still a preview feature.
-- Whether anything copies all the properties of `BookPrice`, such as a mapper to a contract type, and now picks up the two new properties.
-- Which `Microsoft.Extensions.*` packages must move to 11 and which can stay.
-- Whether the Aspire AppHost, the Cake tools and the documentation generator, which have no EF Core, also build on `net11.0`, since every `net10.0` project moves.
-
-#### Done when
-The solution builds and all tests pass on EF Core 11. The Catalog creates no new migration. `CatTemporalEntityBase` has the two properties, and the readmes and the ERD say so.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 2-->

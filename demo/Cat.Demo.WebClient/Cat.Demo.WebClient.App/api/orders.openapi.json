@@ -1,12 +1,12 @@
 {
-  "openapi": "3.1.1",
+  "openapi": "3.2.0",
   "info": {
     "title": "Cat.Demo.OrderService.Api | v1",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://localhost:5102/"
+      "url": "http://localhost:5102"
     }
   ],
   "paths": {
@@ -367,22 +367,13 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": [
-              "null",
-              "string"
-            ]
+            "type": "string"
           },
           "message": {
-            "type": [
-              "null",
-              "string"
-            ]
+            "type": "string"
           },
           "arguments": {
-            "type": [
-              "null",
-              "array"
-            ]
+            "type": "array"
           }
         }
       },

@@ -164,11 +164,8 @@ public static class ModelBuilderExtensions
             t.IsTemporal(tt =>
             {
                 tt.UseHistoryTable(tableName, "History");
-                // TODO: Replace next 2 lines by lines in comment after release of EF Core 11
-                tt.HasPeriodStart("ValidFrom").HasColumnName("ValidFrom");
-                tt.HasPeriodEnd("ValidUntil").HasColumnName("ValidUntil");
-                // tt.HasPeriodStart(x => x.ValidFrom);
-                // tt.HasPeriodEnd(x => x.ValidUntil);
+                tt.HasPeriodStart(x => x.ValidFrom);
+                tt.HasPeriodEnd(x => x.ValidUntil);
             });
         });
     }
