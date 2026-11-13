@@ -28,7 +28,7 @@
 
 ## ICatReceiveRegistry Interface
 
-The message types the service receives, as declared in the `EventProcessor` project\.
+The message types the service receives, as declared when the event processor is registered in the API project\.
 
 ```csharp
 public interface ICatReceiveRegistry

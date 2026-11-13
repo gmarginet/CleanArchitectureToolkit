@@ -33,7 +33,7 @@ It reads the message as a service request, runs it through the service request p
 
 | Classes | |
 | :--- | :--- |
-| [CatEventProcessorBuilder](CatEventProcessorBuilder.md 'Cat\.EventProcessor\.CatEventProcessorBuilder') | Declares the message types a service receives\. Use it in the `EventProcessor` project, like you define the endpoints of an API\. |
+| [CatEventProcessorBuilder](CatEventProcessorBuilder.md 'Cat\.EventProcessor\.CatEventProcessorBuilder') | Declares the message types a service receives\. Use it where the API project registers the event processor, like you define the endpoints of an API\. |
 | [CatFailureTable](CatFailureTable.md 'Cat\.EventProcessor\.CatFailureTable') | Turns the response of a handler into an action on the message\. A succeeded response completes the message\. `InternalServerError` abandons it, so the bus delivers it again\. Every other failure dead letters it at once, because trying again gives the same answer\. The settings of the message type can override the table per response type\. |
 | [CatMessageReceiver](CatMessageReceiver.md 'Cat\.EventProcessor\.CatMessageReceiver') | Default [ICatMessageReceiver](../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/ICatMessageReceiver.md 'Cat\.EventProcessor\.Abstractions\.ICatMessageReceiver')\. The message is the service request itself, so there is no mapping step\. |
 | [ReceiveRegistry](ReceiveRegistry.md 'Cat\.EventProcessor\.ReceiveRegistry') | Default [ICatReceiveRegistry](../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/ICatReceiveRegistry.md 'Cat\.EventProcessor\.Abstractions\.ICatReceiveRegistry')\. |

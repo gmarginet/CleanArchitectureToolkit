@@ -7,7 +7,7 @@ using Cat.ServiceRequests.Abstractions;
 namespace Cat.EventProcessor;
 
 /// <summary>
-/// Declares the message types a service receives. Use it in the <c>EventProcessor</c> project, like you define the endpoints of an API.
+/// Declares the message types a service receives. Use it where the API project registers the event processor, like you define the endpoints of an API.
 /// </summary>
 public sealed class CatEventProcessorBuilder
 {

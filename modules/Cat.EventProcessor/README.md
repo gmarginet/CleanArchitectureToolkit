@@ -137,26 +137,11 @@ Write the handler so that it can run twice for the same message. The bus deliver
 
 ### Register the module
 
-The module works like the API gateway. The `EventProcessor` project of the service holds the declaration in one extension method, and the API calls it:
-
-```csharp
-using Cat.EventProcessor.Extensions;
-
-public static class EventProcessorExtensions
-{
-    public static IServiceCollection AddOrdersEventProcessor(this IServiceCollection services, IConfiguration configuration)
-    {
-        return services.AddCatEventProcessor(configuration, processor => processor
-            .Receive<OrderPlaced>()
-            .Receive<ReserveStock>(options => options.MaxConcurrentCalls = 4));
-    }
-}
-```
-
-In the API project, register the service request module, the connection to the bus and the listener. The subscription name is the name this service uses on the topic of every event:
+The module needs no project of its own. The API project of the service registers it with extension methods. It declares the message types, registers the service request module, the connection to the bus and the listener. The subscription name is the name this service uses on the topic of every event:
 
 ```csharp
 using Cat.EventProcessor.AzureServiceBus.Extensions;
+using Cat.EventProcessor.Extensions;
 using Cat.Messaging.AzureServiceBus.Extensions;
 using Cat.Messaging.Extensions;
 using Cat.ServiceRequests.Extensions;
@@ -165,7 +150,9 @@ builder.Services.AddCatServiceRequestsModule(typeof(OrderPlacedHandler));
 builder.Services.AddCatMessagingModule();
 builder.Services.AddCatMessagingAzureServiceBus(options =>
     options.ConnectionString = builder.Configuration.GetConnectionString("servicebus")!);
-builder.Services.AddOrdersEventProcessor(builder.Configuration);
+builder.Services.AddCatEventProcessor(builder.Configuration, processor => processor
+    .Receive<OrderPlaced>()
+    .Receive<ReserveStock>(options => options.MaxConcurrentCalls = 4));
 builder.Services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = "inventory");
 ```
 
