@@ -1,0 +1,38 @@
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>
+<table>
+    <tr>
+        <td colspan='6' style='text-align: center; font-weight: bold; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+             Clean Architecture Toolkit for .NET
+        </td>
+    </tr>
+    <tr>
+        <td colspan='5' style='padding: 0; vertical-align: middle; border: none;'>
+            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>
+            It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>
+        <td style='padding: 0; border: none;' width='220'>
+            <img src='../../../../resources/logo/CatLogo.svg' alt='' width='200' style='padding: 15px; float: right; background: #121314; border-radius: 10px'/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../../../../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../../../../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../../../../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[CAT.EVENTPROCESSOR](../../README.md)&nbsp;&nbsp;&nbsp;&#124;
+
+</td>
+</tr>
+</table>
+
+# Code Reference  
+  
+##### >> [Cat\.EventProcessor\.Authorization Assembly](index.md 'index')
+
+## Cat\.EventProcessor\.Authorization Namespace
+
+Checks the token of a message with the JWT bearer settings of the service, sets the user of the message and checks the policy of the message type with ASP\.NET Core authorization\.
+
+| Classes | |
+| :--- | :--- |
+| [AuthorizationStartupCheck](AuthorizationStartupCheck.md 'Cat\.EventProcessor\.Authorization\.AuthorizationStartupCheck') | Checks the policies of the message types when the service starts\. A policy name that does not exist stops the start, so the mistake shows at startup and not on the first message\. The message types without a rule are logged\. |
+| [CatMessageAuthorizationOptions](CatMessageAuthorizationOptions.md 'Cat\.EventProcessor\.Authorization\.CatMessageAuthorizationOptions') | The settings of the authorization of messages\. |
+| [CatMessageAuthorizer](CatMessageAuthorizer.md 'Cat\.EventProcessor\.Authorization\.CatMessageAuthorizer') | Default [ICatMessageAuthorizer](../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/ICatMessageAuthorizer.md 'Cat\.EventProcessor\.Abstractions\.ICatMessageAuthorizer')\. It validates the token, sets the user of the scope and checks the policy and the rules of the message type with [Microsoft\.AspNetCore\.Authorization\.IAuthorizationService](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authorization.iauthorizationservice 'Microsoft\.AspNetCore\.Authorization\.IAuthorizationService')\. |
+| [CatMessageTokenValidator](CatMessageTokenValidator.md 'Cat\.EventProcessor\.Authorization\.CatMessageTokenValidator') | Validates the token of a message with the JWT bearer options of the service, the same way the HTTP side does, with one difference: the lifetime is checked against the time the bus received the message, not against the clock now\. |

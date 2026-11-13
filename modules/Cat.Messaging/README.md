@@ -47,6 +47,7 @@ The outbox is optional. With it, a message is saved in the same `SaveChanges` as
   - [Declare a message](#declare-a-message)
   - [Register the module](#register-the-module)
   - [Send a message](#send-a-message)
+  - [Send the token of the caller](#send-the-token-of-the-caller)
   - [Names and sessions](#names-and-sessions)
   - [Create the queues and topics](#create-the-queues-and-topics)
   - [Change the options of Azure Service Bus](#change-the-options-of-azure-service-bus)
@@ -74,7 +75,7 @@ The outbox is optional. With it, a message is saved in the same `SaveChanges` as
 
 | Namespace | What it holds |
 |-----------|---------------|
-| [Cat.Messaging.Abstractions](namespaces/Cat.Messaging.Abstractions/index.md) | The message base types, the sender, the name convention and the transport seam. |
+| [Cat.Messaging.Abstractions](namespaces/Cat.Messaging.Abstractions/index.md) | The message base types, the sender, the token provider, the name convention and the transport seam. |
 | [Cat.Messaging](namespaces/Cat.Messaging/index.md) | The sender, the name convention, the JSON serializer and the module registration. |
 | [Cat.Messaging.AzureServiceBus](namespaces/Cat.Messaging.AzureServiceBus/index.md) | The Azure Service Bus transport, the topology helper and the dead letter metric. |
 | [Cat.Messaging.Outbox](namespaces/Cat.Messaging.Outbox/index.md) | The outbox store contract and the background sender. |
@@ -159,6 +160,28 @@ Both methods take an optional `scheduledAt`. The bus then holds the message unti
 ```csharp
 await _sender.SendAsync(new PaymentExpired { OrderId = orderId }, DateTimeOffset.UtcNow.AddHours(24), cancellationToken);
 ```
+
+### Send the token of the caller
+
+A message can carry the token of its sender, so the receiver knows who sent the work. Implement `ICatTokenProvider` in the host and register it. The sender calls it for every message and puts the result in the message property `Authorization`, as `Bearer <token>`. Without a provider a message carries no token.
+
+```csharp
+public class RequestTokenProvider(IHttpContextAccessor accessor, ISystemTokenSource system) : ICatTokenProvider
+{
+    public async Task<string?> GetTokenAsync(CatTokenSubject subject, CancellationToken cancellationToken = default)
+    {
+        if (subject == CatTokenSubject.System)
+        {
+            return await system.GetTokenAsync(cancellationToken);
+        }
+
+        var header = accessor.HttpContext?.Request.Headers.Authorization.ToString();
+        return header?.StartsWith("Bearer ") == true ? header["Bearer ".Length..] : null;
+    }
+}
+```
+
+A message with a scheduled time asks for `CatTokenSubject.System`, because a token of a user is expired when the bus delivers the message. The system token must be one that the receiving service accepts. The receiver skips the lifetime check for a scheduled message, see `Cat.EventProcessor`. The sender passes what the handler needs in the message, because the user is not known there. The token stays in the message, so it is in the queue and in the outbox table. Use short lived tokens.
 
 ### Names and sessions
 

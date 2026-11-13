@@ -56,6 +56,7 @@ The module settles every message for you. A handler that succeeds completes the 
   - [The inbox](#the-inbox)
   - [Competing consumers and shutdown](#competing-consumers-and-shutdown)
   - [Traces](#traces)
+  - [Who sent the message and what may it do](#who-sent-the-message-and-what-may-it-do)
   - [What is not built yet](#what-is-not-built-yet)
 
 ## NuGet packages  
@@ -66,6 +67,7 @@ The module settles every message for you. A handler that succeeds completes the 
 |---------|------|---------|-----------|
 | [Cat.EventProcessor.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.EventProcessor.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Abstractions)](#nuget-packages) |
 | [Cat.EventProcessor](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor/) | Implementation | `dotnet add package gmarginet.Cat.EventProcessor` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor)](#nuget-packages) |
+| [Cat.EventProcessor.Authorization](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Authorization/) | Optional token and policy check | `dotnet add package gmarginet.Cat.EventProcessor.Authorization` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Authorization)](#nuget-packages) |
 | [Cat.EventProcessor.AzureServiceBus](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.AzureServiceBus/) | Azure Service Bus listener | `dotnet add package gmarginet.Cat.EventProcessor.AzureServiceBus` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.AzureServiceBus)](#nuget-packages) |
 | [Cat.EventProcessor.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Minimal.Api/) | Optional development endpoint | `dotnet add package gmarginet.Cat.EventProcessor.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Minimal.Api)](#nuget-packages) |
 | [Cat.EventProcessor.Inbox.EFCore](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Inbox.EFCore/) | Optional inbox for EF Core | `dotnet add package gmarginet.Cat.EventProcessor.Inbox.EFCore` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Inbox.EFCore)](#nuget-packages) |
@@ -79,6 +81,7 @@ The module settles every message for you. A handler that succeeds completes the 
 |-----------|---------------|
 | [Cat.EventProcessor.Abstractions](namespaces/Cat.EventProcessor.Abstractions/index.md) | The incoming message, the settlement, the receiver, the contract of the inbox store and the settings per message type. |
 | [Cat.EventProcessor](namespaces/Cat.EventProcessor/index.md) | The receiver, the failure table, the builder for the message types and the module registration. |
+| [Cat.EventProcessor.Authorization](namespaces/Cat.EventProcessor.Authorization/index.md) | The token validation, the user of the message and the policy check. |
 | [Cat.EventProcessor.AzureServiceBus](namespaces/Cat.EventProcessor.AzureServiceBus/index.md) | The Azure Service Bus listener, the health check and the creation of the subscriptions. |
 | [Cat.EventProcessor.Minimal.Api](namespaces/Cat.EventProcessor.Minimal.Api/index.md) | The development endpoint that simulates an incoming message. |
 | [Cat.EventProcessor.Inbox.EFCore](namespaces/Cat.EventProcessor.Inbox.EFCore/index.md) | The inbox table and its store. |
@@ -93,6 +96,7 @@ The module settles every message for you. A handler that succeeds completes the 
 | [Cat.Messaging](../Cat.Messaging/README.md) | The message types, the name convention and the Azure Service Bus connection. |
 | [Cat.ServiceRequests](../Cat.ServiceRequests/README.md) | The message is the service request, and its handler runs through the service request processor. |
 | [Cat.Responses](../Cat.Responses/README.md) | The response of the handler decides what happens to the message. |
+| [Cat.Users](../Cat.Users/README.md) | Only the optional authorization project. It sets the user of the message. |
 
 <!-- region end: Dependencies-->
 
@@ -184,7 +188,8 @@ Set them in code, as in the example above. Whoever runs the service can also set
 }
 ```
 
-- **`MaxConcurrentCalls`:** how many messages of this type run at the same time. The default of the bus applies when it is empty. For a message type that needs sessions it is the number of sessions at the same time.
+- **`MaxConcurrentCalls`:** how many messages of this type run at the same time. The default of the bus applies when it is empty. For a message type that needs sessions it is the number of sessions at the same time. A session handles one message at a time, so it is still the number of messages at the same time. The default of the Azure Service Bus SDK is 8 sessions.
+- **`Policy`:** the authorization policy of this message type, see the chapter about who sent the message.
 - **`FailureOverrides`:** what to do with a failed response of a given type. See the table below.
 
 ### What happens to a message
@@ -197,7 +202,7 @@ The listener turns the response of the handler into an action on the message:
 | `BadRequest`, `NotFound`, `Conflict`, `Forbidden` or `Unauthorized` | Dead letters it at once, with the error codes as the reason and the error messages as the description. | Trying again gives the same answer. |
 | `InternalServerError`, or an exception | Abandons it, so the bus delivers it again. After the maximum number of deliveries the bus dead letters it. | The cause may go away, such as a database that is down for a moment. |
 
-A body that is not JSON, or does not fit the message type, is dead lettered with the reason `InvalidMessage`. A content type other than `application/json` is dead lettered with the reason `UnsupportedContentType`.
+A message that fails the authorization is dead lettered with the reason `Unauthorized` or `Forbidden`, see the chapter about who sent the message. A body that is not JSON, or does not fit the message type, is dead lettered with the reason `InvalidMessage`. A content type other than `application/json` is dead lettered with the reason `UnsupportedContentType`.
 
 The bus alone retries. The module adds no retry loop of its own, because two retry layers multiply. The bus uses its own settings, with a default of 10 deliveries. It redelivers at once, so a dependency that is down gets hit up to ten times in a second.
 
@@ -324,7 +329,51 @@ When the service stops, the listener stops taking new messages and finishes the 
 
 The trace of the sender continues in the service. The Azure Service Bus SDK reads the `Diagnostic-Id` of the message and starts the activity of the handling from it, so the second half of a flow joins the same trace. The module adds nothing for this. Register the `Azure.Messaging.ServiceBus` source in the OpenTelemetry setup of the service.
 
+### Who sent the message and what may it do
+
+A message can carry the token of its sender. The optional project `Cat.EventProcessor.Authorization` reads it, sets the user of the message and checks a policy per message type before the handler runs. Without the project a message runs without a user and without a policy, as before.
+
+```csharp
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+{
+    options.Authority = "https://keycloak.example/realms/shop";
+    options.Audience = "cat-gateway";
+    options.MapInboundClaims = false;
+});
+builder.Services.AddAuthorization(options => options.AddPolicy("PriceAdmin", policy => policy.RequireRole("admin")));
+
+builder.Services.AddCatEventProcessor(builder.Configuration, events => events
+    .Receive<PriceChanged>(options => options.Policy = "PriceAdmin")
+    .Receive<StockCounted>(options => options.Require(policy => policy.RequireRole("warehouse")))
+    .Receive<OrderPlaced>());
+builder.Services.AddCatEventProcessorAuthorization();
+```
+
+How it works:
+
+- **The token.** It travels in the message property `Authorization`, with the value `Bearer <token>`, as in HTTP. The sender puts it there, see the chapter about the token in `Cat.Messaging`. It is not part of the message body.
+- **The validation.** The receiver validates the token with the JWT bearer options of the service, so one setup serves the endpoints and the messages. Register the scheme, `Bearer` by default, also when the service has no HTTP authentication. Use another scheme with `AddCatEventProcessorAuthorization(options => options.AuthenticationScheme = "...")`. Set `MapInboundClaims` to `false`, as above, so the claim names stay as they are in the token.
+- **The lifetime.** It is checked against the time the bus received the message, and not against the clock now, because a message can be hours old when it is handled. The clock skew of the JWT bearer options applies.
+- **Scheduled messages.** A message with a scheduled time carries the token of the sending system, not of a user, because a token of a user is expired when the bus delivers the message. The receiver skips the lifetime check for such a message and checks the signature, the issuer and the audience. The cost is that a copied token of a system stays valid for scheduled messages as long as its signing key is valid.
+- **The user.** The receiver sets `ICatUser` of `Cat.Users` for the scope of the message, from the claims of the token. A message without a token runs as the anonymous user, so a policy that needs a login denies it.
+- **The policy.** `Policy` names a policy of ASP.NET Core. `Require` takes a callback that builds a rule with the policy builder of ASP.NET Core, so every rule of ASP.NET Core works. A message must pass the named policy and every rule. The check runs before the inbox, so a message that is not allowed leaves no trace in the inbox. A handler that needs the `HttpContext` does not work for a message.
+- **A message that fails.** A token that is not valid gets the reason `Unauthorized`. A caller that is known and not allowed gets `Forbidden`, and a message without a token that a policy denies gets `Unauthorized`. The message is dead lettered and not retried, because trying again gives the same answer.
+- **At startup.** A policy name that does not exist stops the service at startup, and so does a policy without `AddCatEventProcessorAuthorization`. The service logs a warning with the message types that have no policy and no rule.
+- **Message types without a rule.** The default is to run them, so a service keeps working while its message types get their rules. Set `CatMessageAuthorizationOptions.DenyMessagesWithoutPolicy` to `true` to deny them. A message type that is open on purpose then states a rule that always passes, such as `options.Require(policy => policy.RequireAssertion(_ => true))`.
+
+Set the policy from the configuration too, with `CatEventProcessor:Messages:PriceChanged:Policy`. The inline rules come from code only.
+
+The project targets the latest .NET, because it uses the JWT bearer package of ASP.NET Core. The token stays in the message, so it is in the queue, in the dead letter queue and in the outbox table. Keep the risk small:
+
+- Use short lived tokens.
+- Keep message bodies out of the logs.
+- Give the queues small rights. A person with the right to receive from a queue sees the tokens in clear.
+- Azure Service Bus encrypts the data at rest with keys of Microsoft. Customer-managed keys are optional and need the Premium tier.
+
+Let a person who knows security look at this before the module is used in production.
+
 ### What is not built yet
 
-The identity of the sender is not carried by the message yet. It waits for `Cat.Users`, which does not exist yet. A handler that runs for a message has no current user. The plan holds the decisions about the token.
+- **The arrival time of the real service.** The rule for a normal message uses the time the bus received it. The emulator sets it to the scheduled time for a scheduled message, and the rule for a scheduled message does not depend on it. The documentation of Azure Service Bus does not say what the real service sets, so check it once against the real service before production use.
+- **Tests of the listener host.** The listener host and the development endpoint have no tests of their own. The demo runs a message through the emulator, but that was checked by hand.
 <!-- region end: Usage-->

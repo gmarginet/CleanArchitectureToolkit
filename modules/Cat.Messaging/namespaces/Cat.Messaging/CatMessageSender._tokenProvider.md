@@ -26,29 +26,11 @@
   
 ##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageSender Class](CatMessageSender.md 'Cat\.Messaging\.CatMessageSender')
 
-## CatMessageSender\(ICatMessageNameResolver, ICatMessageSerializer, ICatOutgoingMessageSink\) Constructor
-
-Creates the sender\.
+## CatMessageSender\.\_tokenProvider Field
 
 ```csharp
-public CatMessageSender(Cat.Messaging.Abstractions.ICatMessageNameResolver nameResolver, Cat.Messaging.ICatMessageSerializer serializer, Cat.Messaging.Abstractions.ICatOutgoingMessageSink sink);
+private readonly ICatTokenProvider? _tokenProvider;
 ```
-#### Parameters
 
-<a name='Cat.Messaging.CatMessageSender.CatMessageSender(Cat.Messaging.Abstractions.ICatMessageNameResolver,Cat.Messaging.ICatMessageSerializer,Cat.Messaging.Abstractions.ICatOutgoingMessageSink).nameResolver'></a>
-
-`nameResolver` [ICatMessageNameResolver](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessageNameResolver.md 'Cat\.Messaging\.Abstractions\.ICatMessageNameResolver')
-
-Finds the queue or topic name of the message type\.
-
-<a name='Cat.Messaging.CatMessageSender.CatMessageSender(Cat.Messaging.Abstractions.ICatMessageNameResolver,Cat.Messaging.ICatMessageSerializer,Cat.Messaging.Abstractions.ICatOutgoingMessageSink).serializer'></a>
-
-`serializer` [ICatMessageSerializer](ICatMessageSerializer.md 'Cat\.Messaging\.ICatMessageSerializer')
-
-Turns the message into a body\.
-
-<a name='Cat.Messaging.CatMessageSender.CatMessageSender(Cat.Messaging.Abstractions.ICatMessageNameResolver,Cat.Messaging.ICatMessageSerializer,Cat.Messaging.Abstractions.ICatOutgoingMessageSink).sink'></a>
-
-`sink` [ICatOutgoingMessageSink](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatOutgoingMessageSink.md 'Cat\.Messaging\.Abstractions\.ICatOutgoingMessageSink')
-
-Takes the finished message, to send it or to store it in the outbox\.
+#### Field Value
+[ICatTokenProvider](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatTokenProvider.md 'Cat\.Messaging\.Abstractions\.ICatTokenProvider')

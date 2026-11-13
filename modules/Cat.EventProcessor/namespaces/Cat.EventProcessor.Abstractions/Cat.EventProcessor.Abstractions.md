@@ -33,6 +33,7 @@ A broker project, such as the one for Azure Service Bus, calls the receiver and 
 
 | Classes | |
 | :--- | :--- |
+| [CatAuthorizationResult](CatAuthorizationResult.md 'Cat\.EventProcessor\.Abstractions\.CatAuthorizationResult') | The answer of the authorization of a message\. |
 | [CatIncomingMessage](CatIncomingMessage.md 'Cat\.EventProcessor\.Abstractions\.CatIncomingMessage') | A message that arrived from the broker, before it is turned into a service request\. It knows nothing about a specific broker\. |
 | [CatMessageContext](CatMessageContext.md 'Cat\.EventProcessor\.Abstractions\.CatMessageContext') | The message that is being handled right now\. Code in the handler pipeline, such as the inbox decorator, reads it\. It is empty when a service request does not come from a message, for example from an HTTP call\. |
 | [CatMessageContext\.Scope](CatMessageContext.Scope.md 'Cat\.EventProcessor\.Abstractions\.CatMessageContext\.Scope') | |
@@ -44,6 +45,7 @@ A broker project, such as the one for Azure Service Bus, calls the receiver and 
 | Interfaces | |
 | :--- | :--- |
 | [ICatInboxStore](ICatInboxStore.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore') | Remembers which messages the service handled\. The receiver calls it for a message type that has [UseInbox](CatReceiveOptions.UseInbox.md 'Cat\.EventProcessor\.Abstractions\.CatReceiveOptions\.UseInbox') on\. The store works on the context of the current scope, the same one the handler uses, so the row is saved by the `SaveChanges` of the handler\. |
+| [ICatMessageAuthorizer](ICatMessageAuthorizer.md 'Cat\.EventProcessor\.Abstractions\.ICatMessageAuthorizer') | Checks who sent a message and whether the message type allows that caller\. The receiver calls it before the handler runs\. It is scoped, and it is resolved from the scope of the message, so it can set the user of that scope\. A service without an implementation runs its messages without a user and without a policy\. The implementation lives in an optional project, such as `Cat.EventProcessor.Authorization`\. |
 | [ICatMessageReceiver](ICatMessageReceiver.md 'Cat\.EventProcessor\.Abstractions\.ICatMessageReceiver') | Turns one incoming message into a service request, runs it and tells the broker what to do with the message\. |
 | [ICatReceiveRegistry](ICatReceiveRegistry.md 'Cat\.EventProcessor\.Abstractions\.ICatReceiveRegistry') | The message types the service receives, as declared in the `EventProcessor` project\. |
 

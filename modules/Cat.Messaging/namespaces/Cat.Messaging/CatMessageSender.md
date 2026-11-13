@@ -41,13 +41,14 @@ Implements [ICatMessageSender](../../../Cat.Messaging/namespaces/Cat.Messaging.A
 
 | Constructors | |
 | :--- | :--- |
-| [CatMessageSender\(ICatMessageNameResolver, ICatMessageSerializer, ICatOutgoingMessageSink\)](CatMessageSender..ctor.SKRQ8ICX0K0A2A2YET133MIT5.md 'Cat\.Messaging\.CatMessageSender\.CatMessageSender\(Cat\.Messaging\.Abstractions\.ICatMessageNameResolver, Cat\.Messaging\.ICatMessageSerializer, Cat\.Messaging\.Abstractions\.ICatOutgoingMessageSink\)') | Creates the sender\. |
+| [CatMessageSender\(ICatMessageNameResolver, ICatMessageSerializer, ICatOutgoingMessageSink, ICatTokenProvider\)](CatMessageSender..ctor.G7M5SJROLG4ZAIAA4SOXQ94A9.md 'Cat\.Messaging\.CatMessageSender\.CatMessageSender\(Cat\.Messaging\.Abstractions\.ICatMessageNameResolver, Cat\.Messaging\.ICatMessageSerializer, Cat\.Messaging\.Abstractions\.ICatOutgoingMessageSink, Cat\.Messaging\.Abstractions\.ICatTokenProvider\)') | Creates the sender\. |
 
 | Fields | |
 | :--- | :--- |
 | [\_nameResolver](CatMessageSender._nameResolver.md 'Cat\.Messaging\.CatMessageSender\.\_nameResolver') | |
 | [\_serializer](CatMessageSender._serializer.md 'Cat\.Messaging\.CatMessageSender\.\_serializer') | |
 | [\_sink](CatMessageSender._sink.md 'Cat\.Messaging\.CatMessageSender\.\_sink') | |
+| [\_tokenProvider](CatMessageSender._tokenProvider.md 'Cat\.Messaging\.CatMessageSender\.\_tokenProvider') | |
 
 | Methods | |
 | :--- | :--- |

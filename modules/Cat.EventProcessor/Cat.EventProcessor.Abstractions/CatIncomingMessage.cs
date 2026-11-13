@@ -29,6 +29,18 @@ public class CatIncomingMessage
     public int DeliveryCount { get; set; } = 1;
 
     /// <summary>
+    /// The moment the bus received the message. The bus sets it, so the sender cannot fake it.
+    /// For a scheduled message the emulator sets the scheduled time. Null when the broker does not tell.
+    /// </summary>
+    public DateTimeOffset? EnqueuedTime { get; set; }
+
+    /// <summary>
+    /// True when the sender gave the message a scheduled time. The token of such a message is checked without its lifetime,
+    /// because the token was made when the message was sent and it is expired when the bus delivers the message.
+    /// </summary>
+    public bool IsScheduled { get; set; }
+
+    /// <summary>
     /// The extra properties of the message.
     /// </summary>
     public IDictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();

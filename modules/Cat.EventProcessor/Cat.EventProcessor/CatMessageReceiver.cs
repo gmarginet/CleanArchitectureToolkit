@@ -59,10 +59,23 @@ internal sealed class CatMessageReceiver : ICatMessageReceiver
 
         using var context = CatMessageContext.Begin(message.MessageId, message.DeliveryCount);
         using var scope = _scopeFactory.CreateScope();
-        var processor = scope.ServiceProvider.GetRequiredService<ICatServiceRequestProcessor>();
 
         try
         {
+            // The policy runs before the inbox, so a message that is not allowed leaves no trace in the inbox.
+            var authorizer = scope.ServiceProvider.GetService<ICatMessageAuthorizer>();
+            if (authorizer != null)
+            {
+                var authorization = await authorizer.AuthorizeAsync(message, options, cancellationToken).ConfigureAwait(false);
+                if (!authorization.Succeeded)
+                {
+                    return new CatSettlementResult(CatSettlement.DeadLetter, authorization.Reason, authorization.Description);
+                }
+            }
+
+            // Resolved after the authorization, so everything in the scope sees the user of the message.
+            var processor = scope.ServiceProvider.GetRequiredService<ICatServiceRequestProcessor>();
+
             if (options.UseInbox && !string.IsNullOrEmpty(message.MessageId))
             {
                 var store = scope.ServiceProvider.GetRequiredService<ICatInboxStore>();

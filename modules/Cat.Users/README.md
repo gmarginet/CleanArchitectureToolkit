@@ -101,7 +101,7 @@ public class SavePriceHandler(ICatUser user /* ... */)
 ```
 
 ### Set the user in a worker
-Background work has no token. A worker sets the user for the scope it starts. Running as the system is a choice of the worker and never a default.
+Background work has no HTTP request. A worker sets the user for the scope it starts. The event processor does this for a message, see the optional authorization project of `Cat.EventProcessor`. Running as the system is a choice of the worker and never a default.
 
 ```csharp
 scope.ServiceProvider.GetRequiredService<ICatUserAccessor>().User = CatUser.System("orders");
@@ -110,7 +110,7 @@ scope.ServiceProvider.GetRequiredService<ICatUserAccessor>().User = CatUser.Syst
 The system user is authenticated and has the role `system`. `CatUser` also builds any other user by hand, which is handy in tests.
 
 ### Change the claim names
-The defaults fit a token with a flat `roles` claim. Change them for another identity provider.
+The defaults fit a token with a flat `roles` claim. Change them for another identity provider. Set `MapInboundClaims` to `false` in the JWT bearer options, so the claim names stay as they are in the token. Otherwise the handler of the token renames `sub`.
 
 ```csharp
 builder.Services.AddCatUsers(options => options.RoleClaimType = "groups");

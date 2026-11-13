@@ -1,10 +1,22 @@
 ../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/
+F:Cat.EventProcessor.Abstractions.CatAuthorizationResult.UnauthorizedReason|CatAuthorizationResult.UnauthorizedReason.md|UnauthorizedReason
+F:Cat.EventProcessor.Abstractions.CatAuthorizationResult.ForbiddenReason|CatAuthorizationResult.ForbiddenReason.md|ForbiddenReason
+P:Cat.EventProcessor.Abstractions.CatAuthorizationResult.Succeeded|CatAuthorizationResult.Succeeded.md|Succeeded
+P:Cat.EventProcessor.Abstractions.CatAuthorizationResult.Reason|CatAuthorizationResult.Reason.md|Reason
+P:Cat.EventProcessor.Abstractions.CatAuthorizationResult.Description|CatAuthorizationResult.Description.md|Description
+P:Cat.EventProcessor.Abstractions.CatAuthorizationResult.Success|CatAuthorizationResult.Success.md|Success
+M:Cat.EventProcessor.Abstractions.CatAuthorizationResult.#ctor(System.Boolean,System.String,System.String)|CatAuthorizationResult..ctor.O19VA31ECA30MPYZOITC0ZCPA.md|CatAuthorizationResult(bool, string, string)
+M:Cat.EventProcessor.Abstractions.CatAuthorizationResult.Unauthorized(System.String)|CatAuthorizationResult.Unauthorized.ARX48KCSVB5ML2THM31MBGLU8.md|Unauthorized(string)
+M:Cat.EventProcessor.Abstractions.CatAuthorizationResult.Forbidden(System.String)|CatAuthorizationResult.Forbidden.38W3H5CJQ7OZAVS722BOBDP8B.md|Forbidden(string)
+N:Cat.EventProcessor.Abstractions|Cat.EventProcessor.Abstractions.md|Cat.EventProcessor.Abstractions
+T:Cat.EventProcessor.Abstractions.CatAuthorizationResult|CatAuthorizationResult.md|CatAuthorizationResult
 P:Cat.EventProcessor.Abstractions.CatIncomingMessage.Body|CatIncomingMessage.Body.md|Body
 P:Cat.EventProcessor.Abstractions.CatIncomingMessage.ContentType|CatIncomingMessage.ContentType.md|ContentType
 P:Cat.EventProcessor.Abstractions.CatIncomingMessage.MessageId|CatIncomingMessage.MessageId.md|MessageId
 P:Cat.EventProcessor.Abstractions.CatIncomingMessage.DeliveryCount|CatIncomingMessage.DeliveryCount.md|DeliveryCount
+P:Cat.EventProcessor.Abstractions.CatIncomingMessage.EnqueuedTime|CatIncomingMessage.EnqueuedTime.md|EnqueuedTime
+P:Cat.EventProcessor.Abstractions.CatIncomingMessage.IsScheduled|CatIncomingMessage.IsScheduled.md|IsScheduled
 P:Cat.EventProcessor.Abstractions.CatIncomingMessage.Properties|CatIncomingMessage.Properties.md|Properties
-N:Cat.EventProcessor.Abstractions|Cat.EventProcessor.Abstractions.md|Cat.EventProcessor.Abstractions
 T:Cat.EventProcessor.Abstractions.CatIncomingMessage|CatIncomingMessage.md|CatIncomingMessage
 F:Cat.EventProcessor.Abstractions.CatMessageContext.CurrentData|CatMessageContext.CurrentData.md|CurrentData
 P:Cat.EventProcessor.Abstractions.CatMessageContext.Current|CatMessageContext.Current.md|Current
@@ -17,6 +29,9 @@ M:Cat.EventProcessor.Abstractions.CatMessageContextData.#ctor(System.String,Syst
 T:Cat.EventProcessor.Abstractions.CatMessageContextData|CatMessageContextData.md|CatMessageContextData
 P:Cat.EventProcessor.Abstractions.CatReceiveOptions.MaxConcurrentCalls|CatReceiveOptions.MaxConcurrentCalls.md|MaxConcurrentCalls
 P:Cat.EventProcessor.Abstractions.CatReceiveOptions.UseInbox|CatReceiveOptions.UseInbox.md|UseInbox
+P:Cat.EventProcessor.Abstractions.CatReceiveOptions.Policy|CatReceiveOptions.Policy.md|Policy
+P:Cat.EventProcessor.Abstractions.CatReceiveOptions.AuthorizationRules|CatReceiveOptions.AuthorizationRules.md|AuthorizationRules
+P:Cat.EventProcessor.Abstractions.CatReceiveOptions.HasAuthorizationRule|CatReceiveOptions.HasAuthorizationRule.md|HasAuthorizationRule
 P:Cat.EventProcessor.Abstractions.CatReceiveOptions.FailureOverrides|CatReceiveOptions.FailureOverrides.md|FailureOverrides
 T:Cat.EventProcessor.Abstractions.CatReceiveOptions|CatReceiveOptions.md|CatReceiveOptions
 P:Cat.EventProcessor.Abstractions.CatReceiveRegistration.MessageType|CatReceiveRegistration.MessageType.md|MessageType
@@ -35,6 +50,8 @@ T:Cat.EventProcessor.Abstractions.CatSettlementResult|CatSettlementResult.md|Cat
 M:Cat.EventProcessor.Abstractions.ICatInboxStore.ExistsAsync(System.String,System.Threading.CancellationToken)|ICatInboxStore.ExistsAsync.4N8X6TCE59U7MPLFMFY3AFQ59.md|ExistsAsync(string, CancellationToken)
 M:Cat.EventProcessor.Abstractions.ICatInboxStore.Add(System.String,System.String)|ICatInboxStore.Add.UU452UCKDNFMMBAMI19088PP6.md|Add(string, string)
 T:Cat.EventProcessor.Abstractions.ICatInboxStore|ICatInboxStore.md|ICatInboxStore
+M:Cat.EventProcessor.Abstractions.ICatMessageAuthorizer.AuthorizeAsync(Cat.EventProcessor.Abstractions.CatIncomingMessage,Cat.EventProcessor.Abstractions.CatReceiveOptions,System.Threading.CancellationToken)|ICatMessageAuthorizer.AuthorizeAsync.TPMAGSOMK6XLIJQYYP93QM4O8.md|AuthorizeAsync(CatIncomingMessage, CatReceiveOptions, CancellationToken)
+T:Cat.EventProcessor.Abstractions.ICatMessageAuthorizer|ICatMessageAuthorizer.md|ICatMessageAuthorizer
 M:Cat.EventProcessor.Abstractions.ICatMessageReceiver.ReceiveAsync(System.Type,Cat.EventProcessor.Abstractions.CatIncomingMessage,System.Threading.CancellationToken)|ICatMessageReceiver.ReceiveAsync.UJS0V9JE5RJ3PJ8Y16HANUS24.md|ReceiveAsync(Type, CatIncomingMessage, CancellationToken)
 T:Cat.EventProcessor.Abstractions.ICatMessageReceiver|ICatMessageReceiver.md|ICatMessageReceiver
 P:Cat.EventProcessor.Abstractions.ICatReceiveRegistry.Registrations|ICatReceiveRegistry.Registrations.md|Registrations

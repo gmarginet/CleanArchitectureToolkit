@@ -77,17 +77,26 @@ internal sealed class ServiceBusListener : IHostedService, IAsyncDisposable
 
     private void CheckInbox()
     {
-        if (_serviceProviderIsService.IsService(typeof(ICatInboxStore)))
+        if (!_serviceProviderIsService.IsService(typeof(ICatInboxStore)))
         {
-            return;
+            var names = _registry.Registrations.Where(registration => registration.Options.UseInbox)
+                .Select(registration => registration.MessageType.Name).ToList();
+            if (names.Count > 0)
+            {
+                throw new InvalidOperationException(
+                    $"The inbox is on for {string.Join(", ", names)}, but no ICatInboxStore is registered. Register a store, such as AddCatEventProcessorInbox.");
+            }
         }
 
-        var names = _registry.Registrations.Where(registration => registration.Options.UseInbox)
-            .Select(registration => registration.MessageType.Name).ToList();
-        if (names.Count > 0)
+        if (!_serviceProviderIsService.IsService(typeof(ICatMessageAuthorizer)))
         {
-            throw new InvalidOperationException(
-                $"The inbox is on for {string.Join(", ", names)}, but no ICatInboxStore is registered. Register a store, such as AddCatEventProcessorInbox.");
+            var names = _registry.Registrations.Where(registration => registration.Options.HasAuthorizationRule)
+                .Select(registration => registration.MessageType.Name).ToList();
+            if (names.Count > 0)
+            {
+                throw new InvalidOperationException(
+                    $"A policy is set for {string.Join(", ", names)}, but no ICatMessageAuthorizer is registered. Register one, such as AddCatEventProcessorAuthorization.");
+            }
         }
     }
 

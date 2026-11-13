@@ -88,6 +88,7 @@
   <Folder Name="/modules/Cat.EventProcessor/">
     <File Path="modules/Cat.EventProcessor/README.md" />
     <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.Abstractions/Cat.EventProcessor.Abstractions.csproj" />
+    <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.Authorization/Cat.EventProcessor.Authorization.csproj" />
     <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.AzureServiceBus/Cat.EventProcessor.AzureServiceBus.csproj" />
     <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.Inbox.EFCore/Cat.EventProcessor.Inbox.EFCore.csproj" />
     <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.Minimal.Api/Cat.EventProcessor.Minimal.Api.csproj" />

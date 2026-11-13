@@ -14,6 +14,8 @@ T:Cat.Messaging.Abstractions.CatMessageAttribute|CatMessageAttribute.md|CatMessa
 F:Cat.Messaging.Abstractions.CatMessageKind.Command|CatMessageKind.md#Cat.Messaging.Abstractions.CatMessageKind.Command|Command
 F:Cat.Messaging.Abstractions.CatMessageKind.Event|CatMessageKind.md#Cat.Messaging.Abstractions.CatMessageKind.Event|Event
 T:Cat.Messaging.Abstractions.CatMessageKind|CatMessageKind.md|CatMessageKind
+F:Cat.Messaging.Abstractions.CatMessageProperties.Authorization|CatMessageProperties.Authorization.md|Authorization
+T:Cat.Messaging.Abstractions.CatMessageProperties|CatMessageProperties.md|CatMessageProperties
 P:Cat.Messaging.Abstractions.CatOutgoingMessage.EntityName|CatOutgoingMessage.EntityName.md|EntityName
 P:Cat.Messaging.Abstractions.CatOutgoingMessage.Kind|CatOutgoingMessage.Kind.md|Kind
 P:Cat.Messaging.Abstractions.CatOutgoingMessage.Body|CatOutgoingMessage.Body.md|Body
@@ -25,6 +27,9 @@ P:Cat.Messaging.Abstractions.CatOutgoingMessage.SessionId|CatOutgoingMessage.Ses
 P:Cat.Messaging.Abstractions.CatOutgoingMessage.ScheduledAt|CatOutgoingMessage.ScheduledAt.md|ScheduledAt
 P:Cat.Messaging.Abstractions.CatOutgoingMessage.Properties|CatOutgoingMessage.Properties.md|Properties
 T:Cat.Messaging.Abstractions.CatOutgoingMessage|CatOutgoingMessage.md|CatOutgoingMessage
+F:Cat.Messaging.Abstractions.CatTokenSubject.CurrentUser|CatTokenSubject.md#Cat.Messaging.Abstractions.CatTokenSubject.CurrentUser|CurrentUser
+F:Cat.Messaging.Abstractions.CatTokenSubject.System|CatTokenSubject.md#Cat.Messaging.Abstractions.CatTokenSubject.System|System
+T:Cat.Messaging.Abstractions.CatTokenSubject|CatTokenSubject.md|CatTokenSubject
 T:Cat.Messaging.Abstractions.ICatCommandMessage|ICatCommandMessage.md|ICatCommandMessage
 T:Cat.Messaging.Abstractions.ICatEventMessage|ICatEventMessage.md|ICatEventMessage
 P:Cat.Messaging.Abstractions.ICatMessage.MessageId|ICatMessage.MessageId.md|MessageId
@@ -44,3 +49,5 @@ M:Cat.Messaging.Abstractions.ICatOutgoingMessageSink.AcceptAsync(Cat.Messaging.A
 T:Cat.Messaging.Abstractions.ICatOutgoingMessageSink|ICatOutgoingMessageSink.md|ICatOutgoingMessageSink
 P:Cat.Messaging.Abstractions.ICatSessionMessage.SessionId|ICatSessionMessage.SessionId.md|SessionId
 T:Cat.Messaging.Abstractions.ICatSessionMessage|ICatSessionMessage.md|ICatSessionMessage
+M:Cat.Messaging.Abstractions.ICatTokenProvider.GetTokenAsync(Cat.Messaging.Abstractions.CatTokenSubject,System.Threading.CancellationToken)|ICatTokenProvider.GetTokenAsync.CZ5VQS30IHHLX98RWFUMEV7S8.md|GetTokenAsync(CatTokenSubject, CancellationToken)
+T:Cat.Messaging.Abstractions.ICatTokenProvider|ICatTokenProvider.md|ICatTokenProvider

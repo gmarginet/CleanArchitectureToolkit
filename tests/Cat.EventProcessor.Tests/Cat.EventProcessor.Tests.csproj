@@ -14,8 +14,6 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
         <PackageReference Include="NUnit"/>
         <PackageReference Include="NUnit.Analyzers">
@@ -26,12 +24,17 @@
     </ItemGroup>
 
     <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Using Include="NUnit.Framework"/>
         <Using Include="Microsoft.Extensions.DependencyInjection.ServiceCollection" Alias="ServiceCollection" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Abstractions\Cat.EventProcessor.Abstractions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Authorization\Cat.EventProcessor.Authorization.csproj" />
       <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.AzureServiceBus\Cat.EventProcessor.AzureServiceBus.csproj" />
       <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Inbox.EFCore\Cat.EventProcessor.Inbox.EFCore.csproj" />
       <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Minimal.Api\Cat.EventProcessor.Minimal.Api.csproj" />
