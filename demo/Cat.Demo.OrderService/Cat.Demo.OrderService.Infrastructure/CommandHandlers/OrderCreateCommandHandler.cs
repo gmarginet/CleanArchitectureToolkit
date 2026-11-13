@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cat.Commands.Abstractions;
+using Cat.Db.Errors.SqlServer;
 using Cat.Demo.OrderService.CoreService;
 using Cat.Demo.OrderService.CoreService.Commands;
 using Cat.Demo.OrderService.DataModels.Entities;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -26,8 +26,6 @@ public class OrderCreateCommandHandler : ICatCommandHandler<OrderCreateCommand, 
     /// <summary>The order number has four digits for the counter.</summary>
     public const int DailyLimit = 9999;
 
-    private const int UniqueKeyViolation = 2627;
-    private const int UniqueIndexViolation = 2601;
     private const int MaximumAttempts = 3;
 
     private readonly OrderDbContext _dbContext;
@@ -91,7 +89,7 @@ public class OrderCreateCommandHandler : ICatCommandHandler<OrderCreateCommand, 
                     cancellationToken);
                 return 1;
             }
-            catch (SqlException ex) when (ex.Number is UniqueKeyViolation or UniqueIndexViolation)
+            catch (Exception ex) when (ex.IsUniqueViolation())
             {
             }
         }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cat.Commands.Abstractions;
+using Cat.Db.Errors.SqlServer;
 using Cat.Demo.InventoryService.CoreService;
 using Cat.Demo.InventoryService.CoreService.Commands;
 using Cat.Demo.InventoryService.Infrastructure.DataAccess;
@@ -21,9 +22,6 @@ namespace Cat.Demo.InventoryService.Infrastructure.CommandHandlers;
 /// </summary>
 public class StockReserveCommandHandler : ICatCommandHandler<StockReserveCommand>
 {
-    private const int UniqueKeyViolation = 2627;
-    private const int UniqueIndexViolation = 2601;
-
     // The update takes the first stock item of the book that has enough copies, and tells us which one it was.
     private const string TakeStockSql = """
         WITH candidate AS
@@ -77,7 +75,7 @@ public class StockReserveCommandHandler : ICatCommandHandler<StockReserveCommand
             await transaction.CommitAsync(cancellationToken);
             return CatResponse.Ok();
         }
-        catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: UniqueKeyViolation or UniqueIndexViolation })
+        catch (DbUpdateException ex) when (ex.IsUniqueViolation())
         {
             // The same order was reserved twice at the same moment. The unique key stopped the second one,
             // and its transaction rolls back, so the first reservation stands.

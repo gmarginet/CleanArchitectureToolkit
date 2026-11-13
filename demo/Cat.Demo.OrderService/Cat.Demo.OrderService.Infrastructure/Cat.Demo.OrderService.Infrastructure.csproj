@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\modules\Cat.Api.Client\Cat.Api.Client\Cat.Api.Client.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Db.Errors\Cat.Db.Errors.SqlServer\Cat.Db.Errors.SqlServer.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Extensions\Cat.EFCore.Extensions.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging\Cat.Messaging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.AzureServiceBus\Cat.Messaging.AzureServiceBus.csproj" />
