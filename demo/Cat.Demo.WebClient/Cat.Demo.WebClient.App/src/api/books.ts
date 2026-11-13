@@ -23,6 +23,8 @@ export function useBook(bookId: string) {
   return useQuery({
     queryKey: ['book', bookId],
     queryFn: () => unwrap(catalogApi.GET('/catalog/books/{bookId}', { params: { path: { bookId } } })),
+    // The form for a new book has no id. Without this the empty id asks for the whole list.
+    enabled: bookId !== '',
   })
 }
 
