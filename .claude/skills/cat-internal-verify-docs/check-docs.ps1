@@ -16,6 +16,7 @@ Errors
 - The repo overview table of the readme does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the Building badge. A built row without a plan has the Stable badge. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has no priority, and every other row has a unique whole number as priority.
 - A link points to an anchor that no heading of the target markdown file has.
 - A code fence is not closed.
+- A Markdown table starts on the line right below a heading or a line of text, with no empty line between them. The published site shows it as plain text.
 - A Markdown table touches an HTML comment, on the line right above or right below it. The published site does not render such a table. Template files are skipped, so the row templates in `*.parts.template.md` are fine.
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or has no comment line with its `RootPath`.
 - The readme lost its <!-- region start: RepoOverview--> or <!-- region end: RepoOverview--> region marker.
@@ -157,7 +158,9 @@ foreach ($file in $files) {
         if ($inComment -and $raw -notmatch '-->') {
             $prevKind = 'other'
         } else {
-            $kind = if ($raw.Trim().StartsWith('|')) { 'table' } elseif ($raw -match '<!--|-->') { 'comment' } else { 'other' }
+            $kind = if ($raw.Trim().StartsWith('|')) { 'table' } elseif ($raw -match '<!--|-->') { 'comment' } elseif ($raw.Trim() -eq '') { 'blank' } else { 'text' }
+            # A table needs an empty line above it. Directly under a heading or a paragraph the published site shows plain text.
+            if ($prevKind -eq 'text' -and $kind -eq 'table') { $errors.Add("${file}:$n a table starts right below a line of text. Put an empty line between them.") }
             if ($prevKind -eq 'comment' -and $kind -eq 'table') { $errors.Add("${file}:$($n - 1) an HTML comment is directly above a table. Put an empty line between them.") }
             if ($prevKind -eq 'table' -and $kind -eq 'comment') { $errors.Add("${file}:$n an HTML comment is directly below a table. Put an empty line between them.") }
             $prevKind = $kind
@@ -208,6 +211,15 @@ if (Test-Path $readmeFile) {
     foreach ($marker in '<!-- region start: RepoOverview-->', '<!-- region end: RepoOverview-->') {
         $count = ([regex]::Matches($content, [regex]::Escape($marker))).Count
         if ($count -ne 1) { $errors.Add("README.md: the marker $marker must appear once. Found $count.") }
+    }
+}
+
+# Every plan keeps the no toc line in its Phases region. It stops editor plugins from generating a full table of contents.
+if (-not $Path -or $Path -like '*plans*') {
+    foreach ($planFile in Get-ChildItem -LiteralPath (Join-Path $root 'plans') -Filter '*.md' -File) {
+        if (-not (Select-String -LiteralPath $planFile.FullName -Pattern '^<!-- no toc -->' -Quiet)) {
+            $errors.Add("plans\$($planFile.Name): the Phases region has lost the line <!-- no toc -->. Copy it back from plan.template.md.")
+        }
     }
 }
 

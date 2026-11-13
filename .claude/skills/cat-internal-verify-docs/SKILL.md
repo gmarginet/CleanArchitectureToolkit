@@ -25,6 +25,8 @@ Errors, which you must fix:
 - A path with the wrong letter case. The published site runs on Linux, where case matters, and Windows hides the mistake.
 - A link to an anchor that no heading of the target markdown file has. Anchors follow the GitHub rules: lowercase, punctuation removed, spaces become hyphens, and a repeated heading gets `-1`, `-2`.
 - A code fence that is never closed.
+- A plan in `plans/` that has lost the line `<!-- no toc -->` of its `Phases` region.
+- A Markdown table starts on the line right below a heading or a line of text, with no empty line between them. The published site shows it as plain text.
 - A Markdown table that touches an HTML comment, on the line right above or right below it. The published site does not render such a table. Put an empty line between them. Template files are skipped, so the row templates in `*.parts.template.md` are fine.
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or that has no comment line with its `RootPath`. Template files (`*.template.md`) are skipped.
 - A repo overview table in the readme that does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the Building badge. A built row without a plan has the Stable badge. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has no priority, and every other row has a unique whole number as priority.

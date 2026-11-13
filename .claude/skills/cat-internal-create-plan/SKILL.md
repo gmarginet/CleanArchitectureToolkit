@@ -90,6 +90,7 @@ Use this when an answer or a decision changes more than one plan, and when a mod
   - We always use the first phase to determine the status. When a phase gets deleted, the next phase becomes the first one and the badge is set again from that phase, following these rules.
   - If no phases are left, Claude can ask if it can remove the plan file.
 - `Phases`: A list of all the phases of the plan.
+  - The region starts with the line `<!-- no toc -->`. It comes from the template. Always copy it into a plan and never remove it. It stops editor plugins from generating a full table of contents when the owner edits the file.
   - Use the `PhaseListLine` template to add a line to the list.
 - `PhaseDescription`: A detailed description of what we are going to build and how it is going to be used.
   - It can start as a short idea and grow into a full description as questions get answered.
