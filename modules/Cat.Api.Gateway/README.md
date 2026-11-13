@@ -327,6 +327,7 @@ The `X-Forwarded-For`, `-Host`, `-Proto` and `-Prefix` headers are replaced by t
 The removal runs after YARP has copied the headers of the request, so the copy cannot bring one back.
 
 ### More duties of the gateway
+
 | Duty | Default | Setting |
 |------|---------|---------|
 | Correlation id | Every request gets an id in `X-Correlation-Id`. A short id of plain characters from the caller is kept. Anything else is replaced. The id goes to the service, back to the caller and into the log scope. | None |

@@ -99,6 +99,7 @@ Claude read the engine in `modules/Cat.FluentWorkflows`.
 - **Nothing outside the engine can do this.** A new module cannot add a "wait" step on its own, because the step cannot stop the recursion of its parents in a way that can be resumed.
 
 #### What is missing
+
 | Gap | Where it has to live |
 |---|---|
 | A way for a step to stop the workflow and say "resume later" | Core engine |
@@ -152,6 +153,7 @@ Following the usual module layout, with an abstractions project and implementati
 The instance record holds: instance id, workflow type name, workflow version, status, state as JSON, checkpoint as JSON, correlation key, the message type it waits for, the timeout moment and a row version for concurrency.
 
 ##### What the module depends on
+
 | Module | Why |
 |---|---|
 | `Cat.FluentWorkflows` | The engine to suspend and resume. |
@@ -181,6 +183,7 @@ These must be solved in the design, not afterwards.
 - **Security.** An incoming message must prove which instance it belongs to. The correlation key is not a secret, so the service still validates the message source.
 
 #### Build order
+
 | Step | Work | Needs |
 |---|---|---|
 | 0 | Orders uses short workflows and the order status as saga state. The payment provider stays an interface. | Nothing. Done in the demo. |
