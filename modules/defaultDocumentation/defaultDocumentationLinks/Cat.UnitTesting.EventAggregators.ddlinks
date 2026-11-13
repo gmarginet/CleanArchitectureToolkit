@@ -1,0 +1,14 @@
+../../../Cat.UnitTesting/namespaces/Cat.UnitTesting.EventAggregators/
+P:Cat.UnitTesting.EventAggregators.FakeEventAggregator.Published|FakeEventAggregator.Published.md|Published
+P:Cat.UnitTesting.EventAggregators.FakeEventAggregator.Subscribers|FakeEventAggregator.Subscribers.md|Subscribers
+M:Cat.UnitTesting.EventAggregators.FakeEventAggregator.Of``1|FakeEventAggregator.Of_T_().md|Of<T>()
+M:Cat.UnitTesting.EventAggregators.FakeEventAggregator.Reset|FakeEventAggregator.Reset().md|Reset()
+M:Cat.UnitTesting.EventAggregators.FakeEventAggregator.HasSubscribersForEvent(System.Type)|FakeEventAggregator.HasSubscribersForEvent.N22ADJWMD2EU1BCLCNUZZ6F59.md|HasSubscribersForEvent(Type)
+M:Cat.UnitTesting.EventAggregators.FakeEventAggregator.Subscribe(System.Object)|FakeEventAggregator.Subscribe.5E8A5U9KTYFWIA8X7BVJNPM9.md|Subscribe(object)
+M:Cat.UnitTesting.EventAggregators.FakeEventAggregator.Unsubscribe(System.Object)|FakeEventAggregator.Unsubscribe.6QOLROL3CQODWADJ6KPBEXLQA.md|Unsubscribe(object)
+M:Cat.UnitTesting.EventAggregators.FakeEventAggregator.PublishAsync(System.Object,System.Threading.CancellationToken)|FakeEventAggregator.PublishAsync.84ZR24SCE60II16HZ8C9960R5.md|PublishAsync(object, CancellationToken)
+N:Cat.UnitTesting.EventAggregators|Cat.UnitTesting.EventAggregators.md|Cat.UnitTesting.EventAggregators
+T:Cat.UnitTesting.EventAggregators.FakeEventAggregator|FakeEventAggregator.md|FakeEventAggregator
+P:Cat.UnitTesting.EventAggregators.RecordingSubscriber`1.Events|RecordingSubscriber_TEvent_.Events.md|Events
+M:Cat.UnitTesting.EventAggregators.RecordingSubscriber`1.HandleEventAsync(`0,System.Threading.CancellationToken)|RecordingSubscriber_TEvent_.HandleEventAsync.PMAB3DRJA9YC7QDH9FJJZQTAA.md|HandleEventAsync(TEvent, CancellationToken)
+T:Cat.UnitTesting.EventAggregators.RecordingSubscriber`1|RecordingSubscriber_TEvent_.md|RecordingSubscriber<TEvent>

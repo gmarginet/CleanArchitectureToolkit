@@ -178,7 +178,15 @@
     <Project Path="modules/Cat.Sql.Cdc/Cat.Sql.Cdc/Cat.Sql.Cdc.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.UnitTesting/">
+    <File Path="modules/Cat.UnitTesting/README.md" />
+    <Project Path="modules/Cat.UnitTesting/Cat.UnitTesting.Commands/Cat.UnitTesting.Commands.csproj" />
+    <Project Path="modules/Cat.UnitTesting/Cat.UnitTesting.EventAggregators/Cat.UnitTesting.EventAggregators.csproj" />
+    <Project Path="modules/Cat.UnitTesting/Cat.UnitTesting.Messaging/Cat.UnitTesting.Messaging.csproj" />
     <Project Path="modules/Cat.UnitTesting/Cat.UnitTesting.NUnit/Cat.UnitTesting.NUnit.csproj" />
+    <Project Path="modules/Cat.UnitTesting/Cat.UnitTesting.Queries/Cat.UnitTesting.Queries.csproj" />
+    <Project Path="modules/Cat.UnitTesting/Cat.UnitTesting.Responses.NUnit/Cat.UnitTesting.Responses.NUnit.csproj" />
+    <Project Path="modules/Cat.UnitTesting/Cat.UnitTesting.ServiceRequests/Cat.UnitTesting.ServiceRequests.csproj" />
+    <Project Path="modules/Cat.UnitTesting/Cat.UnitTesting.Users/Cat.UnitTesting.Users.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.Users/">
     <File Path="modules/Cat.Users/README.md" />
@@ -212,6 +220,7 @@
     <Project Path="tests/Cat.Scheduling.Tests/Cat.Scheduling.Tests.csproj" />
     <Project Path="tests/Cat.ServiceRequests.Tests/Cat.ServiceRequests.Tests.csproj" />
     <Project Path="tests/Cat.Sql.Cdc.Tests/Cat.Sql.Cdc.Tests.csproj" />
+    <Project Path="tests/Cat.UnitTesting.Tests/Cat.UnitTesting.Tests.csproj" />
     <Project Path="tests/Cat.Users.Tests/Cat.Users.Tests.csproj" />
     <Project Path="tests/Cat.Validators.Tests/Cat.Validators.Tests.csproj" />
   </Folder>

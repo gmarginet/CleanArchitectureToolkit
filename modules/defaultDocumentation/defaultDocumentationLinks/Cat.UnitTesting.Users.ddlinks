@@ -1,0 +1,11 @@
+../../../Cat.UnitTesting/namespaces/Cat.UnitTesting.Users/
+P:Cat.UnitTesting.Users.FakeUser.UserId|FakeUser.UserId.md|UserId
+P:Cat.UnitTesting.Users.FakeUser.Name|FakeUser.Name.md|Name
+P:Cat.UnitTesting.Users.FakeUser.IsAuthenticated|FakeUser.IsAuthenticated.md|IsAuthenticated
+P:Cat.UnitTesting.Users.FakeUser.Roles|FakeUser.Roles.md|Roles
+M:Cat.UnitTesting.Users.FakeUser.InRole(System.String[])|FakeUser.InRole.53YK4ZEM2MW75UTA9FZFLWS6A.md|InRole(string[])
+M:Cat.UnitTesting.Users.FakeUser.IsInRole(System.String)|FakeUser.IsInRole.YDX2OLJALBHN69VPGPWOOL0Y1.md|IsInRole(string)
+N:Cat.UnitTesting.Users|Cat.UnitTesting.Users.md|Cat.UnitTesting.Users
+T:Cat.UnitTesting.Users.FakeUser|FakeUser.md|FakeUser
+P:Cat.UnitTesting.Users.FakeUserAccessor.User|FakeUserAccessor.User.md|User
+T:Cat.UnitTesting.Users.FakeUserAccessor|FakeUserAccessor.md|FakeUserAccessor

@@ -1,0 +1,12 @@
+../../../Cat.UnitTesting/namespaces/Cat.UnitTesting.Messaging/
+P:Cat.UnitTesting.Messaging.FakeMessageSender.Sent|FakeMessageSender.Sent.md|Sent
+M:Cat.UnitTesting.Messaging.FakeMessageSender.Of``1|FakeMessageSender.Of_T_().md|Of<T>()
+M:Cat.UnitTesting.Messaging.FakeMessageSender.Reset|FakeMessageSender.Reset().md|Reset()
+M:Cat.UnitTesting.Messaging.FakeMessageSender.PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|FakeMessageSender.PublishAsync.B569Z7QN0GV3R2YOO0X4YLJP9.md|PublishAsync(ICatEventMessage, Nullable<DateTimeOffset>, CancellationToken)
+M:Cat.UnitTesting.Messaging.FakeMessageSender.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|FakeMessageSender.SendAsync.2ULEX7TKFDLVR0XUKBX2EPF4F.md|SendAsync(ICatCommandMessage, Nullable<DateTimeOffset>, CancellationToken)
+N:Cat.UnitTesting.Messaging|Cat.UnitTesting.Messaging.md|Cat.UnitTesting.Messaging
+T:Cat.UnitTesting.Messaging.FakeMessageSender|FakeMessageSender.md|FakeMessageSender
+P:Cat.UnitTesting.Messaging.SentMessage.Message|SentMessage.Message.md|Message
+P:Cat.UnitTesting.Messaging.SentMessage.ScheduledAt|SentMessage.ScheduledAt.md|ScheduledAt
+M:Cat.UnitTesting.Messaging.SentMessage.#ctor(Cat.Messaging.Abstractions.ICatMessage,System.Nullable{System.DateTimeOffset})|SentMessage..ctor.M2UF4L1OXMBJJ7SUQBQZDM5AE.md|SentMessage(ICatMessage, Nullable<DateTimeOffset>)
+T:Cat.UnitTesting.Messaging.SentMessage|SentMessage.md|SentMessage

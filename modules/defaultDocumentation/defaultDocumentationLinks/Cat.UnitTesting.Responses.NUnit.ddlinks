@@ -1,0 +1,18 @@
+../../../Cat.UnitTesting/namespaces/Cat.UnitTesting.Responses.NUnit/
+P:Cat.UnitTesting.Responses.NUnit.CatIs.Succeeded|CatIs.Succeeded.md|Succeeded
+P:Cat.UnitTesting.Responses.NUnit.CatIs.Failed|CatIs.Failed.md|Failed
+M:Cat.UnitTesting.Responses.NUnit.CatIs.SucceededWith(Cat.Responses.Abstractions.CatResponseType)|CatIs.SucceededWith.AQ01RT1OFPLUUGI9U626WNJJ8.md|SucceededWith(CatResponseType)
+M:Cat.UnitTesting.Responses.NUnit.CatIs.FailedWith(Cat.Responses.Abstractions.CatResponseType)|CatIs.FailedWith.md#Cat.UnitTesting.Responses.NUnit.CatIs.FailedWith(Cat.Responses.Abstractions.CatResponseType)|FailedWith(CatResponseType)
+M:Cat.UnitTesting.Responses.NUnit.CatIs.FailedWithCode(System.String)|CatIs.FailedWithCode.5FSNSX761X85Q8GU5TTLG2KI9.md|FailedWithCode(string)
+M:Cat.UnitTesting.Responses.NUnit.CatIs.FailedWith(Cat.Responses.Abstractions.CatResponseType,System.String)|CatIs.FailedWith.md#Cat.UnitTesting.Responses.NUnit.CatIs.FailedWith(Cat.Responses.Abstractions.CatResponseType,string)|FailedWith(CatResponseType, string)
+N:Cat.UnitTesting.Responses.NUnit|Cat.UnitTesting.Responses.NUnit.md|Cat.UnitTesting.Responses.NUnit
+T:Cat.UnitTesting.Responses.NUnit.CatIs|CatIs.md|CatIs
+F:Cat.UnitTesting.Responses.NUnit.CatResponseConstraint._succeeded|CatResponseConstraint._succeeded.md|_succeeded
+F:Cat.UnitTesting.Responses.NUnit.CatResponseConstraint._type|CatResponseConstraint._type.md|_type
+F:Cat.UnitTesting.Responses.NUnit.CatResponseConstraint._errorCode|CatResponseConstraint._errorCode.md|_errorCode
+P:Cat.UnitTesting.Responses.NUnit.CatResponseConstraint.Description|CatResponseConstraint.Description.md|Description
+M:Cat.UnitTesting.Responses.NUnit.CatResponseConstraint.#ctor(System.Boolean,Cat.Responses.Abstractions.CatResponseType,System.String)|CatResponseConstraint..ctor.C7J63VZ0RMVWBFWOQGBDYTRFC.md|CatResponseConstraint(bool, CatResponseType, string)
+M:Cat.UnitTesting.Responses.NUnit.CatResponseConstraint.ApplyTo``1(``0)|CatResponseConstraint.ApplyTo.T1T6N5ZEYC79BNKM1YJ0FBEY2.md|ApplyTo<TActual>(TActual)
+M:Cat.UnitTesting.Responses.NUnit.CatResponseConstraint.Describe(Cat.Responses.Abstractions.ICatResponse)|CatResponseConstraint.Describe.4YEG11RBG5755SCBOSMLB6Y74.md|Describe(ICatResponse)
+T:Cat.UnitTesting.Responses.NUnit.CatResponseConstraint|CatResponseConstraint.md|CatResponseConstraint
+?:Cat.UnitTesting.Responses.NUnit.CatIs.FailedWith|CatIs.FailedWith.md|FailedWith

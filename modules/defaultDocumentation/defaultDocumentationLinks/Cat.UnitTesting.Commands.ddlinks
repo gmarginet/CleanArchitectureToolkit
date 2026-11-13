@@ -1,0 +1,19 @@
+../../../Cat.UnitTesting/namespaces/Cat.UnitTesting.Commands/
+F:Cat.UnitTesting.Commands.FakeCommandProcessor._responses|FakeCommandProcessor._responses.md|_responses
+P:Cat.UnitTesting.Commands.FakeCommandProcessor.DefaultResponse|FakeCommandProcessor.DefaultResponse.md|DefaultResponse
+P:Cat.UnitTesting.Commands.FakeCommandProcessor.Commands|FakeCommandProcessor.Commands.md|Commands
+M:Cat.UnitTesting.Commands.FakeCommandProcessor.Respond``1(Cat.Responses.Abstractions.ICatResponse)|FakeCommandProcessor.Respond.md#Cat.UnitTesting.Commands.FakeCommandProcessor.Respond_TCommand_(Cat.Responses.Abstractions.ICatResponse)|Respond<TCommand>(ICatResponse)
+M:Cat.UnitTesting.Commands.FakeCommandProcessor.Respond``1(System.Func{``0,Cat.Responses.Abstractions.ICatResponse})|FakeCommandProcessor.Respond.md#Cat.UnitTesting.Commands.FakeCommandProcessor.Respond_TCommand_(System.Func_TCommand,Cat.Responses.Abstractions.ICatResponse_)|Respond<TCommand>(Func<TCommand,ICatResponse>)
+M:Cat.UnitTesting.Commands.FakeCommandProcessor.Respond``2(Cat.Responses.Abstractions.ICatResponse{``1})|FakeCommandProcessor.Respond.md#Cat.UnitTesting.Commands.FakeCommandProcessor.Respond_TCommand,TResult_(Cat.Responses.Abstractions.ICatResponse_TResult_)|Respond<TCommand,TResult>(ICatResponse<TResult>)
+M:Cat.UnitTesting.Commands.FakeCommandProcessor.Respond``2(System.Func{``0,Cat.Responses.Abstractions.ICatResponse{``1}})|FakeCommandProcessor.Respond.md#Cat.UnitTesting.Commands.FakeCommandProcessor.Respond_TCommand,TResult_(System.Func_TCommand,Cat.Responses.Abstractions.ICatResponse_TResult__)|Respond<TCommand,TResult>(Func<TCommand,ICatResponse<TResult>>)
+M:Cat.UnitTesting.Commands.FakeCommandProcessor.Of``1|FakeCommandProcessor.Of_T_().md|Of<T>()
+M:Cat.UnitTesting.Commands.FakeCommandProcessor.Reset|FakeCommandProcessor.Reset().md|Reset()
+M:Cat.UnitTesting.Commands.FakeCommandProcessor.ProcessAsync(Cat.Commands.Abstractions.ICatCommand,System.Threading.CancellationToken)|FakeCommandProcessor.ProcessAsync.md#Cat.UnitTesting.Commands.FakeCommandProcessor.ProcessAsync(Cat.Commands.Abstractions.ICatCommand,System.Threading.CancellationToken)|ProcessAsync(ICatCommand, CancellationToken)
+M:Cat.UnitTesting.Commands.FakeCommandProcessor.Process(Cat.Commands.Abstractions.ICatCommand)|FakeCommandProcessor.Process.md#Cat.UnitTesting.Commands.FakeCommandProcessor.Process(Cat.Commands.Abstractions.ICatCommand)|Process(ICatCommand)
+M:Cat.UnitTesting.Commands.FakeCommandProcessor.ProcessAsync``1(Cat.Commands.Abstractions.ICatCommand{``0},System.Threading.CancellationToken)|FakeCommandProcessor.ProcessAsync.md#Cat.UnitTesting.Commands.FakeCommandProcessor.ProcessAsync_TResult_(Cat.Commands.Abstractions.ICatCommand_TResult_,System.Threading.CancellationToken)|ProcessAsync<TResult>(ICatCommand<TResult>, CancellationToken)
+M:Cat.UnitTesting.Commands.FakeCommandProcessor.Process``1(Cat.Commands.Abstractions.ICatCommand{``0})|FakeCommandProcessor.Process.md#Cat.UnitTesting.Commands.FakeCommandProcessor.Process_TResult_(Cat.Commands.Abstractions.ICatCommand_TResult_)|Process<TResult>(ICatCommand<TResult>)
+N:Cat.UnitTesting.Commands|Cat.UnitTesting.Commands.md|Cat.UnitTesting.Commands
+T:Cat.UnitTesting.Commands.FakeCommandProcessor|FakeCommandProcessor.md|FakeCommandProcessor
+?:Cat.UnitTesting.Commands.FakeCommandProcessor.Respond|FakeCommandProcessor.Respond.md|Respond
+?:Cat.UnitTesting.Commands.FakeCommandProcessor.ProcessAsync|FakeCommandProcessor.ProcessAsync.md|ProcessAsync
+?:Cat.UnitTesting.Commands.FakeCommandProcessor.Process|FakeCommandProcessor.Process.md|Process

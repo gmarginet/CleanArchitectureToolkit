@@ -1,0 +1,12 @@
+../../../Cat.UnitTesting/namespaces/Cat.UnitTesting.Queries/
+F:Cat.UnitTesting.Queries.FakeQueryProcessor._responses|FakeQueryProcessor._responses.md|_responses
+P:Cat.UnitTesting.Queries.FakeQueryProcessor.Queries|FakeQueryProcessor.Queries.md|Queries
+M:Cat.UnitTesting.Queries.FakeQueryProcessor.Respond``2(Cat.Responses.Abstractions.ICatResponse{``1})|FakeQueryProcessor.Respond.md#Cat.UnitTesting.Queries.FakeQueryProcessor.Respond_TQuery,TQueryResult_(Cat.Responses.Abstractions.ICatResponse_TQueryResult_)|Respond<TQuery,TQueryResult>(ICatResponse<TQueryResult>)
+M:Cat.UnitTesting.Queries.FakeQueryProcessor.Respond``2(System.Func{``0,Cat.Responses.Abstractions.ICatResponse{``1}})|FakeQueryProcessor.Respond.md#Cat.UnitTesting.Queries.FakeQueryProcessor.Respond_TQuery,TQueryResult_(System.Func_TQuery,Cat.Responses.Abstractions.ICatResponse_TQueryResult__)|Respond<TQuery,TQueryResult>(Func<TQuery,ICatResponse<TQueryResult>>)
+M:Cat.UnitTesting.Queries.FakeQueryProcessor.Of``1|FakeQueryProcessor.Of_T_().md|Of<T>()
+M:Cat.UnitTesting.Queries.FakeQueryProcessor.Reset|FakeQueryProcessor.Reset().md|Reset()
+M:Cat.UnitTesting.Queries.FakeQueryProcessor.ProcessAsync``1(Cat.Queries.Abstractions.ICatQuery{``0},System.Threading.CancellationToken)|FakeQueryProcessor.ProcessAsync.XFL2O6PZ3VD3IYI4511NPC0LA.md|ProcessAsync<TQueryResult>(ICatQuery<TQueryResult>, CancellationToken)
+M:Cat.UnitTesting.Queries.FakeQueryProcessor.Process``1(Cat.Queries.Abstractions.ICatQuery{``0})|FakeQueryProcessor.Process.UPS50FTBXDZAJK2OJIK3V4DTE.md|Process<TQueryResult>(ICatQuery<TQueryResult>)
+N:Cat.UnitTesting.Queries|Cat.UnitTesting.Queries.md|Cat.UnitTesting.Queries
+T:Cat.UnitTesting.Queries.FakeQueryProcessor|FakeQueryProcessor.md|FakeQueryProcessor
+?:Cat.UnitTesting.Queries.FakeQueryProcessor.Respond|FakeQueryProcessor.Respond.md|Respond
