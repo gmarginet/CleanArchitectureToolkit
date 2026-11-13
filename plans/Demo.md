@@ -43,6 +43,13 @@
 - [Phase 4](#phase-4)
 - [Phase 5](#phase-5)
 - [Phase 6](#phase-6)
+- [Phase 7](#phase-7)
+- [Phase 8](#phase-8)
+- [Phase 9](#phase-9)
+- [Phase 10](#phase-10)
+- [Phase 11](#phase-11)
+- [Phase 12](#phase-12)
+- [Phase 13](#phase-13)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 2-->
@@ -51,35 +58,74 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-Notifications and scheduling. The Notifications service and `Cat.Scheduling`. The nightly clean up of the order counters, the cancel of unpaid orders and a nightly low stock report.
+The Notifications service. It sends the order confirmed mail.
 
 #### Background
-- Notifications sends the order confirmed and order shipped messages. It also runs the scheduled jobs. It consumes `OrderConfirmed`.
+- Notifications consumes `OrderConfirmed` and sends the mail.
+- The mails are in English. Languages come in [Phase 10](#phase-10).
+- The scheduled jobs come in [Phase 3](#phase-3).
+
+#### What exists today
+- The Notifications service does not exist. The demo readme lists it as planned, and the box in the drawing is hatched.
+
+#### Needs
+Nothing else. The modules it uses, `Cat.Messaging` and `Cat.EventProcessor`, are built.
+
+#### Done when
+An order confirmed mail is sent.
+
+#### Decided
+- **Notifications data.** Notifications has a database, built code first with EF Core migrations, like Orders. A table of sent mails, keyed by order and kind, makes a repeated message safe and shows idempotent handling.
+- **Database.** SQL Server, like the other services. The MySQL showcase of [Phase 13](#phase-13) moves Notifications to MySQL later.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 16-->
+#### Question 16
+How do we keep the move to MySQL small? `Cat.EFCore.Extensions` works on SQL Server only today. `ConfigureCatEntity` calls `IsClustered` and `UseIdentityColumn`, and the schema falls back to `dbo`. The module plan [Cat.EFCore.md](Cat.EFCore.md) makes it provider neutral. The options:
+- **Use the CAT base entities and `ConfigureCatEntity`, like the other services.** No temporal tables and no raw SQL Server code. Cost: the move in [Phase 13](#phase-13) waits for the neutral `Cat.EFCore.Extensions`, and that change must keep these calls source compatible.
+- **Plain EF Core entities without the CAT base.** Cost: Notifications no longer shows the base entities, and its tables differ from the other services.
+
+Recommendation: the first option. The demo should show the same base entities everywhere, and a neutral `Cat.EFCore.Extensions` is needed for MySQL anyway.
+<!-- region end: Question 16-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 2-->
+
+<!-- region start: Phase 3-->
+## Phase 3
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+Scheduled jobs. Show `Cat.Scheduling`: the nightly clean up of the order counters, the cancel of unpaid orders, the sweep of stuck orders and a nightly low stock report.
+
+#### Background
 - The scheduled jobs of the demo:
   - Clean up the daily order counters every night, shortly after midnight UTC.
   - Cancel unpaid orders after 24 hours.
   - Cancel orders that stay Pending too long, the sweep. See Decided and [Question 15](#question-15).
-  - A nightly low stock report.
-- The mails are in English. Languages come in [Phase 6](#phase-6).
+  - A nightly low stock report, sent as a mail by the Notifications service of [Phase 2](#phase-2).
 - Work without a user, such as the Scheduler, uses a client credentials token.
 - The Scheduler is the worker of a service, as the readme describes it. In debug mode the API has a development endpoint group with a sub group per worker.
 
 #### What exists today
-- The Notifications service does not exist. The demo readme lists it as planned, and the box in the drawing is hatched.
 - The `CleanUpOrderCounters` service request exists in Orders, with its handler and tests. The development endpoint `POST /development/scheduler/clean-up-order-counters` triggers it, in the Development environment only. Orders switches on the Scheduler, and the endpoint stays so a developer can try the request without the Scheduler.
 - The Keycloak realm has the clients `cat-demo-web` and `cat-demo-cli` only. It has no client for a client credentials token.
 - `Cat.Scheduling` exists, see the [module readme](../modules/Cat.Scheduling/README.md). Its plan, [Cat.Scheduling.md](Cat.Scheduling.md), recommends that a one-off timeout, such as the cancel after 24 hours, goes through a scheduled message of the bus and not through the Scheduler.
+- Catalog keeps every old price in a temporal table, and `BookPrice` has a `LastUpdatedBy` column. The seed of Catalog already sets the named system user.
 
 #### Needs
-The module plan [Cat.Scheduling.md](Cat.Scheduling.md) built.
+[Phase 2](#phase-2), for the Notifications service and its database. The module `Cat.Scheduling`, which is built.
 
 #### Done when
-An order confirmed mail is sent. The nightly jobs run from the Scheduler, and the development endpoint stays, so a developer can try a job without the Scheduler.
+The nightly jobs run from the Scheduler, and the development endpoint stays, so a developer can try a job without the Scheduler.
 
 #### Decided
 - **Counter cleanup.** The Scheduler runs the `CleanUpOrderCounters` service request every night. The development endpoint triggers it without the Scheduler.
-- **Notifications data.** Notifications has a database, built code first with EF Core migrations, like Orders. A table of sent mails, keyed by order and kind, makes a repeated message safe and shows idempotent handling. The scheduler can use the same database for its claim table and run history, see [Cat.Scheduling.md](Cat.Scheduling.md).
+- **Claim table.** The scheduler can use the database of Notifications for its claim table and run history, see [Cat.Scheduling.md](Cat.Scheduling.md).
 - **Sweep of stuck orders.** The place order handler of Orders cancels the order when the caller gives up after the order is created, for example on a gateway timeout. That does not cover a crash of the service in the middle of the workflow. A scheduled job cancels the orders that stay Pending too long and covers the rest. A cancel through the sweep publishes the same cancelled event, so the stock is released too. How long an order may stay Pending, and whether this is the job that cancels unpaid orders, is [Question 15](#question-15).
+- **System user for jobs.** A price changed by a job gets the named system user, `CatUser.System`, see the [module readme of Cat.Users](../modules/Cat.Users/README.md).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
@@ -92,61 +138,16 @@ How long may an order stay Pending before the sweep cancels it, and is the sweep
 
 Recommendation: one job with a limit that is longer than the slowest normal order, such as 15 minutes. A Pending order older than that is stuck, and the 24 hour wait protects nobody. If the owner wants a showcase of the scheduled message, give it a real one-off timeout, such as a reminder mail for an unpaid order.
 <!-- region end: Question 15-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 2-->
 
-<!-- region start: Phase 3-->
-## Phase 3
+<!-- region start: Question 17-->
+#### Question 17
+Which service runs which job? The earlier text of this plan said Notifications runs the scheduled jobs. Orders already switches on the Scheduler for the counter cleanup. The options:
+- **Notifications runs all jobs** and calls the owning service through service requests. Cost: Notifications depends on the contracts of the other services, and the counter cleanup moves out of Orders.
+- **Each service runs the jobs of its own data.** The counter cleanup and the sweep run in Orders, and the low stock report runs in Inventory. Notifications only sends the mail. Cost: more than one Scheduler in the demo, and each one needs its own claim table.
+- **Notifications runs the report and the other services run their own jobs.** Cost: two rules to explain.
 
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-The other modules. One showcase at a time, each with its own plan.
-
-#### Background
-The showcases:
-- `Cat.Caching`: cached catalog queries.
-- `Cat.Dapper`: fast read-only order overview queries, next to EF Core for writes.
-- `Cat.EFCore` transactions: saving an order and its lines in one go.
-- `Cat.Sagas`: a payment over messages.
-- `Cat.UnitTesting`: the unit tests of the demo.
-
-Every module is designed from what the demo shows, and the module plan of each is built first.
-
-#### What exists today
-- None of these modules exists yet. Each has a plan with the same name in this folder, such as [Cat.Caching.md](Cat.Caching.md).
-- `Cat.Users` is built and the demo uses it. The business logic of Orders asks for `ICatUser`, and Catalog sets `LastUpdatedBy` from it. The demo readme says where.
-- Orders has an event subscriber, `OrderAuditSubscriber`, that writes an audit record when an order event happens. It stays as the example of an event subscriber. `Cat.Auditing` was dropped. A developer who wants to see who changed a row adds a `LastUpdatedBy` column to the temporal table.
-- Catalog keeps every old price in a temporal table, which answers "what was the price then". `BookPrice` has a `LastUpdatedBy` column, so the history also says who set the price.
-- Ownership of orders is a filter in the queries. The test doubles of Orders have `FakeUser`, which is an `ICatUser` and the small demo interface `IUserEmail` in one.
-- The Catalog save endpoint requires the `admin` policy, and a test checks the 401 without a login and the 403 for a user who is not an admin. The check stays at the endpoint, see the [module readme of Cat.Users](../modules/Cat.Users/README.md).
-- Inventory reads through the EF Core scaffold only.
-- A cancelled order keeps its `Approved` payment, because there is no refund step yet.
-- The unit tests of the demo have their own copies of the fake command and query processors.
-
-#### Needs
-The module plan of each showcase, built first.
-
-#### Done when
-Per module: the demo uses it and the readme says where.
-
-#### Decided
-- **System user for jobs.** A price changed by a job gets the named system user, `CatUser.System`, see the [module readme of Cat.Users](../modules/Cat.Users/README.md). The seed of Catalog already does this.
-- **Inventory data access.** The EF Core scaffold only for now. Dapper waits for the `Cat.Dapper` module.
-- **Payment over messages.** A saga style payment over messages comes later, see [Cat.Sagas.md](Cat.Sagas.md). Until then the payment is an interface behind a generated client, and Orders keeps its state in the order status.
-- **Messages carry a token.** A message sent for a user carries the token of that user, and the Scheduler sends with a client credentials token, as the [module readme of Cat.EventProcessor](../modules/Cat.EventProcessor/README.md) and the [module readme of Cat.Messaging](../modules/Cat.Messaging/README.md) describe. The demo host implements `ICatTokenProvider` and registers `AddCatEventProcessorAuthorization`, so a listener builds the `ICatUser` from the token. This comes once `Cat.Users` and the sending side exist, and the demo is the place that proves the rule. The costs:
-  - The token sits in the queue, the dead letter queue and the outbox table, so it needs short lived tokens and a security review before production.
-  - The Keycloak realm needs a client for the system token.
-
-#### Known gaps for these showcases
-- **Refund.** Add a refund when payment becomes a message flow, see [Cat.Sagas.md](Cat.Sagas.md):
-  - A `Refunded` payment status, and an `IPaymentProvider` refund call.
-  - `OrderCancelledEvent` gets a subscriber that refunds an approved payment.
-  - Cancelling a confirmed order is then only done when the refund succeeded or is on its way.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
+Recommendation: each service runs the jobs of its own data. It follows what is built, since Orders already runs the Scheduler, and it shows the module as a worker of a service. Notifications stays a service that only sends mails.
+<!-- region end: Question 17-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 3-->
 
@@ -185,80 +186,160 @@ A visitor who is not signed in sees the sign-in page. The button starts the logi
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-Resilience and telemetry. Show `Cat.Resilience` and `Cat.Telemetry` in the demo, for code that runs without Aspire.
-
-#### Background
-- `Aspire ServiceDefaults` already gives every service telemetry, health checks and the standard resilience handler. The demo uses Aspire, so it does not use `Cat.Telemetry` or `Cat.Resilience` today.
-- `Cat.Resilience` and `Cat.Telemetry` are meant for projects without Aspire. The rule: a project with Aspire uses `ServiceDefaults`, and a project without Aspire uses the modules. See [Cat.Resilience.md](Cat.Resilience.md) and [Cat.Telemetry.md](Cat.Telemetry.md).
-- The demo case for `Cat.Resilience` is retry and circuit breaker on the payment call. The case for `Cat.Telemetry` is tracing one order across all services.
+Show `Cat.Sql.Cdc` with the low stock case in Inventory. A change of the stock in the Inventory database becomes a message, without the Inventory code publishing anything itself.
 
 #### What exists today
-- The payment service is a service of ours, behind the gateway, with `ServiceDefaults`. It can fail on purpose with the settings `PaymentFailures:Latency`, `PaymentFailures:ErrorPercentage` and `PaymentFailures:Outage`.
-- Orders replaces the standard resilience handler of the clients for payment and Inventory with a shorter one in `UseFastFailResilience`: one retry after 500 ms, 5 seconds per try and 12 seconds in total. `FastFailResilienceTests` covers it.
-- The `ServiceDefaults` pipeline is chosen per service address, so a failing service opens its own circuit.
-- `Cat.Resilience` and `Cat.Telemetry` do not exist yet.
+- `Cat.Sql.Cdc` is built, see the [module readme](../modules/Cat.Sql.Cdc/README.md). It reads the change tables of SQL Server and sends every change to a sink. `Cat.Sql.Cdc.Messaging` sends the changes through `Cat.Messaging`.
+- The module never switches change data capture on. It needs `sys.sp_cdc_enable_table` for each table, and a running SQL Server Agent or an equivalent.
+- The Inventory database is database first. In the container mode the creation script of the AppHost creates the database and runs the SQL scripts of the `Database` folder of the Inventory service, `001-schema.sql` to `003-reservation-confirmed.sql`. The scripts only create what is missing, so they run at every start. When an existing inventory database is used, its owner owns the schema and the AppHost runs no scripts.
+- Inventory changes the stock in `StockReserveCommandHandler` and `StockReleaseCommandHandler`, with one conditional `UPDATE` in a transaction.
 
 #### Needs
-The module plans [Cat.Resilience.md](Cat.Resilience.md) and [Cat.Telemetry.md](Cat.Telemetry.md) answered first.
+The module `Cat.Sql.Cdc`, which is built. Whether the phase also needs [Phase 2](#phase-2) is [Question 18](#question-18).
+
+#### Done when
+A stock that drops below the limit becomes a message that the demo handles. The readme says where.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 2-->
-#### Question 2
-What if the demo treats payment as a service we do not control, like a real payment provider? This is the blocking question, because question 1 follows from it. The answers from the code:
-- **`ServiceDefaults`.** It is a project in our own solution. A service we do not control does not use it, and does not have to. What matters is the caller. Orders calls `AddServiceDefaults`, so every `HttpClient` in Orders gets the resilience handler, service discovery and the HTTP client tracing, whoever answers. We are not obliged to implement anything in the outside service.
-- **Tracing.** The call shows as a client span in the trace of Orders, with its duration and status. The outside service joins the trace only when it understands the W3C `traceparent` header. A real provider often does not, so the trace stops at the edge. That is realistic and worth showing.
-- **Resilience and tracing with CAT modules.** Yes, this is a good showcase, because retry, timeout and circuit breaker matter most for a service we cannot fix. The payment service would then run without `ServiceDefaults`, and Orders would swap the `ServiceDefaults` handler for `Cat.Resilience` on that one client. `UseFastFailResilience` in Orders already removes the default handler, so the spot exists.
-- **`Cat.Api.Client`.** Yes, with limits. `AddCatApiClient` takes any address as a plain string, and the generated client needs only the OpenAPI document of the provider. Three things change. The call would not go through our gateway, so the rule "services never call each other directly" needs an exception for outside services. The error body of an outside service is not `CatErrorResponse`, so the helper keeps the status code but loses the error codes and arguments. The token of the user must not be forwarded to a third party. A provider key or its own token is used instead.
+<!-- region start: Question 18-->
+#### Question 18
+What is the result of the showcase? The options:
+- **A low stock mail.** The change becomes a low stock message, and the Notifications service of [Phase 2](#phase-2) sends a mail to the admin. Cost: the phase needs Notifications, and the mail needs a limit per book.
+- **A message that only shows in the logs and a test.** Cost: no visible result in the demo, and it never shows the whole chain.
 
-The options:
-- **A.** Keep payment as it is, a service of ours behind the gateway. Cost: the demo never shows `Cat.Resilience` or `Cat.Telemetry`, and phase 5 shrinks to documentation.
-- **B.** Make payment outside: no `ServiceDefaults`, no gateway, its own error format, and Orders uses `Cat.Resilience` and `Cat.Telemetry` for that call. Cost: the first provider changes, and the error codes of payment are lost to the client.
-- **C.** Do B later as a second payment provider next to the first, selected by configuration. Cost: a second provider to build and a switch to maintain.
+Recommendation: the mail. It shows the chain from a database row to a person, and it reuses Notifications.
+<!-- region end: Question 18-->
 
-Recommendation: C. The `IPaymentProvider` interface already hides the provider, so a second one costs little. The first provider stays as it is and keeps working. The outside variant becomes the showcase for `Cat.Resilience` and `Cat.Telemetry` once those modules exist.
-<!-- region end: Question 2-->
+<!-- region start: Question 19-->
+#### Question 19
+How is change data capture switched on for the Inventory tables, and how does the SQL Server container get its Agent? The options:
+- **A new SQL script in the `Database` folder** that calls `sys.sp_cdc_enable_table` for the stock table, in the same way as the other scripts. Cost: it must be safe to run at every start, and it runs only in the container mode. A developer with an existing database enables it by hand.
+- **Only the readme describes the call.** Cost: the demo does not run the module out of the box.
 
-<!-- region start: Question 1-->
-#### Question 1
-When does the demo use `Cat.Resilience`: never, or in a part that runs without Aspire? The demo readme says the demo does not use `Cat.Resilience`, because `ServiceDefaults` covers it. This follows from question 2: with option A the answer is never, with option C it is the outside payment provider. Answer question 2 and this one is closed. The demo readme then needs one sentence about it.
-<!-- region end: Question 1-->
-
-<!-- region start: Question 3-->
-#### Question 3
-What do we do about the development certificate? The dashboard says "No trusted development certificate was found" when the machine has not run `dotnet dev-certs https --trust`. It is harmless now, because the AppHost, the dashboard and the services all run on HTTP (the AppHost launch settings set `ASPIRE_ALLOW_UNSECURED_TRANSPORT`). It matters once something uses HTTPS. The options:
-- **Keep HTTP and add one note.** The run steps of the demo readme say the warning is harmless. Cost: the demo shows no HTTPS.
-- **Tell the developer to trust the certificate** (`dotnet dev-certs https --trust`) and move the demo to HTTPS. Cost: one more setup step, and the unsecured transport setting goes away.
-- **Do nothing.** Cost: a new developer sees the warning and wonders.
-
-Recommendation: keep HTTP with one note in the run steps. The warning goes away by itself when something needs HTTPS, and then the step moves to the run steps.
-<!-- region end: Question 3-->
-
-<!-- region start: Question 4-->
-#### Question 4
-Do all three failure switches of the payment service hold when the call goes through the gateway? The outage was tried live: with it on, the order ended after about 9 seconds. As far as we know, the latency and the error percentage were not tried through the gateway. The work is one order each, and a check that the gateway does not add its own timeout or retry that changes the result. Where do we write down the outcome?
-- **In the payment chapter of the demo readme.** Cost: the readme gets a table of results that can go out of date.
-- **As a test.** An integration test through the gateway. Cost: it needs the AppHost, so it is slow.
-- **Not at all.** Check once and move on. Cost: nobody knows later what was tried.
-
-Recommendation: check once by hand, and write the three results as one line each in the payment chapter of the demo readme. This needs the owner to run the AppHost, as Claude does not start it.
-<!-- region end: Question 4-->
-
-<!-- region start: Question 5-->
-#### Question 5
-Should the health checks of the services cover their databases? Today every service answers `/health` (ready) and `/alive` (running) from one check, `self`, in `ServiceDefaults`, and that check is always healthy. The AppHost and the gateway watch `/health`, so a service with a database that is down still looks healthy. The options:
-- **Add a database check per service,** on the ready endpoint only. Cost: a package per service (`AspNetCore.HealthChecks.SqlServer` or the EF Core check), and the services restart or stay out of the gateway while the database starts.
-- **Add one check in `ServiceDefaults` that takes any `DbContext`.** Cost: `ServiceDefaults` must know about EF Core, and Inventory is built database first.
-- **Keep it as it is.** Cost: a service shows healthy while its database is down.
-
-Recommendation: a database check per service on `/health` only, and keep `/alive` as it is. It is a real pattern for developers to copy, and it is small. Do it in this phase only if the owner wants it, since it does not need the modules.
-<!-- region end: Question 5-->
+Recommendation: a new script in the `Database` folder. The Agent in the container must be checked first, because the demo has not used it so far. The readme says what a developer does with an existing database.
+<!-- region end: Question 19-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 5-->
 
 <!-- region start: Phase 6-->
 ## Phase 6
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+Show `Cat.UnitTesting`: the unit tests of the demo.
+
+#### What exists today
+- `Cat.UnitTesting` does not exist yet. Its plan is [Cat.UnitTesting.md](Cat.UnitTesting.md).
+- The unit tests of the demo have their own copies of the fake command and query processors.
+- The test doubles of Orders have `FakeUser`, which is an `ICatUser` and the small demo interface `IUserEmail` in one.
+
+#### Needs
+The module plan [Cat.UnitTesting.md](Cat.UnitTesting.md), built first.
+
+#### Done when
+The demo uses the module, and the readme says where.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 6-->
+
+<!-- region start: Phase 7-->
+## Phase 7
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+Show `Cat.Sagas`: a payment over messages.
+
+#### What exists today
+- `Cat.Sagas` does not exist yet. Its plan is [Cat.Sagas.md](Cat.Sagas.md).
+- `Cat.Users` is built and the demo uses it. The business logic of Orders asks for `ICatUser`, and Catalog sets `LastUpdatedBy` from it. The demo readme says where.
+- Orders has an event subscriber, `OrderAuditSubscriber`, that writes an audit record when an order event happens. It stays as the example of an event subscriber. `Cat.Auditing` was dropped. A developer who wants to see who changed a row adds a `LastUpdatedBy` column to the temporal table.
+- Ownership of orders is a filter in the queries.
+- The Catalog save endpoint requires the `admin` policy, and a test checks the 401 without a login and the 403 for a user who is not an admin. The check stays at the endpoint, see the [module readme of Cat.Users](../modules/Cat.Users/README.md).
+- A cancelled order keeps its `Approved` payment, because there is no refund step yet.
+
+#### Needs
+The module plan [Cat.Sagas.md](Cat.Sagas.md), built first.
+
+#### Done when
+The payment runs as a saga over messages, and the readme says where.
+
+#### Decided
+- **Payment over messages.** A saga style payment over messages comes with this phase, see [Cat.Sagas.md](Cat.Sagas.md). Until then the payment is an interface behind a generated client, and Orders keeps its state in the order status.
+- **Messages carry a token.** A message sent for a user carries the token of that user, and the Scheduler sends with a client credentials token, as the [module readme of Cat.EventProcessor](../modules/Cat.EventProcessor/README.md) and the [module readme of Cat.Messaging](../modules/Cat.Messaging/README.md) describe. The demo host implements `ICatTokenProvider` and registers `AddCatEventProcessorAuthorization`, so a listener builds the `ICatUser` from the token. This comes once `Cat.Users` and the sending side exist, and the demo is the place that proves the rule. The costs:
+  - The token sits in the queue, the dead letter queue and the outbox table, so it needs short lived tokens and a security review before production.
+  - The Keycloak realm needs a client for the system token.
+
+#### Known gaps for this showcase
+- **Refund.** Add a refund when payment becomes a message flow, see [Cat.Sagas.md](Cat.Sagas.md):
+  - A `Refunded` payment status, and an `IPaymentProvider` refund call.
+  - `OrderCancelledEvent` gets a subscriber that refunds an approved payment.
+  - Cancelling a confirmed order is then only done when the refund succeeded or is on its way.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 7-->
+
+<!-- region start: Phase 8-->
+## Phase 8
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+Show `Cat.Dapper`: fast read-only order overview queries, next to EF Core for writes.
+
+#### What exists today
+- `Cat.Dapper` does not exist yet. Its plan is [Cat.Dapper.md](Cat.Dapper.md).
+- Inventory reads through the EF Core scaffold only.
+
+#### Needs
+The module plan [Cat.Dapper.md](Cat.Dapper.md), built first.
+
+#### Done when
+The demo uses the module, and the readme says where.
+
+#### Decided
+- **Inventory data access.** The EF Core scaffold only for now. Dapper waits for the `Cat.Dapper` module.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 8-->
+
+<!-- region start: Phase 9-->
+## Phase 9
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+Show `Cat.Caching`: cached catalog queries.
+
+#### What exists today
+- `Cat.Caching` does not exist yet. Its plan is [Cat.Caching.md](Cat.Caching.md).
+
+#### Needs
+The module plan [Cat.Caching.md](Cat.Caching.md), built first.
+
+#### Done when
+The demo uses the module, and the readme says where.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 9-->
+
+<!-- region start: Phase 10-->
+## Phase 10
 
 ### Description
 <!-- region start: PhaseDescription-->
@@ -270,7 +351,7 @@ Languages. The demo works in more than one language: the client has a language s
 - `Cat.Localizations` looks up localized texts by key. Its open points about the culture, localized data and error messages are in [Cat.Localizations.md](Cat.Localizations.md).
 
 #### What exists today
-- The client and the mails of Notifications (Phase 2) are in English.
+- The client and the mails of Notifications ([Phase 2](#phase-2)) are in English.
 - Catalog does not use `Cat.Localizations`, so category names are plain text. Showing them in several languages waits until the module is stable.
 - `ICatLocalizer` has no culture parameter, so a provider must find the culture itself.
 
@@ -317,4 +398,143 @@ Does the client remember the language choice, and where?
 Recommendation: local storage, with the browser language as the first default. It is the smallest step.
 <!-- region end: Question 14-->
 <!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 6-->
+<!-- region end: Phase 10-->
+
+<!-- region start: Phase 11-->
+## Phase 11
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+Show `Cat.Resilience` in the demo, for code that runs without Aspire.
+
+#### Background
+- `Aspire ServiceDefaults` already gives every service telemetry, health checks and the standard resilience handler. The demo uses Aspire, so it does not use `Cat.Resilience` today.
+- `Cat.Resilience` is meant for projects without Aspire. The rule: a project with Aspire uses `ServiceDefaults`, and a project without Aspire uses the module. See [Cat.Resilience.md](Cat.Resilience.md).
+- The demo case for `Cat.Resilience` is retry and circuit breaker on the payment call.
+
+#### What exists today
+- The payment service is a service of ours, behind the gateway, with `ServiceDefaults`. It can fail on purpose with the settings `PaymentFailures:Latency`, `PaymentFailures:ErrorPercentage` and `PaymentFailures:Outage`.
+- Orders replaces the standard resilience handler of the clients for payment and Inventory with a shorter one in `UseFastFailResilience`: one retry after 500 ms, 5 seconds per try and 12 seconds in total. `FastFailResilienceTests` covers it.
+- The `ServiceDefaults` pipeline is chosen per service address, so a failing service opens its own circuit.
+- `Cat.Resilience` does not exist yet.
+
+#### Needs
+The module plan [Cat.Resilience.md](Cat.Resilience.md) answered first.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 2-->
+#### Question 2
+What if the demo treats payment as a service we do not control, like a real payment provider? This is the blocking question, because question 1 follows from it, and [Phase 12](#phase-12) uses the answer for tracing. The answers from the code:
+- **`ServiceDefaults`.** It is a project in our own solution. A service we do not control does not use it, and does not have to. What matters is the caller. Orders calls `AddServiceDefaults`, so every `HttpClient` in Orders gets the resilience handler, service discovery and the HTTP client tracing, whoever answers. We are not obliged to implement anything in the outside service.
+- **Tracing.** The call shows as a client span in the trace of Orders, with its duration and status. The outside service joins the trace only when it understands the W3C `traceparent` header. A real provider often does not, so the trace stops at the edge. That is realistic and worth showing.
+- **Resilience and tracing with CAT modules.** Yes, this is a good showcase, because retry, timeout and circuit breaker matter most for a service we cannot fix. The payment service would then run without `ServiceDefaults`, and Orders would swap the `ServiceDefaults` handler for `Cat.Resilience` on that one client. `UseFastFailResilience` in Orders already removes the default handler, so the spot exists.
+- **`Cat.Api.Client`.** Yes, with limits. `AddCatApiClient` takes any address as a plain string, and the generated client needs only the OpenAPI document of the provider. Three things change. The call would not go through our gateway, so the rule "services never call each other directly" needs an exception for outside services. The error body of an outside service is not `CatErrorResponse`, so the helper keeps the status code but loses the error codes and arguments. The token of the user must not be forwarded to a third party. A provider key or its own token is used instead.
+
+The options:
+- **A.** Keep payment as it is, a service of ours behind the gateway. Cost: the demo never shows `Cat.Resilience` or `Cat.Telemetry`, and the two phases shrink to documentation.
+- **B.** Make payment outside: no `ServiceDefaults`, no gateway, its own error format, and Orders uses `Cat.Resilience` and `Cat.Telemetry` for that call. Cost: the first provider changes, and the error codes of payment are lost to the client.
+- **C.** Do B later as a second payment provider next to the first, selected by configuration. Cost: a second provider to build and a switch to maintain.
+
+Recommendation: C. The `IPaymentProvider` interface already hides the provider, so a second one costs little. The first provider stays as it is and keeps working. The outside variant becomes the showcase for `Cat.Resilience` and `Cat.Telemetry` once those modules exist.
+<!-- region end: Question 2-->
+
+<!-- region start: Question 1-->
+#### Question 1
+When does the demo use `Cat.Resilience`: never, or in a part that runs without Aspire? The demo readme says the demo does not use `Cat.Resilience`, because `ServiceDefaults` covers it. This follows from question 2: with option A the answer is never, with option C it is the outside payment provider. Answer question 2 and this one is closed. The demo readme then needs one sentence about it.
+<!-- region end: Question 1-->
+
+<!-- region start: Question 4-->
+#### Question 4
+Do all three failure switches of the payment service hold when the call goes through the gateway? The outage was tried live: with it on, the order ended after about 9 seconds. As far as we know, the latency and the error percentage were not tried through the gateway. The work is one order each, and a check that the gateway does not add its own timeout or retry that changes the result. Where do we write down the outcome?
+- **In the payment chapter of the demo readme.** Cost: the readme gets a table of results that can go out of date.
+- **As a test.** An integration test through the gateway. Cost: it needs the AppHost, so it is slow.
+- **Not at all.** Check once and move on. Cost: nobody knows later what was tried.
+
+Recommendation: check once by hand, and write the three results as one line each in the payment chapter of the demo readme. This needs the owner to run the AppHost, as Claude does not start it.
+<!-- region end: Question 4-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 11-->
+
+<!-- region start: Phase 12-->
+## Phase 12
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+Show `Cat.Telemetry` in the demo, for code that runs without Aspire.
+
+#### Background
+- `Aspire ServiceDefaults` already gives every service telemetry and health checks. The demo uses Aspire, so it does not use `Cat.Telemetry` today.
+- `Cat.Telemetry` is meant for projects without Aspire. The rule: a project with Aspire uses `ServiceDefaults`, and a project without Aspire uses the module. See [Cat.Telemetry.md](Cat.Telemetry.md).
+- The demo case for `Cat.Telemetry` is tracing one order across all services. It uses the answer to [Question 2](#question-2) of [Phase 11](#phase-11), which decides whether payment is an outside service.
+
+#### What exists today
+- Every service has telemetry from `ServiceDefaults`.
+- `Cat.Telemetry` does not exist yet.
+
+#### Needs
+The module plan [Cat.Telemetry.md](Cat.Telemetry.md) answered first. [Question 2](#question-2) of [Phase 11](#phase-11) answered.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 3-->
+#### Question 3
+What do we do about the development certificate? The dashboard says "No trusted development certificate was found" when the machine has not run `dotnet dev-certs https --trust`. It is harmless now, because the AppHost, the dashboard and the services all run on HTTP (the AppHost launch settings set `ASPIRE_ALLOW_UNSECURED_TRANSPORT`). It matters once something uses HTTPS. The options:
+- **Keep HTTP and add one note.** The run steps of the demo readme say the warning is harmless. Cost: the demo shows no HTTPS.
+- **Tell the developer to trust the certificate** (`dotnet dev-certs https --trust`) and move the demo to HTTPS. Cost: one more setup step, and the unsecured transport setting goes away.
+- **Do nothing.** Cost: a new developer sees the warning and wonders.
+
+Recommendation: keep HTTP with one note in the run steps. The warning goes away by itself when something needs HTTPS, and then the step moves to the run steps.
+<!-- region end: Question 3-->
+
+<!-- region start: Question 5-->
+#### Question 5
+Should the health checks of the services cover their databases? Today every service answers `/health` (ready) and `/alive` (running) from one check, `self`, in `ServiceDefaults`, and that check is always healthy. The AppHost and the gateway watch `/health`, so a service with a database that is down still looks healthy. The options:
+- **Add a database check per service,** on the ready endpoint only. Cost: a package per service (`AspNetCore.HealthChecks.SqlServer` or the EF Core check), and the services restart or stay out of the gateway while the database starts.
+- **Add one check in `ServiceDefaults` that takes any `DbContext`.** Cost: `ServiceDefaults` must know about EF Core, and Inventory is built database first.
+- **Keep it as it is.** Cost: a service shows healthy while its database is down.
+
+Recommendation: a database check per service on `/health` only, and keep `/alive` as it is. It is a real pattern for developers to copy, and it is small. Do it in this phase only if the owner wants it, since it does not need the modules.
+<!-- region end: Question 5-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 12-->
+
+<!-- region start: Phase 13-->
+## Phase 13
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+The MySQL showcase. The Notifications service of [Phase 2](#phase-2) moves from SQL Server to MySQL, and shows that the modules work on another database.
+
+#### Background
+- A showcase on MySQL needs an EF Core provider for MySQL. The demo is on EF Core 11. The provider Pomelo has no release for EF Core 10 or 11 yet, and the Oracle provider is stable for EF Core 10 only and has an EF Core 11 preview. The facts were read on 2026-11-13 from a third-party article and from nuget.org, and nobody has tested them against this code.
+- The Aspire client package for MySQL is built on Pomelo, so a stable Pomelo keeps the integration with Aspire.
+- The module work is in two plans: [Cat.Db.Errors.md](Cat.Db.Errors.md) for the MySQL error numbers and [Cat.EFCore.md](Cat.EFCore.md) for a provider neutral `Cat.EFCore.Extensions`.
+- Temporal tables and `Cat.Sql.Cdc` are SQL Server only. The MySQL service must not use them.
+
+#### What exists today
+- Every service runs on SQL Server, and the AppHost starts it with `AddSqlServer`.
+- The outbox, the inbox and the scheduler claim store are plain EF Core code. They are not tested on MySQL.
+
+#### Needs
+- A stable Pomelo for EF Core 11, with an Aspire MySQL package that accepts it.
+- The module plans [Cat.Db.Errors.md](Cat.Db.Errors.md) and [Cat.EFCore.md](Cat.EFCore.md), built first.
+- The Notifications service of [Phase 2](#phase-2).
+
+#### Done when
+Notifications runs on a MySQL container that the AppHost starts. The outbox, the inbox and the scheduler claim store work there, and the readme says where the demo uses MySQL.
+
+#### Decided
+- **Provider.** The demo waits for a stable Pomelo, so the Aspire integration stays. The Oracle preview is not used.
+- **Which service.** Notifications moves to MySQL after it is built on SQL Server in [Phase 2](#phase-2).
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 13-->

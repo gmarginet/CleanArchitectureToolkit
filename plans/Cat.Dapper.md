@@ -123,5 +123,14 @@ Recommendation: start with bulk insert through `SqlBulkCopy` in `Cat.Dapper.SqlS
 ##### Answer 4
 Move this to phase 2
 <!-- region end: Question 4-->
+
+<!-- region start: Question 5-->
+#### Question 5
+Does the module get a `Cat.Dapper.MySql` project next to `Cat.Dapper.SqlServer`? The demo plans a MySQL showcase in [Phase 13 of the demo](Demo.md#phase-13), and that showcase runs on EF Core. The paging helper and the bulk operations are the parts that differ per database. The options:
+- **Yes, when a showcase or a developer needs it.** Cost: a second project to maintain, with its own paging helper and its own bulk call.
+- **Not planned.** Cost: a developer on MySQL writes the paging and bulk code themselves, and the module is SQL Server only in practice.
+
+Recommendation: not planned for now. The MySQL showcase of the demo runs on EF Core, and the neutral `Cat.Dapper` project stays free of a database. Add the project when a developer asks for it.
+<!-- region end: Question 5-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->

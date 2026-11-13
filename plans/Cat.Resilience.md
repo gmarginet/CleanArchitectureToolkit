@@ -59,7 +59,7 @@ From the readme:
 - A slow or unavailable service must not bring down the caller.
 
 From the demo plan:
-- The demo case is retry and circuit breaker on the payment call. The payment call goes to a separate `Cat.Demo.PaymentService` that can fail on purpose. See the payment provider decision in [Demo.md](Demo.md#phase-5).
+- The demo case is retry and circuit breaker on the payment call. The payment call goes to a separate `Cat.Demo.PaymentService` that can fail on purpose. See the payment provider decision in [Demo.md](Demo.md#phase-11).
 - `Aspire ServiceDefaults` already adds the standard resilience handler to every `HttpClient`: retries, timeouts and a circuit breaker.
 - That overlaps with the future `Cat.Resilience` and `Cat.Telemetry` modules on purpose. CAT is a toolbox, so the developer picks what to use.
 - The future module must work in projects that do not use Aspire, and must not depend on Aspire or on `ServiceDefaults`.
@@ -177,7 +177,7 @@ Recommendation: the `HttpClient` helper. It is the same place `ServiceDefaults` 
 <!-- region start: Question 10-->
 #### Question 10
 What is the scope of the circuit breaker state: per process, per handler or per target? Shared across instances is probably not needed. The options:
-- **Per target** (a service address or integration name). A failing service opens its own circuit and the others stay closed. This is how `ServiceDefaults` works too (see [Demo.md](Demo.md#phase-5)). Cost: a key to define.
+- **Per target** (a service address or integration name). A failing service opens its own circuit and the others stay closed. This is how `ServiceDefaults` works too (see [Demo.md](Demo.md#phase-11)). Cost: a key to define.
 - **Per handler type.** Cost: two handlers that call the same service have separate circuits.
 - **Per process, one for all.** Cost: one failing service opens the circuit for all.
 
