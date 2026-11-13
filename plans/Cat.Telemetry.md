@@ -37,6 +37,7 @@
 
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
+<!-- no toc -->
 - [Phase 1](#phase-1)
 <!-- region end: Phases-->
 
