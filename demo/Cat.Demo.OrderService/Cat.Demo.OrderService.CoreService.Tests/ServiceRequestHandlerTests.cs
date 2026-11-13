@@ -229,6 +229,65 @@ public class ServiceRequestHandlerTests
 
     #endregion CleanUpOrderCounters
 
+    #region CancelStuckOrders
+
+    private sealed class FixedTimeProvider(DateTimeOffset now) : TimeProvider
+    {
+        public override DateTimeOffset GetUtcNow() => now;
+    }
+
+    [Test]
+    public async Task CancelStuckOrders_ShouldAskForOrdersPlacedBeforeTheLimitAndCancelEachOne()
+    {
+        var now = new DateTimeOffset(2026, 11, 13, 12, 0, 0, TimeSpan.Zero);
+        var first = NewOrder();
+        var second = NewOrder();
+        _queryProcessor.Setup<StuckOrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([first, second]));
+        var handler = new CancelStuckOrdersRequestHandler(_queryProcessor, _eventAggregator, new FixedTimeProvider(now));
+
+        var response = await handler.HandleAsync(new CancelStuckOrdersRequest());
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response.Type, Is.TypeOf<CatResponseType.Succeeded.NoContent>());
+            Assert.That(_queryProcessor.Queries.Single(), Is.EqualTo(new StuckOrderGetListQuery(now.UtcDateTime.AddMinutes(-15))));
+            Assert.That(_events.Events.OfType<OrderCancelledEvent>().Select(x => x.OrderId), Is.EqualTo(new[] { first.Id, second.Id }));
+            Assert.That(_events.Events.OfType<OrderCancelledEvent>().All(x => x.Reason == OrderCancelReasons.PendingTooLong), Is.True);
+        }
+    }
+
+    [Test]
+    public async Task CancelStuckOrders_WithoutStuckOrders_ShouldPublishNothing()
+    {
+        _queryProcessor.Setup<StuckOrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([]));
+        var handler = new CancelStuckOrdersRequestHandler(_queryProcessor, _eventAggregator, TimeProvider.System);
+
+        var response = await handler.HandleAsync(new CancelStuckOrdersRequest());
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(_events.Events, Is.Empty);
+        }
+    }
+
+    [Test]
+    public async Task CancelStuckOrders_WhenTheQueryFails_ShouldPassTheFailureOn()
+    {
+        _queryProcessor.Setup<StuckOrderGetListQuery, IList<Order>>(CatResponse.InternalServerError<IList<Order>>());
+        var handler = new CancelStuckOrdersRequestHandler(_queryProcessor, _eventAggregator, TimeProvider.System);
+
+        var response = await handler.HandleAsync(new CancelStuckOrdersRequest());
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response.IsFailed, Is.True);
+            Assert.That(_events.Events, Is.Empty);
+        }
+    }
+
+    #endregion CancelStuckOrders
+
     #region PlaceOrder
 
     private PlaceOrderRequestHandler NewPlaceOrderHandler(ServiceProvider provider) => new(

@@ -16,16 +16,23 @@ public static class SchedulerExtensions
     public const string CleanUpOrderCountersJob = "clean-up-order-counters";
 
     /// <summary>
+    /// The name of the job that cancels the orders that stay Pending too long. It runs every 5 minutes.
+    /// </summary>
+    public const string CancelStuckOrdersJob = "cancel-stuck-orders";
+
+    /// <summary>
     /// Switches the scheduler on. Every night, shortly after midnight UTC, it sends <see cref="CleanUpOrderCountersRequest"/>
-    /// as the system user <c>orders</c>. The runs are claimed in the order database, so two instances of Orders never clean up twice.
-    /// The development endpoint <c>POST /development/scheduler/clean-up-order-counters</c> still triggers the request without the scheduler.
+    /// as the system user <c>orders</c>, and every 5 minutes it sends <see cref="CancelStuckOrdersRequest"/>.
+    /// The runs are claimed in the order database, so two instances of Orders never run a job twice.
+    /// The development endpoints under <c>/development/scheduler</c> still trigger the requests without the scheduler.
     /// </summary>
     public static IServiceCollection AddCatDemoOrderScheduler(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddCatSchedulingEFCore<OrderDbContext>();
         services.AddCatScheduling(configuration, scheduler => scheduler
             .RunAs("orders")
-            .Job<CleanUpOrderCountersRequest>(CleanUpOrderCountersJob, "5 0 * * *"));
+            .Job<CleanUpOrderCountersRequest>(CleanUpOrderCountersJob, "5 0 * * *")
+            .Job<CancelStuckOrdersRequest>(CancelStuckOrdersJob, "*/5 * * * *"));
 
         return services;
     }

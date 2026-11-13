@@ -275,39 +275,6 @@
           }
         }
       }
-    },
-    "/development/scheduler/clean-up-order-counters": {
-      "post": {
-        "tags": [
-          "Cat.Demo.OrderService.Api"
-        ],
-        "operationId": "CleanUpOrderCounters",
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CatProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CatProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {

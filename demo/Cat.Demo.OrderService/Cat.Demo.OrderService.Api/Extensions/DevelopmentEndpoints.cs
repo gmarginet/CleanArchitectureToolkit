@@ -12,15 +12,23 @@ namespace Cat.Demo.OrderService.Api.Extensions;
 /// </summary>
 public static class DevelopmentEndpoints
 {
+    /// <summary>
+    /// The OpenAPI group name of the development endpoints. They are not in the default OpenAPI document, so no generated client gets them.
+    /// Scalar shows them in a second document with this name.
+    /// </summary>
+    public const string DevDocumentName = "dev";
+
     public static IEndpointRouteBuilder MapOrderServiceDevelopmentEndpoints(this IEndpointRouteBuilder builder)
     {
-        var developmentGroup = builder.MapGroup("/development");
+        var developmentGroup = builder.MapGroup("/development").WithGroupName(DevDocumentName);
 
-        // Simulates the scheduler. The scheduler runs this request every night. This endpoint stays, so a developer
-        // can try the request at once, without the scheduler and without waiting for the schedule.
+        // Simulates the scheduler. The scheduler runs these requests on a schedule. These endpoints stay, so a developer
+        // can try a request at once, without the scheduler and without waiting for the schedule.
         var schedulerGroup = developmentGroup.MapGroup("/scheduler");
         schedulerGroup.MapCatPost<CleanUpOrderCountersRequest>("/clean-up-order-counters", CatResponseType.NoContent)
             .WithName("CleanUpOrderCounters");
+        schedulerGroup.MapCatPost<CancelStuckOrdersRequest>("/cancel-stuck-orders", CatResponseType.NoContent)
+            .WithName("CancelStuckOrders");
 
         return builder;
     }

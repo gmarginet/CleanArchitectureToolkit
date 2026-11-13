@@ -9,6 +9,9 @@ public static class OrderCancelReasons
     public const string PaymentUnavailable = "PaymentUnavailable";
     public const string CancelledByUser = "CancelledByUser";
 
+    /// <summary>The order stayed Pending too long, so the scheduled sweep cancelled it.</summary>
+    public const string PendingTooLong = "PendingTooLong";
+
     /// <summary>The caller gave up while the order was being placed, for example a gateway timeout.</summary>
     public const string RequestCancelled = "RequestCancelled";
 }

@@ -38,6 +38,10 @@ builder.AddServiceDefaults();
 
 builder.Services.AddOpenApi();
 
+// The development endpoints are not in the default OpenAPI document, so no client gets them.
+// The dev document holds them, and Scalar shows it next to the default one.
+builder.Services.AddOpenApi(DevelopmentEndpoints.DevDocumentName);
+
 // Numbers are numbers only. The default also reads them from strings, and then the OpenAPI document
 // describes a total or a quantity as a number or a string with a pattern.
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -95,7 +99,7 @@ if (authenticationOn)
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapScalarApiReference(options => options.AddDocuments("v1", DevelopmentEndpoints.DevDocumentName));
     await app.Services.InitializeOrderDatabaseAsync();
     await app.Services.InitializeOrderMessagingAsync();
 }
