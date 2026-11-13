@@ -38,7 +38,6 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 3](#phase-3)
 - [Phase 4](#phase-4)
 - [Phase 5](#phase-5)
 - [Phase 6](#phase-6)
@@ -50,47 +49,6 @@
 - [Phase 12](#phase-12)
 - [Phase 13](#phase-13)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 3-->
-## Phase 3
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Scheduled jobs. Show `Cat.Scheduling`: the nightly clean up of the order counters, the sweep of stuck orders and a nightly low stock report.
-
-#### Background
-- The scheduled jobs of the demo:
-  - Clean up the daily order counters every night, shortly after midnight UTC.
-  - Cancel orders that stay Pending longer than 15 minutes, the sweep. See Decided.
-  - A nightly low stock report, sent as a mail by the Notifications service, which is built.
-- Work without a user, such as the Scheduler, uses a client credentials token.
-- The Scheduler is the worker of a service, as the readme describes it. In debug mode the API has a development endpoint group with a sub group per worker.
-
-#### What exists today
-- The `CleanUpOrderCounters` service request exists in Orders, with its handler and tests. The development endpoint `POST /development/scheduler/clean-up-order-counters` triggers it, in the Development environment only. Orders switches on the Scheduler, and the endpoint stays so a developer can try the request without the Scheduler.
-- The Keycloak realm has the clients `cat-demo-web` and `cat-demo-cli` only. It has no client for a client credentials token.
-- `Cat.Scheduling` exists, see the [module readme](../modules/Cat.Scheduling/README.md). Its plan, [Cat.Scheduling.md](Cat.Scheduling.md), recommends that a one-off timeout, such as the cancel after 24 hours, goes through a scheduled message of the bus and not through the Scheduler.
-- Catalog keeps every old price in a temporal table, and `BookPrice` has a `LastUpdatedBy` column. The seed of Catalog already sets the named system user.
-
-#### Needs
-The Notifications service that sends the mail of the low stock report, which is built. The module `Cat.Scheduling`, which is built.
-
-#### Done when
-The nightly jobs run from the Scheduler, and the development endpoint stays, so a developer can try a job without the Scheduler.
-
-#### Decided
-- **Counter cleanup.** The Scheduler runs the `CleanUpOrderCounters` service request every night. The development endpoint triggers it without the Scheduler.
-- **Jobs per service.** Each service runs the jobs of its own data. The counter cleanup and the sweep run in Orders, and the low stock report runs in Inventory. Notifications only sends the mail. This follows what is built, since Orders already runs the Scheduler.
-- **Claim table.** Each service that runs a job keeps the claim table and the run history of the scheduler in its own database, see [Cat.Scheduling.md](Cat.Scheduling.md). Inventory is database first, so a new SQL script in its `Database` folder creates the table, written like the other scripts so it can run at every start. It runs only in the container mode. The owner of an existing inventory database creates the table by hand, and the demo readme says how.
-- **Sweep of stuck orders.** The place order handler of Orders cancels the order when the caller gives up after the order is created, for example on a gateway timeout. That does not cover a crash of the service in the middle of the workflow. A scheduled job cancels the orders that stay Pending too long and covers the rest. A cancel through the sweep publishes the same cancelled event, so the stock is released too. One job cancels every Pending order older than 15 minutes, which is longer than the slowest normal order. A Pending order is the only unpaid state of the workflow, so the cancel of unpaid orders after 24 hours is dropped.
-- **System user for jobs.** A price changed by a job gets the named system user, `CatUser.System`, see the [module readme of Cat.Users](../modules/Cat.Users/README.md).
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 3-->
 
 <!-- region start: Phase 4-->
 ## Phase 4
