@@ -234,6 +234,7 @@ public class ServiceRequestHandlerTests
     private PlaceOrderRequestHandler NewPlaceOrderHandler(ServiceProvider provider) => new(
         provider.GetRequiredService<ICatWorkflowProcessor>(),
         _queryProcessor,
+        _eventAggregator,
         _currentUser,
         _currentUser,
         TimeProvider.System);
@@ -307,6 +308,24 @@ public class ServiceRequestHandlerTests
         {
             Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.Unauthorized>());
             Assert.That(_commandProcessor.Commands, Is.Empty);
+        }
+    }
+
+    [Test]
+    public async Task PlaceOrder_WhenTheCallerGivesUpAfterTheOrderIsCreated_ShouldCancelTheOrderAndRethrow()
+    {
+        using var caller = new CancellationTokenSource();
+        using var provider = NewWorkflowProvider(stock: new FakeStockReservation { CancelCallerOnReserve = caller });
+        var handler = NewPlaceOrderHandler(provider);
+
+        await Assert.ThrowsAsync<OperationCanceledException>(() => handler.HandleAsync(NewPlaceOrderRequest(), caller.Token));
+
+        var cancelled = _events.Events.Single();
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(cancelled, Is.TypeOf<OrderCancelledEvent>());
+            Assert.That(((OrderCancelledEvent)cancelled).Reason, Is.EqualTo(OrderCancelReasons.RequestCancelled));
+            Assert.That(((OrderCancelledEvent)cancelled).OrderId, Is.EqualTo(_commandProcessor.Of<OrderCreateCommand>().Single().OrderId));
         }
     }
 

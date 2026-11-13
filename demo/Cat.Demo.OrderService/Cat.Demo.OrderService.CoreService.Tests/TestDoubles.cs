@@ -146,8 +146,17 @@ public class FakeStockReservation : IStockReservation
     public List<string> Reserved { get; } = [];
     public List<string> Released { get; } = [];
 
+    /// <summary>When set, the reservation cancels this source and throws, like a caller that gives up during the call.</summary>
+    public CancellationTokenSource? CancelCallerOnReserve { get; set; }
+
     public Task<StockReservationResult> ReserveAsync(string orderNumber, IReadOnlyCollection<StockReservationLine> lines, CancellationToken cancellationToken = default)
     {
+        if (CancelCallerOnReserve is not null)
+        {
+            CancelCallerOnReserve.Cancel();
+            throw new OperationCanceledException(cancellationToken);
+        }
+
         if (Unavailable)
         {
             return Task.FromResult(new StockReservationResult(false, null, Unavailable: true));
