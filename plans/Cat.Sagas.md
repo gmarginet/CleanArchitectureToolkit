@@ -113,7 +113,7 @@ Claude read the engine in `modules/Cat.FluentWorkflows`.
 | Matching an incoming message to a stored instance | New module |
 | Timeouts, such as cancel after 24 hours without payment | New module, with Scheduling |
 | Safe handling of two messages for the same instance | New module |
-| Sending a message and saving the state as one unit | New module, with Messaging and the transactions of `Cat.EFCore` |
+| Sending a message and saving the state as one unit | New module, with Messaging and its outbox |
 | Handling a workflow that changed while instances were stored | Both |
 
 #### What exists today
@@ -160,7 +160,7 @@ The instance record holds: instance id, workflow type name, workflow version, st
 | `Cat.Messaging` (future) | The wait step sends the request message through it. |
 | `Cat.EventProcessor` | Incoming answers come in through it. |
 | `Cat.Scheduling` (future) | Looks for instances whose wait timed out. |
-| `Cat.EFCore` (new transaction project) | Saves the state and the outgoing message together. |
+| `Cat.Messaging.Outbox.EFCore` | Saves the state and the outgoing message in one `SaveChanges`. |
 | `Cat.EFCore` | The store. |
 
 ##### A note on EventAggregators
@@ -174,7 +174,7 @@ These must be solved in the design, not afterwards.
 - **Two messages at the same moment.** Lock the instance with a row version. The loser retries and sees the new state.
 - **A message that arrives twice.** Service Bus delivers at least once. Keep the ids of handled messages per instance and ignore repeats.
 - **An answer that arrives before the instance is saved.** Send the request message only after the save, or in one outbox transaction with it.
-- **A crash between the save and the send.** The outbox pattern in the transactions of `Cat.EFCore` solves it. Without it the saga can hang, and the timeout is the safety net.
+- **A crash between the save and the send.** The outbox pattern of `Cat.Messaging` solves it. Without it the saga can hang, and the timeout is the safety net.
 - **Timeouts.** Save the moment next to the instance. The Scheduler looks for instances past it and resumes them with a timeout result. The decision is to use scheduled messages of the bus instead, see Decided.
 - **Compensation.** When payment fails after stock was reserved, the reservation must be released. First version: the failure branch of the workflow has explicit steps for it. A dedicated compensation feature can come later.
 - **State that cannot be serialized.** Interfaces, delegates and services do not belong in the state. Document it and fail on save with a clear error.
