@@ -32,7 +32,7 @@
 # Plans for `Demo` <!-- omit in toc -->  
 
 <!-- region start: StatusBadge-->
-[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-demo)
+[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-demo)
 <!-- region end: StatusBadge-->
 
 ## Table of contents <!-- omit in toc -->  
@@ -57,6 +57,7 @@ Notifications and scheduling. The Notifications service and `Cat.Scheduling`. Th
 - The scheduled jobs of the demo:
   - Clean up the daily order counters every night, shortly after midnight UTC.
   - Cancel unpaid orders after 24 hours.
+  - Cancel orders that stay Pending too long, the sweep. See Decided and [Question 15](#question-15).
   - A nightly low stock report.
 - The mails are in English. Languages come in [Phase 6](#phase-6).
 - Work without a user, such as the Scheduler, uses a client credentials token.
@@ -77,10 +78,19 @@ An order confirmed mail is sent. The nightly jobs run from the Scheduler, and th
 #### Decided
 - **Counter cleanup.** The Scheduler runs the `CleanUpOrderCounters` service request every night. Until the Scheduler exists, the development endpoint triggers it.
 - **Notifications data.** Notifications has a database, built code first with EF Core migrations, like Orders. A table of sent mails, keyed by order and kind, makes a repeated message safe and shows idempotent handling. The scheduler can use the same database for its claim table and run history, see [Cat.Scheduling.md](Cat.Scheduling.md).
+- **Sweep of stuck orders.** The place order handler of Orders cancels the order when the caller gives up after the order is created, for example on a gateway timeout. That does not cover a crash of the service in the middle of the workflow. A scheduled job cancels the orders that stay Pending too long and covers the rest. A cancel through the sweep publishes the same cancelled event, so the stock is released too. How long an order may stay Pending, and whether this is the job that cancels unpaid orders, is [Question 15](#question-15).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 15-->
+#### Question 15
+How long may an order stay Pending before the sweep cancels it, and is the sweep the same job as the cancel of unpaid orders after 24 hours? The place order workflow takes the payment in the same request, so a Pending order is either in progress for a few seconds or stuck. The options:
+- **One job with a short limit,** for example 15 minutes, that cancels every Pending order older than the limit. The "unpaid after 24 hours" job goes, because a Pending order is the only unpaid state the workflow has. Cost: a limit that is too short could cancel an order that is slow but alive, and the demo loses the 24 hour example of a one-off timeout.
+- **Two jobs.** The sweep with a short limit, and the 24 hour cancel kept as the showcase of a scheduled bus message, as [Cat.Scheduling.md](Cat.Scheduling.md) recommends for a one-off timeout. Cost: two ways to cancel a Pending order, and the 24 hour job never finds an order that the sweep did not catch.
+
+Recommendation: one job with a limit that is longer than the slowest normal order, such as 15 minutes. A Pending order older than that is stuck, and the 24 hour wait protects nobody. If the owner wants a showcase of the scheduled message, give it a real one-off timeout, such as a reminder mail for an unpaid order.
+<!-- region end: Question 15-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->
 
@@ -140,6 +150,9 @@ Do messages carry a token in the demo when `Cat.Users` exists? The [module readm
 - **No token in the demo messages.** Cost: the demo does not show the identity rule. A handler that needs a user cannot be shown.
 
 Recommendation: carry the token, once `Cat.Users` and the sending side exist. It is the decided design, and the demo is the place that proves it. Until then, the handlers of the earlier phases need no user.
+
+##### Answer 10
+As recommended
 <!-- region end: Question 10-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 3-->
@@ -174,6 +187,9 @@ What should the sign-in page be?
 - **C.** A form in the React app that takes the password itself. Not recommended, because the password would pass through the app and the authorization code flow with PKCE is lost.
 
 Recommendation: A first, B later if the form should match.
+
+##### Answer 1
+As recommended
 <!-- region end: Question 1-->
 
 <!-- region start: Question 2-->
@@ -184,6 +200,9 @@ Does the sign-in page show the demo users `alice`, `bob` and `admin`, and where 
 - **Show nothing.** Cost: a visitor must read the readme first.
 
 Recommendation: show them as buttons, but only in the Development environment, because the passwords are known and public. Keep the readme as the source and add a test that the list matches the realm file.
+
+##### Answer 2
+Show nothing.
 <!-- region end: Question 2-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 4-->
@@ -302,6 +321,9 @@ Which languages does the demo support? Each one needs texts in the client, in th
 - **Three or more.** Cost: more texts to write and keep in step, with little more to show.
 
 Recommendation: two. It proves the mechanism, and a third language adds work and nothing to learn.
+
+##### Answer 11
+As recommended, English as the default language, Dutch as the extra language
 <!-- region end: Question 11-->
 
 <!-- region start: Question 12-->
