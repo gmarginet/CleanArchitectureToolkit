@@ -90,6 +90,8 @@ A separate notification service sends the confirmation mail. A mail for the same
 
 Every night a job in the stock service looks for books with fewer than 10 copies left. When it finds any, the notification service mails the list to the admin. Nothing is sent when all stock is fine. The limit and the address of the admin are settings.
 
+The admin also gets a mail at the moment a book drops below the limit, a few seconds after the stock changes. This happens for every change of the stock table, also one made by a person or a script in the database. The stock service has no code that sends it. Only the drop from the limit or more to below the limit sends a mail, so a book that stays low does not send a mail on every order.
+
 Without Aspire stock is pretend. Any line of more than 50 copies is out of stock.
 
 <!-- region end: WhatTheBookshopDoes-->
@@ -182,6 +184,7 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 | Order confirmed, order cancelled | An event on `ICatEventAggregator` | No |
 | Order confirmed, told to another service | A message on Azure Service Bus (`OrderConfirmed`) | No |
 | Low stock, told to Notifications | A message on Azure Service Bus (`LowStockReport`), published by a scheduled job of Inventory | No |
+| Stock changed, told to Notifications | A message on Azure Service Bus (`StockChanged`), sent by `Cat.Sql.Cdc` from the change table of the stock table, without Inventory code that publishes it | No |
 
 - The workflow publishes `OrderConfirmed` and `OrderCancelled`. It knows only the aggregator, not the subscribers.
 - Subscribers: a status updater, an audit logger and the stock release.
@@ -255,7 +258,7 @@ The setting `Sql:Mode` of the AppHost picks where the databases live.
 
 | Mode | What happens | Needs |
 |---|---|---|
-| `Container` (default) | The AppHost starts a SQL Server container with the data volume and creates the databases `catalog`, `orders`, `inventory` and `notifications`. It runs the SQL scripts of Inventory in the `inventory` database. The password is generated and kept in the user secrets. | Docker |
+| `Container` (default) | The AppHost starts a SQL Server container with the data volume and creates the databases `catalog`, `orders`, `inventory` and `notifications`. It starts the SQL Server Agent in the container (`MSSQL_AGENT_ENABLED=true`) and runs the SQL scripts of Inventory in the `inventory` database, which also switch change data capture on. It sets `Inventory:ChangeCapture` for Inventory. The password is generated and kept in the user secrets. | Docker |
 | `Existing` | The AppHost passes the connection strings `ConnectionStrings:catalog`, `ConnectionStrings:orders`, `ConnectionStrings:inventory` and `ConnectionStrings:notifications` to the services. The defaults point to the local default instance. It does not run the SQL scripts, because the owner of an existing database owns its schema. | A SQL Server you can reach |
 
 To use `Existing`, set the mode in the user secrets of the AppHost:
@@ -267,6 +270,8 @@ dotnet user-secrets set "Sql:Mode" "Existing" --project demo/Cat.Demo.AppHost/Ca
 To point it at another server, set `ConnectionStrings:catalog`, `ConnectionStrings:orders`, `ConnectionStrings:inventory` and `ConnectionStrings:notifications` in the same way. The defaults use Windows authentication, which works for a local process only.
 
 The owner of an existing inventory database creates the table of the scheduler by hand. Run `004-scheduling.sql` from `demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.Database` on it. Without the table the nightly low stock report fails.
+
+The same owner switches change data capture on by hand to get the mail for a stock drop. Run `005-change-capture.sql` from the same folder on the inventory database. It needs a running SQL Server Agent, because the Agent runs the capture job. Then set `Inventory:ChangeCapture` to `true` for Inventory, for example in its user secrets. Without the setting Inventory reads no changes.
 
 Two lighter ways exist. LocalDB is the real SQL Server engine, so temporal tables work. It needs no virtual machine and stops by itself when idle. Point the connection strings at it. A plain `docker-compose.yml` with only SQL Server suits people who want a container but no Aspire. Temporal tables tie the demo to SQL Server, so SQLite and PostgreSQL do not work.
 <!-- region end: SqlServerModes-->
@@ -335,6 +340,7 @@ In `Development` both services apply their EF Core migrations at startup. Catalo
 - **Currency.** All amounts are in euro.
 - **Order numbers** look like `20261105-0001`. The counter restarts every UTC day. The Scheduler removes the counters of earlier days every night. The development endpoint `POST /development/scheduler/clean-up-order-counters` does the same at once.
 - **Scheduled jobs.** Orders runs `clean-up-order-counters` every night and `cancel-stuck-orders` every 5 minutes. Inventory runs `low-stock-report` every night at 02:00 UTC. In `Development` each job has an endpoint in the group `/development/scheduler` of its service, so you can run it without waiting. These endpoints are not in the default OpenAPI document, so no generated client gets them. Scalar shows them in a second document named `dev`. `CatScheduling:Jobs:<job name>:Cron` changes the time of a job and `Enabled` switches it off. To see a low stock mail, set the stock of a book below 10 in the `inventory` database, run `POST /development/scheduler/low-stock-report` on port 5105, and open Mailpit. The mail goes to the address in `Notifications:AdminEmail`, which is `admin@example.com` by default. `Inventory:LowStockLimit` changes the limit.
+- **Stock drop mail.** Under the AppHost, a book whose stock drops from the limit or more to below the limit sends a mail to the admin, about 4 seconds later. To see one, change the stock in the `inventory` database, for example `UPDATE dbo.StockItem SET QuantityOnHand = 5 WHERE Id = 3`, and open Mailpit. A change that is no drop sends nothing. The limit is the same setting as for the nightly report. Without the AppHost nothing reads the change table. The development endpoint `POST /dev/event-processor/StockChanged` on port 5106 runs a message through Notifications without a bus.
 <!-- region end: ThingsToKnow-->
 
 ### Health checks
@@ -791,6 +797,7 @@ erDiagram
 - Inventory also listens to the bus. The `Api` project declares the messages it receives in `EventProcessorExtensions`, with `AddCatEventProcessor`. It receives `OrderConfirmed` from Orders, so the `CoreService` and `Api` projects reference the `Contracts` project of Orders. The listener reads the subscription `inventory` on the topic `OrderConfirmed`.
 - Inventory also publishes. The message `LowStockReport` lives in the `Contracts` project of Inventory, in `Messages`. It holds the limit and the low stock items, each with its ISBN, warehouse and quantity. At startup, in `Development`, Inventory creates the topic `LowStockReport`, so Notifications waits for Inventory in the AppHost. Without the connection string `messaging`, a fake transport logs the message and sends nothing.
 - The nightly report is a scheduled job of `Cat.Scheduling`. The Scheduler runs the `LowStockReportRequest` every night at 02:00 UTC as the system user `inventory`, under the job name `low-stock-report`. `LowStockReportRequestHandler` runs `LowStockReportPublishCommand` with the limit of `LowStockSettings`, which is the setting `Inventory:LowStockLimit` and 10 when it is not set. The command handler reads the stock items below the limit, lowest first, and publishes one `LowStockReport` with `ICatMessageSender`. It publishes nothing when no item is low. It only reads, so it needs no outbox. The development endpoint `POST /development/scheduler/low-stock-report` runs the same request without the Scheduler.
+- The message `StockChanged` has no publisher in the Inventory code. `Cat.Sql.Cdc` reads the change table of `dbo.StockItem` and sends one message for every change, with the ISBN, the warehouse, the old and the new quantity and the limit. A mapping cannot skip a change, so the message goes out for every reserve and release as well, and Notifications decides what it means. `StockChangeMapper` in the `CoreService` project maps a change to the message, and it is the only code that knows the table. `ChangeCaptureExtensions` in the `Api` project registers the reader, the mapping and the sink of `Cat.Sql.Cdc.Messaging`, and the health check of the reader. The reader uses the inventory connection string and keeps its position in `catcdc.Position`, in the same database. It runs when `Inventory:ChangeCapture` is `true`. The AppHost sets it in the container mode only, because the capture must be on first. The script `005-change-capture.sql` switches change data capture on for the database and the table, and waits for the SQL Server Agent, which runs the capture job. Delivery is at least once, so Notifications can see a change twice.
 - The Scheduler claims each run in the inventory database, in the table `CatJobRun`, so two instances never run the job twice. The script `004-scheduling.sql` creates the table. The partial class `InventoryDbContext.Scheduling.cs` maps it with `AddCatScheduling()`.
 - `OrderConfirmedHandler` is the service request handler of the message. It runs `StockReservationConfirmCommand`, and the command handler sets `ConfirmedAt` on the reservations of the order that have none. A repeated message finds nothing to update and succeeds, so no inbox is needed. An order number without a reservation gives a not found response with `DEM-INV-1002`, and the failure table of `Cat.EventProcessor` dead letters the message.
 - At startup, in `Development`, Inventory creates its subscription. Orders creates the topic first, so Inventory waits for Orders in the AppHost. In `Development` the API has the endpoint `POST /dev/event-processor/OrderConfirmed`, which runs a message through the same pipeline without a bus. The development endpoints are not in the OpenAPI document that the generated client is built from. Scalar shows them in a second document named `dev`. Without the connection string `messaging` Inventory does not listen.
@@ -844,12 +851,13 @@ erDiagram
 | `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` and `Cat.EventProcessor.Minimal.Api` | Api | Receives `OrderConfirmed` from the bus as a service request, settles the message from the response, and adds the development endpoint and the health check. |
 | `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` | Api | The connection to the bus and the name of the topic. |
 | `Cat.Scheduling` and `Cat.Scheduling.EFCore` | Api and Infrastructure | The nightly low stock report job. The runs are claimed in the table `CatJobRun`. |
+| `Cat.Sql.Cdc`, `Cat.Sql.Cdc.Abstractions` and `Cat.Sql.Cdc.Messaging` | Api and Core service | Reads the changes of the stock table from the change data capture of SQL Server and sends each as a `StockChanged` message. The core service only references the abstractions, for the change type of the mapping. |
 
 The service uses no entity base classes. It shows that you use only the modules you need.
 
-**Pros.** Shows that CAT also works when the database comes first. The atomic update stays plain SQL, and the commands and responses stay the same as in the other services.
+**Pros.** Shows that CAT also works when the database comes first. The atomic update stays plain SQL, and the commands and responses stay the same as in the other services. The stock drop mail shows that a change in the database becomes a message with no publishing code, so a change made by a script is seen as well.
 
-**Cons.** Two ways to build a service means two ways to explain. The scaffolded entities and the hand written SQL both need care after a schema change. Sharing the contracts ties Orders to the models of Inventory.
+**Cons.** Two ways to build a service means two ways to explain. The scaffolded entities and the hand written SQL both need care after a schema change. Sharing the contracts ties Orders to the models of Inventory. The change capture works on SQL Server only and needs the SQL Server Agent. Every change of the stock table becomes a message, also those that nobody needs, because a mapping cannot skip a change.
 
 **More.** Code in `demo/Cat.Demo.InventoryService`. Requests in `InventoryRequests.http`.
 <!-- region end: InventoryService-->
@@ -857,7 +865,7 @@ The service uses no entity base classes. It shows that you use only the modules 
 ### Notification service
 <!-- region start: NotificationService-->
 
-**What it is.** Sends the order confirmed mail and the low stock report. It has no HTTP endpoint for clients. A message from another service is its only way in.
+**What it is.** Sends the order confirmed mail, the low stock report and the mail for a stock drop. It has no HTTP endpoint for clients. A message from another service is its only way in.
 
 **How it works.**
 - The `Api` project declares the message it receives in `EventProcessorExtensions`, with `AddCatEventProcessor`. It receives `OrderConfirmed` from Orders, so the `CoreService` and `Api` projects reference the `Contracts` project of Orders. The listener reads the subscription `notifications` on the topic `OrderConfirmed`.
@@ -866,7 +874,8 @@ The service uses no entity base classes. It shows that you use only the modules 
 - The core service only knows `IMailSender`. `SmtpMailSender` sends over SMTP with the settings `Smtp:Host`, `Smtp:Port` and `Smtp:From`. The AppHost points them at Mailpit. Without `Smtp:Host`, `LogMailSender` writes the mail to the log.
 - The mails are in English.
 - It also receives `LowStockReport` from Inventory, so the `CoreService` and `Api` projects reference the `Contracts` project of Inventory. `LowStockReportHandler` mails the report to the admin with `LowStockReportMailBuilder`. The address is `NotificationSettings.AdminEmail`, which is the setting `Notifications:AdminEmail` and `admin@example.com` when it is not set. A report without items sends no mail. The report is not stored in `SentMail`, which holds mails of orders only, so a message that arrives twice sends two reports. That does no harm for a report.
-- At startup, in `Development`, Notifications applies its migrations and creates its subscriptions. Orders and Inventory create the topics first, so Notifications waits for both in the AppHost. In `Development` the API has the endpoints `POST /dev/event-processor/OrderConfirmed` and `POST /dev/event-processor/LowStockReport`, which run a message through the same pipeline without a bus. Without the connection string `messaging` Notifications does not listen.
+- It also receives `StockChanged` from Inventory, which holds one change of the stock table. `StockChangedHandler` decides what it means: only a drop from the limit or more to below the limit, in `IsDrop`, sends a mail to the admin with `StockDropMailBuilder`. Every other change is a normal case. The handler answers success and sends nothing, so the message is completed. The mail is not stored, so a message that arrives twice sends two mails, which does no harm for an alert. `StockChangedValidator` only rejects a malformed message, such as one without an ISBN or with a negative quantity. It answers `BadRequest`, which dead letters the message, because sending it again gives the same answer. The `Api` project runs the validation decorator, so the validator runs before the handler.
+- At startup, in `Development`, Notifications applies its migrations and creates its subscriptions. Orders and Inventory create the topics first, so Notifications waits for both in the AppHost. In `Development` the API has the endpoints `POST /dev/event-processor/OrderConfirmed`, `POST /dev/event-processor/LowStockReport` and `POST /dev/event-processor/StockChanged`, which run a message through the same pipeline without a bus. Without the connection string `messaging` Notifications does not listen.
 
 **Database.** The `notifications` database is built code first with EF Core migrations, like Orders. In `Development` the service applies the migrations at startup. In `Container` mode the AppHost creates the empty database. The table `SentMail` holds one row for every mail that went out. The entity inherits `CatEntityBase` and uses `ConfigureCatEntity`, with no temporal table and no SQL Server only code.
 
@@ -890,7 +899,8 @@ erDiagram
 | `Cat.Commands` and `Cat.ServiceRequests` | Core service | The message is a service request that ends in a command. |
 | `Cat.EFCore.Commands`, `Cat.EFCore.Entities` and `Cat.EFCore.Extensions` | Infrastructure and DataModels | The command handler inherits the base handler. `SentMail` inherits the base entity. |
 | `Cat.Responses` | Core service | The handlers answer with a response, and the event processor settles the message from it. |
-| `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` and `Cat.EventProcessor.Minimal.Api` | Api | Receives `OrderConfirmed` and `LowStockReport` from the bus as service requests, and adds the development endpoints and the health check. |
+| `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` and `Cat.EventProcessor.Minimal.Api` | Api | Receives `OrderConfirmed`, `LowStockReport` and `StockChanged` from the bus as service requests, and adds the development endpoints and the health check. |
+| `Cat.Validators` and `Cat.ServiceRequests.Decorators.Validation` | Core service and Api | Reject a malformed `StockChanged` message before the handler runs. |
 | `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` | Api | The connection to the bus and the name of the topic. |
 
 **Pros.** A second receiver of `OrderConfirmed` shows that a message has more than one reader. The table of sent mails shows idempotent handling without an inbox.

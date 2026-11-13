@@ -38,7 +38,6 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 5](#phase-5)
 - [Phase 6](#phase-6)
 - [Phase 7](#phase-7)
 - [Phase 8](#phase-8)
@@ -48,37 +47,6 @@
 - [Phase 12](#phase-12)
 - [Phase 13](#phase-13)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 5-->
-## Phase 5
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Show `Cat.Sql.Cdc` with the low stock case in Inventory. A change of the stock in the Inventory database becomes a message, without the Inventory code publishing anything itself.
-
-#### What exists today
-- `Cat.Sql.Cdc` is built, see the [module readme](../modules/Cat.Sql.Cdc/README.md). It reads the change tables of SQL Server and sends every change to a sink. `Cat.Sql.Cdc.Messaging` sends the changes through `Cat.Messaging`.
-- The module never switches change data capture on. It needs `sys.sp_cdc_enable_table` for each table, and a running SQL Server Agent or an equivalent.
-- The Inventory database is database first. In the container mode the creation script of the AppHost creates the database and runs the SQL scripts of the `Database` folder of the Inventory service, `001-schema.sql` to `003-reservation-confirmed.sql`. The scripts only create what is missing, so they run at every start. When an existing inventory database is used, its owner owns the schema and the AppHost runs no scripts.
-- Inventory changes the stock in `StockReserveCommandHandler` and `StockReleaseCommandHandler`, with one conditional `UPDATE` in a transaction.
-
-#### Needs
-The module `Cat.Sql.Cdc`, which is built. The Notifications service that sends the mail, which is built. A check, before the build, that the SQL Server container image of the AppHost can run the SQL Server Agent. The demo has not used the Agent so far, and nobody has checked this.
-
-#### Done when
-A stock that drops below the limit becomes a low stock message, and the Notifications service sends a mail to the admin. The readme says where.
-
-#### Decided
-- **Result.** A low stock mail. The change becomes a low stock message, and the Notifications service sends a mail to the admin. This shows the whole chain from a database row to a person.
-- **Stock limit.** One setting for all books, a number in the configuration. A column per book can come when the demo needs different limits.
-- **Switching it on.** A new SQL script in the `Database` folder of Inventory calls `sys.sp_cdc_enable_table` for the stock table, written like the other scripts so it can run at every start. It runs only in the container mode. A developer with an existing inventory database enables it by hand, and the demo readme says how.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 5-->
 
 <!-- region start: Phase 6-->
 ## Phase 6
@@ -131,7 +99,7 @@ The payment runs as a saga over messages, and the readme says where.
 - **Payment over messages.** A saga style payment over messages comes with this phase, see [Cat.Sagas.md](Cat.Sagas.md). Until then the payment is an interface behind a generated client, and Orders keeps its state in the order status.
 - **Messages carry a token.** A message sent for a user carries the token of that user, and the Scheduler sends with a client credentials token, as the [module readme of Cat.EventProcessor](../modules/Cat.EventProcessor/README.md) and the [module readme of Cat.Messaging](../modules/Cat.Messaging/README.md) describe. The demo host implements `ICatTokenProvider` and registers `AddCatEventProcessorAuthorization`, so a listener builds the `ICatUser` from the token. This comes once `Cat.Users` and the sending side exist, and the demo is the place that proves the rule. The costs:
   - The token sits in the queue, the dead letter queue and the outbox table, so it needs short lived tokens and a security review before production.
-  - The Keycloak realm needs a client for the system token.
+  - The Keycloak realm already has the client `cat-demo-orders` for the system token, so the realm needs no new client.
 
 #### Known gaps for this showcase
 - **Refund.** Add a refund when payment becomes a message flow, see [Cat.Sagas.md](Cat.Sagas.md):
