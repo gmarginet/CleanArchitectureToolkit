@@ -85,7 +85,7 @@ Where does the current culture come from? Today `ICatLocalizer` has no culture p
 - **An `ICatCultureProvider` in `Cat.Localizations.Abstractions`.** The provider asks it, and the developer can plug in the request, the user profile or a fixed value. Cost: one more interface and a default implementation.
 - **A culture parameter on every call.** Explicit. Cost: it changes the contract and clutters every call site.
 
-Recommendation: start with `CurrentUICulture`, because it is the .NET convention and needs no new type. Add the culture provider when the demo needs the user profile, for example in the planned Notifications service, which sends texts without a request.
+Recommendation: start with `CurrentUICulture`, because it is the .NET convention and needs no new type. Add the culture provider when the demo needs the user profile, for example in the Notifications service, which sends texts without a request.
 <!-- region end: Question 3-->
 
 <!-- region start: Question 4-->

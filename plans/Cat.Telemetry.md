@@ -207,11 +207,11 @@ Recommendation: stay. This module lists the `Cat.*` sources in one place and set
 
 <!-- region start: Question 13-->
 #### Question 13
-In the demo, how do we show "one order across all services" before every service exists? Catalog, Orders, Payment and Inventory exist today, and Notifications does not. The options:
-- **Show the trace of a place order call** across Orders, Catalog, Inventory and Payment in the Aspire dashboard now. Cost: none, `ServiceDefaults` already does it. It shows the HTTP part, and the message part comes with `Cat.Messaging`.
-- **Wait until Notifications exists.** Cost: no trace story in the demo for a while.
+In the demo, how do we show "one order across all services"? Catalog, Orders, Payment, Inventory and Notifications exist today. The options:
+- **Show the trace of a place order call** across Orders, Catalog, Inventory and Payment in the Aspire dashboard now. Cost: none, `ServiceDefaults` already does it. It shows the HTTP part. Check whether the message hops of `Cat.Messaging` and the Notifications service join the same trace.
+- **Wait until this module sets up the tracing.** Cost: no trace story in the demo for a while.
 
-Recommendation: show it now and add a section in the demo readme with a screenshot or the steps. The Notifications and message hops join the same trace later.
+Recommendation: show it now and add a section in the demo readme with a screenshot or the steps.
 <!-- region end: Question 13-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
