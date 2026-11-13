@@ -1,0 +1,53 @@
+../../../Cat.Scheduling/namespaces/Cat.Scheduling.Abstractions/
+P:Cat.Scheduling.Abstractions.CatJobClaim.JobName|CatJobClaim.JobName.md|JobName
+P:Cat.Scheduling.Abstractions.CatJobClaim.DueTime|CatJobClaim.DueTime.md|DueTime
+P:Cat.Scheduling.Abstractions.CatJobClaim.StartedAt|CatJobClaim.StartedAt.md|StartedAt
+M:Cat.Scheduling.Abstractions.CatJobClaim.#ctor(System.String,System.DateTimeOffset,System.DateTimeOffset)|CatJobClaim..ctor.RMPO7H1HDIT3WRXU05M9QOPJA.md|CatJobClaim(string, DateTimeOffset, DateTimeOffset)
+N:Cat.Scheduling.Abstractions|Cat.Scheduling.Abstractions.md|Cat.Scheduling.Abstractions
+T:Cat.Scheduling.Abstractions.CatJobClaim|CatJobClaim.md|CatJobClaim
+P:Cat.Scheduling.Abstractions.CatJobClaimResult.Status|CatJobClaimResult.Status.md|Status
+P:Cat.Scheduling.Abstractions.CatJobClaimResult.Claim|CatJobClaimResult.Claim.md|Claim
+M:Cat.Scheduling.Abstractions.CatJobClaimResult.#ctor(Cat.Scheduling.Abstractions.CatJobClaimStatus,Cat.Scheduling.Abstractions.CatJobClaim)|CatJobClaimResult..ctor.JUF7Z29CT8VIW0HJ4SWHYDCS9.md|CatJobClaimResult(CatJobClaimStatus, CatJobClaim)
+M:Cat.Scheduling.Abstractions.CatJobClaimResult.Claimed(Cat.Scheduling.Abstractions.CatJobClaim)|CatJobClaimResult.Claimed.7IADIFEDYU8FR9CTES3MMN6M1.md|Claimed(CatJobClaim)
+M:Cat.Scheduling.Abstractions.CatJobClaimResult.TakenByOther|CatJobClaimResult.TakenByOther().md|TakenByOther()
+M:Cat.Scheduling.Abstractions.CatJobClaimResult.Busy|CatJobClaimResult.Busy().md|Busy()
+T:Cat.Scheduling.Abstractions.CatJobClaimResult|CatJobClaimResult.md|CatJobClaimResult
+F:Cat.Scheduling.Abstractions.CatJobClaimStatus.Claimed|CatJobClaimStatus.md#Cat.Scheduling.Abstractions.CatJobClaimStatus.Claimed|Claimed
+F:Cat.Scheduling.Abstractions.CatJobClaimStatus.TakenByOther|CatJobClaimStatus.md#Cat.Scheduling.Abstractions.CatJobClaimStatus.TakenByOther|TakenByOther
+F:Cat.Scheduling.Abstractions.CatJobClaimStatus.Busy|CatJobClaimStatus.md#Cat.Scheduling.Abstractions.CatJobClaimStatus.Busy|Busy
+T:Cat.Scheduling.Abstractions.CatJobClaimStatus|CatJobClaimStatus.md|CatJobClaimStatus
+P:Cat.Scheduling.Abstractions.CatJobOptions.Cron|CatJobOptions.Cron.md|Cron
+P:Cat.Scheduling.Abstractions.CatJobOptions.TimeZoneId|CatJobOptions.TimeZoneId.md|TimeZoneId
+P:Cat.Scheduling.Abstractions.CatJobOptions.Enabled|CatJobOptions.Enabled.md|Enabled
+P:Cat.Scheduling.Abstractions.CatJobOptions.MissedRuns|CatJobOptions.MissedRuns.md|MissedRuns
+P:Cat.Scheduling.Abstractions.CatJobOptions.AllowOverlap|CatJobOptions.AllowOverlap.md|AllowOverlap
+P:Cat.Scheduling.Abstractions.CatJobOptions.DeadAfter|CatJobOptions.DeadAfter.md|DeadAfter
+P:Cat.Scheduling.Abstractions.CatJobOptions.MaxRetries|CatJobOptions.MaxRetries.md|MaxRetries
+P:Cat.Scheduling.Abstractions.CatJobOptions.RetryDelay|CatJobOptions.RetryDelay.md|RetryDelay
+P:Cat.Scheduling.Abstractions.CatJobOptions.GrowingRetryDelay|CatJobOptions.GrowingRetryDelay.md|GrowingRetryDelay
+T:Cat.Scheduling.Abstractions.CatJobOptions|CatJobOptions.md|CatJobOptions
+P:Cat.Scheduling.Abstractions.CatJobRegistration.Name|CatJobRegistration.Name.md|Name
+P:Cat.Scheduling.Abstractions.CatJobRegistration.RequestFactory|CatJobRegistration.RequestFactory.md|RequestFactory
+P:Cat.Scheduling.Abstractions.CatJobRegistration.Options|CatJobRegistration.Options.md|Options
+M:Cat.Scheduling.Abstractions.CatJobRegistration.#ctor(System.String,System.Func{Cat.ServiceRequests.Abstractions.ICatServiceRequest},Cat.Scheduling.Abstractions.CatJobOptions)|CatJobRegistration..ctor.S6WVB6L2NC6J51UZSNJW6D437.md|CatJobRegistration(string, Func<ICatServiceRequest>, CatJobOptions)
+T:Cat.Scheduling.Abstractions.CatJobRegistration|CatJobRegistration.md|CatJobRegistration
+P:Cat.Scheduling.Abstractions.CatJobRunResult.Status|CatJobRunResult.Status.md|Status
+P:Cat.Scheduling.Abstractions.CatJobRunResult.ErrorCode|CatJobRunResult.ErrorCode.md|ErrorCode
+P:Cat.Scheduling.Abstractions.CatJobRunResult.Attempts|CatJobRunResult.Attempts.md|Attempts
+M:Cat.Scheduling.Abstractions.CatJobRunResult.#ctor(Cat.Scheduling.Abstractions.CatJobRunStatus,System.String,System.Int32)|CatJobRunResult..ctor.I0Z1D6CKK297NQZ2KAU05Y3X4.md|CatJobRunResult(CatJobRunStatus, string, int)
+T:Cat.Scheduling.Abstractions.CatJobRunResult|CatJobRunResult.md|CatJobRunResult
+F:Cat.Scheduling.Abstractions.CatJobRunStatus.Running|CatJobRunStatus.md#Cat.Scheduling.Abstractions.CatJobRunStatus.Running|Running
+F:Cat.Scheduling.Abstractions.CatJobRunStatus.Succeeded|CatJobRunStatus.md#Cat.Scheduling.Abstractions.CatJobRunStatus.Succeeded|Succeeded
+F:Cat.Scheduling.Abstractions.CatJobRunStatus.Failed|CatJobRunStatus.md#Cat.Scheduling.Abstractions.CatJobRunStatus.Failed|Failed
+T:Cat.Scheduling.Abstractions.CatJobRunStatus|CatJobRunStatus.md|CatJobRunStatus
+F:Cat.Scheduling.Abstractions.CatMissedRunBehavior.RunOnce|CatMissedRunBehavior.md#Cat.Scheduling.Abstractions.CatMissedRunBehavior.RunOnce|RunOnce
+F:Cat.Scheduling.Abstractions.CatMissedRunBehavior.Skip|CatMissedRunBehavior.md#Cat.Scheduling.Abstractions.CatMissedRunBehavior.Skip|Skip
+T:Cat.Scheduling.Abstractions.CatMissedRunBehavior|CatMissedRunBehavior.md|CatMissedRunBehavior
+M:Cat.Scheduling.Abstractions.ICatJobClaimStore.TryClaimAsync(System.String,System.DateTimeOffset,System.DateTimeOffset,System.Boolean,System.TimeSpan,System.Threading.CancellationToken)|ICatJobClaimStore.TryClaimAsync.3IGCHZF8DNHB1ZTJ9PSA7L5MD.md|TryClaimAsync(string, DateTimeOffset, DateTimeOffset, bool, TimeSpan, CancellationToken)
+M:Cat.Scheduling.Abstractions.ICatJobClaimStore.CompleteAsync(Cat.Scheduling.Abstractions.CatJobClaim,Cat.Scheduling.Abstractions.CatJobRunResult,System.DateTimeOffset,System.Threading.CancellationToken)|ICatJobClaimStore.CompleteAsync.CQM3U3SVUJ1ATMS0RBFYADC32.md|CompleteAsync(CatJobClaim, CatJobRunResult, DateTimeOffset, CancellationToken)
+M:Cat.Scheduling.Abstractions.ICatJobClaimStore.GetLastDueTimeAsync(System.String,System.Threading.CancellationToken)|ICatJobClaimStore.GetLastDueTimeAsync.U4K9715BAMBGZN57UGXLKIHE.md|GetLastDueTimeAsync(string, CancellationToken)
+T:Cat.Scheduling.Abstractions.ICatJobClaimStore|ICatJobClaimStore.md|ICatJobClaimStore
+P:Cat.Scheduling.Abstractions.ICatJobRegistry.Jobs|ICatJobRegistry.Jobs.md|Jobs
+T:Cat.Scheduling.Abstractions.ICatJobRegistry|ICatJobRegistry.md|ICatJobRegistry
+M:Cat.Scheduling.Abstractions.ICatJobRunner.RunAsync(System.String,System.Threading.CancellationToken)|ICatJobRunner.RunAsync.0EKJBOM11MQCEYU81GJIFI5I8.md|RunAsync(string, CancellationToken)
+T:Cat.Scheduling.Abstractions.ICatJobRunner|ICatJobRunner.md|ICatJobRunner

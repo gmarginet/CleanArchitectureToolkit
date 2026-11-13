@@ -29,7 +29,7 @@
 ## CatUserAccessor Class
 
 Holds the user of the current scope\.
-A user that was set wins\. Without one, an authenticated HTTP request gives a user built from its claims, and everything else is anonymous\.
+A user that was set wins, also in a scope that is created further down the same async call chain\. Without one, an authenticated HTTP request gives a user built from its claims, and everything else is anonymous\.
 
 ```csharp
 public class CatUserAccessor : Cat.Users.Abstractions.ICatUserAccessor
@@ -45,6 +45,7 @@ Implements [ICatUserAccessor](../../../Cat.Users/namespaces/Cat.Users.Abstractio
 
 | Fields | |
 | :--- | :--- |
+| [Flowing](CatUserAccessor.Flowing.md 'Cat\.Users\.CatUserAccessor\.Flowing') | |
 | [\_httpContextAccessor](CatUserAccessor._httpContextAccessor.md 'Cat\.Users\.CatUserAccessor\.\_httpContextAccessor') | |
 | [\_options](CatUserAccessor._options.md 'Cat\.Users\.CatUserAccessor\.\_options') | |
 | [\_user](CatUserAccessor._user.md 'Cat\.Users\.CatUserAccessor\.\_user') | |

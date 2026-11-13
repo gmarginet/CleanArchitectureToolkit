@@ -1,0 +1,79 @@
+../../../Cat.Scheduling/namespaces/Cat.Scheduling/
+F:Cat.Scheduling.CatJobRunner._scopeFactory|CatJobRunner._scopeFactory.md|_scopeFactory
+F:Cat.Scheduling.CatJobRunner._registry|CatJobRunner._registry.md|_registry
+F:Cat.Scheduling.CatJobRunner._settings|CatJobRunner._settings.md|_settings
+F:Cat.Scheduling.CatJobRunner._timeProvider|CatJobRunner._timeProvider.md|_timeProvider
+F:Cat.Scheduling.CatJobRunner._logger|CatJobRunner._logger.md|_logger
+M:Cat.Scheduling.CatJobRunner.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Cat.Scheduling.Abstractions.ICatJobRegistry,Cat.Scheduling.CatSchedulerSettings,System.TimeProvider,Microsoft.Extensions.Logging.ILogger{Cat.Scheduling.CatJobRunner})|CatJobRunner..ctor.CWP2T6NVTJXR72X28KA91XX36.md|CatJobRunner(IServiceScopeFactory, ICatJobRegistry, CatSchedulerSettings, TimeProvider, ILogger<CatJobRunner>)
+M:Cat.Scheduling.CatJobRunner.RunAsync(System.String,System.Threading.CancellationToken)|CatJobRunner.RunAsync.md#Cat.Scheduling.CatJobRunner.RunAsync(string,System.Threading.CancellationToken)|RunAsync(string, CancellationToken)
+M:Cat.Scheduling.CatJobRunner.RunAsync(Cat.Scheduling.Abstractions.CatJobRegistration,System.Threading.CancellationToken)|CatJobRunner.RunAsync.md#Cat.Scheduling.CatJobRunner.RunAsync(Cat.Scheduling.Abstractions.CatJobRegistration,System.Threading.CancellationToken)|RunAsync(CatJobRegistration, CancellationToken)
+M:Cat.Scheduling.CatJobRunner.AttemptAsync(Cat.Scheduling.Abstractions.CatJobRegistration,System.Int32,System.Threading.CancellationToken)|CatJobRunner.AttemptAsync.Q6NQRBU2NFY2YNW8YZHG2NA11.md|AttemptAsync(CatJobRegistration, int, CancellationToken)
+N:Cat.Scheduling|Cat.Scheduling.md|Cat.Scheduling
+T:Cat.Scheduling.CatJobRunner|CatJobRunner.md|CatJobRunner
+F:Cat.Scheduling.CatSchedulerBuilder._registrations|CatSchedulerBuilder._registrations.md|_registrations
+F:Cat.Scheduling.CatSchedulerBuilder.DefaultSystemUserName|CatSchedulerBuilder.DefaultSystemUserName.md|DefaultSystemUserName
+P:Cat.Scheduling.CatSchedulerBuilder.Registrations|CatSchedulerBuilder.Registrations.md|Registrations
+P:Cat.Scheduling.CatSchedulerBuilder.SystemUserName|CatSchedulerBuilder.SystemUserName.md|SystemUserName
+M:Cat.Scheduling.CatSchedulerBuilder.RunAs(System.String)|CatSchedulerBuilder.RunAs.UCXM2LF3HCK6CO1308R8YWL34.md|RunAs(string)
+M:Cat.Scheduling.CatSchedulerBuilder.Job``1(System.String,System.String,System.Action{Cat.Scheduling.Abstractions.CatJobOptions})|CatSchedulerBuilder.Job.md#Cat.Scheduling.CatSchedulerBuilder.Job_TRequest_(string,string,System.Action_Cat.Scheduling.Abstractions.CatJobOptions_)|Job<TRequest>(string, string, Action<CatJobOptions>)
+M:Cat.Scheduling.CatSchedulerBuilder.Job(System.String,System.String,System.Func{Cat.ServiceRequests.Abstractions.ICatServiceRequest},System.Action{Cat.Scheduling.Abstractions.CatJobOptions})|CatSchedulerBuilder.Job.md#Cat.Scheduling.CatSchedulerBuilder.Job(string,string,System.Func_Cat.ServiceRequests.Abstractions.ICatServiceRequest_,System.Action_Cat.Scheduling.Abstractions.CatJobOptions_)|Job(string, string, Func<ICatServiceRequest>, Action<CatJobOptions>)
+T:Cat.Scheduling.CatSchedulerBuilder|CatSchedulerBuilder.md|CatSchedulerBuilder
+F:Cat.Scheduling.CatSchedulerService.MaximumMissedCount|CatSchedulerService.MaximumMissedCount.md|MaximumMissedCount
+F:Cat.Scheduling.CatSchedulerService._registry|CatSchedulerService._registry.md|_registry
+F:Cat.Scheduling.CatSchedulerService._store|CatSchedulerService._store.md|_store
+F:Cat.Scheduling.CatSchedulerService._runner|CatSchedulerService._runner.md|_runner
+F:Cat.Scheduling.CatSchedulerService._timeProvider|CatSchedulerService._timeProvider.md|_timeProvider
+F:Cat.Scheduling.CatSchedulerService._logger|CatSchedulerService._logger.md|_logger
+M:Cat.Scheduling.CatSchedulerService.#ctor(Cat.Scheduling.Abstractions.ICatJobRegistry,Cat.Scheduling.Abstractions.ICatJobClaimStore,Cat.Scheduling.CatJobRunner,System.TimeProvider,Microsoft.Extensions.Logging.ILogger{Cat.Scheduling.CatSchedulerService})|CatSchedulerService..ctor.6JA50GQ4ZVC14QQ1FAD72ZYN2.md|CatSchedulerService(ICatJobRegistry, ICatJobClaimStore, CatJobRunner, TimeProvider, ILogger<CatSchedulerService>)
+M:Cat.Scheduling.CatSchedulerService.ExecuteAsync(System.Threading.CancellationToken)|CatSchedulerService.ExecuteAsync.7O067T0OUWE9GZVMCP1J1D9X9.md|ExecuteAsync(CancellationToken)
+M:Cat.Scheduling.CatSchedulerService.RunLoopAsync(Cat.Scheduling.Abstractions.CatJobRegistration,Cat.Scheduling.CronSchedule,System.Threading.CancellationToken)|CatSchedulerService.RunLoopAsync.8L5VG8R7CATMKUGIFT3Q55VI7.md|RunLoopAsync(CatJobRegistration, CronSchedule, CancellationToken)
+M:Cat.Scheduling.CatSchedulerService.ExecuteSafelyAsync(Cat.Scheduling.Abstractions.CatJobRegistration,System.DateTimeOffset,System.Threading.CancellationToken)|CatSchedulerService.ExecuteSafelyAsync.FPIFLCV37S8EOOE9NOM1Z7Z6A.md|ExecuteSafelyAsync(CatJobRegistration, DateTimeOffset, CancellationToken)
+M:Cat.Scheduling.CatSchedulerService.FindMissedDueTimeAsync(Cat.Scheduling.Abstractions.CatJobRegistration,Cat.Scheduling.CronSchedule,System.DateTimeOffset,System.Threading.CancellationToken)|CatSchedulerService.FindMissedDueTimeAsync.BCXW31WU5KHRRQGV6811PA4G4.md|FindMissedDueTimeAsync(CatJobRegistration, CronSchedule, DateTimeOffset, CancellationToken)
+M:Cat.Scheduling.CatSchedulerService.ExecuteDueAsync(Cat.Scheduling.Abstractions.CatJobRegistration,System.DateTimeOffset,System.Threading.CancellationToken)|CatSchedulerService.ExecuteDueAsync.RZNSSOFO1QAWCDS6KOTE9YEY9.md|ExecuteDueAsync(CatJobRegistration, DateTimeOffset, CancellationToken)
+T:Cat.Scheduling.CatSchedulerService|CatSchedulerService.md|CatSchedulerService
+P:Cat.Scheduling.CatSchedulerSettings.SystemUserName|CatSchedulerSettings.SystemUserName.md|SystemUserName
+M:Cat.Scheduling.CatSchedulerSettings.#ctor(System.String)|CatSchedulerSettings..ctor.40N364B05HYBFTERKCAF4E91C.md|CatSchedulerSettings(string)
+T:Cat.Scheduling.CatSchedulerSettings|CatSchedulerSettings.md|CatSchedulerSettings
+F:Cat.Scheduling.CatSchedulingTelemetry.SourceName|CatSchedulingTelemetry.SourceName.md|SourceName
+F:Cat.Scheduling.CatSchedulingTelemetry.ActivitySource|CatSchedulingTelemetry.ActivitySource.md|ActivitySource
+F:Cat.Scheduling.CatSchedulingTelemetry.Meter|CatSchedulingTelemetry.Meter.md|Meter
+F:Cat.Scheduling.CatSchedulingTelemetry.LastRuns|CatSchedulingTelemetry.LastRuns.md|LastRuns
+F:Cat.Scheduling.CatSchedulingTelemetry.Runs|CatSchedulingTelemetry.Runs.md|Runs
+F:Cat.Scheduling.CatSchedulingTelemetry.LastRunGauge|CatSchedulingTelemetry.LastRunGauge.md|LastRunGauge
+M:Cat.Scheduling.CatSchedulingTelemetry.RecordRun(System.String,Cat.Scheduling.Abstractions.CatJobRunStatus,System.DateTimeOffset)|CatSchedulingTelemetry.RecordRun.RVXU10Q8PZWDQTT3ZIEM0F9DC.md|RecordRun(string, CatJobRunStatus, DateTimeOffset)
+M:Cat.Scheduling.CatSchedulingTelemetry.ObserveLastRuns|CatSchedulingTelemetry.ObserveLastRuns().md|ObserveLastRuns()
+M:Cat.Scheduling.CatSchedulingTelemetry.#cctor|CatSchedulingTelemetry.CatSchedulingTelemetry().md|CatSchedulingTelemetry()
+T:Cat.Scheduling.CatSchedulingTelemetry|CatSchedulingTelemetry.md|CatSchedulingTelemetry
+F:Cat.Scheduling.CronSchedule._expression|CronSchedule._expression.md|_expression
+F:Cat.Scheduling.CronSchedule._zone|CronSchedule._zone.md|_zone
+M:Cat.Scheduling.CronSchedule.#ctor(Cronos.CronExpression,System.TimeZoneInfo)|CronSchedule..ctor.Y409YI7YRK80PLC8FE23P4OND.md|CronSchedule(CronExpression, TimeZoneInfo)
+M:Cat.Scheduling.CronSchedule.Create(System.String,Cat.Scheduling.Abstractions.CatJobOptions)|CronSchedule.Create.FJUQILFU3YRZZ88SIKLWXNJQ9.md|Create(string, CatJobOptions)
+M:Cat.Scheduling.CronSchedule.GetNext(System.DateTimeOffset)|CronSchedule.GetNext.MHYGPN6AX0PEEFC9CDPBGPUME.md|GetNext(DateTimeOffset)
+T:Cat.Scheduling.CronSchedule|CronSchedule.md|CronSchedule
+F:Cat.Scheduling.InMemoryJobClaimStore._lock|InMemoryJobClaimStore._lock.md|_lock
+F:Cat.Scheduling.InMemoryJobClaimStore._runs|InMemoryJobClaimStore._runs.md|_runs
+M:Cat.Scheduling.InMemoryJobClaimStore.TryClaimAsync(System.String,System.DateTimeOffset,System.DateTimeOffset,System.Boolean,System.TimeSpan,System.Threading.CancellationToken)|InMemoryJobClaimStore.TryClaimAsync.SE1UXJOEB11N8HDMX3FZEAN15.md|TryClaimAsync(string, DateTimeOffset, DateTimeOffset, bool, TimeSpan, CancellationToken)
+M:Cat.Scheduling.InMemoryJobClaimStore.CompleteAsync(Cat.Scheduling.Abstractions.CatJobClaim,Cat.Scheduling.Abstractions.CatJobRunResult,System.DateTimeOffset,System.Threading.CancellationToken)|InMemoryJobClaimStore.CompleteAsync.1C9DPZJITHXLSUS8OF3F5LP18.md|CompleteAsync(CatJobClaim, CatJobRunResult, DateTimeOffset, CancellationToken)
+M:Cat.Scheduling.InMemoryJobClaimStore.GetLastDueTimeAsync(System.String,System.Threading.CancellationToken)|InMemoryJobClaimStore.GetLastDueTimeAsync.B0D95IA5Z6MCWMAWZ158M02TA.md|GetLastDueTimeAsync(string, CancellationToken)
+M:Cat.Scheduling.InMemoryJobClaimStore.Key(System.String,System.DateTimeOffset)|InMemoryJobClaimStore.Key.0GTE2FB6JQFMNYT4YKQW0H6T5.md|Key(string, DateTimeOffset)
+T:Cat.Scheduling.InMemoryJobClaimStore|InMemoryJobClaimStore.md|InMemoryJobClaimStore
+P:Cat.Scheduling.JobRegistry.Jobs|JobRegistry.Jobs.md|Jobs
+M:Cat.Scheduling.JobRegistry.#ctor(System.Collections.Generic.IReadOnlyList{Cat.Scheduling.Abstractions.CatJobRegistration})|JobRegistry..ctor.H1P7UGFBAPVCS801ETVI961C4.md|JobRegistry(IReadOnlyList<CatJobRegistration>)
+T:Cat.Scheduling.JobRegistry|JobRegistry.md|JobRegistry
+F:Cat.Scheduling.TimeProviderDelay.LongestWait|TimeProviderDelay.LongestWait.md|LongestWait
+M:Cat.Scheduling.TimeProviderDelay.WaitAsync(System.TimeProvider,System.TimeSpan,System.Threading.CancellationToken)|TimeProviderDelay.WaitAsync.BHQ6M6M4H5X3DUSJDUID4SKLE.md|WaitAsync(TimeProvider, TimeSpan, CancellationToken)
+M:Cat.Scheduling.TimeProviderDelay.WaitOnceAsync(System.TimeProvider,System.TimeSpan,System.Threading.CancellationToken)|TimeProviderDelay.WaitOnceAsync.PY5NM9GZ1YTDLU8ABROBS7TM9.md|WaitOnceAsync(TimeProvider, TimeSpan, CancellationToken)
+M:Cat.Scheduling.TimeProviderDelay.#cctor|TimeProviderDelay.TimeProviderDelay().md|TimeProviderDelay()
+T:Cat.Scheduling.TimeProviderDelay|TimeProviderDelay.md|TimeProviderDelay
+F:Cat.Scheduling.Extensions.ServiceCollectionExtensions.ConfigurationSectionName|ServiceCollectionExtensions.ConfigurationSectionName.md|ConfigurationSectionName
+M:Cat.Scheduling.Extensions.ServiceCollectionExtensions.AddCatScheduling(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Action{Cat.Scheduling.CatSchedulerBuilder})|ServiceCollectionExtensions.AddCatScheduling.MNVW197CZUUNU0H4L6NWFQM2B.md|AddCatScheduling(this IServiceCollection, IConfiguration, Action<CatSchedulerBuilder>)
+N:Cat.Scheduling.Extensions|Cat.Scheduling.Extensions.md|Cat.Scheduling.Extensions
+T:Cat.Scheduling.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+P:Cat.Scheduling.InMemoryJobClaimStore.Run.JobName|InMemoryJobClaimStore.Run.JobName.md|JobName
+P:Cat.Scheduling.InMemoryJobClaimStore.Run.DueTime|InMemoryJobClaimStore.Run.DueTime.md|DueTime
+P:Cat.Scheduling.InMemoryJobClaimStore.Run.StartedAt|InMemoryJobClaimStore.Run.StartedAt.md|StartedAt
+P:Cat.Scheduling.InMemoryJobClaimStore.Run.Status|InMemoryJobClaimStore.Run.Status.md|Status
+M:Cat.Scheduling.InMemoryJobClaimStore.Run.#ctor(System.String,System.DateTimeOffset,System.DateTimeOffset)|InMemoryJobClaimStore.Run..ctor.QJRPJUR7XQADL4POY2QNS9R23.md|Run(string, DateTimeOffset, DateTimeOffset)
+T:Cat.Scheduling.InMemoryJobClaimStore.Run|InMemoryJobClaimStore.Run.md|Run
+?:Cat.Scheduling.CatJobRunner.RunAsync|CatJobRunner.RunAsync.md|RunAsync
+?:Cat.Scheduling.CatSchedulerBuilder.Job|CatSchedulerBuilder.Job.md|Job

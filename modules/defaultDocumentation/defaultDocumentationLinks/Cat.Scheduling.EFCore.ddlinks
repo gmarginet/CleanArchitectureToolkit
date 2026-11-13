@@ -1,0 +1,25 @@
+../../../Cat.Scheduling/namespaces/Cat.Scheduling.EFCore/
+P:Cat.Scheduling.EFCore.CatJobRun.JobName|CatJobRun.JobName.md|JobName
+P:Cat.Scheduling.EFCore.CatJobRun.DueTime|CatJobRun.DueTime.md|DueTime
+P:Cat.Scheduling.EFCore.CatJobRun.Status|CatJobRun.Status.md|Status
+P:Cat.Scheduling.EFCore.CatJobRun.StartedAt|CatJobRun.StartedAt.md|StartedAt
+P:Cat.Scheduling.EFCore.CatJobRun.FinishedAt|CatJobRun.FinishedAt.md|FinishedAt
+P:Cat.Scheduling.EFCore.CatJobRun.ErrorCode|CatJobRun.ErrorCode.md|ErrorCode
+P:Cat.Scheduling.EFCore.CatJobRun.Attempts|CatJobRun.Attempts.md|Attempts
+N:Cat.Scheduling.EFCore|Cat.Scheduling.EFCore.md|Cat.Scheduling.EFCore
+T:Cat.Scheduling.EFCore.CatJobRun|CatJobRun.md|CatJobRun
+F:Cat.Scheduling.EFCore.EfCoreJobClaimStore`1._scopeFactory|EfCoreJobClaimStore_TDbContext_._scopeFactory.md|_scopeFactory
+M:Cat.Scheduling.EFCore.EfCoreJobClaimStore`1.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory)|EfCoreJobClaimStore_TDbContext_..ctor.2BK1CYY5G1EJ009QRYNQQB4AE.md|EfCoreJobClaimStore(IServiceScopeFactory)
+M:Cat.Scheduling.EFCore.EfCoreJobClaimStore`1.TryClaimAsync(System.String,System.DateTimeOffset,System.DateTimeOffset,System.Boolean,System.TimeSpan,System.Threading.CancellationToken)|EfCoreJobClaimStore_TDbContext_.TryClaimAsync.8XQHWC8KZP7YXN7BKF2WY4XO6.md|TryClaimAsync(string, DateTimeOffset, DateTimeOffset, bool, TimeSpan, CancellationToken)
+M:Cat.Scheduling.EFCore.EfCoreJobClaimStore`1.CompleteAsync(Cat.Scheduling.Abstractions.CatJobClaim,Cat.Scheduling.Abstractions.CatJobRunResult,System.DateTimeOffset,System.Threading.CancellationToken)|EfCoreJobClaimStore_TDbContext_.CompleteAsync.Q6Z7B87Q52KVVTYKSTRA682D7.md|CompleteAsync(CatJobClaim, CatJobRunResult, DateTimeOffset, CancellationToken)
+M:Cat.Scheduling.EFCore.EfCoreJobClaimStore`1.GetLastDueTimeAsync(System.String,System.Threading.CancellationToken)|EfCoreJobClaimStore_TDbContext_.GetLastDueTimeAsync.LYOZ2P4TPWUTP1PK6CYO3HECC.md|GetLastDueTimeAsync(string, CancellationToken)
+M:Cat.Scheduling.EFCore.EfCoreJobClaimStore`1.ExistsAsync(System.String,System.DateTime,System.Threading.CancellationToken)|EfCoreJobClaimStore_TDbContext_.ExistsAsync.OS9YAY5KMENO1FADOU2IDHOI6.md|ExistsAsync(string, DateTime, CancellationToken)
+T:Cat.Scheduling.EFCore.EfCoreJobClaimStore`1|EfCoreJobClaimStore_TDbContext_.md|EfCoreJobClaimStore<TDbContext>
+F:Cat.Scheduling.EFCore.ModelBuilderExtensions.AsUtc|ModelBuilderExtensions.AsUtc.md|AsUtc
+F:Cat.Scheduling.EFCore.ModelBuilderExtensions.AsNullableUtc|ModelBuilderExtensions.AsNullableUtc.md|AsNullableUtc
+M:Cat.Scheduling.EFCore.ModelBuilderExtensions.AddCatScheduling(Microsoft.EntityFrameworkCore.ModelBuilder)|ModelBuilderExtensions.AddCatScheduling.AIU68307FR4A2EMPKCIBK347A.md|AddCatScheduling(this ModelBuilder)
+M:Cat.Scheduling.EFCore.ModelBuilderExtensions.#cctor|ModelBuilderExtensions.ModelBuilderExtensions().md|ModelBuilderExtensions()
+T:Cat.Scheduling.EFCore.ModelBuilderExtensions|ModelBuilderExtensions.md|ModelBuilderExtensions
+M:Cat.Scheduling.EFCore.Extensions.ServiceCollectionExtensions.AddCatSchedulingEFCore``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatSchedulingEFCore.U5AWW2ZS0CHKQ68967OCWFCG3.md|AddCatSchedulingEFCore<TDbContext>(this IServiceCollection)
+N:Cat.Scheduling.EFCore.Extensions|Cat.Scheduling.EFCore.Extensions.md|Cat.Scheduling.EFCore.Extensions
+T:Cat.Scheduling.EFCore.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

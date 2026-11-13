@@ -109,15 +109,30 @@ public class UserTests
     }
 
     [Test]
-    public void Accessor_KeepsTheUsersOfTwoScopesApart()
+    public async Task Accessor_KeepsTheUsersOfTwoAsyncFlowsApart()
     {
         using var provider = Build(null);
-        using var first = provider.CreateScope();
+
+        await Task.Run(() =>
+        {
+            using var first = provider.CreateScope();
+            first.ServiceProvider.GetRequiredService<ICatUserAccessor>().User = CatUser.System("orders");
+        });
+
         using var second = provider.CreateScope();
-
-        first.ServiceProvider.GetRequiredService<ICatUserAccessor>().User = CatUser.System("orders");
-
         Assert.That(second.ServiceProvider.GetRequiredService<ICatUser>().IsAuthenticated, Is.False);
+    }
+
+    [Test]
+    public void Accessor_AScopeCreatedBelowTheSetterSeesTheUser()
+    {
+        using var provider = Build(null);
+        using var outer = provider.CreateScope();
+        outer.ServiceProvider.GetRequiredService<ICatUserAccessor>().User = CatUser.System("orders");
+
+        using var inner = provider.CreateScope();
+
+        Assert.That(inner.ServiceProvider.GetRequiredService<ICatUser>().UserId, Is.EqualTo("orders"));
     }
 
     private static ServiceProvider Build(ClaimsPrincipal? principal)

@@ -145,6 +145,12 @@
     <Project Path="modules/Cat.Responses/Cat.Responses.Abstractions/Cat.Responses.Abstractions.csproj" />
     <Project Path="modules/Cat.Responses/Cat.Responses/Cat.Responses.csproj" />
   </Folder>
+  <Folder Name="/modules/Cat.Scheduling/">
+    <File Path="modules/Cat.Scheduling/README.md" />
+    <Project Path="modules/Cat.Scheduling/Cat.Scheduling.Abstractions/Cat.Scheduling.Abstractions.csproj" />
+    <Project Path="modules/Cat.Scheduling/Cat.Scheduling.EFCore/Cat.Scheduling.EFCore.csproj" />
+    <Project Path="modules/Cat.Scheduling/Cat.Scheduling/Cat.Scheduling.csproj" />
+  </Folder>
   <Folder Name="/modules/Cat.ServiceRequests/">
     <File Path="modules/Cat.ServiceRequests/README.md" />
     <Project Path="modules/Cat.ServiceRequests/Cat.ServiceRequests.Abstractions/Cat.ServiceRequests.Abstractions.csproj" />
@@ -183,6 +189,7 @@
     <Project Path="tests/Cat.NUnit/Cat.NUnit.csproj" />
     <Project Path="tests/Cat.Queries.Tests/Cat.Queries.Tests.csproj" />
     <Project Path="tests/Cat.Responses.Tests/Cat.Responses.Tests.csproj" />
+    <Project Path="tests/Cat.Scheduling.Tests/Cat.Scheduling.Tests.csproj" />
     <Project Path="tests/Cat.ServiceRequests.Tests/Cat.ServiceRequests.Tests.csproj" />
     <Project Path="tests/Cat.Users.Tests/Cat.Users.Tests.csproj" />
     <Project Path="tests/Cat.Validators.Tests/Cat.Validators.Tests.csproj" />

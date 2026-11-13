@@ -10,6 +10,7 @@ N:Cat.Users|Cat.Users.md|Cat.Users
 T:Cat.Users.CatClaimsUser|CatClaimsUser.md|CatClaimsUser
 F:Cat.Users.CatUserAccessor._httpContextAccessor|CatUserAccessor._httpContextAccessor.md|_httpContextAccessor
 F:Cat.Users.CatUserAccessor._options|CatUserAccessor._options.md|_options
+F:Cat.Users.CatUserAccessor.Flowing|CatUserAccessor.Flowing.md|Flowing
 F:Cat.Users.CatUserAccessor._user|CatUserAccessor._user.md|_user
 P:Cat.Users.CatUserAccessor.User|CatUserAccessor.User.md|User
 M:Cat.Users.CatUserAccessor.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.Extensions.Options.IOptions{Cat.Users.CatUsersOptions})|CatUserAccessor..ctor.NWJCRIJUA2W2WR4D00Q20REPE.md|CatUserAccessor(IHttpContextAccessor, IOptions<CatUsersOptions>)
