@@ -261,8 +261,6 @@ The diagram uses `ServiceName` as a placeholder for the name of your service.
 | Project                                       | Purpose                                              | Required |
 |-----------------------------------------------|------------------------------------------------------|----------|
 | `ServiceName.Api`                             | Host that handles HTTP requests and runs the workers | Yes      |
-| `ServiceName.Scheduler`                       | Background worker that runs time-based work          | Optional |
-| `ServiceName.EventProcessor`                  | Background worker that handles incoming messages     | Optional |
 | `ServiceName.CoreService`                     | Business logic                                       | Yes      |
 | `ServiceName.Infrastructure`                  | Database and external integrations                   | Yes      |
 | `ServiceName.Contracts`                       | Service requests, contract models and enums          | Yes      |
@@ -284,7 +282,7 @@ It sets up the application, registers the modules in the DI container and passes
 - Runs the background workers, when the service has them.  
 - Registers the `Infrastructure` project in the DI container at startup. That is the only reason it references it.  
 
-The API references the `CoreService`, `Contracts` and `Infrastructure` projects, and the worker projects it runs.  
+The API references the `CoreService`, `Contracts` and `Infrastructure` projects.  
 
 **Development endpoints**  
 In debug mode the API has an extra development endpoint group.  
@@ -300,19 +298,21 @@ It lets you try out the service without the real triggers.
 Not all work comes in over HTTP.  
 Background workers handle work that starts on its own, like a timer or a message.  
 
-A worker is not a host. It has no executable of its own.  
-It lives in its own project and runs inside the API.  
+A worker is not a host and not a project. It has no executable and no project of its own.  
+It is a module that the API switches on with extension methods, and it runs inside the API.  
 
 Like the API, a worker contains no business logic.  
 Every unit of work becomes a service request that the core handles.  
 
-**ServiceName.Scheduler**  
+**Scheduler**  
 - Runs work on a schedule, like a nightly cleanup or a periodic import.  
 - Every run triggers a service request.  
+- The API registers it with an extension method.  
 
-**ServiceName.EventProcessor**  
+**Event processor**  
 - Listens to Azure Service Bus.  
 - Every incoming message triggers a service request.  
+- The API registers it with the extension methods of [Cat.EventProcessor](./modules/Cat.EventProcessor/README.md).  
 
 Both are optional. Add them only when the service needs them.  
 
@@ -398,7 +398,7 @@ This project holds the unit tests of the business logic.
 
 ### Reference rules
 
-- Dependencies point inwards. The API, the workers and the infrastructure depend on the core. The core depends on neither of them.  
+- Dependencies point inwards. The API and the infrastructure depend on the core. The core depends on neither of them.  
 - The core only references the abstractions of the CAT modules.  
 - The API is the only place where everything is wired together.  
 - The `Contracts` project stays small and free of service internals.  
