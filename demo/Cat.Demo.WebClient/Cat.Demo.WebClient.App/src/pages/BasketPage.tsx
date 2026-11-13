@@ -20,7 +20,7 @@ export function BasketPage() {
     return (
       <>
         <h1>Thank you for your order</h1>
-        <p role="status">
+        <p role="status" className="alert alert-success">
           Order <strong>{order.orderNumber}</strong> is <strong>{order.status}</strong>. The total is{' '}
           {formatAmount(order.total)}.
         </p>
@@ -55,7 +55,7 @@ export function BasketPage() {
         </p>
       ) : (
         <>
-          <table className={styles.table}>
+          <table className="table align-middle">
             <thead>
               <tr>
                 <th>Book</th>
@@ -81,7 +81,11 @@ export function BasketPage() {
                   <td className={styles.number}>{formatPrice(line.price)}</td>
                   <td className={styles.number}>{formatPrice(line.price * line.quantity)}</td>
                   <td>
-                    <button type="button" onClick={() => basket.remove(line.bookId)}>
+                    <button
+                      type="button"
+                      className="btn btn-outline-danger btn-sm"
+                      onClick={() => basket.remove(line.bookId)}
+                    >
                       Remove
                     </button>
                   </td>
@@ -96,11 +100,11 @@ export function BasketPage() {
               </tr>
             </tfoot>
           </table>
-          <p className={styles.note}>The shop confirms the price when you place the order.</p>
+          <p className="form-text">The shop confirms the price when you place the order.</p>
 
           {placeOrder.isError && <ErrorMessage error={placeOrder.error} />}
 
-          <button type="button" disabled={placeOrder.isPending || auth.isLoading} onClick={submit}>
+          <button type="button" className="btn btn-primary" disabled={placeOrder.isPending || auth.isLoading} onClick={submit}>
             {placeOrder.isPending
               ? 'Placing the order'
               : auth.isAuthenticated

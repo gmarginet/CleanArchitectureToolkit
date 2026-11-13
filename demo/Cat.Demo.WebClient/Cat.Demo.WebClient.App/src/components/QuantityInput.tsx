@@ -17,6 +17,8 @@ export function QuantityInput({ label, quantity, onChange }: QuantityInputProps)
   return (
     <input
       type="number"
+      className="form-control form-control-sm"
+      style={{ width: '5rem' }}
       aria-label={label}
       min={1}
       max={maxQuantity}

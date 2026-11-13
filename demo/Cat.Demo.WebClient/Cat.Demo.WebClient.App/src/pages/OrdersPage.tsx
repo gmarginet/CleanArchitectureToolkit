@@ -19,7 +19,7 @@ export function OrdersPage() {
       {orders.isError && <ErrorMessage error={orders.error} />}
       {orders.isSuccess && sorted.length === 0 && <p>You have no orders yet.</p>}
       {sorted.length > 0 && (
-        <table className={styles.table}>
+        <table className="table">
           <thead>
             <tr>
               <th>Order</th>

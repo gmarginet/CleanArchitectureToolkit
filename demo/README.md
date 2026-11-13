@@ -401,6 +401,7 @@ One chapter for every block that is built. A database sits in the chapter of the
 
 **How it works.**
 - It only talks to the API gateway.
+- The look comes from Bootstrap, used as plain CSS from npm. The markup has Bootstrap classes, and there is no React-Bootstrap. One small CSS module is left, for the amount columns of the tables.
 - The Log in button, the login button of the basket and a visit to the order pages or the admin pages without a login all lead to the login page at `/login`. The books and the basket stay open to everyone. A small guard, `RequireLogin`, protects the order pages and the admin pages. It waits while the app asks Keycloak for a token after a refresh.
 - The Log in button on the login page sends the browser to Keycloak. The login uses authorization code with PKCE (`react-oidc-context`). The page shows no demo users. A Register button opens the registration form of Keycloak (`prompt=create`), which the realm allows with `registrationAllowed`. After the login or the registration the person is back on the page they came from, and the top bar shows their name. The page to return to travels in the router state, and only a path inside the app counts.
 - The access token lives in memory only. A page refresh loses it, so the app asks Keycloak for a new token without showing the login page. This works while the Keycloak session lasts. A tab flag, kept in session storage, says that the person was logged in. It holds no token.

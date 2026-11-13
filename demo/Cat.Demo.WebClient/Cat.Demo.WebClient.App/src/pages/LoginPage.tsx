@@ -13,26 +13,33 @@ export function LoginPage() {
   }
 
   return (
-    <>
-      <h1>Log in</h1>
-      <p>Log in to place orders and to see your orders. The books and the basket are open to everyone.</p>
-      <p>
-        <button
-          type="button"
-          disabled={auth.isLoading}
-          onClick={() => void auth.signinRedirect({ state: { returnTo } })}
-        >
-          Log in
-        </button>
-      </p>
-      <p>New here? Register, then you are logged in at once.</p>
-      <button
-        type="button"
-        disabled={auth.isLoading}
-        onClick={() => void auth.signinRedirect({ prompt: 'create', state: { returnTo } })}
-      >
-        Register
-      </button>
-    </>
+    <div className="row justify-content-center">
+      <div className="col-md-8 col-lg-6">
+        <div className="card">
+          <div className="card-body">
+            <h1 className="h3 card-title">Log in</h1>
+            <p>Log in to place orders and to see your orders. The books and the basket are open to everyone.</p>
+            <button
+              type="button"
+              className="btn btn-primary"
+              disabled={auth.isLoading}
+              onClick={() => void auth.signinRedirect({ state: { returnTo } })}
+            >
+              Log in
+            </button>
+            <hr />
+            <p>New here? Register, then you are logged in at once.</p>
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              disabled={auth.isLoading}
+              onClick={() => void auth.signinRedirect({ prompt: 'create', state: { returnTo } })}
+            >
+              Register
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

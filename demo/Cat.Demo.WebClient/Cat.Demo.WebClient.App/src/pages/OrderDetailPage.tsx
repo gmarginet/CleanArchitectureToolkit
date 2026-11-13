@@ -31,6 +31,7 @@ export function OrderDetailPage() {
         <button
           type="button"
           disabled={auth.isLoading}
+          className="btn btn-primary"
           onClick={() => void auth.signinRedirect({ state: { returnTo: `/orders/${id}` } })}
         >
           Log in
@@ -47,7 +48,9 @@ export function OrderDetailPage() {
       {order.isPending && <p>Loading the order</p>}
       {order.isError &&
         (order.error instanceof ApiError && order.error.status === 404 ? (
-          <p role="alert">We could not find that order.</p>
+          <p role="alert" className="alert alert-warning">
+            We could not find that order.
+          </p>
         ) : (
           <ErrorMessage error={order.error} />
         ))}
@@ -57,7 +60,7 @@ export function OrderDetailPage() {
           <p>
             Status: <strong>{order.data.status}</strong>
           </p>
-          <table className={styles.table}>
+          <table className="table">
             <thead>
               <tr>
                 <th>Book</th>
@@ -87,8 +90,12 @@ export function OrderDetailPage() {
           </table>
 
           {cancel.isError && <ErrorMessage error={cancel.error} />}
-          {cancel.isSuccess && <p role="status">The order is cancelled.</p>}
-          <button type="button" disabled={cancel.isPending} onClick={() => cancel.mutate()}>
+          {cancel.isSuccess && (
+            <p role="status" className="alert alert-success">
+              The order is cancelled.
+            </p>
+          )}
+          <button type="button" className="btn btn-outline-danger" disabled={cancel.isPending} onClick={() => cancel.mutate()}>
             {cancel.isPending ? 'Cancelling the order' : 'Cancel order'}
           </button>
         </article>

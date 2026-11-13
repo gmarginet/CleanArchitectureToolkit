@@ -11,14 +11,18 @@ export function AddToBasketButton({ book }: AddToBasketButtonProps) {
 
   if (!id || price === null || price === undefined) {
     return (
-      <button type="button" disabled title="This book has no price yet">
+      <button type="button" className="btn btn-primary btn-sm" disabled title="This book has no price yet">
         Add to basket
       </button>
     )
   }
 
   return (
-    <button type="button" onClick={() => basket.add({ bookId: id, title: book.title, price })}>
+    <button
+      type="button"
+      className="btn btn-primary btn-sm"
+      onClick={() => basket.add({ bookId: id, title: book.title, price })}
+    >
       Add to basket
     </button>
   )

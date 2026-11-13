@@ -6,7 +6,7 @@ import { createQueryClient } from './api/queryClient'
 import App from './App.tsx'
 import { AuthProviderWithRouter } from './auth/AuthProviderWithRouter'
 import { BasketProvider } from './basket/BasketProvider'
-import './index.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const queryClient = createQueryClient()
 

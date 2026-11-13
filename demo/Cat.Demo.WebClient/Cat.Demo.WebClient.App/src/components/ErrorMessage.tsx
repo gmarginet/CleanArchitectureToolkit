@@ -1,5 +1,4 @@
 import { ApiError } from '../api/errors'
-import styles from './ErrorMessage.module.css'
 
 interface ErrorMessageProps {
   error: unknown
@@ -11,10 +10,10 @@ export function ErrorMessage({ error }: ErrorMessageProps) {
   const entries = apiError?.errors ?? []
 
   return (
-    <div role="alert" className={styles.error}>
-      {entries.length === 0 && <p className={styles.message}>{apiError?.message ?? 'Something went wrong.'}</p>}
+    <div role="alert" className="alert alert-danger my-3">
+      {entries.length === 0 && <p className="fw-semibold mb-1">{apiError?.message ?? 'Something went wrong.'}</p>}
       {entries.length > 0 && (
-        <ul className={styles.entries}>
+        <ul className="fw-semibold mb-1">
           {entries.map((entry, index) => (
             <li key={index}>
               {entry.code && <code>{entry.code}</code>} {entry.message}
@@ -22,7 +21,7 @@ export function ErrorMessage({ error }: ErrorMessageProps) {
           ))}
         </ul>
       )}
-      {apiError?.traceId && <p className={styles.trace}>Trace id: {apiError.traceId}</p>}
+      {apiError?.traceId && <p className="small mb-0 opacity-75">Trace id: {apiError.traceId}</p>}
     </div>
   )
 }
