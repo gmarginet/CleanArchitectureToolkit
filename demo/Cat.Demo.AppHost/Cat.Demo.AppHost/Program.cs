@@ -111,6 +111,10 @@ catalog.WithEnvironment("Authentication__Authority", authority);
 orders.WithEnvironment("Authentication__Authority", authority);
 payment.WithEnvironment("Authentication__Authority", authority);
 inventory.WithEnvironment("Authentication__Authority", authority);
+// Orders asks Keycloak for a token of its own when a call has no user, such as a job of the Scheduler.
+// The secret is the one in the realm file. Do not use these settings outside the demo.
+orders.WithEnvironment("Authentication__ClientId", "cat-demo-orders");
+orders.WithEnvironment("Authentication__ClientSecret", "cat-demo-orders-secret");
 const int gatewayPort = 5100;
 const int webPort = 5104;
 var gatewayUrl = $"http://localhost:{gatewayPort}";

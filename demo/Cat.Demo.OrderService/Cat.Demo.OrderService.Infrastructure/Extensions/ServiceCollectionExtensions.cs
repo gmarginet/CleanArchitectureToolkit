@@ -53,6 +53,28 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
+    /// Registers the client credentials token of Orders, for calls that have no user, such as the jobs of the Scheduler.
+    /// It needs <c>Authentication:Authority</c>, <c>Authentication:ClientId</c> and <c>Authentication:ClientSecret</c> in the configuration
+    /// (the AppHost sets them). Without one of them nothing is registered, and such calls go out without a token.
+    /// </summary>
+    public static IServiceCollection AddCatDemoOrderClientCredentials(this IServiceCollection services, IConfiguration configuration)
+    {
+        var authority = configuration["Authentication:Authority"];
+        var clientId = configuration["Authentication:ClientId"];
+        var clientSecret = configuration["Authentication:ClientSecret"];
+        if (string.IsNullOrWhiteSpace(authority) || string.IsNullOrWhiteSpace(clientId) || string.IsNullOrWhiteSpace(clientSecret))
+        {
+            return services;
+        }
+
+        services.TryAddSingleton(TimeProvider.System);
+        services.AddHttpClient(ClientCredentialsTokenProvider.HttpClientName);
+        services.TryAddSingleton(new ClientCredentialsSettings($"{authority.TrimEnd('/')}/protocol/openid-connect/token", clientId, clientSecret));
+        services.TryAddSingleton<IClientTokenProvider, ClientCredentialsTokenProvider>();
+        return services;
+    }
+
+    /// <summary>
     /// Registers the payment provider. When the host gives Orders an address for the <c>gateway</c>
     /// (Aspire does, as <c>services:gateway:*</c>), <see cref="PaymentServiceProvider"/> takes the payment at the payment service
     /// through the gateway, with the generated client. The call forwards the token of the user, because the payment route is not anonymous.
@@ -64,6 +86,7 @@ public static class ServiceCollectionExtensions
         {
             // The resilience handler of ServiceDefaults adds retries, a timeout and a circuit breaker to this client.
             services.AddHttpContextAccessor();
+            services.AddCatDemoOrderClientCredentials(configuration);
             services.TryAddTransient<ForwardBearerTokenHandler>();
             services.AddCatApiClient<IPaymentClient, PaymentClient>("https+http://gateway")
                 .AddHttpMessageHandler<ForwardBearerTokenHandler>()
@@ -89,6 +112,7 @@ public static class ServiceCollectionExtensions
         if (configuration.GetSection("services:gateway").Exists())
         {
             services.AddHttpContextAccessor();
+            services.AddCatDemoOrderClientCredentials(configuration);
             services.TryAddTransient<ForwardBearerTokenHandler>();
             services.AddCatApiClient<IInventoryClient, InventoryClient>("https+http://gateway")
                 .AddHttpMessageHandler<ForwardBearerTokenHandler>()

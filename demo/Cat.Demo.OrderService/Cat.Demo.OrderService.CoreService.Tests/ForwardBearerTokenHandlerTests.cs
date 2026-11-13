@@ -18,10 +18,15 @@ public class ForwardBearerTokenHandlerTests
         }
     }
 
-    private static async Task<string?> SendAsync(HttpContext? httpContext)
+    private sealed class FakeClientTokens(string? token) : IClientTokenProvider
+    {
+        public Task<string?> GetTokenAsync(CancellationToken cancellationToken = default) => Task.FromResult(token);
+    }
+
+    private static async Task<string?> SendAsync(HttpContext? httpContext, IClientTokenProvider? clientTokens = null)
     {
         var recorder = new RecordingHandler();
-        var handler = new ForwardBearerTokenHandler(new HttpContextAccessor { HttpContext = httpContext }) { InnerHandler = recorder };
+        var handler = new ForwardBearerTokenHandler(new HttpContextAccessor { HttpContext = httpContext }, clientTokens) { InnerHandler = recorder };
         using var client = new HttpClient(handler) { BaseAddress = new Uri("http://gateway") };
 
         await client.GetAsync("/payment/payments");
@@ -48,5 +53,26 @@ public class ForwardBearerTokenHandlerTests
     public async Task NoRequestAtAll_ShouldSendNoToken()
     {
         Assert.That(await SendAsync(null), Is.Null);
+    }
+
+    [Test]
+    public async Task NoRequestAtAll_WithAClientTokenProvider_ShouldSendTheClientToken()
+    {
+        Assert.That(await SendAsync(null, new FakeClientTokens("client-token")), Is.EqualTo("Bearer client-token"));
+    }
+
+    [Test]
+    public async Task ARequestWithAToken_WithAClientTokenProvider_ShouldStillPassTheUserTokenOn()
+    {
+        var context = new DefaultHttpContext();
+        context.Request.Headers.Authorization = "Bearer abc";
+
+        Assert.That(await SendAsync(context, new FakeClientTokens("client-token")), Is.EqualTo("Bearer abc"));
+    }
+
+    [Test]
+    public async Task NoRequestAtAll_WhenTheClientTokenProviderGivesNothing_ShouldSendNoToken()
+    {
+        Assert.That(await SendAsync(null, new FakeClientTokens(null)), Is.Null);
     }
 }
