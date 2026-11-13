@@ -25,6 +25,8 @@
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.Logging\Cat.ServiceRequests.Decorators.Logging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.Validation\Cat.ServiceRequests.Decorators.Validation.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests\Cat.ServiceRequests.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Sql.Cdc\Cat.Sql.Cdc.Messaging\Cat.Sql.Cdc.Messaging.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Sql.Cdc\Cat.Sql.Cdc\Cat.Sql.Cdc.csproj" />
       <ProjectReference Include="..\Cat.Demo.InventoryService.Contracts\Cat.Demo.InventoryService.Contracts.csproj" />
       <ProjectReference Include="..\Cat.Demo.InventoryService.CoreService\Cat.Demo.InventoryService.CoreService.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.OrderService\Cat.Demo.OrderService.Contracts\Cat.Demo.OrderService.Contracts.csproj" />

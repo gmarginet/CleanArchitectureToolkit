@@ -157,9 +157,11 @@ if (useContainer)
 {
     // The data volume keeps the databases when the container is removed.
     // The memory limit stops SQL Server from taking all the memory it can get.
+    // The SQL Server Agent runs the capture job of change data capture. The Inventory change capture needs it.
     var sql = builder.AddSqlServer("sql")
         .WithDataVolume("cat-demo-sql-data")
-        .WithEnvironment("MSSQL_MEMORY_LIMIT_MB", "2048");
+        .WithEnvironment("MSSQL_MEMORY_LIMIT_MB", "2048")
+        .WithEnvironment("MSSQL_AGENT_ENABLED", "true");
 
     // The resource names must differ from the project names. The connection names stay catalog and orders,
     // because the services read GetConnectionString("catalog") and GetConnectionString("orders").
@@ -176,7 +178,9 @@ if (useContainer)
     // of the Database folder. The scripts only create what is missing, so they can run at every start.
     var inventoryDb = sql.AddDatabase("inventory-db", databaseName: "inventory")
         .WithCreationScript(BuildInventoryCreationScript(builder.AppHostDirectory));
-    inventory.WithReference(inventoryDb, connectionName: "inventory").WaitFor(inventoryDb);
+    // The scripts switch change data capture on in this mode, so Inventory may read the change table.
+    inventory.WithReference(inventoryDb, connectionName: "inventory").WaitFor(inventoryDb)
+        .WithEnvironment("Inventory__ChangeCapture", "true");
 }
 else
 {

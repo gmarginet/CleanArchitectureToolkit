@@ -44,6 +44,9 @@ var eventProcessorOn = builder.Services.AddCatDemoInventoryEventProcessor(builde
 // The scheduler runs the nightly low stock report. The claim table is in the inventory database.
 builder.Services.AddCatDemoInventoryScheduler(builder.Configuration);
 
+// The change capture sends every change of the stock table as a message. It is on when Inventory:ChangeCapture is true.
+builder.Services.AddCatDemoInventoryChangeCapture(builder.Configuration, connectionString);
+
 // The development endpoints, of the scheduler and of the event processor, are not in the default OpenAPI document,
 // so no client gets them. The dev document holds them, and Scalar shows it next to the default one.
 builder.Services.AddOpenApi(DevelopmentEndpoints.DevDocumentName);

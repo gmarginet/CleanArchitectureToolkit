@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\modules\Cat.Commands\Cat.Commands.Abstractions\Cat.Commands.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Sql.Cdc\Cat.Sql.Cdc.Abstractions\Cat.Sql.Cdc.Abstractions.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Validators\Cat.Validators\Cat.Validators.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.OrderService\Cat.Demo.OrderService.Contracts\Cat.Demo.OrderService.Contracts.csproj" />
       <ProjectReference Include="..\Cat.Demo.InventoryService.Contracts\Cat.Demo.InventoryService.Contracts.csproj" />

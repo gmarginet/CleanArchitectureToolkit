@@ -36,7 +36,7 @@ public static class SchedulerExtensions
             services.AddSingleton<ICatMessageTransport, FakeMessageTransport>();
         }
 
-        services.AddSingleton(new LowStockSettings(configuration.GetValue("Inventory:LowStockLimit", LowStockSettings.DefaultLimit)));
+        services.AddSingleton(new LowStockSettings(configuration.GetValue(LowStockSettings.ConfigurationKey, LowStockSettings.DefaultLimit)));
 
         services.AddCatSchedulingEFCore<InventoryDbContext>();
         services.AddCatScheduling(configuration, scheduler => scheduler
