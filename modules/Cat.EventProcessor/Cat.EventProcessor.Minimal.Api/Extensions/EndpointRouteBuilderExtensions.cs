@@ -15,10 +15,17 @@ namespace Cat.EventProcessor.Minimal.Api.Extensions;
 public static class EndpointRouteBuilderExtensions
 {
     /// <summary>
+    /// The OpenAPI group name of the development endpoints.
+    /// </summary>
+    public const string DevDocumentName = "dev";
+
+    /// <summary>
     /// Maps <c>GET /dev/event-processor</c>, which lists the declared message types, and <c>POST /dev/event-processor/{messageType}</c>,
     /// which takes the JSON of a message and runs it through the same pipeline as a real message.
     /// The endpoints exist only in the Development environment. In any other environment nothing is mapped.
     /// The result says what the broker would do with the message, but nothing is settled, because there is no real message.
+    /// The group has the OpenAPI group name <c>dev</c>, so the endpoints are not in the default OpenAPI document and no generated client gets them.
+    /// To see them in an API explorer, add a document with <c>AddOpenApi("dev")</c> and map it.
     /// </summary>
     /// <param name="endpoints">The endpoint route builder of the API.</param>
     /// <returns>The group of the development endpoints, or null when the environment is not Development.</returns>
@@ -30,7 +37,7 @@ public static class EndpointRouteBuilderExtensions
             return null;
         }
 
-        var group = endpoints.MapGroup("/dev/event-processor");
+        var group = endpoints.MapGroup("/dev/event-processor").WithGroupName(DevDocumentName);
 
         group.MapGet("", (ICatReceiveRegistry registry, ICatMessageNameResolver names) =>
             Results.Ok(registry.Registrations.Select(registration => new

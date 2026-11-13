@@ -32,6 +32,8 @@ Maps `GET /dev/event-processor`, which lists the declared message types, and `PO
 which takes the JSON of a message and runs it through the same pipeline as a real message\.
 The endpoints exist only in the Development environment\. In any other environment nothing is mapped\.
 The result says what the broker would do with the message, but nothing is settled, because there is no real message\.
+The group has the OpenAPI group name `dev`, so the endpoints are not in the default OpenAPI document and no generated client gets them\.
+To see them in an API explorer, add a document with `AddOpenApi("dev")` and map it\.
 
 ```csharp
 public static Microsoft.AspNetCore.Routing.RouteGroupBuilder? MapCatEventProcessor(this Microsoft.AspNetCore.Routing.IEndpointRouteBuilder endpoints);

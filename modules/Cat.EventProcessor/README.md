@@ -270,6 +270,14 @@ app.MapCatEventProcessor();
 
 Nothing is settled on the bus, because there is no real message.
 
+The endpoints have the OpenAPI group name `dev`, so they are not in the default OpenAPI document. A client generated from that document, such as the one from NSwag, never gets them. To see them in an API explorer, add a document named `dev` and map it. That document holds the development endpoints and all the normal endpoints, and it is served at `/openapi/dev.json`:
+
+```csharp
+builder.Services.AddOpenApi("dev");
+
+app.MapOpenApi();
+```
+
 ### Add the health check
 
 A listener can stop because of a fatal error, such as a deleted queue or a missing permission, while the API still answers. The health check tells the platform:

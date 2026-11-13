@@ -36,6 +36,10 @@ public static class EndpointRouteBuilderExtensions
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → EndpointRouteBuilderExtensions
 
+| Fields | |
+| :--- | :--- |
+| [DevDocumentName](EndpointRouteBuilderExtensions.DevDocumentName.md 'Cat\.EventProcessor\.Minimal\.Api\.Extensions\.EndpointRouteBuilderExtensions\.DevDocumentName') | The OpenAPI group name of the development endpoints\. |
+
 | Methods | |
 | :--- | :--- |
-| [MapCatEventProcessor\(this IEndpointRouteBuilder\)](EndpointRouteBuilderExtensions.MapCatEventProcessor.EUU1LTX4EQ7UK7B8J4AR190FD.md 'Cat\.EventProcessor\.Minimal\.Api\.Extensions\.EndpointRouteBuilderExtensions\.MapCatEventProcessor\(this Microsoft\.AspNetCore\.Routing\.IEndpointRouteBuilder\)') | Maps `GET /dev/event-processor`, which lists the declared message types, and `POST /dev/event-processor/{messageType}`, which takes the JSON of a message and runs it through the same pipeline as a real message\. The endpoints exist only in the Development environment\. In any other environment nothing is mapped\. The result says what the broker would do with the message, but nothing is settled, because there is no real message\. |
+| [MapCatEventProcessor\(this IEndpointRouteBuilder\)](EndpointRouteBuilderExtensions.MapCatEventProcessor.EUU1LTX4EQ7UK7B8J4AR190FD.md 'Cat\.EventProcessor\.Minimal\.Api\.Extensions\.EndpointRouteBuilderExtensions\.MapCatEventProcessor\(this Microsoft\.AspNetCore\.Routing\.IEndpointRouteBuilder\)') | Maps `GET /dev/event-processor`, which lists the declared message types, and `POST /dev/event-processor/{messageType}`, which takes the JSON of a message and runs it through the same pipeline as a real message\. The endpoints exist only in the Development environment\. In any other environment nothing is mapped\. The result says what the broker would do with the message, but nothing is settled, because there is no real message\. The group has the OpenAPI group name `dev`, so the endpoints are not in the default OpenAPI document and no generated client gets them\. To see them in an API explorer, add a document with `AddOpenApi("dev")` and map it\. |
