@@ -10,9 +10,9 @@ using Cat.Messaging.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cat.Demo.InventoryService.EventProcessor.Extensions;
+namespace Cat.Demo.InventoryService.Api.Extensions;
 
-public static class ServiceCollectionExtensions
+public static class EventProcessorExtensions
 {
     /// <summary>
     /// The name Inventory uses on the topic of every message it receives.

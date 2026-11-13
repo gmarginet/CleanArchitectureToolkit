@@ -4,7 +4,6 @@ using Cat.Commands.Extensions;
 using Cat.Demo.InventoryService.Api.Extensions;
 using Cat.Demo.InventoryService.CoreService.ServiceRequestHandlers;
 using Cat.Demo.InventoryService.CoreService.Validators;
-using Cat.Demo.InventoryService.EventProcessor.Extensions;
 using Cat.Demo.InventoryService.Infrastructure.CommandHandlers;
 using Cat.Demo.InventoryService.Infrastructure.Extensions;
 using Cat.Demo.ServiceDefaults;

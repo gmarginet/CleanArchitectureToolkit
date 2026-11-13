@@ -768,7 +768,7 @@ erDiagram
 - The order number is the idempotency key. A second reserve call for the same order does nothing, and the retries of the resilience handler are safe. A release locks the rows, so a double release gives the stock back once.
 - Not enough stock gives a 409 with `DEM-INV-1000`. An unknown ISBN gives a 404 with `DEM-INV-1001`.
 - The generated client in `Cat.Demo.InventoryService.Api.Client` shares the `Contracts` project, so Orders and Inventory use the same request models. Run `Refresh-InventoryClient.ps1` in that project after the service changes, with the AppHost running.
-- Inventory also listens to the bus. The project `Cat.Demo.InventoryService.EventProcessor` declares the messages it receives, with `AddCatEventProcessor`. It receives `OrderConfirmed` from Orders, so the `CoreService` project references the `Contracts` project of Orders. The listener reads the subscription `inventory` on the topic `OrderConfirmed`.
+- Inventory also listens to the bus. The `Api` project declares the messages it receives in `EventProcessorExtensions`, with `AddCatEventProcessor`. It receives `OrderConfirmed` from Orders, so the `CoreService` and `Api` projects reference the `Contracts` project of Orders. The listener reads the subscription `inventory` on the topic `OrderConfirmed`.
 - `OrderConfirmedHandler` is the service request handler of the message. It runs `StockReservationConfirmCommand`, and the command handler sets `ConfirmedAt` on the reservations of the order that have none. A repeated message finds nothing to update and succeeds, so no inbox is needed. An order number without a reservation gives a not found response with `DEM-INV-1002`, and the failure table of `Cat.EventProcessor` dead letters the message.
 - At startup, in `Development`, Inventory creates its subscription. Orders creates the topic first, so Inventory waits for Orders in the AppHost. In `Development` the API has the endpoint `POST /dev/event-processor/OrderConfirmed`, which runs a message through the same pipeline without a bus. The development endpoints are not in the OpenAPI document that the generated client is built from. Scalar shows them in a second document named `dev`. Without the connection string `messaging` Inventory does not listen.
 
@@ -817,8 +817,8 @@ erDiagram
 | `Cat.Responses` | Core service | Out of stock and unknown ISBN are error definitions, not exceptions. |
 | `Cat.Minimal.Api` | Api | Maps the two endpoints with the response types they may return. |
 | `Cat.Api.Client` | Api.Client and Orders | The generated client and `CatApiCall` turn an HTTP answer back into a response. |
-| `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` and `Cat.EventProcessor.Minimal.Api` | EventProcessor project and Api | Receives `OrderConfirmed` from the bus as a service request, settles the message from the response, and adds the development endpoint and the health check. |
-| `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` | EventProcessor project | The connection to the bus and the name of the topic. |
+| `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` and `Cat.EventProcessor.Minimal.Api` | Api | Receives `OrderConfirmed` from the bus as a service request, settles the message from the response, and adds the development endpoint and the health check. |
+| `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` | Api | The connection to the bus and the name of the topic. |
 
 The service uses no entity base classes. It shows that you use only the modules you need.
 

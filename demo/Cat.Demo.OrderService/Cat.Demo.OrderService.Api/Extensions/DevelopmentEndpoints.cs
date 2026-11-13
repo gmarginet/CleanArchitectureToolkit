@@ -16,7 +16,7 @@ public static class DevelopmentEndpoints
     {
         var developmentGroup = builder.MapGroup("/development");
 
-        // Simulates the scheduler. The Orders.Scheduler project will run this request every night.
+        // Simulates the scheduler. The scheduler will run this request every night.
         var schedulerGroup = developmentGroup.MapGroup("/scheduler");
         schedulerGroup.MapCatPost<CleanUpOrderCountersRequest>("/clean-up-order-counters", CatResponseType.NoContent)
             .WithName("CleanUpOrderCounters");

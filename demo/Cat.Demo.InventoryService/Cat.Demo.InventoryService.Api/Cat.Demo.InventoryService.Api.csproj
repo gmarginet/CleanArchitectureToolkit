@@ -12,16 +12,20 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\modules\Cat.Commands\Cat.Commands.Decorators.Logging\Cat.Commands.Decorators.Logging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Commands\Cat.Commands\Cat.Commands.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor.AzureServiceBus\Cat.EventProcessor.AzureServiceBus.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Minimal.Api\Cat.EventProcessor.Minimal.Api.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor\Cat.EventProcessor.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Expressions\Cat.Expressions\Cat.Expressions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.AzureServiceBus\Cat.Messaging.AzureServiceBus.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging\Cat.Messaging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Minimal.Api\Cat.Minimal.Api\Cat.Minimal.Api.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.ActivitySource\Cat.ServiceRequests.Decorators.ActivitySource.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.Logging\Cat.ServiceRequests.Decorators.Logging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.Validation\Cat.ServiceRequests.Decorators.Validation.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests\Cat.ServiceRequests.csproj" />
       <ProjectReference Include="..\Cat.Demo.InventoryService.Contracts\Cat.Demo.InventoryService.Contracts.csproj" />
-      <ProjectReference Include="..\Cat.Demo.InventoryService.EventProcessor\Cat.Demo.InventoryService.EventProcessor.csproj" />
       <ProjectReference Include="..\Cat.Demo.InventoryService.CoreService\Cat.Demo.InventoryService.CoreService.csproj" />
+      <ProjectReference Include="..\..\Cat.Demo.OrderService\Cat.Demo.OrderService.Contracts\Cat.Demo.OrderService.Contracts.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.ServiceDefaults\Cat.Demo.ServiceDefaults\Cat.Demo.ServiceDefaults.csproj" />
       <ProjectReference Include="..\Cat.Demo.InventoryService.Infrastructure\Cat.Demo.InventoryService.Infrastructure.csproj" />
     </ItemGroup>
