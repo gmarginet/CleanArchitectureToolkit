@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net11.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="NUnit"/>
+        <PackageReference Include="NUnit.Analyzers">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="NUnit3TestAdapter"/>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="NUnit.Framework"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\modules\Cat.Messaging\Cat.Messaging.Abstractions\Cat.Messaging.Abstractions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Sql.Cdc\Cat.Sql.Cdc.Abstractions\Cat.Sql.Cdc.Abstractions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Sql.Cdc\Cat.Sql.Cdc.Messaging\Cat.Sql.Cdc.Messaging.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Sql.Cdc\Cat.Sql.Cdc\Cat.Sql.Cdc.csproj" />
+    </ItemGroup>
+
+</Project>

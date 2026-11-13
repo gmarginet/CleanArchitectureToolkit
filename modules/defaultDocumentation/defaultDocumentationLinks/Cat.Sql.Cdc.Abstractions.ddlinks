@@ -1,0 +1,19 @@
+../../../Cat.Sql.Cdc/namespaces/Cat.Sql.Cdc.Abstractions/
+P:Cat.Sql.Cdc.Abstractions.CatChange.Table|CatChange.Table.md|Table
+P:Cat.Sql.Cdc.Abstractions.CatChange.Operation|CatChange.Operation.md|Operation
+P:Cat.Sql.Cdc.Abstractions.CatChange.Lsn|CatChange.Lsn.md|Lsn
+P:Cat.Sql.Cdc.Abstractions.CatChange.SequenceValue|CatChange.SequenceValue.md|SequenceValue
+P:Cat.Sql.Cdc.Abstractions.CatChange.TransactionTime|CatChange.TransactionTime.md|TransactionTime
+P:Cat.Sql.Cdc.Abstractions.CatChange.TransactionId|CatChange.TransactionId.md|TransactionId
+P:Cat.Sql.Cdc.Abstractions.CatChange.Keys|CatChange.Keys.md|Keys
+P:Cat.Sql.Cdc.Abstractions.CatChange.Old|CatChange.Old.md|Old
+P:Cat.Sql.Cdc.Abstractions.CatChange.New|CatChange.New.md|New
+P:Cat.Sql.Cdc.Abstractions.CatChange.MessageId|CatChange.MessageId.md|MessageId
+N:Cat.Sql.Cdc.Abstractions|Cat.Sql.Cdc.Abstractions.md|Cat.Sql.Cdc.Abstractions
+T:Cat.Sql.Cdc.Abstractions.CatChange|CatChange.md|CatChange
+F:Cat.Sql.Cdc.Abstractions.CatChangeOperation.Insert|CatChangeOperation.md#Cat.Sql.Cdc.Abstractions.CatChangeOperation.Insert|Insert
+F:Cat.Sql.Cdc.Abstractions.CatChangeOperation.Update|CatChangeOperation.md#Cat.Sql.Cdc.Abstractions.CatChangeOperation.Update|Update
+F:Cat.Sql.Cdc.Abstractions.CatChangeOperation.Delete|CatChangeOperation.md#Cat.Sql.Cdc.Abstractions.CatChangeOperation.Delete|Delete
+T:Cat.Sql.Cdc.Abstractions.CatChangeOperation|CatChangeOperation.md|CatChangeOperation
+M:Cat.Sql.Cdc.Abstractions.ICatChangeSink.SendAsync(Cat.Sql.Cdc.Abstractions.CatChange,System.Object,System.Threading.CancellationToken)|ICatChangeSink.SendAsync.KY62MICCI5DHYOSMRH4EJVNFB.md|SendAsync(CatChange, object, CancellationToken)
+T:Cat.Sql.Cdc.Abstractions.ICatChangeSink|ICatChangeSink.md|ICatChangeSink

@@ -1,0 +1,122 @@
+../../../Cat.Sql.Cdc/namespaces/Cat.Sql.Cdc/
+P:Cat.Sql.Cdc.CatCdcTable.CaptureInstance|CatCdcTable.CaptureInstance.md|CaptureInstance
+P:Cat.Sql.Cdc.CatCdcTable.Map|CatCdcTable.Map.md|Map
+M:Cat.Sql.Cdc.CatCdcTable.#ctor(System.String,System.Func{Cat.Sql.Cdc.Abstractions.CatChange,System.Object})|CatCdcTable..ctor.0U0VDH1TN6F8P6OQ5HH91ADGA.md|CatCdcTable(string, Func<CatChange,object>)
+N:Cat.Sql.Cdc|Cat.Sql.Cdc.md|Cat.Sql.Cdc
+T:Cat.Sql.Cdc.CatCdcTable|CatCdcTable.md|CatCdcTable
+P:Cat.Sql.Cdc.CatCdcTableBuilder`1.Mapper|CatCdcTableBuilder_TMessage_.Mapper.md|Mapper
+M:Cat.Sql.Cdc.CatCdcTableBuilder`1.Map(System.Func{Cat.Sql.Cdc.Abstractions.CatChange,`0})|CatCdcTableBuilder_TMessage_.Map.SN11S7VTKTKX5RB0DFH57B2X8.md|Map(Func<CatChange,TMessage>)
+T:Cat.Sql.Cdc.CatCdcTableBuilder`1|CatCdcTableBuilder_TMessage_.md|CatCdcTableBuilder<TMessage>
+F:Cat.Sql.Cdc.CatCdcBuilder.NamePattern|CatCdcBuilder.NamePattern.md|NamePattern
+F:Cat.Sql.Cdc.CatCdcBuilder._tables|CatCdcBuilder._tables.md|_tables
+P:Cat.Sql.Cdc.CatCdcBuilder.Tables|CatCdcBuilder.Tables.md|Tables
+M:Cat.Sql.Cdc.CatCdcBuilder.AddTable(System.String)|CatCdcBuilder.AddTable.md#Cat.Sql.Cdc.CatCdcBuilder.AddTable(string)|AddTable(string)
+M:Cat.Sql.Cdc.CatCdcBuilder.AddTable``1(System.String,System.Action{Cat.Sql.Cdc.CatCdcTableBuilder{``0}})|CatCdcBuilder.AddTable.md#Cat.Sql.Cdc.CatCdcBuilder.AddTable_TMessage_(string,System.Action_Cat.Sql.Cdc.CatCdcTableBuilder_TMessage__)|AddTable<TMessage>(string, Action<CatCdcTableBuilder<TMessage>>)
+M:Cat.Sql.Cdc.CatCdcBuilder.Add(System.String,System.Func{Cat.Sql.Cdc.Abstractions.CatChange,System.Object})|CatCdcBuilder.Add.7L96YNDPCYRF19MK5H1LFYL8A.md|Add(string, Func<CatChange,object>)
+T:Cat.Sql.Cdc.CatCdcBuilder|CatCdcBuilder.md|CatCdcBuilder
+M:Cat.Sql.Cdc.CatCdcGapException.#ctor(System.String)|CatCdcGapException..ctor.PJ8KYEGDNEUS1H6CACS9W5XB3.md|CatCdcGapException(string)
+T:Cat.Sql.Cdc.CatCdcGapException|CatCdcGapException.md|CatCdcGapException
+F:Cat.Sql.Cdc.CatCdcHealthCheck._status|CatCdcHealthCheck._status.md|_status
+M:Cat.Sql.Cdc.CatCdcHealthCheck.#ctor(Cat.Sql.Cdc.CatCdcStatus)|CatCdcHealthCheck..ctor.OBXKRYLEUB3T8A80WJWJM2UQ5.md|CatCdcHealthCheck(CatCdcStatus)
+M:Cat.Sql.Cdc.CatCdcHealthCheck.CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext,System.Threading.CancellationToken)|CatCdcHealthCheck.CheckHealthAsync.RPNYY3SHVKXK2UPJ7AFE4LCFD.md|CheckHealthAsync(HealthCheckContext, CancellationToken)
+T:Cat.Sql.Cdc.CatCdcHealthCheck|CatCdcHealthCheck.md|CatCdcHealthCheck
+P:Cat.Sql.Cdc.CatCdcPosition.Lsn|CatCdcPosition.Lsn.md|Lsn
+P:Cat.Sql.Cdc.CatCdcPosition.SequenceValue|CatCdcPosition.SequenceValue.md|SequenceValue
+M:Cat.Sql.Cdc.CatCdcPosition.#ctor(System.Byte[],System.Byte[])|CatCdcPosition..ctor.KBT0NBEPJCE2EWAVHTQ7AHQL3.md|CatCdcPosition(byte[], byte[])
+T:Cat.Sql.Cdc.CatCdcPosition|CatCdcPosition.md|CatCdcPosition
+P:Cat.Sql.Cdc.CatCdcRawRow.Lsn|CatCdcRawRow.Lsn.md|Lsn
+P:Cat.Sql.Cdc.CatCdcRawRow.SequenceValue|CatCdcRawRow.SequenceValue.md|SequenceValue
+P:Cat.Sql.Cdc.CatCdcRawRow.Operation|CatCdcRawRow.Operation.md|Operation
+P:Cat.Sql.Cdc.CatCdcRawRow.TransactionTime|CatCdcRawRow.TransactionTime.md|TransactionTime
+P:Cat.Sql.Cdc.CatCdcRawRow.TransactionId|CatCdcRawRow.TransactionId.md|TransactionId
+P:Cat.Sql.Cdc.CatCdcRawRow.Values|CatCdcRawRow.Values.md|Values
+T:Cat.Sql.Cdc.CatCdcRawRow|CatCdcRawRow.md|CatCdcRawRow
+M:Cat.Sql.Cdc.CatCdcBinary.Compare(System.Byte[],System.Byte[])|CatCdcBinary.Compare.DE0P90MG3TNIZ5NXNAMEY9Q83.md|Compare(byte[], byte[])
+M:Cat.Sql.Cdc.CatCdcBinary.Highest(System.Int32)|CatCdcBinary.Highest.2VROS4IAD8Q7TJQJNLJHT3KKA.md|Highest(int)
+T:Cat.Sql.Cdc.CatCdcBinary|CatCdcBinary.md|CatCdcBinary
+M:Cat.Sql.Cdc.CatCdcRowMapper.ToChanges(System.String,System.Collections.Generic.IReadOnlyList{Cat.Sql.Cdc.CatCdcRawRow},System.Int32,System.Collections.Generic.IReadOnlyList{System.String})|CatCdcRowMapper.ToChanges.9X5FKGPZMBBMKWXF632RNA7Y9.md|ToChanges(string, IReadOnlyList<CatCdcRawRow>, int, IReadOnlyList<string>)
+M:Cat.Sql.Cdc.CatCdcRowMapper.Create(System.String,Cat.Sql.Cdc.CatCdcRawRow,Cat.Sql.Cdc.Abstractions.CatChangeOperation,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object},System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object},System.Collections.Generic.IReadOnlyList{System.String})|CatCdcRowMapper.Create.LDTSHUQ455HEWMF3PUNXB79B6.md|Create(string, CatCdcRawRow, CatChangeOperation, IReadOnlyDictionary<string,object>, IReadOnlyDictionary<string,object>, IReadOnlyList<string>)
+T:Cat.Sql.Cdc.CatCdcRowMapper|CatCdcRowMapper.md|CatCdcRowMapper
+F:Cat.Sql.Cdc.CatCdcService._tables|CatCdcService._tables.md|_tables
+F:Cat.Sql.Cdc.CatCdcService._database|CatCdcService._database.md|_database
+F:Cat.Sql.Cdc.CatCdcService._sink|CatCdcService._sink.md|_sink
+F:Cat.Sql.Cdc.CatCdcService._settings|CatCdcService._settings.md|_settings
+F:Cat.Sql.Cdc.CatCdcService._status|CatCdcService._status.md|_status
+F:Cat.Sql.Cdc.CatCdcService._logger|CatCdcService._logger.md|_logger
+F:Cat.Sql.Cdc.CatCdcService._owner|CatCdcService._owner.md|_owner
+M:Cat.Sql.Cdc.CatCdcService.#ctor(System.Collections.Generic.IReadOnlyList{Cat.Sql.Cdc.CatCdcTable},Cat.Sql.Cdc.ICatCdcDatabase,Cat.Sql.Cdc.Abstractions.ICatChangeSink,Cat.Sql.Cdc.CatCdcSettings,Cat.Sql.Cdc.CatCdcStatus,Microsoft.Extensions.Logging.ILogger{Cat.Sql.Cdc.CatCdcService})|CatCdcService..ctor.V7397PQLYZ0VMXXXMYK4A2QKE.md|CatCdcService(IReadOnlyList<CatCdcTable>, ICatCdcDatabase, ICatChangeSink, CatCdcSettings, CatCdcStatus, ILogger<CatCdcService>)
+M:Cat.Sql.Cdc.CatCdcService.ExecuteAsync(System.Threading.CancellationToken)|CatCdcService.ExecuteAsync.FT9AU6UP1EXPCXPZWDG0BUKE2.md|ExecuteAsync(CancellationToken)
+M:Cat.Sql.Cdc.CatCdcService.RunLoopAsync(Cat.Sql.Cdc.CatCdcTableReader,System.Threading.CancellationToken)|CatCdcService.RunLoopAsync.XPXVLZYRD2DAZG1N2XHI8SWYD.md|RunLoopAsync(CatCdcTableReader, CancellationToken)
+T:Cat.Sql.Cdc.CatCdcService|CatCdcService.md|CatCdcService
+F:Cat.Sql.Cdc.CatCdcGapBehavior.Fail|CatCdcGapBehavior.md#Cat.Sql.Cdc.CatCdcGapBehavior.Fail|Fail
+F:Cat.Sql.Cdc.CatCdcGapBehavior.SkipToOldest|CatCdcGapBehavior.md#Cat.Sql.Cdc.CatCdcGapBehavior.SkipToOldest|SkipToOldest
+T:Cat.Sql.Cdc.CatCdcGapBehavior|CatCdcGapBehavior.md|CatCdcGapBehavior
+F:Cat.Sql.Cdc.CatCdcSettings.ConfigurationSectionName|CatCdcSettings.ConfigurationSectionName.md|ConfigurationSectionName
+P:Cat.Sql.Cdc.CatCdcSettings.ConnectionString|CatCdcSettings.ConnectionString.md|ConnectionString
+P:Cat.Sql.Cdc.CatCdcSettings.PollInterval|CatCdcSettings.PollInterval.md|PollInterval
+P:Cat.Sql.Cdc.CatCdcSettings.BatchSize|CatCdcSettings.BatchSize.md|BatchSize
+P:Cat.Sql.Cdc.CatCdcSettings.Schema|CatCdcSettings.Schema.md|Schema
+P:Cat.Sql.Cdc.CatCdcSettings.ClaimLease|CatCdcSettings.ClaimLease.md|ClaimLease
+P:Cat.Sql.Cdc.CatCdcSettings.OnRetentionGap|CatCdcSettings.OnRetentionGap.md|OnRetentionGap
+T:Cat.Sql.Cdc.CatCdcSettings|CatCdcSettings.md|CatCdcSettings
+F:Cat.Sql.Cdc.CatCdcStatus._stopped|CatCdcStatus._stopped.md|_stopped
+F:Cat.Sql.Cdc.CatCdcStatus._failing|CatCdcStatus._failing.md|_failing
+P:Cat.Sql.Cdc.CatCdcStatus.Stopped|CatCdcStatus.Stopped.md|Stopped
+P:Cat.Sql.Cdc.CatCdcStatus.StoppedDescription|CatCdcStatus.StoppedDescription.md|StoppedDescription
+P:Cat.Sql.Cdc.CatCdcStatus.Failing|CatCdcStatus.Failing.md|Failing
+P:Cat.Sql.Cdc.CatCdcStatus.FailingDescription|CatCdcStatus.FailingDescription.md|FailingDescription
+M:Cat.Sql.Cdc.CatCdcStatus.Stop(System.String,System.String)|CatCdcStatus.Stop.UOJS0Z7KM2WTDHA0WB49VEILD.md|Stop(string, string)
+M:Cat.Sql.Cdc.CatCdcStatus.Fail(System.String,System.Exception)|CatCdcStatus.Fail.RWKUS9ZA0ZIKQW1HKRGX8L0W8.md|Fail(string, Exception)
+M:Cat.Sql.Cdc.CatCdcStatus.Succeed(System.String)|CatCdcStatus.Succeed.4E426SMMDZUCHPRPGB9D7FY9E.md|Succeed(string)
+T:Cat.Sql.Cdc.CatCdcStatus|CatCdcStatus.md|CatCdcStatus
+F:Cat.Sql.Cdc.CatCdcTableReader._table|CatCdcTableReader._table.md|_table
+F:Cat.Sql.Cdc.CatCdcTableReader._database|CatCdcTableReader._database.md|_database
+F:Cat.Sql.Cdc.CatCdcTableReader._sink|CatCdcTableReader._sink.md|_sink
+F:Cat.Sql.Cdc.CatCdcTableReader._settings|CatCdcTableReader._settings.md|_settings
+F:Cat.Sql.Cdc.CatCdcTableReader._logger|CatCdcTableReader._logger.md|_logger
+F:Cat.Sql.Cdc.CatCdcTableReader._owner|CatCdcTableReader._owner.md|_owner
+F:Cat.Sql.Cdc.CatCdcTableReader._keyColumns|CatCdcTableReader._keyColumns.md|_keyColumns
+P:Cat.Sql.Cdc.CatCdcTableReader.Name|CatCdcTableReader.Name.md|Name
+M:Cat.Sql.Cdc.CatCdcTableReader.#ctor(Cat.Sql.Cdc.CatCdcTable,Cat.Sql.Cdc.ICatCdcDatabase,Cat.Sql.Cdc.Abstractions.ICatChangeSink,Cat.Sql.Cdc.CatCdcSettings,System.String,Microsoft.Extensions.Logging.ILogger)|CatCdcTableReader..ctor.T1ZEYODWL3INEJMZMWZMDT2Q5.md|CatCdcTableReader(CatCdcTable, ICatCdcDatabase, ICatChangeSink, CatCdcSettings, string, ILogger)
+M:Cat.Sql.Cdc.CatCdcTableReader.InitializeAsync(System.Threading.CancellationToken)|CatCdcTableReader.InitializeAsync.O7C244GHBI59V8FCNI4BCFQW9.md|InitializeAsync(CancellationToken)
+M:Cat.Sql.Cdc.CatCdcTableReader.PollAsync(System.Threading.CancellationToken)|CatCdcTableReader.PollAsync.L0BOLLOUDHMFKYKZEEK2KDWBA.md|PollAsync(CancellationToken)
+M:Cat.Sql.Cdc.CatCdcTableReader.SaveAsync(Cat.Sql.Cdc.CatCdcPosition,System.Threading.CancellationToken)|CatCdcTableReader.SaveAsync.PSC4LHQESRTW9U439DLRLK7TA.md|SaveAsync(CatCdcPosition, CancellationToken)
+T:Cat.Sql.Cdc.CatCdcTableReader|CatCdcTableReader.md|CatCdcTableReader
+F:Cat.Sql.Cdc.CatSqlCdcTelemetry.SourceName|CatSqlCdcTelemetry.SourceName.md|SourceName
+F:Cat.Sql.Cdc.CatSqlCdcTelemetry.Meter|CatSqlCdcTelemetry.Meter.md|Meter
+F:Cat.Sql.Cdc.CatSqlCdcTelemetry.Changes|CatSqlCdcTelemetry.Changes.md|Changes
+F:Cat.Sql.Cdc.CatSqlCdcTelemetry.Errors|CatSqlCdcTelemetry.Errors.md|Errors
+M:Cat.Sql.Cdc.CatSqlCdcTelemetry.RecordChange(System.String,Cat.Sql.Cdc.Abstractions.CatChangeOperation)|CatSqlCdcTelemetry.RecordChange.VCRXNNNHETZ3414TRGZ76S3G2.md|RecordChange(string, CatChangeOperation)
+M:Cat.Sql.Cdc.CatSqlCdcTelemetry.RecordError(System.String,System.String)|CatSqlCdcTelemetry.RecordError.ZCFJYHMWHT63PCY5MOGV5V8ND.md|RecordError(string, string)
+M:Cat.Sql.Cdc.CatSqlCdcTelemetry.#cctor|CatSqlCdcTelemetry.CatSqlCdcTelemetry().md|CatSqlCdcTelemetry()
+T:Cat.Sql.Cdc.CatSqlCdcTelemetry|CatSqlCdcTelemetry.md|CatSqlCdcTelemetry
+M:Cat.Sql.Cdc.ICatCdcDatabase.EnsureCreatedAsync(System.String,System.Threading.CancellationToken)|ICatCdcDatabase.EnsureCreatedAsync.8LPHK254QJCQA1PDL8ZY9YTN1.md|EnsureCreatedAsync(string, CancellationToken)
+M:Cat.Sql.Cdc.ICatCdcDatabase.TryClaimAsync(System.String,System.String,System.TimeSpan,System.Threading.CancellationToken)|ICatCdcDatabase.TryClaimAsync.RF66YKBKC5FJKIPM76ZR4LX18.md|TryClaimAsync(string, string, TimeSpan, CancellationToken)
+M:Cat.Sql.Cdc.ICatCdcDatabase.GetPositionAsync(System.String,System.Threading.CancellationToken)|ICatCdcDatabase.GetPositionAsync.DOQ8EHQDN6SFET66J5F8VD529.md|GetPositionAsync(string, CancellationToken)
+M:Cat.Sql.Cdc.ICatCdcDatabase.SavePositionAsync(System.String,System.String,Cat.Sql.Cdc.CatCdcPosition,System.Threading.CancellationToken)|ICatCdcDatabase.SavePositionAsync.XFIFNRVP2CWJWS48U6RJXI1OE.md|SavePositionAsync(string, string, CatCdcPosition, CancellationToken)
+M:Cat.Sql.Cdc.ICatCdcDatabase.GetMinLsnAsync(System.String,System.Threading.CancellationToken)|ICatCdcDatabase.GetMinLsnAsync.J2KE9Y0HBHCEF5W5VLW07WX5E.md|GetMinLsnAsync(string, CancellationToken)
+M:Cat.Sql.Cdc.ICatCdcDatabase.GetMaxLsnAsync(System.Threading.CancellationToken)|ICatCdcDatabase.GetMaxLsnAsync.7P5NQIJUS9DFNTE8VOM274UU2.md|GetMaxLsnAsync(CancellationToken)
+M:Cat.Sql.Cdc.ICatCdcDatabase.GetKeyColumnsAsync(System.String,System.Threading.CancellationToken)|ICatCdcDatabase.GetKeyColumnsAsync.6GA8992H8RAEFXN1FS843KGK6.md|GetKeyColumnsAsync(string, CancellationToken)
+M:Cat.Sql.Cdc.ICatCdcDatabase.ReadChangesAsync(System.String,Cat.Sql.Cdc.CatCdcPosition,System.Byte[],System.Int32,System.Collections.Generic.IReadOnlyList{System.String},System.Threading.CancellationToken)|ICatCdcDatabase.ReadChangesAsync.B7JU9537MZZ4ALLFQHUSSBN3E.md|ReadChangesAsync(string, CatCdcPosition, byte[], int, IReadOnlyList<string>, CancellationToken)
+T:Cat.Sql.Cdc.ICatCdcDatabase|ICatCdcDatabase.md|ICatCdcDatabase
+F:Cat.Sql.Cdc.SqlServerCdcDatabase.LsnLength|SqlServerCdcDatabase.LsnLength.md|LsnLength
+F:Cat.Sql.Cdc.SqlServerCdcDatabase.NamePattern|SqlServerCdcDatabase.NamePattern.md|NamePattern
+F:Cat.Sql.Cdc.SqlServerCdcDatabase._connectionString|SqlServerCdcDatabase._connectionString.md|_connectionString
+F:Cat.Sql.Cdc.SqlServerCdcDatabase._schema|SqlServerCdcDatabase._schema.md|_schema
+M:Cat.Sql.Cdc.SqlServerCdcDatabase.#ctor(Cat.Sql.Cdc.CatCdcSettings)|SqlServerCdcDatabase..ctor.G9A5PAGDSY8VM9CEVDP3JGO62.md|SqlServerCdcDatabase(CatCdcSettings)
+M:Cat.Sql.Cdc.SqlServerCdcDatabase.EnsureCreatedAsync(System.String,System.Threading.CancellationToken)|SqlServerCdcDatabase.EnsureCreatedAsync.L20U2DDQMOW2OTATFXPUV09B4.md|EnsureCreatedAsync(string, CancellationToken)
+M:Cat.Sql.Cdc.SqlServerCdcDatabase.TryClaimAsync(System.String,System.String,System.TimeSpan,System.Threading.CancellationToken)|SqlServerCdcDatabase.TryClaimAsync.7TMN9135QJ9Y4HSBY3CNSDIX2.md|TryClaimAsync(string, string, TimeSpan, CancellationToken)
+M:Cat.Sql.Cdc.SqlServerCdcDatabase.GetPositionAsync(System.String,System.Threading.CancellationToken)|SqlServerCdcDatabase.GetPositionAsync.ZF8RK5DFYG3RBAKV3VGO30FN1.md|GetPositionAsync(string, CancellationToken)
+M:Cat.Sql.Cdc.SqlServerCdcDatabase.SavePositionAsync(System.String,System.String,Cat.Sql.Cdc.CatCdcPosition,System.Threading.CancellationToken)|SqlServerCdcDatabase.SavePositionAsync.W8ZGW0CGVAYT5KPPDZPX2B8SB.md|SavePositionAsync(string, string, CatCdcPosition, CancellationToken)
+M:Cat.Sql.Cdc.SqlServerCdcDatabase.GetMinLsnAsync(System.String,System.Threading.CancellationToken)|SqlServerCdcDatabase.GetMinLsnAsync.V702W0GTPC3ZA0033CD5GK0D.md|GetMinLsnAsync(string, CancellationToken)
+M:Cat.Sql.Cdc.SqlServerCdcDatabase.GetMaxLsnAsync(System.Threading.CancellationToken)|SqlServerCdcDatabase.GetMaxLsnAsync.HK2YLEJGJZ9L0VRRGDR031Q15.md|GetMaxLsnAsync(CancellationToken)
+M:Cat.Sql.Cdc.SqlServerCdcDatabase.GetKeyColumnsAsync(System.String,System.Threading.CancellationToken)|SqlServerCdcDatabase.GetKeyColumnsAsync.7AEBA3GN5WWEAUJXUXK0C1S3A.md|GetKeyColumnsAsync(string, CancellationToken)
+M:Cat.Sql.Cdc.SqlServerCdcDatabase.ReadChangesAsync(System.String,Cat.Sql.Cdc.CatCdcPosition,System.Byte[],System.Int32,System.Collections.Generic.IReadOnlyList{System.String},System.Threading.CancellationToken)|SqlServerCdcDatabase.ReadChangesAsync.6ZCUNAPIO5YPOBKHQ6R7T0QP3.md|ReadChangesAsync(string, CatCdcPosition, byte[], int, IReadOnlyList<string>, CancellationToken)
+M:Cat.Sql.Cdc.SqlServerCdcDatabase.OpenAsync(System.Threading.CancellationToken)|SqlServerCdcDatabase.OpenAsync.L9CHPLNGGE7EUA6YCH77OTUNA.md|OpenAsync(CancellationToken)
+M:Cat.Sql.Cdc.SqlServerCdcDatabase.BinaryParameter(System.String,System.Byte[])|SqlServerCdcDatabase.BinaryParameter.V7DLTULG5P72UGBG7RBHUSMYD.md|BinaryParameter(string, byte[])
+T:Cat.Sql.Cdc.SqlServerCdcDatabase|SqlServerCdcDatabase.md|SqlServerCdcDatabase
+M:Cat.Sql.Cdc.Extensions.ServiceCollectionExtensions.AddCatSqlCdc(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Action{Cat.Sql.Cdc.CatCdcBuilder})|ServiceCollectionExtensions.AddCatSqlCdc.MXU5YRFPUNYVP83FKE3C4GQE3.md|AddCatSqlCdc(this IServiceCollection, IConfiguration, Action<CatCdcBuilder>)
+M:Cat.Sql.Cdc.Extensions.ServiceCollectionExtensions.AddCatSqlCdcHealthCheck(Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder,System.String)|ServiceCollectionExtensions.AddCatSqlCdcHealthCheck.88GLD7GPFU0L6NUWJOHSPXSOB.md|AddCatSqlCdcHealthCheck(this IHealthChecksBuilder, string)
+N:Cat.Sql.Cdc.Extensions|Cat.Sql.Cdc.Extensions.md|Cat.Sql.Cdc.Extensions
+T:Cat.Sql.Cdc.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+?:Cat.Sql.Cdc.CatCdcBuilder.AddTable|CatCdcBuilder.AddTable.md|AddTable

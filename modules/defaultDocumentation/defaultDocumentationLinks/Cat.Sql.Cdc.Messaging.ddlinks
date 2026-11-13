@@ -1,0 +1,18 @@
+../../../Cat.Sql.Cdc/namespaces/Cat.Sql.Cdc.Messaging/
+P:Cat.Sql.Cdc.Messaging.CatCdcChangeMessage.Table|CatCdcChangeMessage.Table.md|Table
+P:Cat.Sql.Cdc.Messaging.CatCdcChangeMessage.Operation|CatCdcChangeMessage.Operation.md|Operation
+P:Cat.Sql.Cdc.Messaging.CatCdcChangeMessage.TransactionId|CatCdcChangeMessage.TransactionId.md|TransactionId
+P:Cat.Sql.Cdc.Messaging.CatCdcChangeMessage.TransactionTime|CatCdcChangeMessage.TransactionTime.md|TransactionTime
+P:Cat.Sql.Cdc.Messaging.CatCdcChangeMessage.Keys|CatCdcChangeMessage.Keys.md|Keys
+P:Cat.Sql.Cdc.Messaging.CatCdcChangeMessage.Old|CatCdcChangeMessage.Old.md|Old
+P:Cat.Sql.Cdc.Messaging.CatCdcChangeMessage.New|CatCdcChangeMessage.New.md|New
+N:Cat.Sql.Cdc.Messaging|Cat.Sql.Cdc.Messaging.md|Cat.Sql.Cdc.Messaging
+T:Cat.Sql.Cdc.Messaging.CatCdcChangeMessage|CatCdcChangeMessage.md|CatCdcChangeMessage
+F:Cat.Sql.Cdc.Messaging.CatMessagingChangeSink._scopeFactory|CatMessagingChangeSink._scopeFactory.md|_scopeFactory
+M:Cat.Sql.Cdc.Messaging.CatMessagingChangeSink.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory)|CatMessagingChangeSink..ctor.0UNTVYNH9ASDW2OJZK4S00ZV.md|CatMessagingChangeSink(IServiceScopeFactory)
+M:Cat.Sql.Cdc.Messaging.CatMessagingChangeSink.SendAsync(Cat.Sql.Cdc.Abstractions.CatChange,System.Object,System.Threading.CancellationToken)|CatMessagingChangeSink.SendAsync.NK2AT9ELHT2CCMMGJ2RWVYQH9.md|SendAsync(CatChange, object, CancellationToken)
+M:Cat.Sql.Cdc.Messaging.CatMessagingChangeSink.Convert(Cat.Sql.Cdc.Abstractions.CatChange)|CatMessagingChangeSink.Convert.011XK7JMH4G20YZPK5WJ8EG58.md|Convert(CatChange)
+T:Cat.Sql.Cdc.Messaging.CatMessagingChangeSink|CatMessagingChangeSink.md|CatMessagingChangeSink
+M:Cat.Sql.Cdc.Messaging.Extensions.ServiceCollectionExtensions.AddCatSqlCdcMessaging(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatSqlCdcMessaging.9TIOG38KDUZJJO20DC54IGA13.md|AddCatSqlCdcMessaging(this IServiceCollection)
+N:Cat.Sql.Cdc.Messaging.Extensions|Cat.Sql.Cdc.Messaging.Extensions.md|Cat.Sql.Cdc.Messaging.Extensions
+T:Cat.Sql.Cdc.Messaging.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
