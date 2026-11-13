@@ -1,6 +1,6 @@
 using Cat.Demo.OrderService.Contracts.Models;
-using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Demo.OrderService.DataModels.Entities;
+using Cat.Users.Abstractions;
 using Riok.Mapperly.Abstractions;
 
 namespace Cat.Demo.OrderService.CoreService.Extensions;
@@ -31,6 +31,6 @@ public static partial class MappingExtensions
     public static partial OrderLineModel ToModel(this OrderLine orderLine);
 
     /// <summary>Gets the external id to filter orders on. An admin has no filter and sees every order.</summary>
-    public static string? GetOwnerFilter(this ICurrentUser currentUser)
-        => currentUser.IsAdmin ? null : currentUser.UserId;
+    public static string? GetOwnerFilter(this ICatUser currentUser)
+        => currentUser.IsAdmin() ? null : currentUser.UserId;
 }

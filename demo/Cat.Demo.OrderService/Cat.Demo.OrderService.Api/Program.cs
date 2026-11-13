@@ -20,6 +20,7 @@ using Cat.FluentWorkflows.Extensions;
 using Cat.Minimal.Api.Extensions;
 using Cat.Queries.Decorators.Logging.Extensions;
 using Cat.Queries.Extensions;
+using Cat.Users.Abstractions;
 using Cat.ServiceRequests.Decorators.ActivitySource.Extensions;
 using Cat.ServiceRequests.Decorators.Logging.Extensions;
 using Cat.ServiceRequests.Decorators.Validation.Extensions;
@@ -71,11 +72,14 @@ var authenticationOn = builder.AddDemoJwtAuthentication();
 builder.Services.AddHttpContextAccessor();
 if (authenticationOn)
 {
-    builder.Services.AddScoped<ICurrentUser, TokenCurrentUser>();
+    // AddDemoJwtAuthentication has registered Cat.Users, so ICatUser comes from the token. Only the email is read here.
+    builder.Services.AddScoped<IUserEmail, TokenUserEmail>();
 }
 else
 {
-    builder.Services.AddScoped<ICurrentUser, DevelopmentCurrentUser>();
+    builder.Services.AddScoped<DevelopmentUser>();
+    builder.Services.AddScoped<ICatUser>(provider => provider.GetRequiredService<DevelopmentUser>());
+    builder.Services.AddScoped<IUserEmail>(provider => provider.GetRequiredService<DevelopmentUser>());
 }
 
 var app = builder.Build();

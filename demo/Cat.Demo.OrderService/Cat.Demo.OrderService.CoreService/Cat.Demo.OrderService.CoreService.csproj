@@ -10,6 +10,7 @@
       <ProjectReference Include="..\..\..\modules\Cat.FluentWorkflows\Cat.FluentWorkflows.Commands\Cat.FluentWorkflows.Commands.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.FluentWorkflows\Cat.FluentWorkflows\Cat.FluentWorkflows.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Queries\Cat.Queries.Abstractions\Cat.Queries.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Users\Cat.Users.Abstractions\Cat.Users.Abstractions.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Validators\Cat.Validators\Cat.Validators.csproj" />
       <ProjectReference Include="..\Cat.Demo.OrderService.Contracts\Cat.Demo.OrderService.Contracts.csproj" />
       <ProjectReference Include="..\Cat.Demo.OrderService.DataModels\Cat.Demo.OrderService.DataModels.csproj" />

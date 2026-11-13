@@ -2,10 +2,12 @@ using Cat.Commands.Abstractions;
 using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Demo.OrderService.CoreService.Commands;
 using Cat.Demo.OrderService.CoreService.Events;
+using Cat.Demo.OrderService.CoreService.Extensions;
 using Cat.EventAggregators.Abstractions;
 using Cat.Queries.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
+using Cat.Users.Abstractions;
 
 namespace Cat.Demo.OrderService.CoreService.Tests;
 
@@ -102,13 +104,15 @@ public class FakeQueryProcessor : ICatQueryProcessor
 }
 
 /// <summary>The current user for tests.</summary>
-public class FakeCurrentUser : ICurrentUser
+public class FakeUser : ICatUser, IUserEmail
 {
     public bool IsAuthenticated { get; set; } = true;
     public string UserId { get; set; } = "alice";
     public string Name { get; set; } = "Alice Jansen";
     public string Email { get; set; } = "alice@example.com";
     public bool IsAdmin { get; set; }
+
+    public bool IsInRole(string role) => IsAdmin && role == CatUserExtensions.AdminRole;
 }
 
 /// <summary>A price provider for tests. Every book costs 10 euro, unless the test changes it.</summary>

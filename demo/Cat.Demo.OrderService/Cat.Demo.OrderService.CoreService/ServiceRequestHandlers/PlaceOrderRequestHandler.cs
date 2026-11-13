@@ -13,6 +13,7 @@ using Cat.Queries.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 using Cat.ServiceRequests.Abstractions;
+using Cat.Users.Abstractions;
 
 namespace Cat.Demo.OrderService.CoreService.ServiceRequestHandlers;
 
@@ -20,18 +21,21 @@ public class PlaceOrderRequestHandler : ICatServiceRequestHandler<PlaceOrderRequ
 {
     private readonly ICatWorkflowProcessor _workflowProcessor;
     private readonly ICatQueryProcessor _queryProcessor;
-    private readonly ICurrentUser _currentUser;
+    private readonly ICatUser _currentUser;
+    private readonly IUserEmail _userEmail;
     private readonly TimeProvider _timeProvider;
 
     public PlaceOrderRequestHandler(
         ICatWorkflowProcessor workflowProcessor,
         ICatQueryProcessor queryProcessor,
-        ICurrentUser currentUser,
+        ICatUser currentUser,
+        IUserEmail userEmail,
         TimeProvider timeProvider)
     {
         _workflowProcessor = workflowProcessor;
         _queryProcessor = queryProcessor;
         _currentUser = currentUser;
+        _userEmail = userEmail;
         _timeProvider = timeProvider;
     }
 
@@ -47,7 +51,7 @@ public class PlaceOrderRequestHandler : ICatServiceRequestHandler<PlaceOrderRequ
             PlacedAt = _timeProvider.GetUtcNow().UtcDateTime,
             CustomerExternalId = _currentUser.UserId,
             CustomerName = _currentUser.Name,
-            CustomerEmail = _currentUser.Email,
+            CustomerEmail = _userEmail.Email,
             Lines = [.. serviceRequest.Order.Lines.Select(x => new PlaceOrderLineState { BookId = x.BookId, Quantity = x.Quantity })]
         };
 

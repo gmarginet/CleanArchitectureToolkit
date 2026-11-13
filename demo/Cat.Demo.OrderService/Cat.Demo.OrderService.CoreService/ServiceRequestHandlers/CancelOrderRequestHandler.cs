@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Cat.Demo.OrderService.Contracts.ServiceRequests;
-using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Demo.OrderService.CoreService.Events;
 using Cat.Demo.OrderService.CoreService.Extensions;
 using Cat.Demo.OrderService.CoreService.Queries;
@@ -11,6 +10,7 @@ using Cat.Queries.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 using Cat.ServiceRequests.Abstractions;
+using Cat.Users.Abstractions;
 
 namespace Cat.Demo.OrderService.CoreService.ServiceRequestHandlers;
 
@@ -18,12 +18,12 @@ public class CancelOrderRequestHandler : ICatServiceRequestHandler<CancelOrderRe
 {
     private readonly ICatQueryProcessor _queryProcessor;
     private readonly ICatEventAggregator _eventAggregator;
-    private readonly ICurrentUser _currentUser;
+    private readonly ICatUser _currentUser;
 
     public CancelOrderRequestHandler(
         ICatQueryProcessor queryProcessor,
         ICatEventAggregator eventAggregator,
-        ICurrentUser currentUser)
+        ICatUser currentUser)
     {
         _queryProcessor = queryProcessor;
         _eventAggregator = eventAggregator;

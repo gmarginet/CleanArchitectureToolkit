@@ -2,22 +2,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cat.Demo.OrderService.Contracts.Models;
 using Cat.Demo.OrderService.Contracts.ServiceRequests;
-using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Demo.OrderService.CoreService.Extensions;
 using Cat.Demo.OrderService.CoreService.Queries;
 using Cat.Queries.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 using Cat.ServiceRequests.Abstractions;
+using Cat.Users.Abstractions;
 
 namespace Cat.Demo.OrderService.CoreService.ServiceRequestHandlers;
 
 public class OrderGetRequestHandler : ICatServiceRequestHandler<OrderGetRequest, OrderModel>
 {
     private readonly ICatQueryProcessor _queryProcessor;
-    private readonly ICurrentUser _currentUser;
+    private readonly ICatUser _currentUser;
 
-    public OrderGetRequestHandler(ICatQueryProcessor queryProcessor, ICurrentUser currentUser)
+    public OrderGetRequestHandler(ICatQueryProcessor queryProcessor, ICatUser currentUser)
     {
         _queryProcessor = queryProcessor;
         _currentUser = currentUser;

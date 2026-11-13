@@ -25,7 +25,7 @@ public class ServiceRequestHandlerTests
 {
     private FakeQueryProcessor _queryProcessor = null!;
     private FakeCommandProcessor _commandProcessor = null!;
-    private FakeCurrentUser _currentUser = null!;
+    private FakeUser _currentUser = null!;
     private ICatEventAggregator _eventAggregator = null!;
     private RecordingSubscriber _events = null!;
 
@@ -34,7 +34,7 @@ public class ServiceRequestHandlerTests
     {
         _queryProcessor = new FakeQueryProcessor();
         _commandProcessor = new FakeCommandProcessor();
-        _currentUser = new FakeCurrentUser();
+        _currentUser = new FakeUser();
 
         var services = new ServiceCollection();
         services.AddCatEventAggregatorsModule();
@@ -234,6 +234,7 @@ public class ServiceRequestHandlerTests
     private PlaceOrderRequestHandler NewPlaceOrderHandler(ServiceProvider provider) => new(
         provider.GetRequiredService<ICatWorkflowProcessor>(),
         _queryProcessor,
+        _currentUser,
         _currentUser,
         TimeProvider.System);
 
