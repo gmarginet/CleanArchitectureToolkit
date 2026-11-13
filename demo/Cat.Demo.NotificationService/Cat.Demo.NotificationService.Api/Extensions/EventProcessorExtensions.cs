@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Cat.Demo.InventoryService.Contracts.Messages;
 using Cat.Demo.OrderService.Contracts.Messages;
 using Cat.EventProcessor.AzureServiceBus;
 using Cat.EventProcessor.AzureServiceBus.Extensions;
@@ -38,7 +39,7 @@ public static class EventProcessorExtensions
             options.AdministrationConnectionString = configuration["Messaging:AdministrationConnectionString"] ?? string.Empty;
         });
 
-        services.AddCatEventProcessor(configuration, processor => processor.Receive<OrderConfirmed>());
+        services.AddCatEventProcessor(configuration, processor => processor.Receive<OrderConfirmed>().Receive<LowStockReport>());
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
         services.AddHealthChecks().AddCatEventProcessorHealthCheck();
 
@@ -47,7 +48,7 @@ public static class EventProcessorExtensions
 
     /// <summary>
     /// Creates the subscription of Notifications on the topic of every message it receives. It skips what exists.
-    /// The topic comes from Orders, which creates it at its own startup. Call this in development only.
+    /// The topics come from Orders and Inventory, which create them at their own startup. Call this in development only.
     /// </summary>
     public static async Task InitializeNotificationEventProcessorAsync(this IServiceProvider services, CancellationToken cancellationToken = default)
     {

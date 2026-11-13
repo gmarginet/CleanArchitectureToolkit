@@ -7,6 +7,8 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\modules\Cat.Db.Errors\Cat.Db.Errors.SqlServer\Cat.Db.Errors.SqlServer.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Commands\Cat.EFCore.Commands.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.Abstractions\Cat.Messaging.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Scheduling\Cat.Scheduling.EFCore\Cat.Scheduling.EFCore.csproj" />
       <ProjectReference Include="..\Cat.Demo.InventoryService.CoreService\Cat.Demo.InventoryService.CoreService.csproj" />
     </ItemGroup>
 

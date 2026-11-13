@@ -1,10 +1,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Cat.Demo.InventoryService.Contracts.Messages;
 using Cat.Demo.OrderService.Contracts.Messages;
 using Cat.EventProcessor.AzureServiceBus;
 using Cat.EventProcessor.AzureServiceBus.Extensions;
 using Cat.EventProcessor.Extensions;
+using Cat.Messaging.AzureServiceBus;
 using Cat.Messaging.AzureServiceBus.Extensions;
 using Cat.Messaging.Extensions;
 using Microsoft.Extensions.Configuration;
@@ -45,6 +47,21 @@ public static class EventProcessorExtensions
         services.AddHealthChecks().AddCatEventProcessorHealthCheck();
 
         return true;
+    }
+
+    /// <summary>
+    /// Creates the topic of every message in the contracts project of Inventory, which is the low stock report. It skips what exists.
+    /// Call it in development only. The emulator forgets its entities at every restart, so Inventory creates them again at startup.
+    /// </summary>
+    public static async Task InitializeInventoryMessagingAsync(this IServiceProvider services, CancellationToken cancellationToken = default)
+    {
+        var topology = services.GetService<ICatServiceBusTopology>();
+        if (topology is null)
+        {
+            return;
+        }
+
+        await topology.EnsureTopologyAsync([typeof(LowStockReport).Assembly], cancellationToken);
     }
 
     /// <summary>

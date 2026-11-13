@@ -41,13 +41,12 @@ builder.Services.AddCatDemoInventoryDatabase(connectionString);
 // The listener for the messages of other services. It is on when the host gives Inventory the connection string "messaging".
 var eventProcessorOn = builder.Services.AddCatDemoInventoryEventProcessor(builder.Configuration);
 
-// The development endpoints of the event processor are not in the default OpenAPI document, so no client gets them.
-// The dev document holds them, and Scalar shows it next to the default one.
-var devDocument = Cat.EventProcessor.Minimal.Api.Extensions.EndpointRouteBuilderExtensions.DevDocumentName;
-if (eventProcessorOn)
-{
-    builder.Services.AddOpenApi(devDocument);
-}
+// The scheduler runs the nightly low stock report. The claim table is in the inventory database.
+builder.Services.AddCatDemoInventoryScheduler(builder.Configuration);
+
+// The development endpoints, of the scheduler and of the event processor, are not in the default OpenAPI document,
+// so no client gets them. The dev document holds them, and Scalar shows it next to the default one.
+builder.Services.AddOpenApi(DevelopmentEndpoints.DevDocumentName);
 
 var authenticationOn = builder.AddDemoJwtAuthentication();
 
@@ -63,19 +62,17 @@ if (authenticationOn)
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference(options =>
-    {
-        if (eventProcessorOn)
-        {
-            options.AddDocuments("v1", devDocument);
-        }
-    });
+    app.MapScalarApiReference(options => options.AddDocuments("v1", DevelopmentEndpoints.DevDocumentName));
+
+    await app.Services.InitializeInventoryMessagingAsync();
 
     if (eventProcessorOn)
     {
         await app.Services.InitializeInventoryEventProcessorAsync();
         app.MapCatEventProcessor();
     }
+
+    app.MapInventoryServiceDevelopmentEndpoints();
 }
 
 app.UseHttpsRedirection();

@@ -93,6 +93,7 @@ var bus = builder.AddAzureServiceBus("messaging")
     });
 
 // Orders publishes OrderConfirmed through its outbox. Inventory listens to it, so it waits for Orders, which creates the topic.
+// Inventory publishes the low stock report. Notifications listens to it, so it waits for Inventory, which creates that topic.
 orders.WithReference(bus)
     .WaitFor(bus)
     .WithEnvironment("Messaging__AdministrationConnectionString", serviceBusAdministrationConnection);
@@ -103,18 +104,19 @@ inventory.WithReference(bus)
 notifications.WithReference(bus)
     .WaitFor(bus)
     .WaitFor(orders)
+    .WaitFor(inventory)
     .WithEnvironment("Messaging__AdministrationConnectionString", serviceBusAdministrationConnection);
 
 // The gateway is the single front door. The services are found by name through service discovery.
 var authority = $"http://localhost:{keycloakPort}/realms/cat-demo";
 catalog.WithEnvironment("Authentication__Authority", authority);
 orders.WithEnvironment("Authentication__Authority", authority);
-payment.WithEnvironment("Authentication__Authority", authority);
-inventory.WithEnvironment("Authentication__Authority", authority);
 // Orders asks Keycloak for a token of its own when a call has no user, such as a job of the Scheduler.
 // The secret is the one in the realm file. Do not use these settings outside the demo.
 orders.WithEnvironment("Authentication__ClientId", "cat-demo-orders");
 orders.WithEnvironment("Authentication__ClientSecret", "cat-demo-orders-secret");
+payment.WithEnvironment("Authentication__Authority", authority);
+inventory.WithEnvironment("Authentication__Authority", authority);
 const int gatewayPort = 5100;
 const int webPort = 5104;
 var gatewayUrl = $"http://localhost:{gatewayPort}";

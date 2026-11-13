@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Cat.Demo.NotificationService.CoreService;
 using Cat.Demo.NotificationService.CoreService.Abstractions;
 using Cat.Demo.NotificationService.Infrastructure.DataAccess;
 using Cat.Demo.NotificationService.Infrastructure.Mail;
@@ -27,6 +28,11 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddCatDemoNotificationMail(this IServiceCollection services, IConfiguration configuration)
     {
+        // The admin gets the low stock report. The address comes from Notifications:AdminEmail.
+        var adminEmail = configuration["Notifications:AdminEmail"];
+        services.AddSingleton(new NotificationSettings(
+            string.IsNullOrWhiteSpace(adminEmail) ? NotificationSettings.DefaultAdminEmail : adminEmail));
+
         if (!string.IsNullOrWhiteSpace(configuration["Smtp:Host"]))
         {
             services.AddSingleton<IMailSender, SmtpMailSender>();
