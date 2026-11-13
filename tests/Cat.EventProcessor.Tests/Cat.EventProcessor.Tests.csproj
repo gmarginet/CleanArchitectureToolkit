@@ -42,7 +42,7 @@
       <ProjectReference Include="..\..\modules\Cat.Messaging\Cat.Messaging\Cat.Messaging.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
       <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests\Cat.ServiceRequests.csproj" />
-      <ProjectReference Include="..\Cat.NUnit\Cat.NUnit.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.UnitTesting\Cat.UnitTesting.NUnit\Cat.UnitTesting.NUnit.csproj" />
     </ItemGroup>
 
 </Project>

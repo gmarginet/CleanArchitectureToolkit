@@ -1,6 +1,6 @@
 using Cat.Expressions.Abstractions;
 using Cat.Expressions.Extensions;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cat.Expressions.Tests;

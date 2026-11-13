@@ -2,7 +2,7 @@ using Cat.Commands.Abstractions;
 using Cat.Commands.Extensions;
 using Cat.Commands.Tests.Helpers;
 using Cat.Decorators.Abstractions;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Cat.Responses.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

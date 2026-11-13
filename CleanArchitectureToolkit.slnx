@@ -177,6 +177,9 @@
     <Project Path="modules/Cat.Sql.Cdc/Cat.Sql.Cdc.Messaging/Cat.Sql.Cdc.Messaging.csproj" />
     <Project Path="modules/Cat.Sql.Cdc/Cat.Sql.Cdc/Cat.Sql.Cdc.csproj" />
   </Folder>
+  <Folder Name="/modules/Cat.UnitTesting/">
+    <Project Path="modules/Cat.UnitTesting/Cat.UnitTesting.NUnit/Cat.UnitTesting.NUnit.csproj" />
+  </Folder>
   <Folder Name="/modules/Cat.Users/">
     <File Path="modules/Cat.Users/README.md" />
     <Project Path="modules/Cat.Users/Cat.Users.Abstractions/Cat.Users.Abstractions.csproj" />
@@ -204,7 +207,6 @@
     <Project Path="tests/Cat.Localizations.Tests/Cat.Localizations.Tests.csproj" />
     <Project Path="tests/Cat.Messaging.Tests/Cat.Messaging.Tests.csproj" />
     <Project Path="tests/Cat.Minimal.Api.Tests/Cat.Minimal.Api.Tests.csproj" />
-    <Project Path="tests/Cat.NUnit/Cat.NUnit.csproj" />
     <Project Path="tests/Cat.Queries.Tests/Cat.Queries.Tests.csproj" />
     <Project Path="tests/Cat.Responses.Tests/Cat.Responses.Tests.csproj" />
     <Project Path="tests/Cat.Scheduling.Tests/Cat.Scheduling.Tests.csproj" />

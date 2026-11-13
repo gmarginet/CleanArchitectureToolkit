@@ -1,7 +1,7 @@
 using System.Globalization;
 using Cat.Localizations.Abstractions;
 using Cat.Localizations.Extensions;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cat.Localizations.Tests;

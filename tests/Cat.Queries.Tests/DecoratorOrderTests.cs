@@ -1,5 +1,5 @@
 using Cat.Decorators.Abstractions;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Cat.Queries.Decorators.Logging.Extensions;
 
 namespace Cat.Queries.Tests;

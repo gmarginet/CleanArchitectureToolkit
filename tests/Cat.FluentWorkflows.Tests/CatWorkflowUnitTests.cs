@@ -169,7 +169,7 @@ public class ModuleRegistrationTests
 }
 
 [TestFixture]
-public class WorkflowTracingTests : Cat.NUnit.UnitTestBase
+public class WorkflowTracingTests : Cat.UnitTesting.NUnit.UnitTestBase
 {
     private readonly List<Activity> _started = [];
     private ActivityListener _listener = null!;

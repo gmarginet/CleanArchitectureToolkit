@@ -4,7 +4,7 @@ using System.Linq;
 using Cat.Decorators.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cat.NUnit;
+namespace Cat.UnitTesting.NUnit;
 
 /// <summary>
 /// An <see cref="ICatDecoratorFactoryBuilder"/> that only records the calls, so a test can check

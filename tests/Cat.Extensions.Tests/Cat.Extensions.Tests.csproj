@@ -33,7 +33,7 @@
       <ProjectReference Include="..\..\modules\Cat.Extensions\Cat.Object.Extensions\Cat.Object.Extensions.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Extensions\Cat.ServiceCollection.Extensions\Cat.ServiceCollection.Extensions.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Extensions\Cat.String.Extensions\Cat.String.Extensions.csproj" />
-      <ProjectReference Include="..\Cat.NUnit\Cat.NUnit.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.UnitTesting\Cat.UnitTesting.NUnit\Cat.UnitTesting.NUnit.csproj" />
     </ItemGroup>
 
 </Project>

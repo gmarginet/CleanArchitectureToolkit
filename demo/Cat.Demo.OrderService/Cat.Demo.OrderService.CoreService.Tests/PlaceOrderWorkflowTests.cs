@@ -8,7 +8,7 @@ using Cat.EventAggregators.Extensions;
 using Cat.FluentWorkflows.Abstractions;
 using Cat.FluentWorkflows.Commands.Extensions;
 using Cat.FluentWorkflows.Extensions;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;

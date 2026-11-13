@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Cat.EventAggregators.Abstractions;
 using Cat.EventAggregators.Extensions;
 using Cat.EventAggregators.Tests.Helpers;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Cat.Object.Extensions;
 using Cat.Objects.Extensions;
 using Microsoft.Extensions.DependencyInjection;

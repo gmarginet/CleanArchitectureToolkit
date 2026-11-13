@@ -2,7 +2,7 @@ using System.Text.Json;
 using Cat.FluentWorkflows.Abstractions;
 using Cat.FluentWorkflows.Extensions;
 using Cat.FluentWorkflows.Tests.Workflows;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;

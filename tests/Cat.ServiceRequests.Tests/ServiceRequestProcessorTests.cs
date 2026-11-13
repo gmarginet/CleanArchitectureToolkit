@@ -1,5 +1,5 @@
 using Cat.Decorators.Abstractions;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Cat.Responses.Abstractions;
 using Cat.ServiceRequests.Abstractions;
 using Cat.ServiceRequests.Extensions;

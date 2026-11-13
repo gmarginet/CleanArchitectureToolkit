@@ -30,7 +30,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\modules\Cat.Decorators\Cat.Decorators.Abstractions\Cat.Decorators.Abstractions.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Decorators\Cat.Decorators\Cat.Decorators.csproj" />
-      <ProjectReference Include="..\Cat.NUnit\Cat.NUnit.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.UnitTesting\Cat.UnitTesting.NUnit\Cat.UnitTesting.NUnit.csproj" />
     </ItemGroup>
 
 </Project>

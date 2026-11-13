@@ -1,4 +1,4 @@
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Cat.Queries.Abstractions;
 using Cat.Queries.Decorators.Logging.Extensions;
 using Cat.Queries.Extensions;

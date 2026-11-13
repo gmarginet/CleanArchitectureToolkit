@@ -1,6 +1,6 @@
 using Cat.Commands.Decorators.Logging.Extensions;
 using Cat.Decorators.Abstractions;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 
 namespace Cat.Commands.Tests;
 

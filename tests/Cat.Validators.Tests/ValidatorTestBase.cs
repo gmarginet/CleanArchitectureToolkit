@@ -1,5 +1,5 @@
 using Cat.Expressions.Extensions;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Cat.Validators.Abstractions;
 using Cat.Validators.Extensions;
 using Cat.Validators.Tests.Validators;

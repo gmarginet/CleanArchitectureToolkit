@@ -2,7 +2,7 @@ using Cat.Demo.CatalogService.Contracts.Models;
 using Cat.Demo.CatalogService.Contracts.ServiceRequests;
 using Cat.Demo.CatalogService.CoreService.Validators;
 using Cat.Expressions.Extensions;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Cat.Queries.Abstractions;
 using Cat.Responses.Abstractions;
 using Cat.Validators;

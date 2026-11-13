@@ -36,7 +36,7 @@
       <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.Validation\Cat.ServiceRequests.Decorators.Validation.csproj" />
       <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests\Cat.ServiceRequests.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Validators\Cat.Validators\Cat.Validators.csproj" />
-      <ProjectReference Include="..\Cat.NUnit\Cat.NUnit.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.UnitTesting\Cat.UnitTesting.NUnit\Cat.UnitTesting.NUnit.csproj" />
     </ItemGroup>
 
 </Project>

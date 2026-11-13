@@ -5,7 +5,7 @@ using Cat.FluentWorkflows.Extensions;
 using Cat.FluentWorkflows.Queries.Extensions;
 using Cat.FluentWorkflows.Tests.Steps;
 using Cat.FluentWorkflows.Tests.Workflows;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Cat.Queries.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

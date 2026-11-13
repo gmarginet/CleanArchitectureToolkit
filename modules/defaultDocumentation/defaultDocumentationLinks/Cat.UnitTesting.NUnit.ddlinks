@@ -1,0 +1,20 @@
+../../../Cat.UnitTesting/namespaces/Cat.UnitTesting.NUnit/
+P:Cat.UnitTesting.NUnit.RecordingDecoratorBuilder.Added|RecordingDecoratorBuilder.Added.md|Added
+M:Cat.UnitTesting.NUnit.RecordingDecoratorBuilder.CreateServiceProvider|RecordingDecoratorBuilder.CreateServiceProvider().md|CreateServiceProvider()
+M:Cat.UnitTesting.NUnit.RecordingDecoratorBuilder.AddDecorator(System.Type,System.Type,Cat.Decorators.Abstractions.ICatDecoratorParameter[])|RecordingDecoratorBuilder.AddDecorator.md#Cat.UnitTesting.NUnit.RecordingDecoratorBuilder.AddDecorator(System.Type,System.Type,Cat.Decorators.Abstractions.ICatDecoratorParameter[])|AddDecorator(Type, Type, ICatDecoratorParameter[])
+M:Cat.UnitTesting.NUnit.RecordingDecoratorBuilder.AddDecorator(System.Type,System.Type,System.Int32,Cat.Decorators.Abstractions.ICatDecoratorParameter[])|RecordingDecoratorBuilder.AddDecorator.md#Cat.UnitTesting.NUnit.RecordingDecoratorBuilder.AddDecorator(System.Type,System.Type,int,Cat.Decorators.Abstractions.ICatDecoratorParameter[])|AddDecorator(Type, Type, int, ICatDecoratorParameter[])
+N:Cat.UnitTesting.NUnit|Cat.UnitTesting.NUnit.md|Cat.UnitTesting.NUnit
+T:Cat.UnitTesting.NUnit.RecordingDecoratorBuilder|RecordingDecoratorBuilder.md|RecordingDecoratorBuilder
+P:Cat.UnitTesting.NUnit.RecordedDecorator.ServiceType|RecordedDecorator.ServiceType.md|ServiceType
+P:Cat.UnitTesting.NUnit.RecordedDecorator.DecoratorType|RecordedDecorator.DecoratorType.md|DecoratorType
+P:Cat.UnitTesting.NUnit.RecordedDecorator.Order|RecordedDecorator.Order.md|Order
+P:Cat.UnitTesting.NUnit.RecordedDecorator.Parameters|RecordedDecorator.Parameters.md|Parameters
+M:Cat.UnitTesting.NUnit.RecordedDecorator.#ctor(System.Type,System.Type,System.Int32,System.Collections.Generic.IDictionary{System.String,System.Object})|RecordedDecorator..ctor.TX91AKK3MP28UEQBXA6P4DMV1.md|RecordedDecorator(Type, Type, int, IDictionary<string,object>)
+T:Cat.UnitTesting.NUnit.RecordedDecorator|RecordedDecorator.md|RecordedDecorator
+F:Cat.UnitTesting.NUnit.UnitTestBase._serviceProvider|UnitTestBase._serviceProvider.md|_serviceProvider
+P:Cat.UnitTesting.NUnit.UnitTestBase.ServiceProvider|UnitTestBase.ServiceProvider.md|ServiceProvider
+M:Cat.UnitTesting.NUnit.UnitTestBase.BaseOneTimeSetup|UnitTestBase.BaseOneTimeSetup().md|BaseOneTimeSetup()
+M:Cat.UnitTesting.NUnit.UnitTestBase.BaseOneTimeTearDown|UnitTestBase.BaseOneTimeTearDown().md|BaseOneTimeTearDown()
+M:Cat.UnitTesting.NUnit.UnitTestBase.ConfigureServices(Microsoft.Extensions.DependencyInjection.ServiceCollection)|UnitTestBase.ConfigureServices.OLU9DG23ZDAWUI1TJW25YK3J4.md|ConfigureServices(ServiceCollection)
+T:Cat.UnitTesting.NUnit.UnitTestBase|UnitTestBase.md|UnitTestBase
+?:Cat.UnitTesting.NUnit.RecordingDecoratorBuilder.AddDecorator|RecordingDecoratorBuilder.AddDecorator.md|AddDecorator

@@ -3,7 +3,7 @@ using Cat.Demo.NotificationService.CoreService.Abstractions;
 using Cat.Demo.NotificationService.CoreService.ServiceRequestHandlers;
 using Cat.Demo.NotificationService.CoreService.Validators;
 using Cat.Expressions.Extensions;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Cat.Validators.Abstractions;
 using Cat.Validators.Extensions;
 using Microsoft.Extensions.DependencyInjection;

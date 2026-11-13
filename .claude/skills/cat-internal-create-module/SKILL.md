@@ -20,7 +20,7 @@ Set up a new module so it matches the others. New modules start with the status 
    - `<ModuleName>.Decorators.<Name>` for optional decorators.
 2. **Project files.** Copy the `.csproj` of a similar project and adjust it. Library projects target `netstandard2.0` as much as possible. A project that needs more, such as one that uses ASP.NET Core or EF Core, targets the latest stable .NET. Check this for every project you add. Projects reference the `DefaultDocumentation` package, as the other modules do. Package versions come from `Directory.Packages.props`. The package id is set in `Directory.Build.props` (`gmarginet.$(MSBuildProjectName)`).
    Every project also gets `DefaultDocumentation/NamespaceDoc.cs`, an internal static class in the root namespace of the project. Its XML summary is the description of the namespace in the generated pages. Copy one from another project, such as `modules/Cat.Responses/Cat.Responses/DefaultDocumentation/NamespaceDoc.cs`, and write a summary that fits.
-3. **Test project.** Create `tests/<ModuleName>.Tests/<ModuleName>.Tests.csproj` like `tests/Cat.Queries.Tests`. It references the module projects and `tests/Cat.NUnit`. Add at least one real test.
+3. **Test project.** Create `tests/<ModuleName>.Tests/<ModuleName>.Tests.csproj` like `tests/Cat.Queries.Tests`. It references the module projects and `modules/Cat.UnitTesting/Cat.UnitTesting.NUnit`. Add at least one real test.
 4. **Solution file.** Update `CleanArchitectureToolkit.slnx`:
    - Add `<Folder Name="/modules/<ModuleName>/">` with `<File Path="modules/<ModuleName>/README.md" />` and one `<Project>` entry per project. Keep the folders sorted by name.
    - Add the test project to the `/tests/` folder, sorted by name.

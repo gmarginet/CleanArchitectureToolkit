@@ -1,4 +1,4 @@
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Cat.ServiceRequests.Abstractions;
 using Cat.ServiceRequests.Decorators.Logging.Extensions;
 using Cat.ServiceRequests.Extensions;

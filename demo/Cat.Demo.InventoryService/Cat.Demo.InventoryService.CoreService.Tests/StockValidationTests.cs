@@ -2,7 +2,7 @@ using Cat.Demo.InventoryService.Contracts.Models;
 using Cat.Demo.InventoryService.Contracts.ServiceRequests;
 using Cat.Demo.InventoryService.CoreService.Validators;
 using Cat.Expressions.Extensions;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Cat.Responses.Abstractions;
 using Cat.Validators;
 using Cat.Validators.Abstractions;

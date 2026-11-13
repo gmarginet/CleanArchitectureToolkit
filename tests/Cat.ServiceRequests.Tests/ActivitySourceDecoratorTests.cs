@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using Cat.NUnit;
+using Cat.UnitTesting.NUnit;
 using Cat.ServiceRequests.Abstractions;
 using Cat.ServiceRequests.Decorators.ActivitySource.Extensions;
 using Cat.ServiceRequests.Extensions;

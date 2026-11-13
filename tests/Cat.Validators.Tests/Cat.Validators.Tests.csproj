@@ -30,7 +30,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\modules\Cat.Expressions\Cat.Expressions\Cat.Expressions.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Validators\Cat.Validators\Cat.Validators.csproj" />
-      <ProjectReference Include="..\Cat.NUnit\Cat.NUnit.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.UnitTesting\Cat.UnitTesting.NUnit\Cat.UnitTesting.NUnit.csproj" />
     </ItemGroup>
 
 </Project>
