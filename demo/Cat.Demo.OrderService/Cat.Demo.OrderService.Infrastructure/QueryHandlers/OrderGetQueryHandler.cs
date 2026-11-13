@@ -4,26 +4,19 @@ using System.Threading.Tasks;
 using Cat.Demo.OrderService.CoreService.Queries;
 using Cat.Demo.OrderService.DataModels.Entities;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
-using Cat.Queries.Abstractions;
+using Cat.EFCore.Queries;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cat.Demo.OrderService.Infrastructure.QueryHandlers;
 
-public class OrderGetQueryHandler : ICatQueryHandler<OrderGetQuery, Order>
+public class OrderGetQueryHandler(OrderDbContext dbContext)
+    : CatEfQueryHandlerBase<OrderDbContext, OrderGetQuery, Order>(dbContext)
 {
-    private readonly OrderDbContext _dbContext;
-
-    public OrderGetQueryHandler(OrderDbContext dbContext)
+    public override async Task<ICatResponse<Order>> HandleAsync(OrderGetQuery query, CancellationToken cancellationToken = default)
     {
-        _dbContext = dbContext;
-    }
-
-    public async Task<ICatResponse<Order>> HandleAsync(OrderGetQuery query, CancellationToken cancellationToken = default)
-    {
-        var order = await _dbContext.Orders
-            .AsNoTracking()
+        var order = await Set<Order>()
             .Include(x => x.OrderStatus)
             .Include(x => x.Lines)
             .Where(x => x.Id == query.OrderId)

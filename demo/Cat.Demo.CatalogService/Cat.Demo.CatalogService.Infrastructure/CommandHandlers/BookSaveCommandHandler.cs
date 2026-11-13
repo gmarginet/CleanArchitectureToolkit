@@ -1,11 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Cat.Commands.Abstractions;
 using Cat.Demo.CatalogService.CoreService;
 using Cat.Demo.CatalogService.CoreService.Commands;
 using Cat.Demo.CatalogService.DataModels.Entities;
 using Cat.Db.Errors.SqlServer;
 using Cat.Demo.CatalogService.Infrastructure.DataAccess;
+using Cat.EFCore.Commands;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 using Cat.Users.Abstractions;
@@ -13,29 +13,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cat.Demo.CatalogService.Infrastructure.CommandHandlers;
 
-public class BookSaveCommandHandler : ICatCommandHandler<BookSaveCommand>
+public class BookSaveCommandHandler(CatalogDbContext dbContext, ICatUser user)
+    : CatEfCommandHandlerBase<CatalogDbContext, BookSaveCommand>(dbContext)
 {
-    private readonly CatalogDbContext _dbContext;
-    private readonly ICatUser _user;
-
-    public BookSaveCommandHandler(CatalogDbContext dbContext, ICatUser user)
-    {
-        _dbContext = dbContext;
-        _user = user;
-    }
-
-    public async Task<ICatResponse> HandleAsync(BookSaveCommand command, CancellationToken cancellationToken = default)
+    public override async Task<ICatResponse> HandleAsync(BookSaveCommand command, CancellationToken cancellationToken = default)
     {
         var incoming = command.Book;
 
-        var book = await _dbContext.Books
+        var book = await DbContext.Books
             .Include(x => x.BookPrice)
             .FirstOrDefaultAsync(x => x.Id == incoming.Id, cancellationToken);
 
         if (book is null)
         {
             book = incoming;
-            _dbContext.Books.Add(book);
+            DbContext.Books.Add(book);
         }
         else
         {
@@ -49,19 +41,19 @@ public class BookSaveCommandHandler : ICatCommandHandler<BookSaveCommand>
         {
             if (book.BookPrice is null)
             {
-                book.BookPrice = new BookPrice { BookId = book.Id, Amount = price, LastUpdatedBy = _user.UserId };
+                book.BookPrice = new BookPrice { BookId = book.Id, Amount = price, LastUpdatedBy = user.UserId };
             }
             else if (book.BookPrice.Amount != price)
             {
                 // The update is enough. The temporal table keeps the old amount and who set it in its history.
                 book.BookPrice.Amount = price;
-                book.BookPrice.LastUpdatedBy = _user.UserId;
+                book.BookPrice.LastUpdatedBy = user.UserId;
             }
         }
 
         try
         {
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await DbContext.SaveChangesAsync(cancellationToken);
         }
         catch (DbUpdateException ex) when (ex.IsUniqueViolation())
         {

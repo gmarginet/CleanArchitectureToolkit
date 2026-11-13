@@ -1,5 +1,6 @@
 using Cat.Demo.CatalogService.DataModels.Entities;
 using Cat.EFCore.Extensions;
+using Cat.EFCore.Extensions.SqlServer;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cat.Demo.CatalogService.Infrastructure.DataAccess;

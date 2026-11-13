@@ -2,12 +2,12 @@ using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Cat.Commands.Abstractions;
 using Cat.Db.Errors.SqlServer;
 using Cat.Demo.InventoryService.CoreService;
 using Cat.Demo.InventoryService.CoreService.Commands;
 using Cat.Demo.InventoryService.Infrastructure.DataAccess;
 using Cat.Demo.InventoryService.Infrastructure.Entities;
+using Cat.EFCore.Commands;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 using Microsoft.Data.SqlClient;
@@ -20,7 +20,8 @@ namespace Cat.Demo.InventoryService.Infrastructure.CommandHandlers;
 /// even when two orders ask for the last copies at the same moment. The lines share one transaction:
 /// when one book is out of stock, nothing is reserved. The order number is the idempotency key.
 /// </summary>
-public class StockReserveCommandHandler : ICatCommandHandler<StockReserveCommand>
+public class StockReserveCommandHandler(InventoryDbContext dbContext)
+    : CatEfCommandHandlerBase<InventoryDbContext, StockReserveCommand>(dbContext)
 {
     // The update takes the first stock item of the book that has enough copies, and tells us which one it was.
     private const string TakeStockSql = """
@@ -35,21 +36,14 @@ public class StockReserveCommandHandler : ICatCommandHandler<StockReserveCommand
         SET QuantityOnHand = QuantityOnHand - @quantity, @stockItemId = Id
         """;
 
-    private readonly InventoryDbContext _dbContext;
-
-    public StockReserveCommandHandler(InventoryDbContext dbContext)
+    public override async Task<ICatResponse> HandleAsync(StockReserveCommand command, CancellationToken cancellationToken = default)
     {
-        _dbContext = dbContext;
-    }
-
-    public async Task<ICatResponse> HandleAsync(StockReserveCommand command, CancellationToken cancellationToken = default)
-    {
-        if (await _dbContext.StockReservations.AnyAsync(x => x.OrderNumber == command.OrderNumber, cancellationToken))
+        if (await DbContext.StockReservations.AnyAsync(x => x.OrderNumber == command.OrderNumber, cancellationToken))
         {
             return CatResponse.Ok();
         }
 
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+        await using var transaction = await DbContext.Database.BeginTransactionAsync(cancellationToken);
 
         try
         {
@@ -63,7 +57,7 @@ public class StockReserveCommandHandler : ICatCommandHandler<StockReserveCommand
                     return await NoStockAsync(line, command.OrderNumber, cancellationToken);
                 }
 
-                _dbContext.StockReservations.Add(new StockReservation
+                DbContext.StockReservations.Add(new StockReservation
                 {
                     StockItemId = stockItemId.Value,
                     OrderNumber = command.OrderNumber,
@@ -71,7 +65,7 @@ public class StockReserveCommandHandler : ICatCommandHandler<StockReserveCommand
                 });
             }
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await DbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
             return CatResponse.Ok();
         }
@@ -87,7 +81,7 @@ public class StockReserveCommandHandler : ICatCommandHandler<StockReserveCommand
     {
         var stockItemId = new SqlParameter("@stockItemId", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
-        await _dbContext.Database.ExecuteSqlRawAsync(
+        await DbContext.Database.ExecuteSqlRawAsync(
             TakeStockSql,
             [new SqlParameter("@isbn", line.Isbn), new SqlParameter("@quantity", line.Quantity), stockItemId],
             cancellationToken);
@@ -97,7 +91,7 @@ public class StockReserveCommandHandler : ICatCommandHandler<StockReserveCommand
 
     private async Task<ICatResponse> NoStockAsync(StockLine line, string orderNumber, CancellationToken cancellationToken)
     {
-        var known = await _dbContext.StockItems.AnyAsync(x => x.Isbn == line.Isbn, cancellationToken);
+        var known = await DbContext.StockItems.AnyAsync(x => x.Isbn == line.Isbn, cancellationToken);
 
         return known
             ? CatResponse.Conflict(InventoryErrorDefinitions.OutOfStock.CreateCatError(line.Isbn, orderNumber))

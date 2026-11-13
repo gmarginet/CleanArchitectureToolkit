@@ -3,12 +3,12 @@ using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Cat.Commands.Abstractions;
 using Cat.Db.Errors.SqlServer;
 using Cat.Demo.OrderService.CoreService;
 using Cat.Demo.OrderService.CoreService.Commands;
 using Cat.Demo.OrderService.DataModels.Entities;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
+using Cat.EFCore.Commands;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -21,25 +21,19 @@ namespace Cat.Demo.OrderService.Infrastructure.CommandHandlers;
 /// The counter row is increased and read back in one SQL statement, so two orders at the same moment never get the same number.
 /// If saving the order fails, the transaction rolls back and the counter goes back with it.
 /// </summary>
-public class OrderCreateCommandHandler : ICatCommandHandler<OrderCreateCommand, OrderCreated>
+public class OrderCreateCommandHandler(OrderDbContext dbContext)
+    : CatEfCommandHandlerBase<OrderDbContext, OrderCreateCommand, OrderCreated>(dbContext)
 {
     /// <summary>The order number has four digits for the counter.</summary>
     public const int DailyLimit = 9999;
 
     private const int MaximumAttempts = 3;
 
-    private readonly OrderDbContext _dbContext;
-
-    public OrderCreateCommandHandler(OrderDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
-    public async Task<ICatResponse<OrderCreated>> HandleAsync(OrderCreateCommand command, CancellationToken cancellationToken = default)
+    public override async Task<ICatResponse<OrderCreated>> HandleAsync(OrderCreateCommand command, CancellationToken cancellationToken = default)
     {
         var today = DateOnly.FromDateTime(command.PlacedAt);
 
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+        await using var transaction = await DbContext.Database.BeginTransactionAsync(cancellationToken);
 
         var counter = await TakeNextCounterAsync(today, cancellationToken);
         if (counter > DailyLimit)
@@ -62,8 +56,8 @@ public class OrderCreateCommandHandler : ICatCommandHandler<OrderCreateCommand, 
             ]
         };
 
-        _dbContext.Orders.Add(order);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        DbContext.Orders.Add(order);
+        await DbContext.SaveChangesAsync(cancellationToken);
         await transaction.CommitAsync(cancellationToken);
 
         return CatResponse.Ok(new OrderCreated(order.Id, order.OrderNumber));
@@ -84,7 +78,7 @@ public class OrderCreateCommandHandler : ICatCommandHandler<OrderCreateCommand, 
             // of them. That one goes around again and increases the row.
             try
             {
-                await _dbContext.Database.ExecuteSqlAsync(
+                await DbContext.Database.ExecuteSqlAsync(
                     $"INSERT INTO dbo.DailyOrderCounter (Id, [Date], LastNumber) VALUES ({Guid.NewGuid()}, {today}, 1)",
                     cancellationToken);
                 return 1;
@@ -99,9 +93,9 @@ public class OrderCreateCommandHandler : ICatCommandHandler<OrderCreateCommand, 
 
     private async Task<int?> IncrementAsync(DateOnly today, CancellationToken cancellationToken)
     {
-        var connection = _dbContext.Database.GetDbConnection();
+        var connection = DbContext.Database.GetDbConnection();
         await using var dbCommand = connection.CreateCommand();
-        dbCommand.Transaction = _dbContext.Database.CurrentTransaction!.GetDbTransaction();
+        dbCommand.Transaction = DbContext.Database.CurrentTransaction!.GetDbTransaction();
         dbCommand.CommandText =
             "UPDATE dbo.DailyOrderCounter SET LastNumber = LastNumber + 1 OUTPUT INSERTED.LastNumber WHERE [Date] = @date";
 

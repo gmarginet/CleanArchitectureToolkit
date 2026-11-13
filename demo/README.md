@@ -574,7 +574,7 @@ erDiagram
 | `Cat.Validators` | Core service | Rules for a book and for the price list request, with every problem returned at once. |
 | `Cat.Responses` | Everywhere | A result is either a value or a list of errors. No exceptions for business failures. |
 | `Cat.Minimal.Api` | Api | Maps service requests to endpoints and documents the responses. |
-| `Cat.EFCore` | DataModels and Infrastructure | Entity base classes, and the temporal price table. |
+| `Cat.EFCore` | DataModels and Infrastructure | Entity base classes, and the temporal price table from the SQL Server projects. The query and command handlers inherit the base handlers, so they only hold what is special about them. |
 | `Cat.Users` | Infrastructure (`Cat.Users.Abstractions`) and the host | The save handler asks `ICatUser` for the id that goes into `LastUpdatedBy`. The `admin` policy on the endpoint is the role check. |
 | `Cat.Expressions` | Api | Compiled member access that is reused. |
 
@@ -733,7 +733,7 @@ erDiagram
 | `Cat.EventAggregators` | Core service | In-process events. The workflow publishes, subscribers react, and neither knows the other. |
 | `Cat.ServiceRequests`, `Cat.Queries`, `Cat.Commands`, `Cat.Validators`, `Cat.Responses` | Core service | The same use case shape as Catalog. |
 | `Cat.Minimal.Api` | Api | Endpoints and OpenAPI. |
-| `Cat.EFCore` | DataModels and Infrastructure | Entities with `Guid` ids and sequence ids. |
+| `Cat.EFCore` | DataModels and Infrastructure | Entities with `Guid` ids and sequence ids. The handlers inherit the base query and command handlers. The order handler starts its own transaction. |
 | `Cat.Users` | Core service (`Cat.Users.Abstractions`) and the host | The handlers ask `ICatUser` who is calling. Customers see their own orders and an admin sees all of them. |
 | `Cat.Messaging`, `Cat.Messaging.AzureServiceBus`, `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore` | Contracts (the message), Infrastructure and Api | Publishes `OrderConfirmed` to the bus, and keeps the message in the outbox until it is sent. |
 | `Cat.Expressions` | Api | Compiled member access. |
@@ -814,6 +814,7 @@ erDiagram
 | Module | Where it is used | Why |
 |---|---|---|
 | `Cat.Commands` and `Cat.ServiceRequests` | Core service | The reserve and release requests end in commands. |
+| `Cat.EFCore.Commands` | Infrastructure | The command handlers inherit the base handler on the scaffolded `InventoryDbContext`. The reserve and release handlers start their own transaction. |
 | `Cat.Validators` | Core service | The order number, the lines, the ISBN and the quantity are checked before the command runs. |
 | `Cat.Responses` | Core service | Out of stock and unknown ISBN are error definitions, not exceptions. |
 | `Cat.Minimal.Api` | Api | Maps the two endpoints with the response types they may return. |

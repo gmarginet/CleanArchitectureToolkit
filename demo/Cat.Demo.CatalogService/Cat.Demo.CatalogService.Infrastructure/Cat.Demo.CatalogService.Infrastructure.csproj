@@ -6,7 +6,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\modules\Cat.Db.Errors\Cat.Db.Errors.SqlServer\Cat.Db.Errors.SqlServer.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Commands\Cat.EFCore.Commands.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Extensions\Cat.EFCore.Extensions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Extensions.SqlServer\Cat.EFCore.Extensions.SqlServer.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Queries\Cat.EFCore.Queries.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Users\Cat.Users.Abstractions\Cat.Users.Abstractions.csproj" />
       <ProjectReference Include="..\Cat.Demo.CatalogService.CoreService\Cat.Demo.CatalogService.CoreService.csproj" />
       <ProjectReference Include="..\Cat.Demo.CatalogService.DataModels\Cat.Demo.CatalogService.DataModels.csproj" />

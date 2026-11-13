@@ -5,29 +5,21 @@ using System.Threading.Tasks;
 using Cat.Demo.CatalogService.CoreService.Queries;
 using Cat.Demo.CatalogService.DataModels.Entities;
 using Cat.Demo.CatalogService.Infrastructure.DataAccess;
-using Cat.Queries.Abstractions;
+using Cat.EFCore.Queries;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cat.Demo.CatalogService.Infrastructure.QueryHandlers;
 
-public class BookSearchQueryHandler : ICatQueryHandler<BookSearchQuery, IList<Book>>
+public class BookSearchQueryHandler(CatalogDbContext dbContext)
+    : CatEfQueryHandlerBase<CatalogDbContext, BookSearchQuery, IList<Book>>(dbContext)
 {
-    private readonly CatalogDbContext _dbContext;
-
-    public BookSearchQueryHandler(CatalogDbContext dbContext)
+    public override async Task<ICatResponse<IList<Book>>> HandleAsync(BookSearchQuery query, CancellationToken cancellationToken = default)
     {
-        _dbContext = dbContext;
-    }
-
-    public async Task<ICatResponse<IList<Book>>> HandleAsync(BookSearchQuery query, CancellationToken cancellationToken = default)
-    {
-        var books = _dbContext.Books
-            .AsNoTracking()
+        IQueryable<Book> books = Set<Book>()
             .Include(x => x.Category)
-            .Include(x => x.BookPrice)
-            .AsQueryable();
+            .Include(x => x.BookPrice);
 
         if (query.CategoryId is not null)
         {

@@ -1,5 +1,5 @@
 using System;
-using Cat.EFCore.Entities;
+using Cat.EFCore.Entities.SqlServer;
 
 namespace Cat.Demo.CatalogService.DataModels.Entities;
 

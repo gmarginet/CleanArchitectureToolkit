@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Entities\Cat.EFCore.Entities.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Entities.SqlServer\Cat.EFCore.Entities.SqlServer.csproj" />
     </ItemGroup>
 
 </Project>

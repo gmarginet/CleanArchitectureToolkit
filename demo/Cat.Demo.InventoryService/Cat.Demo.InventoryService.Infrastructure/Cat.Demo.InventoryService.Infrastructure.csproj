@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\modules\Cat.Db.Errors\Cat.Db.Errors.SqlServer\Cat.Db.Errors.SqlServer.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Commands\Cat.EFCore.Commands.csproj" />
       <ProjectReference Include="..\Cat.Demo.InventoryService.CoreService\Cat.Demo.InventoryService.CoreService.csproj" />
     </ItemGroup>
 

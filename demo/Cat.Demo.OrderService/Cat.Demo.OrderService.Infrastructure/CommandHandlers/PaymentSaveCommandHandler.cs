@@ -1,37 +1,29 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Cat.Commands.Abstractions;
 using Cat.Demo.OrderService.CoreService.Commands;
 using Cat.Demo.OrderService.DataModels.Entities;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
+using Cat.EFCore.Commands;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 
 namespace Cat.Demo.OrderService.Infrastructure.CommandHandlers;
 
-public class PaymentSaveCommandHandler : ICatCommandHandler<PaymentSaveCommand>
+public class PaymentSaveCommandHandler(OrderDbContext dbContext, TimeProvider timeProvider)
+    : CatEfCommandHandlerBase<OrderDbContext, PaymentSaveCommand>(dbContext)
 {
-    private readonly OrderDbContext _dbContext;
-    private readonly TimeProvider _timeProvider;
-
-    public PaymentSaveCommandHandler(OrderDbContext dbContext, TimeProvider timeProvider)
+    public override async Task<ICatResponse> HandleAsync(PaymentSaveCommand command, CancellationToken cancellationToken = default)
     {
-        _dbContext = dbContext;
-        _timeProvider = timeProvider;
-    }
-
-    public async Task<ICatResponse> HandleAsync(PaymentSaveCommand command, CancellationToken cancellationToken = default)
-    {
-        _dbContext.Payments.Add(new Payment
+        DbContext.Payments.Add(new Payment
         {
             OrderId = command.OrderId,
             Amount = command.Amount,
             Status = command.Approved ? Payment.ApprovedStatus : Payment.DeclinedStatus,
-            PaidAt = command.Approved ? _timeProvider.GetUtcNow().UtcDateTime : null
+            PaidAt = command.Approved ? timeProvider.GetUtcNow().UtcDateTime : null
         });
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await DbContext.SaveChangesAsync(cancellationToken);
         return CatResponse.Ok();
     }
 }
