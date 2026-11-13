@@ -32,13 +32,12 @@
 # Plans for `Demo` <!-- omit in toc -->  
 
 <!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-demo)
+[![NOT STARTED](https://img.shields.io/badge/Status-NOT%20STARTED-blue)](#plans-for-demo)
 <!-- region end: StatusBadge-->
 
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 14](#phase-14)
 - [Phase 5](#phase-5)
 - [Phase 6](#phase-6)
 - [Phase 7](#phase-7)
@@ -49,50 +48,6 @@
 - [Phase 12](#phase-12)
 - [Phase 13](#phase-13)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 14-->
-## Phase 14
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-A better look for the React client, with Bootstrap.
-
-#### What exists today
-- The React client has a few CSS modules and `index.css`, and no UI library. The pages use plain HTML elements.
-- The tests of the client find elements by role and text, not by class.
-
-#### Needs
-The React client, which is built.
-
-#### Done when
-The client uses Bootstrap for its layout, navigation, buttons, tables, forms and alerts. The tests still pass.
-
-#### Decided
-- **Library.** Bootstrap, as plain CSS from npm. The page markup gets Bootstrap classes.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 15-->
-#### Question 15
-Should the client use React-Bootstrap or the plain Bootstrap classes?
-- **Plain classes.** One dependency, the markup stays plain HTML with classes. Bootstrap scripts, such as a dropdown, need extra code.
-- **React-Bootstrap.** Ready components, a second dependency, and the markup changes more.
-
-Recommendation: plain classes. The client needs few interactive parts, and the code stays easy to read.
-<!-- region end: Question 15-->
-
-<!-- region start: Question 16-->
-#### Question 16
-What happens to the existing CSS modules?
-- **Replace where Bootstrap does the job.** Keep only the small ones, such as the basket and the error message. Less custom CSS.
-- **Keep all of them.** No risk to the layout, but two styling systems side by side.
-
-Recommendation: replace where Bootstrap does the job, so there is one main styling system.
-<!-- region end: Question 16-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 14-->
 
 <!-- region start: Phase 5-->
 ## Phase 5
