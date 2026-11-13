@@ -1,12 +1,12 @@
 {
-  "openapi": "3.1.1",
+  "openapi": "3.2.0",
   "info": {
     "title": "Cat.Demo.PaymentService.Api | v1",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://localhost:5103/"
+      "url": "http://localhost:5103"
     }
   ],
   "paths": {
@@ -75,7 +75,7 @@
           },
           "amount": {
             "type": "number",
-            "format": "double"
+            "format": "decimal"
           }
         }
       },

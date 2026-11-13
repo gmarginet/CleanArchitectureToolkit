@@ -149,6 +149,25 @@ The demo has a script for this in every client project, such as `Refresh-Catalog
 ### Name the methods
 NSwag builds the method names of the generated client from the operation id of each endpoint. An endpoint without a name gets a generated one, such as `BooksGETAsync`. Name your endpoints with `WithName` in the service and the methods get clear names, such as `GetBookPricesAsync`. The readme of `Cat.Minimal.Api` explains it in [Name your endpoints](../Cat.Minimal.Api/README.md#name-your-endpoints).
 
+### Keep money a decimal
+The OpenAPI document of ASP.NET Core describes a `decimal` as a number with the format `double`, so NSwag generates a `double`. A cast back to `decimal` is not safe. On .NET 11, `(decimal)29.95d` gives `29.949999999999999289457264240`, where .NET 10 gave `29.95`.
+
+Tell the service to write the format `decimal`, and NSwag generates a `decimal`:
+
+```csharp
+builder.Services.AddOpenApi(options => options.AddSchemaTransformer((schema, context, _) =>
+{
+    if ((Nullable.GetUnderlyingType(context.JsonTypeInfo.Type) ?? context.JsonTypeInfo.Type) == typeof(decimal))
+    {
+        schema.Format = "decimal";
+    }
+
+    return Task.CompletedTask;
+}));
+```
+
+The Catalog and Payment services of the demo do this.
+
 ### Share the Contracts of a service
 By default the client has its own generated models, so the caller does not need the contracts of the other service. Sharing the `Contracts` project of the service is your choice. It saves the duplicate models, and it ties the caller to the contracts of the other service.
 

@@ -33,7 +33,7 @@ public class PaymentServiceProvider : IPaymentProvider
         try
         {
             var response = await CatApiCall.ExecuteAsync(
-                () => _paymentClient.TakePaymentAsync(new PaymentRequest { OrderNumber = orderNumber, Amount = (double)amount }, cancellationToken),
+                () => _paymentClient.TakePaymentAsync(new PaymentRequest { OrderNumber = orderNumber, Amount = amount }, cancellationToken),
                 ServiceName,
                 cancellationToken);
 

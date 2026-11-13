@@ -57,7 +57,7 @@ public class CatalogPriceProvider : IPriceProvider
             return Unexpected();
         }
 
-        return CatResponse.Ok<IReadOnlyDictionary<Guid, BookPrice>>(prices.ToDictionary(price => price.BookId, price => new BookPrice((decimal)price.Price, price.Isbn)));
+        return CatResponse.Ok<IReadOnlyDictionary<Guid, BookPrice>>(prices.ToDictionary(price => price.BookId, price => new BookPrice(price.Price, price.Isbn)));
     }
 
     private static ICatResponse<IReadOnlyDictionary<Guid, BookPrice>> Unexpected()

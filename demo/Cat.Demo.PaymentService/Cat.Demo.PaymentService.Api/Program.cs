@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 using Cat.Demo.PaymentService.CoreService;
 using Cat.Demo.ServiceDefaults;
@@ -6,7 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-builder.Services.AddOpenApi();
+// The default document describes a decimal as a double, and so does the generated client. Say decimal, so money stays decimal.
+builder.Services.AddOpenApi(options => options.AddSchemaTransformer((schema, context, _) =>
+{
+    if ((Nullable.GetUnderlyingType(context.JsonTypeInfo.Type) ?? context.JsonTypeInfo.Type) == typeof(decimal))
+    {
+        schema.Format = "decimal";
+    }
+
+    return Task.CompletedTask;
+}));
 
 // Numbers are numbers only, so the OpenAPI document describes the amount as a number and not as a number or a string.
 builder.Services.ConfigureHttpJsonOptions(options =>
