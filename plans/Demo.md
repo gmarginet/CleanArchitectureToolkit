@@ -133,6 +133,9 @@ Per module: the demo uses it and the readme says where.
 - **System user for jobs.** A price changed by a job gets the named system user, `CatUser.System`, see the [module readme of Cat.Users](../modules/Cat.Users/README.md). The seed of Catalog already does this.
 - **Inventory data access.** The EF Core scaffold only for now. Dapper waits for the `Cat.Dapper` module.
 - **Payment over messages.** A saga style payment over messages comes later, see [Cat.Sagas.md](Cat.Sagas.md). Until then the payment is an interface behind a generated client, and Orders keeps its state in the order status.
+- **Messages carry a token.** A message sent for a user carries the token of that user, and the Scheduler sends with a client credentials token, as the [module readme of Cat.EventProcessor](../modules/Cat.EventProcessor/README.md) and the [module readme of Cat.Messaging](../modules/Cat.Messaging/README.md) describe. The demo host implements `ICatTokenProvider` and registers `AddCatEventProcessorAuthorization`, so a listener builds the `ICatUser` from the token. This comes once `Cat.Users` and the sending side exist, and the demo is the place that proves the rule. The costs:
+  - The token sits in the queue, the dead letter queue and the outbox table, so it needs short lived tokens and a security review before production.
+  - The Keycloak realm needs a client for the system token.
 
 #### Known gaps for these showcases
 - **Refund.** Add a refund when payment becomes a message flow, see [Cat.Sagas.md](Cat.Sagas.md):
@@ -143,17 +146,6 @@ Per module: the demo uses it and the readme says where.
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 10-->
-#### Question 10
-Do messages carry a token in the demo when `Cat.Users` exists? The [module readme of Cat.EventProcessor](../modules/Cat.EventProcessor/README.md) and the [module readme of Cat.Messaging](../modules/Cat.Messaging/README.md) say that a message sent for a user carries the token of that user, and a message with a scheduled time carries the token of the sending system. The listener then builds the `ICatUser` from the token. The modules do this now, when the host implements `ICatTokenProvider` and registers `AddCatEventProcessorAuthorization`. The demo does neither yet. The options:
-- **Carry the token of the user,** and a client credentials token for the Scheduler, as decided. Cost: the token sits in the queue, the dead letter queue and the outbox table, so it needs short lived tokens, and a security review before production. The demo needs a client in the Keycloak realm for the system token.
-- **No token in the demo messages.** Cost: the demo does not show the identity rule. A handler that needs a user cannot be shown.
-
-Recommendation: carry the token, once `Cat.Users` and the sending side exist. It is the decided design, and the demo is the place that proves it. Until then, the handlers of the earlier phases need no user.
-
-##### Answer 10
-As recommended
-<!-- region end: Question 10-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 3-->
 
@@ -171,39 +163,18 @@ A sign-in page for the React client, so a person lands on a page of the demo bef
 - The demo users `alice`, `bob` and `admin` are in the demo readme with their passwords. The client has no sign-in page.
 
 #### Needs
-The React client, which is built. The answer to the open question on what the page holds.
+The React client, which is built.
 
 #### Done when
 A visitor who is not signed in sees the sign-in page. The button starts the login against `cat-demo-web`, and the return goes back to the page the person came from.
+
+#### Decided
+- **The page.** A page in the React app with a sign-in button that starts the Keycloak login. The app keeps its look, and the authorization code flow with PKCE stays. A themed Keycloak login form can come later if the form should match the demo.
+- **Demo users.** The page shows no demo users. A visitor reads the demo readme for the names and the passwords.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-What should the sign-in page be?
-- **A.** A page in the React app with a sign-in button that starts the Keycloak login. Cheap, and the app keeps the look.
-- **B.** A themed Keycloak login form, so the form itself looks like the demo. More work in the realm.
-- **C.** A form in the React app that takes the password itself. Not recommended, because the password would pass through the app and the authorization code flow with PKCE is lost.
-
-Recommendation: A first, B later if the form should match.
-
-##### Answer 1
-As recommended
-<!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-Does the sign-in page show the demo users `alice`, `bob` and `admin`, and where do they come from? The passwords are in the demo readme today. It only matters for option A or B of question 1. The options:
-- **Show them as buttons that fill the login hint.** A visitor picks a user and the Keycloak form opens with the name filled in. The list comes from the readme values, written into a constant of the app. Cost: the list and the realm can differ.
-- **Show a text only.** The page says where to find the users, with a link to the demo readme. Cost: one more click for a visitor.
-- **Show nothing.** Cost: a visitor must read the readme first.
-
-Recommendation: show them as buttons, but only in the Development environment, because the passwords are known and public. Keep the readme as the source and add a test that the list matches the realm file.
-
-##### Answer 2
-Show nothing.
-<!-- region end: Question 2-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 4-->
 
@@ -310,22 +281,11 @@ A user picks a language in the client, and the order confirmed mail arrives in t
 
 #### Decided
 - **Scope.** The phase supports translated mails and a client where the user selects the language.
+- **Languages.** Two: English as the default language and Dutch as the extra language. Two prove the mechanism, and a third adds work and nothing to learn.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 11-->
-#### Question 11
-Which languages does the demo support? Each one needs texts in the client, in the mails and in the Catalog data.
-- **Two,** English and one more, for example Dutch. Cost: the least work, and it shows the idea.
-- **Three or more.** Cost: more texts to write and keep in step, with little more to show.
-
-Recommendation: two. It proves the mechanism, and a third language adds work and nothing to learn.
-
-##### Answer 11
-As recommended, English as the default language, Dutch as the extra language
-<!-- region end: Question 11-->
-
 <!-- region start: Question 12-->
 #### Question 12
 How does the mail find the language of the customer? The `OrderConfirmed` message carries no language today.
