@@ -50,13 +50,13 @@
 A new module, `Cat.Scheduling`, with worker support that turns schedules into service requests.
 
 #### The idea
-Some work starts because time passed, not because someone asked. A nightly cleanup, a periodic import, an order that stays unpaid for 24 hours. The service project structure has a place for it: the optional `ServiceName.Scheduler` project.
+Some work starts because time passed, not because someone asked. A nightly cleanup, a periodic import, an order that stays unpaid for 24 hours. The service project structure has a place for it: the Scheduler, a module that the API switches on.
 
-`Cat.Scheduling` is the code behind that project. It runs on a schedule. Every run becomes a service request that the core handles. The worker holds no business logic.
+`Cat.Scheduling` is the code behind the Scheduler. It runs on a schedule. Every run becomes a service request that the core handles. The worker holds no business logic.
 
 #### Background
 From the readme:
-- The scheduler is a worker, not a host. It lives in its own project and runs inside the API.
+- The scheduler is a worker, not a host. It is a module that the API switches on, and it runs inside the API.
 - It runs work on a schedule, like a nightly cleanup or a periodic import. Every run triggers a service request.
 - It is optional.
 - In debug mode the API has a development endpoint group with a sub group per worker. The scheduler endpoint simulates a trigger.
@@ -79,7 +79,7 @@ From the architecture:
 - The module does not exist yet. It is listed in the repo overview of the readme with the status New.
 - The `CleanUpOrderCounters` service request exists in the contracts of Orders, with its handler and tests. The counter cleanup command handler uses `TimeProvider`.
 - Until the scheduler exists, the development endpoint `POST /development/scheduler/clean-up-order-counters` triggers the request. It only exists in the Development environment.
-- Orders has no `Scheduler` project yet, and the Notifications service does not exist.
+- Orders does not switch on the scheduler yet, and the Notifications service does not exist.
 - The Keycloak realm of the demo has no client for a client credentials token yet.
 - Nothing in the code uses a cron library such as `Cronos`.
 

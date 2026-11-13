@@ -65,7 +65,7 @@ Notifications and scheduling. The Notifications service and `Cat.Scheduling`. Th
 
 #### What exists today
 - The Notifications service does not exist. The demo readme lists it as planned, and the box in the drawing is hatched.
-- The `CleanUpOrderCounters` service request exists in Orders, with its handler and tests. The development endpoint `POST /development/scheduler/clean-up-order-counters` triggers it, in the Development environment only. Orders has no `Scheduler` project yet.
+- The `CleanUpOrderCounters` service request exists in Orders, with its handler and tests. The development endpoint `POST /development/scheduler/clean-up-order-counters` triggers it, in the Development environment only. Orders does not switch on the Scheduler yet.
 - The Keycloak realm has the clients `cat-demo-web` and `cat-demo-cli` only. It has no client for a client credentials token.
 - `Cat.Scheduling` does not exist yet. Its plan is [Cat.Scheduling.md](Cat.Scheduling.md). The plan recommends that a one-off timeout, such as the cancel after 24 hours, goes through a scheduled message of the bus and not through the Scheduler.
 
