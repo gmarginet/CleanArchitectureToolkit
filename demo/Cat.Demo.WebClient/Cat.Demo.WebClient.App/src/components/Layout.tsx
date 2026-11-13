@@ -1,5 +1,6 @@
 import { useAuth } from 'react-oidc-context'
-import { Link, Outlet, useLocation } from 'react-router'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router'
+import { loginPath, loginState } from '../auth/loginRoute'
 import { forgetSignedIn } from '../auth/silentSignIn'
 import { useIsAdmin } from '../auth/useIsAdmin'
 import { useBasket } from '../basket/useBasket'
@@ -16,6 +17,7 @@ export function Layout() {
   const basket = useBasket()
   const isAdmin = useIsAdmin()
   const location = useLocation()
+  const navigate = useNavigate()
   const user = auth.user?.profile
   const name = user?.name ?? user?.preferred_username ?? 'Signed in'
 
@@ -44,15 +46,17 @@ export function Layout() {
               </button>
             </>
           ) : (
-            <button
-              type="button"
-              disabled={auth.isLoading}
-              onClick={() =>
-                void auth.signinRedirect({ state: { returnTo: location.pathname + location.search } })
-              }
-            >
-              Log in
-            </button>
+            location.pathname !== loginPath && (
+              <button
+                type="button"
+                disabled={auth.isLoading}
+                onClick={() =>
+                  void navigate(loginPath, { state: loginState(location.pathname + location.search) })
+                }
+              >
+                Log in
+              </button>
+            )
           )}
         </nav>
       </header>

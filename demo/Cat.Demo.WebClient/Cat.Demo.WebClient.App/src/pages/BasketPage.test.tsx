@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router'
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { toApiError } from '../api/errors'
 import { BasketProvider } from '../basket/BasketProvider'
@@ -29,11 +29,18 @@ function order(value: object = {}) {
   } as never)
 }
 
+function LoginProbe() {
+  return <p data-testid="login-state">{(useLocation().state as { returnTo: string }).returnTo}</p>
+}
+
 function renderPage() {
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={['/basket']}>
       <BasketProvider>
-        <BasketPage />
+        <Routes>
+          <Route path="basket" element={<BasketPage />} />
+          <Route path="login" element={<LoginProbe />} />
+        </Routes>
       </BasketProvider>
     </MemoryRouter>,
   )
@@ -90,14 +97,15 @@ describe('BasketPage', () => {
     expect(mutate).toHaveBeenCalledWith([{ bookId: 'b1', quantity: 3 }], expect.any(Object))
   })
 
-  it('sends a visitor to the login and back to the basket', async () => {
+  it('sends a visitor to the login page and back to the basket', async () => {
     login(false)
     saveBasket([{ bookId: 'b1', title: 'Dune', price: 12.5, quantity: 1 }])
     renderPage()
 
     await userEvent.click(screen.getByRole('button', { name: 'Log in to place your order' }))
 
-    expect(signinRedirect).toHaveBeenCalledWith({ state: { returnTo: '/basket' } })
+    expect(screen.getByTestId('login-state')).toHaveTextContent('/basket')
+    expect(signinRedirect).not.toHaveBeenCalled()
     expect(mutate).not.toHaveBeenCalled()
   })
 

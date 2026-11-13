@@ -35,16 +35,6 @@ describe('OrdersPage', () => {
     login(true)
   })
 
-  it('asks to log in without a session', async () => {
-    login(false)
-    vi.mocked(useOrders).mockReturnValue({} as never)
-    render(<MemoryRouter><OrdersPage /></MemoryRouter>)
-
-    await userEvent.click(screen.getByRole('button', { name: 'Log in' }))
-
-    expect(signinRedirect).toHaveBeenCalledWith({ state: { returnTo: '/orders' } })
-  })
-
   it('lists the orders newest first', () => {
     vi.mocked(useOrders).mockReturnValue({
       isSuccess: true,

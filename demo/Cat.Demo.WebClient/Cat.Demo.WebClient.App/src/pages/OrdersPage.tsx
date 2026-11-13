@@ -10,22 +10,6 @@ export function OrdersPage() {
   const auth = useAuth()
   const orders = useOrders(auth.isAuthenticated)
 
-  if (!auth.isAuthenticated) {
-    return (
-      <>
-        <h1>My orders</h1>
-        <p>Log in to see your orders.</p>
-        <button
-          type="button"
-          disabled={auth.isLoading}
-          onClick={() => void auth.signinRedirect({ state: { returnTo: '/orders' } })}
-        >
-          Log in
-        </button>
-      </>
-    )
-  }
-
   const sorted = [...(orders.data ?? [])].sort((a, b) => (b.placedAt ?? '').localeCompare(a.placedAt ?? ''))
 
   return (

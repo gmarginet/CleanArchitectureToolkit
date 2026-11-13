@@ -71,9 +71,9 @@ What you can do today:
 - **Follow your orders.** See a list of your orders and open one to see its lines, its total and its status.
 - **Cancel an order.** Change your mind after ordering and cancel it.
 - **Get a confirmation mail.** When an order is confirmed, the customer gets a mail with the order number and the total. The mails are in English. The demo keeps them in a test inbox, so nothing leaves your machine.
-- **Log in.** Alice, Bob and the admin each have an account. You need to be logged in to place or follow orders. Anyone can browse the catalog without a login.
+- **Log in or register.** Alice, Bob and the admin each have an account. A new user can register on the login page and is logged in at once. You need to be logged in to place or follow orders. Anyone can browse the catalog without a login.
 - **Stay private.** A customer only sees their own orders. An admin sees all of them. Only an admin can add or change a book.
-- **Use the web shop.** Open the shop in the browser, search the books by text or category, open a book and log in. Put books in a basket and place an order. Follow your orders in the browser, and cancel one. An admin can add a book and change a book.
+- **Use the web shop.** Open the shop in the browser, search the books by text or category, open a book and log in on the login page. A new user registers there first. Put books in a basket and place an order. Follow your orders in the browser, and cancel one. An admin can add a book and change a book.
 
 What the shop does when something goes wrong:
 
@@ -323,7 +323,7 @@ In `Development` both services apply their EF Core migrations at startup. Catalo
 ### Things to know
 <!-- region start: ThingsToKnow-->
 
-- **Users.** Keycloak holds three users: `alice`, `bob` and `admin`. The password is the same as the name. Alice and Bob only see their own orders. The admin sees all orders and may save books. The Keycloak admin console at `http://localhost:8180` uses `admin` and `admin`. Use these settings in the demo only.
+- **Users.** Keycloak holds three users: `alice`, `bob` and `admin`. The password is the same as the name. Alice and Bob only see their own orders. The admin sees all orders and may save books. The Keycloak admin console at `http://localhost:8180` uses `admin` and `admin`. Use these settings in the demo only. A person who registers on the login page becomes a normal user, with no admin role. Keycloak does not check the email address, because the demo has no mail server for it.
 - **Tokens.** The `.http` files get a token from Keycloak with the password grant of the client `cat-demo-cli`. The gateway needs a valid token for everything except reading books and categories. The services check the token again, so a call straight to port 5101 or 5102 without a token gets a 401 too.
 - **Run without the AppHost.** Without the setting `Authentication:Authority` a service has no login. Orders then reads the `X-Demo-User` header (`alice` by default, `bob` or `admin`).
 - **Fakes for the other services.** Prices, stock, payment and the message bus are fakes only without the AppHost. Without a bus, Orders only logs the `OrderConfirmed` message, and Inventory and Notifications do not listen.
@@ -401,11 +401,12 @@ One chapter for every block that is built. A database sits in the chapter of the
 
 **How it works.**
 - It only talks to the API gateway.
-- The Log in button sends the browser to Keycloak. The login uses authorization code with PKCE (`react-oidc-context`). After the login the person is back on the page they came from, and the top bar shows their name.
+- The Log in button, the login button of the basket and a visit to the order pages or the admin pages without a login all lead to the login page at `/login`. The books and the basket stay open to everyone. A small guard, `RequireLogin`, protects the order pages and the admin pages. It waits while the app asks Keycloak for a token after a refresh.
+- The Log in button on the login page sends the browser to Keycloak. The login uses authorization code with PKCE (`react-oidc-context`). The page shows no demo users. A Register button opens the registration form of Keycloak (`prompt=create`), which the realm allows with `registrationAllowed`. After the login or the registration the person is back on the page they came from, and the top bar shows their name. The page to return to travels in the router state, and only a path inside the app counts.
 - The access token lives in memory only. A page refresh loses it, so the app asks Keycloak for a new token without showing the login page. This works while the Keycloak session lasts. A tab flag, kept in session storage, says that the person was logged in. It holds no token.
 - Every call to the gateway carries the token when a person is logged in. Catalog reads need none.
 - The basket lives in the local storage of the browser, so a refresh or the trip to the login does not empty it. A line holds the book, the title, the price of the list and the quantity from 1 to 50. A book without a price cannot be added.
-- Place order sends only the book and the quantity. The shop decides price, stock and payment. A visitor who is not logged in is sent to the login first and returns to the basket. After a success the screen shows the order number, status and total, and the basket is emptied. A failed order is never retried by the client, so nobody is charged twice by a retry.
+- Place order sends only the book and the quantity. The shop decides price, stock and payment. A visitor who is not logged in is sent to the login page first and returns to the basket. After a success the screen shows the order number, status and total, and the basket is emptied. A failed order is never retried by the client, so nobody is charged twice by a retry.
 - The order overview lists the orders of the person, newest first. The order detail shows the lines with the book titles, which come from the catalog, and a Cancel button that is always shown. The client holds no list of the statuses that allow a cancel. A refused cancel shows the message of the service, such as `DEM-ORD-1004`. Another person's order comes back as not found.
 - The admin screens `/admin/books/new` and `/admin/books/:id` hold a form for ISBN, title, author, category and price. The links to them show only when the ID token has the `admin` role in its `roles` claim. That only decides what the screen shows. The catalog checks the role again on every save, so a non admin who opens the address gets the 403 of the service. A duplicate ISBN shows `DEM-CTL-1000`.
 - A failed call shows its CAT errors: the code and the message with the arguments filled in, and the trace id. The validators put the field name in front of the arguments, and the client skips it. The basket stays, so the person can try again.

@@ -1,6 +1,7 @@
 import { useAuth } from 'react-oidc-context'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { usePlaceOrder } from '../api/orders'
+import { loginPath, loginState } from '../auth/loginRoute'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { QuantityInput } from '../components/QuantityInput'
 import { useBasket } from '../basket/useBasket'
@@ -11,6 +12,7 @@ export function BasketPage() {
   const basket = useBasket()
   const auth = useAuth()
   const placeOrder = usePlaceOrder()
+  const navigate = useNavigate()
 
   // The answer of the shop stays on the screen after the basket is emptied.
   if (placeOrder.isSuccess) {
@@ -35,7 +37,7 @@ export function BasketPage() {
   function submit() {
     if (!auth.isAuthenticated) {
       // The basket is kept in this browser, so it is still here after the login.
-      void auth.signinRedirect({ state: { returnTo: '/basket' } })
+      void navigate(loginPath, { state: loginState('/basket') })
       return
     }
     placeOrder.mutate(

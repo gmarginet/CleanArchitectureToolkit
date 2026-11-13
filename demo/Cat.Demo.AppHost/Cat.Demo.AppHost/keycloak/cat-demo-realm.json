@@ -2,7 +2,7 @@
     "realm":  "cat-demo",
     "enabled":  true,
     "sslRequired":  "none",
-    "registrationAllowed":  false,
+    "registrationAllowed":  true,
     "accessTokenLifespan":  3600,
     "roles":  {
                   "realm":  [

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router'
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { BasketProvider } from '../basket/BasketProvider'
 import { Layout } from './Layout'
@@ -21,11 +21,20 @@ function auth(value: object) {
   } as never)
 }
 
+function LoginProbe() {
+  return <p data-testid="login-state">{(useLocation().state as { returnTo: string }).returnTo}</p>
+}
+
 function renderLayout(path = '/books/b1?x=1') {
   render(
     <MemoryRouter initialEntries={[path]}>
       <BasketProvider>
-        <Layout />
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="login" element={path === '/login' ? <p>Login page</p> : <LoginProbe />} />
+            <Route path="*" element={<p>A page</p>} />
+          </Route>
+        </Routes>
       </BasketProvider>
     </MemoryRouter>,
   )
@@ -53,13 +62,21 @@ describe('Layout', () => {
     expect(screen.getByRole('link', { name: 'Basket (3)' })).toHaveAttribute('href', '/basket')
   })
 
-  it('offers a login that returns to the same page', async () => {
+  it('sends a visitor to the login page, with the page to return to', async () => {
     auth({})
     renderLayout()
 
     await userEvent.click(screen.getByRole('button', { name: 'Log in' }))
 
-    expect(signinRedirect).toHaveBeenCalledWith({ state: { returnTo: '/books/b1?x=1' } })
+    expect(screen.getByTestId('login-state')).toHaveTextContent('/books/b1?x=1')
+    expect(signinRedirect).not.toHaveBeenCalled()
+  })
+
+  it('shows no login button on the login page itself', () => {
+    auth({})
+    renderLayout('/login')
+
+    expect(screen.queryByRole('button', { name: 'Log in' })).not.toBeInTheDocument()
   })
 
   it('shows the name of the person and a logout', async () => {
