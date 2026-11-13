@@ -1,5 +1,6 @@
 ﻿using Cat.Responses.Abstractions;
 using Cat.Validators.Tests.Validators;
+using Cat.UnitTesting.Responses.NUnit;
 
 namespace Cat.Validators.Tests;
 
@@ -8,14 +9,14 @@ public class NullablePropertyRuleTests : ValidatorTestBase
 {
     private static void AssertSucceeded(ICatResponse result)
     {
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     private static void AssertFailed(ICatResponse result, string code, params object?[] arguments)
     {
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -273,7 +274,7 @@ public class NullablePropertyRuleTests : ValidatorTestBase
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())

@@ -3,6 +3,7 @@ using Cat.Commands.Decorators.Logging.Extensions;
 using Cat.Commands.Extensions;
 using Cat.Commands.Tests.Helpers;
 using Cat.UnitTesting.NUnit;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -69,7 +70,7 @@ public class LoggingDecoratorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new RegisterUserCommand("fail"));
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
         Assert.That(response.ErrorList, Has.Count.EqualTo(2));
     }
 
@@ -92,7 +93,7 @@ public class LoggingDecoratorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new CreateOrderCommand(Guid.NewGuid(), "fail"));
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
         var entries = Logs.Entries;
         Assert.That(entries[0].Message, Is.EqualTo("Start handling Command CreateOrderCommand"));
         Assert.That(entries.Skip(1).Select(e => e.Level), Is.All.EqualTo(LogLevel.Error));

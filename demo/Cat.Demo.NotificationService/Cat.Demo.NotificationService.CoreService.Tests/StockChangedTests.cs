@@ -6,6 +6,7 @@ using Cat.Expressions.Extensions;
 using Cat.UnitTesting.NUnit;
 using Cat.Validators.Abstractions;
 using Cat.Validators.Extensions;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cat.Demo.NotificationService.CoreService.Tests;
@@ -60,7 +61,7 @@ public class StockChangedTests : UnitTestBase
 
         Assert.Multiple(() =>
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(sender.Mails, Has.Count.EqualTo(1));
             Assert.That(sender.Mails[0].To, Is.EqualTo("boss@example.com"));
         });
@@ -76,7 +77,7 @@ public class StockChangedTests : UnitTestBase
 
         Assert.Multiple(() =>
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(sender.Mails, Is.Empty);
         });
     }
@@ -99,7 +100,7 @@ public class StockChangedTests : UnitTestBase
     {
         var response = await _validatorProcessor.ValidateAsync(Change(20, 18));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
     }
 
     [Test]
@@ -110,8 +111,8 @@ public class StockChangedTests : UnitTestBase
 
         Assert.Multiple(() =>
         {
-            Assert.That(insert.IsSucceeded, Is.True);
-            Assert.That(delete.IsSucceeded, Is.True);
+            Assert.That(insert, CatIs.Succeeded);
+            Assert.That(delete, CatIs.Succeeded);
         });
     }
 
@@ -125,7 +126,7 @@ public class StockChangedTests : UnitTestBase
     {
         var response = await _validatorProcessor.ValidateAsync(Change(oldQuantity, newQuantity, limit, isbn, warehouseId));
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
     }
 
     private sealed class FakeMailSender : IMailSender

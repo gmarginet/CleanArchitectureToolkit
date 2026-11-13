@@ -14,6 +14,10 @@ using Cat.FluentWorkflows.Commands.Extensions;
 using Cat.FluentWorkflows.Extensions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
+using Cat.UnitTesting.Commands;
+using Cat.UnitTesting.Queries;
+using Cat.UnitTesting.EventAggregators;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -27,19 +31,19 @@ public class ServiceRequestHandlerTests
     private FakeCommandProcessor _commandProcessor = null!;
     private FakeUser _currentUser = null!;
     private ICatEventAggregator _eventAggregator = null!;
-    private RecordingSubscriber _events = null!;
+    private RecordingSubscriber<IOrderEvent> _events = null!;
 
     [SetUp]
     public void SetUp()
     {
         _queryProcessor = new FakeQueryProcessor();
-        _commandProcessor = new FakeCommandProcessor();
+        _commandProcessor = new FakeCommandProcessor().Apply();
         _currentUser = new FakeUser();
 
         var services = new ServiceCollection();
         services.AddCatEventAggregatorsModule();
         _eventAggregator = services.BuildServiceProvider().GetRequiredService<ICatEventAggregator>();
-        _events = new RecordingSubscriber();
+        _events = new RecordingSubscriber<IOrderEvent>();
         _eventAggregator.Subscribe(_events);
     }
 
@@ -59,14 +63,14 @@ public class ServiceRequestHandlerTests
     public async Task OrderGet_ShouldMapTheOrderAndFilterOnTheCurrentUser()
     {
         var order = NewOrder();
-        _queryProcessor.Setup<OrderGetQuery, Order>(CatResponse.Ok(order));
+        _queryProcessor.Respond<OrderGetQuery, Order>(CatResponse.Ok(order));
         var handler = new OrderGetRequestHandler(_queryProcessor, _currentUser);
 
         var response = await handler.HandleAsync(new OrderGetRequest(order.Id));
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(response.Value!.OrderNumber, Is.EqualTo("20261105-0007"));
             Assert.That(response.Value!.Status, Is.EqualTo(OrderStatuses.PendingCode));
             Assert.That(response.Value!.Total, Is.EqualTo(25m));
@@ -80,7 +84,7 @@ public class ServiceRequestHandlerTests
     {
         _currentUser.IsAdmin = true;
         var order = NewOrder();
-        _queryProcessor.Setup<OrderGetQuery, Order>(CatResponse.Ok(order));
+        _queryProcessor.Respond<OrderGetQuery, Order>(CatResponse.Ok(order));
         var handler = new OrderGetRequestHandler(_queryProcessor, _currentUser);
 
         await handler.HandleAsync(new OrderGetRequest(order.Id));
@@ -91,12 +95,12 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task OrderGet_WhenTheOrderBelongsToSomeoneElse_ShouldPassNotFoundOn()
     {
-        _queryProcessor.Setup<OrderGetQuery, Order>(CatResponse.NotFound<Order>());
+        _queryProcessor.Respond<OrderGetQuery, Order>(CatResponse.NotFound<Order>());
         var handler = new OrderGetRequestHandler(_queryProcessor, _currentUser);
 
         var response = await handler.HandleAsync(new OrderGetRequest(Guid.NewGuid()));
 
-        Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.NotFound>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.NotFound));
     }
 
     [Test]
@@ -109,7 +113,7 @@ public class ServiceRequestHandlerTests
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.Unauthorized>());
+            Assert.That(response, CatIs.FailedWith(CatResponseType.Unauthorized));
             Assert.That(_queryProcessor.Queries, Is.Empty);
         }
     }
@@ -121,7 +125,7 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task OrderGetList_ShouldMapTheSummariesAndFilterOnTheCurrentUser()
     {
-        _queryProcessor.Setup<OrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([NewOrder(), NewOrder(OrderStatuses.ConfirmedCode)]));
+        _queryProcessor.Respond<OrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([NewOrder(), NewOrder(OrderStatuses.ConfirmedCode)]));
         var handler = new OrderGetListRequestHandler(_queryProcessor, _currentUser);
 
         var response = await handler.HandleAsync(new OrderGetListRequest());
@@ -137,7 +141,7 @@ public class ServiceRequestHandlerTests
     public async Task OrderGetList_AsAdmin_ShouldAskForAllOrders()
     {
         _currentUser.IsAdmin = true;
-        _queryProcessor.Setup<OrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([]));
+        _queryProcessor.Respond<OrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([]));
         var handler = new OrderGetListRequestHandler(_queryProcessor, _currentUser);
 
         await handler.HandleAsync(new OrderGetListRequest());
@@ -153,14 +157,14 @@ public class ServiceRequestHandlerTests
     public async Task CancelOrder_ShouldPublishTheCancelledEvent()
     {
         var order = NewOrder(OrderStatuses.ConfirmedCode);
-        _queryProcessor.Setup<OrderGetQuery, Order>(CatResponse.Ok(order));
+        _queryProcessor.Respond<OrderGetQuery, Order>(CatResponse.Ok(order));
         var handler = new CancelOrderRequestHandler(_queryProcessor, _eventAggregator, _currentUser);
 
         var response = await handler.HandleAsync(new CancelOrderRequest(order.Id));
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(_queryProcessor.Queries.Single(), Is.EqualTo(new OrderGetQuery(order.Id, "alice")));
             Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(order.Id, order.OrderNumber, OrderCancelReasons.CancelledByUser)));
         }
@@ -170,14 +174,14 @@ public class ServiceRequestHandlerTests
     public async Task CancelOrder_WhenAlreadyCancelled_ShouldReturnConflict()
     {
         var order = NewOrder(OrderStatuses.CancelledCode);
-        _queryProcessor.Setup<OrderGetQuery, Order>(CatResponse.Ok(order));
+        _queryProcessor.Respond<OrderGetQuery, Order>(CatResponse.Ok(order));
         var handler = new CancelOrderRequestHandler(_queryProcessor, _eventAggregator, _currentUser);
 
         var response = await handler.HandleAsync(new CancelOrderRequest(order.Id));
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.Conflict>());
+            Assert.That(response, CatIs.FailedWith(CatResponseType.Conflict));
             Assert.That(response.ErrorList.Single().Code, Is.EqualTo(OrderErrorDefinitions.CannotCancel.Code));
             Assert.That(_events.Events, Is.Empty);
         }
@@ -186,14 +190,14 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task CancelOrder_WhenTheOrderBelongsToSomeoneElse_ShouldReturnNotFoundAndPublishNothing()
     {
-        _queryProcessor.Setup<OrderGetQuery, Order>(CatResponse.NotFound<Order>());
+        _queryProcessor.Respond<OrderGetQuery, Order>(CatResponse.NotFound<Order>());
         var handler = new CancelOrderRequestHandler(_queryProcessor, _eventAggregator, _currentUser);
 
         var response = await handler.HandleAsync(new CancelOrderRequest(Guid.NewGuid()));
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.NotFound>());
+            Assert.That(response, CatIs.FailedWith(CatResponseType.NotFound));
             Assert.That(_events.Events, Is.Empty);
         }
     }
@@ -211,7 +215,7 @@ public class ServiceRequestHandlerTests
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Succeeded.NoContent>());
+            Assert.That(response, CatIs.SucceededWith(CatResponseType.NoContent));
             Assert.That(_commandProcessor.Of<OrderCountersCleanUpCommand>().Count(), Is.EqualTo(1));
         }
     }
@@ -219,12 +223,12 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task CleanUpOrderCounters_WhenTheCommandFails_ShouldPassTheFailureOn()
     {
-        _commandProcessor.Responses[typeof(OrderCountersCleanUpCommand)] = CatResponse.InternalServerError();
+        _commandProcessor.Respond<OrderCountersCleanUpCommand>(CatResponse.InternalServerError());
         var handler = new CleanUpOrderCountersRequestHandler(_commandProcessor);
 
         var response = await handler.HandleAsync(new CleanUpOrderCountersRequest());
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
     }
 
     #endregion CleanUpOrderCounters
@@ -242,14 +246,14 @@ public class ServiceRequestHandlerTests
         var now = new DateTimeOffset(2026, 11, 13, 12, 0, 0, TimeSpan.Zero);
         var first = NewOrder();
         var second = NewOrder();
-        _queryProcessor.Setup<StuckOrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([first, second]));
+        _queryProcessor.Respond<StuckOrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([first, second]));
         var handler = new CancelStuckOrdersRequestHandler(_queryProcessor, _eventAggregator, new FixedTimeProvider(now));
 
         var response = await handler.HandleAsync(new CancelStuckOrdersRequest());
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Succeeded.NoContent>());
+            Assert.That(response, CatIs.SucceededWith(CatResponseType.NoContent));
             Assert.That(_queryProcessor.Queries.Single(), Is.EqualTo(new StuckOrderGetListQuery(now.UtcDateTime.AddMinutes(-15))));
             Assert.That(_events.Events.OfType<OrderCancelledEvent>().Select(x => x.OrderId), Is.EqualTo(new[] { first.Id, second.Id }));
             Assert.That(_events.Events.OfType<OrderCancelledEvent>().All(x => x.Reason == OrderCancelReasons.PendingTooLong), Is.True);
@@ -259,14 +263,14 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task CancelStuckOrders_WithoutStuckOrders_ShouldPublishNothing()
     {
-        _queryProcessor.Setup<StuckOrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([]));
+        _queryProcessor.Respond<StuckOrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([]));
         var handler = new CancelStuckOrdersRequestHandler(_queryProcessor, _eventAggregator, TimeProvider.System);
 
         var response = await handler.HandleAsync(new CancelStuckOrdersRequest());
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(_events.Events, Is.Empty);
         }
     }
@@ -274,14 +278,14 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task CancelStuckOrders_WhenTheQueryFails_ShouldPassTheFailureOn()
     {
-        _queryProcessor.Setup<StuckOrderGetListQuery, IList<Order>>(CatResponse.InternalServerError<IList<Order>>());
+        _queryProcessor.Respond<StuckOrderGetListQuery, IList<Order>>(CatResponse.InternalServerError<IList<Order>>());
         var handler = new CancelStuckOrdersRequestHandler(_queryProcessor, _eventAggregator, TimeProvider.System);
 
         var response = await handler.HandleAsync(new CancelStuckOrdersRequest());
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsFailed, Is.True);
+            Assert.That(response, CatIs.Failed);
             Assert.That(_events.Events, Is.Empty);
         }
     }
@@ -323,7 +327,7 @@ public class ServiceRequestHandlerTests
     public async Task PlaceOrder_ShouldRunTheWorkflowAndReturnTheCreatedOrder()
     {
         var order = NewOrder(OrderStatuses.ConfirmedCode);
-        _queryProcessor.Setup<OrderGetQuery, Order>(CatResponse.Ok(order));
+        _queryProcessor.Respond<OrderGetQuery, Order>(CatResponse.Ok(order));
         using var provider = NewWorkflowProvider();
         var handler = NewPlaceOrderHandler(provider);
 
@@ -331,7 +335,7 @@ public class ServiceRequestHandlerTests
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Succeeded.Created>());
+            Assert.That(response, CatIs.SucceededWith(CatResponseType.Created));
             Assert.That(response.Value!.Status, Is.EqualTo(OrderStatuses.ConfirmedCode));
             Assert.That(_queryProcessor.Queries.Single(), Is.EqualTo(new OrderGetQuery(_commandProcessor.Of<OrderCreateCommand>().Single().OrderId, "alice")));
             Assert.That(_events.Events.Single(), Is.TypeOf<OrderConfirmedEvent>());
@@ -348,7 +352,7 @@ public class ServiceRequestHandlerTests
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.BadRequest>());
+            Assert.That(response, CatIs.FailedWith(CatResponseType.BadRequest));
             Assert.That(response.ErrorList.Single().Code, Is.EqualTo(OrderErrorDefinitions.OutOfStock.Code));
             Assert.That(_queryProcessor.Queries, Is.Empty);
         }
@@ -365,7 +369,7 @@ public class ServiceRequestHandlerTests
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.Unauthorized>());
+            Assert.That(response, CatIs.FailedWith(CatResponseType.Unauthorized));
             Assert.That(_commandProcessor.Commands, Is.Empty);
         }
     }

@@ -4,6 +4,7 @@ using Cat.Commands.Tests.Helpers;
 using Cat.Decorators.Abstractions;
 using Cat.UnitTesting.NUnit;
 using Cat.Responses.Abstractions;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -38,7 +39,7 @@ public class CommandProcessorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new RegisterUserCommand("anna"));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
         Assert.That(Recorder.Calls.Select(c => c.Name), Is.EqualTo(new[] { "anna" }));
     }
 
@@ -47,8 +48,7 @@ public class CommandProcessorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new RegisterUserCommand("fail"));
 
-        Assert.That(response.IsFailed, Is.True);
-        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.BadRequest>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.BadRequest));
         Assert.That(response.ErrorList.Select(e => e.Code), Is.EqualTo(new[] { "USR-1", "USR-2" }));
     }
 
@@ -83,7 +83,7 @@ public class CommandProcessorTests : UnitTestBase
     {
         var response = Processor.Process(new RegisterUserCommand("anna"));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
         Assert.That(Recorder.Calls, Has.Count.EqualTo(1));
     }
 
@@ -92,7 +92,7 @@ public class CommandProcessorTests : UnitTestBase
     {
         var response = Processor.Process(new RegisterUserCommand("fail"));
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
     }
 
     [Test]
@@ -112,7 +112,7 @@ public class CommandProcessorTests : UnitTestBase
 
         var response = await Processor.ProcessAsync(new CreateOrderCommand(orderId, "anna"));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
         Assert.That(response.Value, Is.EqualTo(new OrderCreated(orderId, 42)));
         Assert.That(Recorder.Calls.Select(c => c.Name), Is.EqualTo(new[] { "anna" }));
     }
@@ -122,8 +122,7 @@ public class CommandProcessorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new CreateOrderCommand(Guid.NewGuid(), "fail"));
 
-        Assert.That(response.IsFailed, Is.True);
-        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.BadRequest>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.BadRequest));
         Assert.That(response.ErrorList.Select(e => e.Code), Is.EqualTo(new[] { "ORD-1" }));
     }
 
@@ -160,7 +159,7 @@ public class CommandProcessorTests : UnitTestBase
 
         var response = Processor.Process(new CreateOrderCommand(orderId, "anna"));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
         Assert.That(response.Value!.OrderId, Is.EqualTo(orderId));
     }
 

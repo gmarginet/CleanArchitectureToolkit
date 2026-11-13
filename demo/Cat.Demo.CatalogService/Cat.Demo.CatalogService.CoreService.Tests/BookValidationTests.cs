@@ -8,6 +8,10 @@ using Cat.Responses.Abstractions;
 using Cat.Validators;
 using Cat.Validators.Abstractions;
 using Cat.Validators.Extensions;
+using Cat.UnitTesting.Queries;
+using Cat.Demo.CatalogService.CoreService.Queries;
+using Cat.Responses;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cat.Demo.CatalogService.CoreService.Tests;
@@ -19,6 +23,8 @@ public class BookValidationTests : UnitTestBase
 
     private readonly FakeQueryProcessor _queryProcessor = new();
     private ICatValidatorProcessor _validatorProcessor = null!;
+
+    private List<CheckIsbnExistsQuery> IsbnQueries => _queryProcessor.Of<CheckIsbnExistsQuery>().ToList();
 
     // Fully qualified, because the namespace Cat.ServiceCollection.Extensions is in scope through the Api project.
     protected override void ConfigureServices(Microsoft.Extensions.DependencyInjection.ServiceCollection services)
@@ -38,6 +44,7 @@ public class BookValidationTests : UnitTestBase
     public void SetUp()
     {
         _queryProcessor.Reset();
+        _queryProcessor.Respond<CheckIsbnExistsQuery, bool>(CatResponse.Ok(false));
     }
 
     private static BookModel NewBook(Guid? id = null, string isbn = Isbn, decimal? price = 10m) => new()
@@ -54,7 +61,7 @@ public class BookValidationTests : UnitTestBase
     {
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsFailed, Is.True);
+            Assert.That(response, CatIs.Failed);
             Assert.That(response.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -71,13 +78,13 @@ public class BookValidationTests : UnitTestBase
     {
         var result = await _validatorProcessor.ValidateAsync(NewBook());
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
     public async Task Isbn_InUse_ShouldFail()
     {
-        _queryProcessor.IsbnExists = true;
+        _queryProcessor.Respond<CheckIsbnExistsQuery, bool>(CatResponse.Ok(true));
 
         var result = await _validatorProcessor.ValidateAsync(NewBook());
 
@@ -87,7 +94,7 @@ public class BookValidationTests : UnitTestBase
     [Test]
     public async Task Isbn_InUse_ThroughSaveRequest_ShouldPrefixTheFieldName()
     {
-        _queryProcessor.IsbnExists = true;
+        _queryProcessor.Respond<CheckIsbnExistsQuery, bool>(CatResponse.Ok(true));
 
         var result = await _validatorProcessor.ValidateAsync(new BookSaveRequest(NewBook()));
 
@@ -99,11 +106,11 @@ public class BookValidationTests : UnitTestBase
     {
         await _validatorProcessor.ValidateAsync(NewBook());
 
-        Assert.That(_queryProcessor.IsbnQueries, Has.Count.EqualTo(1));
+        Assert.That(IsbnQueries, Has.Count.EqualTo(1));
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(_queryProcessor.IsbnQueries[0].Isbn, Is.EqualTo(Isbn));
-            Assert.That(_queryProcessor.IsbnQueries[0].ExcludeBookId, Is.Null);
+            Assert.That(IsbnQueries[0].Isbn, Is.EqualTo(Isbn));
+            Assert.That(IsbnQueries[0].ExcludeBookId, Is.Null);
         }
     }
 
@@ -114,8 +121,8 @@ public class BookValidationTests : UnitTestBase
 
         await _validatorProcessor.ValidateAsync(NewBook(bookId));
 
-        Assert.That(_queryProcessor.IsbnQueries, Has.Count.EqualTo(1));
-        Assert.That(_queryProcessor.IsbnQueries[0].ExcludeBookId, Is.EqualTo(bookId));
+        Assert.That(IsbnQueries, Has.Count.EqualTo(1));
+        Assert.That(IsbnQueries[0].ExcludeBookId, Is.EqualTo(bookId));
     }
 
     [Test]
@@ -125,8 +132,8 @@ public class BookValidationTests : UnitTestBase
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(_queryProcessor.IsbnQueries, Is.Empty);
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(IsbnQueries, Is.Empty);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList.Select(e => e.Code), Does.Contain(CatValidatorErrorDefinitions.NotEmpty.Code));
         }
     }
@@ -142,7 +149,7 @@ public class BookValidationTests : UnitTestBase
     [Test]
     public async Task Isbn_LookupFails_ShouldThrow()
     {
-        _queryProcessor.FailLookup = true;
+        _queryProcessor.Respond<CheckIsbnExistsQuery, bool>(CatResponse.InternalServerError<bool>());
 
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await _validatorProcessor.ValidateAsync(NewBook()));
@@ -157,7 +164,7 @@ public class BookValidationTests : UnitTestBase
     {
         var result = await _validatorProcessor.ValidateAsync(NewBook(price: null));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -165,7 +172,7 @@ public class BookValidationTests : UnitTestBase
     {
         var result = await _validatorProcessor.ValidateAsync(NewBook(price: 0m));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -210,7 +217,7 @@ public class BookValidationTests : UnitTestBase
 
         var result = await _validatorProcessor.ValidateAsync(request);
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]

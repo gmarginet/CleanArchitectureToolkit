@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using Cat.Validators.Tests.Validators;
+using Cat.UnitTesting.Responses.NUnit;
 
 namespace Cat.Validators.Tests;
 
@@ -14,7 +15,7 @@ public class MatchesRegexNullTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_PropertyStringMatchesRegexValidator(null!));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -22,7 +23,7 @@ public class MatchesRegexNullTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_PropertyStringMatchesRegexWithFuncValidator(null!, new Regex("^x")));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -30,7 +31,7 @@ public class MatchesRegexNullTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_PropertyStringMatchesRegexWithPatternValidator(null!));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -38,7 +39,7 @@ public class MatchesRegexNullTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_PropertyStringMatchesRegexWithPatternAndOptionsValidator(null!));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -46,7 +47,7 @@ public class MatchesRegexNullTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_PropertyStringMatchesRegexWithPatternFuncValidator(null!, "^x"));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -54,7 +55,7 @@ public class MatchesRegexNullTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_PropertyStringMatchesRegexWithPatternFuncAndOptionsValidator(null!, "^x"));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -62,6 +63,6 @@ public class MatchesRegexNullTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_PropertyStringMatchesRegexWithPatternValidator("Mike"));
 
-        Assert.That(result.IsFailed, Is.True);
+        Assert.That(result, CatIs.Failed);
     }
 }

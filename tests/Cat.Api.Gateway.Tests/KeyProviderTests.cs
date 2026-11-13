@@ -5,19 +5,13 @@ using Cat.Api.Gateway.Tests.Helpers;
 using Cat.Api.Gateway.Verification;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Time.Testing;
 
 namespace Cat.Api.Gateway.Tests;
 
 [TestFixture]
 public class KeyProviderTests
 {
-    private sealed class FakeTime : TimeProvider
-    {
-        public DateTimeOffset Now { get; set; } = new(2026, 11, 6, 12, 0, 0, TimeSpan.Zero);
-
-        public override DateTimeOffset GetUtcNow() => Now;
-    }
-
     private sealed class StubHandler : HttpMessageHandler
     {
         public int Calls { get; private set; }
@@ -50,7 +44,7 @@ public class KeyProviderTests
     }
 
     private StubHandler _handler = null!;
-    private FakeTime _time = null!;
+    private FakeTimeProvider _time = null!;
     private CatGatewaySigningKeys _gatewayKeys = null!;
     private string _keyId = null!;
 
@@ -62,7 +56,7 @@ public class KeyProviderTests
             new DevelopmentEnvironment(),
             NullLogger<CatGatewaySigningKeys>.Instance);
         _handler = new StubHandler { Body = _gatewayKeys.GetJwks() };
-        _time = new FakeTime();
+        _time = new FakeTimeProvider(new DateTimeOffset(2026, 11, 6, 12, 0, 0, TimeSpan.Zero));
         _keyId = new Microsoft.IdentityModel.JsonWebTokens.JsonWebToken(_gatewayKeys.GetAssertion("catalog")).Kid;
     }
 
@@ -99,7 +93,7 @@ public class KeyProviderTests
         using var provider = Provider();
         await provider.GetKeysAsync(_keyId, CancellationToken.None);
 
-        _time.Now += TimeSpan.FromMinutes(11);
+        _time.Advance(TimeSpan.FromMinutes(11));
         await provider.GetKeysAsync(_keyId, CancellationToken.None);
 
         Assert.That(_handler.Calls, Is.EqualTo(2));
@@ -114,7 +108,7 @@ public class KeyProviderTests
         await provider.GetKeysAsync("unknown", CancellationToken.None);
         Assert.That(_handler.Calls, Is.EqualTo(1), "Too soon after the last download.");
 
-        _time.Now += TimeSpan.FromSeconds(31);
+        _time.Advance(TimeSpan.FromSeconds(31));
         await provider.GetKeysAsync("unknown", CancellationToken.None);
         await provider.GetKeysAsync("unknown", CancellationToken.None);
         Assert.That(_handler.Calls, Is.EqualTo(2));
@@ -127,7 +121,7 @@ public class KeyProviderTests
         await provider.GetKeysAsync(_keyId, CancellationToken.None);
 
         _handler.Fail = true;
-        _time.Now += TimeSpan.FromMinutes(11);
+        _time.Advance(TimeSpan.FromMinutes(11));
         var keys = await provider.GetKeysAsync(_keyId, CancellationToken.None);
 
         Assert.That(keys, Has.Count.EqualTo(1));

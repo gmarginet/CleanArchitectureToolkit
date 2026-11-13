@@ -4,6 +4,7 @@ using Cat.Responses.Abstractions;
 using Cat.ServiceRequests.Abstractions;
 using Cat.ServiceRequests.Extensions;
 using Cat.ServiceRequests.Tests.Helpers;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cat.ServiceRequests.Tests;
@@ -35,7 +36,7 @@ public class ServiceRequestProcessorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new CreateOrderRequest("book"));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
         Assert.That(Recorder.Calls.Select(c => c.Request), Is.EqualTo(new[] { "CreateOrderRequest:book" }));
     }
 
@@ -44,7 +45,7 @@ public class ServiceRequestProcessorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new CreateOrderRequest("fail"));
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
         Assert.That(response.ErrorList.Single().Code, Is.EqualTo("ORD-1"));
     }
 
@@ -79,7 +80,7 @@ public class ServiceRequestProcessorTests : UnitTestBase
     {
         var response = Processor.Process(new CreateOrderRequest("book"));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
     }
 
     [Test]
@@ -97,7 +98,7 @@ public class ServiceRequestProcessorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new GetOrderRequest(5));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
         Assert.That(response.Value, Is.EqualTo("order:5"));
     }
 
@@ -106,8 +107,7 @@ public class ServiceRequestProcessorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new GetOrderRequest(404));
 
-        Assert.That(response.IsFailed, Is.True);
-        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.NotFound>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.NotFound));
         Assert.That(response.ErrorList.Single().Code, Is.EqualTo("ORD-404"));
     }
 

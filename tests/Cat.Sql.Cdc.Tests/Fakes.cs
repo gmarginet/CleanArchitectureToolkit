@@ -86,17 +86,3 @@ internal sealed class RecordingSink : ICatChangeSink
         return Task.CompletedTask;
     }
 }
-
-internal sealed class RecordingSender : ICatMessageSender
-{
-    public List<ICatEventMessage> Published { get; } = [];
-
-    public Task PublishAsync(ICatEventMessage message, DateTimeOffset? scheduledAt = null, CancellationToken cancellationToken = default)
-    {
-        Published.Add(message);
-        return Task.CompletedTask;
-    }
-
-    public Task SendAsync(ICatCommandMessage message, DateTimeOffset? scheduledAt = null, CancellationToken cancellationToken = default)
-        => throw new NotSupportedException();
-}

@@ -4,6 +4,8 @@ using Cat.Demo.InventoryService.CoreService.Commands;
 using Cat.Demo.InventoryService.CoreService.ServiceRequestHandlers;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
+using Cat.UnitTesting.Commands;
+using Cat.UnitTesting.Responses.NUnit;
 
 namespace Cat.Demo.InventoryService.CoreService.Tests;
 
@@ -37,7 +39,7 @@ public class StockRequestHandlerTests
         var command = (StockReserveCommand)_commandProcessor.Commands.Single();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(command.OrderNumber, Is.EqualTo("20261106-0001"));
             Assert.That(command.Lines, Is.EqualTo(new[] { new StockLine(IsbnA, 2), new StockLine(IsbnB, 1) }));
         }
@@ -57,14 +59,14 @@ public class StockRequestHandlerTests
     [Test]
     public async Task Reserve_WhenTheCommandFails_ShouldPassTheFailureOn()
     {
-        _commandProcessor.Response = CatResponse.Conflict(InventoryErrorDefinitions.OutOfStock.CreateCatError(IsbnA, "20261106-0001"));
+        _commandProcessor.DefaultResponse = CatResponse.Conflict(InventoryErrorDefinitions.OutOfStock.CreateCatError(IsbnA, "20261106-0001"));
         var handler = new StockReserveRequestHandler(_commandProcessor);
 
         var response = await handler.HandleAsync(Reserve((IsbnA, 51)));
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.Conflict>());
+            Assert.That(response, CatIs.FailedWith(CatResponseType.Conflict));
             Assert.That(response.ErrorList.Single().Code, Is.EqualTo(InventoryErrorDefinitions.OutOfStock.Code));
         }
     }
@@ -78,7 +80,7 @@ public class StockRequestHandlerTests
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(_commandProcessor.Commands.Single(), Is.EqualTo(new StockReleaseCommand("20261106-0001")));
         }
     }

@@ -4,6 +4,7 @@ using Cat.ServiceRequests.Abstractions;
 using Cat.ServiceRequests.Decorators.ActivitySource.Extensions;
 using Cat.ServiceRequests.Extensions;
 using Cat.ServiceRequests.Tests.Helpers;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cat.ServiceRequests.Tests;
@@ -112,7 +113,7 @@ public class ActivitySourceDecoratorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new GetOrderRequest(404));
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
         Assert.That(response.ErrorList.Single().Code, Is.EqualTo("ORD-404"));
     }
 
@@ -123,7 +124,7 @@ public class ActivitySourceDecoratorTests : UnitTestBase
 
         var response = await Processor.ProcessAsync(new CreateOrderRequest("book"));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
         Assert.That(_started, Is.Empty);
     }
 }

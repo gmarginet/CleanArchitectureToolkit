@@ -206,6 +206,7 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 | Scheduler | `Cat.Scheduling` and `Cat.Scheduling.EFCore` (Orders and Inventory) |
 | EventProcessor | `Cat.EventProcessor` (Inventory and Notifications) |
 | Users | `Cat.Users.Abstractions` in the core service and the infrastructure, `Cat.Users` and `Cat.Users.JwtBearer` in the host |
+| Core service tests | `Cat.UnitTesting.Commands`, `Cat.UnitTesting.Queries` and `Cat.UnitTesting.NUnit` |
 | Everywhere | `Cat.Expressions` |
 
 The [building blocks](#building-blocks) explain where each module is used and why.
@@ -363,6 +364,8 @@ Run all tests of the repository, including the demo tests:
 ```
 dotnet cake --target=Test
 ```
+
+The unit tests of a service sit in its `CoreService.Tests` project. They use the fake processors of `Cat.UnitTesting` instead of a database.
 <!-- region end: RunTheTests-->
 <!-- region end: HowToRun-->
 
@@ -600,6 +603,7 @@ erDiagram
 | `Cat.EFCore` | DataModels and Infrastructure | Entity base classes, and the temporal price table from the SQL Server projects. The query and command handlers inherit the base handlers, so they only hold what is special about them. |
 | `Cat.Users` | Infrastructure (`Cat.Users.Abstractions`) and the host | The save handler asks `ICatUser` for the id that goes into `LastUpdatedBy`. The `admin` policy on the endpoint is the role check. |
 | `Cat.Expressions` | Api | Compiled member access that is reused. |
+| `Cat.UnitTesting.Commands`, `Cat.UnitTesting.Queries` and `Cat.UnitTesting.NUnit` | Core service tests | `FakeCommandProcessor` and `FakeQueryProcessor` stand in for the processors, and `UnitTestBase` builds the service provider of the validation tests. |
 
 **Pros.**
 - Every use case has the same shape, so a new one is easy to add.
@@ -762,6 +766,7 @@ erDiagram
 | `Cat.Users` | Core service (`Cat.Users.Abstractions`) and the host | The handlers ask `ICatUser` who is calling. Customers see their own orders and an admin sees all of them. |
 | `Cat.Messaging`, `Cat.Messaging.AzureServiceBus`, `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore` | Contracts (the message), Infrastructure and Api | Publishes `OrderConfirmed` to the bus, and keeps the message in the outbox until it is sent. |
 | `Cat.Expressions` | Api | Compiled member access. |
+| `Cat.UnitTesting.Commands`, `Cat.UnitTesting.Queries` and `Cat.UnitTesting.NUnit` | Core service tests | The fake processors replace the database. `OrderCommandDefaults` sets the ids that the real handlers hand out, and `UnitTestBase` builds the service provider of the workflow and validation tests. |
 
 **Pros.**
 - The business process is one readable class.
@@ -852,6 +857,7 @@ erDiagram
 | `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` | Api | The connection to the bus and the name of the topic. |
 | `Cat.Scheduling` and `Cat.Scheduling.EFCore` | Api and Infrastructure | The nightly low stock report job. The runs are claimed in the table `CatJobRun`. |
 | `Cat.Sql.Cdc`, `Cat.Sql.Cdc.Abstractions` and `Cat.Sql.Cdc.Messaging` | Api and Core service | Reads the changes of the stock table from the change data capture of SQL Server and sends each as a `StockChanged` message. The core service only references the abstractions, for the change type of the mapping. |
+| `Cat.UnitTesting.Commands` and `Cat.UnitTesting.NUnit` | Core service tests | `FakeCommandProcessor` stands in for the command processor, and `UnitTestBase` builds the service provider of the validation tests. |
 
 The service uses no entity base classes. It shows that you use only the modules you need.
 
@@ -902,6 +908,7 @@ erDiagram
 | `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` and `Cat.EventProcessor.Minimal.Api` | Api | Receives `OrderConfirmed`, `LowStockReport` and `StockChanged` from the bus as service requests, and adds the development endpoints and the health check. |
 | `Cat.Validators` and `Cat.ServiceRequests.Decorators.Validation` | Core service and Api | Reject a malformed `StockChanged` message before the handler runs. |
 | `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` | Api | The connection to the bus and the name of the topic. |
+| `Cat.UnitTesting.Commands` and `Cat.UnitTesting.NUnit` | Core service tests | `FakeCommandProcessor` stands in for the command processor, and `UnitTestBase` builds the service provider of the validator tests. |
 
 **Pros.** A second receiver of `OrderConfirmed` shows that a message has more than one reader. The table of sent mails shows idempotent handling without an inbox.
 

@@ -1,4 +1,5 @@
 using Cat.Validators.Tests.Validators;
+using Cat.UnitTesting.Responses.NUnit;
 
 namespace Cat.Validators.Tests;
 
@@ -15,7 +16,7 @@ public class CustomRuleTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_CustomRuleValidator("TODO buy milk"));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -45,7 +46,7 @@ public class CustomRuleTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_CustomRuleWithOptionsValidator("buy milk", Check: false));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     #endregion A synchronous property rule
@@ -57,7 +58,7 @@ public class CustomRuleTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_CustomAsyncRuleValidator("hello"));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -79,7 +80,7 @@ public class CustomRuleTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_CustomModelRuleValidator("a", "b"));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]

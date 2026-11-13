@@ -9,6 +9,7 @@ using Cat.Demo.CatalogService.CoreService.ServiceRequestHandlers;
 using Cat.Demo.ServiceDefaults;
 using Cat.Minimal.Api.Extensions;
 using Cat.ServiceRequests.Extensions;
+using Cat.UnitTesting.Commands;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

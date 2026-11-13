@@ -7,6 +7,7 @@ using Cat.Responses.Abstractions;
 using Cat.Validators;
 using Cat.Validators.Abstractions;
 using Cat.Validators.Extensions;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cat.Demo.InventoryService.CoreService.Tests;
@@ -42,7 +43,7 @@ public class StockValidationTests : UnitTestBase
     {
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsFailed, Is.True);
+            Assert.That(response, CatIs.Failed);
             Assert.That(response.ErrorList, Has.Count.EqualTo(1));
         }
         Assert.That(response.ErrorList[0].Code, Is.EqualTo(code));
@@ -53,7 +54,7 @@ public class StockValidationTests : UnitTestBase
     {
         var result = await _validatorProcessor.ValidateAsync(Reserve("20261106-0001", Line(), Line("9780261103573", 3)));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]

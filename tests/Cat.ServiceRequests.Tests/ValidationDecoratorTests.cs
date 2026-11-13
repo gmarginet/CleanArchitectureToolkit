@@ -6,6 +6,7 @@ using Cat.ServiceRequests.Decorators.Validation.Extensions;
 using Cat.ServiceRequests.Extensions;
 using Cat.ServiceRequests.Tests.Helpers;
 using Cat.Validators.Extensions;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cat.ServiceRequests.Tests;
@@ -48,7 +49,7 @@ public class ValidationDecoratorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new CreateOrderRequest("book"));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
         Assert.That(Recorder.Calls, Has.Count.EqualTo(1));
     }
 
@@ -57,8 +58,7 @@ public class ValidationDecoratorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new CreateOrderRequest(""));
 
-        Assert.That(response.IsFailed, Is.True);
-        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.BadRequest>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.BadRequest));
         Assert.That(Recorder.Calls, Is.Empty);
     }
 
@@ -77,7 +77,7 @@ public class ValidationDecoratorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new NoValidatorRequest());
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
     }
 
     [Test]
@@ -85,7 +85,7 @@ public class ValidationDecoratorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new CreateOrderRequest("fail"));
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
         Assert.That(response.ErrorList.Single().Code, Is.EqualTo("ORD-1"));
     }
 
@@ -107,8 +107,7 @@ public class ValidationDecoratorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new GetOrderRequest(0));
 
-        Assert.That(response.IsFailed, Is.True);
-        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.BadRequest>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.BadRequest));
         Assert.That(response.Value, Is.Null);
         Assert.That(Recorder.Calls, Is.Empty);
     }
@@ -174,7 +173,7 @@ public class ValidationRequiredDecoratorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new CreateOrderRequest("book"));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
     }
 
     [Test]

@@ -4,6 +4,7 @@ using Cat.Queries.Abstractions;
 using Cat.Queries.Extensions;
 using Cat.Queries.Tests.Helpers;
 using Cat.Responses.Abstractions;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -38,7 +39,7 @@ public class QueryProcessorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new GetUserQuery("anna"));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
         Assert.That(response.Value, Is.EqualTo("user:anna"));
         Assert.That(Recorder.Calls.Select(c => c.Name), Is.EqualTo(new[] { "anna" }));
     }
@@ -58,8 +59,7 @@ public class QueryProcessorTests : UnitTestBase
     {
         var response = await Processor.ProcessAsync(new GetUserQuery("missing"));
 
-        Assert.That(response.IsFailed, Is.True);
-        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.NotFound>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.NotFound));
         Assert.That(response.ErrorList.Single().Code, Is.EqualTo("USR-404"));
         Assert.That(response.Value, Is.Null);
     }

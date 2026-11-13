@@ -5,6 +5,9 @@ using Cat.Demo.CatalogService.CoreService.ServiceRequestHandlers;
 using Cat.Demo.CatalogService.DataModels.Entities;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
+using Cat.UnitTesting.Commands;
+using Cat.UnitTesting.Queries;
+using Cat.UnitTesting.Responses.NUnit;
 
 namespace Cat.Demo.CatalogService.CoreService.Tests;
 
@@ -37,7 +40,7 @@ public class ServiceRequestHandlerTests
     public async Task BookSearch_ShouldSendTheQueryAndMapTheBooks()
     {
         var categoryId = Guid.NewGuid();
-        _queryProcessor.Setup<BookSearchQuery, IList<Book>>(
+        _queryProcessor.Respond<BookSearchQuery, IList<Book>>(
             CatResponse.Ok<IList<Book>>([NewBook("A", new Category { Name = "Software" }), NewBook("B")]));
         var handler = new BookSearchRequestHandler(_queryProcessor);
 
@@ -45,7 +48,7 @@ public class ServiceRequestHandlerTests
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(response.Value!.Select(b => b.Title), Is.EqualTo(new[] { "A", "B" }));
             Assert.That(response.Value![0].CategoryName, Is.EqualTo("Software"));
             Assert.That(response.Value![0].Price, Is.EqualTo(10m));
@@ -56,12 +59,12 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task BookSearch_WhenTheQueryFails_ShouldPassTheFailureOn()
     {
-        _queryProcessor.Setup<BookSearchQuery, IList<Book>>(CatResponse.InternalServerError<IList<Book>>());
+        _queryProcessor.Respond<BookSearchQuery, IList<Book>>(CatResponse.InternalServerError<IList<Book>>());
         var handler = new BookSearchRequestHandler(_queryProcessor);
 
         var response = await handler.HandleAsync(new BookSearchRequest(null, null));
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
     }
 
     #endregion BookSearch
@@ -72,14 +75,14 @@ public class ServiceRequestHandlerTests
     public async Task BookGet_ShouldSendTheQueryAndMapTheBook()
     {
         var book = NewBook("Clean Code");
-        _queryProcessor.Setup<BookGetQuery, Book>(CatResponse.Ok(book));
+        _queryProcessor.Respond<BookGetQuery, Book>(CatResponse.Ok(book));
         var handler = new BookGetRequestHandler(_queryProcessor);
 
         var response = await handler.HandleAsync(new BookGetRequest(book.Id));
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(response.Value!.Id, Is.EqualTo(book.Id));
             Assert.That(response.Value!.Title, Is.EqualTo("Clean Code"));
             Assert.That(_queryProcessor.Queries.Single(), Is.EqualTo(new BookGetQuery(book.Id)));
@@ -89,15 +92,14 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task BookGet_WhenTheBookIsMissing_ShouldPassNotFoundOn()
     {
-        _queryProcessor.Setup<BookGetQuery, Book>(CatResponse.NotFound<Book>());
+        _queryProcessor.Respond<BookGetQuery, Book>(CatResponse.NotFound<Book>());
         var handler = new BookGetRequestHandler(_queryProcessor);
 
         var response = await handler.HandleAsync(new BookGetRequest(Guid.NewGuid()));
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsFailed, Is.True);
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.NotFound>());
+            Assert.That(response, CatIs.FailedWith(CatResponseType.NotFound));
         }
     }
 
@@ -110,7 +112,7 @@ public class ServiceRequestHandlerTests
     {
         var first = Guid.NewGuid();
         var second = Guid.NewGuid();
-        _queryProcessor.Setup<BookPriceListQuery, IList<BookPriceInfo>>(CatResponse.Ok<IList<BookPriceInfo>>(
+        _queryProcessor.Respond<BookPriceListQuery, IList<BookPriceInfo>>(CatResponse.Ok<IList<BookPriceInfo>>(
         [
             new BookPriceInfo(second, "9780000000002", 20m),
             new BookPriceInfo(first, "9780000000001", 10m)
@@ -121,7 +123,7 @@ public class ServiceRequestHandlerTests
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(response.Value!.Select(p => (p.BookId, p.Isbn, p.Price)), Is.EqualTo(new[] { (first, "9780000000001", 10m), (second, "9780000000002", 20m) }));
             Assert.That(((BookPriceListQuery)_queryProcessor.Queries.Single()).BookIds, Is.EqualTo(new[] { first, second }));
         }
@@ -132,7 +134,7 @@ public class ServiceRequestHandlerTests
     {
         var known = Guid.NewGuid();
         var unknown = Guid.NewGuid();
-        _queryProcessor.Setup<BookPriceListQuery, IList<BookPriceInfo>>(CatResponse.Ok<IList<BookPriceInfo>>(
+        _queryProcessor.Respond<BookPriceListQuery, IList<BookPriceInfo>>(CatResponse.Ok<IList<BookPriceInfo>>(
             [new BookPriceInfo(known, "9780000000001", 10m)]));
         var handler = new BookPriceListRequestHandler(_queryProcessor);
 
@@ -140,7 +142,7 @@ public class ServiceRequestHandlerTests
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.NotFound>());
+            Assert.That(response, CatIs.FailedWith(CatResponseType.NotFound));
             Assert.That(response.ErrorList.Single().Code, Is.EqualTo(CatalogErrorDefinitions.BookPriceNotFound.Code));
             Assert.That(response.ErrorList.Single().Arguments, Is.EqualTo(new object?[] { unknown }));
         }
@@ -149,12 +151,12 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task BookPriceList_WhenTheQueryFails_ShouldPassTheFailureOn()
     {
-        _queryProcessor.Setup<BookPriceListQuery, IList<BookPriceInfo>>(CatResponse.InternalServerError<IList<BookPriceInfo>>());
+        _queryProcessor.Respond<BookPriceListQuery, IList<BookPriceInfo>>(CatResponse.InternalServerError<IList<BookPriceInfo>>());
         var handler = new BookPriceListRequestHandler(_queryProcessor);
 
         var response = await handler.HandleAsync(new BookPriceListRequest([Guid.NewGuid()]));
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
     }
 
     #endregion BookPriceList
@@ -179,7 +181,7 @@ public class ServiceRequestHandlerTests
         var command = (BookSaveCommand)_commandProcessor.Commands.Single();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(command.Book.Isbn, Is.EqualTo(model.Isbn));
             Assert.That(command.Price, Is.EqualTo(20m));
         }
@@ -188,13 +190,13 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task BookSave_WhenTheCommandFails_ShouldPassTheFailureOn()
     {
-        _commandProcessor.Response = CatResponse.InternalServerError();
+        _commandProcessor.DefaultResponse = CatResponse.InternalServerError();
         var handler = new BookSaveRequestHandler(_commandProcessor);
         var model = new Contracts.Models.BookModel { Isbn = "1", Title = "T", Author = "A" };
 
         var response = await handler.HandleAsync(new BookSaveRequest(model));
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
     }
 
     #endregion BookSave
@@ -209,14 +211,14 @@ public class ServiceRequestHandlerTests
             new() { Id = Guid.NewGuid(), Name = "Fiction" },
             new() { Id = Guid.NewGuid(), Name = "History" }
         };
-        _queryProcessor.Setup<CategoryGetListQuery, IList<Category>>(CatResponse.Ok<IList<Category>>(categories));
+        _queryProcessor.Respond<CategoryGetListQuery, IList<Category>>(CatResponse.Ok<IList<Category>>(categories));
         var handler = new CategoryGetListRequestHandler(_queryProcessor);
 
         var response = await handler.HandleAsync(new CategoryGetListRequest());
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(response.Value!.Select(c => c.Name), Is.EqualTo(new[] { "Fiction", "History" }));
             Assert.That(response.Value!.Select(c => c.Id), Is.EqualTo(categories.Select(c => c.Id)));
         }
@@ -225,12 +227,12 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task CategoryGetList_WhenTheQueryFails_ShouldPassTheFailureOn()
     {
-        _queryProcessor.Setup<CategoryGetListQuery, IList<Category>>(CatResponse.InternalServerError<IList<Category>>());
+        _queryProcessor.Respond<CategoryGetListQuery, IList<Category>>(CatResponse.InternalServerError<IList<Category>>());
         var handler = new CategoryGetListRequestHandler(_queryProcessor);
 
         var response = await handler.HandleAsync(new CategoryGetListRequest());
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
     }
 
     #endregion CategoryGetList

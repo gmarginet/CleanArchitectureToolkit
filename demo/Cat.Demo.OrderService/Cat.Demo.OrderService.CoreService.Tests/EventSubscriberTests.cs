@@ -8,6 +8,7 @@ using Cat.Demo.OrderService.DataModels.Entities;
 using Cat.EventAggregators.Abstractions;
 using Cat.EventAggregators.Extensions;
 using Cat.Responses;
+using Cat.UnitTesting.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -25,7 +26,7 @@ public class EventSubscriberTests
     [SetUp]
     public void SetUp()
     {
-        _commandProcessor = new FakeCommandProcessor();
+        _commandProcessor = new FakeCommandProcessor().Apply();
         _stockReservation = new FakeStockReservation();
 
         var services = new ServiceCollection();
@@ -84,7 +85,7 @@ public class EventSubscriberTests
     [Test]
     public async Task WhenTheStatusCannotBeSet_ShouldThrowToThePublisher()
     {
-        _commandProcessor.Responses[typeof(OrderSetStatusCommand)] = CatResponse.InternalServerError();
+        _commandProcessor.Respond<OrderSetStatusCommand>(CatResponse.InternalServerError());
 
         await Assert.ThrowsAsync<InvalidOperationException>(
             () => _eventAggregator.PublishAsync(new OrderConfirmedEvent(Guid.NewGuid(), "20261105-0003", 10m)));

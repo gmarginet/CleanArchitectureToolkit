@@ -3,6 +3,8 @@ using Cat.Demo.InventoryService.CoreService.Commands;
 using Cat.Demo.InventoryService.CoreService.ServiceRequestHandlers;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
+using Cat.UnitTesting.Commands;
+using Cat.UnitTesting.Responses.NUnit;
 
 namespace Cat.Demo.InventoryService.CoreService.Tests;
 
@@ -26,7 +28,7 @@ public class LowStockReportRequestHandlerTests
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Succeeded.NoContent>());
+            Assert.That(response, CatIs.SucceededWith(CatResponseType.NoContent));
             Assert.That(_commandProcessor.Commands.Single(), Is.EqualTo(new LowStockReportPublishCommand(7)));
         }
     }
@@ -34,10 +36,10 @@ public class LowStockReportRequestHandlerTests
     [Test]
     public async Task Handle_WhenTheCommandFails_ShouldPassTheFailureOn()
     {
-        _commandProcessor.Response = CatResponse.InternalServerError();
+        _commandProcessor.DefaultResponse = CatResponse.InternalServerError();
 
         var response = await _handler.HandleAsync(new LowStockReportRequest());
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
     }
 }

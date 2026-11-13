@@ -5,6 +5,7 @@ using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Demo.OrderService.Infrastructure.Catalog;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Cat.Demo.OrderService.CoreService.Tests;
@@ -29,7 +30,7 @@ public class CatalogPriceProviderTests
 
         var response = await CreateProvider(handler).GetPricesAsync([BookA, BookB]);
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
         Assert.That(response.Value![BookA], Is.EqualTo(new BookPrice(29.95m, "9780141036144")));
         Assert.That(response.Value![BookB], Is.EqualTo(new BookPrice(9.5m, "9780261103573")));
     }
@@ -55,8 +56,7 @@ public class CatalogPriceProviderTests
 
         var response = await CreateProvider(handler).GetPricesAsync([BookA, BookB]);
 
-        Assert.That(response.IsFailed, Is.True);
-        Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.NotFound>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.NotFound));
         Assert.That(response.ErrorList.Single().Code, Is.EqualTo(OrderErrorDefinitions.PriceUnavailable.Code));
         Assert.That(response.ErrorList.Single().Arguments, Is.EqualTo(new object[] { BookB }));
     }
@@ -68,7 +68,7 @@ public class CatalogPriceProviderTests
 
         var response = await CreateProvider(handler).GetPricesAsync([BookA]);
 
-        Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.NotFound>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.NotFound));
         Assert.That(response.ErrorList.Single().Code, Is.EqualTo(OrderErrorDefinitions.PriceUnavailable.Code));
     }
 
@@ -81,8 +81,7 @@ public class CatalogPriceProviderTests
 
         var response = await CreateProvider(handler).GetPricesAsync([BookA]);
 
-        Assert.That(response.IsFailed, Is.True);
-        Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.InternalServerError>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.InternalServerError));
         Assert.That(response.ErrorList.Single().Code, Is.EqualTo(CatGeneralErrorDefinitions.UnexpectedResponse.Code));
     }
 
@@ -93,7 +92,7 @@ public class CatalogPriceProviderTests
 
         var response = await CreateProvider(handler).GetPricesAsync([BookA, BookB]);
 
-        Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.InternalServerError>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.InternalServerError));
     }
 
     [Test]
@@ -103,7 +102,7 @@ public class CatalogPriceProviderTests
 
         var response = await CreateProvider(handler).GetPricesAsync([BookA]);
 
-        Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.InternalServerError>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.InternalServerError));
     }
 
     [Test]
@@ -113,7 +112,7 @@ public class CatalogPriceProviderTests
 
         var response = await CreateProvider(handler).GetPricesAsync([BookA]);
 
-        Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.InternalServerError>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.InternalServerError));
         Assert.That(response.ErrorList.Single().Code, Is.EqualTo(CatGeneralErrorDefinitions.UnexpectedResponse.Code));
     }
 
@@ -124,7 +123,7 @@ public class CatalogPriceProviderTests
 
         var response = await CreateProvider(handler).GetPricesAsync([BookA]);
 
-        Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.InternalServerError>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.InternalServerError));
     }
 
     [Test]

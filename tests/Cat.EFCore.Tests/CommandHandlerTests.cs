@@ -2,6 +2,7 @@ using Cat.Commands.Abstractions;
 using Cat.EFCore.Commands;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,7 +41,7 @@ public class CommandHandlerTests
     {
         var response = await new AddItemHandler(_context).HandleAsync(new AddItemCommand("one"));
 
-        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response, CatIs.Succeeded);
         Assert.That(await _context.Items.CountAsync(), Is.EqualTo(1));
     }
 

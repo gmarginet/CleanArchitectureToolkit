@@ -32,6 +32,7 @@
       <ProjectReference Include="..\..\modules\Cat.Sql.Cdc\Cat.Sql.Cdc.Abstractions\Cat.Sql.Cdc.Abstractions.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Sql.Cdc\Cat.Sql.Cdc.Messaging\Cat.Sql.Cdc.Messaging.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Sql.Cdc\Cat.Sql.Cdc\Cat.Sql.Cdc.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.UnitTesting\Cat.UnitTesting.Messaging\Cat.UnitTesting.Messaging.csproj" />
     </ItemGroup>
 
 </Project>

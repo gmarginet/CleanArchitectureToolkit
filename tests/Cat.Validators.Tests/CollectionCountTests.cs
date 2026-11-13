@@ -1,4 +1,5 @@
 using Cat.Validators.Tests.Validators;
+using Cat.UnitTesting.Responses.NUnit;
 
 namespace Cat.Validators.Tests;
 
@@ -35,7 +36,7 @@ public class CollectionCountTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_PropertyMinimumCountValidator(null));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [TestCase(0, true)]
@@ -63,7 +64,7 @@ public class CollectionCountTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_PropertyMaximumCountValidator(null));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -74,8 +75,8 @@ public class CollectionCountTests : ValidatorTestBase
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(ok.IsSucceeded, Is.True);
-            Assert.That(tooMany.IsFailed, Is.True);
+            Assert.That(ok, CatIs.Succeeded);
+            Assert.That(tooMany, CatIs.Failed);
             Assert.That(tooMany.ErrorList[0].Arguments, Is.EqualTo(new object?[] { "Items", 2, 3 }));
         }
     }

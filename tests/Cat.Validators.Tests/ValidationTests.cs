@@ -4,6 +4,7 @@ using Cat.UnitTesting.NUnit;
 using Cat.Validators.Abstractions;
 using Cat.Validators.Extensions;
 using Cat.Validators.Tests.Validators;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable PreferConcreteValueOverDefault
@@ -39,7 +40,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -53,7 +54,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -74,7 +75,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -88,7 +89,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -109,7 +110,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -123,7 +124,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -144,7 +145,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -158,7 +159,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -179,7 +180,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -193,7 +194,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -214,7 +215,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -228,7 +229,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -249,7 +250,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -263,7 +264,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -284,7 +285,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -298,7 +299,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -320,7 +321,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -334,7 +335,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -355,7 +356,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -369,7 +370,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -390,7 +391,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -404,7 +405,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -425,7 +426,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -439,7 +440,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -460,7 +461,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -474,7 +475,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -495,7 +496,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -509,7 +510,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -530,7 +531,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -544,7 +545,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -565,7 +566,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -580,7 +581,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -601,7 +602,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -615,7 +616,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -636,7 +637,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -650,7 +651,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -671,7 +672,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -685,7 +686,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -707,7 +708,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -722,7 +723,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -747,7 +748,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -761,7 +762,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -782,7 +783,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -796,7 +797,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -817,7 +818,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -831,7 +832,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -854,7 +855,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -870,7 +871,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -895,7 +896,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -909,7 +910,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -930,7 +931,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -944,7 +945,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -965,7 +966,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -979,7 +980,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1001,7 +1002,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1016,7 +1017,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1041,7 +1042,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1055,7 +1056,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1076,7 +1077,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1090,7 +1091,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1111,7 +1112,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1125,7 +1126,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1148,7 +1149,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1164,7 +1165,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1189,7 +1190,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1203,7 +1204,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1224,7 +1225,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1238,7 +1239,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1259,7 +1260,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1273,7 +1274,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1287,7 +1288,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1308,7 +1309,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1322,7 +1323,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1336,7 +1337,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1357,7 +1358,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
     
@@ -1371,7 +1372,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1392,7 +1393,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
    
@@ -1406,7 +1407,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1427,7 +1428,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1441,7 +1442,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1455,7 +1456,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1476,7 +1477,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
     
@@ -1490,7 +1491,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1504,7 +1505,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1525,7 +1526,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
     
@@ -1539,7 +1540,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
     
@@ -1553,7 +1554,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1567,7 +1568,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1588,7 +1589,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1609,7 +1610,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
     
@@ -1623,7 +1624,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
     
@@ -1637,7 +1638,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1651,7 +1652,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1672,7 +1673,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1693,7 +1694,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
     
@@ -1707,7 +1708,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
     
@@ -1721,7 +1722,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
     
@@ -1735,7 +1736,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1756,7 +1757,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1777,7 +1778,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
     
@@ -1791,7 +1792,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
     
@@ -1805,7 +1806,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1819,7 +1820,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1840,7 +1841,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1861,7 +1862,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1875,7 +1876,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1896,7 +1897,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1917,7 +1918,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1938,7 +1939,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1959,7 +1960,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -1973,7 +1974,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -1994,7 +1995,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2015,7 +2016,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2036,7 +2037,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2057,7 +2058,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2071,7 +2072,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2092,7 +2093,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2113,7 +2114,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2134,7 +2135,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2155,7 +2156,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2169,7 +2170,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2190,7 +2191,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2211,7 +2212,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2232,7 +2233,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2255,7 +2256,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2269,7 +2270,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2283,7 +2284,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
     
@@ -2297,7 +2298,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2318,7 +2319,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2339,7 +2340,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2353,7 +2354,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2367,7 +2368,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2381,7 +2382,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2395,7 +2396,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2416,7 +2417,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2437,7 +2438,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2451,7 +2452,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2465,7 +2466,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2486,7 +2487,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2507,7 +2508,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2521,7 +2522,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2535,7 +2536,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2556,7 +2557,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2577,7 +2578,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2591,7 +2592,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2605,7 +2606,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2619,7 +2620,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2640,7 +2641,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2654,7 +2655,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2668,7 +2669,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2682,7 +2683,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2696,7 +2697,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2717,7 +2718,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2731,7 +2732,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2745,7 +2746,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2766,7 +2767,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2780,7 +2781,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2794,7 +2795,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2808,7 +2809,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2829,7 +2830,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2843,7 +2844,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2857,7 +2858,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2878,7 +2879,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2892,7 +2893,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2913,7 +2914,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2925,7 +2926,7 @@ public partial class ValidationTests : UnitTestBase
         // act
         var result = await _validatorProcessor.ValidateAsync(model);
         // assert
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -2938,7 +2939,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2962,7 +2963,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -2976,7 +2977,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -2997,7 +2998,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3011,7 +3012,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3032,7 +3033,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3046,7 +3047,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3070,7 +3071,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3085,7 +3086,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(2));
         }
         using (Assert.EnterMultipleScope())
@@ -3122,7 +3123,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3138,7 +3139,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(4));
         }
         using (Assert.EnterMultipleScope())
@@ -3191,7 +3192,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3205,7 +3206,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3226,7 +3227,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3240,7 +3241,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3261,7 +3262,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3275,7 +3276,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3296,7 +3297,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3310,7 +3311,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3335,7 +3336,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3349,7 +3350,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3370,7 +3371,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3384,7 +3385,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3409,7 +3410,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3430,7 +3431,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3451,7 +3452,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3472,7 +3473,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3486,7 +3487,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3507,7 +3508,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3521,7 +3522,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
     }
@@ -3536,7 +3537,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3550,7 +3551,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3571,7 +3572,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(2));
         }
         using (Assert.EnterMultipleScope())
@@ -3619,7 +3620,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3633,7 +3634,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3647,7 +3648,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(1));
         }
         using (Assert.EnterMultipleScope())
@@ -3721,7 +3722,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3735,7 +3736,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsSucceeded, Is.True);
+            Assert.That(result, CatIs.Succeeded);
         }
     }
 
@@ -3758,7 +3759,7 @@ public partial class ValidationTests : UnitTestBase
         // act
         var result = await _validatorProcessor.ValidateAsync(model, validatorRequired: false);
         // assert
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -3773,7 +3774,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             // the null entry is skipped, subModel1 and subModel3 each report 2 errors
             Assert.That(result.ErrorList, Has.Count.EqualTo(4));
         }
@@ -3808,7 +3809,7 @@ public partial class ValidationTests : UnitTestBase
         // assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList, Has.Count.EqualTo(2));
         }
         using (Assert.EnterMultipleScope())

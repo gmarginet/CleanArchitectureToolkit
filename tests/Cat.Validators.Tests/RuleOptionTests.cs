@@ -1,5 +1,6 @@
 using Cat.Responses.Abstractions;
 using Cat.Validators.Tests.Validators;
+using Cat.UnitTesting.Responses.NUnit;
 
 namespace Cat.Validators.Tests;
 
@@ -13,7 +14,7 @@ public class RuleOptionTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_WithCodeValidator(""));
 
-        Assert.That(result.IsFailed, Is.True);
+        Assert.That(result, CatIs.Failed);
         Assert.That(result.ErrorList.Single().Code, Is.EqualTo("APP-1001"));
     }
 
@@ -38,7 +39,7 @@ public class RuleOptionTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_WithCodeValidator("Anna"));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     #endregion WithCode
@@ -70,7 +71,7 @@ public class RuleOptionTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_AllRuleOptionsValidator("Ann"));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     #endregion All options together
@@ -99,7 +100,7 @@ public class RuleOptionTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_MultipleRulesOnOnePropertyValidator("Anna"));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
         Assert.That(result.ErrorList, Is.Empty);
     }
 
@@ -108,7 +109,7 @@ public class RuleOptionTests : ValidatorTestBase
     {
         var result = await Processor.ValidateAsync(new TestModelFor_MultipleRulesOnOnePropertyValidator(""));
 
-        Assert.That(result.Type, Is.InstanceOf<CatResponseType.Failed.BadRequest>());
+        Assert.That(result, CatIs.FailedWith(CatResponseType.BadRequest));
     }
 
     #endregion Several rules on one property

@@ -3,6 +3,8 @@ using Cat.Demo.InventoryService.CoreService.ServiceRequestHandlers;
 using Cat.Demo.OrderService.Contracts.Messages;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
+using Cat.UnitTesting.Commands;
+using Cat.UnitTesting.Responses.NUnit;
 
 namespace Cat.Demo.InventoryService.CoreService.Tests;
 
@@ -29,7 +31,7 @@ public class OrderConfirmedHandlerTests
         var command = (StockReservationConfirmCommand)_commandProcessor.Commands.Single();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(command.OrderNumber, Is.EqualTo("20261111-0001"));
         }
     }
@@ -37,13 +39,13 @@ public class OrderConfirmedHandlerTests
     [Test]
     public async Task Handle_WhenTheOrderHasNoReservation_ShouldPassTheNotFoundOn()
     {
-        _commandProcessor.Response = CatResponse.NotFound(InventoryErrorDefinitions.UnknownOrder.CreateCatError("20261111-0001"));
+        _commandProcessor.DefaultResponse = CatResponse.NotFound(InventoryErrorDefinitions.UnknownOrder.CreateCatError("20261111-0001"));
 
         var response = await _handler.HandleAsync(Message());
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response.Type, Is.TypeOf<CatResponseType.Failed.NotFound>());
+            Assert.That(response, CatIs.FailedWith(CatResponseType.NotFound));
             Assert.That(response.ErrorList.Single().Code, Is.EqualTo(InventoryErrorDefinitions.UnknownOrder.Code));
         }
     }

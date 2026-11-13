@@ -31,6 +31,7 @@
       <ProjectReference Include="..\..\modules\Cat.EFCore\Cat.EFCore.Commands\Cat.EFCore.Commands.csproj" />
       <ProjectReference Include="..\..\modules\Cat.EFCore\Cat.EFCore.Queries\Cat.EFCore.Queries.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.UnitTesting\Cat.UnitTesting.Responses.NUnit\Cat.UnitTesting.Responses.NUnit.csproj" />
     </ItemGroup>
 
 </Project>

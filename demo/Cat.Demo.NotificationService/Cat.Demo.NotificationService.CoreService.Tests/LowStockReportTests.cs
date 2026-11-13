@@ -1,6 +1,7 @@
 using Cat.Demo.InventoryService.Contracts.Messages;
 using Cat.Demo.NotificationService.CoreService.Abstractions;
 using Cat.Demo.NotificationService.CoreService.ServiceRequestHandlers;
+using Cat.UnitTesting.Responses.NUnit;
 
 namespace Cat.Demo.NotificationService.CoreService.Tests;
 
@@ -44,7 +45,7 @@ public class LowStockReportTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(sender.Mails.Single().To, Is.EqualTo("boss@example.com"));
         });
     }
@@ -59,7 +60,7 @@ public class LowStockReportTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(response.IsSucceeded, Is.True);
+            Assert.That(response, CatIs.Succeeded);
             Assert.That(sender.Mails, Is.Empty);
         });
     }

@@ -9,6 +9,8 @@ using Cat.FluentWorkflows.Abstractions;
 using Cat.FluentWorkflows.Commands.Extensions;
 using Cat.FluentWorkflows.Extensions;
 using Cat.UnitTesting.NUnit;
+using Cat.UnitTesting.Commands;
+using Cat.UnitTesting.EventAggregators;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -18,13 +20,13 @@ namespace Cat.Demo.OrderService.CoreService.Tests;
 [TestFixture]
 public class PlaceOrderWorkflowTests : UnitTestBase
 {
-    private readonly FakeCommandProcessor _commandProcessor = new();
+    private readonly FakeCommandProcessor _commandProcessor = new FakeCommandProcessor().Apply();
     private readonly FakePriceProvider _priceProvider = new();
     private readonly FakeStockReservation _stockReservation = new();
     private readonly FakePaymentProvider _paymentProvider = new();
 
     private IServiceScope _scope = null!;
-    private RecordingSubscriber _events = null!;
+    private RecordingSubscriber<IOrderEvent> _events = null!;
 
     protected override void ConfigureServices(ServiceCollection services)
     {
@@ -44,8 +46,8 @@ public class PlaceOrderWorkflowTests : UnitTestBase
     [SetUp]
     public void SetUp()
     {
-        _commandProcessor.Commands.Clear();
-        _commandProcessor.Responses.Clear();
+        _commandProcessor.Reset();
+        _commandProcessor.Apply();
         _priceProvider.Fail = false;
         _priceProvider.UnknownBooks.Clear();
         _stockReservation.OutOfStock = false;
@@ -57,7 +59,7 @@ public class PlaceOrderWorkflowTests : UnitTestBase
         _paymentProvider.Payments.Clear();
 
         _scope = ServiceProvider.CreateScope();
-        _events = new RecordingSubscriber();
+        _events = new RecordingSubscriber<IOrderEvent>();
         ServiceProvider.GetRequiredService<ICatEventAggregator>().Subscribe(_events);
     }
 
@@ -70,7 +72,7 @@ public class PlaceOrderWorkflowTests : UnitTestBase
 
     private static PlaceOrderState NewState(params (Guid BookId, int Quantity)[] lines) => new()
     {
-        OrderId = FakeCommandProcessor.NewOrderId,
+        OrderId = OrderCommandDefaults.NewOrderId,
         PlacedAt = new DateTime(2026, 11, 5, 10, 0, 0, DateTimeKind.Utc),
         CustomerExternalId = "alice",
         CustomerName = "Alice Jansen",
@@ -98,17 +100,17 @@ public class PlaceOrderWorkflowTests : UnitTestBase
             Assert.That(response.ErrorList, Is.Empty);
             Assert.That(response.WorkflowResult, Is.EqualTo(CatStepExecutionResult.Continue));
             Assert.That(state.Total, Is.EqualTo(37.50m));
-            Assert.That(state.OrderNumber, Is.EqualTo(FakeCommandProcessor.NewOrderNumber));
-            Assert.That(create.OrderId, Is.EqualTo(FakeCommandProcessor.NewOrderId));
+            Assert.That(state.OrderNumber, Is.EqualTo(OrderCommandDefaults.NewOrderNumber));
+            Assert.That(create.OrderId, Is.EqualTo(OrderCommandDefaults.NewOrderId));
             Assert.That(create.PlacedAt, Is.EqualTo(state.PlacedAt));
-            Assert.That(create.CustomerId, Is.EqualTo(FakeCommandProcessor.CustomerId));
+            Assert.That(create.CustomerId, Is.EqualTo(OrderCommandDefaults.CustomerId));
             Assert.That(create.Total, Is.EqualTo(37.50m));
             Assert.That(create.Lines, Is.EqualTo(new[] { new OrderCreateLine(bookA, 2, 12.50m), new OrderCreateLine(bookB, 1, 12.50m) }));
             Assert.That(payment.Approved, Is.True);
             Assert.That(payment.Amount, Is.EqualTo(37.50m));
-            Assert.That(_stockReservation.Reserved, Is.EqualTo(new[] { FakeCommandProcessor.NewOrderNumber }));
+            Assert.That(_stockReservation.Reserved, Is.EqualTo(new[] { OrderCommandDefaults.NewOrderNumber }));
             Assert.That(_paymentProvider.Payments.Single().Amount, Is.EqualTo(37.50m));
-            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderConfirmedEvent(FakeCommandProcessor.NewOrderId, FakeCommandProcessor.NewOrderNumber, 37.50m)));
+            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderConfirmedEvent(OrderCommandDefaults.NewOrderId, OrderCommandDefaults.NewOrderNumber, 37.50m)));
         }
     }
 
@@ -162,8 +164,8 @@ public class PlaceOrderWorkflowTests : UnitTestBase
     [Test]
     public async Task WhenTheOrderCannotBeCreated_ShouldStopBeforeStockAndPayment()
     {
-        _commandProcessor.Responses[typeof(OrderCreateCommand)] =
-            Cat.Responses.CatResponse.BadRequest<OrderCreated>(OrderErrorDefinitions.DailyLimitReached.CreateCatError(9999));
+        _commandProcessor.Respond<OrderCreateCommand, OrderCreated>(
+            Cat.Responses.CatResponse.BadRequest<OrderCreated>(OrderErrorDefinitions.DailyLimitReached.CreateCatError(9999)));
 
         var response = await RunAsync(NewState((Guid.NewGuid(), 1)));
 
@@ -190,10 +192,10 @@ public class PlaceOrderWorkflowTests : UnitTestBase
         {
             Assert.That(response.WorkflowResult, Is.EqualTo(CatStepExecutionResult.BreakCascade));
             Assert.That(response.ErrorList.Single().Code, Is.EqualTo(OrderErrorDefinitions.OutOfStock.Code));
-            Assert.That(response.ErrorList.Single().Arguments, Is.EqualTo(new object?[] { book, FakeCommandProcessor.NewOrderNumber }));
+            Assert.That(response.ErrorList.Single().Arguments, Is.EqualTo(new object?[] { book, OrderCommandDefaults.NewOrderNumber }));
             Assert.That(_paymentProvider.Payments, Is.Empty);
             Assert.That(_commandProcessor.Of<PaymentSaveCommand>(), Is.Empty);
-            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(FakeCommandProcessor.NewOrderId, FakeCommandProcessor.NewOrderNumber, OrderCancelReasons.OutOfStock)));
+            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(OrderCommandDefaults.NewOrderId, OrderCommandDefaults.NewOrderNumber, OrderCancelReasons.OutOfStock)));
         }
     }
 
@@ -209,7 +211,7 @@ public class PlaceOrderWorkflowTests : UnitTestBase
             Assert.That(response.WorkflowResult, Is.EqualTo(CatStepExecutionResult.BreakCascade));
             Assert.That(response.ErrorList.Single().Code, Is.EqualTo(OrderErrorDefinitions.StockUnavailable.Code));
             Assert.That(_paymentProvider.Payments, Is.Empty);
-            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(FakeCommandProcessor.NewOrderId, FakeCommandProcessor.NewOrderNumber, OrderCancelReasons.StockUnavailable)));
+            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(OrderCommandDefaults.NewOrderId, OrderCommandDefaults.NewOrderNumber, OrderCancelReasons.StockUnavailable)));
         }
     }
 
@@ -225,7 +227,7 @@ public class PlaceOrderWorkflowTests : UnitTestBase
             Assert.That(response.WorkflowResult, Is.EqualTo(CatStepExecutionResult.BreakCascade));
             Assert.That(response.ErrorList.Single().Code, Is.EqualTo(OrderErrorDefinitions.PaymentDeclined.Code));
             Assert.That(_commandProcessor.Of<PaymentSaveCommand>().Single().Approved, Is.False);
-            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(FakeCommandProcessor.NewOrderId, FakeCommandProcessor.NewOrderNumber, OrderCancelReasons.PaymentDeclined)));
+            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(OrderCommandDefaults.NewOrderId, OrderCommandDefaults.NewOrderNumber, OrderCancelReasons.PaymentDeclined)));
         }
     }
 
@@ -241,7 +243,7 @@ public class PlaceOrderWorkflowTests : UnitTestBase
             Assert.That(response.WorkflowResult, Is.EqualTo(CatStepExecutionResult.BreakCascade));
             Assert.That(response.ErrorList.Single().Code, Is.EqualTo(OrderErrorDefinitions.PaymentUnavailable.Code));
             Assert.That(_commandProcessor.Of<PaymentSaveCommand>(), Is.Empty);
-            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(FakeCommandProcessor.NewOrderId, FakeCommandProcessor.NewOrderNumber, OrderCancelReasons.PaymentUnavailable)));
+            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(OrderCommandDefaults.NewOrderId, OrderCommandDefaults.NewOrderNumber, OrderCancelReasons.PaymentUnavailable)));
         }
     }
 }

@@ -6,6 +6,7 @@ using Cat.UnitTesting.NUnit;
 using Cat.Validators.Abstractions;
 using Cat.Validators;
 using Cat.Validators.Extensions;
+using Cat.UnitTesting.Responses.NUnit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cat.Demo.OrderService.CoreService.Tests;
@@ -36,7 +37,7 @@ public class PlaceOrderValidationTests : UnitTestBase
     {
         var result = await _validatorProcessor.ValidateAsync(NewRequest(NewLine(2), NewLine(99)));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -46,7 +47,7 @@ public class PlaceOrderValidationTests : UnitTestBase
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList.Single().Arguments, Does.Contain("Order.Lines"));
         }
     }
@@ -60,7 +61,7 @@ public class PlaceOrderValidationTests : UnitTestBase
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList.Single().Arguments, Has.Some.Contains("Quantity"));
         }
     }
@@ -72,7 +73,7 @@ public class PlaceOrderValidationTests : UnitTestBase
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList.Single().Arguments, Has.Some.Contains("BookId"));
         }
     }
@@ -84,7 +85,7 @@ public class PlaceOrderValidationTests : UnitTestBase
 
         var result = await _validatorProcessor.ValidateAsync(NewRequest(lines));
 
-        Assert.That(result.IsSucceeded, Is.True);
+        Assert.That(result, CatIs.Succeeded);
     }
 
     [Test]
@@ -97,7 +98,7 @@ public class PlaceOrderValidationTests : UnitTestBase
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.IsFailed, Is.True);
+            Assert.That(result, CatIs.Failed);
             Assert.That(result.ErrorList.Single().Code, Is.EqualTo(CatValidatorErrorDefinitions.MaximumCount.Code));
             Assert.That(result.ErrorList.Single().Arguments, Is.EqualTo(new object?[] { "Order.Lines", PlaceOrderModelValidator.MaximumLines, count }));
         }

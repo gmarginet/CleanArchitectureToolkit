@@ -3,6 +3,7 @@ using Cat.Sql.Cdc.Abstractions;
 using Cat.Sql.Cdc.Extensions;
 using Cat.Sql.Cdc.Messaging;
 using Cat.Sql.Cdc.Messaging.Extensions;
+using Cat.UnitTesting.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,9 +38,9 @@ public class CatCdcRegistrationTests
         New = new Dictionary<string, object?> { ["Price"] = 12m }
     };
 
-    private static (CatMessagingChangeSink Sink, RecordingSender Sender) CreateSink()
+    private static (CatMessagingChangeSink Sink, FakeMessageSender Sender) CreateSink()
     {
-        var sender = new RecordingSender();
+        var sender = new FakeMessageSender();
         var services = new ServiceCollection();
         services.AddScoped<ICatMessageSender>(_ => sender);
         var provider = services.BuildServiceProvider();
@@ -54,7 +55,7 @@ public class CatCdcRegistrationTests
 
         await sink.SendAsync(change, change);
 
-        var message = (CatCdcChangeMessage)sender.Published.Single();
+        var message = sender.Of<CatCdcChangeMessage>().Single();
         Assert.That(message.MessageId, Is.EqualTo(change.MessageId));
         Assert.That(message.Table, Is.EqualTo("dbo_BookPrice"));
         Assert.That(message.Operation, Is.EqualTo(CatChangeOperation.Update));
@@ -71,7 +72,7 @@ public class CatCdcRegistrationTests
 
         await sink.SendAsync(change, new BookPriceChanged { Isbn = "1" });
 
-        Assert.That(sender.Published.Single().MessageId, Is.EqualTo(change.MessageId));
+        Assert.That(sender.Of<ICatEventMessage>().Single().MessageId, Is.EqualTo(change.MessageId));
     }
 
     [Test]
@@ -126,7 +127,7 @@ public class CatCdcRegistrationTests
         var services = new ServiceCollection();
         services.AddLogging();
         services.AddCatSqlCdcMessaging();
-        services.AddScoped<ICatMessageSender, RecordingSender>();
+        services.AddScoped<ICatMessageSender, FakeMessageSender>();
 
         services.AddCatSqlCdc(configuration, b => b.AddTable("dbo_Book"));
         var provider = services.BuildServiceProvider();

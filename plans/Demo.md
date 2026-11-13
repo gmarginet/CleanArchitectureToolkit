@@ -38,7 +38,6 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 6](#phase-6)
 - [Phase 7](#phase-7)
 - [Phase 8](#phase-8)
 - [Phase 9](#phase-9)
@@ -47,31 +46,6 @@
 - [Phase 12](#phase-12)
 - [Phase 13](#phase-13)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 6-->
-## Phase 6
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Show `Cat.UnitTesting`: the unit tests of the demo.
-
-#### What exists today
-- `Cat.UnitTesting` does not exist yet. Its plan is [Cat.UnitTesting.md](Cat.UnitTesting.md).
-- The unit tests of the demo have their own copies of the fake command and query processors.
-- The test doubles of Orders have `FakeUser`, which is an `ICatUser` and the small demo interface `IUserEmail` in one.
-
-#### Needs
-The module plan [Cat.UnitTesting.md](Cat.UnitTesting.md), built first.
-
-#### Done when
-The demo uses the module, and the readme says where.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 6-->
 
 <!-- region start: Phase 7-->
 ## Phase 7

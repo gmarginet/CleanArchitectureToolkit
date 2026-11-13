@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Time.Testing;
 
 namespace Cat.Demo.PaymentService.CoreService.Tests;
 
@@ -14,25 +15,8 @@ public class PaymentProcessorTests
         public IDisposable? OnChange(Action<PaymentFailureOptions, string?> listener) => null;
     }
 
-    private sealed class FakeTime : TimeProvider
-    {
-        public override ITimer CreateTimer(TimerCallback callback, object? state, TimeSpan dueTime, TimeSpan period)
-        {
-            // The delay is over as soon as it starts.
-            callback(state);
-            return new NoTimer();
-        }
-
-        private sealed class NoTimer : ITimer
-        {
-            public bool Change(TimeSpan dueTime, TimeSpan period) => true;
-            public void Dispose() { }
-            public ValueTask DisposeAsync() => ValueTask.CompletedTask;
-        }
-    }
-
     private static PaymentProcessor Processor(PaymentFailureOptions? options = null, int percentage = 0) =>
-        new(new FixedOptions(options ?? new PaymentFailureOptions()), new FakeTime(), () => percentage);
+        new(new FixedOptions(options ?? new PaymentFailureOptions()), new FakeTimeProvider(), () => percentage);
 
     [Test]
     public async Task AnAmountUpToTheMaximum_ShouldBeApprovedWithAReference()
@@ -80,7 +64,7 @@ public class PaymentProcessorTests
     public async Task ARandomFailure_ShouldFailAfterTheChargeAndTheRetryShouldNotChargeAgain()
     {
         var next = 10;
-        var processor = new PaymentProcessor(new FixedOptions(new PaymentFailureOptions { ErrorPercentage = 50 }), new FakeTime(), () => next);
+        var processor = new PaymentProcessor(new FixedOptions(new PaymentFailureOptions { ErrorPercentage = 50 }), new FakeTimeProvider(), () => next);
 
         var failed = await processor.ProcessAsync(new PaymentRequest("20261106-0001", 10m));
 
@@ -99,8 +83,15 @@ public class PaymentProcessorTests
     [Test]
     public async Task ALatency_ShouldDelayTheAnswerOnTheClockOfTheProcessor()
     {
-        var outcome = await Processor(new PaymentFailureOptions { Latency = TimeSpan.FromSeconds(30) })
-            .ProcessAsync(new PaymentRequest("20261106-0001", 10m));
+        var time = new FakeTimeProvider();
+        var processor = new PaymentProcessor(new FixedOptions(new PaymentFailureOptions { Latency = TimeSpan.FromSeconds(30) }), time, () => 0);
+
+        var answer = processor.ProcessAsync(new PaymentRequest("20261106-0001", 10m));
+
+        Assert.That(answer.IsCompleted, Is.False, "The answer waits for the latency.");
+
+        time.Advance(TimeSpan.FromSeconds(30));
+        var outcome = await answer;
 
         Assert.That(outcome.Failed, Is.False);
     }

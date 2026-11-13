@@ -1,6 +1,7 @@
 using System.Net.Http;
 using Cat.Api.Client;
 using Cat.Responses.Abstractions;
+using Cat.UnitTesting.Responses.NUnit;
 
 namespace Cat.Api.Client.Tests;
 
@@ -30,8 +31,7 @@ public class CatApiCallTests
     {
         var response = await CatApiCall.ExecuteAsync(() => Task.FromResult(42), ServiceName);
 
-        Assert.That(response.IsSucceeded, Is.True);
-        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Succeeded.Ok>());
+        Assert.That(response, CatIs.SucceededWith(CatResponseType.Ok));
         Assert.That(response.Value, Is.EqualTo(42));
     }
 
@@ -40,8 +40,7 @@ public class CatApiCallTests
     {
         var response = await CatApiCall.ExecuteAsync(() => Task.CompletedTask, ServiceName);
 
-        Assert.That(response.IsSucceeded, Is.True);
-        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Succeeded.Ok>());
+        Assert.That(response, CatIs.SucceededWith(CatResponseType.Ok));
     }
 
     [TestCase(400, typeof(CatResponseType.Failed.BadRequest))]
@@ -55,7 +54,7 @@ public class CatApiCallTests
     {
         var response = await CatApiCall.ExecuteAsync<int>(() => throw Failure(status, NotFoundBody), ServiceName);
 
-        Assert.That(response.IsFailed, Is.True);
+        Assert.That(response, CatIs.Failed);
         Assert.That(response.Type, Is.InstanceOf(expected));
     }
 
@@ -84,7 +83,7 @@ public class CatApiCallTests
             ServiceName);
 
         var error = response.ErrorList.Single();
-        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.NotFound>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.NotFound));
         Assert.That(error.Code, Is.EqualTo("DEM-CTL-1001"));
         Assert.That(error.Arguments, Is.EqualTo(new object?[] { "b1" }));
     }
@@ -107,7 +106,7 @@ public class CatApiCallTests
     {
         var response = await CatApiCall.ExecuteAsync<int>(() => throw new HttpRequestException("down"), ServiceName);
 
-        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.InternalServerError>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.InternalServerError));
         Assert.That(response.ErrorList.Single().Code, Is.EqualTo("CAT-GEN-1001"));
     }
 
@@ -116,7 +115,7 @@ public class CatApiCallTests
     {
         var response = await CatApiCall.ExecuteAsync<int>(() => throw new TaskCanceledException(), ServiceName);
 
-        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.InternalServerError>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.InternalServerError));
     }
 
     [Test]
@@ -141,6 +140,6 @@ public class CatApiCallTests
     {
         var response = await CatApiCall.ExecuteAsync(() => throw Failure(409, NotFoundBody), ServiceName);
 
-        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Failed.Conflict>());
+        Assert.That(response, CatIs.FailedWith(CatResponseType.Conflict));
     }
 }

@@ -3,6 +3,7 @@ using Cat.Responses.Abstractions;
 using Cat.Scheduling.Abstractions;
 using Cat.Scheduling.Extensions;
 using Cat.ServiceRequests.Abstractions;
+using Cat.UnitTesting.Users;
 using Cat.Users.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -88,11 +89,6 @@ internal sealed class FakeProcessor : ICatServiceRequestProcessor
     public ICatResponse Process(ICatServiceRequest catServiceRequest) => throw new NotSupportedException();
 
     public ICatResponse<TResponse> Process<TResponse>(ICatServiceRequest<TResponse> catServiceRequest) => throw new NotSupportedException();
-}
-
-internal sealed class FakeUserAccessor : ICatUserAccessor
-{
-    public ICatUser User { get; set; } = CatUser.Anonymous;
 }
 
 internal static class TestHost
