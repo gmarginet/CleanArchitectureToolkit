@@ -37,6 +37,7 @@
 
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
+<!-- no toc -->
 - [Phase 2](#phase-2)
 - [Phase 3](#phase-3)
 - [Phase 4](#phase-4)
@@ -65,18 +66,18 @@ Notifications and scheduling. The Notifications service and `Cat.Scheduling`. Th
 
 #### What exists today
 - The Notifications service does not exist. The demo readme lists it as planned, and the box in the drawing is hatched.
-- The `CleanUpOrderCounters` service request exists in Orders, with its handler and tests. The development endpoint `POST /development/scheduler/clean-up-order-counters` triggers it, in the Development environment only. Orders does not switch on the Scheduler yet.
+- The `CleanUpOrderCounters` service request exists in Orders, with its handler and tests. The development endpoint `POST /development/scheduler/clean-up-order-counters` triggers it, in the Development environment only. Orders switches on the Scheduler, and the endpoint stays so a developer can try the request without the Scheduler.
 - The Keycloak realm has the clients `cat-demo-web` and `cat-demo-cli` only. It has no client for a client credentials token.
-- `Cat.Scheduling` does not exist yet. Its plan is [Cat.Scheduling.md](Cat.Scheduling.md). The plan recommends that a one-off timeout, such as the cancel after 24 hours, goes through a scheduled message of the bus and not through the Scheduler.
+- `Cat.Scheduling` exists, see the [module readme](../modules/Cat.Scheduling/README.md). Its plan, [Cat.Scheduling.md](Cat.Scheduling.md), recommends that a one-off timeout, such as the cancel after 24 hours, goes through a scheduled message of the bus and not through the Scheduler.
 
 #### Needs
 The module plan [Cat.Scheduling.md](Cat.Scheduling.md) built.
 
 #### Done when
-An order confirmed mail is sent. The nightly jobs run from the Scheduler, and the development endpoint can go.
+An order confirmed mail is sent. The nightly jobs run from the Scheduler, and the development endpoint stays, so a developer can try a job without the Scheduler.
 
 #### Decided
-- **Counter cleanup.** The Scheduler runs the `CleanUpOrderCounters` service request every night. Until the Scheduler exists, the development endpoint triggers it.
+- **Counter cleanup.** The Scheduler runs the `CleanUpOrderCounters` service request every night. The development endpoint triggers it without the Scheduler.
 - **Notifications data.** Notifications has a database, built code first with EF Core migrations, like Orders. A table of sent mails, keyed by order and kind, makes a repeated message safe and shows idempotent handling. The scheduler can use the same database for its claim table and run history, see [Cat.Scheduling.md](Cat.Scheduling.md).
 - **Sweep of stuck orders.** The place order handler of Orders cancels the order when the caller gives up after the order is created, for example on a gateway timeout. That does not cover a crash of the service in the middle of the workflow. A scheduled job cancels the orders that stay Pending too long and covers the rest. A cancel through the sweep publishes the same cancelled event, so the stock is released too. How long an order may stay Pending, and whether this is the job that cancels unpaid orders, is [Question 15](#question-15).
 <!-- region end: PhaseDescription-->

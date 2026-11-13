@@ -118,7 +118,7 @@ Some modules depend on other modules, in the documentation of each module you ca
 | [Cat.Resilience](./plans/Cat.Resilience.md) | [![Module](https://img.shields.io/badge/type-Module-yellow)](./plans/Cat.Resilience.md) [![New](https://img.shields.io/badge/status-New-blue)](./plans/Cat.Resilience.md)<br>Retry and circuit breaker decorators for calls to other services and integrations. | 11 |
 | [Cat.Responses](./modules/Cat.Responses/README.md) | [![Module](https://img.shields.io/badge/type-Module-yellow)](./modules/Cat.Responses/README.md) [![Stable](https://img.shields.io/badge/status-Stable-green)](./modules/Cat.Responses/README.md)<br>Return the outcome of an operation as a response, either succeeded with a value or failed with errors. |  |
 | [Cat.Sagas](./plans/Cat.Sagas.md) | [![Module](https://img.shields.io/badge/type-Module-yellow)](./plans/Cat.Sagas.md) [![New](https://img.shields.io/badge/status-New-blue)](./plans/Cat.Sagas.md)<br>Long running workflows that send a message, wait for the answer and carry on. | 7 |
-| [Cat.Scheduling](./plans/Cat.Scheduling.md) | [![Module](https://img.shields.io/badge/type-Module-yellow)](./plans/Cat.Scheduling.md) [![New](https://img.shields.io/badge/status-New-blue)](./plans/Cat.Scheduling.md)<br>Worker support that turns schedules into service requests. | 1 |
+| [Cat.Scheduling](./modules/Cat.Scheduling/README.md) | [![Module](https://img.shields.io/badge/type-Module-yellow)](./plans/Cat.Scheduling.md) [![Building](https://img.shields.io/badge/status-Building-orange)](./plans/Cat.Scheduling.md)<br>Worker support that turns schedules into service requests. | 1 |
 | [Cat.ServiceRequests](./modules/Cat.ServiceRequests/README.md) | [![Module](https://img.shields.io/badge/type-Module-yellow)](./modules/Cat.ServiceRequests/README.md) [![Stable](https://img.shields.io/badge/status-Stable-green)](./modules/Cat.ServiceRequests/README.md)<br>Run application use cases through one entry point, with validation, logging and tracing decorators. |  |
 | [Cat.Sql.Cdc](./plans/Cat.Sql.Cdc.md) | [![Module](https://img.shields.io/badge/type-Module-yellow)](./plans/Cat.Sql.Cdc.md) [![New](https://img.shields.io/badge/status-New-blue)](./plans/Cat.Sql.Cdc.md)<br>Turns SQL Server change data capture changes into service bus calls. | 4 |
 | [Cat.Telemetry](./plans/Cat.Telemetry.md) | [![Module](https://img.shields.io/badge/type-Module-yellow)](./plans/Cat.Telemetry.md) [![New](https://img.shields.io/badge/status-New-blue)](./plans/Cat.Telemetry.md)<br>Shared tracing and metrics setup for all services. | 12 |
@@ -295,7 +295,7 @@ It lets you try out the service without the real triggers.
 **Scheduler**  
 - Runs work on a schedule, like a nightly cleanup or a periodic import.  
 - Every run triggers a service request.  
-- The API registers it with the extension methods of [Cat.Scheduling](./plans/Cat.Scheduling.md).  
+- The API registers it with the extension methods of [Cat.Scheduling](./modules/Cat.Scheduling/README.md).  
 
 **Event processor**  
 - Listens to Azure Service Bus.  
