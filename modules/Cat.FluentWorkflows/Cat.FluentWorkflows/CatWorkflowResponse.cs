@@ -29,6 +29,9 @@ public class CatWorkflowResponse : ICatWorkflowResponse
     public IReadOnlyList<ICatError> ErrorList { get; private set; }
 
     /// <inheritdoc />
+    public CatWorkflowCheckpoint? Checkpoint { get; private set; }
+
+    /// <inheritdoc />
     public ICatWorkflowResponse ChangeWorkflowResult(CatStepExecutionResult workflowResult)
     {
         WorkflowResult = workflowResult;
@@ -45,8 +48,25 @@ public class CatWorkflowResponse : ICatWorkflowResponse
     {
         return allErrors.Count == last.ErrorList.Count
             ? last
-            : new CatWorkflowResponse(last.WorkflowResult, allErrors);
+            : new CatWorkflowResponse(last.WorkflowResult, allErrors) { Checkpoint = last.Checkpoint };
     }
+
+    /// <summary>
+    /// Creates the response of a list of steps that suspended. The checkpoint holds the frame of the step that waits.
+    /// </summary>
+    /// <param name="frame">The frame of the step that suspended.</param>
+    /// <param name="errors">The errors collected so far.</param>
+    /// <returns>A response with the result <see cref="CatStepExecutionResult.Suspend"/>.</returns>
+    internal static ICatWorkflowResponse Suspended(CatCheckpointFrame frame, IReadOnlyList<ICatError> errors)
+        => new CatWorkflowResponse(CatStepExecutionResult.Suspend, errors) { Checkpoint = new CatWorkflowCheckpoint { Frame = frame } };
+
+    /// <summary>
+    /// Creates a response for a step that waits for an answer. Return it from <c>RunAsync</c> of a step that implements
+    /// <see cref="ICatResumableStepBody"/>. The workflow stops here and the response of the workflow holds a checkpoint.
+    /// </summary>
+    /// <returns>The response, without errors.</returns>
+    public static ICatWorkflowResponse Suspended()
+        => new CatWorkflowResponse(CatStepExecutionResult.Suspend);
 
     /// <summary>
     /// Creates a response for a step that worked.

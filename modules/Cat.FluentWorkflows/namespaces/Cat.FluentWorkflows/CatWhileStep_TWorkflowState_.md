@@ -33,7 +33,7 @@ A BreakFromLoop leaves the loop and continues\. A BreakCascade leaves the loop a
 The errors of every pass are kept\.
 
 ```csharp
-public class CatWhileStep<TWorkflowState> : Cat.FluentWorkflows.CatStepBodyAsync<TWorkflowState>
+public class CatWhileStep<TWorkflowState> : Cat.FluentWorkflows.CatContainerStepBody<TWorkflowState>
     where TWorkflowState : class, Cat.FluentWorkflows.Abstractions.ICatWorkflowState<TWorkflowState>
 ```
 #### Type parameters
@@ -44,7 +44,7 @@ public class CatWhileStep<TWorkflowState> : Cat.FluentWorkflows.CatStepBodyAsync
 
 The state of the workflow\.
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatStepBodyAsync](CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') → [Cat\.FluentWorkflows\.CatStepBodyAsync&lt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>')[TWorkflowState](CatWhileStep_TWorkflowState_.md#Cat.FluentWorkflows.Steps.CatWhileStep_TWorkflowState_.TWorkflowState 'Cat\.FluentWorkflows\.Steps\.CatWhileStep\<TWorkflowState\>\.TWorkflowState')[&gt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>') → CatWhileStep\<TWorkflowState\>
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatStepBodyAsync](CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') → [Cat\.FluentWorkflows\.CatStepBodyAsync&lt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>')[TWorkflowState](CatWhileStep_TWorkflowState_.md#Cat.FluentWorkflows.Steps.CatWhileStep_TWorkflowState_.TWorkflowState 'Cat\.FluentWorkflows\.Steps\.CatWhileStep\<TWorkflowState\>\.TWorkflowState')[&gt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>') → [Cat\.FluentWorkflows\.CatContainerStepBody&lt;](CatContainerStepBody_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatContainerStepBody\<TWorkflowState\>')[TWorkflowState](CatWhileStep_TWorkflowState_.md#Cat.FluentWorkflows.Steps.CatWhileStep_TWorkflowState_.TWorkflowState 'Cat\.FluentWorkflows\.Steps\.CatWhileStep\<TWorkflowState\>\.TWorkflowState')[&gt;](CatContainerStepBody_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatContainerStepBody\<TWorkflowState\>') → CatWhileStep\<TWorkflowState\>
 
 | Constructors | |
 | :--- | :--- |

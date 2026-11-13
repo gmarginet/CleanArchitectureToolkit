@@ -30,5 +30,11 @@ public enum CatStepExecutionResult
     /// <summary>
     /// Reserved for loops. The step processor does not stop on it, and no built-in step returns it.
     /// </summary>
-    ContinueLoop
+    ContinueLoop,
+
+    /// <summary>
+    /// Stop here and wait for an answer. Every list of steps stops at once and passes it up, like a <see cref="BreakCascade"/>, but without an error.
+    /// The response then holds a <see cref="CatWorkflowCheckpoint"/> that a later <c>ResumeAsync</c> picks up.
+    /// </summary>
+    Suspend
 }

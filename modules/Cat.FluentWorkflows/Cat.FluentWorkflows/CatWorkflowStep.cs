@@ -13,6 +13,9 @@ public abstract class CatWorkflowStep : ICatWorkflowStep
     public abstract Type BodyType { get; }
 
     /// <inheritdoc />
+    public string? Name { get; set; }
+
+    /// <inheritdoc />
     public List<ICatStepParameter> Inputs { get; } = [];
 
     /// <inheritdoc />

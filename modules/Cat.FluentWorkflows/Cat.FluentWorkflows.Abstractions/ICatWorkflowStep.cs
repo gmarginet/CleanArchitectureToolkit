@@ -14,6 +14,12 @@ public interface ICatWorkflowStep
     Type BodyType { get; }
 
     /// <summary>
+    /// The name of the step, or <c>null</c> when it has none. A name must be unique in its list of steps.
+    /// It marks the step in a checkpoint, and names the step that gets the answer of a resume.
+    /// </summary>
+    string? Name { get; }
+
+    /// <summary>
     /// The values copied from the state into the step before it runs.
     /// </summary>
     List<ICatStepParameter> Inputs { get; }

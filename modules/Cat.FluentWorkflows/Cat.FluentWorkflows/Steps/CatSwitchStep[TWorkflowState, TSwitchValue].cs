@@ -13,7 +13,7 @@ namespace Cat.FluentWorkflows.Steps;
 /// </summary>
 /// <typeparam name="TWorkflowState">The state of the workflow.</typeparam>
 /// <typeparam name="TSwitchValue">The type of the value being switched on.</typeparam>
-public class CatSwitchStep<TWorkflowState, TSwitchValue> : CatStepBodyAsync<TWorkflowState>
+public class CatSwitchStep<TWorkflowState, TSwitchValue> : CatContainerStepBody<TWorkflowState>
     where TSwitchValue : struct
     where TWorkflowState : class, ICatWorkflowState<TWorkflowState>
 {
@@ -50,18 +50,66 @@ public class CatSwitchStep<TWorkflowState, TSwitchValue> : CatStepBodyAsync<TWor
     /// <inheritdoc />
     public override async Task<ICatWorkflowResponse> RunAsync(CancellationToken cancellationToken = default)
     {
-        var switchValue = SwitchValue(WorkflowState);
+        var resuming = SavedFrame != null;
+        CatWorkflowBuilder<TWorkflowState>? builder;
+        string branch;
+        string? caseValue = null;
 
-        if (CaseBuilders.TryGetValue(switchValue, out var caseBuilder))
+        if (resuming)
         {
-            return await _catStepProcessor.RunStepsAsync(caseBuilder, WorkflowState, cancellationToken);
+            branch = SavedFrame!.Branch ?? string.Empty;
+            caseValue = SavedFrame.CaseValue;
+            builder = FindSavedBuilder(branch, caseValue);
+        }
+        else
+        {
+            var switchValue = SwitchValue(WorkflowState);
+            caseValue = switchValue.ToString();
+
+            if (CaseBuilders.TryGetValue(switchValue, out var caseBuilder))
+            {
+                branch = CatCheckpointBranches.Case;
+                builder = caseBuilder;
+            }
+            else
+            {
+                branch = CatCheckpointBranches.Default;
+                builder = DefaultCaseBuilder;
+            }
         }
 
-        if (DefaultCaseBuilder is not null)
+        if (builder is null)
         {
-            return await _catStepProcessor.RunStepsAsync(DefaultCaseBuilder, WorkflowState, cancellationToken);
+            return CatWorkflowResponse.Succeeded(CatStepExecutionResult.Continue);
         }
 
-        return CatWorkflowResponse.Succeeded(CatStepExecutionResult.Continue);
+        var result = await RunChildStepsAsync(_catStepProcessor, builder, WorkflowState, resuming, cancellationToken);
+
+        return result.WorkflowResult == CatStepExecutionResult.Suspend
+            ? Suspended(result, frame =>
+            {
+                frame.Branch = branch;
+                frame.CaseValue = caseValue;
+            })
+            : result;
+    }
+
+    private CatWorkflowBuilder<TWorkflowState> FindSavedBuilder(string branch, string? caseValue)
+    {
+        if (branch == CatCheckpointBranches.Default)
+        {
+            return DefaultCaseBuilder
+                   ?? throw new CatWorkflowResumeException("The checkpoint holds the default case of a switch, but the workflow has no default case.");
+        }
+
+        foreach (var pair in CaseBuilders)
+        {
+            if (pair.Key.ToString() == caseValue)
+            {
+                return pair.Value;
+            }
+        }
+
+        throw new CatWorkflowResumeException($"The checkpoint holds the case '{caseValue}' of a switch, but the workflow has no such case.");
     }
 }

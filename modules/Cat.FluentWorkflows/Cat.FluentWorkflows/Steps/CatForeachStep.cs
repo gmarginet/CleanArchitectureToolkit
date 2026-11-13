@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cat.FluentWorkflows.Abstractions;
@@ -17,7 +18,7 @@ namespace Cat.FluentWorkflows.Steps;
 /// <typeparam name="TWorkflowState">The state of the workflow around the loop.</typeparam>
 /// <typeparam name="TCollection">The type of the items.</typeparam>
 /// <typeparam name="TForeachState">The state of the inner steps.</typeparam>
-public class CatForeachStep<TWorkflowState, TCollection, TForeachState> : CatStepBodyAsync<TWorkflowState>
+public class CatForeachStep<TWorkflowState, TCollection, TForeachState> : CatContainerStepBody<TWorkflowState>
     where TWorkflowState : class, ICatWorkflowState<TWorkflowState>
     where TForeachState : class, ICatForeachState<TCollection, TWorkflowState>, ICatWorkflowState<TForeachState>
 {
@@ -51,17 +52,69 @@ public class CatForeachStep<TWorkflowState, TCollection, TForeachState> : CatSte
     /// <inheritdoc />
     public override async Task<ICatWorkflowResponse> RunAsync(CancellationToken cancellationToken = default)
     {
-        var foreachState = CreateForeachState();
+        var resuming = SavedFrame != null;
+        var startIndex = 0;
+        var itemCount = 0;
+        IEnumerable<TCollection> items = Collection(WorkflowState);
+        TForeachState foreachState;
+
+        if (resuming)
+        {
+            var saved = SavedFrame!;
+            foreachState = saved.LoopState as TForeachState
+                           ?? throw new CatWorkflowResumeException(
+                               $"The checkpoint holds no usable loop state for the foreach. Give the checkpoint a LoopState of type {typeof(TForeachState).Name}.");
+            startIndex = saved.Iteration;
+
+            var list = items.ToList();
+            itemCount = list.Count;
+            items = list;
+
+            if (itemCount != saved.ItemCount)
+            {
+                throw new CatWorkflowResumeException(
+                    $"The foreach had {saved.ItemCount} items when it suspended, but the collection has {itemCount} now. The collection must not change while the workflow waits.");
+            }
+        }
+        else
+        {
+            foreachState = CreateForeachState();
+        }
+
         foreachState.ParentWorkflowState = WorkflowState;
 
         var result = CatWorkflowResponse.Succeeded(CatStepExecutionResult.Continue);
         var errors = new List<ICatError>();
-        foreach (var item in Collection(WorkflowState))
+        var index = -1;
+        foreach (var item in items)
         {
+            index++;
+
+            if (index < startIndex)
+            {
+                continue;
+            }
+
             foreachState.CurrentItem = item;
 
-            result = await _catStepProcessor.RunStepsAsync<TForeachState>(Builder, foreachState, cancellationToken);
+            result = await RunChildStepsAsync(_catStepProcessor, Builder, foreachState, resuming && index == startIndex, cancellationToken);
             errors.AddRange(result.ErrorList);
+
+            if (result.WorkflowResult == CatStepExecutionResult.Suspend)
+            {
+                var suspendedAt = index;
+                var count = resuming ? itemCount : Collection(WorkflowState).Count();
+                foreachState.ParentWorkflowState = null!;
+
+                return Suspended(result, errors, frame =>
+                {
+                    frame.Branch = CatCheckpointBranches.Body;
+                    frame.Iteration = suspendedAt;
+                    frame.ItemCount = count;
+                    frame.LoopState = foreachState;
+                    frame.LoopStateType = foreachState.GetType().AssemblyQualifiedName;
+                });
+            }
 
             if (result.WorkflowResult == CatStepExecutionResult.ContinueLoop)
             {

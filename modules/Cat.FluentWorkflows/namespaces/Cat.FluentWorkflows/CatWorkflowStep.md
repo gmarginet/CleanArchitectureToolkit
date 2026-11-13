@@ -45,4 +45,5 @@ Implements [ICatWorkflowStep](../../../Cat.FluentWorkflows/namespaces/Cat.Fluent
 | :--- | :--- |
 | [BodyType](CatWorkflowStep.BodyType.md 'Cat\.FluentWorkflows\.CatWorkflowStep\.BodyType') | The type of the step body\. The step processor gets it from the service provider\. |
 | [Inputs](CatWorkflowStep.Inputs.md 'Cat\.FluentWorkflows\.CatWorkflowStep\.Inputs') | The values copied from the state into the step before it runs\. |
+| [Name](CatWorkflowStep.Name.md 'Cat\.FluentWorkflows\.CatWorkflowStep\.Name') | The name of the step, or `null` when it has none\. A name must be unique in its list of steps\. It marks the step in a checkpoint, and names the step that gets the answer of a resume\. |
 | [Outputs](CatWorkflowStep.Outputs.md 'Cat\.FluentWorkflows\.CatWorkflowStep\.Outputs') | The values copied from the step into the state after it ran\. |

@@ -32,7 +32,7 @@ Built\-in step behind `Switch`\. It runs the steps of the case that matches the 
 With no match it runs the default case\. With no default case either it does nothing and continues\.
 
 ```csharp
-public class CatSwitchStep<TWorkflowState,TSwitchValue> : Cat.FluentWorkflows.CatStepBodyAsync<TWorkflowState>
+public class CatSwitchStep<TWorkflowState,TSwitchValue> : Cat.FluentWorkflows.CatContainerStepBody<TWorkflowState>
     where TWorkflowState : class, Cat.FluentWorkflows.Abstractions.ICatWorkflowState<TWorkflowState>
     where TSwitchValue : struct
 ```
@@ -50,7 +50,7 @@ The state of the workflow\.
 
 The type of the value being switched on\.
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatStepBodyAsync](CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') → [Cat\.FluentWorkflows\.CatStepBodyAsync&lt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>')[TWorkflowState](CatSwitchStep_TWorkflowState,TSwitchValue_.md#Cat.FluentWorkflows.Steps.CatSwitchStep_TWorkflowState,TSwitchValue_.TWorkflowState 'Cat\.FluentWorkflows\.Steps\.CatSwitchStep\<TWorkflowState,TSwitchValue\>\.TWorkflowState')[&gt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>') → CatSwitchStep\<TWorkflowState,TSwitchValue\>
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatStepBodyAsync](CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') → [Cat\.FluentWorkflows\.CatStepBodyAsync&lt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>')[TWorkflowState](CatSwitchStep_TWorkflowState,TSwitchValue_.md#Cat.FluentWorkflows.Steps.CatSwitchStep_TWorkflowState,TSwitchValue_.TWorkflowState 'Cat\.FluentWorkflows\.Steps\.CatSwitchStep\<TWorkflowState,TSwitchValue\>\.TWorkflowState')[&gt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>') → [Cat\.FluentWorkflows\.CatContainerStepBody&lt;](CatContainerStepBody_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatContainerStepBody\<TWorkflowState\>')[TWorkflowState](CatSwitchStep_TWorkflowState,TSwitchValue_.md#Cat.FluentWorkflows.Steps.CatSwitchStep_TWorkflowState,TSwitchValue_.TWorkflowState 'Cat\.FluentWorkflows\.Steps\.CatSwitchStep\<TWorkflowState,TSwitchValue\>\.TWorkflowState')[&gt;](CatContainerStepBody_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatContainerStepBody\<TWorkflowState\>') → CatSwitchStep\<TWorkflowState,TSwitchValue\>
 
 | Constructors | |
 | :--- | :--- |
@@ -68,4 +68,5 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Methods | |
 | :--- | :--- |
+| [FindSavedBuilder\(string, string\)](CatSwitchStep_TWorkflowState,TSwitchValue_.FindSavedBuilder.GN25JPWT16JK6N0QI7G21J98A.md 'Cat\.FluentWorkflows\.Steps\.CatSwitchStep\<TWorkflowState,TSwitchValue\>\.FindSavedBuilder\(string, string\)') | |
 | [RunAsync\(CancellationToken\)](CatSwitchStep_TWorkflowState,TSwitchValue_.RunAsync.S5ZJP9XH140S6JCW0LWZMGC8A.md 'Cat\.FluentWorkflows\.Steps\.CatSwitchStep\<TWorkflowState,TSwitchValue\>\.RunAsync\(System\.Threading\.CancellationToken\)') | Runs the step\. |

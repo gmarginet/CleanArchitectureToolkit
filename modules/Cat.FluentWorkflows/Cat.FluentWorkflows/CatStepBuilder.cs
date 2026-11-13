@@ -26,6 +26,18 @@ public class CatStepBuilder<TWorkflowState, TStepBody> : ICatStepBuilder<TWorkfl
     }
 
     /// <inheritdoc />
+    public ICatStepBuilder<TWorkflowState, TStepBody> Named(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException("A step name cannot be empty.", nameof(name));
+        }
+
+        _workflowStep.Name = name;
+        return this;
+    }
+
+    /// <inheritdoc />
     public ICatStepBuilder<TWorkflowState, TStepBody> Input<TInput>(Expression<Func<TWorkflowState, TInput>> source, Expression<Func<TStepBody, TInput>> target)
     {
         _workflowStep.Inputs.Add(new CatStepParameter(source, target));

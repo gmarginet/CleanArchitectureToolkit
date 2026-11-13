@@ -30,8 +30,9 @@
 
 Default [ICatStepProcessor](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatStepProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepProcessor')\.
 For each step it gets the step body from the service provider, fills the inputs, runs the step and copies the outputs\.
-It stops after a step that returns BreakCascade, BreakFromCurrentFlowOnly or BreakFromLoop\.
+It stops after a step that returns BreakCascade, BreakFromCurrentFlowOnly, BreakFromLoop or Suspend\.
 The result is the one of the last step that ran\. The errors of every step that ran are kept\.
+A step that suspends is written as a frame in the checkpoint of the response\. A resume starts again at that step\.
 
 ```csharp
 public class CatStepProcessor : Cat.FluentWorkflows.Abstractions.ICatStepProcessor
@@ -52,4 +53,8 @@ Implements [ICatStepProcessor](../../../Cat.FluentWorkflows/namespaces/Cat.Fluen
 
 | Methods | |
 | :--- | :--- |
-| [RunStepsAsync&lt;TWorkflowState&gt;\(ICatWorkflowBuilder&lt;TWorkflowState&gt;, TWorkflowState, CancellationToken\)](CatStepProcessor.RunStepsAsync.X9T5P5646TC85HDMBJ8KD0KQ2.md 'Cat\.FluentWorkflows\.CatStepProcessor\.RunStepsAsync\<TWorkflowState\>\(Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder\<TWorkflowState\>, TWorkflowState, System\.Threading\.CancellationToken\)') | Runs the steps of a builder in order\. It stops after a step that returns a break result\. |
+| [CheckNamesAreUnique\(List&lt;ICatWorkflowStep&gt;\)](CatStepProcessor.CheckNamesAreUnique.HW0TALQ12RV4DQRLZJYOM6ZR5.md 'Cat\.FluentWorkflows\.CatStepProcessor\.CheckNamesAreUnique\(System\.Collections\.Generic\.List\<Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowStep\>\)') | |
+| [FindResumeIndex\(List&lt;ICatWorkflowStep&gt;, CatCheckpointFrame\)](CatStepProcessor.FindResumeIndex.563NINGTQRTLNZY7B31YL12X5.md 'Cat\.FluentWorkflows\.CatStepProcessor\.FindResumeIndex\(System\.Collections\.Generic\.List\<Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowStep\>, Cat\.FluentWorkflows\.Abstractions\.CatCheckpointFrame\)') | |
+| [ResumeStepAsync\(ICatStepBodyAsync, CatResumeInfo, CancellationToken\)](CatStepProcessor.ResumeStepAsync.7X0DNRZOS3R249M5I3ZA7R7ZC.md 'Cat\.FluentWorkflows\.CatStepProcessor\.ResumeStepAsync\(Cat\.FluentWorkflows\.Abstractions\.ICatStepBodyAsync, Cat\.FluentWorkflows\.Abstractions\.CatResumeInfo, System\.Threading\.CancellationToken\)') | |
+| [RunStepsAsync&lt;TWorkflowState&gt;\(ICatWorkflowBuilder&lt;TWorkflowState&gt;, TWorkflowState, CatResumeInfo, CancellationToken\)](CatStepProcessor.RunStepsAsync.md#Cat.FluentWorkflows.CatStepProcessor.RunStepsAsync_TWorkflowState_(Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder_TWorkflowState_,TWorkflowState,Cat.FluentWorkflows.Abstractions.CatResumeInfo,System.Threading.CancellationToken) 'Cat\.FluentWorkflows\.CatStepProcessor\.RunStepsAsync\<TWorkflowState\>\(Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder\<TWorkflowState\>, TWorkflowState, Cat\.FluentWorkflows\.Abstractions\.CatResumeInfo, System\.Threading\.CancellationToken\)') | Runs the steps of a builder in order, starting at the saved step when a resume is given\. A step that returns [Suspend](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/CatStepExecutionResult.md#Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.Suspend 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult\.Suspend') stops the run, and the response holds its frame in the checkpoint\. |
+| [RunStepsAsync&lt;TWorkflowState&gt;\(ICatWorkflowBuilder&lt;TWorkflowState&gt;, TWorkflowState, CancellationToken\)](CatStepProcessor.RunStepsAsync.md#Cat.FluentWorkflows.CatStepProcessor.RunStepsAsync_TWorkflowState_(Cat.FluentWorkflows.Abstractions.ICatWorkflowBuilder_TWorkflowState_,TWorkflowState,System.Threading.CancellationToken) 'Cat\.FluentWorkflows\.CatStepProcessor\.RunStepsAsync\<TWorkflowState\>\(Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowBuilder\<TWorkflowState\>, TWorkflowState, System\.Threading\.CancellationToken\)') | Runs the steps of a builder in order\. It stops after a step that returns a break result\. |

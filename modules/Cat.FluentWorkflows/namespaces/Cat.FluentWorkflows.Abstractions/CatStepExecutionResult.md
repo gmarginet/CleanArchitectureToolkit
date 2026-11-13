@@ -66,3 +66,10 @@ Leave the nearest loop, a while or a foreach, and go on with the step after it\.
 `ContinueLoop` 4
 
 Reserved for loops\. The step processor does not stop on it, and no built\-in step returns it\.
+
+<a name='Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.Suspend'></a>
+
+`Suspend` 5
+
+Stop here and wait for an answer\. Every list of steps stops at once and passes it up, like a [BreakCascade](CatStepExecutionResult.md#Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.BreakCascade 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult\.BreakCascade'), but without an error\.
+The response then holds a [CatWorkflowCheckpoint](CatWorkflowCheckpoint.md 'Cat\.FluentWorkflows\.Abstractions\.CatWorkflowCheckpoint') that a later `ResumeAsync` picks up\.

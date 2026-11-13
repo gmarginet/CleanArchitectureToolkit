@@ -14,6 +14,14 @@ public interface ICatStepBuilder<TWorkflowState, TStepBody>
     where TStepBody : class, ICatStepBodyAsync
 {
     /// <summary>
+    /// Gives the step a name. Name every step that can suspend, because the name is what a checkpoint holds and what a resume can aim at.
+    /// A name must be unique in its list of steps.
+    /// </summary>
+    /// <param name="name">The name of the step.</param>
+    /// <returns>The same builder, so calls can be chained.</returns>
+    ICatStepBuilder<TWorkflowState, TStepBody> Named(string name);
+
+    /// <summary>
     /// Copies a value from the workflow state into a member of the step, right before the step runs.
     /// </summary>
     /// <typeparam name="TInput">The type of the value.</typeparam>

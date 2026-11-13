@@ -24,6 +24,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient(typeof(CatForeachStep<,,>));
         services.AddTransient(typeof(CatWhileStep<>));
         services.AddTransient(typeof(CatSwitchStep<,>));
+        services.AddTransient(typeof(CatParallelStep<>));
         services.AddTransient(typeof(CatRunSubWorkflowStep<,,>));
         services.AddTransient(typeof(CatSetStatePropertyStep<,>));
         services.AddTransient(typeof(CatLogStep<>));

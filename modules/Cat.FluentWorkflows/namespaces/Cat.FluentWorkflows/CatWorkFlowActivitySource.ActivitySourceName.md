@@ -31,7 +31,7 @@
 The name of the activity source\.
 
 ```csharp
-public const string ActivitySourceName = "Cat.FluentWorkFlows";
+public const string ActivitySourceName = "Cat.FluentWorkflows";
 ```
 
 #### Field Value

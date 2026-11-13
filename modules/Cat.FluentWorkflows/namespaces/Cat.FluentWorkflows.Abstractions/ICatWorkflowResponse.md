@@ -36,6 +36,7 @@ public interface ICatWorkflowResponse
 
 | Properties | |
 | :--- | :--- |
+| [Checkpoint](ICatWorkflowResponse.Checkpoint.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse\.Checkpoint') | The saved position of a suspended workflow\. It is set only when [WorkflowResult](ICatWorkflowResponse.WorkflowResult.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse\.WorkflowResult') is [Suspend](CatStepExecutionResult.md#Cat.FluentWorkflows.Abstractions.CatStepExecutionResult.Suspend 'Cat\.FluentWorkflows\.Abstractions\.CatStepExecutionResult\.Suspend')\. A response from the workflow processor holds the full checkpoint\. A response from inside a container holds the frame of that level only\. |
 | [ErrorList](ICatWorkflowResponse.ErrorList.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse\.ErrorList') | The errors\. The list is empty when nothing failed\. |
 | [WorkflowResult](ICatWorkflowResponse.WorkflowResult.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse\.WorkflowResult') | What the step processor does next\. |
 

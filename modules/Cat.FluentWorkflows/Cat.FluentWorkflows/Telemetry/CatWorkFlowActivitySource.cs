@@ -10,7 +10,7 @@ public class CatWorkFlowActivitySource
     /// <summary>
     /// The name of the activity source.
     /// </summary>
-    public const string ActivitySourceName = "Cat.FluentWorkFlows";
+    public const string ActivitySourceName = "Cat.FluentWorkflows";
 
     /// <summary>
     /// The shared activity source.

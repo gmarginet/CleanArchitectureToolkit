@@ -13,7 +13,7 @@ namespace Cat.FluentWorkflows.Steps;
 /// A break result from the inner steps goes on to the steps around the if.
 /// </summary>
 /// <typeparam name="TWorkflowState">The state of the workflow.</typeparam>
-public class CatIfStep<TWorkflowState> : CatStepBodyAsync<TWorkflowState>
+public class CatIfStep<TWorkflowState> : CatContainerStepBody<TWorkflowState>
     where TWorkflowState : class, ICatWorkflowState<TWorkflowState>
 {
     private readonly ICatStepProcessor _catStepProcessor;
@@ -49,17 +49,40 @@ public class CatIfStep<TWorkflowState> : CatStepBodyAsync<TWorkflowState>
     /// <inheritdoc />
     public override async Task<ICatWorkflowResponse> RunAsync(CancellationToken cancellationToken = default)
     {
-        var result = CatWorkflowResponse.Succeeded(CatStepExecutionResult.Continue);
+        var resuming = SavedFrame != null;
+        string? branch = null;
 
-        if (Condition(WorkflowState))
+        if (resuming)
         {
-            result = await _catStepProcessor.RunStepsAsync(ThenBuilder, WorkflowState, cancellationToken);
+            branch = SavedFrame!.Branch;
+        }
+        else if (Condition(WorkflowState))
+        {
+            branch = CatCheckpointBranches.Then;
         }
         else if (ElseBuilder?.WorkflowSteps != null)
         {
-            result = await _catStepProcessor.RunStepsAsync(ElseBuilder, WorkflowState, cancellationToken);
+            branch = CatCheckpointBranches.Else;
         }
 
-        return result;
+        var builder = branch switch
+        {
+            CatCheckpointBranches.Then => ThenBuilder,
+            CatCheckpointBranches.Else => ElseBuilder,
+            _ => null
+        };
+
+        if (builder == null)
+        {
+            return resuming
+                ? throw new CatWorkflowResumeException($"The checkpoint holds the branch '{branch}' of an if, but the workflow has no such branch.")
+                : CatWorkflowResponse.Succeeded(CatStepExecutionResult.Continue);
+        }
+
+        var result = await RunChildStepsAsync(_catStepProcessor, builder, WorkflowState, resuming, cancellationToken);
+
+        return result.WorkflowResult == CatStepExecutionResult.Suspend
+            ? Suspended(result, frame => frame.Branch = branch)
+            : result;
     }
 }

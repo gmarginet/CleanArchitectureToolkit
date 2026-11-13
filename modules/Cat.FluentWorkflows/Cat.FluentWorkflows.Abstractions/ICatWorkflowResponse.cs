@@ -19,6 +19,12 @@ public interface ICatWorkflowResponse
     IReadOnlyList<ICatError> ErrorList { get; }
 
     /// <summary>
+    /// The saved position of a suspended workflow. It is set only when <see cref="WorkflowResult"/> is <see cref="CatStepExecutionResult.Suspend"/>.
+    /// A response from the workflow processor holds the full checkpoint. A response from inside a container holds the frame of that level only.
+    /// </summary>
+    CatWorkflowCheckpoint? Checkpoint { get; }
+
+    /// <summary>
     /// Changes the result and keeps the errors.
     /// </summary>
     /// <param name="workflowResult">The new result.</param>

@@ -15,7 +15,7 @@ namespace Cat.FluentWorkflows.Steps;
 /// The errors of every pass are kept.
 /// </summary>
 /// <typeparam name="TWorkflowState">The state of the workflow.</typeparam>
-public class CatWhileStep<TWorkflowState> : CatStepBodyAsync<TWorkflowState>
+public class CatWhileStep<TWorkflowState> : CatContainerStepBody<TWorkflowState>
     where TWorkflowState : class, ICatWorkflowState<TWorkflowState>
 {
     private readonly ICatStepProcessor _catStepProcessor;
@@ -49,10 +49,29 @@ public class CatWhileStep<TWorkflowState> : CatStepBodyAsync<TWorkflowState>
         var result = CatWorkflowResponse.Succeeded(CatStepExecutionResult.Continue);
         var errors = new List<ICatError>();
 
-        while (Condition(WorkflowState))
+        var resuming = SavedFrame != null;
+        var pass = SavedFrame?.Iteration ?? 0;
+
+        while (resuming || Condition(WorkflowState))
         {
-            result = await _catStepProcessor.RunStepsAsync(Builder, WorkflowState, cancellationToken);
+            if (!resuming)
+            {
+                pass++;
+            }
+
+            result = await RunChildStepsAsync(_catStepProcessor, Builder, WorkflowState, resuming, cancellationToken);
+            resuming = false;
             errors.AddRange(result.ErrorList);
+
+            if (result.WorkflowResult == CatStepExecutionResult.Suspend)
+            {
+                var currentPass = pass;
+                return Suspended(result, errors, frame =>
+                {
+                    frame.Branch = CatCheckpointBranches.Body;
+                    frame.Iteration = currentPass;
+                });
+            }
 
             if (result.WorkflowResult == CatStepExecutionResult.BreakFromLoop)
             {

@@ -456,6 +456,35 @@ public static class CatWorkflowBuilderExtensions
     }
 
     /// <summary>
+    /// Adds a step that runs several branches on the same workflow state.
+    /// The code steps of the branches run one after another, in the order you add the branches. Only the waiting is parallel:
+    /// a branch that suspends waits while the other branches run.
+    /// Two branches must not write the same property of the state.
+    /// </summary>
+    /// <typeparam name="TWorkflowState">The state of the workflow.</typeparam>
+    /// <param name="builder">The builder to add the step to.</param>
+    /// <param name="buildBranches">Adds the branches, like <c>p =&gt; p.Branch(b =&gt; ...).Branch(b =&gt; ...)</c>.</param>
+    /// <param name="rule">What a failing or suspending branch does to the other branches. The default is <see cref="CatParallelRule.FailFast"/>.</param>
+    public static void Parallel<TWorkflowState>(
+        this ICatWorkflowBuilder<TWorkflowState> builder,
+        Action<ICatParallelBuilder<TWorkflowState>> buildBranches,
+        CatParallelRule rule = CatParallelRule.FailFast)
+        where TWorkflowState : class, ICatWorkflowState<TWorkflowState>
+    {
+        var workflowStep = new CatWorkflowStep<CatParallelStep<TWorkflowState>>();
+        var stepBuilder = new CatStepBuilder<TWorkflowState, CatParallelStep<TWorkflowState>>(workflowStep);
+
+        var parallelBuilder = new CatParallelBuilder<TWorkflowState>();
+        buildBranches(parallelBuilder);
+        var branches = parallelBuilder.Branches;
+
+        stepBuilder.Input(state => branches, step => step.Branches);
+        stepBuilder.Input(state => rule, step => step.Rule);
+
+        builder.WorkflowSteps.Add(workflowStep);
+    }
+
+    /// <summary>
     /// Adds a step that writes a log entry at the Error level.
     /// </summary>
     /// <typeparam name="TWorkflowState">The state of the workflow.</typeparam>

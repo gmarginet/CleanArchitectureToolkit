@@ -61,8 +61,16 @@ The module ships the common steps for you, and you can write your own.
     - [Break](#break)
     - [Break if](#break-if)
     - [Run a sub-workflow](#run-a-sub-workflow)
+    - [Parallel](#parallel)
     - [Process a command](#process-a-command)
     - [Process a query](#process-a-query)
+  - [Suspend and resume](#suspend-and-resume)
+    - [A step that waits](#a-step-that-waits)
+    - [Suspend and resume a workflow](#suspend-and-resume-a-workflow)
+    - [The checkpoint](#the-checkpoint)
+    - [Changed workflows](#changed-workflows)
+    - [Rules](#rules)
+    - [Containers of your own](#containers-of-your-own)
   - [Create your own steps](#create-your-own-steps)
     - [A step that works on inputs and outputs](#a-step-that-works-on-inputs-and-outputs)
     - [A step that works on the workflow state](#a-step-that-works-on-the-workflow-state)
@@ -220,10 +228,11 @@ public class OrderService
 }
 ```
 
-The response holds two things:
+The response holds three things:
 
 - **`WorkflowResult`:** How the workflow ended, as a `CatStepExecutionResult`.
 - **`ErrorList`:** The errors a step reported. The list is empty when nothing failed.
+- **`Checkpoint`:** The saved position of a workflow that suspended. It is `null` for every other result. See [Suspend and resume](#suspend-and-resume).
 
 ### How a step decides what happens next
 
@@ -236,8 +245,9 @@ Every step returns a result. The step processor reads it after the step and deci
 | `BreakFromCurrentFlowOnly` | Stop this list of steps. A workflow ends, and its caller goes on as if it succeeded. Inside a foreach it ends only the current item. |
 | `BreakFromLoop` | Leave the nearest loop, a while or a foreach, and go on with the step after it. |
 | `ContinueLoop` | Reserved for loops. The step processor does not stop on it, and no built-in step returns it. |
+| `Suspend` | Stop here and wait for an answer. Every list of steps stops at once, like a `BreakCascade`, but without an error. The response holds a checkpoint. See [Suspend and resume](#suspend-and-resume). |
 
-"A list of steps" means the steps of a workflow, or the inner steps of an if, a while, a foreach or a switch case.
+"A list of steps" means the steps of a workflow, or the inner steps of an if, a while, a foreach, a switch case or a branch of a parallel step.
 
 The workflow processor reports `BreakFromCurrentFlowOnly` as `Continue`, so the caller of a workflow never sees it.
 
@@ -536,6 +546,32 @@ How breaks cross the boundary:
 
 - **`BreakFromCurrentFlowOnly` in the sub-workflow:** Ends only the sub-workflow. The main workflow goes on.
 - **`BreakCascade` in the sub-workflow:** Ends the main workflow too.
+- **`Suspend` in the sub-workflow:** Suspends the main workflow too. A resume goes on inside the sub-workflow.
+
+#### Parallel
+
+A parallel step runs several branches on the same workflow state. Use it when a process waits for more than one answer at once, such as a payment and a stock reservation.
+
+```csharp
+builder.Parallel(p => p
+    .Branch(b => b.Run<OrderState, WaitForPaymentStep>().Named("payment").Output(step => step.Paid, s => s.Paid))
+    .Branch(b => b.Run<OrderState, WaitForStockStep>().Named("stock").Output(step => step.Reserved, s => s.Reserved)),
+    CatParallelRule.SuspendUntilAllDone);
+```
+
+The code steps of the branches run one after another, in the order you add the branches. Only the waiting is parallel. A branch that suspends waits while the other branches run, so the parallel step has no races on the state. Two branches must still not write the same property of the state.
+
+The rule says what a failing or a suspending branch does:
+
+| Rule | What happens |
+|------|--------------|
+| `FailFast` | The default. The first branch that fails or suspends stops the step at once, and later branches do not start. A failure ends the workflow. After a resume the later branches start. |
+| `WaitForAll` | Every branch runs, also after a failure. The step ends when no branch waits any more, and it ends the workflow with `BreakCascade` if a branch failed. |
+| `SuspendUntilAllDone` | Every branch runs, and a suspended branch does not stop the others. The first failure ends the step and the workflow at once, even when other branches still wait. Without a failure the step waits until all branches are done. |
+
+A branch fails when it returns `BreakCascade`. A `BreakFromCurrentFlowOnly` ends only that branch. A `BreakFromLoop` leaves the parallel step and the nearest loop around it.
+
+The errors of branches that finished before a suspend are not part of the response of a later resume. Read what you need from the state.
 
 #### Process a command
 
@@ -603,6 +639,140 @@ builder.ProcessQuery<OrderState, GetDiscountQuery, decimal>()
 
 A failed query ends the workflow with `BreakCascade` and carries the errors of the query. The output is copied after the step ran, so check the workflow response for errors before you trust the value.
 
+### Suspend and resume
+
+Some processes wait. A payment takes minutes, an approval takes days. A workflow can suspend at a step, hand you a checkpoint, and go on later at the same step, with the answer.
+
+The engine does the position part only. It never stores anything and never waits by itself. You save the state and the checkpoint, and you call the workflow again when the answer arrives.
+
+#### A step that waits
+
+Derive from `CatResumableStepBody<TAnswer>`. `RunAsync` starts the work and returns `CatWorkflowResponse.Suspended()`. `ResumeAsync` finishes the step with the answer.
+
+```csharp
+using Cat.FluentWorkflows;
+using Cat.FluentWorkflows.Abstractions;
+using Microsoft.Extensions.Logging;
+
+public class WaitForPaymentStep : CatResumableStepBody<PaymentResult>
+{
+    private readonly IPaymentGateway _gateway;
+
+    public WaitForPaymentStep(IPaymentGateway gateway, ILogger<WaitForPaymentStep> logger)
+        : base(logger)
+    {
+        _gateway = gateway;
+    }
+
+    public Guid OrderId { get; set; }
+
+    public bool Paid { get; private set; }
+
+    public override async Task<ICatWorkflowResponse> RunAsync(CancellationToken cancellationToken = default)
+    {
+        await _gateway.RequestPaymentAsync(OrderId, cancellationToken);
+
+        return CatWorkflowResponse.Suspended();
+    }
+
+    protected override Task<ICatWorkflowResponse> ResumeAsync(PaymentResult answer, CancellationToken cancellationToken)
+    {
+        Paid = answer.Succeeded;
+
+        return Task.FromResult(CatWorkflowResponse.Succeeded(CatStepExecutionResult.Continue));
+    }
+}
+```
+
+The step is a new instance on the resume. The step processor fills the inputs again before `ResumeAsync` runs and copies the outputs after it. A step that suspends and does not implement `ICatResumableStepBody` can never take an answer, and a resume at it throws.
+
+Give the step a name with `Named`, and give the workflow a version:
+
+```csharp
+public class PlaceOrderWorkflow : ICatWorkflow<OrderState>, ICatVersionedWorkflow
+{
+    public int Version => 1;
+
+    public void Build(ICatWorkflowBuilder<OrderState> builder)
+    {
+        builder.Run<OrderState, ReserveStockStep>();
+        builder.Run<OrderState, WaitForPaymentStep>()
+            .Named("payment")
+            .Input(s => s.OrderId, step => step.OrderId)
+            .Output(step => step.Paid, s => s.Paid);
+        builder.If(s => s.Paid, then => then.Run(s => s.Status = "Paid"), otherwise => otherwise.Run(s => s.Status = "Cancelled"));
+    }
+}
+```
+
+#### Suspend and resume a workflow
+
+A suspended run returns the result `Suspend` and a checkpoint. Save the checkpoint next to the state. Later, call `ResumeAsync` with both and the answer.
+
+```csharp
+var response = await _workflowProcessor.RunAsync<PlaceOrderWorkflow, OrderState>(state, cancellationToken);
+
+if (response.WorkflowResult == CatStepExecutionResult.Suspend)
+{
+    await SaveAsync(state, response.Checkpoint!);
+    return;
+}
+
+// later, when the payment answer arrives
+var (state, checkpoint) = await LoadAsync(orderId);
+var resumed = await _workflowProcessor.ResumeAsync<PlaceOrderWorkflow, OrderState>(state, checkpoint, paymentResult, cancellationToken);
+```
+
+The resume builds the workflow again and walks to the saved step. It does not run the steps before it a second time. The result of a resume can be `Suspend` again, with a new checkpoint.
+
+When the workflow waits in more than one place at once, name the step that gets the answer: `ResumeAsync<TWorkflow, TState>(state, checkpoint, answer, "payment", cancellationToken)`. Without a name, a checkpoint with more than one waiting step throws.
+
+#### The checkpoint
+
+`CatWorkflowCheckpoint` is a plain class. The engine never serializes it, so use the serializer you like. It holds the version of the workflow and a tree of frames, one frame per list of steps on the way to the waiting step:
+
+| Member | What it holds |
+|--------|---------------|
+| `Version` | The version of the workflow, from `ICatVersionedWorkflow`. A workflow without it has version 0. |
+| `Frame.StepIndex`, `StepName`, `BodyType` | Which step of the list suspended, its name if it has one, and the type of its step body. |
+| `Frame.Branch`, `CaseValue` | The branch of an if or a switch that was running. |
+| `Frame.Iteration`, `ItemCount`, `LoopState`, `LoopStateType` | The pass of a while, or the item, the item count and the shared state of a foreach. |
+| `Frame.Child` | The frame of the step inside a container step. |
+| `Frame.Branches` | One entry per branch of a parallel step, with its status and frame. |
+| `Frame.Leaves()` | The frames of the steps that wait, at any depth. Use `StepName` to see what the workflow waits for. |
+
+Two things to know when you serialize it:
+
+- **The loop state:** A foreach keeps its state in `LoopState`, with the assembly qualified type name in `LoopStateType`. Create that type when you read the checkpoint back. The engine sets `ParentWorkflowState` of the loop state to `null` when it suspends, so a serializer does not write the whole workflow state again. The resume sets it again, and it reads the current item again from the collection.
+- **The state:** The checkpoint holds the position only. Save the workflow state yourself, and make sure it can be serialized. Do not put services or delegates in it.
+
+#### Changed workflows
+
+The resume builds the workflow again, so a change to the workflow can point the checkpoint at the wrong step. The engine checks, and a resume that does not fit throws a `CatWorkflowResumeException` with a clear message.
+
+- **Version:** The workflow has a version through `ICatVersionedWorkflow`. A resume with another version fails. Raise the version when you add, remove or reorder steps while checkpoints are still saved.
+- **Names:** A step with a name is found by its name, so it can move. A missing name fails.
+- **Positions:** A step without a name is found by its position, and the type of its step body must match.
+
+Name every step that can suspend. Side by side versions of a workflow are not part of the module.
+
+#### Rules
+
+- **`Build` is deterministic.** It builds the same steps every time, from the same version. Do not read the clock, a database or random values in `Build`.
+- **The collection of a foreach does not change while the workflow waits.** The checkpoint holds the item count, and a resume with another count fails. Read the collection from the saved state.
+- **A condition is not asked again.** A resumed `If` goes on in the branch it was in, and a resumed `Switch` in its case, also when the state would now choose another one.
+- **Branches of a parallel step do not write the same property.**
+
+#### Containers of your own
+
+A step that runs other steps can derive from `CatContainerStepBody<TState>`. It gives you the frame handling.
+
+- Read `SavedFrame` to see whether this is a resume, and what you wrote last time.
+- Run the inner steps with `RunChildStepsAsync(stepProcessor, builder, state, resuming, cancellationToken)`. Set `resuming` for the first pass only.
+- When the result is `Suspend`, return `Suspended(result, frame => ...)` and write in the frame what you need to find your place again, such as the branch or the item.
+
+The built-in if, switch, while, foreach, sub-workflow and parallel steps work this way.
+
 ### Create your own steps
 
 A step you write is a class, called a step body. The workflow builder runs it with `Run<TWorkflowState, TStepBody>()`. Give both type arguments, like `builder.Run<OrderState, CheckStockStep>()`. You connect it to the state with two calls:
@@ -622,6 +792,8 @@ Pick the base class that fits:
 | `CatStepBodyAsync` | The work is asynchronous and the step only needs its inputs. |
 | `CatStepBody<TState>` | The work is synchronous and the step needs the workflow state. |
 | `CatStepBodyAsync<TState>` | The work is asynchronous and the step needs the workflow state. |
+| `CatResumableStepBody<TAnswer>` | The step waits for an answer, see [Suspend and resume](#suspend-and-resume). |
+| `CatContainerStepBody<TState>` | The step runs other steps, see [Containers of your own](#containers-of-your-own). |
 
 Every base class gives you a `Logger`.
 
@@ -752,10 +924,12 @@ Exceptions are not turned into responses. They leave the workflow processor, so 
 | The target of `Input` or `Output` isn't a member access, like `step => step.Total` | A `NotSupportedException` when you build the workflow. |
 | `Switch` gets the same case value twice | An `Exception` with the message `Case with value '<value>' is already defined.` when you build the workflow. |
 | A step throws | The exception leaves the workflow processor as it is. |
+| `ResumeAsync` gets a checkpoint that does not fit: another version, a missing step name, a step of another type, another foreach item count, an answer of the wrong type, no target for several waiting steps | A `CatWorkflowResumeException`. It derives from `InvalidOperationException`. |
+| Two steps of one list have the same name | An `InvalidOperationException` when the list runs. |
 
 ### Tracing
 
-The workflow processor starts an activity named `Processing Workflow <name>` for every run. The activity source is called `Cat.FluentWorkFlows`. Add it to your OpenTelemetry setup to collect the traces:
+The workflow processor starts an activity named `Processing Workflow <name>` for every run, and `Resuming Workflow <name>` for every resume. The activity source is called `Cat.FluentWorkflows`. Add it to your OpenTelemetry setup to collect the traces:
 
 ```csharp
 using Cat.FluentWorkflows.Telemetry;

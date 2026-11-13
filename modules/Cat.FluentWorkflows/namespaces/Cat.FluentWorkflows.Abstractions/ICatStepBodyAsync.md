@@ -34,6 +34,9 @@ The code of one step\. Derive from `CatStepBody` or `CatStepBodyAsync` instead o
 public interface ICatStepBodyAsync
 ```
 
+Derived  
+↳ [ICatResumableStepBody](ICatResumableStepBody.md 'Cat\.FluentWorkflows\.Abstractions\.ICatResumableStepBody')
+
 | Methods | |
 | :--- | :--- |
 | [RunAsync\(CancellationToken\)](ICatStepBodyAsync.RunAsync.ZWAKQ1MI96PZE0Z0G8PFD9ZUD.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepBodyAsync\.RunAsync\(System\.Threading\.CancellationToken\)') | Runs the step\. |

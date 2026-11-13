@@ -31,9 +31,10 @@
 Built\-in step behind `Run<TSubWorkflow, TSubWorkflowState, TWorkflowState>`\.
 It runs another workflow on the sub\-workflow state that the main state carries\.
 A BreakFromCurrentFlowOnly inside the sub\-workflow ends only the sub\-workflow\.
+When the sub\-workflow suspends, this step suspends too, and a resume goes on inside the sub\-workflow\.
 
 ```csharp
-public class CatRunSubWorkflowStep<TWorkflowState,TSubWorkflow,TSubWorkflowState> : Cat.FluentWorkflows.CatStepBodyAsync<TWorkflowState>
+public class CatRunSubWorkflowStep<TWorkflowState,TSubWorkflow,TSubWorkflowState> : Cat.FluentWorkflows.CatContainerStepBody<TWorkflowState>
     where TWorkflowState : class, Cat.FluentWorkflows.Abstractions.ICatWorkflowState<TWorkflowState>, Cat.FluentWorkflows.Abstractions.ICatHasSubWorkflowState<TSubWorkflowState>
     where TSubWorkflow : Cat.FluentWorkflows.Abstractions.ICatWorkflow<TSubWorkflowState>
     where TSubWorkflowState : class, Cat.FluentWorkflows.Abstractions.ICatWorkflowState<TSubWorkflowState>
@@ -58,7 +59,7 @@ The workflow to run\.
 
 The state of the sub\-workflow\.
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatStepBodyAsync](CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') → [Cat\.FluentWorkflows\.CatStepBodyAsync&lt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>')[TWorkflowState](CatRunSubWorkflowStep_TWorkflowState,TSubWorkflow,TSubWorkflowState_.md#Cat.FluentWorkflows.Steps.CatRunSubWorkflowStep_TWorkflowState,TSubWorkflow,TSubWorkflowState_.TWorkflowState 'Cat\.FluentWorkflows\.Steps\.CatRunSubWorkflowStep\<TWorkflowState,TSubWorkflow,TSubWorkflowState\>\.TWorkflowState')[&gt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>') → CatRunSubWorkflowStep\<TWorkflowState,TSubWorkflow,TSubWorkflowState\>
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatStepBodyAsync](CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') → [Cat\.FluentWorkflows\.CatStepBodyAsync&lt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>')[TWorkflowState](CatRunSubWorkflowStep_TWorkflowState,TSubWorkflow,TSubWorkflowState_.md#Cat.FluentWorkflows.Steps.CatRunSubWorkflowStep_TWorkflowState,TSubWorkflow,TSubWorkflowState_.TWorkflowState 'Cat\.FluentWorkflows\.Steps\.CatRunSubWorkflowStep\<TWorkflowState,TSubWorkflow,TSubWorkflowState\>\.TWorkflowState')[&gt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>') → [Cat\.FluentWorkflows\.CatContainerStepBody&lt;](CatContainerStepBody_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatContainerStepBody\<TWorkflowState\>')[TWorkflowState](CatRunSubWorkflowStep_TWorkflowState,TSubWorkflow,TSubWorkflowState_.md#Cat.FluentWorkflows.Steps.CatRunSubWorkflowStep_TWorkflowState,TSubWorkflow,TSubWorkflowState_.TWorkflowState 'Cat\.FluentWorkflows\.Steps\.CatRunSubWorkflowStep\<TWorkflowState,TSubWorkflow,TSubWorkflowState\>\.TWorkflowState')[&gt;](CatContainerStepBody_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatContainerStepBody\<TWorkflowState\>') → CatRunSubWorkflowStep\<TWorkflowState,TSubWorkflow,TSubWorkflowState\>
 
 | Constructors | |
 | :--- | :--- |

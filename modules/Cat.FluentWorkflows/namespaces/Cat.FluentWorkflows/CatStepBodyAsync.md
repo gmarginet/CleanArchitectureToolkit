@@ -38,6 +38,7 @@ public abstract class CatStepBodyAsync : Cat.FluentWorkflows.Abstractions.ICatSt
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatStepBodyAsync
 
 Derived  
+↳ [CatResumableStepBody&lt;TAnswer&gt;](CatResumableStepBody_TAnswer_.md 'Cat\.FluentWorkflows\.CatResumableStepBody\<TAnswer\>')  
 ↳ [CatStepBody](CatStepBody.md 'Cat\.FluentWorkflows\.CatStepBody')  
 ↳ [CatStepBodyAsync&lt;TWorkflowState&gt;](CatStepBodyAsync_TWorkflowState_.md 'Cat\.FluentWorkflows\.CatStepBodyAsync\<TWorkflowState\>')
 
