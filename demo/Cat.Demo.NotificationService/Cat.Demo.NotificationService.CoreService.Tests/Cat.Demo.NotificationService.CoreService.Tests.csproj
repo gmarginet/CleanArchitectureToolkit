@@ -25,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\modules\Cat.Expressions\Cat.Expressions\Cat.Expressions.csproj" />
       <ProjectReference Include="..\..\..\tests\Cat.NUnit\Cat.NUnit.csproj" />
       <ProjectReference Include="..\Cat.Demo.NotificationService.CoreService\Cat.Demo.NotificationService.CoreService.csproj" />
     </ItemGroup>

@@ -8,6 +8,7 @@
       <ProjectReference Include="..\..\..\modules\Cat.Commands\Cat.Commands.Abstractions\Cat.Commands.Abstractions.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Abstractions\Cat.ServiceRequests.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Validators\Cat.Validators\Cat.Validators.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.InventoryService\Cat.Demo.InventoryService.Contracts\Cat.Demo.InventoryService.Contracts.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.OrderService\Cat.Demo.OrderService.Contracts\Cat.Demo.OrderService.Contracts.csproj" />
       <ProjectReference Include="..\Cat.Demo.NotificationService.DataModels\Cat.Demo.NotificationService.DataModels.csproj" />

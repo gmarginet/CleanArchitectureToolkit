@@ -39,7 +39,7 @@ public static class EventProcessorExtensions
             options.AdministrationConnectionString = configuration["Messaging:AdministrationConnectionString"] ?? string.Empty;
         });
 
-        services.AddCatEventProcessor(configuration, processor => processor.Receive<OrderConfirmed>().Receive<LowStockReport>());
+        services.AddCatEventProcessor(configuration, processor => processor.Receive<OrderConfirmed>().Receive<LowStockReport>().Receive<StockChanged>());
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
         services.AddHealthChecks().AddCatEventProcessorHealthCheck();
 

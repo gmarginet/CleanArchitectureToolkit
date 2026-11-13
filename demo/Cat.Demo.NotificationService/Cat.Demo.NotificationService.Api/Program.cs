@@ -3,14 +3,18 @@ using Cat.Commands.Decorators.Logging.Extensions;
 using Cat.Commands.Extensions;
 using Cat.Demo.NotificationService.Api.Extensions;
 using Cat.Demo.NotificationService.CoreService.ServiceRequestHandlers;
+using Cat.Demo.NotificationService.CoreService.Validators;
 using Cat.Demo.NotificationService.Infrastructure.CommandHandlers;
 using Cat.Demo.NotificationService.Infrastructure.Extensions;
 using Cat.Demo.ServiceDefaults;
 using Cat.EventProcessor.Minimal.Api.Extensions;
+using Cat.Expressions.Extensions;
 using Cat.Minimal.Api.Extensions;
 using Cat.ServiceRequests.Decorators.ActivitySource.Extensions;
 using Cat.ServiceRequests.Decorators.Logging.Extensions;
+using Cat.ServiceRequests.Decorators.Validation.Extensions;
 using Cat.ServiceRequests.Extensions;
+using Cat.Validators.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +28,8 @@ builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
 
 builder.Services.AddCatMinimalApiModule();
+builder.Services.AddCatCompiledMemberExpressionCache();
+builder.Services.AddCatValidatorsModule(typeof(StockChangedValidator));
 builder.Services.AddCatServiceRequestsModule(typeof(OrderConfirmedHandler));
 builder.Services.AddCatCommandsModule(typeof(SendOrderConfirmedMailCommandHandler));
 
@@ -69,6 +75,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapDefaultEndpoints();
+app.Services.AddCatServiceRequestsModuleValidationDecorator();
 app.Services.AddCatServiceRequestsModuleLoggingDecorator();
 app.Services.AddCatServiceRequestsModuleActivitySourceDecorator();
 app.Services.AddCatCommandsModuleLoggingDecorator();
