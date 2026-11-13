@@ -64,7 +64,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **Note:** It runs `cat-internal-verify-docs` first when markdown changed, and it keeps generated, private and scratch files out of commits.
 
 ### cat-internal-verify-docs
-- **What it does:** Runs `cat-internal-verify-docs/check-docs.ps1` over all markdown, locally and without web requests. It reports broken relative links, wrong letter case in paths, anchors without a heading, unclosed code fences, a Header region that differs from the header template, a module plan without its place in the readme tables, a lost readme marker, skills missing from this overview and forbidden punctuation. It skips the generated namespaces pages unless asked.
+- **What it does:** Runs `cat-internal-verify-docs/check-docs.ps1` over all markdown, locally and without web requests. It reports broken relative links, wrong letter case in paths, anchors without a heading, unclosed code fences, a table that touches an HTML comment, a Header region that differs from the header template, a module plan without its place in the readme tables, a lost readme marker, skills missing from this overview and forbidden punctuation. It skips the generated namespaces pages unless asked.
 - **How to use it:** Run it without arguments. Add a folder or file to limit the check while you work.
 - **When:** At the end of a task that changed markdown, a heading or a file name, and after every rename or move.
 - **Note:** `cat-internal-verify-site` is the slow crawl of the published site with external links, and runs only on request.

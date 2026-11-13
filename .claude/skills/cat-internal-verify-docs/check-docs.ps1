@@ -16,6 +16,7 @@ Errors
 - The repo overview table of the readme does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the Building badge. A built row without a plan has the Stable badge. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has no priority, and every other row has a unique whole number as priority.
 - A link points to an anchor that no heading of the target markdown file has.
 - A code fence is not closed.
+- A Markdown table touches an HTML comment, on the line right above or right below it. The published site does not render such a table. Template files are skipped, so the row templates in `*.parts.template.md` are fine.
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or has no comment line with its `RootPath`.
 - The readme lost its <!-- region start: RepoOverview--> or <!-- region end: RepoOverview--> region marker.
 - A skill folder has no SKILL.md, has a name that differs from the folder, or is missing from .claude/skills/README.md.
@@ -137,6 +138,7 @@ foreach ($file in $files) {
     $inFence = $false
     $fenceStart = 0
     $inComment = $false
+    $prevKind = 'other'
     for ($i = 0; $i -lt $lines.Count; $i++) {
         $raw = $lines[$i]
         $n = $i + 1
@@ -144,9 +146,21 @@ foreach ($file in $files) {
         if ($trim.StartsWith('```') -or $trim.StartsWith('~~~')) {
             $inFence = -not $inFence
             if ($inFence) { $fenceStart = $n }
+            $prevKind = 'other'
             continue
         }
         if ($inFence) { continue }
+
+        # A Markdown table that touches an HTML comment is not rendered on the published site. Keep an empty line between them.
+        if ($inComment) {
+            $prevKind = 'other'
+        } else {
+            $one = $raw.Trim()
+            $kind = if ($one.StartsWith('<!--') -and $one.EndsWith('-->')) { 'comment' } elseif ($one.StartsWith('|')) { 'table' } else { 'other' }
+            if ($prevKind -eq 'comment' -and $kind -eq 'table') { $errors.Add("${file}:$($n - 1) an HTML comment is directly above a table. Put an empty line between them.") }
+            if ($prevKind -eq 'table' -and $kind -eq 'comment') { $errors.Add("${file}:$n an HTML comment is directly below a table. Put an empty line between them.") }
+            $prevKind = $kind
+        }
 
         $line = $raw
         if ($inComment) {
