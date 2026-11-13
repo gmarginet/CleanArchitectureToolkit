@@ -1,6 +1,7 @@
 using Cat.Demo.OrderService.DataModels.Entities;
 using Cat.EFCore.Extensions;
 using Cat.Messaging.Outbox.EFCore;
+using Cat.Scheduling.EFCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cat.Demo.OrderService.Infrastructure.DataAccess;
@@ -71,5 +72,8 @@ public class OrderDbContext : DbContext
 
         // The outbox table holds the messages until the background sender has handed them to the bus.
         modelBuilder.AddCatOutbox();
+
+        // The job run table lets several instances of Orders agree on who runs a scheduled job.
+        modelBuilder.AddCatScheduling();
     }
 }

@@ -23,6 +23,8 @@
       <ProjectReference Include="..\..\..\modules\Cat.Minimal.Api\Cat.Minimal.Api\Cat.Minimal.Api.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Queries\Cat.Queries.Decorators.Logging\Cat.Queries.Decorators.Logging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Queries\Cat.Queries\Cat.Queries.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Scheduling\Cat.Scheduling.EFCore\Cat.Scheduling.EFCore.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Scheduling\Cat.Scheduling\Cat.Scheduling.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.ActivitySource\Cat.ServiceRequests.Decorators.ActivitySource.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.Logging\Cat.ServiceRequests.Decorators.Logging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Decorators.Validation\Cat.ServiceRequests.Decorators.Validation.csproj" />

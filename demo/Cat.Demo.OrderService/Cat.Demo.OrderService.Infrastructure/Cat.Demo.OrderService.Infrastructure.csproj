@@ -11,6 +11,7 @@
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging\Cat.Messaging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.AzureServiceBus\Cat.Messaging.AzureServiceBus.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.Outbox.EFCore\Cat.Messaging.Outbox.EFCore.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Scheduling\Cat.Scheduling.EFCore\Cat.Scheduling.EFCore.csproj" />
       <ProjectReference Include="..\Cat.Demo.OrderService.Contracts\Cat.Demo.OrderService.Contracts.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.CatalogService\Cat.Demo.CatalogService.Api.Client\Cat.Demo.CatalogService.Api.Client.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.InventoryService\Cat.Demo.InventoryService.Api.Client\Cat.Demo.InventoryService.Api.Client.csproj" />

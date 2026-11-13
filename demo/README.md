@@ -192,6 +192,7 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 | API | `Cat.Minimal.Api` |
 | Core service | `Cat.ServiceRequests`, `Cat.Queries`, `Cat.Commands`, `Cat.Validators`, `Cat.Responses`, and in Orders also `Cat.FluentWorkflows` and `Cat.EventAggregators` |
 | Infrastructure | `Cat.EFCore`, and in Orders `Cat.Messaging` with the outbox |
+| Scheduler | `Cat.Scheduling` and `Cat.Scheduling.EFCore` (Orders) |
 | EventProcessor | `Cat.EventProcessor` (Inventory) |
 | Users | `Cat.Users.Abstractions` in the core service and the infrastructure, `Cat.Users` and `Cat.Users.JwtBearer` in the host |
 | Everywhere | `Cat.Expressions` |
@@ -321,7 +322,7 @@ In `Development` both services apply their EF Core migrations at startup. Catalo
   - A total above 500 euro is declined, by the payment service under the AppHost and by a fake without it.
 - **Payment failures.** The payment service can fail on purpose, to show the retries and the circuit breaker. See [Payment service](#payment-service) for the settings.
 - **Currency.** All amounts are in euro.
-- **Order numbers** look like `20261105-0001`. The counter restarts every UTC day. The development endpoint `POST /development/scheduler/clean-up-order-counters` removes the counters of earlier days.
+- **Order numbers** look like `20261105-0001`. The counter restarts every UTC day. The Scheduler removes the counters of earlier days every night. The development endpoint `POST /development/scheduler/clean-up-order-counters` does the same at once.
 <!-- region end: ThingsToKnow-->
 
 ### Health checks
@@ -640,7 +641,7 @@ Edge cases:
 - **Past 9999.** The request fails with `DEM-ORD-1000`. It never produces `10000`.
 - **Cancelled orders.** They keep their number. Numbers are never reused.
 
-**Counter cleanup.** The table grows by one row per day, and only today's row matters. The `CleanUpOrderCounters` service request deletes every row before today (UTC) and creates today's row with `LastNumber = 0` when it is missing. It lives in `Orders.Contracts` and `Orders.CoreService`, like every other request, and a second run changes nothing. A development endpoint triggers it: `POST /development/scheduler/clean-up-order-counters`. It exists in `Development` only. The development endpoints have a group per background worker. This one is the `scheduler` group.
+**Counter cleanup.** The table grows by one row per day, and only today's row matters. The `CleanUpOrderCounters` service request deletes every row before today (UTC) and creates today's row with `LastNumber = 0` when it is missing. It lives in `Orders.Contracts` and `Orders.CoreService`, like every other request, and a second run changes nothing. The Scheduler of `Cat.Scheduling` runs it as the system user `orders` every night at 00:05 UTC. The job is called `clean-up-order-counters`, and `CatScheduling:Jobs:clean-up-order-counters` in the configuration changes its time or switches it off. Orders claims each run in its own database (`CatJobRun`), so two instances never clean up twice. The development endpoint triggers the same request without the Scheduler: `POST /development/scheduler/clean-up-order-counters`. It exists in `Development` only, and the development endpoints have a group per background worker. This one is the `scheduler` group.
 
 **Error codes.** `OrderErrorDefinitions` defines them with the prefix `DEM-ORD`:
 
@@ -655,7 +656,7 @@ Edge cases:
 | `DEM-ORD-1006` | `PaymentUnavailable` | `The payment service is not available. Order {OrderNumber} was cancelled. Try again later.` |
 | `DEM-ORD-1007` | `StockUnavailable` | `The inventory service is not available. Order {OrderNumber} was cancelled. Try again later.` |
 
-**Database.** The `orders` database is built. It is a SQL Server database that only Orders reads. In `Development` the service applies its EF Core migrations at startup and adds the three order statuses. All tables are regular entities that inherit `CatEntityBase`. `OrderNumber` is unique. `OrderLine` refers to a book with `BookId` and has no foreign key, because the book lives in the Catalog database. `DailyOrderCounter` has no relationship with the other tables. `CatOutbox` comes from `Cat.Messaging.Outbox.EFCore`, and has none either. Only `Payment.PaidAt` and four columns of the outbox (`SentAt`, `SessionId`, `ScheduledAt` and `PropertiesJson`) can be empty, and the diagram marks them. Names and columns are not final.
+**Database.** The `orders` database is built. It is a SQL Server database that only Orders reads. In `Development` the service applies its EF Core migrations at startup and adds the three order statuses. All tables are regular entities that inherit `CatEntityBase`. `OrderNumber` is unique. `OrderLine` refers to a book with `BookId` and has no foreign key, because the book lives in the Catalog database. `DailyOrderCounter` has no relationship with the other tables. `CatOutbox` comes from `Cat.Messaging.Outbox.EFCore`, and has none either. `CatJobRun` comes from `Cat.Scheduling.EFCore`. It holds the run history of the Scheduler and is not in the diagram. Only `Payment.PaidAt` and four columns of the outbox (`SentAt`, `SessionId`, `ScheduledAt` and `PropertiesJson`) can be empty, and the diagram marks them. Names and columns are not final.
 
 ```mermaid
 erDiagram
