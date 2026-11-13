@@ -38,7 +38,6 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 2](#phase-2)
 - [Phase 3](#phase-3)
 - [Phase 4](#phase-4)
 - [Phase 5](#phase-5)
@@ -52,39 +51,6 @@
 - [Phase 13](#phase-13)
 <!-- region end: Phases-->
 
-<!-- region start: Phase 2-->
-## Phase 2
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-The Notifications service. It sends the order confirmed mail.
-
-#### Background
-- Notifications consumes `OrderConfirmed` and sends the mail.
-- The mails are in English. Languages come in [Phase 10](#phase-10).
-- The scheduled jobs come in [Phase 3](#phase-3).
-
-#### What exists today
-- The Notifications service does not exist. The demo readme lists it as planned, and the box in the drawing is hatched.
-
-#### Needs
-Nothing else. The modules it uses, `Cat.Messaging` and `Cat.EventProcessor`, are built.
-
-#### Done when
-An order confirmed mail is sent.
-
-#### Decided
-- **Notifications data.** Notifications has a database, built code first with EF Core migrations, like Orders. A table of sent mails, keyed by order and kind, makes a repeated message safe and shows idempotent handling.
-- **Database.** SQL Server, like the other services. The MySQL showcase of [Phase 13](#phase-13) moves Notifications to MySQL later.
-- **Entities.** Notifications uses the CAT base entities and `ConfigureCatEntity`, like the other services, with no temporal tables and no raw SQL Server code. The move in [Phase 13](#phase-13) waits for the neutral `Cat.EFCore.Extensions` of [Cat.EFCore.md](Cat.EFCore.md), and that change must keep these calls source compatible.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 2-->
-
 <!-- region start: Phase 3-->
 ## Phase 3
 
@@ -97,7 +63,7 @@ Scheduled jobs. Show `Cat.Scheduling`: the nightly clean up of the order counter
 - The scheduled jobs of the demo:
   - Clean up the daily order counters every night, shortly after midnight UTC.
   - Cancel orders that stay Pending longer than 15 minutes, the sweep. See Decided.
-  - A nightly low stock report, sent as a mail by the Notifications service of [Phase 2](#phase-2).
+  - A nightly low stock report, sent as a mail by the Notifications service, which is built.
 - Work without a user, such as the Scheduler, uses a client credentials token.
 - The Scheduler is the worker of a service, as the readme describes it. In debug mode the API has a development endpoint group with a sub group per worker.
 
@@ -108,7 +74,7 @@ Scheduled jobs. Show `Cat.Scheduling`: the nightly clean up of the order counter
 - Catalog keeps every old price in a temporal table, and `BookPrice` has a `LastUpdatedBy` column. The seed of Catalog already sets the named system user.
 
 #### Needs
-[Phase 2](#phase-2), for the Notifications service that sends the mail of the low stock report. The module `Cat.Scheduling`, which is built.
+The Notifications service that sends the mail of the low stock report, which is built. The module `Cat.Scheduling`, which is built.
 
 #### Done when
 The nightly jobs run from the Scheduler, and the development endpoint stays, so a developer can try a job without the Scheduler.
@@ -170,13 +136,13 @@ Show `Cat.Sql.Cdc` with the low stock case in Inventory. A change of the stock i
 - Inventory changes the stock in `StockReserveCommandHandler` and `StockReleaseCommandHandler`, with one conditional `UPDATE` in a transaction.
 
 #### Needs
-The module `Cat.Sql.Cdc`, which is built. [Phase 2](#phase-2), for the Notifications service that sends the mail. A check, before the build, that the SQL Server container image of the AppHost can run the SQL Server Agent. The demo has not used the Agent so far, and nobody has checked this.
+The module `Cat.Sql.Cdc`, which is built. The Notifications service that sends the mail, which is built. A check, before the build, that the SQL Server container image of the AppHost can run the SQL Server Agent. The demo has not used the Agent so far, and nobody has checked this.
 
 #### Done when
 A stock that drops below the limit becomes a low stock message, and the Notifications service sends a mail to the admin. The readme says where.
 
 #### Decided
-- **Result.** A low stock mail. The change becomes a low stock message, and the Notifications service of [Phase 2](#phase-2) sends a mail to the admin. This shows the whole chain from a database row to a person.
+- **Result.** A low stock mail. The change becomes a low stock message, and the Notifications service sends a mail to the admin. This shows the whole chain from a database row to a person.
 - **Stock limit.** One setting for all books, a number in the configuration. A column per book can come when the demo needs different limits.
 - **Switching it on.** A new SQL script in the `Database` folder of Inventory calls `sys.sp_cdc_enable_table` for the stock table, written like the other scripts so it can run at every start. It runs only in the container mode. A developer with an existing inventory database enables it by hand, and the demo readme says how.
 <!-- region end: PhaseDescription-->
@@ -310,16 +276,16 @@ The demo uses the module, and the readme says where.
 Languages. The demo works in more than one language: the client has a language selector, and the mails are translated. `Cat.Localizations` provides the texts.
 
 #### Background
-- The owner moved this out of [Phase 2](#phase-2). The client has no language support, so everything is in English, and translated mails alone would not show.
+- The owner moved this out of phase 2, the Notifications service. The client has no language support, so everything is in English, and translated mails alone would not show.
 - `Cat.Localizations` looks up localized texts by key. Its open points about the culture, localized data and error messages are in [Cat.Localizations.md](Cat.Localizations.md).
 
 #### What exists today
-- The client and the mails of Notifications ([Phase 2](#phase-2)) are in English.
+- The client and the mails of Notifications are in English.
 - Catalog does not use `Cat.Localizations`, so category names are plain text. Showing them in several languages waits until the module is stable.
 - `ICatLocalizer` has no culture parameter, so a provider must find the culture itself.
 
 #### Needs
-[Phase 2](#phase-2), for the Notifications service. The module plan [Cat.Localizations.md](Cat.Localizations.md) answered and built.
+The Notifications service, which is built. The module plan [Cat.Localizations.md](Cat.Localizations.md) answered and built.
 
 #### Done when
 A user picks a language in the client, and the order confirmed mail arrives in that language.
@@ -472,7 +438,7 @@ Recommendation: a database check per service on `/health` only, and keep `/alive
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-The MySQL showcase. The Notifications service of [Phase 2](#phase-2) moves from SQL Server to MySQL, and shows that the modules work on another database.
+The MySQL showcase. The Notifications service moves from SQL Server to MySQL, and shows that the modules work on another database.
 
 #### Background
 - A showcase on MySQL needs an EF Core provider for MySQL. The demo is on EF Core 11. The provider Pomelo has no release for EF Core 10 or 11 yet, and the Oracle provider is stable for EF Core 10 only and has an EF Core 11 preview. The facts were read on 2026-11-13 from a third-party article and from nuget.org, and nobody has tested them against this code.
@@ -487,14 +453,15 @@ The MySQL showcase. The Notifications service of [Phase 2](#phase-2) moves from 
 #### Needs
 - A stable Pomelo for EF Core 11, with an Aspire MySQL package that accepts it.
 - The module plans [Cat.Db.Errors.md](Cat.Db.Errors.md) and [Cat.EFCore.md](Cat.EFCore.md), built first.
-- The Notifications service of [Phase 2](#phase-2).
+- The Notifications service, which is built.
 
 #### Done when
 Notifications runs on a MySQL container that the AppHost starts. The outbox, the inbox and the scheduler claim store work there, and the readme says where the demo uses MySQL.
 
 #### Decided
 - **Provider.** The demo waits for a stable Pomelo, so the Aspire integration stays. The Oracle preview is not used.
-- **Which service.** Notifications moves to MySQL after it is built on SQL Server in [Phase 2](#phase-2).
+- **Which service.** Notifications moves to MySQL after it is built on SQL Server.
+- **Entities.** Notifications uses the CAT base entities and `ConfigureCatEntity`, with no temporal tables and no raw SQL Server code. The move waits for the neutral `Cat.EFCore.Extensions` of [Cat.EFCore.md](Cat.EFCore.md), and that change must keep these calls source compatible.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
