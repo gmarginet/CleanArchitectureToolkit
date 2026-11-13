@@ -97,7 +97,6 @@ The showcases:
 - `Cat.Caching`: cached catalog queries.
 - `Cat.Dapper`: fast read-only order overview queries, next to EF Core for writes.
 - `Cat.EFCore` transactions: saving an order and its lines in one go.
-- `Cat.Users`: customers see their own orders, and admins edit the catalog.
 - `Cat.Sagas`: a payment over messages.
 - `Cat.UnitTesting`: the unit tests of the demo.
 
@@ -105,10 +104,11 @@ Every module is designed from what the demo shows, and the module plan of each i
 
 #### What exists today
 - None of these modules exists yet. Each has a plan with the same name in this folder, such as [Cat.Caching.md](Cat.Caching.md).
+- `Cat.Users` is built and the demo uses it. The business logic of Orders asks for `ICatUser`, and Catalog sets `LastUpdatedBy` from it. The demo readme says where.
 - Orders has an event subscriber, `OrderAuditSubscriber`, that writes an audit record when an order event happens. It stays as the example of an event subscriber. `Cat.Auditing` was dropped. A developer who wants to see who changed a row adds a `LastUpdatedBy` column to the temporal table.
-- Catalog keeps every old price in a temporal table, which answers "what was the price then". It does not say who changed it.
-- Ownership of orders is a filter in the queries, and the demo has its own `ICurrentUser` in the core service of Orders.
-- The Catalog save endpoint requires the `admin` policy. A test that a user who is not an admin gets a 403 on the save does not exist yet. The check stays at the endpoint, see the [module readme of Cat.Users](../modules/Cat.Users/README.md).
+- Catalog keeps every old price in a temporal table, which answers "what was the price then". `BookPrice` has a `LastUpdatedBy` column, so the history also says who set the price.
+- Ownership of orders is a filter in the queries. The test doubles of Orders have `FakeUser`, which is an `ICatUser` and the small demo interface `IUserEmail` in one.
+- The Catalog save endpoint requires the `admin` policy, and a test checks the 401 without a login and the 403 for a user who is not an admin. The check stays at the endpoint, see the [module readme of Cat.Users](../modules/Cat.Users/README.md).
 - Inventory reads through the EF Core scaffold only.
 - A cancelled order keeps its `Approved` payment, because there is no refund step yet.
 - The unit tests of the demo have their own copies of the fake command and query processors.
@@ -120,13 +120,12 @@ The module plan of each showcase, built first.
 Per module: the demo uses it and the readme says where.
 
 #### Decided
-- **Current user.** The business logic only knows `ICurrentUser` today. `Cat.Users` exists now, so the demo switches to `ICatUser` of `Cat.Users.Abstractions`, see the [module readme of Cat.Users](../modules/Cat.Users/README.md). The demo keeps `IsAdmin` as an extension method over `IsInRole("admin")`, and keeps `Email` in a small demo interface that the Api project fills from the token. Keycloak emits a flat `roles` claim with a mapper in the realm, and the demo readme documents it. The JWT bearer setup sets `MapInboundClaims` to false.
+- **System user for jobs.** A price changed by a job gets the named system user, `CatUser.System`, see the [module readme of Cat.Users](../modules/Cat.Users/README.md). The seed of Catalog already does this.
 - **Inventory data access.** The EF Core scaffold only for now. Dapper waits for the `Cat.Dapper` module.
 - **Payment over messages.** A saga style payment over messages comes later, see [Cat.Sagas.md](Cat.Sagas.md). Until then the payment is an interface behind a generated client, and Orders keeps its state in the order status.
 
 #### Known gaps for these showcases
-- **Admin check on the Catalog save.** The `admin` policy at the endpoint is the check, because authorization happens at the entrance of the service. Add a test that a user who is not an admin gets a 403 on the save.
-- **Who changed the price.** `BookPrice` gets a `LastUpdatedBy` column next to the temporal history, so the history shows who changed a price. The command handler of the Catalog save sets it from `ICatUser`, the id of the user and not the name or the email. Catalog needs an `ICatUser` for this, see the [module readme of Cat.Users](../modules/Cat.Users/README.md). A price changed by a job gets the named system user. Add a refund when payment becomes a message flow, see [Cat.Sagas.md](Cat.Sagas.md):
+- **Refund.** Add a refund when payment becomes a message flow, see [Cat.Sagas.md](Cat.Sagas.md):
   - A `Refunded` payment status, and an `IPaymentProvider` refund call.
   - `OrderCancelledEvent` gets a subscriber that refunds an approved payment.
   - Cancelling a confirmed order is then only done when the refund succeeded or is on its way.

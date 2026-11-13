@@ -78,7 +78,7 @@ From the existing modules:
 - The copies of the fakes in the demo test projects exist as the plan says:
   - `FakeCommandProcessor` in Catalog, Inventory and Orders.
   - `FakeQueryProcessor` in Catalog and Orders.
-  - `RecordingSubscriber` and `FakeCurrentUser` in the Orders `TestDoubles.cs`.
+  - `RecordingSubscriber` and `FakeUser` in the Orders `TestDoubles.cs`. `FakeUser` is an `ICatUser` and the demo interface `IUserEmail` in one, with settable properties.
 - `FakePriceProvider`, `FakeStockReservation` and `FakePaymentProvider` exist in the Orders test doubles, and also in the Orders `Infrastructure/Fakes` folder. They are demo doubles, not doubles of a CAT interface.
 - Two test projects have their own `FakeTime : TimeProvider`: `Cat.Api.Gateway.Tests` and the Payment `CoreService.Tests`. Nothing uses `FakeTimeProvider` of Microsoft yet.
 
@@ -114,7 +114,7 @@ Checked in the test projects of the demo and the repository. "Needed now" means 
 | Recording event subscriber, fake event aggregator | `ICatHandleEvent<T>`, the aggregator | `Cat.UnitTesting.EventAggregators` | Yes: Orders has `RecordingSubscriber` | Records the events it got. A fake aggregator is foreseen, for a test of code that publishes events. |
 | Response asserts | `ICatResponse` | `Cat.UnitTesting.Responses` | Partly: the tests check responses by hand | Succeeded, failed, the type and an error code. Stand alone, with an NUnit part only if needed. |
 | Fake workflow and validator processors | `ICatWorkflowProcessor`, `ICatStepProcessor`, `ICatValidatorProcessor` | `Cat.UnitTesting.FluentWorkflows` | Not clear | Foreseen. Check how the workflow tests of Orders set up their steps before deciding. |
-| Fake user | `ICatUser` of `Cat.Users.Abstractions` | `Cat.UnitTesting.Authorization` | Yes, as `FakeCurrentUser` in Orders, which is the demo interface `ICurrentUser` | Waits for `Cat.Users`. |
+| Fake user | `ICatUser` of `Cat.Users.Abstractions` | `Cat.UnitTesting.Authorization` | Yes, as `FakeUser` in Orders, which is an `ICatUser` with the demo interface `IUserEmail` | `Cat.Users` is built. `CatUser` of `Cat.Users.Abstractions` already builds any user by hand, so check whether a fake adds anything before deciding. |
 | Fake clock | `TimeProvider` | None | No | .NET has `FakeTimeProvider` in the `Microsoft.Extensions.TimeProvider.Testing` package. Recommendation: do not write our own. Point to it in the readme. |
 | Fake message publisher | `Cat.Messaging` | `Cat.UnitTesting.Messaging` | No | Foreseen, waits for the module. |
 | Base class with a service provider | `UnitTestBase` | `Cat.UnitTesting.NUnit` | Yes: 14 test projects of the repository and the 3 demo test projects use `Cat.NUnit` | Moves from `tests/Cat.NUnit`. |

@@ -154,8 +154,10 @@ Calls from one service to another forward the same token.
 
 In the code:
 
-- `ICurrentUser` lives in the `CoreService` project of Orders and exposes `UserId`, `Name`, `Email` and `IsAdmin`. The business logic never sees `HttpContext`.
-- The Api project implements it from the claims of the token. A stub reads the `X-Demo-User` header when the service runs without a login.
+- The business logic asks for `ICatUser` of [Cat.Users](../modules/Cat.Users/README.md) and never sees `HttpContext`. It has `UserId`, `Name`, `IsAuthenticated` and `IsInRole`. The `CoreService` project of Orders only references `Cat.Users.Abstractions`.
+- `IsAdmin` is a small extension method over `IsInRole("admin")`. `Email` is not part of `ICatUser`, so Orders has its own small `IUserEmail` that the Api project fills from the `email` claim.
+- `AddDemoJwtAuthentication` in `ServiceDefaults` registers `Cat.Users` and `Cat.Users.JwtBearer`. `ICatUser` then comes from the claims of the token, with the flat `roles` claim that Keycloak emits. `MapInboundClaims` is false, so `sub` keeps its name.
+- A stub reads the `X-Demo-User` header when the service runs without a login. It is `ICatUser` and `IUserEmail` in one.
 - Ownership is a filter in the query. The queries get the external id of the customer, or none for an admin, so the orders of others come back as not found and nothing leaks.
 
 Other ways were rejected. Entra ID or Auth0 would make every person who clones the repository create a tenant. An own token service is a lot of code that is not about CAT. `dotnet user-jwts` has no login flow for the client.
@@ -190,6 +192,7 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 | Core service | `Cat.ServiceRequests`, `Cat.Queries`, `Cat.Commands`, `Cat.Validators`, `Cat.Responses`, and in Orders also `Cat.FluentWorkflows` and `Cat.EventAggregators` |
 | Infrastructure | `Cat.EFCore`, and in Orders `Cat.Messaging` with the outbox |
 | EventProcessor | `Cat.EventProcessor` (Inventory) |
+| Users | `Cat.Users.Abstractions` in the core service and the infrastructure, `Cat.Users` and `Cat.Users.JwtBearer` in the host |
 | Everywhere | `Cat.Expressions` |
 
 The [building blocks](#building-blocks) explain where each module is used and why.
@@ -516,7 +519,9 @@ The gateway only option of the module is not used in the demo. The services chec
   - `GET /categories` lists the categories.
 - Each endpoint maps to a service request such as `BookSearchRequest`. A handler turns it into queries and commands.
 - Entities are `Category`, `Book` and `BookPrice`. `BookPrice` is a temporal table, so every old price stays in the history.
+- `BookPrice` has a `LastUpdatedBy` column, so the history also shows who set each price. The command handler of the save fills it with the `UserId` of `ICatUser`, the id and not the name or the email. The seed prices belong to the named system user `catalog`.
 - Saving a book checks that the ISBN is unique.
+- Saving a book needs the `admin` role. A test starts the real endpoint mapping and the real `admin` policy on a local server, and checks that a call without a login gets a 401 and a user who is not an admin gets a 403. In both cases the command does not run.
 - The folder is `demo/Cat.Demo.CatalogService`, with the projects of the service project structure.
 
 **Error codes.** `CatalogErrorDefinitions` defines them with the prefix `DEM-CTL`:
@@ -526,7 +531,7 @@ The gateway only option of the module is not used in the demo. The services chec
 | `DEM-CTL-1000` | `IsbnAlreadyExists` | `A book with ISBN {Isbn} already exists.` |
 | `DEM-CTL-1001` | `BookPriceNotFound` | `Book {BookId} does not exist or has no price.` |
 
-**Database.** The `catalog` database is built. It is a SQL Server database that only Catalog reads. In `Development` the service applies its EF Core migrations at startup and adds 4 categories and 7 books when the tables are empty. Every entity inherits `CatEntityBase`, so each has a `Guid` `Id` as non-clustered primary key and an identity `SequenceId` that holds the clustered index. `BookPrice` inherits `CatTemporalEntityBase`. SQL Server keeps every old price in a history table, and `ValidFrom` and `ValidUntil` are the period columns. The class does not map them yet. Names and columns are not final.
+**Database.** The `catalog` database is built. It is a SQL Server database that only Catalog reads. In `Development` the service applies its EF Core migrations at startup and adds 4 categories and 7 books when the tables are empty. Every entity inherits `CatEntityBase`, so each has a `Guid` `Id` as non-clustered primary key and an identity `SequenceId` that holds the clustered index. `BookPrice` inherits `CatTemporalEntityBase`. SQL Server keeps every old price in a history table, and `ValidFrom` and `ValidUntil` are the period columns. The class does not map them yet. `LastUpdatedBy` holds the `UserId` of the user who set the price, so the history shows who changed it. The seed prices hold the system user `catalog`. Names and columns are not final.
 
 ```mermaid
 erDiagram
@@ -551,6 +556,7 @@ erDiagram
         int SequenceId
         Guid BookId FK
         decimal Amount
+        string LastUpdatedBy
         datetime ValidFrom "Column only, the class does not map it yet"
         datetime ValidUntil "Column only, the class does not map it yet"
     }
@@ -566,6 +572,7 @@ erDiagram
 | `Cat.Responses` | Everywhere | A result is either a value or a list of errors. No exceptions for business failures. |
 | `Cat.Minimal.Api` | Api | Maps service requests to endpoints and documents the responses. |
 | `Cat.EFCore` | DataModels and Infrastructure | Entity base classes, and the temporal price table. |
+| `Cat.Users` | Infrastructure (`Cat.Users.Abstractions`) and the host | The save handler asks `ICatUser` for the id that goes into `LastUpdatedBy`. The `admin` policy on the endpoint is the role check. |
 | `Cat.Expressions` | Api | Compiled member access that is reused. |
 
 **Pros.**
@@ -604,7 +611,7 @@ erDiagram
 - At startup, in `Development`, Orders creates the topic `OrderConfirmed` on the bus. Without the connection string `messaging`, a fake transport logs the message and sends nothing.
 - Stock, price and payment sit behind interfaces: `IStockReservation`, `IPriceProvider` and `IPaymentProvider`. For stock, `InventoryStockReservation` uses the generated `IInventoryClient` of `Cat.Demo.InventoryService.Api.Client`, which shares the `Contracts` project of Inventory. It reserves all lines with `POST /inventory/reservations`, with the ISBN of each book, and releases with `DELETE /inventory/reservations/{orderNumber}`. A 409 or a 404 means out of stock. Any other failure or a timeout means unavailable, and the workflow cancels the order with `DEM-ORD-1007`. A failed release is logged and not thrown, and a cancel because Inventory did not answer skips the release. `FakeStockReservation` answers without a gateway address. For prices, `CatalogPriceProvider` uses the generated `ICatalogClient` of `Cat.Demo.CatalogService.Api.Client`. It calls `GET /catalog/books/prices` through the gateway when the host gives Orders the address of the gateway, as the AppHost does. Without it, `FakePriceProvider` answers. For payments, `PaymentServiceProvider` uses the generated `IPaymentClient` of `Cat.Demo.PaymentService.Api.Client` in the same way, through the gateway, and `FakePaymentProvider` answers without an address. The payment route is not anonymous, so `ForwardBearerTokenHandler` passes the token of the user on to the call. A call without a request, such as a background job, has no token and gets a 401, which counts as unavailable. Run `Refresh-PaymentClient.ps1` in the client project after the payment service changes, and `Refresh-InventoryClient.ps1` after the inventory service changes.
 - `CatalogPriceProvider` wraps the call in `CatApiCall.ExecuteAsync`, so a failure arrives as an `ICatResponse`. A 200 gives the prices and a 404 becomes `PriceUnavailable`. Any other status, a network error or a timeout becomes an error response, because Orders never trusts a half answer. The resilience handler adds retries and a circuit breaker. Catalog reads are public, so the call sends no token. The unit tests use a fake `HttpMessageHandler` under the generated client, so they need no database and no running service. Run `Refresh-CatalogClient.ps1` in the client project to regenerate the client after Catalog changes. Catalog must run on port 5101 for it.
-- `ICurrentUser` tells the core service who is calling. With a login it reads the claims of the token (`sub`, `name`, `email` and the `admin` role). Without one, a development stub reads the `X-Demo-User` header. Orders of other users come back as not found.
+- `ICatUser` tells the core service who is calling. With a login `Cat.Users` reads the claims of the token (`sub`, `name` and the `admin` role), and `IUserEmail` reads the `email` claim. Without a login, a development stub reads the `X-Demo-User` header. Orders of other users come back as not found.
 - Order numbers come from a `DailyOrderCounter` table, increased in one atomic statement in the same transaction that saves the order. The part **Order numbers** below explains it.
 
 **Order numbers.** A number looks like `YYYYMMDD-0000`: the UTC year, month and day, a dash and a four digit counter. The counter restarts at `0001` every UTC day, so there is room for 9999 orders a day. Two orders at the same moment never get the same number. The unique key on `OrderNumber` is the safety net.
@@ -723,6 +730,7 @@ erDiagram
 | `Cat.ServiceRequests`, `Cat.Queries`, `Cat.Commands`, `Cat.Validators`, `Cat.Responses` | Core service | The same use case shape as Catalog. |
 | `Cat.Minimal.Api` | Api | Endpoints and OpenAPI. |
 | `Cat.EFCore` | DataModels and Infrastructure | Entities with `Guid` ids and sequence ids. |
+| `Cat.Users` | Core service (`Cat.Users.Abstractions`) and the host | The handlers ask `ICatUser` who is calling. Customers see their own orders and an admin sees all of them. |
 | `Cat.Messaging`, `Cat.Messaging.AzureServiceBus`, `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore` | Contracts (the message), Infrastructure and Api | Publishes `OrderConfirmed` to the bus, and keeps the message in the outbox until it is sent. |
 | `Cat.Expressions` | Api | Compiled member access. |
 
@@ -826,10 +834,10 @@ The service uses no entity base classes. It shows that you use only the modules 
 **How it works.** `AddServiceDefaults()` in the `Program.cs` of a service sets up:
 - Logs, metrics and traces with OpenTelemetry. The wildcard source `Cat.*` covers the CAT decorators and workflows. Data leaves the process only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set, which the AppHost does.
 - A readiness check at `/health` and a liveness check at `/alive`.
-- The token check of the services. `AddDemoJwtAuthentication` turns on JWT validation when `Authentication:Authority` is set.
+- The token check of the services. `AddDemoJwtAuthentication` turns on JWT validation when `Authentication:Authority` is set. It also registers `Cat.Users` and `Cat.Users.JwtBearer`, so `ICatUser` comes from the token and the role policies read the same `roles` claim. `AddDemoAuthorization` holds the `admin` policy.
 - Service discovery and the standard resilience handler on every `HttpClient`: retries, timeouts and a circuit breaker. The pipeline is chosen per service address, so a failing service opens its own circuit and not the circuit of the others.
 
-**CAT modules.** None are referenced. It works next to them: the tracing decorator of `Cat.ServiceRequests` shows up in the traces.
+**CAT modules.** Only for the token setup: it references `Cat.Users` and `Cat.Users.JwtBearer`. Nothing else is referenced. The rest works next to the modules: the tracing decorator of `Cat.ServiceRequests` shows up in the traces.
 
 **Pros.**
 - Every service gets the same setup in one line.
