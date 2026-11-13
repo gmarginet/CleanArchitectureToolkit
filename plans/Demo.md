@@ -32,13 +32,13 @@
 # Plans for `Demo` <!-- omit in toc -->  
 
 <!-- region start: StatusBadge-->
-[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-demo)
+[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-demo)
 <!-- region end: StatusBadge-->
 
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 4](#phase-4)
+- [Phase 14](#phase-14)
 - [Phase 5](#phase-5)
 - [Phase 6](#phase-6)
 - [Phase 7](#phase-7)
@@ -50,34 +50,49 @@
 - [Phase 13](#phase-13)
 <!-- region end: Phases-->
 
-<!-- region start: Phase 4-->
-## Phase 4
+<!-- region start: Phase 14-->
+## Phase 14
 
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-A sign-in page for the React client, so a person lands on a page of the demo before the login, instead of going straight to the Keycloak form.
+A better look for the React client, with Bootstrap.
 
 #### What exists today
-- The top bar of the React client has a Log in button that sends the browser to the Keycloak login. The basket sends a person who is not logged in to the login first and returns to the basket.
-- The login uses authorization code with PKCE against the client `cat-demo-web`, and the person returns to the page they came from.
-- The demo users `alice`, `bob` and `admin` are in the demo readme with their passwords. The client has no sign-in page.
+- The React client has a few CSS modules and `index.css`, and no UI library. The pages use plain HTML elements.
+- The tests of the client find elements by role and text, not by class.
 
 #### Needs
 The React client, which is built.
 
 #### Done when
-A visitor who is not signed in sees the sign-in page. The button starts the login against `cat-demo-web`, and the return goes back to the page the person came from.
+The client uses Bootstrap for its layout, navigation, buttons, tables, forms and alerts. The tests still pass.
 
 #### Decided
-- **The page.** A page in the React app with a sign-in button that starts the Keycloak login. The app keeps its look, and the authorization code flow with PKCE stays. A themed Keycloak login form can come later if the form should match the demo.
-- **Demo users.** The page shows no demo users. A visitor reads the demo readme for the names and the passwords.
+- **Library.** Bootstrap, as plain CSS from npm. The page markup gets Bootstrap classes.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 15-->
+#### Question 15
+Should the client use React-Bootstrap or the plain Bootstrap classes?
+- **Plain classes.** One dependency, the markup stays plain HTML with classes. Bootstrap scripts, such as a dropdown, need extra code.
+- **React-Bootstrap.** Ready components, a second dependency, and the markup changes more.
+
+Recommendation: plain classes. The client needs few interactive parts, and the code stays easy to read.
+<!-- region end: Question 15-->
+
+<!-- region start: Question 16-->
+#### Question 16
+What happens to the existing CSS modules?
+- **Replace where Bootstrap does the job.** Keep only the small ones, such as the basket and the error message. Less custom CSS.
+- **Keep all of them.** No risk to the layout, but two styling systems side by side.
+
+Recommendation: replace where Bootstrap does the job, so there is one main styling system.
+<!-- region end: Question 16-->
 <!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 4-->
+<!-- region end: Phase 14-->
 
 <!-- region start: Phase 5-->
 ## Phase 5
