@@ -133,7 +133,7 @@ Recommendation: counts, durations and failure counts per service request, and th
 
 <!-- region start: Question 5-->
 #### Question 5
-Do we want one naming scheme for activity sources, meters, tags and span names? The `Cat.*` prefix is the start, and today it is not consistent: the workflow source is `Cat.FluentWorkFlows`, which is renamed to `Cat.FluentWorkflows` as decided in [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md). The options:
+Do we want one naming scheme for activity sources, meters, tags and span names? The `Cat.*` prefix is the start, and today it is not consistent: the workflow source is `Cat.FluentWorkFlows`, which is now `Cat.FluentWorkflows`, see the [module readme of Cat.FluentWorkflows](../modules/Cat.FluentWorkflows/README.md). The options:
 - **Yes, one scheme:** source and meter names equal the module name (`Cat.Messaging`), tags in a `cat.` prefix (`cat.job.name`). Cost: a rename of a few existing names.
 - **No scheme,** each module picks. Cost: a developer cannot predict names.
 

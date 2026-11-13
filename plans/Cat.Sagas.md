@@ -141,8 +141,7 @@ All of it is generic and has no storage or messaging.
 4. **Resume entry.** `ResumeAsync` on `ICatWorkflowProcessor`. It takes the state and a checkpoint, rebuilds the workflow, skips to the address and goes on.
 5. **A resumable step body.** A second interface for steps that run in two phases: start (and suspend), and resume with the data of the answer. `Output` copies the answer into the state after the resume.
 6. **Container support.** `If`, `Switch`, `While`, `Foreach` and the sub-workflow step learn to write their frame when a child suspends, and to restore it on resume.
-7. **A run context.** Gives a step the instance id, so the new module can correlate. The engine only carries the id and does nothing with it.
-8. **Rules in the readme.** `Build` must be deterministic, and the state must be serializable to save it.
+7. **Rules in the readme.** `Build` must be deterministic, and the state must be serializable to save it.
 
 ##### In the new module
 Following the usual module layout, with an abstractions project and implementations:
@@ -201,12 +200,12 @@ Steps 1 to 3 do not depend on the other future modules, so they can start before
 - **Messaging.** The wait step goes through the messaging abstractions, not through `Cat.EventAggregators`.
 - **Outbox.** The outbox lives in `Cat.Messaging`, see [Cat.Messaging.md](../modules/Cat.Messaging/README.md). The saga module saves the instance and the outgoing message in one `SaveChanges`, through `Cat.Messaging.Outbox.EFCore`.
 - **Order of work.** The engine change comes first and needs no other future module. The module itself follows `Cat.Messaging` and `Cat.EventProcessor`.
-- **Approach.** Option C: a small engine change in `Cat.FluentWorkflows` plus a new module around it. Option A is how Orders works until then. The engine change is decided in [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md): it ships before the saga module and is tested in memory.
+- **Approach.** Option C: a small engine change in `Cat.FluentWorkflows` plus a new module around it. Option A is how Orders works until then. The engine change is built, see the [module readme of Cat.FluentWorkflows](../modules/Cat.FluentWorkflows/README.md).
 - **Name.** `Cat.Sagas`. The module readme says that it covers any long running workflow.
 - **Step addresses.** Index paths by default, and a name where the developer gives one. The name wins when it exists. Names are required only on steps that suspend, the wait steps.
 - **Changed workflows.** The instance record holds a workflow version. A resume with another version, or with a name that does not match, fails clearly. The rules are in the engine plan.
 - **Serializer.** `System.Text.Json` only, and an `ISerializer` interface in `Cat.Sagas.Abstractions` so a swap is possible later. This follows the messaging plan.
-- **Waiting for several answers.** Parallel waits come from the `Parallel` step of the engine, see [Cat.FluentWorkflows.md](Cat.FluentWorkflows.md). The checkpoint of the module must hold the state of every branch.
+- **Waiting for several answers.** Parallel waits come from the `Parallel` step of the engine, see the [module readme of Cat.FluentWorkflows](../modules/Cat.FluentWorkflows/README.md). The checkpoint of the module must hold the state of every branch.
 - **Orders until then.** Orders stays as it is, with the state in the order status and the payment as an interface, until step 6 of the build order.
 - **Compensation.** Explicit steps in the failure branch of the workflow, written by the developer. A dedicated compensation feature comes only when the explicit steps become repetitive.
 - **Timeouts.** Scheduled messages of the bus, see [Cat.Messaging.md](../modules/Cat.Messaging/README.md) and [Cat.Scheduling.md](Cat.Scheduling.md). The first version of the module may go without timeouts if the bus support is not ready.
