@@ -50,6 +50,10 @@ Inherit from a base class, call one extension method in `OnModelCreating`, and g
 |---------|------|---------|-----------|
 | [Cat.EFCore.Entities](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Entities/) | Entity base classes | `dotnet add package gmarginet.Cat.EFCore.Entities` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Entities)](#nuget-packages) |
 | [Cat.EFCore.Extensions](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions/) | Model builder extensions | `dotnet add package gmarginet.Cat.EFCore.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions)](#nuget-packages) |
+| [Cat.EFCore.Entities.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Entities.SqlServer/) | SQL Server entity base class for temporal tables | `dotnet add package gmarginet.Cat.EFCore.Entities.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Entities.SqlServer)](#nuget-packages) |
+| [Cat.EFCore.Extensions.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions.SqlServer/) | SQL Server model builder extensions for temporal tables | `dotnet add package gmarginet.Cat.EFCore.Extensions.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions.SqlServer)](#nuget-packages) |
+| [Cat.EFCore.Queries](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Queries/) | Base query handler and paging | `dotnet add package gmarginet.Cat.EFCore.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Queries)](#nuget-packages) |
+| [Cat.EFCore.Commands](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Commands/) | Base command handlers | `dotnet add package gmarginet.Cat.EFCore.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Commands)](#nuget-packages) |
 
 <!-- region end: NuGet-->
 
@@ -60,13 +64,23 @@ Inherit from a base class, call one extension method in `OnModelCreating`, and g
 |-----------|---------------|
 | [Cat.EFCore.Entities](namespaces/Cat.EFCore.Entities/index.md) | Base classes for regular, temporal and reference data entities. |
 | [Cat.EFCore.Extensions](namespaces/Cat.EFCore.Extensions/index.md) | Model builder extensions that configure keys, indexes and tables for the base classes. |
+| [Cat.EFCore.Entities.SqlServer](namespaces/Cat.EFCore.Entities.SqlServer/index.md) | The entity base class for SQL Server temporal tables. |
+| [Cat.EFCore.Extensions.SqlServer](namespaces/Cat.EFCore.Extensions.SqlServer/index.md) | Model builder extensions that configure SQL Server temporal tables. |
+| [Cat.EFCore.Queries](namespaces/Cat.EFCore.Queries/index.md) | The base class for query handlers that read with EF Core, and a paging extension. |
+| [Cat.EFCore.Commands](namespaces/Cat.EFCore.Commands/index.md) | The base classes for command handlers that change data with EF Core. |
 
 <!-- region end: Namespaces-->
 
 ## Dependencies
 <!-- region start: Dependencies-->
-Cat.EFCore has no dependencies on other CAT modules.  
-`Cat.EFCore.Entities` targets `netstandard2.0` and has no reference to EF Core. `Cat.EFCore.Extensions` uses EF Core 11 and targets `net11.0`.  
+
+| Module | Why Cat.EFCore needs it |
+|--------|-------------------------|
+| [Cat.Queries](../Cat.Queries/README.md) | `Cat.EFCore.Queries` implements `ICatQueryHandler` in its base class. |
+| [Cat.Commands](../Cat.Commands/README.md) | `Cat.EFCore.Commands` implements `ICatCommandHandler` in its base classes. |
+| [Cat.Responses](../Cat.Responses/README.md) | `Cat.EFCore.Queries` returns an `ICatPagedList` from the paging extension. |
+
+Every project references only what it needs, so you pick the projects you use. `Cat.EFCore.Entities` and `Cat.EFCore.Entities.SqlServer` target `netstandard2.0` and have no reference to EF Core. The other projects use EF Core 11 and target `net11.0`.  
 <!-- region end: Dependencies-->
 
 ## Usage
@@ -114,6 +128,8 @@ What you get:
 - `CatTemporalEntityBase`: the same as above, in a [temporal table](https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal/overview?view=sql-server-ver17) with a history table in the `History` schema.
 - `CatReferenceEntityBase`: a non-clustered primary key, and the table is excluded from migrations.
 
+`CatTemporalEntityBase` lives in `Cat.EFCore.Entities.SqlServer` and `ConfigureCatTemporalEntity` in `Cat.EFCore.Extensions.SqlServer`. Reference them only when you use temporal tables. The namespaces have the same names as the projects.
+
 ### What are temporal tables
 A temporal table is a SQL Server feature. It keeps the full history of your data, not only the current rows.
 
@@ -132,4 +148,47 @@ Use it for a table that someone else owns, so you can point a foreign key at it.
 - Treat the entity as read-only. Only the owner changes the data.
 
 Do not use it for your own tables. Use `CatEntityBase` for those, even when the data is a short list of fixed values.
+
+### Query handlers
+Inherit from `CatEfQueryHandlerBase` and write only what is special about the query.
+
+```csharp
+public class BookGetQueryHandler(CatalogDbContext dbContext)
+    : CatEfQueryHandlerBase<CatalogDbContext, BookGetQuery, Book>(dbContext)
+{
+    public override async Task<ICatResponse<Book>> HandleAsync(BookGetQuery query, CancellationToken cancellationToken = default)
+    {
+        var book = await Set<Book>()
+            .Include(x => x.Category)
+            .FirstOrDefaultAsync(x => x.Id == query.BookId, cancellationToken);
+
+        return book is null ? CatResponse.NotFound<Book>(/* your error */) : CatResponse.Ok(book);
+    }
+}
+```
+
+- The context type is any `DbContext`, so a scaffolded context of a database first service works.
+- `Set<TEntity>()` does not track the entities. Override `TrackChanges` in a handler that needs tracking.
+- `ToPagedListAsync(pageNumber, pageSize)` on an `IQueryable` returns an `ICatPagedList`. Sort the query first. Sorting and filtering stay in your handler.
+
+### Command handlers
+Inherit from `CatEfCommandHandlerBase`. Use the version with a third type parameter when the command returns a result.
+
+```csharp
+public class BookSaveCommandHandler(CatalogDbContext dbContext)
+    : CatEfCommandHandlerBase<CatalogDbContext, BookSaveCommand>(dbContext)
+{
+    public override async Task<ICatResponse> HandleAsync(BookSaveCommand command, CancellationToken cancellationToken = default)
+    {
+        DbContext.Books.Add(command.Book);
+        await DbContext.SaveChangesAsync(cancellationToken);
+        return CatResponse.Ok();
+    }
+}
+```
+
+- The base class only gives you `DbContext`. You decide when to start a transaction and when to call `SaveChanges`.
+- `SaveChanges` is one transaction by itself. You only need your own transaction when you mix it with raw SQL or call it more than once.
+- You map database errors to responses yourself. `Cat.Db.Errors.SqlServer` has helpers such as `IsUniqueViolation`.
+- Every command runs in its own scope with its own `DbContext`, so two commands never share a transaction.
 <!-- region end: Usage-->

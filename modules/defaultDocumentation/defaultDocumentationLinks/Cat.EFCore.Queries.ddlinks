@@ -1,0 +1,10 @@
+../../../Cat.EFCore/namespaces/Cat.EFCore.Queries/
+P:Cat.EFCore.Queries.CatEfQueryHandlerBase`3.DbContext|CatEfQueryHandlerBase_TDbContext,TQuery,TQueryResult_.DbContext.md|DbContext
+P:Cat.EFCore.Queries.CatEfQueryHandlerBase`3.TrackChanges|CatEfQueryHandlerBase_TDbContext,TQuery,TQueryResult_.TrackChanges.md|TrackChanges
+M:Cat.EFCore.Queries.CatEfQueryHandlerBase`3.#ctor(`0)|CatEfQueryHandlerBase_TDbContext,TQuery,TQueryResult_..ctor.9EVE3WR251MH544LEMUK92EU2.md|CatEfQueryHandlerBase(TDbContext)
+M:Cat.EFCore.Queries.CatEfQueryHandlerBase`3.Set``1|CatEfQueryHandlerBase_TDbContext,TQuery,TQueryResult_.Set_TEntity_().md|Set<TEntity>()
+M:Cat.EFCore.Queries.CatEfQueryHandlerBase`3.HandleAsync(`1,System.Threading.CancellationToken)|CatEfQueryHandlerBase_TDbContext,TQuery,TQueryResult_.HandleAsync.L18PABR26LZL8NJVJ6L8NVJ62.md|HandleAsync(TQuery, CancellationToken)
+N:Cat.EFCore.Queries|Cat.EFCore.Queries.md|Cat.EFCore.Queries
+T:Cat.EFCore.Queries.CatEfQueryHandlerBase`3|CatEfQueryHandlerBase_TDbContext,TQuery,TQueryResult_.md|CatEfQueryHandlerBase<TDbContext,TQuery,TQueryResult>
+M:Cat.EFCore.Queries.QueryablePagingExtensions.ToPagedListAsync``1(System.Linq.IQueryable{``0},System.Int32,System.Int32,System.Threading.CancellationToken)|QueryablePagingExtensions.ToPagedListAsync.PB9F2UE6DIXCMNSMBDDW2HF92.md|ToPagedListAsync<T>(this IQueryable<T>, int, int, CancellationToken)
+T:Cat.EFCore.Queries.QueryablePagingExtensions|QueryablePagingExtensions.md|QueryablePagingExtensions

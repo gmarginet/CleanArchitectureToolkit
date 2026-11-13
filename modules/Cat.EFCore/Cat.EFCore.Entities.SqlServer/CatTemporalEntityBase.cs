@@ -1,4 +1,6 @@
-namespace Cat.EFCore.Entities;
+using Cat.EFCore.Entities;
+
+namespace Cat.EFCore.Entities.SqlServer;
 
 /// <summary>
 /// Base class for entities that live in a temporal table.

@@ -83,7 +83,7 @@ Optional extra configuration for the entity\.
 ## ModelBuilderExtensions\.ConfigureCatEntity\<TEntity\>\(this ModelBuilder, string, string, Action\<EntityTypeBuilder\<TEntity\>\>, Action\<TableBuilder\<TEntity\>\>\) Method
 
 ```csharp
-private static void ConfigureCatEntity<TEntity>(this Microsoft.EntityFrameworkCore.ModelBuilder modelBuilder, string tableName, string schemaName, System.Action<Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<TEntity>>? entityTypeBuildAction, System.Action<Microsoft.EntityFrameworkCore.Metadata.Builders.TableBuilder<TEntity>>? tableBuildAction)
+internal static void ConfigureCatEntity<TEntity>(this Microsoft.EntityFrameworkCore.ModelBuilder modelBuilder, string tableName, string schemaName, System.Action<Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<TEntity>>? entityTypeBuildAction, System.Action<Microsoft.EntityFrameworkCore.Metadata.Builders.TableBuilder<TEntity>>? tableBuildAction)
     where TEntity : Cat.EFCore.Entities.CatEntityBase;
 ```
 #### Type parameters

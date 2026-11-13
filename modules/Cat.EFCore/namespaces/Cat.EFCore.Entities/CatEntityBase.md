@@ -37,9 +37,6 @@ public class CatEntityBase
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatEntityBase
 
-Derived  
-↳ [CatTemporalEntityBase](CatTemporalEntityBase.md 'Cat\.EFCore\.Entities\.CatTemporalEntityBase')
-
 | Properties | |
 | :--- | :--- |
 | [Id](CatEntityBase.Id.md 'Cat\.EFCore\.Entities\.CatEntityBase\.Id') | Gets or sets the unique id of the entity\. It is the non\-clustered primary key\. A new [System\.Guid](https://learn.microsoft.com/en-us/dotnet/api/system.guid 'System\.Guid') is created when the entity is instantiated\. |

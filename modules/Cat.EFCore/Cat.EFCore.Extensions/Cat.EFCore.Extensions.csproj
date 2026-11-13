@@ -18,6 +18,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <InternalsVisibleTo Include="Cat.EFCore.Extensions.SqlServer" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\Cat.EFCore.Entities\Cat.EFCore.Entities.csproj" />
     </ItemGroup>
 

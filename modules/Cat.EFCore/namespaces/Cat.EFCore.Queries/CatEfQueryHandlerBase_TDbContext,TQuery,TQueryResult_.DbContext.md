@@ -24,16 +24,15 @@
 
 # Code Reference  
   
-##### >> [Cat\.EFCore\.Entities Assembly](index.md 'index') >> [Cat\.EFCore\.Entities Namespace](Cat.EFCore.Entities.md 'Cat\.EFCore\.Entities') >> [CatTemporalEntityBase Class](CatTemporalEntityBase.md 'Cat\.EFCore\.Entities\.CatTemporalEntityBase')
+##### >> [Cat\.EFCore\.Queries Assembly](index.md 'index') >> [Cat\.EFCore\.Queries Namespace](Cat.EFCore.Queries.md 'Cat\.EFCore\.Queries') >> [CatEfQueryHandlerBase&lt;TDbContext,TQuery,TQueryResult&gt; Class](CatEfQueryHandlerBase_TDbContext,TQuery,TQueryResult_.md 'Cat\.EFCore\.Queries\.CatEfQueryHandlerBase\<TDbContext,TQuery,TQueryResult\>')
 
-## CatTemporalEntityBase\.ValidUntil Property
+## CatEfQueryHandlerBase\<TDbContext,TQuery,TQueryResult\>\.DbContext Property
 
-The end of the period in which this version of the row was current\.
-EF Core and the database set it\. Do not set it yourself\.
+The context to read from\.
 
 ```csharp
-public System.DateTime ValidUntil { get; set; }
+protected TDbContext DbContext { protected get; }
 ```
 
 #### Property Value
-[System\.DateTime](https://learn.microsoft.com/en-us/dotnet/api/system.datetime 'System\.DateTime')
+[TDbContext](CatEfQueryHandlerBase_TDbContext,TQuery,TQueryResult_.md#Cat.EFCore.Queries.CatEfQueryHandlerBase_TDbContext,TQuery,TQueryResult_.TDbContext 'Cat\.EFCore\.Queries\.CatEfQueryHandlerBase\<TDbContext,TQuery,TQueryResult\>\.TDbContext')

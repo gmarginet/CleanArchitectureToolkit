@@ -24,16 +24,10 @@
 
 # Code Reference  
   
-##### >> [Cat\.EFCore\.Entities Assembly](index.md 'index') >> [Cat\.EFCore\.Entities Namespace](Cat.EFCore.Entities.md 'Cat\.EFCore\.Entities') >> [CatTemporalEntityBase Class](CatTemporalEntityBase.md 'Cat\.EFCore\.Entities\.CatTemporalEntityBase')
+##### >> [Cat\.EFCore\.Extensions\.SqlServer Assembly](index.md 'index')
 
-## CatTemporalEntityBase\.ValidFrom Property
+## Cat\.EFCore\.Extensions\.SqlServer Assembly
 
-The start of the period in which this version of the row was current\.
-EF Core and the database set it\. Do not set it yourself\.
-
-```csharp
-public System.DateTime ValidFrom { get; set; }
-```
-
-#### Property Value
-[System\.DateTime](https://learn.microsoft.com/en-us/dotnet/api/system.datetime 'System\.DateTime')
+| Namespaces | |
+| :--- | :--- |
+| [Cat\.EFCore\.Extensions\.SqlServer](Cat.EFCore.Extensions.SqlServer.md 'Cat\.EFCore\.Extensions\.SqlServer') | Adds [Microsoft\.EntityFrameworkCore\.ModelBuilder](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.modelbuilder 'Microsoft\.EntityFrameworkCore\.ModelBuilder') extensions that configure SQL Server temporal tables for the entity base class\. |

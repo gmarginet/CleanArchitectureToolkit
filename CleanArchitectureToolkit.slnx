@@ -80,8 +80,12 @@
     <Project Path="modules/Cat.Decorators/Cat.Decorators/Cat.Decorators.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.EFCore/">
+    <Project Path="modules/Cat.EFCore/Cat.EFCore.Commands/Cat.EFCore.Commands.csproj" />
     <Project Path="modules/Cat.EFCore/Cat.EFCore.Entities/Cat.EFCore.Entities.csproj" />
+    <Project Path="modules/Cat.EFCore/Cat.EFCore.Entities.SqlServer/Cat.EFCore.Entities.SqlServer.csproj" />
     <Project Path="modules/Cat.EFCore/Cat.EFCore.Extensions/Cat.EFCore.Extensions.csproj" />
+    <Project Path="modules/Cat.EFCore/Cat.EFCore.Extensions.SqlServer/Cat.EFCore.Extensions.SqlServer.csproj" />
+    <Project Path="modules/Cat.EFCore/Cat.EFCore.Queries/Cat.EFCore.Queries.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.EventAggregators/">
     <File Path="modules/Cat.EventAggregators/README.md" />
@@ -178,6 +182,7 @@
     <Project Path="tests/Cat.Commands.Tests/Cat.Commands.Tests.csproj" />
     <Project Path="tests/Cat.Db.Errors.SqlServer.Tests/Cat.Db.Errors.SqlServer.Tests.csproj" />
     <Project Path="tests/Cat.Decorators.Tests/Cat.Decorators.Tests.csproj" />
+    <Project Path="tests/Cat.EFCore.Tests/Cat.EFCore.Tests.csproj" />
     <Project Path="tests/Cat.EventAggregators.Tests/Cat.EventAggregators.Tests.csproj" />
     <Project Path="tests/Cat.EventProcessor.Tests/Cat.EventProcessor.Tests.csproj" />
     <Project Path="tests/Cat.Expressions.Tests/Cat.Expressions.Tests.csproj" />

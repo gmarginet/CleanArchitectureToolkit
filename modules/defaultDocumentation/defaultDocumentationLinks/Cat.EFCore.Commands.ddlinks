@@ -1,0 +1,10 @@
+../../../Cat.EFCore/namespaces/Cat.EFCore.Commands/
+P:Cat.EFCore.Commands.CatEfCommandHandlerBase`3.DbContext|CatEfCommandHandlerBase_TDbContext,TCommand,TResult_.DbContext.md|DbContext
+M:Cat.EFCore.Commands.CatEfCommandHandlerBase`3.#ctor(`0)|CatEfCommandHandlerBase_TDbContext,TCommand,TResult_..ctor.078LJAV13EQH6HFYU9SG7LHH.md|CatEfCommandHandlerBase(TDbContext)
+M:Cat.EFCore.Commands.CatEfCommandHandlerBase`3.HandleAsync(`1,System.Threading.CancellationToken)|CatEfCommandHandlerBase_TDbContext,TCommand,TResult_.HandleAsync.SI7HCBZ29G0U3MAWYEHWNE8QC.md|HandleAsync(TCommand, CancellationToken)
+N:Cat.EFCore.Commands|Cat.EFCore.Commands.md|Cat.EFCore.Commands
+T:Cat.EFCore.Commands.CatEfCommandHandlerBase`3|CatEfCommandHandlerBase_TDbContext,TCommand,TResult_.md|CatEfCommandHandlerBase<TDbContext,TCommand,TResult>
+P:Cat.EFCore.Commands.CatEfCommandHandlerBase`2.DbContext|CatEfCommandHandlerBase_TDbContext,TCommand_.DbContext.md|DbContext
+M:Cat.EFCore.Commands.CatEfCommandHandlerBase`2.#ctor(`0)|CatEfCommandHandlerBase_TDbContext,TCommand_..ctor.H12I4953GU6YV16X6LM6OE7W2.md|CatEfCommandHandlerBase(TDbContext)
+M:Cat.EFCore.Commands.CatEfCommandHandlerBase`2.HandleAsync(`1,System.Threading.CancellationToken)|CatEfCommandHandlerBase_TDbContext,TCommand_.HandleAsync.3ULN6IXKUGORCLZCZHBFKVGE7.md|HandleAsync(TCommand, CancellationToken)
+T:Cat.EFCore.Commands.CatEfCommandHandlerBase`2|CatEfCommandHandlerBase_TDbContext,TCommand_.md|CatEfCommandHandlerBase<TDbContext,TCommand>

@@ -24,20 +24,18 @@
 
 # Code Reference  
   
-##### >> [Cat\.EFCore\.Entities Assembly](index.md 'index') >> [Cat\.EFCore\.Entities Namespace](Cat.EFCore.Entities.md 'Cat\.EFCore\.Entities')
+##### >> [Cat\.EFCore\.Queries Assembly](index.md 'index') >> [Cat\.EFCore\.Queries Namespace](Cat.EFCore.Queries.md 'Cat\.EFCore\.Queries')
 
-## CatTemporalEntityBase Class
+## QueryablePagingExtensions Class
 
-Base class for entities that live in a temporal table\.
-The database keeps the history of every change in a separate history table\.
+Paging for Entity Framework Core queries\.
 
 ```csharp
-public class CatTemporalEntityBase : Cat.EFCore.Entities.CatEntityBase
+public static class QueryablePagingExtensions
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatEntityBase](CatEntityBase.md 'Cat\.EFCore\.Entities\.CatEntityBase') → CatTemporalEntityBase
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → QueryablePagingExtensions
 
-| Properties | |
+| Methods | |
 | :--- | :--- |
-| [ValidFrom](CatTemporalEntityBase.ValidFrom.md 'Cat\.EFCore\.Entities\.CatTemporalEntityBase\.ValidFrom') | The start of the period in which this version of the row was current\. EF Core and the database set it\. Do not set it yourself\. |
-| [ValidUntil](CatTemporalEntityBase.ValidUntil.md 'Cat\.EFCore\.Entities\.CatTemporalEntityBase\.ValidUntil') | The end of the period in which this version of the row was current\. EF Core and the database set it\. Do not set it yourself\. |
+| [ToPagedListAsync&lt;T&gt;\(this IQueryable&lt;T&gt;, int, int, CancellationToken\)](QueryablePagingExtensions.ToPagedListAsync.PB9F2UE6DIXCMNSMBDDW2HF92.md 'Cat\.EFCore\.Queries\.QueryablePagingExtensions\.ToPagedListAsync\<T\>\(this System\.Linq\.IQueryable\<T\>, int, int, System\.Threading\.CancellationToken\)') | Counts all items, then reads one page of them\. Sort the query before you call this, otherwise the pages have no stable order\. |

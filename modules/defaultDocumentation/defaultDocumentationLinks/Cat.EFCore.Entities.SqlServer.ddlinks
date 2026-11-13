@@ -1,0 +1,5 @@
+../../../Cat.EFCore/namespaces/Cat.EFCore.Entities.SqlServer/
+P:Cat.EFCore.Entities.SqlServer.CatTemporalEntityBase.ValidFrom|CatTemporalEntityBase.ValidFrom.md|ValidFrom
+P:Cat.EFCore.Entities.SqlServer.CatTemporalEntityBase.ValidUntil|CatTemporalEntityBase.ValidUntil.md|ValidUntil
+N:Cat.EFCore.Entities.SqlServer|Cat.EFCore.Entities.SqlServer.md|Cat.EFCore.Entities.SqlServer
+T:Cat.EFCore.Entities.SqlServer.CatTemporalEntityBase|CatTemporalEntityBase.md|CatTemporalEntityBase
