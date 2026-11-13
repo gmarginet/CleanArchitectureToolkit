@@ -446,4 +446,5 @@ The settings of the verification project live in the `CatGatewayVerification` se
 | `JwksRefreshInterval` | `00:10:00` | How long the downloaded keys are kept. |
 | `JwksMinimumRefreshInterval` | `00:00:30` | The shortest time between two downloads. |
 | `ClockSkew` | `00:00:10` | The difference allowed between the clocks. |
+
 <!-- region end: Usage-->

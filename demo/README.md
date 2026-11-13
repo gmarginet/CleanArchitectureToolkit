@@ -364,6 +364,7 @@ One chapter for every block that is built. A database sits in the chapter of the
 | [Aspire ServiceDefaults](#aspire-servicedefaults) | Shared telemetry, health checks and resilience. |
 | [Payment service](#payment-service) | A separate pretend payment service that can fail on purpose. |
 | [Service Bus emulator](#service-bus-emulator) | The message bus that carries `OrderConfirmed` from Orders to Inventory. |
+
 <!-- region end: BlockOverview-->
 
 ### React client

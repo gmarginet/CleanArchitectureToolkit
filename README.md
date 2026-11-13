@@ -240,6 +240,7 @@ The modules support the building blocks of a service.
 | Cross-cutting work                   | [Cat.Decorators](./modules/Cat.Decorators/README.md)             |
 | Business processes as steps          | [Cat.FluentWorkflows](./modules/Cat.FluentWorkflows/README.md)   |
 | In-process events                    | [Cat.EventAggregators](./modules/Cat.EventAggregators/README.md) |
+
 <!-- region end: ApplicationArchitecture-->
 
 ## Service Project structure
