@@ -128,11 +128,6 @@
     <Project Path="modules/Cat.FluentWorkflows/Cat.FluentWorkflows.Queries/Cat.FluentWorkflows.Queries.csproj" />
     <Project Path="modules/Cat.FluentWorkflows/Cat.FluentWorkflows/Cat.FluentWorkflows.csproj" />
   </Folder>
-  <Folder Name="/modules/Cat.Localizations/">
-    <File Path="modules/Cat.Localizations/README.md" />
-    <Project Path="modules/Cat.Localizations/Cat.Localizations.Abstractions/Cat.Localizations.Abstractions.csproj" />
-    <Project Path="modules/Cat.Localizations/Cat.Localizations/Cat.Localizations.csproj" />
-  </Folder>
   <Folder Name="/modules/Cat.Messaging/">
     <File Path="modules/Cat.Messaging/README.md" />
     <Project Path="modules/Cat.Messaging/Cat.Messaging.Abstractions/Cat.Messaging.Abstractions.csproj" />
@@ -218,7 +213,6 @@
     <Project Path="tests/Cat.Expressions.Tests/Cat.Expressions.Tests.csproj" />
     <Project Path="tests/Cat.Extensions.Tests/Cat.Extensions.Tests.csproj" />
     <Project Path="tests/Cat.FluentWorkflows.Tests/Cat.FluentWorkflows.Tests.csproj" />
-    <Project Path="tests/Cat.Localizations.Tests/Cat.Localizations.Tests.csproj" />
     <Project Path="tests/Cat.Messaging.Tests/Cat.Messaging.Tests.csproj" />
     <Project Path="tests/Cat.Minimal.Api.Tests/Cat.Minimal.Api.Tests.csproj" />
     <Project Path="tests/Cat.Queries.Tests/Cat.Queries.Tests.csproj" />

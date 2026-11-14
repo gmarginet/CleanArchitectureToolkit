@@ -35,6 +35,10 @@
 [![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catlocalizations)
 <!-- region end: StatusBadge-->
 
+<!-- region start: FirstStableVersion-->
+**First stable version:** not reached
+<!-- region end: FirstStableVersion-->
+
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
@@ -47,17 +51,11 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-`Cat.Localizations` already exists and is marked Building. This phase finishes the module and uses it in the demo.
-
-#### What exists today
-- `Cat.Localizations.Abstractions` holds `ICatLocalizer`. It is a contract to look up a localized string by key, so the rest of the app does not depend on one provider.
-- `Cat.Localizations` holds the no-op localizer and the module registration `AddCatNoLocalizationLocalizer`.
-- The no-op localizer returns the key itself. It fills in placeholders when the key contains them, in the order of the arguments.
-- The module readme shows how to write your own `ICatLocalizer`.
-- The readme marks the module as Building.
+`Cat.Localizations` does not exist yet.
 
 #### What we want to build
-- A real provider, so the module is useful beyond the no-op localizer. Which one comes first is open (see question 2). Each provider is a project that a developer can pick or skip.
+- A contract to look up a localized string by key, so the rest of an app does not depend on one provider. The shape of the contract is open and follows from questions 2 and 3.
+- A real provider, so the module is useful from the start. Which one comes first is open (see question 2). Each provider is a project that a developer can pick or skip.
 - The demo uses the module for category names, order statuses and email texts in a few languages. See [Demo.md](Demo.md).
   - Category names are plain text today, because the module is not used yet.
 
@@ -69,23 +67,23 @@
 <!-- region start: PhaseOpenQuestions-->
 <!-- region start: Question 2-->
 #### Question 2
-Which real provider do we ship or document first? This is the blocking question, and questions 1, 3 and 4 depend on it. Each provider is its own project, so a developer can pick it or skip it.
+Which real provider do we ship or document first? This is the blocking question, and questions 3 and 4 depend on it. Each provider is its own project, so a developer can pick it or skip it.
 - **Resource files (`.resx`) through a small adapter.** Familiar to most .NET developers, works offline, and a translator can edit the files. Cost: strings are compiled in, so a change needs a deploy.
 - **`IStringLocalizer` from ASP.NET Core.** One adapter project over what the framework already has, so the developer gets all its sources. Cost: the project targets the latest .NET instead of `netstandard2.0`, and it pulls in `Microsoft.Extensions.Localization`.
 - **A database provider.** Strings can change without a deploy, and it fits data that lives in the database (question 4). Cost: the most work, a schema and caching, and a choice between `Cat.EFCore` and `Cat.Dapper`.
-- **Only document how to write your own.** The module readme already shows this. Cost: the module stays a contract plus a no-op.
+- **Only a contract, and document how to write your own provider.** Cost: the module is a contract and nothing else, so it gives a developer little.
 
 Recommendation: the `IStringLocalizer` adapter first. It is the smallest project, it reuses what developers already know, and it covers resx files too. The database provider can follow when the demo needs it.
 <!-- region end: Question 2-->
 
 <!-- region start: Question 3-->
 #### Question 3
-Where does the current culture come from? Today `ICatLocalizer` has no culture parameter, so the provider must find it itself. The options:
+Where does the current culture come from? The options:
 - **The provider reads `CultureInfo.CurrentUICulture`.** The host sets it per request (ASP.NET Core request localization does this) and the contract stays as it is. Cost: it is implicit, and background work such as a message handler must set the culture by hand.
 - **An `ICatCultureProvider` in `Cat.Localizations.Abstractions`.** The provider asks it, and the developer can plug in the request, the user profile or a fixed value. Cost: one more interface and a default implementation.
-- **A culture parameter on every call.** Explicit. Cost: it changes the contract and clutters every call site.
+- **A culture parameter on every call.** Explicit. Cost: it clutters every call site.
 
-Recommendation: start with `CurrentUICulture`, because it is the .NET convention and needs no new type. Add the culture provider when the demo needs the user profile, for example in the Notifications service, which sends texts without a request.
+Recommendation: start with `CurrentUICulture`, because it is the .NET convention and needs no new type. The contract then has no culture parameter. Add the culture provider when the demo needs the user profile, for example in the Notifications service, which sends texts without a request.
 <!-- region end: Question 3-->
 
 <!-- region start: Question 4-->
@@ -107,16 +105,5 @@ Do the error codes from `Cat.Responses` and `Cat.Validators` get localized messa
 
 Recommendation: the Api layer option, once there is a real provider (question 2). Park it until then.
 <!-- region end: Question 5-->
-
-<!-- region start: Question 1-->
-#### Question 1
-What must be true before the Building badge goes? Here is a checklist as the exit criteria. Tell Claude what to add or remove:
-- At least one real provider is built and tested (question 2).
-- The culture rule is written in the module readme (question 3).
-- The demo uses the module for at least one text, such as the order statuses.
-- Tests exist for the placeholder logic and for the provider.
-
-Recommendation: keep these four. The module readme then holds everything, and the plan can go.
-<!-- region end: Question 1-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
