@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
+using Cat.Demo.PaymentService.Api.Extensions;
 using Cat.Demo.PaymentService.CoreService;
 using Cat.Demo.ServiceDefaults;
+using Cat.ServiceRequests.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,11 @@ builder.Services.Configure<PaymentFailureOptions>(builder.Configuration.GetSecti
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<PaymentProcessor>();
 
+// The listener for the TakePayment messages of Orders. It is on when the host gives Payment the connection string "messaging".
+// The handler uses the same processor as the HTTP endpoint, so the failure settings and the ledger apply to both.
+builder.Services.AddCatServiceRequestsModule(typeof(TakePaymentHandler));
+var messagingOn = builder.Services.AddCatDemoPaymentMessaging(builder.Configuration);
+
 // With an authority in the configuration (the AppHost sets it) the service checks the token the gateway forwards.
 // Without one, a plain dotnet run keeps working with no login.
 var authenticationOn = builder.AddDemoJwtAuthentication();
@@ -41,6 +48,11 @@ if (authenticationOn)
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    if (messagingOn)
+    {
+        await app.Services.InitializePaymentMessagingAsync();
+    }
 }
 
 app.MapDefaultEndpoints();

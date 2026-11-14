@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net11.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.Abstractions\Cat.Messaging.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests.Abstractions\Cat.ServiceRequests.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -10,6 +10,13 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Authorization\Cat.EventProcessor.Authorization.csproj" />
+        <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor.AzureServiceBus\Cat.EventProcessor.AzureServiceBus.csproj" />
+        <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor\Cat.EventProcessor.csproj" />
+        <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.AzureServiceBus\Cat.Messaging.AzureServiceBus.csproj" />
+        <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging\Cat.Messaging.csproj" />
+        <ProjectReference Include="..\..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests\Cat.ServiceRequests.csproj" />
+        <ProjectReference Include="..\Cat.Demo.PaymentService.Contracts\Cat.Demo.PaymentService.Contracts.csproj" />
         <ProjectReference Include="..\Cat.Demo.PaymentService.CoreService\Cat.Demo.PaymentService.CoreService.csproj" />
         <ProjectReference Include="..\..\Cat.Demo.ServiceDefaults\Cat.Demo.ServiceDefaults\Cat.Demo.ServiceDefaults.csproj" />
     </ItemGroup>

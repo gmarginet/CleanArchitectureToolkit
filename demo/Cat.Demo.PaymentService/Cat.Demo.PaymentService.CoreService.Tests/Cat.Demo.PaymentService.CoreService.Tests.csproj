@@ -26,6 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\modules\Cat.UnitTesting\Cat.UnitTesting.Messaging\Cat.UnitTesting.Messaging.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.UnitTesting\Cat.UnitTesting.Responses.NUnit\Cat.UnitTesting.Responses.NUnit.csproj" />
       <ProjectReference Include="..\Cat.Demo.PaymentService.CoreService\Cat.Demo.PaymentService.CoreService.csproj" />
     </ItemGroup>
 
