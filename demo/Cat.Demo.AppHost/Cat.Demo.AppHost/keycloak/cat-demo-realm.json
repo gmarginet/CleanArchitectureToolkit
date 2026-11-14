@@ -107,6 +107,34 @@
                                             ]
                     },
                     {
+                        "clientId":  "cat-demo-payment",
+                        "name":  "Cat demo Payment service",
+                        "description":  "Confidential client with the client credentials grant. Payment uses it to sign its answer to a payment request. The secret is for the demo only.",
+                        "enabled":  true,
+                        "publicClient":  false,
+                        "secret":  "cat-demo-payment-secret",
+                        "serviceAccountsEnabled":  true,
+                        "standardFlowEnabled":  false,
+                        "directAccessGrantsEnabled":  false,
+                        "defaultClientScopes":  [
+                                                    "basic",
+                                                    "roles"
+                                                ],
+                        "protocolMappers":  [
+                                                {
+                                                    "name":  "cat-demo-api",
+                                                    "protocol":  "openid-connect",
+                                                    "protocolMapper":  "oidc-audience-mapper",
+                                                    "consentRequired":  false,
+                                                    "config":  {
+                                                                   "included.custom.audience":  "cat-gateway",
+                                                                   "id.token.claim":  "false",
+                                                                   "access.token.claim":  "true"
+                                                               }
+                                                }
+                                            ]
+                    },
+                    {
                         "clientId":  "cat-demo-orders",
                         "name":  "Cat demo Orders service",
                         "description":  "Confidential client with the client credentials grant. Orders uses it for work without a user, such as the jobs of the Scheduler. The secret is for the demo only.",

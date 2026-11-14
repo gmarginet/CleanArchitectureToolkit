@@ -94,8 +94,14 @@ var bus = builder.AddAzureServiceBus("messaging")
 
 // Orders publishes OrderConfirmed through its outbox. Inventory listens to it, so it waits for Orders, which creates the topic.
 // Inventory publishes the low stock report. Notifications listens to it, so it waits for Inventory, which creates that topic.
+// Payment receives TakePayment on a queue and answers with PaymentProcessed on a topic. It creates both at startup,
+// so Orders, which sends the request and listens for the answer, waits for Payment.
+payment.WithReference(bus)
+    .WaitFor(bus)
+    .WithEnvironment("Messaging__AdministrationConnectionString", serviceBusAdministrationConnection);
 orders.WithReference(bus)
     .WaitFor(bus)
+    .WaitFor(payment)
     .WithEnvironment("Messaging__AdministrationConnectionString", serviceBusAdministrationConnection);
 inventory.WithReference(bus)
     .WaitFor(bus)
@@ -116,6 +122,9 @@ orders.WithEnvironment("Authentication__Authority", authority);
 orders.WithEnvironment("Authentication__ClientId", "cat-demo-orders");
 orders.WithEnvironment("Authentication__ClientSecret", "cat-demo-orders-secret");
 payment.WithEnvironment("Authentication__Authority", authority);
+// Payment signs its answer to a payment request with a token of its own, from its own client. Demo secret, as above.
+payment.WithEnvironment("Authentication__ClientId", "cat-demo-payment");
+payment.WithEnvironment("Authentication__ClientSecret", "cat-demo-payment-secret");
 inventory.WithEnvironment("Authentication__Authority", authority);
 const int gatewayPort = 5100;
 const int webPort = 5104;
