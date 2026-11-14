@@ -28,16 +28,17 @@
 
 ## CatServiceRequestProcessor Class
 
-Default [ICatServiceRequestProcessor](../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Abstractions/ICatServiceRequestProcessor.md 'Cat\.ServiceRequests\.Abstractions\.ICatServiceRequestProcessor')\.
+Default [ICatServiceRequestProcessor](../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Abstractions/ICatServiceRequestProcessor.md 'Cat\.ServiceRequests\.Abstractions\.ICatServiceRequestProcessor') and [ICatCurrentScopeServiceRequestProcessor](../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Abstractions/ICatCurrentScopeServiceRequestProcessor.md 'Cat\.ServiceRequests\.Abstractions\.ICatCurrentScopeServiceRequestProcessor')\.
 Opens a new scope per request, gets the decorated handler from it and invokes the handler\.
+The current scope variant skips the new scope and uses the scope of the caller\.
 
 ```csharp
-internal class CatServiceRequestProcessor : Cat.ServiceRequests.Abstractions.ICatServiceRequestProcessor
+internal class CatServiceRequestProcessor : Cat.ServiceRequests.Abstractions.ICatServiceRequestProcessor, Cat.ServiceRequests.Abstractions.ICatCurrentScopeServiceRequestProcessor
 ```
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatServiceRequestProcessor
 
-Implements [ICatServiceRequestProcessor](../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Abstractions/ICatServiceRequestProcessor.md 'Cat\.ServiceRequests\.Abstractions\.ICatServiceRequestProcessor')
+Implements [ICatServiceRequestProcessor](../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Abstractions/ICatServiceRequestProcessor.md 'Cat\.ServiceRequests\.Abstractions\.ICatServiceRequestProcessor'), [ICatCurrentScopeServiceRequestProcessor](../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Abstractions/ICatCurrentScopeServiceRequestProcessor.md 'Cat\.ServiceRequests\.Abstractions\.ICatCurrentScopeServiceRequestProcessor')
 
 | Constructors | |
 | :--- | :--- |
@@ -55,3 +56,5 @@ Implements [ICatServiceRequestProcessor](../../../Cat.ServiceRequests/namespaces
 | [Process&lt;TResponse&gt;\(ICatServiceRequest&lt;TResponse&gt;\)](CatServiceRequestProcessor.Process.md#Cat.ServiceRequests.CatServiceRequestProcessor.Process_TResponse_(Cat.ServiceRequests.Abstractions.ICatServiceRequest_TResponse_) 'Cat\.ServiceRequests\.CatServiceRequestProcessor\.Process\<TResponse\>\(Cat\.ServiceRequests\.Abstractions\.ICatServiceRequest\<TResponse\>\)') | Runs a service request that returns a payload and blocks until it finishes\. Prefer [ProcessAsync&lt;TResponse&gt;\(ICatServiceRequest&lt;TResponse&gt;, CancellationToken\)](../../../Cat.ServiceRequests/namespaces/Cat.ServiceRequests.Abstractions/ICatServiceRequestProcessor.ProcessAsync.md#Cat.ServiceRequests.Abstractions.ICatServiceRequestProcessor.ProcessAsync_TResponse_(Cat.ServiceRequests.Abstractions.ICatServiceRequest_TResponse_,System.Threading.CancellationToken) 'Cat\.ServiceRequests\.Abstractions\.ICatServiceRequestProcessor\.ProcessAsync\`\`1\(Cat\.ServiceRequests\.Abstractions\.ICatServiceRequest\{\`\`0\},System\.Threading\.CancellationToken\)') when you can\. |
 | [ProcessAsync\(ICatServiceRequest, CancellationToken\)](CatServiceRequestProcessor.ProcessAsync.md#Cat.ServiceRequests.CatServiceRequestProcessor.ProcessAsync(Cat.ServiceRequests.Abstractions.ICatServiceRequest,System.Threading.CancellationToken) 'Cat\.ServiceRequests\.CatServiceRequestProcessor\.ProcessAsync\(Cat\.ServiceRequests\.Abstractions\.ICatServiceRequest, System\.Threading\.CancellationToken\)') | Runs a service request that returns no payload\. |
 | [ProcessAsync&lt;TResponse&gt;\(ICatServiceRequest&lt;TResponse&gt;, CancellationToken\)](CatServiceRequestProcessor.ProcessAsync.md#Cat.ServiceRequests.CatServiceRequestProcessor.ProcessAsync_TResponse_(Cat.ServiceRequests.Abstractions.ICatServiceRequest_TResponse_,System.Threading.CancellationToken) 'Cat\.ServiceRequests\.CatServiceRequestProcessor\.ProcessAsync\<TResponse\>\(Cat\.ServiceRequests\.Abstractions\.ICatServiceRequest\<TResponse\>, System\.Threading\.CancellationToken\)') | Runs a service request that returns a payload\. |
+| [ProcessInCurrentScopeAsync\(ICatServiceRequest, CancellationToken\)](CatServiceRequestProcessor.ProcessInCurrentScopeAsync.CH61IZ24QNMTFAV1DLOLRI612.md 'Cat\.ServiceRequests\.CatServiceRequestProcessor\.ProcessInCurrentScopeAsync\(Cat\.ServiceRequests\.Abstractions\.ICatServiceRequest, System\.Threading\.CancellationToken\)') | Runs a service request that returns no payload, in the scope of the caller\. |
+| [RunHandlerAsync\(IServiceProvider, ICatServiceRequest, CancellationToken\)](CatServiceRequestProcessor.RunHandlerAsync.L6QPXV1PPZ6IEBUJH8Q20PC5D.md 'Cat\.ServiceRequests\.CatServiceRequestProcessor\.RunHandlerAsync\(System\.IServiceProvider, Cat\.ServiceRequests\.Abstractions\.ICatServiceRequest, System\.Threading\.CancellationToken\)') | |

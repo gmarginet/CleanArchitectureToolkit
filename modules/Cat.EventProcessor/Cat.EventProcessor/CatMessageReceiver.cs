@@ -74,7 +74,12 @@ internal sealed class CatMessageReceiver : ICatMessageReceiver
             }
 
             // Resolved after the authorization, so everything in the scope sees the user of the message.
-            var processor = scope.ServiceProvider.GetRequiredService<ICatServiceRequestProcessor>();
+            // The handler runs in this scope, so its DbContext is the one the inbox row is added to and one SaveChanges commits both.
+            // A processor of your own, registered only as ICatServiceRequestProcessor, opens a scope of its own and cannot share it.
+            var currentScopeProcessor = scope.ServiceProvider.GetService<ICatCurrentScopeServiceRequestProcessor>();
+            var processor = currentScopeProcessor == null
+                ? scope.ServiceProvider.GetRequiredService<ICatServiceRequestProcessor>()
+                : null;
 
             if (options.UseInbox && !string.IsNullOrEmpty(message.MessageId))
             {
@@ -87,7 +92,9 @@ internal sealed class CatMessageReceiver : ICatMessageReceiver
                 store.Add(message.MessageId, messageType.Name);
             }
 
-            var response = await processor.ProcessAsync(serviceRequest, cancellationToken).ConfigureAwait(false);
+            var response = currentScopeProcessor != null
+                ? await currentScopeProcessor.ProcessInCurrentScopeAsync(serviceRequest, cancellationToken).ConfigureAwait(false)
+                : await processor!.ProcessAsync(serviceRequest, cancellationToken).ConfigureAwait(false);
             return CatFailureTable.Settle(response, options);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)

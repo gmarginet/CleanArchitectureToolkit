@@ -40,5 +40,6 @@ public static class ServiceCollectionExtensions
         );
         
         services.AddScoped<ICatServiceRequestProcessor, CatServiceRequestProcessor>();
+        services.AddScoped<ICatCurrentScopeServiceRequestProcessor, CatServiceRequestProcessor>();
     }
 }

@@ -41,7 +41,7 @@ public class EfCoreSagaStoreTests
         _connection = new SqliteConnection("DataSource=:memory:");
         _connection.Open();
 
-        var services = new ServiceCollection();
+        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
         services.AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
         services.AddDbContext<SagaDbContext>(options => options.UseSqlite(_connection));
         services.AddCatFluentWorkflowsModule();

@@ -157,7 +157,7 @@ public static class SagaTestHost
 {
     public static ServiceProvider Create()
     {
-        var services = new ServiceCollection();
+        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
         services.AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
         services.AddCatFluentWorkflowsModule();
         services.AddCatFluentWorkflowsFlows(typeof(PaymentFlow));

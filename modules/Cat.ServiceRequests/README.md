@@ -46,6 +46,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
   - [Define a request](#define-a-request)
   - [Write a handler](#write-a-handler)
   - [Process a request](#process-a-request)
+  - [Process a request in the current scope](#process-a-request-in-the-current-scope)
   - [Handle a JSON Patch document](#handle-a-json-patch-document)
   - [Add decorators](#add-decorators)
     - [Validation](#validation)
@@ -215,6 +216,34 @@ var response = _processor.Process(new TodoGetRequest(id));
 ```
 
 To expose a request as an HTTP endpoint, see [Cat.Minimal.Api](../Cat.Minimal.Api/README.md).
+
+### Process a request in the current scope
+
+Sometimes the caller prepares work that the handler must commit together with its own. A receiver of messages that adds an inbox row to a `DbContext` is the example: the handler has to see that same `DbContext`, so one `SaveChanges` saves both. Inject `ICatCurrentScopeServiceRequestProcessor` for this. It runs the handler, with its decorators, in the scope of the caller and opens no scope of its own.
+
+```csharp
+using Cat.ServiceRequests.Abstractions;
+
+public class MessageReceiver
+{
+    private readonly ICatCurrentScopeServiceRequestProcessor _processor;
+
+    public MessageReceiver(ICatCurrentScopeServiceRequestProcessor processor)
+    {
+        _processor = processor;
+    }
+
+    public Task<ICatResponse> ReceiveAsync(TodoSaveRequest request, CancellationToken cancellationToken)
+    {
+        return _processor.ProcessInCurrentScopeAsync(request, cancellationToken);
+    }
+}
+```
+
+What to know:
+- **Registered with the module.** `AddCatServiceRequestsModule` registers it as scoped, next to `ICatServiceRequestProcessor`.
+- **Requests without a payload only.** It takes an `ICatServiceRequest`, which is what a received message is.
+- **Calls share the scope.** Two calls in one scope share their scoped services, such as the `DbContext`. Use `ICatServiceRequestProcessor` when each call needs its own.
 
 ### Handle a JSON Patch document
 

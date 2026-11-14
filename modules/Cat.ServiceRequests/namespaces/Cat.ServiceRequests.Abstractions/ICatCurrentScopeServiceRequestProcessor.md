@@ -1,0 +1,42 @@
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>
+<table>
+    <tr>
+        <td colspan='6' style='text-align: center; font-weight: bold; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+             Clean Architecture Toolkit for .NET
+        </td>
+    </tr>
+    <tr>
+        <td colspan='5' style='padding: 0; vertical-align: middle; border: none;'>
+            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>
+            It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>
+        <td style='padding: 0; border: none;' width='220'>
+            <img src='../../../../resources/logo/CatLogo.svg' alt='' width='200' style='padding: 15px; float: right; background: #121314; border-radius: 10px'/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../../../../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../../../../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../../../../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[CAT.SERVICEREQUESTS](../../README.md)&nbsp;&nbsp;&nbsp;&#124;
+
+</td>
+</tr>
+</table>
+
+# Code Reference  
+  
+##### >> [Cat\.ServiceRequests\.Abstractions Assembly](index.md 'index') >> [Cat\.ServiceRequests\.Abstractions Namespace](Cat.ServiceRequests.Abstractions.md 'Cat\.ServiceRequests\.Abstractions')
+
+## ICatCurrentScopeServiceRequestProcessor Interface
+
+Runs a service request in the scope of the caller, instead of in a scope of its own\.
+The handler and everything it uses, such as a `DbContext`, are the same instances the caller sees in its scope\.
+Use it when the caller prepares work that the handler must commit together with its own, like the receiver of a message that adds an inbox row\.
+[ICatServiceRequestProcessor](ICatServiceRequestProcessor.md 'Cat\.ServiceRequests\.Abstractions\.ICatServiceRequestProcessor') keeps opening a scope per request\.
+
+```csharp
+public interface ICatCurrentScopeServiceRequestProcessor
+```
+
+| Methods | |
+| :--- | :--- |
+| [ProcessInCurrentScopeAsync\(ICatServiceRequest, CancellationToken\)](ICatCurrentScopeServiceRequestProcessor.ProcessInCurrentScopeAsync.5TFUJ8OZCAA9T4DH06XUJ1A4D.md 'Cat\.ServiceRequests\.Abstractions\.ICatCurrentScopeServiceRequestProcessor\.ProcessInCurrentScopeAsync\(Cat\.ServiceRequests\.Abstractions\.ICatServiceRequest, System\.Threading\.CancellationToken\)') | Runs a service request that returns no payload, in the scope of the caller\. |

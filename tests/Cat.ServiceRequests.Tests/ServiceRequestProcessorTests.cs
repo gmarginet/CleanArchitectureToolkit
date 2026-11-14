@@ -174,6 +174,43 @@ public class ServiceRequestProcessorTests : UnitTestBase
         Assert.That(Recorder.Calls.Select(c => c.ScopeId).Distinct().Count(), Is.EqualTo(20));
     }
 
+    [Test]
+    public async Task ProcessInCurrentScopeAsync_RunsTheHandlerInTheScopeOfTheCaller()
+    {
+        using var scope = ServiceProvider.CreateScope();
+        var marker = scope.ServiceProvider.GetRequiredService<ScopedMarker>();
+        var processor = scope.ServiceProvider.GetRequiredService<ICatCurrentScopeServiceRequestProcessor>();
+
+        var response = await processor.ProcessInCurrentScopeAsync(new CreateOrderRequest("book"));
+
+        Assert.That(response, CatIs.Succeeded);
+        Assert.That(Recorder.Calls.Single().ScopeId, Is.EqualTo(marker.Id));
+    }
+
+    [Test]
+    public async Task ProcessInCurrentScopeAsync_CallsInOneScope_ShareTheScope()
+    {
+        using var scope = ServiceProvider.CreateScope();
+        var processor = scope.ServiceProvider.GetRequiredService<ICatCurrentScopeServiceRequestProcessor>();
+
+        await processor.ProcessInCurrentScopeAsync(new CreateOrderRequest("one"));
+        await processor.ProcessInCurrentScopeAsync(new CreateOrderRequest("two"));
+
+        Assert.That(Recorder.Calls.Select(c => c.ScopeId).Distinct().Count(), Is.EqualTo(1));
+    }
+
+    [Test]
+    public async Task ProcessInCurrentScopeAsync_AFailedResponse_IsReturnedWithItsErrors()
+    {
+        using var scope = ServiceProvider.CreateScope();
+        var processor = scope.ServiceProvider.GetRequiredService<ICatCurrentScopeServiceRequestProcessor>();
+
+        var response = await processor.ProcessInCurrentScopeAsync(new CreateOrderRequest("fail"));
+
+        Assert.That(response, CatIs.Failed);
+        Assert.That(response.ErrorList.Single().Code, Is.EqualTo("ORD-1"));
+    }
+
     #endregion Scopes
 
     #region Registration

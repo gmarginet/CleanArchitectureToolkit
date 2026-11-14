@@ -307,7 +307,7 @@ builder.Services.AddCatEventProcessor(builder.Configuration, events => events
 What to know:
 - **Per message type.** `UseInbox` is false by default. Only a message type with it on gets the inbox, so you pick the types and not every handler.
 - **Configuration.** The configuration of the service wins over the code, like the other settings: `CatEventProcessor:Messages:OrderPlaced:UseInbox`.
-- **Where it runs.** The receiver does the work, not a decorator. Before the handler runs it asks the store for the message ID. A repeated message completes without running the handler. A new message gets its row in the context of the handler, so the `SaveChanges` of the handler saves the row with the work, or neither is saved.
+- **Where it runs.** The receiver does the work, not a decorator. Before the handler runs it asks the store for the message ID. A repeated message completes without running the handler. A new message gets its row in the context of the handler, so the `SaveChanges` of the handler saves the row with the work, or neither is saved. This works because the receiver runs the handler in its own scope, through `ICatCurrentScopeServiceRequestProcessor` of `Cat.ServiceRequests`. A processor of your own that you register only as `ICatServiceRequestProcessor` opens a scope per call, so the row would never be saved. Register `ICatCurrentScopeServiceRequestProcessor` too.
 - **Two copies at once.** The key of the table fails the second save, the message is abandoned, and the next delivery finds the row and skips it.
 - **No message ID.** A message without an ID is handled without the inbox.
 - **Missing store.** The listener fails at startup when a message type has `UseInbox` on and no `ICatInboxStore` is registered.

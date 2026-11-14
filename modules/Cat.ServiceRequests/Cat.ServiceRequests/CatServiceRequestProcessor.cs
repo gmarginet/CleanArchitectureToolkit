@@ -12,10 +12,11 @@ using Nito.AsyncEx;
 namespace Cat.ServiceRequests;
 
 /// <summary>
-/// Default <see cref="ICatServiceRequestProcessor"/>.
+/// Default <see cref="ICatServiceRequestProcessor"/> and <see cref="ICatCurrentScopeServiceRequestProcessor"/>.
 /// Opens a new scope per request, gets the decorated handler from it and invokes the handler.
+/// The current scope variant skips the new scope and uses the scope of the caller.
 /// </summary>
-internal class CatServiceRequestProcessor : ICatServiceRequestProcessor
+internal class CatServiceRequestProcessor : ICatServiceRequestProcessor, ICatCurrentScopeServiceRequestProcessor
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ICatDecoratorFactory _decoratorFactory;
@@ -35,16 +36,26 @@ internal class CatServiceRequestProcessor : ICatServiceRequestProcessor
     public async Task<ICatResponse> ProcessAsync(ICatServiceRequest catServiceRequest, CancellationToken cancellationToken = default)
     {
         await using var scope = _serviceProvider.CreateAsyncScope();
-        
+
+        return await RunHandlerAsync(scope.ServiceProvider, catServiceRequest, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<ICatResponse> ProcessInCurrentScopeAsync(ICatServiceRequest catServiceRequest, CancellationToken cancellationToken = default)
+    {
+        // The processor is scoped, so the provider it got is the provider of the scope of the caller.
+        return RunHandlerAsync(_serviceProvider, catServiceRequest, cancellationToken);
+    }
+
+    private async Task<ICatResponse> RunHandlerAsync(IServiceProvider provider, ICatServiceRequest catServiceRequest, CancellationToken cancellationToken)
+    {
         var serviceRequestType = catServiceRequest.GetType();
         var handlerType = typeof(ICatServiceRequestHandler<>).MakeGenericType(serviceRequestType);
-        var handler = _decoratorFactory.GetRequiredDecoratedService(scope.ServiceProvider, handlerType);
+        var handler = _decoratorFactory.GetRequiredDecoratedService(provider, handlerType);
 
         var method = handlerType.GetMethod("HandleAsync");
         var task = (Task<ICatResponse>)InvokeHandler(method!, handler, catServiceRequest, cancellationToken);
-        var result = await task;
-        
-        return result;
+        return await task;
     }
 
     /// <inheritdoc />
