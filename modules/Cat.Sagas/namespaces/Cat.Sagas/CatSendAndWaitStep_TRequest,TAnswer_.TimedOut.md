@@ -24,15 +24,15 @@
 
 # Code Reference  
   
-##### >> [Cat\.Sagas\.Abstractions Assembly](index.md 'index') >> [Cat\.Sagas\.Abstractions Namespace](Cat.Sagas.Abstractions.md 'Cat\.Sagas\.Abstractions') >> [CatSagaInstance Class](CatSagaInstance.md 'Cat\.Sagas\.Abstractions\.CatSagaInstance')
+##### >> [Cat\.Sagas Assembly](index.md 'index') >> [Cat\.Sagas\.Steps Namespace](Cat.Sagas.Steps.md 'Cat\.Sagas\.Steps') >> [CatSendAndWaitStep&lt;TRequest,TAnswer&gt; Class](CatSendAndWaitStep_TRequest,TAnswer_.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>')
 
-## CatSagaInstance\.WaitingFor Property
+## CatSendAndWaitStep\<TRequest,TAnswer\>\.TimedOut Property
 
-The name of the type of answer the instance waits for\. It is empty when the instance is not waiting\.
+True when the wait timed out before an answer came\. Read it with `Output` and branch on it\.
 
 ```csharp
-public string? WaitingFor { get; set; }
+public bool TimedOut { get; private set; }
 ```
 
 #### Property Value
-[System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
+[System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')

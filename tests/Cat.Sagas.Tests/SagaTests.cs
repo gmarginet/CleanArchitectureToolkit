@@ -49,7 +49,10 @@ public class SagaTests
         Assert.That(result.Status, Is.EqualTo(CatSagaStatus.Waiting));
         var instance = await InstanceAsync(result.InstanceId);
         Assert.That(instance.Status, Is.EqualTo(CatSagaStatus.Waiting));
-        Assert.That(instance.WaitingFor, Is.EqualTo(nameof(PaymentTaken)));
+        var wait = ((List<CatSagaWait>)_provider.GetRequiredService<ICatSagaSerializer>().Deserialize(instance.Waits!, typeof(List<CatSagaWait>))).Single();
+        Assert.That(wait.StepName, Is.EqualTo("payment"));
+        Assert.That(wait.AnswerType, Does.StartWith(typeof(PaymentTaken).FullName!));
+        Assert.That(wait.TimeoutAt, Is.Null);
         Assert.That(instance.WorkflowType, Is.EqualTo(typeof(PaymentFlow).FullName));
         Assert.That(StateOf(instance).Log, Is.EqualTo(new[] { "started" }));
     }

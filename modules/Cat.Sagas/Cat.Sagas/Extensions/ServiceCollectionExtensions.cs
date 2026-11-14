@@ -29,6 +29,7 @@ public static class ServiceCollectionExtensions
         services.TryAddScoped<ICatSagaRunner, CatSagaRunner>();
         services.TryAddScoped<ICatSagaDispatcher, CatSagaDispatcher>();
         services.TryAddTransient(typeof(CatSendAndWaitStep<,>));
+        services.TryAddScoped<ICatServiceRequestHandler<CatSagaTimeout>, CatSagaTimeoutHandler>();
     }
 
     /// <summary>

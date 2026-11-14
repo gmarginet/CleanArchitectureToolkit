@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cat.FluentWorkflows.Abstractions;
@@ -28,8 +30,24 @@ internal sealed class CatSagaEngine
         _options = options;
     }
 
+    public List<CatSagaWait> ReadWaits(CatSagaInstance instance)
+    {
+        return string.IsNullOrEmpty(instance.Waits)
+            ? new List<CatSagaWait>()
+            : (List<CatSagaWait>)_serializer.Deserialize(instance.Waits!, typeof(List<CatSagaWait>));
+    }
+
+    /// <summary>Saves the result of a run and sends the messages it collected.</summary>
+    /// <param name="definition">The definition of the saga.</param>
+    /// <param name="instance">The stored instance, or null for a new saga.</param>
+    /// <param name="id">The instance id.</param>
+    /// <param name="state">The workflow state after the run.</param>
+    /// <param name="response">The workflow response of the run.</param>
+    /// <param name="resolvedStep">The wait step that this run answered or timed out, or null for a new saga.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The result with the status of the instance.</returns>
     public async Task<CatSagaResult> FinishAsync(ICatSagaDefinition definition, CatSagaInstance? instance, Guid id, object state,
-        ICatWorkflowResponse response, CancellationToken cancellationToken)
+        ICatWorkflowResponse response, string? resolvedStep, CancellationToken cancellationToken)
     {
         var now = DateTimeOffset.UtcNow;
 
@@ -38,13 +56,17 @@ internal sealed class CatSagaEngine
             var checkpoint = response.Checkpoint
                              ?? throw new InvalidOperationException("The workflow suspended without a checkpoint.");
             var isNew = instance == null;
+            var before = instance == null ? new List<CatSagaWait>() : ReadWaits(instance);
             instance ??= new CatSagaInstance { Id = id, WorkflowType = definition.Name, CreatedAt = now };
+
+            // The waits that stay open, plus the ones this run opened. A step that suspended again replaces its old wait.
+            var open = before.Where(w => w.StepName != resolvedStep).Concat(_context.Waits).ToList();
 
             instance.Status = CatSagaStatus.Waiting;
             instance.State = _serializer.Serialize(state, definition.StateType);
             instance.Checkpoint = _serializer.Serialize(checkpoint, typeof(CatWorkflowCheckpoint));
             instance.WorkflowVersion = checkpoint.Version;
-            instance.WaitingFor = _context.WaitingFor;
+            instance.Waits = _serializer.Serialize(open, typeof(List<CatSagaWait>));
             instance.UpdatedAt = now;
 
             // With the outbox the sender only adds a row to the context, and the save commits it together with the instance.
@@ -77,7 +99,7 @@ internal sealed class CatSagaEngine
             instance.Status = status;
             instance.State = _serializer.Serialize(state, definition.StateType);
             instance.Checkpoint = null;
-            instance.WaitingFor = null;
+            instance.Waits = null;
             instance.UpdatedAt = now;
             await _store.UpdateAsync(instance, cancellationToken);
         }
@@ -87,19 +109,19 @@ internal sealed class CatSagaEngine
 
     private async Task SendPendingAsync(CancellationToken cancellationToken)
     {
-        foreach (var message in _context.Pending)
+        foreach (var pending in _context.Pending)
         {
-            switch (message)
+            switch (pending.Message)
             {
                 case ICatCommandMessage command:
-                    await _sender.SendAsync(command, null, cancellationToken);
+                    await _sender.SendAsync(command, pending.ScheduledAt, cancellationToken);
                     break;
                 case ICatEventMessage @event:
-                    await _sender.PublishAsync(@event, null, cancellationToken);
+                    await _sender.PublishAsync(@event, pending.ScheduledAt, cancellationToken);
                     break;
                 default:
                     throw new InvalidOperationException(
-                        $"The message {message.GetType().Name} is neither an event nor a command message, so it cannot be sent.");
+                        $"The message {pending.Message.GetType().Name} is neither an event nor a command message, so it cannot be sent.");
             }
         }
 

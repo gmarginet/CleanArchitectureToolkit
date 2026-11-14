@@ -23,7 +23,6 @@ public static class ModelBuilderExtensions
             entity.Property(row => row.Id).ValueGeneratedNever();
             entity.Property(row => row.WorkflowType).HasMaxLength(260).IsRequired();
             entity.Property(row => row.State).IsRequired();
-            entity.Property(row => row.WaitingFor).HasMaxLength(260);
             entity.Property(row => row.Version).IsConcurrencyToken();
             entity.HasIndex(row => row.Status);
         });

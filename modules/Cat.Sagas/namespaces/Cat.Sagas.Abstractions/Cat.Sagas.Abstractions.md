@@ -35,6 +35,7 @@ The contracts of a long running workflow: the saga instance and its status, the 
 | [CatSagaConcurrencyException](CatSagaConcurrencyException.md 'Cat\.Sagas\.Abstractions\.CatSagaConcurrencyException') | Thrown by a store when another message changed the instance since it was loaded\. Let it pass\. The message is delivered again and the next try sees the new state\. |
 | [CatSagaInstance](CatSagaInstance.md 'Cat\.Sagas\.Abstractions\.CatSagaInstance') | The saved record of one saga: the state of the workflow and the place where it waits\. A store keeps one record per instance\. |
 | [CatSagaResult](CatSagaResult.md 'Cat\.Sagas\.Abstractions\.CatSagaResult') | What a saga run came to: waiting for an answer, done, or failed\. |
+| [CatSagaWait](CatSagaWait.md 'Cat\.Sagas\.Abstractions\.CatSagaWait') | One open wait of an instance: a wait step that sent its request and has no answer yet\. An instance with a parallel step can have several\. |
 
 | Interfaces | |
 | :--- | :--- |

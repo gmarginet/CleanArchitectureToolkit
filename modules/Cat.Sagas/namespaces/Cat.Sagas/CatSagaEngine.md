@@ -51,5 +51,6 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Methods | |
 | :--- | :--- |
-| [FinishAsync\(ICatSagaDefinition, CatSagaInstance, Guid, object, ICatWorkflowResponse, CancellationToken\)](CatSagaEngine.FinishAsync.KHRKZ1SNI92RE0MQXY0NHT5VB.md 'Cat\.Sagas\.CatSagaEngine\.FinishAsync\(Cat\.Sagas\.ICatSagaDefinition, Cat\.Sagas\.Abstractions\.CatSagaInstance, System\.Guid, object, Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse, System\.Threading\.CancellationToken\)') | |
+| [FinishAsync\(ICatSagaDefinition, CatSagaInstance, Guid, object, ICatWorkflowResponse, string, CancellationToken\)](CatSagaEngine.FinishAsync.XJSU3R194Z9CWS6GGY0AXPAQB.md 'Cat\.Sagas\.CatSagaEngine\.FinishAsync\(Cat\.Sagas\.ICatSagaDefinition, Cat\.Sagas\.Abstractions\.CatSagaInstance, System\.Guid, object, Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse, string, System\.Threading\.CancellationToken\)') | Saves the result of a run and sends the messages it collected\. |
+| [ReadWaits\(CatSagaInstance\)](CatSagaEngine.ReadWaits.QBTT9RVX54K1RASLMRPQ268J4.md 'Cat\.Sagas\.CatSagaEngine\.ReadWaits\(Cat\.Sagas\.Abstractions\.CatSagaInstance\)') | |
 | [SendPendingAsync\(CancellationToken\)](CatSagaEngine.SendPendingAsync.XX4UQ648XF76R6EZALBLUCHT9.md 'Cat\.Sagas\.CatSagaEngine\.SendPendingAsync\(System\.Threading\.CancellationToken\)') | |

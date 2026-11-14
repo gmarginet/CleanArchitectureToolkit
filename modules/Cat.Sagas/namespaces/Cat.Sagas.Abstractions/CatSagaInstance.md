@@ -46,6 +46,6 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 | [Status](CatSagaInstance.Status.md 'Cat\.Sagas\.Abstractions\.CatSagaInstance\.Status') | Where the instance is in its life\. |
 | [UpdatedAt](CatSagaInstance.UpdatedAt.md 'Cat\.Sagas\.Abstractions\.CatSagaInstance\.UpdatedAt') | When the instance was last saved\. |
 | [Version](CatSagaInstance.Version.md 'Cat\.Sagas\.Abstractions\.CatSagaInstance\.Version') | The number of the saved version\. The store raises it on every update and refuses an update that holds an older number\. |
-| [WaitingFor](CatSagaInstance.WaitingFor.md 'Cat\.Sagas\.Abstractions\.CatSagaInstance\.WaitingFor') | The name of the type of answer the instance waits for\. It is empty when the instance is not waiting\. |
+| [Waits](CatSagaInstance.Waits.md 'Cat\.Sagas\.Abstractions\.CatSagaInstance\.Waits') | The open waits as JSON, a list of [CatSagaWait](CatSagaWait.md 'Cat\.Sagas\.Abstractions\.CatSagaWait')\. It is empty when the instance is not waiting\. |
 | [WorkflowType](CatSagaInstance.WorkflowType.md 'Cat\.Sagas\.Abstractions\.CatSagaInstance\.WorkflowType') | The name of the saga, as it was registered\. It tells the dispatcher which workflow to resume\. |
 | [WorkflowVersion](CatSagaInstance.WorkflowVersion.md 'Cat\.Sagas\.Abstractions\.CatSagaInstance\.WorkflowVersion') | The version of the workflow when the instance last suspended, see `ICatVersionedWorkflow`\. |

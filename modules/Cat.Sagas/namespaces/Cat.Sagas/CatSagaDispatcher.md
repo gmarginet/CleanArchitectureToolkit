@@ -54,4 +54,7 @@ Implements [ICatSagaDispatcher](../../../Cat.Sagas/namespaces/Cat.Sagas.Abstract
 
 | Methods | |
 | :--- | :--- |
+| [FindWaitFor\(List&lt;CatSagaWait&gt;, object, string\)](CatSagaDispatcher.FindWaitFor.4RSKU8DEH2DHGRTS24G3I5QE9.md 'Cat\.Sagas\.CatSagaDispatcher\.FindWaitFor\(System\.Collections\.Generic\.List\<Cat\.Sagas\.Abstractions\.CatSagaWait\>, object, string\)') | With several open waits, an answer goes to the wait whose answer type it fits\. It must fit exactly one\. |
 | [ResumeAsync\(Guid, object, CancellationToken\)](CatSagaDispatcher.ResumeAsync.RBDOHS185C449F8SHQQLJNBRC.md 'Cat\.Sagas\.CatSagaDispatcher\.ResumeAsync\(System\.Guid, object, System\.Threading\.CancellationToken\)') | Resumes the instance with the answer\. |
+| [ResumeCoreAsync\(CatSagaInstance, string, object, CancellationToken\)](CatSagaDispatcher.ResumeCoreAsync.TM1RORS42QL636505J3KCSAMA.md 'Cat\.Sagas\.CatSagaDispatcher\.ResumeCoreAsync\(Cat\.Sagas\.Abstractions\.CatSagaInstance, string, object, System\.Threading\.CancellationToken\)') | |
+| [TimeoutAsync\(Guid, Guid, CancellationToken\)](CatSagaDispatcher.TimeoutAsync.9KNVXA6JSOMXPVE56CXDK8R2C.md 'Cat\.Sagas\.CatSagaDispatcher\.TimeoutAsync\(System\.Guid, System\.Guid, System\.Threading\.CancellationToken\)') | Times out one wait of the instance\. The workflow resumes at the wait step with `TimedOut` set and no answer\. The handler for `CatSagaTimeout` calls it for you\. |

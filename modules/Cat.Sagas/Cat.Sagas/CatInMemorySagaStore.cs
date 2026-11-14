@@ -66,7 +66,7 @@ public sealed class CatInMemorySagaStore : ICatSagaStore
             Status = source.Status,
             State = source.State,
             Checkpoint = source.Checkpoint,
-            WaitingFor = source.WaitingFor,
+            Waits = source.Waits,
             CreatedAt = source.CreatedAt,
             UpdatedAt = source.UpdatedAt,
             Version = source.Version

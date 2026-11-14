@@ -39,9 +39,9 @@ public class CatSagaInstance
     public string? Checkpoint { get; set; }
 
     /// <summary>
-    /// The name of the type of answer the instance waits for. It is empty when the instance is not waiting.
+    /// The open waits as JSON, a list of <see cref="CatSagaWait"/>. It is empty when the instance is not waiting.
     /// </summary>
-    public string? WaitingFor { get; set; }
+    public string? Waits { get; set; }
 
     /// <summary>
     /// When the instance was created.

@@ -17,7 +17,7 @@ internal interface ICatSagaDefinition
     Type StateType { get; }
 
     Task<ICatWorkflowResponse> ResumeAsync(ICatWorkflowProcessor processor, object state, CatWorkflowCheckpoint checkpoint, object answer,
-        CancellationToken cancellationToken);
+        string target, CancellationToken cancellationToken);
 }
 
 internal sealed class CatSagaDefinition<TWorkflow, TWorkflowState> : ICatSagaDefinition
@@ -31,8 +31,8 @@ internal sealed class CatSagaDefinition<TWorkflow, TWorkflowState> : ICatSagaDef
     public Type StateType => typeof(TWorkflowState);
 
     public Task<ICatWorkflowResponse> ResumeAsync(ICatWorkflowProcessor processor, object state, CatWorkflowCheckpoint checkpoint, object answer,
-        CancellationToken cancellationToken)
+        string target, CancellationToken cancellationToken)
     {
-        return processor.ResumeAsync<TWorkflow, TWorkflowState>((TWorkflowState)state, checkpoint, answer, cancellationToken);
+        return processor.ResumeAsync<TWorkflow, TWorkflowState>((TWorkflowState)state, checkpoint, answer, target, cancellationToken);
     }
 }

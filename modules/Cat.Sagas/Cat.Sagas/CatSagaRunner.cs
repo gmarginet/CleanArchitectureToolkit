@@ -39,6 +39,6 @@ internal sealed class CatSagaRunner : ICatSagaRunner
         _context.Begin(id);
 
         var response = await _processor.RunAsync<TWorkflow, TWorkflowState>(state, cancellationToken);
-        return await _engine.FinishAsync(definition, null, id, state, response, cancellationToken);
+        return await _engine.FinishAsync(definition, null, id, state, response, null, cancellationToken);
     }
 }

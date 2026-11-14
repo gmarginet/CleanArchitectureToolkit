@@ -30,9 +30,10 @@
 
 Built\-in step behind `SendAndWait`\. It hands the request message to the saga and suspends the workflow\.
 The saga saves the state first and sends the message after that\. When the answer comes, the step ends and the workflow goes on\.
+When the wait has a timeout and it passes first, the step ends with [TimedOut](CatSendAndWaitStep_TRequest,TAnswer_.TimedOut.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.TimedOut') set and no [Answer](CatSendAndWaitStep_TRequest,TAnswer_.Answer.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.Answer')\.
 
 ```csharp
-public class CatSendAndWaitStep<TRequest,TAnswer> : Cat.FluentWorkflows.CatResumableStepBody<TAnswer>
+public class CatSendAndWaitStep<TRequest,TAnswer> : Cat.FluentWorkflows.CatStepBodyAsync, Cat.FluentWorkflows.Abstractions.ICatResumableStepBody, Cat.FluentWorkflows.Abstractions.ICatStepBodyAsync
     where TRequest : class, Cat.Messaging.Abstractions.ICatMessage
     where TAnswer : class
 ```
@@ -50,7 +51,9 @@ The request message\. It is an event or a command message with a parameterless c
 
 The answer the step waits for\. It can be a base class or an interface when the step accepts more than one answer message\.
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatStepBodyAsync](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows/CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') → [Cat\.FluentWorkflows\.CatResumableStepBody&lt;](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows/CatResumableStepBody_TAnswer_.md 'Cat\.FluentWorkflows\.CatResumableStepBody\`1')[TAnswer](CatSendAndWaitStep_TRequest,TAnswer_.md#Cat.Sagas.Steps.CatSendAndWaitStep_TRequest,TAnswer_.TAnswer 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.TAnswer')[&gt;](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows/CatResumableStepBody_TAnswer_.md 'Cat\.FluentWorkflows\.CatResumableStepBody\`1') → CatSendAndWaitStep\<TRequest,TAnswer\>
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatStepBodyAsync](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows/CatStepBodyAsync.md 'Cat\.FluentWorkflows\.CatStepBodyAsync') → CatSendAndWaitStep\<TRequest,TAnswer\>
+
+Implements [ICatResumableStepBody](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatResumableStepBody.md 'Cat\.FluentWorkflows\.Abstractions\.ICatResumableStepBody'), [ICatStepBodyAsync](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatStepBodyAsync.md 'Cat\.FluentWorkflows\.Abstractions\.ICatStepBodyAsync')
 
 | Constructors | |
 | :--- | :--- |
@@ -62,10 +65,13 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Properties | |
 | :--- | :--- |
-| [Answer](CatSendAndWaitStep_TRequest,TAnswer_.Answer.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.Answer') | The answer, after the step resumed\. Read it with `Output`\. |
+| [Answer](CatSendAndWaitStep_TRequest,TAnswer_.Answer.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.Answer') | The answer, after the step resumed with one\. It is null when [TimedOut](CatSendAndWaitStep_TRequest,TAnswer_.TimedOut.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.TimedOut') is true\. Read it with `Output`\. |
 | [Request](CatSendAndWaitStep_TRequest,TAnswer_.Request.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.Request') | The request message\. Fill its members with `Input`\. |
+| [StepName](CatSendAndWaitStep_TRequest,TAnswer_.StepName.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.StepName') | The name of the step\. `SendAndWait` fills it\. A timeout and an answer find the step by it\. |
+| [TimedOut](CatSendAndWaitStep_TRequest,TAnswer_.TimedOut.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.TimedOut') | True when the wait timed out before an answer came\. Read it with `Output` and branch on it\. |
+| [Timeout](CatSendAndWaitStep_TRequest,TAnswer_.Timeout.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.Timeout') | How long the wait lasts\. `SendAndWait` fills it\. Null means the wait has no timeout\. |
 
 | Methods | |
 | :--- | :--- |
-| [ResumeAsync\(TAnswer, CancellationToken\)](CatSendAndWaitStep_TRequest,TAnswer_.ResumeAsync.SINGI8J9TDPOHUMMTNHVOX26D.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.ResumeAsync\(TAnswer, System\.Threading\.CancellationToken\)') | |
+| [ResumeAsync\(object, CancellationToken\)](CatSendAndWaitStep_TRequest,TAnswer_.ResumeAsync.XJKKXR915A7FZNPTZNCYM3T57.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.ResumeAsync\(object, System\.Threading\.CancellationToken\)') | Finishes the step with the answer\. The inputs of the step are filled again before this runs, and the outputs are copied after it\. |
 | [RunAsync\(CancellationToken\)](CatSendAndWaitStep_TRequest,TAnswer_.RunAsync.J6ZDTHIJPRNCHIHJK1R81JMZD.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.RunAsync\(System\.Threading\.CancellationToken\)') | Runs the step\. |

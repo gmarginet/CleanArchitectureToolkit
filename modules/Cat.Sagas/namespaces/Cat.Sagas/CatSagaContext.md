@@ -29,7 +29,7 @@
 ## CatSagaContext Class
 
 The saga that runs in this scope\. The runner and the dispatcher set it before the workflow runs, and the wait step uses it
-to hand over its request message, so the message goes out only after the state is saved\.
+to hand over its request message and its wait, so the messages go out only after the state is saved\.
 
 ```csharp
 public sealed class CatSagaContext : Cat.Sagas.Abstractions.ICatSagaContext
@@ -43,7 +43,7 @@ Implements [ICatSagaContext](../../../Cat.Sagas/namespaces/Cat.Sagas.Abstraction
 | :--- | :--- |
 | [InstanceId](CatSagaContext.InstanceId.md 'Cat\.Sagas\.CatSagaContext\.InstanceId') | The id of the running instance\. It is the correlation id for every message of the saga\. |
 | [Pending](CatSagaContext.Pending.md 'Cat\.Sagas\.CatSagaContext\.Pending') | |
-| [WaitingFor](CatSagaContext.WaitingFor.md 'Cat\.Sagas\.CatSagaContext\.WaitingFor') | |
+| [Waits](CatSagaContext.Waits.md 'Cat\.Sagas\.CatSagaContext\.Waits') | |
 
 | Methods | |
 | :--- | :--- |

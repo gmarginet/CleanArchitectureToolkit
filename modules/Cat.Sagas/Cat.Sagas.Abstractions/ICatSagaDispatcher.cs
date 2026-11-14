@@ -23,4 +23,18 @@ public interface ICatSagaDispatcher
     /// </returns>
     /// <exception cref="CatSagaConcurrencyException">Another message changed the instance at the same time.</exception>
     Task<ICatResponse> ResumeAsync(Guid correlationId, object answer, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Times out one wait of the instance. The workflow resumes at the wait step with <c>TimedOut</c> set and no answer.
+    /// The handler for <c>CatSagaTimeout</c> calls it for you.
+    /// </summary>
+    /// <param name="correlationId">The id of the instance.</param>
+    /// <param name="waitId">The id of the wait that timed out, see <see cref="CatSagaWait.WaitId"/>.</param>
+    /// <param name="cancellationToken">Token to cancel the work.</param>
+    /// <returns>
+    /// A succeeded response when the wait timed out, and also when it no longer applies, such as an answer that came first.
+    /// A NotFound response when there is no such instance.
+    /// </returns>
+    /// <exception cref="CatSagaConcurrencyException">Another message changed the instance at the same time.</exception>
+    Task<ICatResponse> TimeoutAsync(Guid correlationId, Guid waitId, CancellationToken cancellationToken = default);
 }

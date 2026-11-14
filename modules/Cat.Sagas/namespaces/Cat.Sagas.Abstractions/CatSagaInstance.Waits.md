@@ -24,12 +24,14 @@
 
 # Code Reference  
   
-##### >> [Cat\.Sagas Assembly](index.md 'index') >> [Cat\.Sagas Namespace](Cat.Sagas.md 'Cat\.Sagas') >> [CatSagaContext Class](CatSagaContext.md 'Cat\.Sagas\.CatSagaContext')
+##### >> [Cat\.Sagas\.Abstractions Assembly](index.md 'index') >> [Cat\.Sagas\.Abstractions Namespace](Cat.Sagas.Abstractions.md 'Cat\.Sagas\.Abstractions') >> [CatSagaInstance Class](CatSagaInstance.md 'Cat\.Sagas\.Abstractions\.CatSagaInstance')
 
-## CatSagaContext\.WaitingFor Property
+## CatSagaInstance\.Waits Property
+
+The open waits as JSON, a list of [CatSagaWait](CatSagaWait.md 'Cat\.Sagas\.Abstractions\.CatSagaWait')\. It is empty when the instance is not waiting\.
 
 ```csharp
-internal string? WaitingFor { internal get; internal set; }
+public string? Waits { get; set; }
 ```
 
 #### Property Value

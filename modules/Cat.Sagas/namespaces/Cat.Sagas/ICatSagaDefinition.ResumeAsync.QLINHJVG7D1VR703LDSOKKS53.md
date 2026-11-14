@@ -26,30 +26,34 @@
   
 ##### >> [Cat\.Sagas Assembly](index.md 'index') >> [Cat\.Sagas Namespace](Cat.Sagas.md 'Cat\.Sagas') >> [ICatSagaDefinition Interface](ICatSagaDefinition.md 'Cat\.Sagas\.ICatSagaDefinition')
 
-## ICatSagaDefinition\.ResumeAsync\(ICatWorkflowProcessor, object, CatWorkflowCheckpoint, object, CancellationToken\) Method
+## ICatSagaDefinition\.ResumeAsync\(ICatWorkflowProcessor, object, CatWorkflowCheckpoint, object, string, CancellationToken\) Method
 
 ```csharp
-System.Threading.Tasks.Task<Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse> ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor processor, object state, Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint checkpoint, object answer, System.Threading.CancellationToken cancellationToken);
+System.Threading.Tasks.Task<Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse> ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor processor, object state, Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint checkpoint, object answer, string target, System.Threading.CancellationToken cancellationToken);
 ```
 #### Parameters
 
-<a name='Cat.Sagas.ICatSagaDefinition.ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor,object,Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint,object,System.Threading.CancellationToken).processor'></a>
+<a name='Cat.Sagas.ICatSagaDefinition.ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor,object,Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint,object,string,System.Threading.CancellationToken).processor'></a>
 
 `processor` [ICatWorkflowProcessor](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowProcessor.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowProcessor')
 
-<a name='Cat.Sagas.ICatSagaDefinition.ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor,object,Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint,object,System.Threading.CancellationToken).state'></a>
+<a name='Cat.Sagas.ICatSagaDefinition.ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor,object,Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint,object,string,System.Threading.CancellationToken).state'></a>
 
 `state` [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object')
 
-<a name='Cat.Sagas.ICatSagaDefinition.ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor,object,Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint,object,System.Threading.CancellationToken).checkpoint'></a>
+<a name='Cat.Sagas.ICatSagaDefinition.ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor,object,Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint,object,string,System.Threading.CancellationToken).checkpoint'></a>
 
 `checkpoint` [CatWorkflowCheckpoint](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/CatWorkflowCheckpoint.md 'Cat\.FluentWorkflows\.Abstractions\.CatWorkflowCheckpoint')
 
-<a name='Cat.Sagas.ICatSagaDefinition.ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor,object,Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint,object,System.Threading.CancellationToken).answer'></a>
+<a name='Cat.Sagas.ICatSagaDefinition.ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor,object,Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint,object,string,System.Threading.CancellationToken).answer'></a>
 
 `answer` [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object')
 
-<a name='Cat.Sagas.ICatSagaDefinition.ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor,object,Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint,object,System.Threading.CancellationToken).cancellationToken'></a>
+<a name='Cat.Sagas.ICatSagaDefinition.ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor,object,Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint,object,string,System.Threading.CancellationToken).target'></a>
+
+`target` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
+
+<a name='Cat.Sagas.ICatSagaDefinition.ResumeAsync(Cat.FluentWorkflows.Abstractions.ICatWorkflowProcessor,object,Cat.FluentWorkflows.Abstractions.CatWorkflowCheckpoint,object,string,System.Threading.CancellationToken).cancellationToken'></a>
 
 `cancellationToken` [System\.Threading\.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System\.Threading\.CancellationToken')
 

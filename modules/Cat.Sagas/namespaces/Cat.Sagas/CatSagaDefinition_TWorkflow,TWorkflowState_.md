@@ -53,4 +53,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Methods | |
 | :--- | :--- |
-| [ResumeAsync\(ICatWorkflowProcessor, object, CatWorkflowCheckpoint, object, CancellationToken\)](CatSagaDefinition_TWorkflow,TWorkflowState_.ResumeAsync.4X9TI0UDJC7J1BMUEAYMY29W5.md 'Cat\.Sagas\.CatSagaDefinition\<TWorkflow,TWorkflowState\>\.ResumeAsync\(Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowProcessor, object, Cat\.FluentWorkflows\.Abstractions\.CatWorkflowCheckpoint, object, System\.Threading\.CancellationToken\)') | |
+| [ResumeAsync\(ICatWorkflowProcessor, object, CatWorkflowCheckpoint, object, string, CancellationToken\)](CatSagaDefinition_TWorkflow,TWorkflowState_.ResumeAsync.30L4PQ53JX00GCBZ12JEEATD1.md 'Cat\.Sagas\.CatSagaDefinition\<TWorkflow,TWorkflowState\>\.ResumeAsync\(Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowProcessor, object, Cat\.FluentWorkflows\.Abstractions\.CatWorkflowCheckpoint, object, string, System\.Threading\.CancellationToken\)') | |

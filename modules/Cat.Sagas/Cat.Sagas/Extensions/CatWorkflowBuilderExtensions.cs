@@ -1,3 +1,4 @@
+using System;
 using Cat.FluentWorkflows;
 using Cat.FluentWorkflows.Abstractions;
 using Cat.Messaging.Abstractions;
@@ -21,10 +22,18 @@ public static class CatWorkflowBuilderExtensions
     /// <typeparam name="TRequest">The request message to send.</typeparam>
     /// <typeparam name="TAnswer">The answer to wait for.</typeparam>
     /// <param name="builder">The builder to add the step to.</param>
-    /// <param name="name">The name of the step. A step that waits needs a name that does not change, because the saved position points at it.</param>
+    /// <param name="name">
+    /// The name of the step. A step that waits needs a name that does not change, because the saved position points at it.
+    /// The name must be unique in the whole workflow, because an answer and a timeout find the step by it.
+    /// </param>
+    /// <param name="timeout">
+    /// How long to wait. When it passes before an answer comes, the workflow goes on with <c>TimedOut</c> set and no answer.
+    /// It needs the handler for <c>CatSagaTimeout</c>, which the module registers, and a <c>Receive</c> of that message on the event processor.
+    /// Leave it out to wait without a limit.
+    /// </param>
     /// <returns>A builder to connect the step to the state with <c>Input</c> and <c>Output</c>.</returns>
     public static ICatStepBuilder<TWorkflowState, CatSendAndWaitStep<TRequest, TAnswer>> SendAndWait<TWorkflowState, TRequest, TAnswer>(
-        this ICatWorkflowBuilder<TWorkflowState> builder, string name)
+        this ICatWorkflowBuilder<TWorkflowState> builder, string name, TimeSpan? timeout = null)
         where TWorkflowState : class, ICatWorkflowState<TWorkflowState>
         where TRequest : class, ICatMessage
         where TAnswer : class
@@ -33,6 +42,14 @@ public static class CatWorkflowBuilderExtensions
         var stepBuilder = new CatStepBuilder<TWorkflowState, CatSendAndWaitStep<TRequest, TAnswer>>(workflowStep);
 
         builder.WorkflowSteps.Add(workflowStep);
-        return stepBuilder.Named(name);
+        stepBuilder.Named(name);
+        stepBuilder.Input(state => name, step => step.StepName);
+        if (timeout.HasValue)
+        {
+            var wait = timeout.Value;
+            stepBuilder.Input(state => (TimeSpan?)wait, step => step.Timeout);
+        }
+
+        return stepBuilder;
     }
 }

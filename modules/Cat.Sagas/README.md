@@ -54,9 +54,9 @@ A message that arrives twice, or a workflow that changed while instances wait, d
   - [Answer from another service](#answer-from-another-service)
   - [Skip a repeated answer](#skip-a-repeated-answer)
   - [Wait for more than one kind of answer](#wait-for-more-than-one-kind-of-answer)
+  - [Time out a wait](#time-out-a-wait)
   - [Rules to follow](#rules-to-follow)
   - [Test a saga](#test-a-saga)
-  - [What is not built yet](#what-is-not-built-yet)
 
 ## NuGet packages
 <!-- region start: NuGet-->
@@ -186,7 +186,7 @@ The result holds the instance id and the status: `Waiting`, `Completed` or `Fail
 ### What happens at the wait step
 The step does not send the request at once. It hands the request to the saga, and the workflow stops. The saga then does this, in this order:
 
-1. It saves the state, the position and the name of the answer it waits for.
+1. It saves the state, the position and the list of open waits.
 2. It sends the request through `ICatMessageSender`.
 
 An answer can therefore never arrive before its instance exists. If the process stops between the two, the instance waits and the request is lost. The outbox of `Cat.Messaging` closes that gap, see [Use the outbox](#use-the-outbox).
@@ -266,16 +266,40 @@ builder.If(state => state.Declined,
 
 Register every derived type with `AddCatSagaAnswer`. The state keeps simple values, such as the `Declined` flag. The JSON of a base class property would lose the derived type.
 
+### Time out a wait
+A wait can have a limit. Pass a `timeout` to `SendAndWait`. The step then has a `TimedOut` flag next to `Answer`. On a timeout `Answer` is null and `TimedOut` is true. Copy the flag with `Output` and branch with `If`, so the workflow can compensate:
+
+```csharp
+builder.SendAndWait<PlaceOrderState, TakePayment, PaymentTaken>("payment", TimeSpan.FromHours(24))
+    .Output(step => step.Answer, state => state.Payment)
+    .Output(step => step.TimedOut, state => state.PaymentTimedOut);
+builder.If(state => state.PaymentTimedOut,
+    then => then.Run(state => state.Status = "Cancelled"),
+    otherwise => otherwise.Run(state => state.Status = "Confirmed"));
+```
+
+The timeout is a message of the module, `CatSagaTimeout`. The saga sends it to the own queue of the service with a scheduled time, in the same step that sends the request. The module registers the handler. You declare the message on the event processor, next to the answers:
+
+```csharp
+builder.Services.AddCatEventProcessor(builder.Configuration, processor => processor
+    .Receive<PaymentTaken>()
+    .Receive<CatSagaTimeout>());
+```
+
+Things to know:
+- **The bus cannot cancel a scheduled message.** An answer that arrives in time leaves the timeout on the bus. The dispatcher finds no open wait for it and ignores it.
+- **The instance keeps a list of open waits.** The `Waits` column holds one entry per open wait, with the step name, a wait id, the answer type and the time limit. A timeout carries the wait id, and it only fires that wait. A late timeout of an earlier step never fires the wait that follows.
+- **Waits can run side by side.** In a `Parallel` step every waiting branch has its own entry. An answer finds its wait by the answer type, so a second wait for the same answer type in the same moment is a `Conflict`.
+- **With the outbox on, the timeout message is saved with the instance.** It goes into the outbox in the same `SaveChanges` as the request.
+
 ### Rules to follow
 - **The state must be serializable.** The default serializer is `System.Text.Json` with the web defaults. Keep services, delegates and interfaces out of the state. Replace `ICatSagaSerializer` to use another format.
 - **`Build` must give the same steps every time.** The workflow is built again on every resume, and the saved position points into those steps.
-- **Name every step that waits.** A name does not change when you add a step before it. Never remove or reorder a step while instances wait. Raise the version of the workflow when you must, see `ICatVersionedWorkflow` in the [Cat.FluentWorkflows](../Cat.FluentWorkflows/README.md) readme. A resume with another version fails with a `Conflict`.
+- **Name every step that waits, and keep the names unique.** The name is how the instance finds its wait, so two wait steps in one workflow must not share a name. A name does not change when you add a step before it. Never remove or reorder a step while instances wait. Raise the version of the workflow when you must, see `ICatVersionedWorkflow` in the [Cat.FluentWorkflows](../Cat.FluentWorkflows/README.md) readme. A resume with another version fails with a `Conflict`.
 - **Steps before a wait step may run twice.** When two answers race, the loser has already run its steps when the store refuses its update. Write them so that a second run does no harm.
 - **Write the other side to copy the correlation id.** Without it the answer finds no instance.
 
 ### Test a saga
 Use `CatInMemorySagaStore` and a fake message sender, such as `FakeMessageSender` of [Cat.UnitTesting](../Cat.UnitTesting/README.md). Start the saga, read the request from the sender, then call `ICatSagaDispatcher.ResumeAsync` with an answer that carries the same correlation id. Read the instance from the store to see the status and the state.
 
-### What is not built yet
-- **Timeouts.** A wait has no limit yet.
 <!-- region end: Usage-->

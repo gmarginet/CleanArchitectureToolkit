@@ -24,22 +24,22 @@
 
 # Code Reference  
   
-##### >> [Cat\.Sagas Assembly](index.md 'index') >> [Cat\.Sagas\.Steps Namespace](Cat.Sagas.Steps.md 'Cat\.Sagas\.Steps') >> [CatSendAndWaitStep&lt;TRequest,TAnswer&gt; Class](CatSendAndWaitStep_TRequest,TAnswer_.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>')
+##### >> [Cat\.Sagas Assembly](index.md 'index') >> [Cat\.Sagas Namespace](Cat.Sagas.md 'Cat\.Sagas') >> [CatSagaTimeoutHandler Class](CatSagaTimeoutHandler.md 'Cat\.Sagas\.CatSagaTimeoutHandler')
 
-## CatSendAndWaitStep\<TRequest,TAnswer\>\.ResumeAsync\(TAnswer, CancellationToken\) Method
+## CatSagaTimeoutHandler\.HandleAsync\(CatSagaTimeout, CancellationToken\) Method
 
 ```csharp
-protected override System.Threading.Tasks.Task<Cat.FluentWorkflows.Abstractions.ICatWorkflowResponse> ResumeAsync(TAnswer answer, System.Threading.CancellationToken cancellationToken);
+public System.Threading.Tasks.Task<Cat.Responses.Abstractions.ICatResponse> HandleAsync(Cat.Sagas.CatSagaTimeout serviceRequest, System.Threading.CancellationToken cancellationToken=default(System.Threading.CancellationToken));
 ```
 #### Parameters
 
-<a name='Cat.Sagas.Steps.CatSendAndWaitStep_TRequest,TAnswer_.ResumeAsync(TAnswer,System.Threading.CancellationToken).answer'></a>
+<a name='Cat.Sagas.CatSagaTimeoutHandler.HandleAsync(Cat.Sagas.CatSagaTimeout,System.Threading.CancellationToken).serviceRequest'></a>
 
-`answer` [TAnswer](CatSendAndWaitStep_TRequest,TAnswer_.md#Cat.Sagas.Steps.CatSendAndWaitStep_TRequest,TAnswer_.TAnswer 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.TAnswer')
+`serviceRequest` [CatSagaTimeout](CatSagaTimeout.md 'Cat\.Sagas\.CatSagaTimeout')
 
-<a name='Cat.Sagas.Steps.CatSendAndWaitStep_TRequest,TAnswer_.ResumeAsync(TAnswer,System.Threading.CancellationToken).cancellationToken'></a>
+<a name='Cat.Sagas.CatSagaTimeoutHandler.HandleAsync(Cat.Sagas.CatSagaTimeout,System.Threading.CancellationToken).cancellationToken'></a>
 
 `cancellationToken` [System\.Threading\.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System\.Threading\.CancellationToken')
 
 #### Returns
-[System\.Threading\.Tasks\.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')[ICatWorkflowResponse](../../../Cat.FluentWorkflows/namespaces/Cat.FluentWorkflows.Abstractions/ICatWorkflowResponse.md 'Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowResponse')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')
+[System\.Threading\.Tasks\.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')[ICatResponse](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse.md 'Cat\.Responses\.Abstractions\.ICatResponse')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')

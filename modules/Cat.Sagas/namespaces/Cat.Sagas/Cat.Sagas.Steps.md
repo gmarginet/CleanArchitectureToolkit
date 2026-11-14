@@ -30,4 +30,4 @@
 
 | Classes | |
 | :--- | :--- |
-| [CatSendAndWaitStep&lt;TRequest,TAnswer&gt;](CatSendAndWaitStep_TRequest,TAnswer_.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>') | Built\-in step behind `SendAndWait`\. It hands the request message to the saga and suspends the workflow\. The saga saves the state first and sends the message after that\. When the answer comes, the step ends and the workflow goes on\. |
+| [CatSendAndWaitStep&lt;TRequest,TAnswer&gt;](CatSendAndWaitStep_TRequest,TAnswer_.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>') | Built\-in step behind `SendAndWait`\. It hands the request message to the saga and suspends the workflow\. The saga saves the state first and sends the message after that\. When the answer comes, the step ends and the workflow goes on\. When the wait has a timeout and it passes first, the step ends with [TimedOut](CatSendAndWaitStep_TRequest,TAnswer_.TimedOut.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.TimedOut') set and no [Answer](CatSendAndWaitStep_TRequest,TAnswer_.Answer.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.Answer')\. |

@@ -45,4 +45,4 @@ Derived
 
 | Methods | |
 | :--- | :--- |
-| [ResumeAsync\(ICatWorkflowProcessor, object, CatWorkflowCheckpoint, object, CancellationToken\)](ICatSagaDefinition.ResumeAsync.X367426PTI0UBLVF4K0D2DFP.md 'Cat\.Sagas\.ICatSagaDefinition\.ResumeAsync\(Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowProcessor, object, Cat\.FluentWorkflows\.Abstractions\.CatWorkflowCheckpoint, object, System\.Threading\.CancellationToken\)') | |
+| [ResumeAsync\(ICatWorkflowProcessor, object, CatWorkflowCheckpoint, object, string, CancellationToken\)](ICatSagaDefinition.ResumeAsync.QLINHJVG7D1VR703LDSOKKS53.md 'Cat\.Sagas\.ICatSagaDefinition\.ResumeAsync\(Cat\.FluentWorkflows\.Abstractions\.ICatWorkflowProcessor, object, Cat\.FluentWorkflows\.Abstractions\.CatWorkflowCheckpoint, object, string, System\.Threading\.CancellationToken\)') | |

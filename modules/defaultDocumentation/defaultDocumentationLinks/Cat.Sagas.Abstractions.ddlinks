@@ -9,7 +9,7 @@ P:Cat.Sagas.Abstractions.CatSagaInstance.WorkflowVersion|CatSagaInstance.Workflo
 P:Cat.Sagas.Abstractions.CatSagaInstance.Status|CatSagaInstance.Status.md|Status
 P:Cat.Sagas.Abstractions.CatSagaInstance.State|CatSagaInstance.State.md|State
 P:Cat.Sagas.Abstractions.CatSagaInstance.Checkpoint|CatSagaInstance.Checkpoint.md|Checkpoint
-P:Cat.Sagas.Abstractions.CatSagaInstance.WaitingFor|CatSagaInstance.WaitingFor.md|WaitingFor
+P:Cat.Sagas.Abstractions.CatSagaInstance.Waits|CatSagaInstance.Waits.md|Waits
 P:Cat.Sagas.Abstractions.CatSagaInstance.CreatedAt|CatSagaInstance.CreatedAt.md|CreatedAt
 P:Cat.Sagas.Abstractions.CatSagaInstance.UpdatedAt|CatSagaInstance.UpdatedAt.md|UpdatedAt
 P:Cat.Sagas.Abstractions.CatSagaInstance.Version|CatSagaInstance.Version.md|Version
@@ -23,9 +23,15 @@ F:Cat.Sagas.Abstractions.CatSagaStatus.Waiting|CatSagaStatus.md#Cat.Sagas.Abstra
 F:Cat.Sagas.Abstractions.CatSagaStatus.Completed|CatSagaStatus.md#Cat.Sagas.Abstractions.CatSagaStatus.Completed|Completed
 F:Cat.Sagas.Abstractions.CatSagaStatus.Failed|CatSagaStatus.md#Cat.Sagas.Abstractions.CatSagaStatus.Failed|Failed
 T:Cat.Sagas.Abstractions.CatSagaStatus|CatSagaStatus.md|CatSagaStatus
+P:Cat.Sagas.Abstractions.CatSagaWait.StepName|CatSagaWait.StepName.md|StepName
+P:Cat.Sagas.Abstractions.CatSagaWait.WaitId|CatSagaWait.WaitId.md|WaitId
+P:Cat.Sagas.Abstractions.CatSagaWait.AnswerType|CatSagaWait.AnswerType.md|AnswerType
+P:Cat.Sagas.Abstractions.CatSagaWait.TimeoutAt|CatSagaWait.TimeoutAt.md|TimeoutAt
+T:Cat.Sagas.Abstractions.CatSagaWait|CatSagaWait.md|CatSagaWait
 P:Cat.Sagas.Abstractions.ICatSagaContext.InstanceId|ICatSagaContext.InstanceId.md|InstanceId
 T:Cat.Sagas.Abstractions.ICatSagaContext|ICatSagaContext.md|ICatSagaContext
 M:Cat.Sagas.Abstractions.ICatSagaDispatcher.ResumeAsync(System.Guid,System.Object,System.Threading.CancellationToken)|ICatSagaDispatcher.ResumeAsync.ITMGKI4U7JF3ANEOQ22KR1WD2.md|ResumeAsync(Guid, object, CancellationToken)
+M:Cat.Sagas.Abstractions.ICatSagaDispatcher.TimeoutAsync(System.Guid,System.Guid,System.Threading.CancellationToken)|ICatSagaDispatcher.TimeoutAsync.FW7ZC320WTINFPP98AU9EN7A6.md|TimeoutAsync(Guid, Guid, CancellationToken)
 T:Cat.Sagas.Abstractions.ICatSagaDispatcher|ICatSagaDispatcher.md|ICatSagaDispatcher
 M:Cat.Sagas.Abstractions.ICatSagaRunner.StartAsync``2(``1,System.Nullable{System.Guid},System.Threading.CancellationToken)|ICatSagaRunner.StartAsync.7WTMGWDM7ZTE80UW4C2JRXMD3.md|StartAsync<TWorkflow,TWorkflowState>(TWorkflowState, Nullable<Guid>, CancellationToken)
 T:Cat.Sagas.Abstractions.ICatSagaRunner|ICatSagaRunner.md|ICatSagaRunner

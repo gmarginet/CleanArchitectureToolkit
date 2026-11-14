@@ -38,3 +38,4 @@ public interface ICatSagaDispatcher
 | Methods | |
 | :--- | :--- |
 | [ResumeAsync\(Guid, object, CancellationToken\)](ICatSagaDispatcher.ResumeAsync.ITMGKI4U7JF3ANEOQ22KR1WD2.md 'Cat\.Sagas\.Abstractions\.ICatSagaDispatcher\.ResumeAsync\(System\.Guid, object, System\.Threading\.CancellationToken\)') | Resumes the instance with the answer\. |
+| [TimeoutAsync\(Guid, Guid, CancellationToken\)](ICatSagaDispatcher.TimeoutAsync.FW7ZC320WTINFPP98AU9EN7A6.md 'Cat\.Sagas\.Abstractions\.ICatSagaDispatcher\.TimeoutAsync\(System\.Guid, System\.Guid, System\.Threading\.CancellationToken\)') | Times out one wait of the instance\. The workflow resumes at the wait step with `TimedOut` set and no answer\. The handler for `CatSagaTimeout` calls it for you\. |

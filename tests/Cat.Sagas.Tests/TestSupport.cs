@@ -18,6 +18,61 @@ public class OrderState : ICatWorkflowState<OrderState>
     public List<string> Log { get; set; } = [];
     public PaymentTaken? Taken { get; set; }
     public bool Declined { get; set; }
+    public bool TimedOut { get; set; }
+    public bool Shipped { get; set; }
+}
+
+public class ShipGoods : CatCommandMessage
+{
+    public Guid OrderId { get; set; }
+}
+
+public class ShipmentConfirmed : CatEventMessage, ICatServiceRequest
+{
+    public Guid OrderId { get; set; }
+}
+
+/// <summary>Waits for the payment, and gives up after a day.</summary>
+public class TimeoutFlow : ICatWorkflow<OrderState>
+{
+    public void Build(ICatWorkflowBuilder<OrderState> builder)
+    {
+        builder.SendAndWait<OrderState, TakePayment, PaymentTaken>("payment", TimeSpan.FromHours(24))
+            .Input(s => s.OrderId, step => step.Request.OrderId)
+            .Output(step => step.Answer, s => s.Taken)
+            .Output(step => step.TimedOut, s => s.TimedOut);
+        builder.If(s => s.TimedOut,
+            then => then.Run(s => s.Log.Add("cancelled")),
+            otherwise => otherwise.Run(s => s.Log.Add("confirmed")));
+    }
+}
+
+/// <summary>Two waits one after the other, both with a timeout.</summary>
+public class TwoWaitsFlow : ICatWorkflow<OrderState>
+{
+    public void Build(ICatWorkflowBuilder<OrderState> builder)
+    {
+        builder.SendAndWait<OrderState, TakePayment, PaymentTaken>("payment", TimeSpan.FromHours(1))
+            .Output(step => step.TimedOut, s => s.TimedOut);
+        builder.SendAndWait<OrderState, ShipGoods, ShipmentConfirmed>("shipping", TimeSpan.FromHours(2))
+            .Output(step => step.Answer != null, s => s.Shipped);
+        builder.Run(s => s.Log.Add("done"));
+    }
+}
+
+/// <summary>Waits for the payment and the shipment at the same time.</summary>
+public class ParallelWaitsFlow : ICatWorkflow<OrderState>
+{
+    public void Build(ICatWorkflowBuilder<OrderState> builder)
+    {
+        builder.Parallel(branches => branches
+                .Branch(b => b.SendAndWait<OrderState, TakePayment, PaymentTaken>("payment")
+                    .Output(step => step.Answer, s => s.Taken))
+                .Branch(b => b.SendAndWait<OrderState, ShipGoods, ShipmentConfirmed>("shipping")
+                    .Output(step => step.Answer != null, s => s.Shipped)),
+            CatParallelRule.SuspendUntilAllDone);
+        builder.Run(s => s.Log.Add("done"));
+    }
 }
 
 public class TakePayment : CatCommandMessage
@@ -85,16 +140,16 @@ public class CheckingSender : ICatMessageSender
         _store = store;
     }
 
-    public List<(ICatMessage Message, bool InstanceWasSaved)> Sent { get; } = [];
+    public List<(ICatMessage Message, bool InstanceWasSaved, DateTimeOffset? ScheduledAt)> Sent { get; } = [];
 
     public async Task PublishAsync(ICatEventMessage message, DateTimeOffset? scheduledAt = null, CancellationToken cancellationToken = default)
     {
-        Sent.Add((message, await _store.FindAsync(message.CorrelationId, cancellationToken) != null));
+        Sent.Add((message, await _store.FindAsync(message.CorrelationId, cancellationToken) != null, scheduledAt));
     }
 
     public async Task SendAsync(ICatCommandMessage message, DateTimeOffset? scheduledAt = null, CancellationToken cancellationToken = default)
     {
-        Sent.Add((message, await _store.FindAsync(message.CorrelationId, cancellationToken) != null));
+        Sent.Add((message, await _store.FindAsync(message.CorrelationId, cancellationToken) != null, scheduledAt));
     }
 }
 
@@ -113,8 +168,12 @@ public static class SagaTestHost
         services.AddCatSaga<PaymentFlow, OrderState>();
         services.AddCatSaga<EitherPaymentFlow, OrderState>();
         services.AddCatSaga<QuickFlow, OrderState>();
+        services.AddCatSaga<TimeoutFlow, OrderState>();
+        services.AddCatSaga<TwoWaitsFlow, OrderState>();
+        services.AddCatSaga<ParallelWaitsFlow, OrderState>();
         services.AddCatSagaAnswer<PaymentTaken>();
         services.AddCatSagaAnswer<PaymentDeclined>();
+        services.AddCatSagaAnswer<ShipmentConfirmed>();
         return services.BuildServiceProvider();
     }
 }

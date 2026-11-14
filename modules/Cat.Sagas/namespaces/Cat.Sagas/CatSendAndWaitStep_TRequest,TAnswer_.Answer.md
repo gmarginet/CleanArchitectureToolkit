@@ -28,7 +28,7 @@
 
 ## CatSendAndWaitStep\<TRequest,TAnswer\>\.Answer Property
 
-The answer, after the step resumed\. Read it with `Output`\.
+The answer, after the step resumed with one\. It is null when [TimedOut](CatSendAndWaitStep_TRequest,TAnswer_.TimedOut.md 'Cat\.Sagas\.Steps\.CatSendAndWaitStep\<TRequest,TAnswer\>\.TimedOut') is true\. Read it with `Output`\.
 
 ```csharp
 public TAnswer? Answer { get; private set; }

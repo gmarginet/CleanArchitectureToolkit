@@ -29,8 +29,8 @@
 ## CatSagaContext\.Pending Property
 
 ```csharp
-internal System.Collections.Generic.List<Cat.Messaging.Abstractions.ICatMessage> Pending { internal get; }
+internal System.Collections.Generic.List<Cat.Sagas.CatPendingMessage> Pending { internal get; }
 ```
 
 #### Property Value
-[System\.Collections\.Generic\.List&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')[ICatMessage](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessage.md 'Cat\.Messaging\.Abstractions\.ICatMessage')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')
+[System\.Collections\.Generic\.List&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')[CatPendingMessage](CatPendingMessage.md 'Cat\.Sagas\.CatPendingMessage')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1 'System\.Collections\.Generic\.List\`1')
