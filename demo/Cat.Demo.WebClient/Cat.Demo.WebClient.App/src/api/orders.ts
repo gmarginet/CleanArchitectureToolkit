@@ -28,11 +28,22 @@ export function useOrders(enabled: boolean) {
   })
 }
 
+/** The status of an order that waits for its payment. The shop answers 202 Accepted with this status. */
+export const pendingStatus = 'Pending'
+
+/** How often a pending order is asked for again, in milliseconds. */
+export const pendingPollInterval = 2000
+
+/**
+ * One order. While the status is Pending, the order is asked for again every few seconds, because the payment
+ * is taken in the background. The polling stops when the status changes, so a confirmed or cancelled order is not asked for again.
+ */
 export function useOrder(orderId: string, enabled: boolean) {
   return useQuery({
     queryKey: ['orders', orderId],
     enabled,
     queryFn: () => unwrap(ordersApi.GET('/orders/{orderId}', { params: { path: { orderId } } })),
+    refetchInterval: (query) => (query.state.data?.status === pendingStatus ? pendingPollInterval : false),
   })
 }
 

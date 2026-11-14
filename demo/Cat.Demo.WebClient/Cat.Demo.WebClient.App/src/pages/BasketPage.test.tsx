@@ -8,9 +8,9 @@ import { saveBasket } from '../basket/basketState'
 import { BasketPage } from './BasketPage'
 
 vi.mock('react-oidc-context', () => ({ useAuth: vi.fn() }))
-vi.mock('../api/orders', () => ({ usePlaceOrder: vi.fn() }))
+vi.mock('../api/orders', () => ({ usePlaceOrder: vi.fn(), useOrder: vi.fn(), pendingStatus: 'Pending' }))
 import { useAuth } from 'react-oidc-context'
-import { usePlaceOrder } from '../api/orders'
+import { useOrder, usePlaceOrder } from '../api/orders'
 
 const signinRedirect = vi.fn()
 const mutate = vi.fn()
@@ -27,6 +27,11 @@ function order(value: object = {}) {
     isSuccess: false,
     ...value,
   } as never)
+}
+
+/** What the page asks for again after the order is placed. Without data, the page shows the answer of the post. */
+function current(value: object = {}) {
+  vi.mocked(useOrder).mockReturnValue(value as never)
 }
 
 function LoginProbe() {
@@ -135,10 +140,33 @@ describe('BasketPage', () => {
   })
 
   it('shows the order number and the status after a success', () => {
-    order({ isSuccess: true, data: { orderNumber: '20261106-0001', status: 'Confirmed', total: '25' } })
+    order({ isSuccess: true, data: { id: 'o1', orderNumber: '20261106-0001', status: 'Confirmed', total: '25' } })
+    current({ data: { id: 'o1', orderNumber: '20261106-0001', status: 'Confirmed', total: '25' } })
 
     renderPage()
 
     expect(screen.getByRole('status')).toHaveTextContent('Order 20261106-0001 is Confirmed. The total is €25.00.')
+    expect(screen.getByRole('heading', { name: 'Thank you for your order' })).toBeInTheDocument()
+  })
+
+  it('says the payment is being taken while the order is pending', () => {
+    order({ isSuccess: true, data: { id: 'o1', orderNumber: '20261106-0001', status: 'Pending', total: '25' } })
+    current({ data: undefined })
+
+    renderPage()
+
+    expect(screen.getByRole('status')).toHaveTextContent('Order 20261106-0001 is Pending.')
+    expect(screen.getByRole('status')).toHaveTextContent('We are taking the payment.')
+  })
+
+  it('shows the new status when the polling brings it', () => {
+    order({ isSuccess: true, data: { id: 'o1', orderNumber: '20261106-0001', status: 'Pending', total: '25' } })
+    current({ data: { id: 'o1', orderNumber: '20261106-0001', status: 'Cancelled', total: '25' } })
+
+    renderPage()
+
+    expect(screen.getByRole('heading', { name: 'Your order was cancelled' })).toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent('Order 20261106-0001 is Cancelled.')
+    expect(screen.getByRole('status')).not.toHaveTextContent('We are taking the payment.')
   })
 })

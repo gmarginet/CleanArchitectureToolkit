@@ -1,12 +1,41 @@
 import { useAuth } from 'react-oidc-context'
 import { Link, useNavigate } from 'react-router'
-import { usePlaceOrder } from '../api/orders'
+import { pendingStatus, usePlaceOrder, useOrder } from '../api/orders'
 import { loginPath, loginState } from '../auth/loginRoute'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { QuantityInput } from '../components/QuantityInput'
 import { useBasket } from '../basket/useBasket'
 import { formatAmount, formatPrice } from '../format'
 import styles from './BasketPage.module.css'
+
+type PlacedOrderData = ReturnType<typeof usePlaceOrder>['data']
+
+/**
+ * The screen after the order is placed. The shop answers at once with the order in status Pending, and takes the
+ * payment in the background. The page asks for the order again until the status changes, and shows the new status.
+ */
+function PlacedOrder({ placed }: { placed: NonNullable<PlacedOrderData> }) {
+  const current = useOrder(placed.id as string, true)
+  const order = current.data ?? placed
+  const pending = order.status === pendingStatus
+  const cancelled = order.status === 'Cancelled'
+
+  return (
+    <>
+      <h1>{cancelled ? 'Your order was cancelled' : 'Thank you for your order'}</h1>
+      <p role="status" className={`alert ${cancelled ? 'alert-warning' : pending ? 'alert-info' : 'alert-success'}`}>
+        Order <strong>{order.orderNumber}</strong> is <strong>{order.status}</strong>. The total is {formatAmount(order.total)}.
+        {pending && ' We are taking the payment. This page updates by itself.'}
+      </p>
+      <p>
+        <Link to={`/orders/${order.id}`}>See this order</Link>
+      </p>
+      <p>
+        <Link to="/">Back to the books</Link>
+      </p>
+    </>
+  )
+}
 
 export function BasketPage() {
   const basket = useBasket()
@@ -16,22 +45,7 @@ export function BasketPage() {
 
   // The answer of the shop stays on the screen after the basket is emptied.
   if (placeOrder.isSuccess) {
-    const order = placeOrder.data
-    return (
-      <>
-        <h1>Thank you for your order</h1>
-        <p role="status" className="alert alert-success">
-          Order <strong>{order.orderNumber}</strong> is <strong>{order.status}</strong>. The total is{' '}
-          {formatAmount(order.total)}.
-        </p>
-        <p>
-          <Link to={`/orders/${order.id}`}>See this order</Link>
-        </p>
-        <p>
-          <Link to="/">Back to the books</Link>
-        </p>
-      </>
-    )
+    return <PlacedOrder placed={placeOrder.data} />
   }
 
   function submit() {
