@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
         services.TryAddSingleton<ICatSagaSerializer, SystemTextJsonSagaSerializer>();
         services.TryAddScoped<CatSagaContext>();
         services.TryAddScoped<ICatSagaContext>(provider => provider.GetRequiredService<CatSagaContext>());
+        services.TryAddSingleton(new CatSagaOptions());
         services.TryAddSingleton<CatSagaRegistry>();
         services.TryAddScoped<CatSagaEngine>();
         services.TryAddScoped<ICatSagaRunner, CatSagaRunner>();
@@ -37,6 +38,18 @@ public static class ServiceCollectionExtensions
     public static void AddCatSagasInMemoryStore(this IServiceCollection services)
     {
         services.TryAddSingleton<ICatSagaStore, CatInMemorySagaStore>();
+    }
+
+    /// <summary>
+    /// Tells the engine that the outbox of <c>Cat.Messaging</c> is on. The engine then hands the request to the sender first and saves once,
+    /// so the instance and the outbox row commit together. Call it next to the outbox registration, in any order with <see cref="AddCatSagasModule"/>.
+    /// Without the outbox, do not call it. The request would go out before the instance is saved.
+    /// </summary>
+    /// <param name="services">The service collection to add to.</param>
+    public static void AddCatSagasOutbox(this IServiceCollection services)
+    {
+        services.RemoveAll<CatSagaOptions>();
+        services.AddSingleton(new CatSagaOptions { SendBeforeSave = true });
     }
 
     /// <summary>

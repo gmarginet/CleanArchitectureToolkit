@@ -26,25 +26,29 @@
   
 ##### >> [Cat\.Sagas Assembly](index.md 'index') >> [Cat\.Sagas Namespace](Cat.Sagas.md 'Cat\.Sagas') >> [CatSagaEngine Class](CatSagaEngine.md 'Cat\.Sagas\.CatSagaEngine')
 
-## CatSagaEngine\(ICatSagaStore, ICatSagaSerializer, CatSagaContext, ICatMessageSender\) Constructor
+## CatSagaEngine\(ICatSagaStore, ICatSagaSerializer, CatSagaContext, ICatMessageSender, CatSagaOptions\) Constructor
 
 ```csharp
-public CatSagaEngine(Cat.Sagas.Abstractions.ICatSagaStore store, Cat.Sagas.Abstractions.ICatSagaSerializer serializer, Cat.Sagas.CatSagaContext context, Cat.Messaging.Abstractions.ICatMessageSender sender);
+public CatSagaEngine(Cat.Sagas.Abstractions.ICatSagaStore store, Cat.Sagas.Abstractions.ICatSagaSerializer serializer, Cat.Sagas.CatSagaContext context, Cat.Messaging.Abstractions.ICatMessageSender sender, Cat.Sagas.CatSagaOptions options);
 ```
 #### Parameters
 
-<a name='Cat.Sagas.CatSagaEngine.CatSagaEngine(Cat.Sagas.Abstractions.ICatSagaStore,Cat.Sagas.Abstractions.ICatSagaSerializer,Cat.Sagas.CatSagaContext,Cat.Messaging.Abstractions.ICatMessageSender).store'></a>
+<a name='Cat.Sagas.CatSagaEngine.CatSagaEngine(Cat.Sagas.Abstractions.ICatSagaStore,Cat.Sagas.Abstractions.ICatSagaSerializer,Cat.Sagas.CatSagaContext,Cat.Messaging.Abstractions.ICatMessageSender,Cat.Sagas.CatSagaOptions).store'></a>
 
 `store` [ICatSagaStore](../../../Cat.Sagas/namespaces/Cat.Sagas.Abstractions/ICatSagaStore.md 'Cat\.Sagas\.Abstractions\.ICatSagaStore')
 
-<a name='Cat.Sagas.CatSagaEngine.CatSagaEngine(Cat.Sagas.Abstractions.ICatSagaStore,Cat.Sagas.Abstractions.ICatSagaSerializer,Cat.Sagas.CatSagaContext,Cat.Messaging.Abstractions.ICatMessageSender).serializer'></a>
+<a name='Cat.Sagas.CatSagaEngine.CatSagaEngine(Cat.Sagas.Abstractions.ICatSagaStore,Cat.Sagas.Abstractions.ICatSagaSerializer,Cat.Sagas.CatSagaContext,Cat.Messaging.Abstractions.ICatMessageSender,Cat.Sagas.CatSagaOptions).serializer'></a>
 
 `serializer` [ICatSagaSerializer](../../../Cat.Sagas/namespaces/Cat.Sagas.Abstractions/ICatSagaSerializer.md 'Cat\.Sagas\.Abstractions\.ICatSagaSerializer')
 
-<a name='Cat.Sagas.CatSagaEngine.CatSagaEngine(Cat.Sagas.Abstractions.ICatSagaStore,Cat.Sagas.Abstractions.ICatSagaSerializer,Cat.Sagas.CatSagaContext,Cat.Messaging.Abstractions.ICatMessageSender).context'></a>
+<a name='Cat.Sagas.CatSagaEngine.CatSagaEngine(Cat.Sagas.Abstractions.ICatSagaStore,Cat.Sagas.Abstractions.ICatSagaSerializer,Cat.Sagas.CatSagaContext,Cat.Messaging.Abstractions.ICatMessageSender,Cat.Sagas.CatSagaOptions).context'></a>
 
 `context` [CatSagaContext](CatSagaContext.md 'Cat\.Sagas\.CatSagaContext')
 
-<a name='Cat.Sagas.CatSagaEngine.CatSagaEngine(Cat.Sagas.Abstractions.ICatSagaStore,Cat.Sagas.Abstractions.ICatSagaSerializer,Cat.Sagas.CatSagaContext,Cat.Messaging.Abstractions.ICatMessageSender).sender'></a>
+<a name='Cat.Sagas.CatSagaEngine.CatSagaEngine(Cat.Sagas.Abstractions.ICatSagaStore,Cat.Sagas.Abstractions.ICatSagaSerializer,Cat.Sagas.CatSagaContext,Cat.Messaging.Abstractions.ICatMessageSender,Cat.Sagas.CatSagaOptions).sender'></a>
 
 `sender` [ICatMessageSender](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessageSender.md 'Cat\.Messaging\.Abstractions\.ICatMessageSender')
+
+<a name='Cat.Sagas.CatSagaEngine.CatSagaEngine(Cat.Sagas.Abstractions.ICatSagaStore,Cat.Sagas.Abstractions.ICatSagaSerializer,Cat.Sagas.CatSagaContext,Cat.Messaging.Abstractions.ICatMessageSender,Cat.Sagas.CatSagaOptions).options'></a>
+
+`options` [CatSagaOptions](CatSagaOptions.md 'Cat\.Sagas\.CatSagaOptions')

@@ -17,13 +17,15 @@ internal sealed class CatSagaEngine
     private readonly ICatSagaSerializer _serializer;
     private readonly CatSagaContext _context;
     private readonly ICatMessageSender _sender;
+    private readonly CatSagaOptions _options;
 
-    public CatSagaEngine(ICatSagaStore store, ICatSagaSerializer serializer, CatSagaContext context, ICatMessageSender sender)
+    public CatSagaEngine(ICatSagaStore store, ICatSagaSerializer serializer, CatSagaContext context, ICatMessageSender sender, CatSagaOptions options)
     {
         _store = store;
         _serializer = serializer;
         _context = context;
         _sender = sender;
+        _options = options;
     }
 
     public async Task<CatSagaResult> FinishAsync(ICatSagaDefinition definition, CatSagaInstance? instance, Guid id, object state,
@@ -45,6 +47,12 @@ internal sealed class CatSagaEngine
             instance.WaitingFor = _context.WaitingFor;
             instance.UpdatedAt = now;
 
+            // With the outbox the sender only adds a row to the context, and the save commits it together with the instance.
+            if (_options.SendBeforeSave)
+            {
+                await SendPendingAsync(cancellationToken);
+            }
+
             if (isNew)
             {
                 await _store.AddAsync(instance, cancellationToken);
@@ -54,7 +62,11 @@ internal sealed class CatSagaEngine
                 await _store.UpdateAsync(instance, cancellationToken);
             }
 
-            await SendPendingAsync(cancellationToken);
+            if (!_options.SendBeforeSave)
+            {
+                await SendPendingAsync(cancellationToken);
+            }
+
             return new CatSagaResult(id, CatSagaStatus.Waiting, response.ErrorList);
         }
 

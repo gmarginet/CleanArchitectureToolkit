@@ -117,8 +117,9 @@ Claude read the engine in `modules/Cat.FluentWorkflows`.
 | Handling a workflow that changed while instances were stored | Both |
 
 #### What exists today
-- The module exists with steps 2 and 3 of the build order: `Cat.Sagas.Abstractions` and `Cat.Sagas`, with the runner, the dispatcher, the `SendAndWait` step, the answer handler, the JSON serializer and an in-memory store, plus `Cat.Sagas.EFCore` with the table and the store. See the [module readme](../modules/Cat.Sagas/README.md). The instance is saved first and the request goes out after it.
-- Not built yet: the outbox, the ids of handled messages and timeouts (steps 4 and 5).
+- The module exists with steps 2 to 4 of the build order: `Cat.Sagas.Abstractions` and `Cat.Sagas`, with the runner, the dispatcher, the `SendAndWait` step, the answer handler, the JSON serializer and an in-memory store, plus `Cat.Sagas.EFCore` with the table and the store. See the [module readme](../modules/Cat.Sagas/README.md). The instance is saved first and the request goes out after it.
+- Step 4 is built: the outbox through `AddCatSagasOutbox()` and the handled message ids through the inbox of the event processor.
+- Not built yet: timeouts (step 5) and the demo (step 6).
 - The engine in `Cat.FluentWorkflows` is as described in the findings. It has no suspend, no checkpoint and no `ResumeAsync`.
 - Orders already works as phase 0 of the build order below:
   - The place order workflow has a `TakePaymentStep` that calls `IPaymentProvider`.
@@ -190,7 +191,7 @@ These must be solved in the design, not afterwards.
 | 1 | Engine: `Suspend`, step addresses, checkpoint, `ResumeAsync` and container support. In memory, fully tested. Update the readme and the namespace pages. | Nothing |
 | 2 | `Cat.Sagas.Abstractions` and `Cat.Sagas` with an in-memory store, to prove the model with the wait step. | Step 1. Built. |
 | 3 | `Cat.Sagas.EFCore` with the instance entity and concurrency. | Step 2, `Cat.EFCore`. Built, on plain EF Core like `Cat.Scheduling.EFCore`. |
-| 4 | Connect to `Cat.Messaging` and `Cat.EventProcessor`. Add the outbox and the inbox ids. | Those modules |
+| 4 | Connect to `Cat.Messaging` and `Cat.EventProcessor`. Add the outbox and the inbox ids. | Those modules. Built: `AddCatSagasOutbox()` and the inbox of the event processor. |
 | 5 | Timeouts with `Cat.Scheduling`. | That module |
 | 6 | Demo: the place order workflow waits for the payment answer over the Service Bus. | All above |
 
@@ -213,6 +214,7 @@ Steps 1 to 3 do not depend on the other future modules, so they can start before
 - **Correlation.** An answer finds its instance through the `CorrelationId` of the message. The wait step sends the request with the correlation id of the instance, and the other service copies it into its answer. There is no selector for a business key.
 - **EF Core store saves itself.** `AddAsync` and `UpdateAsync` of the EF Core store call `SaveChangesAsync` on the context of the scope. A version conflict becomes a `CatSagaConcurrencyException`. Step 4 may change the order inside the engine, so the outbox rows and the instance go in one commit.
 - **Send order with the outbox.** With the Messaging outbox on, `SendAsync` only adds a row to the context. A call `AddCatSagasOutbox()` next to the outbox registration switches the engine to adding the request first and saving once, so the instance and the request row commit together. Without the call the order stays: save the instance, then send.
+- **Handled message ids.** The saga module reuses the inbox of `Cat.EventProcessor`. The developer switches on `UseInbox` for the answer message types, and the inbox row is saved in the same `SaveChanges` as the instance update, in the same `DbContext`. The module adds no table and no code for it. It skips a redelivery of the same `MessageId`, not a second answer with a new id.
 - **Starting and waiting.** The developer starts a saga with `ICatSagaRunner.StartAsync<TWorkflow, TState>(state)`. Inside the workflow a `SendAndWait<TRequest, TAnswer>` builder step sends the request and suspends. The module registers a handler for each answer type, and the handler resumes the instance. The developer writes no wiring of their own.
 <!-- region end: PhaseDescription-->
 

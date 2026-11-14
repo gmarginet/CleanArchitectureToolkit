@@ -30,6 +30,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\modules\Cat.FluentWorkflows\Cat.FluentWorkflows\Cat.FluentWorkflows.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Inbox.EFCore\Cat.EventProcessor.Inbox.EFCore.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Messaging\Cat.Messaging.Outbox.EFCore\Cat.Messaging.Outbox.EFCore.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Messaging\Cat.Messaging\Cat.Messaging.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Sagas\Cat.Sagas.EFCore\Cat.Sagas.EFCore.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Sagas\Cat.Sagas\Cat.Sagas.csproj" />
       <ProjectReference Include="..\..\modules\Cat.UnitTesting\Cat.UnitTesting.Messaging\Cat.UnitTesting.Messaging.csproj" />

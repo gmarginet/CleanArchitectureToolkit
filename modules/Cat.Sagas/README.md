@@ -50,7 +50,9 @@ A message that arrives twice, or a workflow that changed while instances wait, d
   - [Keep the instances in your database](#keep-the-instances-in-your-database)
   - [Start a saga](#start-a-saga)
   - [What happens at the wait step](#what-happens-at-the-wait-step)
+  - [Use the outbox](#use-the-outbox)
   - [Answer from another service](#answer-from-another-service)
+  - [Skip a repeated answer](#skip-a-repeated-answer)
   - [Wait for more than one kind of answer](#wait-for-more-than-one-kind-of-answer)
   - [Rules to follow](#rules-to-follow)
   - [Test a saga](#test-a-saga)
@@ -187,7 +189,22 @@ The step does not send the request at once. It hands the request to the saga, an
 1. It saves the state, the position and the name of the answer it waits for.
 2. It sends the request through `ICatMessageSender`.
 
-An answer can therefore never arrive before its instance exists. If the process stops between the two, the instance waits and the request is lost. The outbox of `Cat.Messaging` closes that gap, see [What is not built yet](#what-is-not-built-yet).
+An answer can therefore never arrive before its instance exists. If the process stops between the two, the instance waits and the request is lost. The outbox of `Cat.Messaging` closes that gap, see [Use the outbox](#use-the-outbox).
+
+### Use the outbox
+With the outbox of [Cat.Messaging](../Cat.Messaging/README.md) on, `ICatMessageSender` does not send. It adds a row to the context, and the next `SaveChanges` saves it. The order above would then add the request row after the instance is saved, and nothing would save it. Tell the saga about the outbox, next to the outbox registration:
+
+```csharp
+services.AddCatMessagingOutboxEfCore<OrdersDbContext>();
+services.AddCatMessagingOutbox();
+services.AddCatSagasModule();
+services.AddCatSagasEFCore<OrdersDbContext>();
+services.AddCatSagasOutbox();
+```
+
+The engine then hands the request to the sender first and saves once. The instance and the request row commit in the same `SaveChanges`, so a crash loses neither or both. When the save fails, for example on a version conflict, no request row is saved either.
+
+Call `AddCatSagasOutbox` only when the outbox is on, and use the EF Core store on the same context. Without the outbox the request would leave before the instance is saved, and a fast answer could find no instance.
 
 ### Answer from another service
 The other service receives the request, does its work and sends the answer with the same correlation id. In your service, the event processor receives the answer and hands it to the handler of `AddCatSagaAnswer`. The handler gives it to the dispatcher, which does this:
@@ -204,6 +221,29 @@ The other service receives the request, does its work and sends the answer with 
 | The answer does not fit the step, or the workflow changed | `Conflict` (`CAT-SAG-1003`) | Dead letters the message. |
 | The saga is not registered in this service | `InternalServerError` (`CAT-SAG-1002`) | Abandons the message, so the bus delivers it again after a fix. |
 | Another message changed the instance at the same moment | `CatSagaConcurrencyException` is thrown | Abandons the message. The next try sees the new state. |
+
+### Skip a repeated answer
+The bus delivers a message at least once, so the same answer can arrive twice. A repeat is harmless when the instance is no longer waiting, because the dispatcher ignores it. It is not harmless when the instance waits at a later step for the same answer type. Use the inbox of [Cat.EventProcessor](../Cat.EventProcessor/README.md) for that.
+
+Switch the inbox on for the answer message types, and map its table in the same context as the saga table:
+
+```csharp
+builder.Services.AddCatEventProcessor(builder.Configuration, processor => processor
+    .Receive<PaymentTaken>(options => options.UseInbox = true));
+builder.Services.AddCatEventProcessorInbox<OrdersDbContext>();
+```
+
+```csharp
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.AddCatSagas();
+    modelBuilder.AddCatInbox();
+}
+```
+
+The receiver checks the inbox before the handler and adds the id of the message to the context. The store of the saga then saves that row in the same `SaveChanges` as the instance update. A repeated delivery of the same message id is skipped, and a failed update leaves no inbox row, so the bus delivers the message again. The saga module needs no code for this.
+
+The inbox skips a repeated delivery of the same `MessageId`. It does not catch a second answer that the other service sends with a new id.
 
 ### Wait for more than one kind of answer
 A wait step waits for one answer type. For several outcomes, such as `PaymentTaken` and `PaymentDeclined`, give the answers a common base class or interface and wait for that:
@@ -237,7 +277,5 @@ Register every derived type with `AddCatSagaAnswer`. The state keeps simple valu
 Use `CatInMemorySagaStore` and a fake message sender, such as `FakeMessageSender` of [Cat.UnitTesting](../Cat.UnitTesting/README.md). Start the saga, read the request from the sender, then call `ICatSagaDispatcher.ResumeAsync` with an answer that carries the same correlation id. Read the instance from the store to see the status and the state.
 
 ### What is not built yet
-- **The outbox.** The instance and the request are saved by two separate calls, and the request goes out after the save. The outbox of `Cat.Messaging` will save both in one `SaveChanges`.
-- **Handled message ids.** A repeated answer is harmless today because the instance is no longer waiting. A repeated answer for an instance that waits at a later step with the same answer type would still be used. Ids of handled messages per instance close that gap.
 - **Timeouts.** A wait has no limit yet.
 <!-- region end: Usage-->

@@ -39,11 +39,12 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Constructors | |
 | :--- | :--- |
-| [CatSagaEngine\(ICatSagaStore, ICatSagaSerializer, CatSagaContext, ICatMessageSender\)](CatSagaEngine..ctor.GWVUKH0NOPJ9K5KQRB6230L82.md 'Cat\.Sagas\.CatSagaEngine\.CatSagaEngine\(Cat\.Sagas\.Abstractions\.ICatSagaStore, Cat\.Sagas\.Abstractions\.ICatSagaSerializer, Cat\.Sagas\.CatSagaContext, Cat\.Messaging\.Abstractions\.ICatMessageSender\)') | |
+| [CatSagaEngine\(ICatSagaStore, ICatSagaSerializer, CatSagaContext, ICatMessageSender, CatSagaOptions\)](CatSagaEngine..ctor.66FHRKW7SPX3KL18WCCTVL096.md 'Cat\.Sagas\.CatSagaEngine\.CatSagaEngine\(Cat\.Sagas\.Abstractions\.ICatSagaStore, Cat\.Sagas\.Abstractions\.ICatSagaSerializer, Cat\.Sagas\.CatSagaContext, Cat\.Messaging\.Abstractions\.ICatMessageSender, Cat\.Sagas\.CatSagaOptions\)') | |
 
 | Fields | |
 | :--- | :--- |
 | [\_context](CatSagaEngine._context.md 'Cat\.Sagas\.CatSagaEngine\.\_context') | |
+| [\_options](CatSagaEngine._options.md 'Cat\.Sagas\.CatSagaEngine\.\_options') | |
 | [\_sender](CatSagaEngine._sender.md 'Cat\.Sagas\.CatSagaEngine\.\_sender') | |
 | [\_serializer](CatSagaEngine._serializer.md 'Cat\.Sagas\.CatSagaEngine\.\_serializer') | |
 | [\_store](CatSagaEngine._store.md 'Cat\.Sagas\.CatSagaEngine\.\_store') | |
