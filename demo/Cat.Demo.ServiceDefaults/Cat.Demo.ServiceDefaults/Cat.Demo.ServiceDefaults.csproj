@@ -9,6 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.Abstractions\Cat.Messaging.Abstractions.csproj" />
         <ProjectReference Include="..\..\..\modules\Cat.Users\Cat.Users\Cat.Users.csproj" />
         <ProjectReference Include="..\..\..\modules\Cat.Users\Cat.Users.JwtBearer\Cat.Users.JwtBearer.csproj" />
     </ItemGroup>
