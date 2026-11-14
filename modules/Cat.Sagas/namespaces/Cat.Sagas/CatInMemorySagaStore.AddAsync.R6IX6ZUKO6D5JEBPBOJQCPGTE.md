@@ -1,0 +1,54 @@
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>
+<table>
+    <tr>
+        <td colspan='6' style='text-align: center; font-weight: bold; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+             Clean Architecture Toolkit for .NET
+        </td>
+    </tr>
+    <tr>
+        <td colspan='5' style='padding: 0; vertical-align: middle; border: none;'>
+            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>
+            It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>
+        <td style='padding: 0; border: none;' width='220'>
+            <img src='../../../../resources/logo/CatLogo.svg' alt='' width='200' style='padding: 15px; float: right; background: #121314; border-radius: 10px'/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../../../../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../../../../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../../../../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[CAT.SAGAS](../../README.md)&nbsp;&nbsp;&nbsp;&#124;
+
+</td>
+</tr>
+</table>
+
+# Code Reference  
+  
+##### >> [Cat\.Sagas Assembly](index.md 'index') >> [Cat\.Sagas Namespace](Cat.Sagas.md 'Cat\.Sagas') >> [CatInMemorySagaStore Class](CatInMemorySagaStore.md 'Cat\.Sagas\.CatInMemorySagaStore')
+
+## CatInMemorySagaStore\.AddAsync\(CatSagaInstance, CancellationToken\) Method
+
+Saves a new instance with [Version](../../../Cat.Sagas/namespaces/Cat.Sagas.Abstractions/CatSagaInstance.Version.md 'Cat\.Sagas\.Abstractions\.CatSagaInstance\.Version') 1\.
+
+```csharp
+public System.Threading.Tasks.Task AddAsync(Cat.Sagas.Abstractions.CatSagaInstance instance, System.Threading.CancellationToken cancellationToken=default(System.Threading.CancellationToken));
+```
+#### Parameters
+
+<a name='Cat.Sagas.CatInMemorySagaStore.AddAsync(Cat.Sagas.Abstractions.CatSagaInstance,System.Threading.CancellationToken).instance'></a>
+
+`instance` [CatSagaInstance](../../../Cat.Sagas/namespaces/Cat.Sagas.Abstractions/CatSagaInstance.md 'Cat\.Sagas\.Abstractions\.CatSagaInstance')
+
+The instance to save\.
+
+<a name='Cat.Sagas.CatInMemorySagaStore.AddAsync(Cat.Sagas.Abstractions.CatSagaInstance,System.Threading.CancellationToken).cancellationToken'></a>
+
+`cancellationToken` [System\.Threading\.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System\.Threading\.CancellationToken')
+
+Token to cancel the work\.
+
+Implements [AddAsync\(CatSagaInstance, CancellationToken\)](../../../Cat.Sagas/namespaces/Cat.Sagas.Abstractions/ICatSagaStore.AddAsync.7MULTR44YMMYAWMMC8WLSFFV2.md 'Cat\.Sagas\.Abstractions\.ICatSagaStore\.AddAsync\(Cat\.Sagas\.Abstractions\.CatSagaInstance,System\.Threading\.CancellationToken\)')
+
+#### Returns
+[System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task')  
+A task that completes when the instance is saved\.

@@ -156,6 +156,12 @@
     <Project Path="modules/Cat.Responses/Cat.Responses.Abstractions/Cat.Responses.Abstractions.csproj" />
     <Project Path="modules/Cat.Responses/Cat.Responses/Cat.Responses.csproj" />
   </Folder>
+  <Folder Name="/modules/Cat.Sagas/">
+    <File Path="modules/Cat.Sagas/README.md" />
+    <Project Path="modules/Cat.Sagas/Cat.Sagas.Abstractions/Cat.Sagas.Abstractions.csproj" />
+    <Project Path="modules/Cat.Sagas/Cat.Sagas.EFCore/Cat.Sagas.EFCore.csproj" />
+    <Project Path="modules/Cat.Sagas/Cat.Sagas/Cat.Sagas.csproj" />
+  </Folder>
   <Folder Name="/modules/Cat.Scheduling/">
     <File Path="modules/Cat.Scheduling/README.md" />
     <Project Path="modules/Cat.Scheduling/Cat.Scheduling.Abstractions/Cat.Scheduling.Abstractions.csproj" />
@@ -217,6 +223,7 @@
     <Project Path="tests/Cat.Minimal.Api.Tests/Cat.Minimal.Api.Tests.csproj" />
     <Project Path="tests/Cat.Queries.Tests/Cat.Queries.Tests.csproj" />
     <Project Path="tests/Cat.Responses.Tests/Cat.Responses.Tests.csproj" />
+    <Project Path="tests/Cat.Sagas.Tests/Cat.Sagas.Tests.csproj" />
     <Project Path="tests/Cat.Scheduling.Tests/Cat.Scheduling.Tests.csproj" />
     <Project Path="tests/Cat.ServiceRequests.Tests/Cat.ServiceRequests.Tests.csproj" />
     <Project Path="tests/Cat.Sql.Cdc.Tests/Cat.Sql.Cdc.Tests.csproj" />

@@ -1,0 +1,38 @@
+../../../Cat.Sagas/namespaces/Cat.Sagas.Abstractions/
+P:Cat.Sagas.Abstractions.CatSagaConcurrencyException.InstanceId|CatSagaConcurrencyException.InstanceId.md|InstanceId
+M:Cat.Sagas.Abstractions.CatSagaConcurrencyException.#ctor(System.Guid)|CatSagaConcurrencyException..ctor.ONM2WVWI4SFRVQMKJZ9465DK6.md|CatSagaConcurrencyException(Guid)
+N:Cat.Sagas.Abstractions|Cat.Sagas.Abstractions.md|Cat.Sagas.Abstractions
+T:Cat.Sagas.Abstractions.CatSagaConcurrencyException|CatSagaConcurrencyException.md|CatSagaConcurrencyException
+P:Cat.Sagas.Abstractions.CatSagaInstance.Id|CatSagaInstance.Id.md|Id
+P:Cat.Sagas.Abstractions.CatSagaInstance.WorkflowType|CatSagaInstance.WorkflowType.md|WorkflowType
+P:Cat.Sagas.Abstractions.CatSagaInstance.WorkflowVersion|CatSagaInstance.WorkflowVersion.md|WorkflowVersion
+P:Cat.Sagas.Abstractions.CatSagaInstance.Status|CatSagaInstance.Status.md|Status
+P:Cat.Sagas.Abstractions.CatSagaInstance.State|CatSagaInstance.State.md|State
+P:Cat.Sagas.Abstractions.CatSagaInstance.Checkpoint|CatSagaInstance.Checkpoint.md|Checkpoint
+P:Cat.Sagas.Abstractions.CatSagaInstance.WaitingFor|CatSagaInstance.WaitingFor.md|WaitingFor
+P:Cat.Sagas.Abstractions.CatSagaInstance.CreatedAt|CatSagaInstance.CreatedAt.md|CreatedAt
+P:Cat.Sagas.Abstractions.CatSagaInstance.UpdatedAt|CatSagaInstance.UpdatedAt.md|UpdatedAt
+P:Cat.Sagas.Abstractions.CatSagaInstance.Version|CatSagaInstance.Version.md|Version
+T:Cat.Sagas.Abstractions.CatSagaInstance|CatSagaInstance.md|CatSagaInstance
+P:Cat.Sagas.Abstractions.CatSagaResult.InstanceId|CatSagaResult.InstanceId.md|InstanceId
+P:Cat.Sagas.Abstractions.CatSagaResult.Status|CatSagaResult.Status.md|Status
+P:Cat.Sagas.Abstractions.CatSagaResult.Errors|CatSagaResult.Errors.md|Errors
+M:Cat.Sagas.Abstractions.CatSagaResult.#ctor(System.Guid,Cat.Sagas.Abstractions.CatSagaStatus,System.Collections.Generic.IReadOnlyList{Cat.Responses.Abstractions.ICatError})|CatSagaResult..ctor.4ZYW3A9KJ90TQGCMK3UM7PNXC.md|CatSagaResult(Guid, CatSagaStatus, IReadOnlyList<ICatError>)
+T:Cat.Sagas.Abstractions.CatSagaResult|CatSagaResult.md|CatSagaResult
+F:Cat.Sagas.Abstractions.CatSagaStatus.Waiting|CatSagaStatus.md#Cat.Sagas.Abstractions.CatSagaStatus.Waiting|Waiting
+F:Cat.Sagas.Abstractions.CatSagaStatus.Completed|CatSagaStatus.md#Cat.Sagas.Abstractions.CatSagaStatus.Completed|Completed
+F:Cat.Sagas.Abstractions.CatSagaStatus.Failed|CatSagaStatus.md#Cat.Sagas.Abstractions.CatSagaStatus.Failed|Failed
+T:Cat.Sagas.Abstractions.CatSagaStatus|CatSagaStatus.md|CatSagaStatus
+P:Cat.Sagas.Abstractions.ICatSagaContext.InstanceId|ICatSagaContext.InstanceId.md|InstanceId
+T:Cat.Sagas.Abstractions.ICatSagaContext|ICatSagaContext.md|ICatSagaContext
+M:Cat.Sagas.Abstractions.ICatSagaDispatcher.ResumeAsync(System.Guid,System.Object,System.Threading.CancellationToken)|ICatSagaDispatcher.ResumeAsync.ITMGKI4U7JF3ANEOQ22KR1WD2.md|ResumeAsync(Guid, object, CancellationToken)
+T:Cat.Sagas.Abstractions.ICatSagaDispatcher|ICatSagaDispatcher.md|ICatSagaDispatcher
+M:Cat.Sagas.Abstractions.ICatSagaRunner.StartAsync``2(``1,System.Nullable{System.Guid},System.Threading.CancellationToken)|ICatSagaRunner.StartAsync.7WTMGWDM7ZTE80UW4C2JRXMD3.md|StartAsync<TWorkflow,TWorkflowState>(TWorkflowState, Nullable<Guid>, CancellationToken)
+T:Cat.Sagas.Abstractions.ICatSagaRunner|ICatSagaRunner.md|ICatSagaRunner
+M:Cat.Sagas.Abstractions.ICatSagaSerializer.Serialize(System.Object,System.Type)|ICatSagaSerializer.Serialize.PZZU9XGTUUKW2A5LO4CFETFA.md|Serialize(object, Type)
+M:Cat.Sagas.Abstractions.ICatSagaSerializer.Deserialize(System.String,System.Type)|ICatSagaSerializer.Deserialize.D6W389TA4R4MUX10XC4PP2A74.md|Deserialize(string, Type)
+T:Cat.Sagas.Abstractions.ICatSagaSerializer|ICatSagaSerializer.md|ICatSagaSerializer
+M:Cat.Sagas.Abstractions.ICatSagaStore.FindAsync(System.Guid,System.Threading.CancellationToken)|ICatSagaStore.FindAsync.3PK0II465KD7RWQ37ZL8JNCU.md|FindAsync(Guid, CancellationToken)
+M:Cat.Sagas.Abstractions.ICatSagaStore.AddAsync(Cat.Sagas.Abstractions.CatSagaInstance,System.Threading.CancellationToken)|ICatSagaStore.AddAsync.7MULTR44YMMYAWMMC8WLSFFV2.md|AddAsync(CatSagaInstance, CancellationToken)
+M:Cat.Sagas.Abstractions.ICatSagaStore.UpdateAsync(Cat.Sagas.Abstractions.CatSagaInstance,System.Threading.CancellationToken)|ICatSagaStore.UpdateAsync.607OADSCKT13JO7W8PRH4OLU3.md|UpdateAsync(CatSagaInstance, CancellationToken)
+T:Cat.Sagas.Abstractions.ICatSagaStore|ICatSagaStore.md|ICatSagaStore

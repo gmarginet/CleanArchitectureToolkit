@@ -1,0 +1,13 @@
+../../../Cat.Sagas/namespaces/Cat.Sagas.EFCore/
+F:Cat.Sagas.EFCore.EfCoreSagaStore`1._dbContext|EfCoreSagaStore_TDbContext_._dbContext.md|_dbContext
+M:Cat.Sagas.EFCore.EfCoreSagaStore`1.#ctor(`0)|EfCoreSagaStore_TDbContext_..ctor.UJLT52TPJ7ZDQ4IWMLR8AWCMD.md|EfCoreSagaStore(TDbContext)
+M:Cat.Sagas.EFCore.EfCoreSagaStore`1.FindAsync(System.Guid,System.Threading.CancellationToken)|EfCoreSagaStore_TDbContext_.FindAsync.CSZERNL2D2R8Q6SKJPVWKI90D.md|FindAsync(Guid, CancellationToken)
+M:Cat.Sagas.EFCore.EfCoreSagaStore`1.AddAsync(Cat.Sagas.Abstractions.CatSagaInstance,System.Threading.CancellationToken)|EfCoreSagaStore_TDbContext_.AddAsync.PJPLUY5R86E5DSRGSEVF0YBS1.md|AddAsync(CatSagaInstance, CancellationToken)
+M:Cat.Sagas.EFCore.EfCoreSagaStore`1.UpdateAsync(Cat.Sagas.Abstractions.CatSagaInstance,System.Threading.CancellationToken)|EfCoreSagaStore_TDbContext_.UpdateAsync.P7UFYPIDOYSD10NSOMPIP0VFC.md|UpdateAsync(CatSagaInstance, CancellationToken)
+N:Cat.Sagas.EFCore|Cat.Sagas.EFCore.md|Cat.Sagas.EFCore
+T:Cat.Sagas.EFCore.EfCoreSagaStore`1|EfCoreSagaStore_TDbContext_.md|EfCoreSagaStore<TDbContext>
+M:Cat.Sagas.EFCore.ModelBuilderExtensions.AddCatSagas(Microsoft.EntityFrameworkCore.ModelBuilder)|ModelBuilderExtensions.AddCatSagas.ONPE2ELDHBFDVCG1E70SN9QN8.md|AddCatSagas(this ModelBuilder)
+T:Cat.Sagas.EFCore.ModelBuilderExtensions|ModelBuilderExtensions.md|ModelBuilderExtensions
+M:Cat.Sagas.EFCore.Extensions.ServiceCollectionExtensions.AddCatSagasEFCore``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatSagasEFCore.PB6Y09C59RM02D0ZT0XC76MBD.md|AddCatSagasEFCore<TDbContext>(this IServiceCollection)
+N:Cat.Sagas.EFCore.Extensions|Cat.Sagas.EFCore.Extensions.md|Cat.Sagas.EFCore.Extensions
+T:Cat.Sagas.EFCore.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

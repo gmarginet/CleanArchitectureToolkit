@@ -117,14 +117,15 @@ Claude read the engine in `modules/Cat.FluentWorkflows`.
 | Handling a workflow that changed while instances were stored | Both |
 
 #### What exists today
-- The module does not exist yet. It is listed in the repo overview of the readme with the status New.
+- The module exists with steps 2 and 3 of the build order: `Cat.Sagas.Abstractions` and `Cat.Sagas`, with the runner, the dispatcher, the `SendAndWait` step, the answer handler, the JSON serializer and an in-memory store, plus `Cat.Sagas.EFCore` with the table and the store. See the [module readme](../modules/Cat.Sagas/README.md). The instance is saved first and the request goes out after it.
+- Not built yet: the outbox, the ids of handled messages and timeouts (steps 4 and 5).
 - The engine in `Cat.FluentWorkflows` is as described in the findings. It has no suspend, no checkpoint and no `ResumeAsync`.
 - Orders already works as phase 0 of the build order below:
   - The place order workflow has a `TakePaymentStep` that calls `IPaymentProvider`.
   - The state lives in the order status. The statuses are `Pending`, `Confirmed` and `Cancelled`.
   - `IPaymentProvider` is answered by the separate payment service, `Cat.Demo.PaymentService`, through `PaymentServiceProvider`. Without an address in the configuration the `FakePaymentProvider` answers.
   - The comment on `IPaymentProvider` points to this plan for a later flow over the Service Bus.
-- `Cat.Messaging` and `Cat.EventProcessor` exist now. `Cat.Scheduling` does not exist yet.
+- `Cat.Messaging` (with `Cat.Messaging.Outbox.EFCore`), `Cat.EventProcessor` (with `Cat.EventProcessor.Inbox.EFCore`) and `Cat.Scheduling` exist now.
 
 #### What goes where
 This is option C, the approach the owner decided on.
@@ -156,9 +157,9 @@ The instance record holds: instance id, workflow type name, workflow version, st
 | Module | Why |
 |---|---|
 | `Cat.FluentWorkflows` | The engine to suspend and resume. |
-| `Cat.Messaging` (future) | The wait step sends the request message through it. |
+| `Cat.Messaging` | The wait step sends the request message through it. |
 | `Cat.EventProcessor` | Incoming answers come in through it. |
-| `Cat.Scheduling` (future) | Looks for instances whose wait timed out. |
+| `Cat.Scheduling` | Looks for instances whose wait timed out. |
 | `Cat.Messaging.Outbox.EFCore` | Saves the state and the outgoing message in one `SaveChanges`. |
 | `Cat.EFCore` | The store. |
 
@@ -187,8 +188,8 @@ These must be solved in the design, not afterwards.
 |---|---|---|
 | 0 | Orders uses short workflows and the order status as saga state. The payment provider stays an interface. | Nothing. Done in the demo. |
 | 1 | Engine: `Suspend`, step addresses, checkpoint, `ResumeAsync` and container support. In memory, fully tested. Update the readme and the namespace pages. | Nothing |
-| 2 | `Cat.Sagas.Abstractions` and `Cat.Sagas` with an in-memory store, to prove the model with the wait step. | Step 1 |
-| 3 | `Cat.Sagas.EFCore` with the instance entity and concurrency. | Step 2, `Cat.EFCore` |
+| 2 | `Cat.Sagas.Abstractions` and `Cat.Sagas` with an in-memory store, to prove the model with the wait step. | Step 1. Built. |
+| 3 | `Cat.Sagas.EFCore` with the instance entity and concurrency. | Step 2, `Cat.EFCore`. Built, on plain EF Core like `Cat.Scheduling.EFCore`. |
 | 4 | Connect to `Cat.Messaging` and `Cat.EventProcessor`. Add the outbox and the inbox ids. | Those modules |
 | 5 | Timeouts with `Cat.Scheduling`. | That module |
 | 6 | Demo: the place order workflow waits for the payment answer over the Service Bus. | All above |
@@ -209,6 +210,10 @@ Steps 1 to 3 do not depend on the other future modules, so they can start before
 - **Orders until then.** Orders stays as it is, with the state in the order status and the payment as an interface, until step 6 of the build order.
 - **Compensation.** Explicit steps in the failure branch of the workflow, written by the developer. A dedicated compensation feature comes only when the explicit steps become repetitive.
 - **Timeouts.** Scheduled messages of the bus, see [Cat.Messaging.md](../modules/Cat.Messaging/README.md) and [Cat.Scheduling.md](Cat.Scheduling.md). The first version of the module may go without timeouts if the bus support is not ready.
+- **Correlation.** An answer finds its instance through the `CorrelationId` of the message. The wait step sends the request with the correlation id of the instance, and the other service copies it into its answer. There is no selector for a business key.
+- **EF Core store saves itself.** `AddAsync` and `UpdateAsync` of the EF Core store call `SaveChangesAsync` on the context of the scope. A version conflict becomes a `CatSagaConcurrencyException`. Step 4 may change the order inside the engine, so the outbox rows and the instance go in one commit.
+- **Send order with the outbox.** With the Messaging outbox on, `SendAsync` only adds a row to the context. A call `AddCatSagasOutbox()` next to the outbox registration switches the engine to adding the request first and saving once, so the instance and the request row commit together. Without the call the order stays: save the instance, then send.
+- **Starting and waiting.** The developer starts a saga with `ICatSagaRunner.StartAsync<TWorkflow, TState>(state)`. Inside the workflow a `SendAndWait<TRequest, TAnswer>` builder step sends the request and suspends. The module registers a handler for each answer type, and the handler resumes the instance. The developer writes no wiring of their own.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
