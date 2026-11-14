@@ -56,7 +56,7 @@
 Show `Cat.Sagas`: a payment over messages.
 
 #### What exists today
-- `Cat.Sagas` does not exist yet. Its plan is [Cat.Sagas.md](Cat.Sagas.md).
+- `Cat.Sagas` exists with the runner, the wait step, the EF Core store, the outbox switch and timeouts. The demo does not use it yet. This phase is step 6 of the module plan [Cat.Sagas.md](Cat.Sagas.md).
 - `Cat.Users` is built and the demo uses it. The business logic of Orders asks for `ICatUser`, and Catalog sets `LastUpdatedBy` from it. The demo readme says where.
 - Orders has an event subscriber, `OrderAuditSubscriber`, that writes an audit record when an order event happens. It stays as the example of an event subscriber. `Cat.Auditing` was dropped. A developer who wants to see who changed a row adds a `LastUpdatedBy` column to the temporal table.
 - Ownership of orders is a filter in the queries.
@@ -64,13 +64,20 @@ Show `Cat.Sagas`: a payment over messages.
 - A cancelled order keeps its `Approved` payment, because there is no refund step yet.
 
 #### Needs
-The module plan [Cat.Sagas.md](Cat.Sagas.md), built first.
+The module `Cat.Sagas`, steps 1 to 5 of its plan [Cat.Sagas.md](Cat.Sagas.md). They are built.
 
 #### Done when
 The payment runs as a saga over messages, and the readme says where.
 
 #### Decided
 - **Payment over messages.** A saga style payment over messages comes with this phase, see [Cat.Sagas.md](Cat.Sagas.md). Until then the payment is an interface behind a generated client, and Orders keeps its state in the order status.
+- **What `POST /orders` returns.** `POST /orders` answers 202 Accepted with the order in status `Pending`. The saga takes the payment and confirms or cancels the order later. The React client polls `GET /orders/{id}` every few seconds until the status is no longer `Pending`. The client and the tests that expect 201 `Confirmed` change with this phase.
+- **The whole workflow is the saga.** `POST /orders` starts `PlaceOrderWorkflow` through `ICatSagaRunner`. Customer, prices, order and stock run in the first run. `TakePaymentStep` becomes a `SendAndWait` step for the payment, and that is the only suspend. The steps after it stay. The 202 reports the order number that the first run already has. The Payment service gets a message handler for the command `TakePayment`, which goes to a queue.
+- **Payment timeout.** The payment wait has a timeout that comes from configuration, short in the demo, for example 2 minutes. After the timeout the workflow cancels the order with the reason `PaymentUnavailable` and publishes `OrderCancelledEvent`, as for a decline. A payment that arrives after the cancel is not refunded, which stays in the known gaps with the refund.
+- **Where the instances live.** The saga instances live in the Orders database, in the existing Orders `DbContext`, through `AddCatSagas()` and a migration. The instance, the outbox row and the inbox row commit in one `SaveChanges`, with `AddCatSagasOutbox()` and `UseInbox` on the answer messages.
+- **The answer.** Payment answers with one event, `PaymentProcessed`, with an `Approved` flag and a `Reference`. A decline is data, not a type. The event copies the correlation id of the request, goes to a topic, and Orders subscribes to it. The wait step waits for `PaymentProcessed`, and `Output` copies the flag into the state, as `TakePaymentStep` does today.
+- **Failure settings on the message path.** The handler for `TakePayment` uses the same `PaymentProcessor` and the same `PaymentFailures` settings. `Latency` delays the answer, and `Outage` or `ErrorPercentage` make the handler fail, so the bus delivers the message again and the order ends through the timeout. The ledger by order number keeps a retry from charging twice.
+- **The HTTP payment call.** Orders drops `IPaymentProvider`, `PaymentServiceProvider` and `FakePaymentProvider`, because the workflow sends a message instead. The Payment service keeps its HTTP endpoint and its generated client.
 - **Messages carry a token.** A message sent for a user carries the token of that user, and the Scheduler sends with a client credentials token, as the [module readme of Cat.EventProcessor](../modules/Cat.EventProcessor/README.md) and the [module readme of Cat.Messaging](../modules/Cat.Messaging/README.md) describe. The demo host implements `ICatTokenProvider` and registers `AddCatEventProcessorAuthorization`, so a listener builds the `ICatUser` from the token. This comes once `Cat.Users` and the sending side exist, and the demo is the place that proves the rule. The costs:
   - The token sits in the queue, the dead letter queue and the outbox table, so it needs short lived tokens and a security review before production.
   - The Keycloak realm already has the client `cat-demo-orders` for the system token, so the realm needs no new client.
@@ -254,6 +261,16 @@ Do all three failure switches of the payment service hold when the call goes thr
 
 Recommendation: check once by hand, and write the three results as one line each in the payment chapter of the demo readme. This needs the owner to run the AppHost, as Claude does not start it.
 <!-- region end: Question 4-->
+
+<!-- region start: Question 15-->
+#### Question 15
+[Phase 7](#phase-7) decides that Orders takes the payment over messages and drops its HTTP payment call. The Payment service keeps its HTTP endpoint and its generated client. This phase and its questions 1, 2 and 4 describe a retry and a circuit breaker on the payment call from Orders, and the failure settings act on the HTTP path. What does the showcase of `Cat.Resilience` call once Orders no longer calls Payment over HTTP?
+- **Another call that Orders still makes over HTTP.** For example Catalog prices or Inventory reservations. Cost: the failure settings of the Payment service no longer serve the showcase, so Catalog or Inventory needs its own switches.
+- **A second, outside payment provider next to the saga.** It is the variant of question 2, option C, called over HTTP from a separate step or from a small service. Cost: a second provider to build, and it sits outside the saga path.
+- **The Payment endpoint called directly, for example by a test or a tool.** Cost: it shows the module on a call that the order flow never makes.
+
+Recommendation: the first option. Orders still calls Inventory and Catalog over HTTP, and Inventory already sits in the order flow, so the showcase stays on the real path. Answer it together with question 2.
+<!-- region end: Question 15-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 11-->
 
