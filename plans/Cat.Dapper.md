@@ -35,6 +35,10 @@
 [![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-catdapper)
 <!-- region end: StatusBadge-->
 
+<!-- region start: FirstStableVersion-->
+**First stable version:** not reached
+<!-- region end: FirstStableVersion-->
+
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
