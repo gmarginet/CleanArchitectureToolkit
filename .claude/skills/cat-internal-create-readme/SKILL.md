@@ -56,11 +56,12 @@ Name column:
 
 Type badge: the `TypeBadge` template, with the type of the row. It comes first in the `Description` cell and links to the same target as the status badge.
 
-Status badge, from two facts: is the item built, and does it still have a plan in `plans/`. It comes after the type badge.
+Status badge, from three facts: is the item built, does it still have a plan in `plans/`, and does the plan say that the first stable version is reached. The plan says it in the line `**First stable version:**` of its `FirstStableVersion` region. The status badge comes after the type badge.
 - Not built: the `NewBadge` template. The badge links to the plan.
-- Built, and the plan file exists: the `BuildingBadge` template. The badge links to the plan. Breaking changes are possible.
+- Built, the plan file exists and the first stable version is not reached: the `BuildingBadge` template. The badge links to the plan. Breaking changes are possible.
+- Built, the plan file exists and the first stable version is reached: the `GrowingBadge` template. The badge links to the plan. The item is stable, and the plan holds extra features. Breaking changes are not expected.
 - Built, and no plan file: the `StableBadge` template. The badge links to the readme of the item, the same target as the name link.
-- A plan goes only when the owner agrees. That is the moment an item becomes stable.
+- The owner decides when the first stable version is reached. Change the line in the plan and the badge together.
 
 A module is built when its folder exists in `modules/`. The demo is built from the first stage on. A tooling item is built when its files exist.
 
@@ -106,8 +107,8 @@ Use this when the owner changes the template and asks to update the readme.
 - [[NameLink]]: Where the name links to, see the name column above.
 - [[Type]]: `Module`, `Demo` or `Tooling`.
 - [[TypeBadge]]: The TypeBadge template.
-- [[BadgeLink]]: Where the type badge links to. It is the same target as the status badge: the plan for a New or Building item, and the readme of the item for a Stable item.
-- [[StatusBadge]]: The `NewBadge`, `BuildingBadge` or `StableBadge` template.
+- [[BadgeLink]]: Where the type badge links to. It is the same target as the status badge: the plan for a New, Building or Growing item, and the readme of the item for a Stable item.
+- [[StatusBadge]]: The `NewBadge`, `BuildingBadge`, `GrowingBadge` or `StableBadge` template.
 - [[Priority]]: The priority of the item, see the priority rules above. Empty for a stable item.
 - [[Description]]: One short sentence about what the item is used for.
 - [[PlanFile]]: The file name of the plan in `plans/`, such as `Cat.Messaging.md` or `Demo.md`.

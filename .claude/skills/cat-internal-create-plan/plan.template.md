@@ -10,6 +10,10 @@
 <!-- region start: StatusBadge-->
 <!-- region end: StatusBadge-->
 
+<!-- region start: FirstStableVersion-->
+**First stable version:** not reached
+<!-- region end: FirstStableVersion-->
+
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->

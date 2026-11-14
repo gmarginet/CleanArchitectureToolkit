@@ -37,7 +37,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **Note:** The header comes from `cat-internal-create-header`, with `RootPath` `../..`.
 
 ### cat-internal-create-readme
-- **What it does:** Keeps the readme in sync with `readme.template.md`. The repo overview table has one row per module, the demo and the tooling, with a New, Building or Stable badge that follows from the plans. Every item that is not stable also has a priority, which Claude recalculates when plans or builds change. The chapters with static text have their own region, so you can ask Claude to look at or change one chapter.
+- **What it does:** Keeps the readme in sync with `readme.template.md`. The repo overview table has one row per module, the demo and the tooling, with a New, Building, Growing or Stable badge that follows from the plans. Every item that is not stable also has a priority, which Claude recalculates when plans or builds change. The chapters with static text have their own region, so you can ask Claude to look at or change one chapter.
 - **How to use it:** Give it an item such as a module, or run it without arguments to resync the table. Name a chapter to look at or change it.
 - **When:** After adding or removing a module, a plan or a tooling item, changing a module intro, or changing the readme template.
 

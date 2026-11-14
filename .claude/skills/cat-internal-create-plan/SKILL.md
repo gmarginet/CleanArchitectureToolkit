@@ -48,7 +48,7 @@ Read these before you write, and search them for the module name:
 ## Where a module plan is linked
 Only plans of modules (`plans/Cat.*.md`) are linked from the readme. `Demo.md` and `Skills.md` are not.
 - Every plan has a row in the repo overview table of the readme. `Demo.md` belongs to the row `Cat.Demo` and `Skills.md` to the row `Cat.Skills`.
-- An item that is not built yet has the New badge and its name links to the plan. A built item with a plan has the Building badge. The badge links to the plan in both cases. The `cat-internal-create-readme` skill covers the table.
+- An item that is not built yet has the New badge and its name links to the plan. A built item with a plan has the Building badge, or the Growing badge when its first stable version is reached (see the `FirstStableVersion` region). The badge links to the plan in all three cases. The `cat-internal-create-readme` skill covers the table.
 - A change to a plan, an answered open question and a finished build can change the priorities in the repo overview. Recalculate them with the `cat-internal-create-readme` skill.
 - When a future module is started with the `cat-internal-create-module` skill, its row changes from New to Building and its name links to the module readme.
 - Keep the plan until the module has done everything in it and the owner agrees that it can go. When the plan goes, remove its link from the readme too.
@@ -89,6 +89,11 @@ Use this when an answer or a decision changes more than one plan, and when a mod
   - Once the last open question of the first phase is closed, use the badge from the `ReadyToStartBuildingBadge` template.
   - We always use the first phase to determine the status. When a phase gets deleted, the next phase becomes the first one and the badge is set again from that phase, following these rules.
   - If no phases are left, Claude can ask if it can remove the plan file.
+- `FirstStableVersion`: One line that says whether the item has reached its first stable version. It is `**First stable version:** not reached` or `**First stable version:** reached`.
+  - A new plan says `not reached`.
+  - Only the owner decides that the first stable version is reached. Claude never changes the line on its own.
+  - It drives the status badge in the repo overview: `not reached` gives Building, `reached` gives Growing. The `cat-internal-verify-docs` skill checks it.
+  - When the plan goes, the item becomes Stable, see the `cat-internal-create-readme` skill.
 - `Phases`: A list of all the phases of the plan.
   - The region starts with the line `<!-- no toc -->`. It comes from the template. Always copy it into a plan and never remove it. It stops editor plugins from generating a full table of contents when the owner edits the file.
   - Use the `PhaseListLine` template to add a line to the list.

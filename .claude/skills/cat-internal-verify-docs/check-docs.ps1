@@ -13,7 +13,7 @@ Scope
 Errors
 - A relative link or image points to a file or folder that does not exist, or the case of the path is wrong.
   The published site runs on Linux, where case matters.
-- The repo overview table of the readme does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the Building badge. A built row without a plan has the Stable badge. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has no priority, and every other row has a unique whole number as priority.
+- The repo overview table of the readme does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the Building badge, or the Growing badge when the plan says `**First stable version:** reached`. A built row without a plan has the Stable badge. Every plan has that line, and a plan that is not built says `not reached`. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has no priority, and every other row has a unique whole number as priority.
 - A link points to an anchor that no heading of the target markdown file has.
 - A code fence is not closed.
 - A Markdown table starts on the line right below a heading or a line of text, with no empty line between them. The published site shows it as plain text.
@@ -254,12 +254,24 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
         $hasPlan = $planFiles -contains $plan
         $built = switch ($row.Type) { 'Module' { $moduleFolders -contains $name } 'Demo' { $true } default { $row.Badge -notlike '*badge/status-New-*' } }
         if ($row.Type -eq 'Module' -and -not $built -and $row.Link -like './modules/*') { $errors.Add("README.md repo overview: $name has no folder in modules/.") }
+        # The plan says whether the first stable version is reached, in the line "**First stable version:** reached" or "not reached".
+        $firstStable = $null
+        if ($hasPlan) {
+            $planText = [System.IO.File]::ReadAllText((Join-Path $plansRoot $plan))
+            if ($planText -match '(?m)^\*\*First stable version:\*\* (reached|not reached)\s*$') {
+                $firstStable = $Matches[1]
+            } else {
+                $errors.Add("plans\${plan}: the line '**First stable version:** reached' or '**First stable version:** not reached' is missing. It belongs in the FirstStableVersion region, below the status badge.")
+            }
+            if ($firstStable -eq 'reached' -and -not $built) { $errors.Add("plans\${plan}: $name is not built, so the first stable version cannot be reached.") }
+        }
         if (-not $built) {
             if (-not $hasPlan) { $errors.Add("README.md repo overview: $name is not built and has no plan plans\$plan.") }
             if ($row.Badge -notlike "*badge/status-New-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name is not built. Its badge must be New and link to ./plans/$plan.") }
             if ($row.Link -ne "./plans/$plan") { $errors.Add("README.md repo overview: $name is not built. Its name must link to ./plans/$plan.") }
         } elseif ($hasPlan) {
-            if ($row.Badge -notlike "*badge/status-Building-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name has a plan. Its badge must be Building and link to ./plans/$plan.") }
+            $word = if ($firstStable -eq 'reached') { 'Growing' } else { 'Building' }
+            if ($row.Badge -notlike "*badge/status-$word-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name has a plan that says the first stable version is $firstStable. Its badge must be $word and link to ./plans/$plan.") }
         } else {
             if ($row.Badge -notlike "*badge/status-Stable-*]($($row.Link))*") { $errors.Add("README.md repo overview: $name has no plan. Its badge must be Stable and link to $($row.Link).") }
         }
