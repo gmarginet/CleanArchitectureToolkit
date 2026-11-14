@@ -354,6 +354,10 @@ The gateway and every service answer `/health` (ready) and `/alive` (running) in
 <!-- region start: ThingsToKnowAboutTheDashboard-->
 
 The dashboard may say "No trusted development certificate was found". That is harmless for now, because the AppHost, the dashboard and the services all run on HTTP. Anyone on your machine can open the dashboard on localhost, which is fine for a local demo.
+
+To follow one order, place it and open **Traces** in the dashboard. The call `POST /orders` shows up as one trace. It holds the gateway, Orders, Keycloak, Catalog, Inventory and Payment, so you see every HTTP hop of the order in one place.
+
+The message hops are not part of that trace. When Notifications handles `OrderConfirmed`, or `StockChanged` arrives, the dashboard shows it as its own trace with only the `notifications` resource in it. `Cat.Messaging` does not pass the trace context along with a message yet. Match such a trace to its order by the time and the message name.
 <!-- region end: ThingsToKnowAboutTheDashboard-->
 
 ### Run the tests
