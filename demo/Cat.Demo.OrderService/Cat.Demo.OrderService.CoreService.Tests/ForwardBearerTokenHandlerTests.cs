@@ -1,5 +1,6 @@
 using System.Net;
 using Cat.Demo.OrderService.Infrastructure.ApiClients;
+using Cat.Demo.ServiceDefaults;
 using Microsoft.AspNetCore.Http;
 
 namespace Cat.Demo.OrderService.CoreService.Tests;

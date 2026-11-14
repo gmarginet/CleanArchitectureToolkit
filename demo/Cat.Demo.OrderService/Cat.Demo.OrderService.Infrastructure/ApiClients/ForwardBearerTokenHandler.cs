@@ -2,6 +2,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Cat.Demo.ServiceDefaults;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 

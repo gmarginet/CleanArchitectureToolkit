@@ -10,6 +10,7 @@ using Cat.Messaging.AzureServiceBus.Extensions;
 using Cat.Messaging.Extensions;
 using Cat.Messaging.Outbox.EFCore.Extensions;
 using Cat.Messaging.Outbox.Extensions;
+using Cat.Sagas;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -58,6 +59,7 @@ public static class OrderMessagingExtensions
             return;
         }
 
-        await topology.EnsureTopologyAsync([typeof(OrderConfirmed).Assembly], cancellationToken);
+        // The saga module holds the timeout message. It is a command, so it gets a queue of Orders.
+        await topology.EnsureTopologyAsync([typeof(OrderConfirmed).Assembly, typeof(CatSagaTimeout).Assembly], cancellationToken);
     }
 }

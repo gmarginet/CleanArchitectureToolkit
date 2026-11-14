@@ -103,19 +103,3 @@ public class FakeStockReservation : IStockReservation
     }
 }
 
-/// <summary>A payment provider for tests.</summary>
-public class FakePaymentProvider : IPaymentProvider
-{
-    public bool Approve { get; set; } = true;
-    public bool Unavailable { get; set; }
-    public List<(string OrderNumber, decimal Amount)> Payments { get; } = [];
-
-    public Task<PaymentResult> TakePaymentAsync(string orderNumber, decimal amount, CancellationToken cancellationToken = default)
-    {
-        Payments.Add((orderNumber, amount));
-        return Task.FromResult(Unavailable
-            ? new PaymentResult(false, null, Unavailable: true)
-            : new PaymentResult(Approve, Approve ? "REF" : null));
-    }
-}
-

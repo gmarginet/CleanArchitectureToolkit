@@ -1,6 +1,6 @@
 using System.Net;
 using System.Text;
-using Cat.Demo.OrderService.Infrastructure.ApiClients;
+using Cat.Demo.ServiceDefaults;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Cat.Demo.OrderService.CoreService.Tests;

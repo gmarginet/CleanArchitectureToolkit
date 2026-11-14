@@ -18,7 +18,7 @@ public static class OrderEndpoints
             ordersBuilder.RequireAuthorization();
         }
 
-        ordersBuilder.MapCatPost<PlaceOrderRequest, OrderModel>("/", order => $"/orders/{order.Id}", CatResponseType.Created, CatResponseType.Unauthorized)
+        ordersBuilder.MapCatPost<PlaceOrderRequest, OrderModel>("/", order => $"/orders/{order.Id}", CatResponseType.Accepted, CatResponseType.Unauthorized)
             .WithName("PlaceOrder");
         ordersBuilder.MapCatGetList<OrderGetListRequest, OrderSummaryModel>("/", CatResponseType.Ok, CatResponseType.Unauthorized)
             .WithName("GetOrders");

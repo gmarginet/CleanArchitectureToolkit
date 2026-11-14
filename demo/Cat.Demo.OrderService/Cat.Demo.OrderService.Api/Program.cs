@@ -66,8 +66,8 @@ var connectionString = builder.Configuration.GetConnectionString("orders")
     ?? throw new InvalidOperationException("Connection string 'orders' is missing.");
 builder.Services.AddCatDemoOrderDatabase(connectionString);
 builder.Services.AddCatDemoOrderMessaging(builder.Configuration);
+builder.Services.AddCatDemoOrderSagas(builder.Configuration);
 builder.Services.AddCatDemoOrderPriceProvider(builder.Configuration);
-builder.Services.AddCatDemoOrderPaymentProvider(builder.Configuration);
 builder.Services.AddCatDemoOrderStockReservation(builder.Configuration);
 builder.Services.AddCatDemoOrderScheduler(builder.Configuration);
 
@@ -102,6 +102,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference(options => options.AddDocuments("v1", DevelopmentEndpoints.DevDocumentName));
     await app.Services.InitializeOrderDatabaseAsync();
     await app.Services.InitializeOrderMessagingAsync();
+    await app.Services.InitializeOrderEventProcessorAsync();
 }
 
 app.UseHttpsRedirection();

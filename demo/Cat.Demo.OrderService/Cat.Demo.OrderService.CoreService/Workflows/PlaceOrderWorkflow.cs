@@ -2,10 +2,12 @@ using System.Linq;
 using Cat.Demo.OrderService.CoreService.Commands;
 using Cat.Demo.OrderService.CoreService.Events;
 using Cat.Demo.OrderService.CoreService.Workflows.Steps;
+using Cat.Demo.PaymentService.Contracts.Messages;
 using Cat.FluentWorkflows.Abstractions;
 using Cat.FluentWorkflows.Commands;
 using Cat.FluentWorkflows.Extensions;
 using Cat.Responses;
+using Cat.Sagas.Extensions;
 
 namespace Cat.Demo.OrderService.CoreService.Workflows;
 
@@ -16,6 +18,13 @@ namespace Cat.Demo.OrderService.CoreService.Workflows;
 /// </summary>
 public class PlaceOrderWorkflow : ICatWorkflow<PlaceOrderState>
 {
+    private readonly PlaceOrderOptions _options;
+
+    public PlaceOrderWorkflow(PlaceOrderOptions options)
+    {
+        _options = options;
+    }
+
     public void Build(ICatWorkflowBuilder<PlaceOrderState> builder)
     {
         // 1. The customer. The first order of a user creates the customer.
@@ -60,9 +69,15 @@ public class PlaceOrderWorkflow : ICatWorkflow<PlaceOrderState>
                 OrderErrorDefinitions.OutOfStock.CreateCatError(s.OutOfStockBookId, s.OrderNumber)));
         });
 
-        // 5. The payment. A payment service that cannot answer cancels the order and ends the workflow, and nothing is saved.
+        // 5. The payment. The workflow sends the request to Payment and stops here. Its state is saved, and the caller gets its answer.
+        // The answer of Payment resumes the workflow, even after a restart. No answer in time cancels the order and ends the workflow.
         // An answer is saved when it is a decline too. A decline cancels the order and ends the workflow.
-        builder.Run<PlaceOrderState, TakePaymentStep>();
+        builder.SendAndWait<PlaceOrderState, TakePayment, PaymentProcessed>("payment", _options.PaymentTimeout)
+            .Input(s => s.OrderNumber, step => step.Request.OrderNumber)
+            .Input(s => s.Total, step => step.Request.Amount)
+            .Output(step => step.Answer != null && step.Answer.Approved, s => s.PaymentApproved)
+            .Output(step => step.TimedOut, s => s.PaymentUnavailable)
+            .Output(step => step.Answer != null ? step.Answer.Reference : null, s => s.PaymentReference);
         builder.If(s => s.PaymentUnavailable, then =>
         {
             then.Set(s => s.CancelReason, s => OrderCancelReasons.PaymentUnavailable);

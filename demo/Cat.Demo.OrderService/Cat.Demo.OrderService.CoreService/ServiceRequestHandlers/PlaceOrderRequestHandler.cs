@@ -10,10 +10,10 @@ using Cat.Demo.OrderService.CoreService.Extensions;
 using Cat.Demo.OrderService.CoreService.Queries;
 using Cat.Demo.OrderService.CoreService.Workflows;
 using Cat.EventAggregators.Abstractions;
-using Cat.FluentWorkflows.Abstractions;
 using Cat.Queries.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
+using Cat.Sagas.Abstractions;
 using Cat.ServiceRequests.Abstractions;
 using Cat.Users.Abstractions;
 
@@ -23,7 +23,7 @@ public class PlaceOrderRequestHandler : ICatServiceRequestHandler<PlaceOrderRequ
 {
     private static readonly TimeSpan CancelCleanUpTimeout = TimeSpan.FromSeconds(10);
 
-    private readonly ICatWorkflowProcessor _workflowProcessor;
+    private readonly ICatSagaRunner _sagaRunner;
     private readonly ICatQueryProcessor _queryProcessor;
     private readonly ICatEventAggregator _eventAggregator;
     private readonly ICatUser _currentUser;
@@ -31,14 +31,14 @@ public class PlaceOrderRequestHandler : ICatServiceRequestHandler<PlaceOrderRequ
     private readonly TimeProvider _timeProvider;
 
     public PlaceOrderRequestHandler(
-        ICatWorkflowProcessor workflowProcessor,
+        ICatSagaRunner sagaRunner,
         ICatQueryProcessor queryProcessor,
         ICatEventAggregator eventAggregator,
         ICatUser currentUser,
         IUserEmail userEmail,
         TimeProvider timeProvider)
     {
-        _workflowProcessor = workflowProcessor;
+        _sagaRunner = sagaRunner;
         _queryProcessor = queryProcessor;
         _eventAggregator = eventAggregator;
         _currentUser = currentUser;
@@ -62,10 +62,10 @@ public class PlaceOrderRequestHandler : ICatServiceRequestHandler<PlaceOrderRequ
             Lines = [.. serviceRequest.Order.Lines.Select(x => new PlaceOrderLineState { BookId = x.BookId, Quantity = x.Quantity })]
         };
 
-        ICatWorkflowResponse workflowResponse;
+        CatSagaResult sagaResult;
         try
         {
-            workflowResponse = await _workflowProcessor.RunAsync<PlaceOrderWorkflow, PlaceOrderState>(state, cancellationToken);
+            sagaResult = await _sagaRunner.StartAsync<PlaceOrderWorkflow, PlaceOrderState>(state, cancellationToken: cancellationToken);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested && state.Created is not null)
         {
@@ -79,16 +79,21 @@ public class PlaceOrderRequestHandler : ICatServiceRequestHandler<PlaceOrderRequ
             throw;
         }
 
-        if (workflowResponse.ErrorList.Count > 0 || workflowResponse.WorkflowResult == CatStepExecutionResult.BreakCascade)
+        if (sagaResult.Status == CatSagaStatus.Failed || sagaResult.Errors.Count > 0)
         {
-            return CatResponse.BadRequest<OrderModel>([.. workflowResponse.ErrorList]);
+            return CatResponse.BadRequest<OrderModel>([.. sagaResult.Errors]);
         }
 
         var orderResponse = await _queryProcessor.ProcessAsync(new OrderGetQuery(state.OrderId, _currentUser.GetOwnerFilter()), cancellationToken);
         var modelResponse = orderResponse.Cast<OrderModel>(x => x.ToModel());
+        if (!modelResponse.IsSucceeded)
+        {
+            return modelResponse;
+        }
 
-        return modelResponse.IsSucceeded
-            ? CatResponse.Created(modelResponse.Value!)
-            : modelResponse;
+        // The workflow waits for the payment, so the order is still Pending here. The caller asks for it again until the status changes.
+        return sagaResult.Status == CatSagaStatus.Waiting
+            ? CatResponse.Accepted(modelResponse.Value!)
+            : CatResponse.Created(modelResponse.Value!);
     }
 }

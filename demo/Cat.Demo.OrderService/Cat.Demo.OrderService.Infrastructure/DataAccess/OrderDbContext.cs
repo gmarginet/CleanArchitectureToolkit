@@ -1,6 +1,8 @@
 using Cat.Demo.OrderService.DataModels.Entities;
 using Cat.EFCore.Extensions;
+using Cat.EventProcessor.Inbox.EFCore;
 using Cat.Messaging.Outbox.EFCore;
+using Cat.Sagas.EFCore;
 using Cat.Scheduling.EFCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -75,5 +77,11 @@ public class OrderDbContext : DbContext
 
         // The job run table lets several instances of Orders agree on who runs a scheduled job.
         modelBuilder.AddCatScheduling();
+
+        // The saga table holds the place order instances that wait for the answer of Payment.
+        modelBuilder.AddCatSagas();
+
+        // The inbox table remembers the messages that are handled, so a message that arrives twice runs once.
+        modelBuilder.AddCatInbox();
     }
 }

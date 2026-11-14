@@ -10,14 +10,16 @@
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Commands\Cat.EFCore.Commands.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Extensions\Cat.EFCore.Extensions.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Queries\Cat.EFCore.Queries.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Inbox.EFCore\Cat.EventProcessor.Inbox.EFCore.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging\Cat.Messaging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.AzureServiceBus\Cat.Messaging.AzureServiceBus.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.Outbox.EFCore\Cat.Messaging.Outbox.EFCore.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Sagas\Cat.Sagas.EFCore\Cat.Sagas.EFCore.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Scheduling\Cat.Scheduling.EFCore\Cat.Scheduling.EFCore.csproj" />
       <ProjectReference Include="..\Cat.Demo.OrderService.Contracts\Cat.Demo.OrderService.Contracts.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.CatalogService\Cat.Demo.CatalogService.Api.Client\Cat.Demo.CatalogService.Api.Client.csproj" />
       <ProjectReference Include="..\..\Cat.Demo.InventoryService\Cat.Demo.InventoryService.Api.Client\Cat.Demo.InventoryService.Api.Client.csproj" />
-      <ProjectReference Include="..\..\Cat.Demo.PaymentService\Cat.Demo.PaymentService.Api.Client\Cat.Demo.PaymentService.Api.Client.csproj" />
+      <ProjectReference Include="..\..\Cat.Demo.ServiceDefaults\Cat.Demo.ServiceDefaults\Cat.Demo.ServiceDefaults.csproj" />
       <ProjectReference Include="..\Cat.Demo.OrderService.CoreService\Cat.Demo.OrderService.CoreService.csproj" />
       <ProjectReference Include="..\Cat.Demo.OrderService.DataModels\Cat.Demo.OrderService.DataModels.csproj" />
     </ItemGroup>

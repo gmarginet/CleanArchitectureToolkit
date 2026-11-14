@@ -9,12 +9,16 @@ using Cat.Demo.OrderService.CoreService.Workflows.Steps;
 using Cat.Demo.OrderService.DataModels.Entities;
 using Cat.EventAggregators.Abstractions;
 using Cat.EventAggregators.Extensions;
-using Cat.FluentWorkflows.Abstractions;
+using Cat.Demo.PaymentService.Contracts.Messages;
 using Cat.FluentWorkflows.Commands.Extensions;
 using Cat.FluentWorkflows.Extensions;
+using Cat.Messaging.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
+using Cat.Sagas.Abstractions;
+using Cat.Sagas.Extensions;
 using Cat.UnitTesting.Commands;
+using Cat.UnitTesting.Messaging;
 using Cat.UnitTesting.Queries;
 using Cat.UnitTesting.EventAggregators;
 using Cat.UnitTesting.Responses.NUnit;
@@ -32,10 +36,12 @@ public class ServiceRequestHandlerTests
     private FakeUser _currentUser = null!;
     private ICatEventAggregator _eventAggregator = null!;
     private RecordingSubscriber<IOrderEvent> _events = null!;
+    private FakeMessageSender _sender = null!;
 
     [SetUp]
     public void SetUp()
     {
+        _sender = new FakeMessageSender();
         _queryProcessor = new FakeQueryProcessor();
         _commandProcessor = new FakeCommandProcessor().Apply();
         _currentUser = new FakeUser();
@@ -295,14 +301,14 @@ public class ServiceRequestHandlerTests
     #region PlaceOrder
 
     private PlaceOrderRequestHandler NewPlaceOrderHandler(ServiceProvider provider) => new(
-        provider.GetRequiredService<ICatWorkflowProcessor>(),
+        provider.CreateScope().ServiceProvider.GetRequiredService<ICatSagaRunner>(),
         _queryProcessor,
         _eventAggregator,
         _currentUser,
         _currentUser,
         TimeProvider.System);
 
-    private ServiceProvider NewWorkflowProvider(FakeStockReservation? stock = null, FakePaymentProvider? payment = null)
+    private ServiceProvider NewWorkflowProvider(FakeStockReservation? stock = null)
     {
         var services = new ServiceCollection();
         services.AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
@@ -310,11 +316,15 @@ public class ServiceRequestHandlerTests
         services.AddCatBuildInCommandWorkflowStep();
         services.AddCatFluentWorkflowsFlows(typeof(PlaceOrderWorkflow));
         services.AddCatFluentWorkflowsSteps(typeof(PriceLinesStep));
+        services.AddCatSagasModule();
+        services.AddCatSagasInMemoryStore();
+        services.AddCatSaga<PlaceOrderWorkflow, PlaceOrderState>();
+        services.AddSingleton(new PlaceOrderOptions());
+        services.AddSingleton<ICatMessageSender>(_sender);
         services.AddSingleton(_eventAggregator);
         services.AddSingleton<Cat.Commands.Abstractions.ICatCommandProcessor>(_commandProcessor);
         services.AddSingleton<Abstractions.IPriceProvider>(new FakePriceProvider());
         services.AddSingleton<Abstractions.IStockReservation>(stock ?? new FakeStockReservation());
-        services.AddSingleton<Abstractions.IPaymentProvider>(payment ?? new FakePaymentProvider());
         return services.BuildServiceProvider();
     }
 
@@ -324,9 +334,9 @@ public class ServiceRequestHandlerTests
     });
 
     [Test]
-    public async Task PlaceOrder_ShouldRunTheWorkflowAndReturnTheCreatedOrder()
+    public async Task PlaceOrder_ShouldStartTheSagaAndReturnThePendingOrderAsAccepted()
     {
-        var order = NewOrder(OrderStatuses.ConfirmedCode);
+        var order = NewOrder();
         _queryProcessor.Respond<OrderGetQuery, Order>(CatResponse.Ok(order));
         using var provider = NewWorkflowProvider();
         var handler = NewPlaceOrderHandler(provider);
@@ -335,10 +345,11 @@ public class ServiceRequestHandlerTests
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(response, CatIs.SucceededWith(CatResponseType.Created));
-            Assert.That(response.Value!.Status, Is.EqualTo(OrderStatuses.ConfirmedCode));
+            Assert.That(response, CatIs.SucceededWith(CatResponseType.Accepted));
+            Assert.That(response.Value!.Status, Is.EqualTo(OrderStatuses.PendingCode));
             Assert.That(_queryProcessor.Queries.Single(), Is.EqualTo(new OrderGetQuery(_commandProcessor.Of<OrderCreateCommand>().Single().OrderId, "alice")));
-            Assert.That(_events.Events.Single(), Is.TypeOf<OrderConfirmedEvent>());
+            Assert.That(_sender.Of<TakePayment>().Count(), Is.EqualTo(1));
+            Assert.That(_events.Events, Is.Empty);
         }
     }
 

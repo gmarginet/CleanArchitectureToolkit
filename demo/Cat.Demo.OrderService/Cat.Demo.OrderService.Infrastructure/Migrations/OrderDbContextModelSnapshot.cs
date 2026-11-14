@@ -16,7 +16,7 @@ partial class OrderDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261113152555_AddScheduling";
+    public override string LastMigrationId => "20261114012637_AddSagas";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -264,6 +264,25 @@ partial class OrderDbContextModelSnapshot : ModelSnapshot
                 b.ToTable("Payment", "dbo");
             });
 
+        modelBuilder.Entity("Cat.EventProcessor.Inbox.EFCore.CatInboxMessage", b =>
+            {
+                b.Property<string>("MessageId")
+                    .HasMaxLength(128)
+                    .HasColumnType("nvarchar(128)");
+
+                b.Property<DateTimeOffset>("HandledAt")
+                    .HasColumnType("datetimeoffset");
+
+                b.Property<string>("MessageType")
+                    .IsRequired()
+                    .HasMaxLength(260)
+                    .HasColumnType("nvarchar(260)");
+
+                b.HasKey("MessageId");
+
+                b.ToTable("CatInbox");
+            });
+
         modelBuilder.Entity("Cat.Messaging.Outbox.EFCore.CatOutboxMessage", b =>
             {
                 b.Property<Guid>("Id")
@@ -319,6 +338,49 @@ partial class OrderDbContextModelSnapshot : ModelSnapshot
                 b.HasIndex("SentAt", "CreatedAt");
 
                 b.ToTable("CatOutbox");
+            });
+
+        modelBuilder.Entity("Cat.Sagas.Abstractions.CatSagaInstance", b =>
+            {
+                b.Property<Guid>("Id")
+                    .HasColumnType("uniqueidentifier");
+
+                b.Property<string>("Checkpoint")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<DateTimeOffset>("CreatedAt")
+                    .HasColumnType("datetimeoffset");
+
+                b.Property<string>("State")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<int>("Status")
+                    .HasColumnType("int");
+
+                b.Property<DateTimeOffset>("UpdatedAt")
+                    .HasColumnType("datetimeoffset");
+
+                b.Property<long>("Version")
+                    .IsConcurrencyToken()
+                    .HasColumnType("bigint");
+
+                b.Property<string>("Waits")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("WorkflowType")
+                    .IsRequired()
+                    .HasMaxLength(260)
+                    .HasColumnType("nvarchar(260)");
+
+                b.Property<int>("WorkflowVersion")
+                    .HasColumnType("int");
+
+                b.HasKey("Id");
+
+                b.HasIndex("Status");
+
+                b.ToTable("CatSagas");
             });
 
         modelBuilder.Entity("Cat.Scheduling.EFCore.CatJobRun", b =>
