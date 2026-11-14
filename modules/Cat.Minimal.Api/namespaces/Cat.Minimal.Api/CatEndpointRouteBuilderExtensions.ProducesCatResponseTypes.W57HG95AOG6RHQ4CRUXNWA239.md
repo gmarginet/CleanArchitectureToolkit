@@ -26,38 +26,44 @@
   
 ##### >> [Cat\.Minimal\.Api Assembly](index.md 'index') >> [Cat\.Minimal\.Api Namespace](Cat.Minimal.Api.md 'Cat\.Minimal\.Api') >> [CatEndpointRouteBuilderExtensions Class](CatEndpointRouteBuilderExtensions.md 'Cat\.Minimal\.Api\.CatEndpointRouteBuilderExtensions')
 
-## CatEndpointRouteBuilderExtensions\.ProducesCatResponseTypes\(this RouteHandlerBuilder, CatResponseType\[\], Type, Type\) Method
+## CatEndpointRouteBuilderExtensions\.ProducesCatResponseTypes\(this RouteHandlerBuilder, CatResponseType\[\], Type, Type, Type\) Method
 
 Adds one OpenAPI response per allowed response type, plus 415 when the endpoint reads a body\.
 
 ```csharp
-private static Microsoft.AspNetCore.Builder.RouteHandlerBuilder ProducesCatResponseTypes(this Microsoft.AspNetCore.Builder.RouteHandlerBuilder handlerBuilder, Cat.Responses.Abstractions.CatResponseType[] allowed, System.Type? okValueType=null, System.Type? createdValueType=null);
+private static Microsoft.AspNetCore.Builder.RouteHandlerBuilder ProducesCatResponseTypes(this Microsoft.AspNetCore.Builder.RouteHandlerBuilder handlerBuilder, Cat.Responses.Abstractions.CatResponseType[] allowed, System.Type? okValueType=null, System.Type? createdValueType=null, System.Type? acceptedValueType=null);
 ```
 #### Parameters
 
-<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.ProducesCatResponseTypes(thisMicrosoft.AspNetCore.Builder.RouteHandlerBuilder,Cat.Responses.Abstractions.CatResponseType[],System.Type,System.Type).handlerBuilder'></a>
+<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.ProducesCatResponseTypes(thisMicrosoft.AspNetCore.Builder.RouteHandlerBuilder,Cat.Responses.Abstractions.CatResponseType[],System.Type,System.Type,System.Type).handlerBuilder'></a>
 
 `handlerBuilder` [Microsoft\.AspNetCore\.Builder\.RouteHandlerBuilder](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.routehandlerbuilder 'Microsoft\.AspNetCore\.Builder\.RouteHandlerBuilder')
 
 The endpoint to describe\.
 
-<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.ProducesCatResponseTypes(thisMicrosoft.AspNetCore.Builder.RouteHandlerBuilder,Cat.Responses.Abstractions.CatResponseType[],System.Type,System.Type).allowed'></a>
+<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.ProducesCatResponseTypes(thisMicrosoft.AspNetCore.Builder.RouteHandlerBuilder,Cat.Responses.Abstractions.CatResponseType[],System.Type,System.Type,System.Type).allowed'></a>
 
 `allowed` [CatResponseType](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType')[\[\]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System\.Array')
 
 The response types the endpoint allows\.
 
-<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.ProducesCatResponseTypes(thisMicrosoft.AspNetCore.Builder.RouteHandlerBuilder,Cat.Responses.Abstractions.CatResponseType[],System.Type,System.Type).okValueType'></a>
+<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.ProducesCatResponseTypes(thisMicrosoft.AspNetCore.Builder.RouteHandlerBuilder,Cat.Responses.Abstractions.CatResponseType[],System.Type,System.Type,System.Type).okValueType'></a>
 
 `okValueType` [System\.Type](https://learn.microsoft.com/en-us/dotnet/api/system.type 'System\.Type')
 
 The type of the body of an Ok response\. `null` when it has no body\.
 
-<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.ProducesCatResponseTypes(thisMicrosoft.AspNetCore.Builder.RouteHandlerBuilder,Cat.Responses.Abstractions.CatResponseType[],System.Type,System.Type).createdValueType'></a>
+<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.ProducesCatResponseTypes(thisMicrosoft.AspNetCore.Builder.RouteHandlerBuilder,Cat.Responses.Abstractions.CatResponseType[],System.Type,System.Type,System.Type).createdValueType'></a>
 
 `createdValueType` [System\.Type](https://learn.microsoft.com/en-us/dotnet/api/system.type 'System\.Type')
 
 The type of the body of a Created response\. `null` when it has no body\.
+
+<a name='Cat.Minimal.Api.CatEndpointRouteBuilderExtensions.ProducesCatResponseTypes(thisMicrosoft.AspNetCore.Builder.RouteHandlerBuilder,Cat.Responses.Abstractions.CatResponseType[],System.Type,System.Type,System.Type).acceptedValueType'></a>
+
+`acceptedValueType` [System\.Type](https://learn.microsoft.com/en-us/dotnet/api/system.type 'System\.Type')
+
+The type of the body of an Accepted response\. `null` when it has no body\.
 
 #### Returns
 [Microsoft\.AspNetCore\.Builder\.RouteHandlerBuilder](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.routehandlerbuilder 'Microsoft\.AspNetCore\.Builder\.RouteHandlerBuilder')  

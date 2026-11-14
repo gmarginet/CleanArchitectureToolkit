@@ -22,6 +22,7 @@ internal static class CatResponseTypeExtensions
             CatResponseType.Succeeded.Ok => StatusCodes.Status200OK,
             CatResponseType.Succeeded.Created => StatusCodes.Status201Created,
             CatResponseType.Succeeded.NoContent => StatusCodes.Status204NoContent,
+            CatResponseType.Succeeded.Accepted => StatusCodes.Status202Accepted,
             CatResponseType.Failed.BadRequest => StatusCodes.Status400BadRequest,
             CatResponseType.Failed.Unauthorized => StatusCodes.Status401Unauthorized,
             CatResponseType.Failed.Forbidden => StatusCodes.Status403Forbidden,

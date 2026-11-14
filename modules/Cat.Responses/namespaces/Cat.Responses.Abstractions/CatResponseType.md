@@ -44,6 +44,7 @@ Derived
 
 | Properties | |
 | :--- | :--- |
+| [Accepted](CatResponseType.Accepted.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Accepted') | The operation was accepted and is not finished yet\. The result comes later\. |
 | [BadRequest](CatResponseType.BadRequest.md 'Cat\.Responses\.Abstractions\.CatResponseType\.BadRequest') | The operation failed because the request was invalid\. |
 | [Conflict](CatResponseType.Conflict.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Conflict') | The operation failed because it conflicts with the current state of the resource\. |
 | [Created](CatResponseType.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Created') | The operation succeeded and created a new resource\. |

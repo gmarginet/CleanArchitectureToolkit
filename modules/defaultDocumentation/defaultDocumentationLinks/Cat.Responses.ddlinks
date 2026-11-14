@@ -42,6 +42,7 @@ M:Cat.Responses.CatResponse.Cast``1(``0)|CatResponse.Cast.md#Cat.Responses.CatRe
 M:Cat.Responses.CatResponse.Ok|CatResponse.Ok.md#Cat.Responses.CatResponse.Ok()|Ok()
 M:Cat.Responses.CatResponse.Created|CatResponse.Created.md#Cat.Responses.CatResponse.Created()|Created()
 M:Cat.Responses.CatResponse.NoContent|CatResponse.NoContent.md#Cat.Responses.CatResponse.NoContent()|NoContent()
+M:Cat.Responses.CatResponse.Accepted|CatResponse.Accepted.md#Cat.Responses.CatResponse.Accepted()|Accepted()
 M:Cat.Responses.CatResponse.BadRequest(Cat.Responses.Abstractions.ICatError[])|CatResponse.BadRequest.md#Cat.Responses.CatResponse.BadRequest(Cat.Responses.Abstractions.ICatError[])|BadRequest(ICatError[])
 M:Cat.Responses.CatResponse.NotFound(Cat.Responses.Abstractions.ICatError[])|CatResponse.NotFound.md#Cat.Responses.CatResponse.NotFound(Cat.Responses.Abstractions.ICatError[])|NotFound(ICatError[])
 M:Cat.Responses.CatResponse.Conflict(Cat.Responses.Abstractions.ICatError[])|CatResponse.Conflict.md#Cat.Responses.CatResponse.Conflict(Cat.Responses.Abstractions.ICatError[])|Conflict(ICatError[])
@@ -51,6 +52,7 @@ M:Cat.Responses.CatResponse.InternalServerError(Cat.Responses.Abstractions.ICatE
 M:Cat.Responses.CatResponse.Ok``1(``0)|CatResponse.Ok.md#Cat.Responses.CatResponse.Ok_TResponse_(TResponse)|Ok<TResponse>(TResponse)
 M:Cat.Responses.CatResponse.Created``1(``0)|CatResponse.Created.md#Cat.Responses.CatResponse.Created_TResponse_(TResponse)|Created<TResponse>(TResponse)
 M:Cat.Responses.CatResponse.NoContent``1|CatResponse.NoContent.md#Cat.Responses.CatResponse.NoContent_TResponse_()|NoContent<TResponse>()
+M:Cat.Responses.CatResponse.Accepted``1(``0)|CatResponse.Accepted.md#Cat.Responses.CatResponse.Accepted_TResponse_(TResponse)|Accepted<TResponse>(TResponse)
 M:Cat.Responses.CatResponse.BadRequest``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.BadRequest.md#Cat.Responses.CatResponse.BadRequest_TResponse_(Cat.Responses.Abstractions.ICatError[])|BadRequest<TResponse>(ICatError[])
 M:Cat.Responses.CatResponse.NotFound``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.NotFound.md#Cat.Responses.CatResponse.NotFound_TResponse_(Cat.Responses.Abstractions.ICatError[])|NotFound<TResponse>(ICatError[])
 M:Cat.Responses.CatResponse.Conflict``1(Cat.Responses.Abstractions.ICatError[])|CatResponse.Conflict.md#Cat.Responses.CatResponse.Conflict_TResponse_(Cat.Responses.Abstractions.ICatError[])|Conflict<TResponse>(ICatError[])
@@ -97,6 +99,7 @@ T:Cat.Responses.CatResponse.PagedList|CatResponse.PagedList.md|PagedList
 ?:Cat.Responses.CatResponse.Ok|CatResponse.Ok.md|Ok
 ?:Cat.Responses.CatResponse.Created|CatResponse.Created.md|Created
 ?:Cat.Responses.CatResponse.NoContent|CatResponse.NoContent.md|NoContent
+?:Cat.Responses.CatResponse.Accepted|CatResponse.Accepted.md|Accepted
 ?:Cat.Responses.CatResponse.BadRequest|CatResponse.BadRequest.md|BadRequest
 ?:Cat.Responses.CatResponse.NotFound|CatResponse.NotFound.md|NotFound
 ?:Cat.Responses.CatResponse.Conflict|CatResponse.Conflict.md|Conflict

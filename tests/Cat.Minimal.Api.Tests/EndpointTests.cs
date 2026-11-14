@@ -227,6 +227,45 @@ public class EndpointTests
     }
 
     [Test]
+    public async Task Post_Accepted_Answers202WithTheValueAndTheLocationHeader()
+    {
+        var response = await Client.PostAsync("/items-accepted?outcome=accepted", JsonBody("""{"id":5,"name":"five"}"""));
+
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Accepted));
+        Assert.That(response.Headers.Location?.ToString(), Is.EqualTo("/items/5"));
+        var body = await ReadJsonAsync(response);
+        Assert.That(body.GetProperty("id").GetInt32(), Is.EqualTo(5));
+        Assert.That(body.GetProperty("name").GetString(), Is.EqualTo("five"));
+    }
+
+    [Test]
+    public async Task Post_Accepted_WithoutALocation_HasNoLocationHeader()
+    {
+        var response = await Client.PostAsync("/items-accepted-without-location?outcome=accepted", JsonBody("""{"id":5,"name":"five"}"""));
+
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Accepted));
+        Assert.That(response.Headers.Location, Is.Null);
+        Assert.That((await ReadJsonAsync(response)).GetProperty("id").GetInt32(), Is.EqualTo(5));
+    }
+
+    [Test]
+    public async Task PostWithoutAValue_Accepted_Answers202WithoutABody()
+    {
+        var response = await Client.PostAsync("/ping-accepted?outcome=accepted", null);
+
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Accepted));
+        Assert.That(await response.Content.ReadAsStringAsync(), Is.Empty);
+    }
+
+    [Test]
+    public async Task Post_AcceptedThatIsNotAllowed_Answers500()
+    {
+        var response = await Client.PostAsync("/items?outcome=accepted", JsonBody("""{"id":5,"name":"five"}"""));
+
+        await AssertProblemAsync(response, HttpStatusCode.InternalServerError);
+    }
+
+    [Test]
     public async Task Post_AllowedFailedResponse_AnswersItsStatus()
     {
         var response = await Client.PostAsync("/items?outcome=conflict", JsonBody("""{"id":5,"name":"five"}"""));

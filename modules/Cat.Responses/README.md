@@ -98,6 +98,7 @@ Every response has a `Type` of `CatResponseType`. Each type is either a `Succeed
 | `Ok` | Succeeded | The operation worked. | None | Optional |
 | `Created` | Succeeded | The operation worked and made a new resource. | None | Optional |
 | `NoContent` | Succeeded | The operation worked and has nothing to return. | None | None |
+| `Accepted` | Succeeded | The operation was accepted and is not finished yet. The result comes later. | None | Optional |
 | `BadRequest` | Failed | The request was invalid, for example a failed validation. | One or more | None |
 | `NotFound` | Failed | The requested resource doesn't exist. | One or more | None |
 | `Unauthorized` | Failed | The caller isn't authenticated. | One or more | None |
@@ -120,10 +121,12 @@ using Cat.Responses.Abstractions;
 ICatResponse ok = CatResponse.Ok();
 ICatResponse created = CatResponse.Created();
 ICatResponse noContent = CatResponse.NoContent();
+ICatResponse accepted = CatResponse.Accepted();
 
 // Succeeded, with a value
 ICatResponse<Todo> okWithValue = CatResponse.Ok(todo);
 ICatResponse<Todo> createdWithValue = CatResponse.Created(todo);
+ICatResponse<Todo> acceptedWithValue = CatResponse.Accepted(todo);
 ICatResponse<Todo> noContentTyped = CatResponse.NoContent<Todo>();
 
 // Failed, no value type. Pass one or more errors.

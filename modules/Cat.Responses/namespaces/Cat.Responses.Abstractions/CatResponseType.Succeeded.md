@@ -37,6 +37,7 @@ public abstract class CatResponseType.Succeeded : Cat.Responses.Abstractions.Cat
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatResponseType](CatResponseType.md 'Cat\.Responses\.Abstractions\.CatResponseType') → Succeeded
 
 Derived  
+↳ [Accepted](CatResponseType.Succeeded.Accepted.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded\.Accepted')  
 ↳ [Created](CatResponseType.Succeeded.Created.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded\.Created')  
 ↳ [NoContent](CatResponseType.Succeeded.NoContent.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded\.NoContent')  
 ↳ [Ok](CatResponseType.Succeeded.Ok.md 'Cat\.Responses\.Abstractions\.CatResponseType\.Succeeded\.Ok')

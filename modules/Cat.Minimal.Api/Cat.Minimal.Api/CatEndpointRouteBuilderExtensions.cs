@@ -279,6 +279,7 @@ public static class CatEndpointRouteBuilderExtensions
     /// <summary>
     /// Maps a POST endpoint that creates a resource and returns it. A <see cref="CatResponseType.Created"/> response
     /// carries the created value in its body and a Location header built by <paramref name="location"/>.
+    /// An <see cref="CatResponseType.Accepted"/> response carries the value and the header the same way, for work that is not finished yet.
     /// </summary>
     /// <typeparam name="TRequest">The service request. Give a property <c>[FromBody]</c> to read the request body.</typeparam>
     /// <typeparam name="TResponse">The type of the created value in the response body.</typeparam>
@@ -308,9 +309,10 @@ public static class CatEndpointRouteBuilderExtensions
                 var response = await serviceRequestProcessor.ProcessAsync(request, ct);
 
                 return response.ToHttpResult(httpContext, allowed, typeof(TRequest), "POST",
-                    created: () => TypedResults.Created(location?.Invoke(response.Value), response.Value));
+                    created: () => TypedResults.Created(location?.Invoke(response.Value), response.Value),
+                    accepted: () => TypedResults.Accepted(location?.Invoke(response.Value), response.Value));
             })
-            .ProducesCatResponseTypes(allowed,createdValueType: typeof(TResponse));
+            .ProducesCatResponseTypes(allowed, createdValueType: typeof(TResponse), acceptedValueType: typeof(TResponse));
     }
 
     /// <summary>
@@ -371,6 +373,7 @@ public static class CatEndpointRouteBuilderExtensions
     /// <param name="httpMethod">The http method of the endpoint, used in the error message.</param>
     /// <param name="ok">Builds the result for an Ok response with a body. Without it the result has no body.</param>
     /// <param name="created">Builds the result for a Created response with a body. Without it the result has no body.</param>
+    /// <param name="accepted">Builds the result for an Accepted response with a body. Without it the result has no body.</param>
     /// <returns>The http result for the response.</returns>
     /// <exception cref="InvalidOperationException">Thrown when the response type isn't one the endpoint allows.</exception>
     private static IResult ToHttpResult(
@@ -380,7 +383,8 @@ public static class CatEndpointRouteBuilderExtensions
         Type requestType,
         string httpMethod,
         Func<IResult>? ok = null,
-        Func<IResult>? created = null)
+        Func<IResult>? created = null,
+        Func<IResult>? accepted = null)
     {
         var responseType = response.Type.GetType();
 
@@ -395,6 +399,7 @@ public static class CatEndpointRouteBuilderExtensions
             CatResponseType.Succeeded.Ok => ok?.Invoke() ?? TypedResults.Ok(),
             CatResponseType.Succeeded.Created => created?.Invoke() ?? TypedResults.Created(),
             CatResponseType.Succeeded.NoContent => TypedResults.NoContent(),
+            CatResponseType.Succeeded.Accepted => accepted?.Invoke() ?? TypedResults.Accepted((string?)null),
             CatResponseType.Failed => TypedResults.Problem(response.ToProblemDetail(httpContext)),
             _ => throw new InvalidOperationException(
                 $"CatResponseType {responseType.Name} is not supported in {httpMethod} http methods.")
@@ -408,12 +413,14 @@ public static class CatEndpointRouteBuilderExtensions
     /// <param name="allowed">The response types the endpoint allows.</param>
     /// <param name="okValueType">The type of the body of an Ok response. <c>null</c> when it has no body.</param>
     /// <param name="createdValueType">The type of the body of a Created response. <c>null</c> when it has no body.</param>
+    /// <param name="acceptedValueType">The type of the body of an Accepted response. <c>null</c> when it has no body.</param>
     /// <returns>The builder of the endpoint.</returns>
     private static RouteHandlerBuilder ProducesCatResponseTypes(
         this RouteHandlerBuilder handlerBuilder,
         CatResponseType[] allowed,
         Type? okValueType = null,
-        Type? createdValueType = null)
+        Type? createdValueType = null,
+        Type? acceptedValueType = null)
     {
         foreach (var responseType in allowed)
         {
@@ -426,6 +433,9 @@ public static class CatEndpointRouteBuilderExtensions
                     break;
                 case CatResponseType.Succeeded.Created when createdValueType is not null:
                     handlerBuilder.Produces(statusCode, createdValueType, JsonContentType);
+                    break;
+                case CatResponseType.Succeeded.Accepted when acceptedValueType is not null:
+                    handlerBuilder.Produces(statusCode, acceptedValueType, JsonContentType);
                     break;
                 case CatResponseType.Succeeded:
                     handlerBuilder.Produces(statusCode);

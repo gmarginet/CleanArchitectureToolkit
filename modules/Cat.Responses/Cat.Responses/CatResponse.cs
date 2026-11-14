@@ -78,6 +78,10 @@ public class CatResponse : ICatResponse
     public static ICatResponse NoContent()
         => new CatResponse(CatResponseType.NoContent);
     
+    /// <summary>Creates a succeeded response with the <see cref="CatResponseType.Accepted"/> outcome and no value.</summary>
+    public static ICatResponse Accepted()
+        => new CatResponse(CatResponseType.Accepted);
+
     /// <summary>Creates a failed response with the <see cref="CatResponseType.BadRequest"/> outcome.</summary>
     /// <param name="errors">The errors that caused the request to be rejected.</param>
     public static ICatResponse BadRequest(
@@ -135,6 +139,13 @@ public class CatResponse : ICatResponse
     public static ICatResponse<TResponse> NoContent<TResponse>()
         => new CatResponse<TResponse>(CatResponseType.NoContent);
     
+    /// <summary>Creates a succeeded response with the <see cref="CatResponseType.Accepted"/> outcome, carrying the given value.</summary>
+    /// <typeparam name="TResponse">The type of value the response carries.</typeparam>
+    /// <param name="value">The value the response carries.</param>
+    public static ICatResponse<TResponse> Accepted<TResponse>(
+        TResponse value)
+        => new CatResponse<TResponse>(CatResponseType.Accepted, value);
+
     /// <summary>Creates a failed response with the <see cref="CatResponseType.BadRequest"/> outcome.</summary>
     /// <typeparam name="TResponse">The value type the response is typed to.</typeparam>
     /// <param name="errors">The errors that caused the request to be rejected.</param>

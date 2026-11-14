@@ -14,6 +14,8 @@ public abstract class CatResponseType
     public static Succeeded.Created Created => new();
     /// <summary>The operation succeeded and has nothing to return.</summary>
     public static Succeeded.NoContent NoContent => new();
+    /// <summary>The operation was accepted and is not finished yet. The result comes later.</summary>
+    public static Succeeded.Accepted Accepted => new();
 
     /// <summary>The operation failed because the request was invalid.</summary>
     public static Failed.BadRequest BadRequest => new ();
@@ -46,6 +48,9 @@ public abstract class CatResponseType
 
         /// <summary>The response type for <see cref="CatResponseType.NoContent"/>.</summary>
         public new class NoContent : Succeeded { }
+
+        /// <summary>The response type for <see cref="CatResponseType.Accepted"/>.</summary>
+        public new class Accepted : Succeeded { }
     }
 
     /// <summary>

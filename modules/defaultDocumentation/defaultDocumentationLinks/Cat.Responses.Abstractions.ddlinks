@@ -2,6 +2,7 @@
 P:Cat.Responses.Abstractions.CatResponseType.Ok|CatResponseType.Ok.md|Ok
 P:Cat.Responses.Abstractions.CatResponseType.Created|CatResponseType.Created.md|Created
 P:Cat.Responses.Abstractions.CatResponseType.NoContent|CatResponseType.NoContent.md|NoContent
+P:Cat.Responses.Abstractions.CatResponseType.Accepted|CatResponseType.Accepted.md|Accepted
 P:Cat.Responses.Abstractions.CatResponseType.BadRequest|CatResponseType.BadRequest.md|BadRequest
 P:Cat.Responses.Abstractions.CatResponseType.NotFound|CatResponseType.NotFound.md|NotFound
 P:Cat.Responses.Abstractions.CatResponseType.Conflict|CatResponseType.Conflict.md|Conflict
@@ -38,6 +39,7 @@ T:Cat.Responses.Abstractions.CatResponseType.Failed|CatResponseType.Failed.md|Fa
 T:Cat.Responses.Abstractions.CatResponseType.Succeeded.Ok|CatResponseType.Succeeded.Ok.md|Ok
 T:Cat.Responses.Abstractions.CatResponseType.Succeeded.Created|CatResponseType.Succeeded.Created.md|Created
 T:Cat.Responses.Abstractions.CatResponseType.Succeeded.NoContent|CatResponseType.Succeeded.NoContent.md|NoContent
+T:Cat.Responses.Abstractions.CatResponseType.Succeeded.Accepted|CatResponseType.Succeeded.Accepted.md|Accepted
 T:Cat.Responses.Abstractions.CatResponseType.Failed.BadRequest|CatResponseType.Failed.BadRequest.md|BadRequest
 T:Cat.Responses.Abstractions.CatResponseType.Failed.NotFound|CatResponseType.Failed.NotFound.md|NotFound
 T:Cat.Responses.Abstractions.CatResponseType.Failed.Conflict|CatResponseType.Failed.Conflict.md|Conflict

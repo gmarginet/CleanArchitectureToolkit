@@ -66,8 +66,13 @@ public sealed class TestApp : IAsyncDisposable
         app.MapCatPost<ItemCreateRequest, ItemModel>("/items-without-location", CatResponseType.Created);
         app.MapCatPost<ItemCreateRequest, ItemModel>("/items-null-location", _ => null, CatResponseType.Created);
 
+        // POST: work that is accepted and not finished yet.
+        app.MapCatPost<ItemCreateRequest, ItemModel>("/items-accepted", item => $"/items/{item.Id}", CatResponseType.Accepted);
+        app.MapCatPost<ItemCreateRequest, ItemModel>("/items-accepted-without-location", CatResponseType.Accepted);
+
         // POST: without a value in the body of the response.
         app.MapCatPost<PingRequest>("/ping");
+        app.MapCatPost<PingRequest>("/ping-accepted", CatResponseType.Accepted);
 
         app.MapCatPut<ItemUpdateRequest>("/items/{id:int}");
         app.MapCatPatch<ItemUpdateRequest>("/items/{id:int}", CatResponseType.Ok, CatResponseType.NotFound);

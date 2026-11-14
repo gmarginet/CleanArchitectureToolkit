@@ -153,6 +153,21 @@ public class EndpointMetadataTests
     }
 
     [Test]
+    public void Post_Accepted_DocumentsTheAcceptedValue()
+    {
+        var response = Response("POST", "/items-accepted", 202);
+
+        Assert.That(response.Type, Is.EqualTo(typeof(ItemModel)));
+        Assert.That(response.ContentTypes, Is.EquivalentTo(new[] { Json }));
+    }
+
+    [Test]
+    public void Post_AcceptedWithoutAValue_DocumentsNoBody()
+    {
+        Assert.That(HasNoBody(Response("POST", "/ping-accepted", 202)), Is.True);
+    }
+
+    [Test]
     public void Post_WithoutAValue_DocumentsCreatedWithoutABody()
     {
         Assert.That(HasNoBody(Response("POST", "/ping", 201)), Is.True);

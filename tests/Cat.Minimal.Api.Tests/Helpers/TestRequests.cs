@@ -57,6 +57,7 @@ public static class Outcomes
         {
             "ok" => CatResponse.Ok(value),
             "created" => CatResponse.Created(value),
+            "accepted" => CatResponse.Accepted(value),
             "nocontent" => CatResponse.NoContent<T>(),
             "badrequest" => CatResponse.BadRequest<T>(Error),
             "notfound" => CatResponse.NotFound<T>(Error),
@@ -73,6 +74,7 @@ public static class Outcomes
         {
             "ok" => CatResponse.Ok(),
             "created" => CatResponse.Created(),
+            "accepted" => CatResponse.Accepted(),
             "nocontent" => CatResponse.NoContent(),
             "badrequest" => CatResponse.BadRequest(Error),
             "notfound" => CatResponse.NotFound(Error),

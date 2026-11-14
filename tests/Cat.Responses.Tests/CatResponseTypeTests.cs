@@ -41,6 +41,7 @@ public class CatResponseTypeTests
         Assert.That(CatResponseType.Ok, Is.TypeOf<CatResponseType.Succeeded.Ok>());
         Assert.That(CatResponseType.Created, Is.TypeOf<CatResponseType.Succeeded.Created>());
         Assert.That(CatResponseType.NoContent, Is.TypeOf<CatResponseType.Succeeded.NoContent>());
+        Assert.That(CatResponseType.Accepted, Is.TypeOf<CatResponseType.Succeeded.Accepted>());
         Assert.That(CatResponseType.BadRequest, Is.TypeOf<CatResponseType.Failed.BadRequest>());
         Assert.That(CatResponseType.NotFound, Is.TypeOf<CatResponseType.Failed.NotFound>());
         Assert.That(CatResponseType.Conflict, Is.TypeOf<CatResponseType.Failed.Conflict>());

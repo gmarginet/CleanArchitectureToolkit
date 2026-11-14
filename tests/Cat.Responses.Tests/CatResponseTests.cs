@@ -41,6 +41,26 @@ public class CatResponseTests
         Assert.That(response.ErrorList, Is.Empty);
     }
 
+    [Test]
+    public void Accepted_IsSucceededWithoutErrors()
+    {
+        var response = CatResponse.Accepted();
+
+        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Succeeded.Accepted>());
+        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response.ErrorList, Is.Empty);
+    }
+
+    [Test]
+    public void AcceptedWithAValue_CarriesTheValue()
+    {
+        var response = CatResponse.Accepted("order 7");
+
+        Assert.That(response.Type, Is.InstanceOf<CatResponseType.Succeeded.Accepted>());
+        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(response.Value, Is.EqualTo("order 7"));
+    }
+
     #endregion Succeeded responses without a value
 
     #region Failed responses without a value

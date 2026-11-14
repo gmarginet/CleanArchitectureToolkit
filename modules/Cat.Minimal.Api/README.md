@@ -46,6 +46,7 @@ You decide which response types your handler returns. The OpenAPI description li
   - [Map a service request](#map-a-service-request)
   - [Choose the response types](#choose-the-response-types)
   - [Return the created value with a location](#return-the-created-value-with-a-location)
+  - [Answer that the work is not finished](#answer-that-the-work-is-not-finished)
   - [Patch with a JSON Patch document](#patch-with-a-json-patch-document)
   - [What the endpoint returns](#what-the-endpoint-returns)
   - [The OpenAPI description](#the-openapi-description)
@@ -188,6 +189,7 @@ These are the response types you can pass:
 | `Ok` | 200 |
 | `Created` | 201 |
 | `NoContent` | 204 |
+| `Accepted` | 202 |
 | `BadRequest` | 400 |
 | `Unauthorized` | 401 |
 | `Forbidden` | 403 |
@@ -214,6 +216,15 @@ group.MapCatPost<TodoCreateRequest, TodoModel>("/", todo => $"/todo/{todo.Id}", 
 ```
 
 Without a `location`, or when it returns `null`, the response has no Location header.
+
+### Answer that the work is not finished
+Some work runs after the call returns, such as a saga that waits for a payment. Let the handler return `Accepted` and list it on the endpoint. The status is 202. With a value, the body holds it and the `location` builds the header, so the caller knows where to read the result later:
+
+```csharp
+group.MapCatPost<OrderPlaceRequest, OrderModel>("/", order => $"/orders/{order.Id}", CatResponseType.Accepted);
+```
+
+`MapCatPost<TRequest>` without a value answers 202 with no body.
 
 ### Patch with a JSON Patch document
 
@@ -246,6 +257,8 @@ The patch types come from `Microsoft.AspNetCore.JsonPatch.SystemTextJson`, which
 | `Ok` without a value | 200 | None. |
 | `Created` with a value | 201 | The value as JSON. A Location header when you pass a `location`. |
 | `Created` without a value | 201 | None. |
+| `Accepted` with a value | 202 | The value as JSON. A Location header when you pass a `location`. |
+| `Accepted` without a value | 202 | None. |
 | `NoContent` | 204 | None. |
 | `BadRequest`, like a failed validation | 400 | Problem details. |
 | `Unauthorized` | 401 | Problem details. |
@@ -261,7 +274,7 @@ Use `Unauthorized` when the caller isn't authenticated. Use `Forbidden` when the
 
 Each endpoint lists the response types you passed, plus 400 and 500, plus 415 when it reads a body. It lists nothing else.
 
-- **Succeeded types:** `Ok` and `Created` document the value as `application/json`. The other succeeded types have no body.
+- **Succeeded types:** `Ok`, `Created` and `Accepted` document the value as `application/json`. The other succeeded types have no body.
 - **Failed types:** They document `CatProblemDetails` as `application/problem+json`.
 
 For the endpoints in the example above, the description lists:
