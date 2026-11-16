@@ -50,15 +50,15 @@ Cat.Extensions is a collection of small, focused extension method libraries. Eac
 
 ## NuGet packages
 <!-- region start: NuGet-->
-[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Enumerable.Extensions)](#nuget-packages)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Extensions.Enumerables)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
-| [Cat.Enumerable.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Enumerable.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Enumerable.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Enumerable.Extensions)](#nuget-packages) |
-| [Cat.Expression.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Expression.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Expression.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expression.Extensions)](#nuget-packages) |
-| [Cat.Object.Extensions](https://www.nuget.org/packages/gmarginet.Cat.Object.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.Object.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Object.Extensions)](#nuget-packages) |
-| [Cat.ServiceCollection.Extensions](https://www.nuget.org/packages/gmarginet.Cat.ServiceCollection.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.ServiceCollection.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceCollection.Extensions)](#nuget-packages) |
-| [Cat.String.Extensions](https://www.nuget.org/packages/gmarginet.Cat.String.Extensions/) | Extensions | `dotnet add package gmarginet.Cat.String.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.String.Extensions)](#nuget-packages) |
+| [Cat.Extensions.Enumerables](https://www.nuget.org/packages/gmarginet.Cat.Extensions.Enumerables/) | Extensions | `dotnet add package gmarginet.Cat.Extensions.Enumerables` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Extensions.Enumerables)](#nuget-packages) |
+| [Cat.Extensions.Expressions](https://www.nuget.org/packages/gmarginet.Cat.Extensions.Expressions/) | Extensions | `dotnet add package gmarginet.Cat.Extensions.Expressions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Extensions.Expressions)](#nuget-packages) |
+| [Cat.Extensions.Objects](https://www.nuget.org/packages/gmarginet.Cat.Extensions.Objects/) | Extensions | `dotnet add package gmarginet.Cat.Extensions.Objects` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Extensions.Objects)](#nuget-packages) |
+| [Cat.Extensions.ServiceCollections](https://www.nuget.org/packages/gmarginet.Cat.Extensions.ServiceCollections/) | Extensions | `dotnet add package gmarginet.Cat.Extensions.ServiceCollections` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Extensions.ServiceCollections)](#nuget-packages) |
+| [Cat.Extensions.Strings](https://www.nuget.org/packages/gmarginet.Cat.Extensions.Strings/) | Extensions | `dotnet add package gmarginet.Cat.Extensions.Strings` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Extensions.Strings)](#nuget-packages) |
 
 <!-- region end: NuGet-->
 
@@ -67,11 +67,11 @@ Cat.Extensions is a collection of small, focused extension method libraries. Eac
 
 | Namespace | What it holds |
 |-----------|---------------|
-| [Cat.Enumerable.Extensions](namespaces/Cat.Enumerable.Extensions/index.md) | Extension methods for `IEnumerable`. |
-| [Cat.Expression.Extensions](namespaces/Cat.Expression.Extensions/index.md) | Extension methods for expressions. |
-| [Cat.Object.Extensions](namespaces/Cat.Object.Extensions/index.md) | Extension methods for any object. |
-| [Cat.ServiceCollection.Extensions](namespaces/Cat.ServiceCollection.Extensions/index.md) | Extension methods for `IServiceCollection`. |
-| [Cat.String.Extensions](namespaces/Cat.String.Extensions/index.md) | Extension methods for strings. |
+| [Cat.Extensions.Enumerables](namespaces/Cat.Extensions.Enumerables/index.md) | Extension methods for `IEnumerable`. |
+| [Cat.Extensions.Expressions](namespaces/Cat.Extensions.Expressions/index.md) | Extension methods for expressions. |
+| [Cat.Extensions.Objects](namespaces/Cat.Extensions.Objects/index.md) | Extension methods for any object. |
+| [Cat.Extensions.ServiceCollections](namespaces/Cat.Extensions.ServiceCollections/index.md) | Extension methods for `IServiceCollection`. |
+| [Cat.Extensions.Strings](namespaces/Cat.Extensions.Strings/index.md) | Extension methods for strings. |
 
 <!-- region end: Namespaces-->
 
@@ -92,7 +92,7 @@ This module has nothing to register. Add a `using` for the namespace you need, a
 `IsEmpty` checks whether a sequence has any elements. It works on any `IEnumerable`, and it reads at most one element.
 
 ```csharp
-using Cat.Enumerable.Extensions;
+using Cat.Extensions.Enumerables;
 
 if (items.IsEmpty()) return;
 ```
@@ -102,7 +102,7 @@ if (items.IsEmpty()) return;
 `GetMemberInfo` resolves the member a lambda expression points to. It returns `null` when the expression isn't a direct member access on its parameter.
 
 ```csharp
-using Cat.Expression.Extensions;
+using Cat.Extensions.Expressions;
 
 Expression<Func<Order, int>> expression = order => order.Id;
 MemberInfo? member = expression.GetMemberInfo();            // the Id property
@@ -129,7 +129,7 @@ Validate arguments without hand-written null and range checks. Every method retu
 The four comparison methods use the default comparison of the type. Each also has an overload that takes your own `IComparer<T>`, placed right after the limit.
 
 ```csharp
-using Cat.Object.Extensions;
+using Cat.Extensions.Objects;
 
 public Order(Customer customer, int quantity, int minQuantity, int maxQuantity)
 {
@@ -152,7 +152,7 @@ _start = start.ThrowIfGreaterThanOrEqualTo(end, StringComparer.OrdinalIgnoreCase
 `HasRegistrationFor` checks whether a service is already registered. Use it to register something once, however many modules ask for it.
 
 ```csharp
-using Cat.ServiceCollection.Extensions;
+using Cat.Extensions.ServiceCollections;
 
 if (services.HasRegistrationFor<ICatEventAggregator>()) return;
 ```
@@ -168,7 +168,7 @@ var hasHandlers = services.HasRegistrationFor(typeof(ICatCommandHandler<>));
 `NamedFormat` formats a named message template. The names are only for readability. Values are matched by position, in order.
 
 ```csharp
-using Cat.String.Extensions;
+using Cat.Extensions.Strings;
 
 var message = "User {UserId} logged in at {Timestamp}".NamedFormat(userId, timestamp);
 var padded = "Total: {Total,10:N2}".NamedFormat(total);
