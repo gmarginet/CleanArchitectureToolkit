@@ -32,7 +32,7 @@
 # Plans for `Cat.Dapper` <!-- omit in toc -->  
 
 <!-- region start: FirstStableVersion-->
-**First stable version:** not reached
+**First stable version:** reached
 <!-- region end: FirstStableVersion-->
 
 ## Table of contents <!-- omit in toc -->  
