@@ -31,10 +31,6 @@
 
 # Plans for `Skills` <!-- omit in toc -->  
 
-<!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-skills)
-<!-- region end: StatusBadge-->
-
 <!-- region start: FirstStableVersion-->
 **First stable version:** not reached
 <!-- region end: FirstStableVersion-->

@@ -31,10 +31,6 @@
 
 # Plans for `Cat.Dapper` <!-- omit in toc -->  
 
-<!-- region start: StatusBadge-->
-[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-catdapper)
-<!-- region end: StatusBadge-->
-
 <!-- region start: FirstStableVersion-->
 **First stable version:** not reached
 <!-- region end: FirstStableVersion-->
@@ -199,6 +195,9 @@ Recommendation: the unit tests of the generated SQL text, plus the tests against
 <!-- region start: PhaseDescription-->
 #### Goal
 Support for MySQL, with a `Cat.Dapper.MySql` project next to `Cat.Dapper.SqlServer`.
+
+#### Needs
+[Phase 1 of the plan of Cat.Db.Errors](Cat.Db.Errors.md#phase-1), which builds `Cat.Db.Errors.MySql`.
 
 #### Decided
 - **The project.** `Cat.Dapper.MySql` is added. It holds at least the MySQL specific items that `Cat.Dapper.SqlServer` has since phase 1: `MySqlConnectionFactory`, `MySqlPagingExtensions` and the registration helper for the connection string, like `AddCatDapperSqlServer`. The neutral `Cat.Dapper` project stays free of a database.

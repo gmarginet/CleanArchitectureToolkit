@@ -31,10 +31,6 @@
 
 # Plans for `Cat.EventProcessor` <!-- omit in toc -->  
 
-<!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-cateventprocessor)
-<!-- region end: StatusBadge-->
-
 <!-- region start: FirstStableVersion-->
 **First stable version:** reached
 <!-- region end: FirstStableVersion-->

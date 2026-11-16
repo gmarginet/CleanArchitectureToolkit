@@ -31,10 +31,6 @@
 
 # Plans for `Cat.Messaging` <!-- omit in toc -->  
 
-<!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catmessaging)
-<!-- region end: StatusBadge-->
-
 <!-- region start: FirstStableVersion-->
 **First stable version:** reached
 <!-- region end: FirstStableVersion-->

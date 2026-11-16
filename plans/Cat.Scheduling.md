@@ -31,10 +31,6 @@
 
 # Plans for `Cat.Scheduling` <!-- omit in toc -->  
 
-<!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catscheduling)
-<!-- region end: StatusBadge-->
-
 <!-- region start: FirstStableVersion-->
 **First stable version:** reached
 <!-- region end: FirstStableVersion-->
@@ -52,6 +48,9 @@
 <!-- region start: PhaseDescription-->
 #### Goal
 Retry of a failed scheduled run through `Cat.Resilience`.
+
+#### Needs
+The module plan [Cat.Resilience.md](Cat.Resilience.md), built first.
 
 #### Decided
 - **Retry.** Retry of a failed run goes through `Cat.Resilience`, see [Cat.Resilience.md](Cat.Resilience.md). The module has a small retry setting per job already, see the [module readme](../modules/Cat.Scheduling/README.md#retry-a-failed-run).

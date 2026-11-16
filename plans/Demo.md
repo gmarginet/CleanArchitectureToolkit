@@ -31,10 +31,6 @@
 
 # Plans for `Demo` <!-- omit in toc -->  
 
-<!-- region start: StatusBadge-->
-[![NOT STARTED](https://img.shields.io/badge/Status-NOT%20STARTED-blue)](#plans-for-demo)
-<!-- region end: StatusBadge-->
-
 <!-- region start: FirstStableVersion-->
 **First stable version:** reached
 <!-- region end: FirstStableVersion-->

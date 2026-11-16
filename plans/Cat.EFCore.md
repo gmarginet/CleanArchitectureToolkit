@@ -31,10 +31,6 @@
 
 # Plans for `Cat.EFCore` <!-- omit in toc -->  
 
-<!-- region start: StatusBadge-->
-[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-catefcore)
-<!-- region end: StatusBadge-->
-
 <!-- region start: FirstStableVersion-->
 **First stable version:** reached
 <!-- region end: FirstStableVersion-->
