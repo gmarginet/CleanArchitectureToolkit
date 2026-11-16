@@ -32,7 +32,7 @@
 # Plans for `Cat.Db.Errors` <!-- omit in toc -->  
 
 <!-- region start: StatusBadge-->
-[![PLANNING](https://img.shields.io/badge/Status-PLANNING-orange)](#plans-for-catdberrors)
+[![READY TO START BUILDING](https://img.shields.io/badge/Status-READY%20TO%20START%20BUILDING-green)](#plans-for-catdberrors)
 <!-- region end: StatusBadge-->
 
 <!-- region start: FirstStableVersion-->
@@ -59,7 +59,10 @@ A MySQL project next to the SQL Server project, so a developer who uses MySQL ge
 - The tests build a `SqlException` with a factory, so the module needs no database to test.
 
 #### Needs
-A MySQL driver that the new project references. The numbers below are to check against the MySQL documentation before they go into code: 1062 for a duplicate key, 1451 and 1452 for a foreign key, 1213 for a deadlock and 1205 for a lock wait timeout.
+The MySQL driver that the new project references is MySqlConnector, the driver under Pomelo, which the demo uses. The owner decided the same driver for every module, see the [plan of Cat.Dapper](Cat.Dapper.md). The numbers below are to check against the MySQL documentation before they go into code: 1062 for a duplicate key, 1451 and 1452 for a foreign key, 1213 for a deadlock and 1205 for a lock wait timeout.
+
+#### Decided
+- **No neutral shape.** The checks stay extension methods of the project of the database, as today. Code that wants to be database neutral picks a project, and the demo services use the SQL Server one. A neutral `Cat.Db.Errors.Abstractions` with the checks as an interface can come when a showcase needs it.
 
 #### Done when
 A `Cat.Db.Errors.MySql` project has the checks that make sense for MySQL, with tests, and the module readme describes it.
@@ -67,23 +70,5 @@ A `Cat.Db.Errors.MySql` project has the checks that make sense for MySQL, with t
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-Which MySQL driver does the project reference? The two exceptions are different types, and the check reads the type.
-- **MySqlConnector.** The driver under Pomelo, which the demo waits for. Cost: an application on Oracle's driver is not recognized.
-- **MySql.Data.** The driver of Oracle. Cost: it is not the driver under Pomelo, and its license is different.
-- **Both, in one project or in two.** Cost: two package references, or a second project.
-
-Recommendation: MySqlConnector. It matches the provider the demo waits for. A second project for MySql.Data can come when a developer needs it.
-<!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-Does the module get a neutral shape next to the per-database projects? Today a developer calls an extension method of the project of the database.
-- **Per-database extension methods only, as today.** Cost: code that wants to be database neutral picks a project, and the demo services use the SQL Server one.
-- **A neutral `Cat.Db.Errors.Abstractions` with the checks as an interface.** Cost: one more project and a registration, for a benefit that nothing in the demo needs yet.
-
-Recommendation: per-database extension methods only. A neutral shape can come when a showcase needs it.
-<!-- region end: Question 2-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

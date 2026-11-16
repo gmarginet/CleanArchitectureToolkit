@@ -60,17 +60,18 @@
 Show `Cat.Dapper`: fast read-only order overview queries, next to EF Core for writes.
 
 #### What exists today
-- `Cat.Dapper` does not exist yet. Its plan is [Cat.Dapper.md](Cat.Dapper.md).
+- The module `Cat.Dapper` is built, see the [module readme](../modules/Cat.Dapper/README.md). Nothing in the demo uses it yet.
 - Inventory reads through the EF Core scaffold only.
 
 #### Needs
-The module plan [Cat.Dapper.md](Cat.Dapper.md), built first.
+The module `Cat.Dapper`. It is built.
 
 #### Done when
 The demo uses the module, and the readme says where.
 
 #### Decided
 - **Inventory data access.** The EF Core scaffold only for now. Dapper waits for the `Cat.Dapper` module.
+- **First case.** The read-only order overview query in Orders. Inventory can read through Dapper next to the scaffolded EF Core model (decided in the plan of `Cat.Dapper`).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
