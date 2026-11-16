@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Cat.Object.Extensions;
+using Cat.Extensions.Objects;
 using Cat.Responses.Abstractions;
 
 namespace Cat.Responses;

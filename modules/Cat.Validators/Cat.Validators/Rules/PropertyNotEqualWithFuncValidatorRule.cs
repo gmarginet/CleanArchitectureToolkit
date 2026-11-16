@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Cat.Object.Extensions;
-using Cat.Objects.Extensions;
+using Cat.Extensions.Objects;
 using Cat.Validators.Abstractions;
 
 namespace Cat.Validators.Rules;

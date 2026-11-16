@@ -13,8 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Cat.Extensions\Cat.Expression.Extensions\Cat.Expression.Extensions.csproj" />
-      <ProjectReference Include="..\..\Cat.Extensions\Cat.Object.Extensions\Cat.Object.Extensions.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Extensions.Expressions\Cat.Extensions.Expressions.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Extensions.Objects\Cat.Extensions.Objects.csproj" />
       <ProjectReference Include="..\Cat.Expressions.Abstractions\Cat.Expressions.Abstractions.csproj" />
     </ItemGroup>
 

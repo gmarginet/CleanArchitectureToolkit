@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Cat.Expression.Extensions;
+using Cat.Extensions.Expressions;
 using Cat.Expressions.Abstractions;
-using Cat.Expressions.Extensions;
-using Cat.Object.Extensions;
-using Cat.Objects.Extensions;
+using Cat.Extensions.Objects;
 using Cat.Validators.Abstractions;
 
 namespace Cat.Validators;

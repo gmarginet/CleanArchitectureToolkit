@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Cat.Object.Extensions;
-using Cat.Objects.Extensions;
-using Cat.String.Extensions;
-using Cat.Strings.Extensions;
+using Cat.Extensions.Objects;
+using Cat.Extensions.Strings;
 using Cat.Validators.Abstractions;
 
 namespace Cat.Validators.Rules;

@@ -28,9 +28,6 @@
 
 ## Cat\.Expressions\.Extensions Namespace
 
-Provides extension methods for inspecting [System\.Linq\.Expressions\.Expression](https://learn.microsoft.com/en-us/dotnet/api/system.linq.expressions.expression 'System\.Linq\.Expressions\.Expression') trees, such as
-resolving the member a lambda expression points to\.
-
 | Classes | |
 | :--- | :--- |
 | [ServiceCollectionExtensions](ServiceCollectionExtensions.md 'Cat\.Expressions\.Extensions\.ServiceCollectionExtensions') | Registers the Cat Expressions module's compiled member expression cache in the dependency injection container\. |

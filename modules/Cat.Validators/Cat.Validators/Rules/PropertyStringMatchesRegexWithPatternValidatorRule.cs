@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Cat.String.Extensions;
-using Cat.Strings.Extensions;
+using Cat.Extensions.Strings;
 using Cat.Validators.Abstractions;
 
 namespace Cat.Validators.Rules;

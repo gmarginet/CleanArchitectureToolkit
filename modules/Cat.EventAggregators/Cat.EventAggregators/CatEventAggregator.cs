@@ -5,8 +5,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Cat.EventAggregators.Abstractions;
-using Cat.Object.Extensions;
-using Cat.Objects.Extensions;
+using Cat.Extensions.Objects;
 
 namespace Cat.EventAggregators;
 

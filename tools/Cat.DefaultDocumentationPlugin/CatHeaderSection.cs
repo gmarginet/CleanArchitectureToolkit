@@ -1,5 +1,5 @@
 using System.Linq;
-using Cat.Object.Extensions;
+using Cat.Extensions.Objects;
 using DefaultDocumentation.Api;
 using DefaultDocumentation.Models;
 using DefaultDocumentation.Models.Members;

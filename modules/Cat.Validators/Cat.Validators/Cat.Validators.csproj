@@ -19,10 +19,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Cat.Expressions\Cat.Expressions.Abstractions\Cat.Expressions.Abstractions.csproj" />
-      <ProjectReference Include="..\..\Cat.Extensions\Cat.Enumerable.Extensions\Cat.Enumerable.Extensions.csproj" />
-      <ProjectReference Include="..\..\Cat.Extensions\Cat.Expression.Extensions\Cat.Expression.Extensions.csproj" />
-      <ProjectReference Include="..\..\Cat.Extensions\Cat.Object.Extensions\Cat.Object.Extensions.csproj" />
-      <ProjectReference Include="..\..\Cat.Extensions\Cat.String.Extensions\Cat.String.Extensions.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Extensions.Enumerables\Cat.Extensions.Enumerables.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Extensions.Expressions\Cat.Extensions.Expressions.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Extensions.Objects\Cat.Extensions.Objects.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Extensions.Strings\Cat.Extensions.Strings.csproj" />
       <ProjectReference Include="..\..\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
       <ProjectReference Include="..\Cat.Validators.Abstractions\Cat.Validators.Abstractions.csproj" />
     </ItemGroup>

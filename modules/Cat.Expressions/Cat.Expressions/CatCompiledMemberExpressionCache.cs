@@ -2,11 +2,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using System.Reflection;
-using Cat.Expression.Extensions;
+using Cat.Extensions.Expressions;
 using Cat.Expressions.Abstractions;
-using Cat.Expressions.Extensions;
-using Cat.Object.Extensions;
-using Cat.Objects.Extensions;
+using Cat.Extensions.Objects;
 
 namespace Cat.Expressions;
 

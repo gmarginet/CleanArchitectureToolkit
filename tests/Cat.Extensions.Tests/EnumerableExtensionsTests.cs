@@ -1,5 +1,5 @@
 using System.Collections;
-using Cat.Enumerable.Extensions;
+using Cat.Extensions.Enumerables;
 
 namespace Cat.Extensions.Tests;
 

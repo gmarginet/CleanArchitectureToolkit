@@ -122,11 +122,11 @@
   </Folder>
   <Folder Name="/modules/Cat.Extensions/">
     <File Path="modules/Cat.Extensions/README.md" />
-    <Project Path="modules/Cat.Extensions/Cat.Enumerable.Extensions/Cat.Enumerable.Extensions.csproj" />
-    <Project Path="modules/Cat.Extensions/Cat.Expression.Extensions/Cat.Expression.Extensions.csproj" />
-    <Project Path="modules/Cat.Extensions/Cat.Object.Extensions/Cat.Object.Extensions.csproj" />
-    <Project Path="modules/Cat.Extensions/Cat.ServiceCollection.Extensions/Cat.ServiceCollection.Extensions.csproj" />
-    <Project Path="modules/Cat.Extensions/Cat.String.Extensions/Cat.String.Extensions.csproj" />
+    <Project Path="modules/Cat.Extensions/Cat.Extensions.Enumerables/Cat.Extensions.Enumerables.csproj" />
+    <Project Path="modules/Cat.Extensions/Cat.Extensions.Expressions/Cat.Extensions.Expressions.csproj" />
+    <Project Path="modules/Cat.Extensions/Cat.Extensions.Objects/Cat.Extensions.Objects.csproj" />
+    <Project Path="modules/Cat.Extensions/Cat.Extensions.ServiceCollections/Cat.Extensions.ServiceCollections.csproj" />
+    <Project Path="modules/Cat.Extensions/Cat.Extensions.Strings/Cat.Extensions.Strings.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.FluentWorkflows/">
     <File Path="modules/Cat.FluentWorkflows/README.md" />

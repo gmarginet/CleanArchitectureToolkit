@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace Cat.Enumerable.Extensions;
+namespace Cat.Extensions.Enumerables;
 
 /// <summary>
 /// Extension methods for <see cref="IEnumerable"/>.

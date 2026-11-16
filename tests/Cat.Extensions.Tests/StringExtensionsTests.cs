@@ -1,6 +1,6 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
-using Cat.String.Extensions;
+using Cat.Extensions.Strings;
 
 namespace Cat.Extensions.Tests;
 

@@ -2,8 +2,7 @@ using System;
 using System.Linq.Expressions;
 using System.Reflection;
 using Cat.Expressions.Abstractions;
-using Cat.Object.Extensions;
-using Cat.Objects.Extensions;
+using Cat.Extensions.Objects;
 
 namespace Cat.Expressions;
 

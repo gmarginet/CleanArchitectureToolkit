@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Cat.Extensions\Cat.Object.Extensions\Cat.Object.Extensions.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Extensions.Objects\Cat.Extensions.Objects.csproj" />
       <ProjectReference Include="..\Cat.Responses.Abstractions\Cat.Responses.Abstractions.csproj" />
     </ItemGroup>
 

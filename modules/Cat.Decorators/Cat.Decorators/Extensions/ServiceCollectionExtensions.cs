@@ -1,6 +1,6 @@
 using Cat.Decorators.Abstractions;
 using System;
-using Cat.ServiceCollection.Extensions;
+using Cat.Extensions.ServiceCollections;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

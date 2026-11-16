@@ -2,7 +2,7 @@ using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Cat.Expression.Extensions;
+namespace Cat.Extensions.Expressions;
 
 /// <summary>
 /// Extension methods for inspecting <see cref="System.Linq.Expressions.Expression"/> trees.

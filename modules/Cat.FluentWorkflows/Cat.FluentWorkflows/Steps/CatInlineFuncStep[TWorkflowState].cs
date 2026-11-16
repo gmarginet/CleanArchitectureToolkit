@@ -1,7 +1,7 @@
 using System;
 using Cat.FluentWorkflows.Abstractions;
 using Cat.FluentWorkflows.Extensions;
-using Cat.Object.Extensions;
+using Cat.Extensions.Objects;
 using Cat.Responses.Abstractions;
 using Microsoft.Extensions.Logging;
 

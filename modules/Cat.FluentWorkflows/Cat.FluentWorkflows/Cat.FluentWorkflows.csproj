@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Cat.Extensions\Cat.Object.Extensions\Cat.Object.Extensions.csproj" />
+      <ProjectReference Include="..\..\Cat.Extensions\Cat.Extensions.Objects\Cat.Extensions.Objects.csproj" />
       <ProjectReference Include="..\..\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
       <ProjectReference Include="..\Cat.FluentWorkflows.Abstractions\Cat.FluentWorkflows.Abstractions.csproj" />
     </ItemGroup>

@@ -10,7 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\modules\Cat.Extensions\Cat.Object.Extensions\Cat.Object.Extensions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Extensions\Cat.Extensions.Objects\Cat.Extensions.Objects.csproj" />
     </ItemGroup>
 
 </Project>

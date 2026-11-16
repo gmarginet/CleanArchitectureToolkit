@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using Cat.Expression.Extensions;
+using Cat.Extensions.Expressions;
 
 namespace Cat.Extensions.Tests;
 

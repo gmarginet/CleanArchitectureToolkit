@@ -19,7 +19,7 @@ public class ServiceCollectionExtensionsTests
         var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
         services.AddSingleton<IService, Service>();
 
-        Assert.That(Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor<IService>(services), Is.True);
+        Assert.That(Cat.Extensions.ServiceCollections.ServiceCollectionExtensions.HasRegistrationFor<IService>(services), Is.True);
     }
 
     [Test]
@@ -27,7 +27,7 @@ public class ServiceCollectionExtensionsTests
     {
         var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
 
-        Assert.That(Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor<IService>(services), Is.False);
+        Assert.That(Cat.Extensions.ServiceCollections.ServiceCollectionExtensions.HasRegistrationFor<IService>(services), Is.False);
     }
 
     [Test]
@@ -36,8 +36,8 @@ public class ServiceCollectionExtensionsTests
         var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
         services.AddSingleton<Service>();
 
-        Assert.That(Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor<IService>(services), Is.False);
-        Assert.That(Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor<Service>(services), Is.True);
+        Assert.That(Cat.Extensions.ServiceCollections.ServiceCollectionExtensions.HasRegistrationFor<IService>(services), Is.False);
+        Assert.That(Cat.Extensions.ServiceCollections.ServiceCollectionExtensions.HasRegistrationFor<Service>(services), Is.True);
     }
 
     [Test]
@@ -46,8 +46,8 @@ public class ServiceCollectionExtensionsTests
         var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
         services.AddSingleton<IService, Service>();
 
-        Assert.That(Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor(services, typeof(IService)), Is.True);
-        Assert.That(Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor(services, typeof(Service)), Is.False);
+        Assert.That(Cat.Extensions.ServiceCollections.ServiceCollectionExtensions.HasRegistrationFor(services, typeof(IService)), Is.True);
+        Assert.That(Cat.Extensions.ServiceCollections.ServiceCollectionExtensions.HasRegistrationFor(services, typeof(Service)), Is.False);
     }
 
     [Test]
@@ -56,7 +56,7 @@ public class ServiceCollectionExtensionsTests
         var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
         services.AddSingleton<IRepository<int>, Repository<int>>();
 
-        Assert.That(Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor(services, typeof(IRepository<>)), Is.True);
+        Assert.That(Cat.Extensions.ServiceCollections.ServiceCollectionExtensions.HasRegistrationFor(services, typeof(IRepository<>)), Is.True);
     }
 
     [Test]
@@ -65,7 +65,7 @@ public class ServiceCollectionExtensionsTests
         var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
         services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
 
-        Assert.That(Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor(services, typeof(IRepository<>)), Is.True);
+        Assert.That(Cat.Extensions.ServiceCollections.ServiceCollectionExtensions.HasRegistrationFor(services, typeof(IRepository<>)), Is.True);
     }
 
     [Test]
@@ -74,8 +74,8 @@ public class ServiceCollectionExtensionsTests
         var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
         services.AddSingleton<IRepository<int>, Repository<int>>();
 
-        Assert.That(Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor<IRepository<int>>(services), Is.True);
-        Assert.That(Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor<IRepository<string>>(services), Is.False);
+        Assert.That(Cat.Extensions.ServiceCollections.ServiceCollectionExtensions.HasRegistrationFor<IRepository<int>>(services), Is.True);
+        Assert.That(Cat.Extensions.ServiceCollections.ServiceCollectionExtensions.HasRegistrationFor<IRepository<string>>(services), Is.False);
     }
 
     [Test]
@@ -84,6 +84,6 @@ public class ServiceCollectionExtensionsTests
         var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
         services.AddSingleton<IService, Service>();
 
-        Assert.That(Cat.ServiceCollection.Extensions.ServiceCollectionExtensions.HasRegistrationFor(services, typeof(IRepository<>)), Is.False);
+        Assert.That(Cat.Extensions.ServiceCollections.ServiceCollectionExtensions.HasRegistrationFor(services, typeof(IRepository<>)), Is.False);
     }
 }

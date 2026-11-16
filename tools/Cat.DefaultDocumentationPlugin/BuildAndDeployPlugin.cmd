@@ -12,5 +12,5 @@ dotnet build-server shutdown
 
 copy .\bin\Release\netstandard2.0\Cat.DefaultDocumentationPlugin.dll ..\..\resources\defaultDocumentationPlugins\ /y
 if errorlevel 1 exit /b %errorlevel%
-copy .\bin\Release\netstandard2.0\Cat.Object.Extensions.dll ..\..\resources\defaultDocumentationPlugins\ /y
+copy .\bin\Release\netstandard2.0\Cat.Extensions.Objects.dll ..\..\resources\defaultDocumentationPlugins\ /y
 if errorlevel 1 exit /b %errorlevel%

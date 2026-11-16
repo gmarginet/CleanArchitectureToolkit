@@ -4,8 +4,7 @@ using Cat.EventAggregators.Abstractions;
 using Cat.EventAggregators.Extensions;
 using Cat.EventAggregators.Tests.Helpers;
 using Cat.UnitTesting.NUnit;
-using Cat.Object.Extensions;
-using Cat.Objects.Extensions;
+using Cat.Extensions.Objects;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 

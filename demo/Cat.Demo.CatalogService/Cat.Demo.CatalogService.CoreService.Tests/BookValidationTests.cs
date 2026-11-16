@@ -26,7 +26,7 @@ public class BookValidationTests : UnitTestBase
 
     private List<CheckIsbnExistsQuery> IsbnQueries => _queryProcessor.Of<CheckIsbnExistsQuery>().ToList();
 
-    // Fully qualified, because the namespace Cat.ServiceCollection.Extensions is in scope through the Api project.
+    // Fully qualified, because the namespace Cat.Extensions.ServiceCollections is in scope through the Api project.
     protected override void ConfigureServices(Microsoft.Extensions.DependencyInjection.ServiceCollection services)
     {
         services.AddCatCompiledMemberExpressionCache();

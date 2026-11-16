@@ -1,4 +1,4 @@
-using Cat.Object.Extensions;
+using Cat.Extensions.Objects;
 using DefaultDocumentation;
 using DefaultDocumentation.Api;
 using DefaultDocumentation.Markdown.UrlFactories;

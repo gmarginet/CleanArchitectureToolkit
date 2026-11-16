@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Cat.Enumerable.Extensions;
+using Cat.Extensions.Enumerables;
 using Cat.Validators.Abstractions;
 
 // ReSharper disable RedundantBoolCompare

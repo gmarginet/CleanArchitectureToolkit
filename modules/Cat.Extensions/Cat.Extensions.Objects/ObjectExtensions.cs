@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Cat.Object.Extensions;
+namespace Cat.Extensions.Objects;
 
 /// <summary>
 /// Extension methods for argument validation.

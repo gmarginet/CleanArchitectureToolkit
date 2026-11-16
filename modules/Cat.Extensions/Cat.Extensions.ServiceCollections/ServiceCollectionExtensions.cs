@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable RedundantBoolCompare
 
-namespace Cat.ServiceCollection.Extensions;
+namespace Cat.Extensions.ServiceCollections;
 
 /// <summary>
 /// Extension methods for inspecting an <see cref="IServiceCollection"/>'s existing registrations.

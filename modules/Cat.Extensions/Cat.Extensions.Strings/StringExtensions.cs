@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
-namespace Cat.String.Extensions;
+namespace Cat.Extensions.Strings;
 
 /// <summary>
 /// Extension methods for <see cref="string"/>.

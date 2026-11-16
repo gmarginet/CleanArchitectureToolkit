@@ -1,4 +1,4 @@
-using Cat.Object.Extensions;
+using Cat.Extensions.Objects;
 
 namespace Cat.Extensions.Tests;
 
