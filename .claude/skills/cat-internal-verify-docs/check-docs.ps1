@@ -13,7 +13,7 @@ Scope
 Errors
 - A relative link or image points to a file or folder that does not exist, or the case of the path is wrong.
   The published site runs on Linux, where case matters.
-- The repo overview table of the readme does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the Building badge, or the Growing badge when the plan says `**First stable version:** reached`. A built row without a plan has the Stable badge. Every plan has that line, and a plan that is not built says `not reached`. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has no priority, and every other row has a unique whole number as priority.
+- The repo overview table of the readme does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the Building badge, or the Growing badge when the plan says `**First stable version:** reached`. A built row without a plan has the Stable badge. Every plan has that line, and a plan that is not built says `not reached`. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has an empty Phases cell. Every other row has one line `[A (B): C](./plans/File.md#phase-A)` for each phase of its plan, ordered by C. A is the phase number, B is the number of open questions of the phase, and C is its priority, a whole number that is unique in the table.
 - A link points to an anchor that no heading of the target markdown file has.
 - A code fence is not closed.
 - A Markdown table starts on the line right below a heading or a line of text, with no empty line between them. The published site shows it as plain text.
@@ -220,7 +220,45 @@ if (-not $Path -or $Path -like '*plans*') {
         if (-not (Select-String -LiteralPath $planFile.FullName -Pattern '^<!-- no toc -->' -Quiet)) {
             $errors.Add("plans\$($planFile.Name): the Phases region has lost the line <!-- no toc -->. Copy it back from plan.template.md.")
         }
+        if (Select-String -LiteralPath $planFile.FullName -Pattern '^<!-- region (start|end): StatusBadge-->' -Quiet) {
+            $errors.Add("plans\$($planFile.Name): the StatusBadge region is gone from the plan template. Remove the region and the badge.")
+        }
     }
+}
+
+# Returns the phases of a plan with their number of open questions.
+# A question or a sub question is open when it has no answer and no sub question below it.
+function Get-PlanPhases([string]$file) {
+    $questions = @{}
+    $answers = @{}
+    $order = [System.Collections.Generic.List[string]]::new()
+    $current = $null
+    foreach ($line in [System.IO.File]::ReadAllLines($file)) {
+        if ($line -match '^<!-- region start: Phase (\d+)-->$') {
+            $current = $Matches[1]
+            $order.Add($current)
+            $questions[$current] = [System.Collections.Generic.List[string]]::new()
+            $answers[$current] = [System.Collections.Generic.List[string]]::new()
+            continue
+        }
+        if ($line -match '^<!-- region end: Phase (\d+)-->$') { $current = $null; continue }
+        if ($null -eq $current) { continue }
+        if ($line -match '^#{4,5} Question (\d+(?:\.\d+)*)\s*$') { $questions[$current].Add($Matches[1]) }
+        elseif ($line -match '^##### Answer (\d+(?:\.\d+)*)\s*$') { $answers[$current].Add($Matches[1]) }
+    }
+    $result = [ordered]@{}
+    foreach ($phase in $order) {
+        $open = 0
+        foreach ($question in $questions[$phase]) {
+            $hasSub = $false
+            foreach ($other in $questions[$phase]) {
+                if ($other.StartsWith("$question.")) { $hasSub = $true; break }
+            }
+            if (-not $hasSub -and -not $answers[$phase].Contains($question)) { $open++ }
+        }
+        $result[$phase] = $open
+    }
+    return $result
 }
 
 # The repo overview table: one row per module folder and per plan, with the right badge, link and order
@@ -235,11 +273,11 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
     $rows = [System.Collections.Generic.List[object]]::new()
     if ($start -ge 0 -and $end -gt $start) {
         for ($i = $start + 1; $i -lt $end; $i++) {
-            # A row is: name | type badge, status badge, line break, description | priority
-            if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(([^)]+)\) \| \[!\[(\w+)\]\([^)]*\)\]\(([^)]*)\) (\[!\[[^\]]*\]\([^)]*\)\]\(([^)]*)\))<br>.+ \| (\d*) \|$') {
-                $rows.Add([pscustomobject]@{ Name = $Matches[1]; Link = $Matches[2]; Type = $Matches[3]; TypeLink = $Matches[4]; Badge = $Matches[5]; BadgeLink = $Matches[6]; Priority = $Matches[7] })
+            # A row is: name | type badge, status badge, line break, description | phases
+            if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(([^)]+)\) \| \[!\[(\w+)\]\([^)]*\)\]\(([^)]*)\) (\[!\[[^\]]*\]\([^)]*\)\]\(([^)]*)\))<br>.+ \| (.*) \|$') {
+                $rows.Add([pscustomobject]@{ Name = $Matches[1]; Link = $Matches[2]; Type = $Matches[3]; TypeLink = $Matches[4]; Badge = $Matches[5]; BadgeLink = $Matches[6]; Phases = $Matches[7] })
             } elseif ($readme[$i] -match '^\| \[Cat\.') {
-                $errors.Add("README.md repo overview line $($i + 1): the row does not match name | type badge, status badge, <br>, description | priority.")
+                $errors.Add("README.md repo overview line $($i + 1): the row does not match name | type badge, status badge, <br>, description | phases.")
             }
         }
     }
@@ -261,7 +299,7 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
             if ($planText -match '(?m)^\*\*First stable version:\*\* (reached|not reached)\s*$') {
                 $firstStable = $Matches[1]
             } else {
-                $errors.Add("plans\${plan}: the line '**First stable version:** reached' or '**First stable version:** not reached' is missing. It belongs in the FirstStableVersion region, below the status badge.")
+                $errors.Add("plans\${plan}: the line '**First stable version:** reached' or '**First stable version:** not reached' is missing. It belongs in the FirstStableVersion region.")
             }
             if ($firstStable -eq 'reached' -and -not $built) { $errors.Add("plans\${plan}: $name is not built, so the first stable version cannot be reached.") }
         }
@@ -277,16 +315,42 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
         }
         if ($row.Type -eq 'Module' -and $built -and $row.Link -ne "./modules/$name/README.md") { $errors.Add("README.md repo overview: $name is built. Its name must link to ./modules/$name/README.md.") }
     }
+    # The Phases column: one line for each phase of the plan, ordered by priority
     $priorities = @{}
     foreach ($row in $rows) {
+        $name = $row.Name
+        $cell = $row.Phases.Trim()
         if ($row.Badge -like '*badge/status-Stable-*') {
-            if ($row.Priority -ne '') { $errors.Add("README.md repo overview: $($row.Name) is Stable. Its priority must be empty.") }
-        } elseif ($row.Priority -eq '' -or [int]$row.Priority -lt 1) {
-            $errors.Add("README.md repo overview: $($row.Name) is not Stable. It needs a priority, a whole number from 1.")
-        } elseif ($priorities.ContainsKey($row.Priority)) {
-            $errors.Add("README.md repo overview: the priority $($row.Priority) is used by $($priorities[$row.Priority]) and $($row.Name). Priorities are unique.")
-        } else {
-            $priorities[$row.Priority] = $row.Name
+            if ($cell -ne '') { $errors.Add("README.md repo overview: $name is Stable. Its Phases cell must be empty.") }
+            continue
+        }
+        $plan = if ($planOf.ContainsKey($name)) { $planOf[$name] } else { "$name.md" }
+        $planPath = Join-Path $plansRoot $plan
+        if (-not (Test-Path $planPath)) { continue }
+        $phases = Get-PlanPhases $planPath
+        $lines = if ($cell -eq '') { @() } else { @($cell -split '<br>') }
+        $linePhases = @{}
+        $last = 0
+        foreach ($line in $lines) {
+            if ($line -notmatch '^\[(\d+) \((\d+)\): (\d+)\]\(\./plans/([^)#]+)#phase-(\d+)\)$') {
+                $errors.Add("README.md repo overview: $name has the Phases line '$line'. A line is [A (B): C](./plans/File.md#phase-A).")
+                continue
+            }
+            $phase = $Matches[1]; $open = [int]$Matches[2]; $priority = [int]$Matches[3]; $file = $Matches[4]; $anchor = $Matches[5]
+            if ($file -ne $plan) { $errors.Add("README.md repo overview: $name has a Phases line that links to $file. It must link to $plan.") }
+            if ($anchor -ne $phase) { $errors.Add("README.md repo overview: $name has the Phases line for phase $phase that links to #phase-$anchor.") }
+            if (-not $phases.Contains($phase)) { $errors.Add("README.md repo overview: $name has a Phases line for phase $phase, and plans\$plan has no such phase."); continue }
+            if ($linePhases.ContainsKey($phase)) { $errors.Add("README.md repo overview: $name has more than one Phases line for phase $phase."); continue }
+            $linePhases[$phase] = $true
+            if ($open -ne $phases[$phase]) { $errors.Add("README.md repo overview: $name phase $phase says $open open questions, and plans\$plan has $($phases[$phase]).") }
+            if ($priority -lt 1) { $errors.Add("README.md repo overview: $name phase $phase needs a priority, a whole number from 1.") }
+            elseif ($priorities.ContainsKey($priority)) { $errors.Add("README.md repo overview: the priority $priority is used by $($priorities[$priority]) and by $name phase $phase. Priorities are unique.") }
+            else { $priorities[$priority] = "$name phase $phase" }
+            if ($priority -le $last) { $errors.Add("README.md repo overview: the Phases lines of $name are not ordered by priority. Phase $phase with priority $priority comes after priority $last.") }
+            $last = $priority
+        }
+        foreach ($phase in $phases.Keys) {
+            if (-not $linePhases.ContainsKey($phase)) { $errors.Add("README.md repo overview: $name has no Phases line for phase $phase of plans\$plan.") }
         }
     }
     foreach ($name in $moduleFolders) {
