@@ -169,8 +169,8 @@ A message carries a token too, because a message arrives without a request. The 
 - A message that Orders sends while a user places an order carries the token of that user. Without a user request, such as the timeout of a saga, Orders asks Keycloak for a client credentials token of the client `cat-demo-orders`.
 - Payment answers with a token of its own, from the client `cat-demo-payment`.
 - Inventory sends its messages, such as the nightly low stock report, with a token of its own, from the client `cat-demo-inventory`.
-- Orders, Payment and Inventory accept a message only from a logged in caller, with `Cat.EventProcessor.Authorization`. The receiver skips the lifetime check for a scheduled message, because the token of a scheduled message is made when it is sent and is expired when the bus delivers it.
-- The token sits in the queue and in the outbox table for as long as the message does. The demo uses short lived tokens, and Notifications does not check a token on its messages yet.
+- Orders, Payment, Inventory and Notifications accept a message only from a logged in caller, with `Cat.EventProcessor.Authorization`. The receiver skips the lifetime check for a scheduled message, because the token of a scheduled message is made when it is sent and is expired when the bus delivers it.
+- The token sits in the queue and in the outbox table for as long as the message does. The demo uses short lived tokens.
 
 In the code:
 
@@ -217,7 +217,7 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 | Infrastructure | `Cat.EFCore`, and in Orders `Cat.Messaging` with the outbox |
 | Saga | `Cat.Sagas` and `Cat.Sagas.EFCore` (Orders) |
 | Scheduler | `Cat.Scheduling` and `Cat.Scheduling.EFCore` (Orders and Inventory) |
-| EventProcessor | `Cat.EventProcessor` (Orders, Payment, Inventory and Notifications), with its inbox in Orders and `Cat.EventProcessor.Authorization` in Orders, Payment and Inventory |
+| EventProcessor | `Cat.EventProcessor` (Orders, Payment, Inventory and Notifications), with its inbox in Orders and `Cat.EventProcessor.Authorization` in Orders, Payment, Inventory and Notifications |
 | Messaging | `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` (Orders, Payment, Inventory and Notifications) |
 | Users | `Cat.Users.Abstractions` in the core service and the infrastructure, `Cat.Users` and `Cat.Users.JwtBearer` in the host |
 | Core service tests | `Cat.UnitTesting.Commands`, `Cat.UnitTesting.Queries` and `Cat.UnitTesting.NUnit` |
@@ -964,6 +964,7 @@ erDiagram
 | `Cat.EFCore.Commands`, `Cat.EFCore.Entities` and `Cat.EFCore.Extensions` | Infrastructure and DataModels | The command handler inherits the base handler. `SentMail` inherits the base entity. |
 | `Cat.Responses` | Core service | The handlers answer with a response, and the event processor settles the message from it. |
 | `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` and `Cat.EventProcessor.Minimal.Api` | Api | Receives `OrderConfirmed`, `LowStockReport` and `StockChanged` from the bus as service requests, and adds the development endpoints and the health check. |
+| `Cat.EventProcessor.Authorization` | Api | Checks the token of all three messages when there is a login. Notifications sends no messages, so it has no client of its own. |
 | `Cat.Validators` and `Cat.ServiceRequests.Decorators.Validation` | Core service and Api | Reject a malformed `StockChanged` message before the handler runs. |
 | `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` | Api | The connection to the bus and the name of the topic. |
 | `Cat.UnitTesting.Commands` and `Cat.UnitTesting.NUnit` | Core service tests | `FakeCommandProcessor` stands in for the command processor, and `UnitTestBase` builds the service provider of the validator tests. |

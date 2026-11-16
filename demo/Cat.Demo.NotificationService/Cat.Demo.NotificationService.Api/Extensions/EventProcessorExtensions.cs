@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cat.Demo.InventoryService.Contracts.Messages;
 using Cat.Demo.OrderService.Contracts.Messages;
+using Cat.EventProcessor.Abstractions;
+using Cat.EventProcessor.Authorization.Extensions;
 using Cat.EventProcessor.AzureServiceBus;
 using Cat.EventProcessor.AzureServiceBus.Extensions;
 using Cat.EventProcessor.Extensions;
@@ -39,12 +41,33 @@ public static class EventProcessorExtensions
             options.AdministrationConnectionString = configuration["Messaging:AdministrationConnectionString"] ?? string.Empty;
         });
 
-        services.AddCatEventProcessor(configuration, processor => processor.Receive<OrderConfirmed>().Receive<LowStockReport>().Receive<StockChanged>());
+        // With an authority in the configuration (the AppHost sets it) a message needs a valid token of a logged in caller.
+        // Notifications sends no messages, so it needs no token of its own. Without an authority the messages run with no token.
+        var authenticationOn = !string.IsNullOrWhiteSpace(configuration["Authentication:Authority"]);
+
+        services.AddCatEventProcessor(configuration, processor => processor
+            .Receive<OrderConfirmed>(RequireLogin(authenticationOn))
+            .Receive<LowStockReport>(RequireLogin(authenticationOn))
+            .Receive<StockChanged>(RequireLogin(authenticationOn)));
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
+
+        if (authenticationOn)
+        {
+            services.AddCatEventProcessorAuthorization();
+        }
+
         services.AddHealthChecks().AddCatEventProcessorHealthCheck();
 
         return true;
     }
+
+    private static Action<CatReceiveOptions> RequireLogin(bool authenticationOn) => options =>
+    {
+        if (authenticationOn)
+        {
+            options.Require(policy => policy.RequireAuthenticatedUser());
+        }
+    };
 
     /// <summary>
     /// Creates the subscription of Notifications on the topic of every message it receives. It skips what exists.

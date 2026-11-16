@@ -49,8 +49,17 @@ if (eventProcessorOn)
     builder.Services.AddOpenApi(devDocument);
 }
 
+// With an authority in the configuration (the AppHost sets it) the listener accepts a message only with a valid token.
+var authenticationOn = builder.AddDemoJwtAuthentication();
+
 var app = builder.Build();
 app.UseCatMinimalApiModule();
+
+if (authenticationOn)
+{
+    app.UseAuthentication();
+    app.UseAuthorization();
+}
 
 if (app.Environment.IsDevelopment())
 {
