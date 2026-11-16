@@ -7,9 +7,6 @@
 
 # Plans for `[[PlanName]]` <!-- omit in toc -->  
 
-<!-- region start: StatusBadge-->
-<!-- region end: StatusBadge-->
-
 <!-- region start: FirstStableVersion-->
 **First stable version:** not reached
 <!-- region end: FirstStableVersion-->

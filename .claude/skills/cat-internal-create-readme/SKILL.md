@@ -42,7 +42,7 @@ Regions that every template has.
 Edit only inside a region. Never remove a region marker. A change to a heading changes the anchor, so search the old anchor with `git grep` and fix every link.
 
 ## Repo overview
-The `RepoOverview` region holds one table with a row for everything in the repository. The columns are `Name`, `Description` and `#`. The `#` column holds the priority. The `Description` cell starts with the type badge and the status badge, then a `<br>`, then the description. The badges sit in the wide column, because a badge in a narrow column is scaled down until it is unreadable.
+The `RepoOverview` region holds one table with a row for everything in the repository. The columns are `Name`, `Description` and `Phases`. The `Phases` column holds one line for each phase of the plan, with the priority of the phase. The `Description` cell starts with the type badge and the status badge, then a `<br>`, then the description. The badges sit in the wide column, because a badge in a narrow column is scaled down until it is unreadable.
 
 Rows, in this order. Inside a group, sort by name.
 1. **Modules.** One row per module. Type `Module`.
@@ -65,15 +65,17 @@ Status badge, from three facts: is the item built, does it still have a plan in 
 
 A module is built when its folder exists in `modules/`. The demo is built from the first stage on. A tooling item is built when its files exist.
 
-Priority column, with the header `#`: a whole number for every item that is not stable, and empty for a stable item. 1 is the highest priority. The numbers are unique, so there is one order of work.
-- Rank first the plans where the first phase can be built, which means the first phase has no open questions. They rank above the demo, unless the next rule applies.
-- A plan that only the other phases of the demo need ranks below the demo, also when its first phase can be built.
-- Rank the plans that the first phase of the demo needs, even when their first phase cannot be built yet, above the demo and above the other plans.
-- Then rank the demo, followed by the other plans.
-- A plan that the first phase of another plan needs ranks above that other plan. Only the first phase counts. A need of a later phase does not change the order.
-- Rank the plans further by the number of open questions in their first phase. The plan with fewer open questions comes first. On a tie, the plan that the earlier phase of the demo needs comes first.
-- The first phase of a plan is the first phase in its file.
-- Recalculate the priorities every time a plan changes, an open question is answered, a plan is created or removed, or a build is finished. A stable item leaves the order, and the numbers after it move up.
+Phases column, with the header `Phases`: one line for each phase in the plan of the item. A stable item has no plan, and its cell is empty. The lines of a cell are separated by `<br>`, and they are in the order of the priority number, the lowest first. So the first line is the next phase of the item to build, and the phase numbers of the lines can be out of sequence.
+- A line looks like `[A (B): C](./plans/[[PlanFile]]#phase-A)`. A is the phase number, B is the number of open questions of the phase and C is the priority number of the phase. The link goes to the phase in the plan.
+- The priority numbers are whole numbers from 1 and unique over the whole table, so there is one order of work. 1 is the highest priority.
+- B counts the open questions of the phase. A question or a sub question counts when it has no answer and no sub question below it. A question that has a sub question does not count, because it is answered. The headings in a question region are `#### Question N`, `##### Question N.x` and `##### Answer N.x`.
+- A phase that another phase needs ranks above it. Only the needs written in the `Needs` chapter of a phase count.
+- Then the phase with fewer open questions comes first.
+- On a tie, the phase that an earlier phase of the demo needs comes first.
+- On a tie that is still open, the phase of the item that ranks higher in the table today keeps its place. For a new phase, use the alphabetical order of the name of the item.
+- A phase that waits for something outside the repository, such as a stable release of another package, ranks after all other phases. These phases keep the same rules among themselves.
+- A later phase of a plan can rank above an earlier phase of the same plan, when it has no written need on that phase.
+- Recalculate the numbers every time a plan changes, an open question is answered, a plan is created or removed, or a build is finished. When a phase is removed, the numbers after it move up.
 - The owner decides the order. Propose the new numbers with the reason when the order changes, and wait for the owner before you write them.
 
 Description: one short sentence about what the item is used for. For a module, base it on the intro of the module readme.
@@ -89,7 +91,7 @@ Steps:
 1. List the folders in `modules/` and the files in `plans/`.
 2. Read the intro of each module readme that needs a new or changed row.
 3. Edit the rows. Keep the existing rows untouched when nothing changed.
-4. Check that every module folder and every plan has exactly one row, that the order is right, that every status badge matches the two facts, and that the priorities are up to date.
+4. Check that every module folder and every plan has exactly one row, that the order is right, that every status badge matches the three facts, and that the lines of the `Phases` column are up to date.
 5. Run the `cat-internal-verify-docs` skill.
 
 When a future module is started with the `cat-internal-create-module` skill, the row stays and its status and name link change. When a plan is removed, the status becomes stable. The `cat-internal-create-plan` skill describes where a plan is linked.
@@ -109,7 +111,7 @@ Use this when the owner changes the template and asks to update the readme.
 - [[TypeBadge]]: The TypeBadge template.
 - [[BadgeLink]]: Where the type badge links to. It is the same target as the status badge: the plan for a New, Building or Growing item, and the readme of the item for a Stable item.
 - [[StatusBadge]]: The `NewBadge`, `BuildingBadge`, `GrowingBadge` or `StableBadge` template.
-- [[Priority]]: The priority of the item, see the priority rules above. Empty for a stable item.
+- [[PhaseLines]]: The lines of the `Phases` column, one for each phase, see the rules above. Empty for a stable item.
 - [[Description]]: One short sentence about what the item is used for.
 - [[PlanFile]]: The file name of the plan in `plans/`, such as `Cat.Messaging.md` or `Demo.md`.
 - [[RootPath]]: The relative path to the root of the repository, used by the header. It is `.` for the readme.

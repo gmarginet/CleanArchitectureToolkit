@@ -1,6 +1,6 @@
 ---
 name: cat-internal-create-plan
-description: Create, build and update a plan in the plans folder from plan.template.md. Handles the phases, the open questions and their answers, the status badge, and updating plans after the template changed. Use when a plan is created, when the owner asks to build a phase, answers an open question, or changes the plan template.
+description: Create, build and update a plan in the plans folder from plan.template.md. Handles the phases, the open questions and their answers, and updating plans after the template changed. Use when a plan is created, when the owner asks to build a phase, answers an open question, or changes the plan template.
 argument-hint: "[create|build|answer|update] [plan name]"
 ---
 
@@ -12,7 +12,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 
 ## Files
 - [plan.template.md](plan.template.md): the start of every new plan. Copy it as it is and replace the placeholders.
-- [plan.parts.template.md](plan.parts.template.md): the small templates, such as the badges, a phase and a question. Read it when you add one of them.
+- [plan.parts.template.md](plan.parts.template.md): the small templates, such as a phase and a question. Read it when you add one of them.
 - The header comes from the `cat-internal-create-header` skill.
 
 ## Creating a plan
@@ -21,10 +21,9 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 3. Copy `plan.template.md` to `plans/<PlanName>.md`. The plan file is named after the plan, such as `Cat.Messaging.md` or `Demo.md`.
 4. Replace `[[PlanName]]`.
 5. Fill the `Header` region by following the `cat-internal-create-header` skill.
-6. Fill the `StatusBadge` region with the `NotStartedBadge` template.
-7. Add phase 1 with the `Phase` template, at the end of the file, and its `PhaseListLine` in the `Phases` region. Put what you found in the `PhaseDescription` region and the unknowns in numbered open questions.
-8. Link the plan from the readme, see [Where a module plan is linked](#where-a-module-plan-is-linked).
-9. Run the `cat-internal-verify-docs` skill.
+6. Add phase 1 with the `Phase` template, at the end of the file, and its `PhaseListLine` in the `Phases` region. Put what you found in the `PhaseDescription` region and the unknowns in numbered open questions.
+7. Link the plan from the readme, see [Where a module plan is linked](#where-a-module-plan-is-linked).
+8. Run the `cat-internal-verify-docs` skill.
 
 ## Which plans exist
 - `Demo.md` is the plan of the demo, and `Skills.md` and `Cat.Templates.md` are plans of the tooling.
@@ -35,6 +34,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 - Facts in the description come from documents and code that you read. Do not add facts you did not check. Mark a guess as something to check.
 - One decision per open question, answerable in a sentence. Put the blocking questions first.
 - When a question or a sub question offers options, write the options as a list. Ask the question first, then give one bullet per option, each with a short label and what it costs. Never run the options together in a sentence. Always end with a line that starts with "Recommendation:", which names the option Claude recommends and says why. Claude always has one when it offers options. The owner still decides.
+- A phase that depends on another phase or plan names it in a `#### Needs` chapter of its description, with a link to the plan and the phase. Write only the needs that exist. The `Phases` column of the readme ranks the phases by these needs, see the `cat-internal-create-readme` skill.
 - A plan never says a module "will" exist in a certain version or on a date. It only says what is decided.
 - Follow the style rules in CLAUDE.md.
 
@@ -49,7 +49,7 @@ Read these before you write, and search them for the module name:
 Only plans of modules (`plans/Cat.*.md`) are linked from the readme. `Demo.md` and `Skills.md` are not.
 - Every plan has a row in the repo overview table of the readme. `Demo.md` belongs to the row `Cat.Demo` and `Skills.md` to the row `Cat.Skills`.
 - An item that is not built yet has the New badge and its name links to the plan. A built item with a plan has the Building badge, or the Growing badge when its first stable version is reached (see the `FirstStableVersion` region). The badge links to the plan in all three cases. The `cat-internal-create-readme` skill covers the table.
-- A change to a plan, an answered open question and a finished build can change the priorities in the repo overview. Recalculate them with the `cat-internal-create-readme` skill.
+- A change to a plan, an answered open question and a finished build can change the lines of the `Phases` column in the repo overview. Recalculate them with the `cat-internal-create-readme` skill.
 - When a future module is started with the `cat-internal-create-module` skill, its row changes from New to Building and its name links to the module readme.
 - Keep the plan until the module has done everything in it and the owner agrees that it can go. When the plan goes, remove its link from the readme too.
 - A module readme never links to the plan. Only the readme does. A module readme grows until it holds everything about how the module works and how to use it, so the plan can be removed.
@@ -66,13 +66,12 @@ Use this when an answer or a decision changes more than one plan, and when a mod
 - Every plan has at least one phase. Every phase gets its own chapter and number.
 - A new phase is always added at the end of the file.
 - When Claude adds a phase, it also adds its `PhaseListLine` to the `Phases` region.
-- Removing a phase removes the line and updates the status badge.
+- Removing a phase removes its line in the `Phases` region.
 
 ## Building a phase
 - When the owner asks Claude to build the next phase of a plan, Claude first double-checks that everything is clear and answered in that phase.
-- If not, Claude creates one or more open questions for the phase and puts the plan in the `PlanningBadge` status.
-- If the check finds nothing open, Claude puts the plan in the `ReadyToStartBuildingBadge` status before the build starts.
-- When new questions come in view during the build, Claude adds them to the phase it is building and puts the plan back in the `PlanningBadge` status.
+- If not, Claude creates one or more open questions for the phase and does not start the build.
+- When new questions come in view during the build, Claude adds them to the phase it is building.
 - When the phase is fully built, Claude does the following in this order:
   1. Update the README of the module or demo the plan belongs to, using the `cat-internal-create-module-readme` or `cat-internal-create-demo-readme` skill, so it incorporates all the info from the phase description.
   2. Search the other markdown files for mentions of what the phase changed (`git grep --untracked -l`, without the generated `namespaces` pages) and update the READMEs and plans that are now out of date.
@@ -82,13 +81,6 @@ Use this when an answer or a decision changes more than one plan, and when a mod
 ## Regions
 - `Header`: The header of the plan, filled by the `cat-internal-create-header` skill.
 - `TemplateSkill`: Points to this skill. The text in it is how Claude finds every plan that was made with this template.
-- `StatusBadge`: Always contains one of the badges from the badge templates.
-  - A plan that is just created gets the badge from the `NotStartedBadge` template.
-  - A plan without open questions stays on `NotStartedBadge` until the owner asks Claude to build a phase.
-  - Once the first phase in the plan has open questions, use the badge from the `PlanningBadge` template.
-  - Once the last open question of the first phase is closed, use the badge from the `ReadyToStartBuildingBadge` template.
-  - We always use the first phase to determine the status. When a phase gets deleted, the next phase becomes the first one and the badge is set again from that phase, following these rules.
-  - If no phases are left, Claude can ask if it can remove the plan file.
 - `FirstStableVersion`: One line that says whether the item has reached its first stable version. It is `**First stable version:** not reached` or `**First stable version:** reached`.
   - A new plan says `not reached`.
   - Only the owner decides that the first stable version is reached. Claude never changes the line on its own.
@@ -147,7 +139,6 @@ Use this when the owner changes `plan.template.md` or `plan.parts.template.md` a
 - [[PlanName]]: The name of the plan.
   - For a module plan that is the module name, for the demo plan that is Demo, and so on.
   - The plan file is named after the plan, such as `Cat.Messaging.md` or `Demo.md`.
-- [[PlanAnchorName]]: The name of the plan, transformed to lowercase with all punctuation marks and spaces removed.
 - [[PhaseNumber]]: The number of a phase.
   - It is a unique number within the plan file.
   - This number never changes, so even if a phase gets deleted after it gets built, all following phases keep their number.

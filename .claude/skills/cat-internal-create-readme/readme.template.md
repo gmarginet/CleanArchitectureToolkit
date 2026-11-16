@@ -25,10 +25,10 @@
 > **New** means not built yet. The badge links to the plan.  
 > **Building** means built, with a plan for the work that is left. The badge links to the plan. Breaking changes are possible.  
 > **Stable** means built, with no plan left.  
-> **#** is the priority. 1 is the next item to work on. A stable item has none.  
+> **Phases** lists the phases of the plan of an item, one line each, as `phase (open questions): priority`. 1 is the next phase to work on, and the first line of a cell is the next phase of that item. A stable item has none.  
 
-| Name | Description | # |
-|------|-------------|---|
+| Name | Description | Phases |
+|------|-------------|--------|
 
 <!-- region end: RepoOverview-->
 

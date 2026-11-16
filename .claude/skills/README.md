@@ -37,7 +37,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **Note:** The header comes from `cat-internal-create-header`, with `RootPath` `../..`.
 
 ### cat-internal-create-readme
-- **What it does:** Keeps the readme in sync with `readme.template.md`. The repo overview table has one row per module, the demo and the tooling, with a New, Building, Growing or Stable badge that follows from the plans. Every item that is not stable also has a priority, which Claude recalculates when plans or builds change. The chapters with static text have their own region, so you can ask Claude to look at or change one chapter.
+- **What it does:** Keeps the readme in sync with `readme.template.md`. The repo overview table has one row per module, the demo and the tooling, with a New, Building, Growing or Stable badge that follows from the plans. Every item that is not stable also has a `Phases` cell with one line for each phase of its plan, showing the open questions and the priority of the phase. Claude recalculates the lines when plans or builds change. The chapters with static text have their own region, so you can ask Claude to look at or change one chapter.
 - **How to use it:** Give it an item such as a module, or run it without arguments to resync the table. Name a chapter to look at or change it.
 - **When:** After adding or removing a module, a plan or a tooling item, changing a module intro, or changing the readme template.
 
@@ -101,7 +101,7 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - **When:** When a template-based file is created, and after a change to the header template.
 - **Note:** `cat-internal-verify-docs` reports every `Header` region that differs from the template.
 ### cat-internal-create-plan
-- **What it does:** Creates a plan from `cat-internal-create-plan/plan.template.md`, adds phases and open questions from `plan.parts.template.md`, keeps the status badge right and processes the answers to open questions. It also builds a phase, links a module plan from the readme, keeps the other plans and readmes in step and updates plans after the template changed.
+- **What it does:** Creates a plan from `cat-internal-create-plan/plan.template.md`, adds phases and open questions from `plan.parts.template.md`, processes the answers to open questions and asks for the needs of a phase. It also builds a phase, links a module plan from the readme, keeps the other plans and readmes in step and updates plans after the template changed.
 - **How to use it:** Ask for a new plan, to build the next phase of a plan, or to update the plans after you changed the template.
 - **When:** When a plan is created, built or answered, and after a change to the plan template.
 - **Note:** The header comes from `cat-internal-create-header`. The instructions live in the `SKILL.md`, so the template files hold only what ends up in a plan.
