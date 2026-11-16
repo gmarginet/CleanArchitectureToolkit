@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Cat.Dapper.Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Dapper" />
+        <PackageReference Include="DefaultDocumentation">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Cat.Commands\Cat.Commands.Abstractions\Cat.Commands.Abstractions.csproj" />
+        <ProjectReference Include="..\..\Cat.Queries\Cat.Queries.Abstractions\Cat.Queries.Abstractions.csproj" />
+        <ProjectReference Include="..\..\Cat.Responses\Cat.Responses.Abstractions\Cat.Responses.Abstractions.csproj" />
+        <ProjectReference Include="..\Cat.Dapper.Abstractions\Cat.Dapper.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net11.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="NUnit"/>
+        <PackageReference Include="NUnit.Analyzers">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="NUnit3TestAdapter"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="NUnit.Framework"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper.Abstractions\Cat.Dapper.Abstractions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper.SqlServer\Cat.Dapper.SqlServer.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper\Cat.Dapper.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.UnitTesting\Cat.UnitTesting.NUnit\Cat.UnitTesting.NUnit.csproj" />
+    </ItemGroup>
+
+</Project>

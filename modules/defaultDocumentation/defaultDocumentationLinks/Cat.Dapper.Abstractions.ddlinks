@@ -1,0 +1,8 @@
+../../../Cat.Dapper/namespaces/Cat.Dapper.Abstractions/
+M:Cat.Dapper.Abstractions.ICatDbConnectionFactory.CreateConnection|ICatDbConnectionFactory.CreateConnection().md|CreateConnection()
+N:Cat.Dapper.Abstractions|Cat.Dapper.Abstractions.md|Cat.Dapper.Abstractions
+T:Cat.Dapper.Abstractions.ICatDbConnectionFactory|ICatDbConnectionFactory.md|ICatDbConnectionFactory
+P:Cat.Dapper.Abstractions.ICatDbSession.Transaction|ICatDbSession.Transaction.md|Transaction
+M:Cat.Dapper.Abstractions.ICatDbSession.GetConnectionAsync(System.Threading.CancellationToken)|ICatDbSession.GetConnectionAsync.91NMK6W9ZQIM09GF15NP83IY3.md|GetConnectionAsync(CancellationToken)
+M:Cat.Dapper.Abstractions.ICatDbSession.BeginTransactionAsync(System.Data.IsolationLevel,System.Threading.CancellationToken)|ICatDbSession.BeginTransactionAsync.7WSCUI08F08O8F33PVKR3F9O5.md|BeginTransactionAsync(IsolationLevel, CancellationToken)
+T:Cat.Dapper.Abstractions.ICatDbSession|ICatDbSession.md|ICatDbSession

@@ -1,0 +1,15 @@
+../../../Cat.Dapper/namespaces/Cat.Dapper.SqlServer/
+F:Cat.Dapper.SqlServer.SqlServerConnectionFactory._connectionString|SqlServerConnectionFactory._connectionString.md|_connectionString
+M:Cat.Dapper.SqlServer.SqlServerConnectionFactory.#ctor(System.String)|SqlServerConnectionFactory..ctor.A1H9RGDQ1S7P9JCORWO32Y4B2.md|SqlServerConnectionFactory(string)
+M:Cat.Dapper.SqlServer.SqlServerConnectionFactory.CreateConnection|SqlServerConnectionFactory.CreateConnection().md|CreateConnection()
+N:Cat.Dapper.SqlServer|Cat.Dapper.SqlServer.md|Cat.Dapper.SqlServer
+T:Cat.Dapper.SqlServer.SqlServerConnectionFactory|SqlServerConnectionFactory.md|SqlServerConnectionFactory
+F:Cat.Dapper.SqlServer.SqlServerPagingExtensions.SkipParameter|SqlServerPagingExtensions.SkipParameter.md|SkipParameter
+F:Cat.Dapper.SqlServer.SqlServerPagingExtensions.TakeParameter|SqlServerPagingExtensions.TakeParameter.md|TakeParameter
+M:Cat.Dapper.SqlServer.SqlServerPagingExtensions.QueryPagedAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.String,System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)|SqlServerPagingExtensions.QueryPagedAsync.PQOBI3F3PILWXXV0S24GXWI68.md|QueryPagedAsync<T>(this ICatDbSession, string, string, int, int, object, CancellationToken)
+M:Cat.Dapper.SqlServer.SqlServerPagingExtensions.CalculateSkip(System.Int32,System.Int32)|SqlServerPagingExtensions.CalculateSkip.FPMC2HJB1USADXOQNZ2D5VVM4.md|CalculateSkip(int, int)
+M:Cat.Dapper.SqlServer.SqlServerPagingExtensions.BuildSql(System.String,System.String)|SqlServerPagingExtensions.BuildSql.R3EO9HJFEB8WBZEHV16BS8WJ2.md|BuildSql(string, string)
+T:Cat.Dapper.SqlServer.SqlServerPagingExtensions|SqlServerPagingExtensions.md|SqlServerPagingExtensions
+M:Cat.Dapper.SqlServer.Extensions.ServiceCollectionExtensions.AddCatDapperSqlServer(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)|ServiceCollectionExtensions.AddCatDapperSqlServer.D2N4TYSPNDNK7OV1HRB793OM8.md|AddCatDapperSqlServer(this IServiceCollection, string)
+N:Cat.Dapper.SqlServer.Extensions|Cat.Dapper.SqlServer.Extensions.md|Cat.Dapper.SqlServer.Extensions
+T:Cat.Dapper.SqlServer.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

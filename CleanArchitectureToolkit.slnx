@@ -78,6 +78,12 @@
     <Project Path="modules/Cat.Commands/Cat.Commands.Decorators.Logging/Cat.Commands.Decorators.Logging.csproj" />
     <Project Path="modules/Cat.Commands/Cat.Commands/Cat.Commands.csproj" />
   </Folder>
+  <Folder Name="/modules/Cat.Dapper/">
+    <File Path="modules/Cat.Dapper/README.md" />
+    <Project Path="modules/Cat.Dapper/Cat.Dapper.Abstractions/Cat.Dapper.Abstractions.csproj" />
+    <Project Path="modules/Cat.Dapper/Cat.Dapper.SqlServer/Cat.Dapper.SqlServer.csproj" />
+    <Project Path="modules/Cat.Dapper/Cat.Dapper/Cat.Dapper.csproj" />
+  </Folder>
   <Folder Name="/modules/Cat.Db.Errors/">
     <File Path="modules/Cat.Db.Errors/README.md" />
     <Project Path="modules/Cat.Db.Errors/Cat.Db.Errors.SqlServer/Cat.Db.Errors.SqlServer.csproj" />
@@ -206,6 +212,7 @@
     <Project Path="tests/Cat.Api.Client.Tests/Cat.Api.Client.Tests.csproj" />
     <Project Path="tests/Cat.Api.Gateway.Tests/Cat.Api.Gateway.Tests.csproj" />
     <Project Path="tests/Cat.Commands.Tests/Cat.Commands.Tests.csproj" />
+    <Project Path="tests/Cat.Dapper.Tests/Cat.Dapper.Tests.csproj" />
     <Project Path="tests/Cat.Db.Errors.SqlServer.Tests/Cat.Db.Errors.SqlServer.Tests.csproj" />
     <Project Path="tests/Cat.Decorators.Tests/Cat.Decorators.Tests.csproj" />
     <Project Path="tests/Cat.EFCore.Tests/Cat.EFCore.Tests.csproj" />

@@ -1,0 +1,35 @@
+../../../Cat.Dapper/namespaces/Cat.Dapper/
+P:Cat.Dapper.CatDapperCommandHandlerBase`2.Session|CatDapperCommandHandlerBase_TCommand,TResult_.Session.md|Session
+M:Cat.Dapper.CatDapperCommandHandlerBase`2.#ctor(Cat.Dapper.Abstractions.ICatDbSession)|CatDapperCommandHandlerBase_TCommand,TResult_..ctor.9SJYQLWKZIJ6L7DKASZ7NHRY9.md|CatDapperCommandHandlerBase(ICatDbSession)
+M:Cat.Dapper.CatDapperCommandHandlerBase`2.HandleAsync(`0,System.Threading.CancellationToken)|CatDapperCommandHandlerBase_TCommand,TResult_.HandleAsync.B7UNI8HW2E0YPJ9OPRQY38SSD.md|HandleAsync(TCommand, CancellationToken)
+N:Cat.Dapper|Cat.Dapper.md|Cat.Dapper
+T:Cat.Dapper.CatDapperCommandHandlerBase`2|CatDapperCommandHandlerBase_TCommand,TResult_.md|CatDapperCommandHandlerBase<TCommand,TResult>
+P:Cat.Dapper.CatDapperCommandHandlerBase`1.Session|CatDapperCommandHandlerBase_TCommand_.Session.md|Session
+M:Cat.Dapper.CatDapperCommandHandlerBase`1.#ctor(Cat.Dapper.Abstractions.ICatDbSession)|CatDapperCommandHandlerBase_TCommand_..ctor.XO1142EZWI4NKDYW0S905UOIB.md|CatDapperCommandHandlerBase(ICatDbSession)
+M:Cat.Dapper.CatDapperCommandHandlerBase`1.HandleAsync(`0,System.Threading.CancellationToken)|CatDapperCommandHandlerBase_TCommand_.HandleAsync.UDLQGPOXHHBLUED3XRLN7CU7E.md|HandleAsync(TCommand, CancellationToken)
+T:Cat.Dapper.CatDapperCommandHandlerBase`1|CatDapperCommandHandlerBase_TCommand_.md|CatDapperCommandHandlerBase<TCommand>
+P:Cat.Dapper.CatDapperQueryHandlerBase`2.Session|CatDapperQueryHandlerBase_TQuery,TQueryResult_.Session.md|Session
+M:Cat.Dapper.CatDapperQueryHandlerBase`2.#ctor(Cat.Dapper.Abstractions.ICatDbSession)|CatDapperQueryHandlerBase_TQuery,TQueryResult_..ctor.KMEBK6H9Q64JPYH2RX1ESA0NE.md|CatDapperQueryHandlerBase(ICatDbSession)
+M:Cat.Dapper.CatDapperQueryHandlerBase`2.HandleAsync(`0,System.Threading.CancellationToken)|CatDapperQueryHandlerBase_TQuery,TQueryResult_.HandleAsync.GM9ME00FDRU54I9ICVLA8VLU3.md|HandleAsync(TQuery, CancellationToken)
+T:Cat.Dapper.CatDapperQueryHandlerBase`2|CatDapperQueryHandlerBase_TQuery,TQueryResult_.md|CatDapperQueryHandlerBase<TQuery,TQueryResult>
+F:Cat.Dapper.CatDbSession._connectionFactory|CatDbSession._connectionFactory.md|_connectionFactory
+F:Cat.Dapper.CatDbSession._connection|CatDbSession._connection.md|_connection
+F:Cat.Dapper.CatDbSession._transaction|CatDbSession._transaction.md|_transaction
+F:Cat.Dapper.CatDbSession._disposed|CatDbSession._disposed.md|_disposed
+P:Cat.Dapper.CatDbSession.Transaction|CatDbSession.Transaction.md|Transaction
+M:Cat.Dapper.CatDbSession.#ctor(Cat.Dapper.Abstractions.ICatDbConnectionFactory)|CatDbSession..ctor.CE9UN3B5T6D6ESZ0I7Q4NXY12.md|CatDbSession(ICatDbConnectionFactory)
+M:Cat.Dapper.CatDbSession.GetConnectionAsync(System.Threading.CancellationToken)|CatDbSession.GetConnectionAsync.G4XSLBLZO3TR4VK38J5KJ7Q73.md|GetConnectionAsync(CancellationToken)
+M:Cat.Dapper.CatDbSession.BeginTransactionAsync(System.Data.IsolationLevel,System.Threading.CancellationToken)|CatDbSession.BeginTransactionAsync.1QSXZ67SA4YOZCJ1JQ75AWSDC.md|BeginTransactionAsync(IsolationLevel, CancellationToken)
+M:Cat.Dapper.CatDbSession.Dispose|CatDbSession.Dispose().md|Dispose()
+M:Cat.Dapper.CatDbSession.ThrowIfDisposed|CatDbSession.ThrowIfDisposed().md|ThrowIfDisposed()
+T:Cat.Dapper.CatDbSession|CatDbSession.md|CatDbSession
+M:Cat.Dapper.CatDbSessionExtensions.QueryAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.String,System.Object,System.Threading.CancellationToken)|CatDbSessionExtensions.QueryAsync.W08URJB7Q2RX7FDXV3PYMVHF5.md|QueryAsync<T>(this ICatDbSession, string, object, CancellationToken)
+M:Cat.Dapper.CatDbSessionExtensions.QueryFirstOrDefaultAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.String,System.Object,System.Threading.CancellationToken)|CatDbSessionExtensions.QueryFirstOrDefaultAsync.78YZ37MSPG4NSHWPYVKMMMB77.md|QueryFirstOrDefaultAsync<T>(this ICatDbSession, string, object, CancellationToken)
+M:Cat.Dapper.CatDbSessionExtensions.QuerySingleOrDefaultAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.String,System.Object,System.Threading.CancellationToken)|CatDbSessionExtensions.QuerySingleOrDefaultAsync.XYSORTP92PMKR05SNXELY8YN9.md|QuerySingleOrDefaultAsync<T>(this ICatDbSession, string, object, CancellationToken)
+M:Cat.Dapper.CatDbSessionExtensions.ExecuteAsync(Cat.Dapper.Abstractions.ICatDbSession,System.String,System.Object,System.Threading.CancellationToken)|CatDbSessionExtensions.ExecuteAsync.BC0KMCHH17BHLR5CMKS8EOZUD.md|ExecuteAsync(this ICatDbSession, string, object, CancellationToken)
+M:Cat.Dapper.CatDbSessionExtensions.ExecuteScalarAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.String,System.Object,System.Threading.CancellationToken)|CatDbSessionExtensions.ExecuteScalarAsync.K75890MCJHMZ9IKOQLFKI5VH4.md|ExecuteScalarAsync<T>(this ICatDbSession, string, object, CancellationToken)
+M:Cat.Dapper.CatDbSessionExtensions.PrepareAsync(Cat.Dapper.Abstractions.ICatDbSession,System.String,System.Object,System.Threading.CancellationToken)|CatDbSessionExtensions.PrepareAsync.XEAZ0FVE7R9S1QI3R4YUKHV7.md|PrepareAsync(this ICatDbSession, string, object, CancellationToken)
+T:Cat.Dapper.CatDbSessionExtensions|CatDbSessionExtensions.md|CatDbSessionExtensions
+M:Cat.Dapper.Extensions.ServiceCollectionExtensions.AddCatDapperModule(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatDapperModule.30WTJV7WW5Q08S8MUTXEA3G59.md|AddCatDapperModule(this IServiceCollection)
+N:Cat.Dapper.Extensions|Cat.Dapper.Extensions.md|Cat.Dapper.Extensions
+T:Cat.Dapper.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
