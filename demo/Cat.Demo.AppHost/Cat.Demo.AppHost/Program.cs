@@ -126,6 +126,9 @@ payment.WithEnvironment("Authentication__Authority", authority);
 payment.WithEnvironment("Authentication__ClientId", "cat-demo-payment");
 payment.WithEnvironment("Authentication__ClientSecret", "cat-demo-payment-secret");
 inventory.WithEnvironment("Authentication__Authority", authority);
+// Inventory asks Keycloak for a token of its own for work without a user, such as the low stock report. Demo secret, as above.
+inventory.WithEnvironment("Authentication__ClientId", "cat-demo-inventory");
+inventory.WithEnvironment("Authentication__ClientSecret", "cat-demo-inventory-secret");
 const int gatewayPort = 5100;
 const int webPort = 5104;
 var gatewayUrl = $"http://localhost:{gatewayPort}";

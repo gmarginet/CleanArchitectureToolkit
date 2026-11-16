@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cat.Demo.InventoryService.Contracts.Messages;
 using Cat.Demo.OrderService.Contracts.Messages;
+using Cat.Demo.ServiceDefaults;
+using Cat.EventProcessor.Authorization.Extensions;
 using Cat.EventProcessor.AzureServiceBus;
 using Cat.EventProcessor.AzureServiceBus.Extensions;
 using Cat.EventProcessor.Extensions;
@@ -42,8 +44,26 @@ public static class EventProcessorExtensions
             options.AdministrationConnectionString = configuration["Messaging:AdministrationConnectionString"] ?? string.Empty;
         });
 
-        services.AddCatEventProcessor(configuration, processor => processor.Receive<OrderConfirmed>());
+        // With an authority in the configuration (the AppHost sets it) a message needs a valid token of a logged in caller,
+        // and a message of Inventory carries the client credentials token of Inventory. Without one, the messages run with no token.
+        var authenticationOn = !string.IsNullOrWhiteSpace(configuration["Authentication:Authority"]);
+
+        services.AddCatEventProcessor(configuration, processor => processor.Receive<OrderConfirmed>(options =>
+        {
+            if (authenticationOn)
+            {
+                options.Require(policy => policy.RequireAuthenticatedUser());
+            }
+        }));
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
+
+        if (authenticationOn)
+        {
+            services.AddDemoClientCredentials(configuration);
+            services.AddDemoMessageTokens();
+            services.AddCatEventProcessorAuthorization();
+        }
+
         services.AddHealthChecks().AddCatEventProcessorHealthCheck();
 
         return true;

@@ -12,6 +12,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\modules\Cat.Commands\Cat.Commands.Decorators.Logging\Cat.Commands.Decorators.Logging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Commands\Cat.Commands\Cat.Commands.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Authorization\Cat.EventProcessor.Authorization.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor.AzureServiceBus\Cat.EventProcessor.AzureServiceBus.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Minimal.Api\Cat.EventProcessor.Minimal.Api.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor\Cat.EventProcessor.csproj" />
