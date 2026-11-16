@@ -50,7 +50,7 @@
 Retry of a failed scheduled run through `Cat.Resilience`.
 
 #### Needs
-The module plan [Cat.Resilience.md](Cat.Resilience.md), built first.
+Phase 1 of the module plan [Cat.Resilience.md](Cat.Resilience.md#phase-1), built first.
 
 #### Decided
 - **Retry.** Retry of a failed run goes through `Cat.Resilience`, see [Cat.Resilience.md](Cat.Resilience.md). The module has a small retry setting per job already, see the [module readme](../modules/Cat.Scheduling/README.md#retry-a-failed-run).

@@ -59,9 +59,6 @@ Show `Cat.Dapper`: fast read-only order overview queries, next to EF Core for wr
 - The module `Cat.Dapper` is built, see the [module readme](../modules/Cat.Dapper/README.md). Nothing in the demo uses it yet.
 - Inventory reads through the EF Core scaffold only.
 
-#### Needs
-The module `Cat.Dapper`. It is built.
-
 #### Done when
 The demo uses the module, and the readme says where.
 
@@ -87,7 +84,7 @@ Show `Cat.Caching`: cached catalog queries.
 - `Cat.Caching` does not exist yet. Its plan is [Cat.Caching.md](Cat.Caching.md).
 
 #### Needs
-The module plan [Cat.Caching.md](Cat.Caching.md), built first.
+Phase 1 of the module plan [Cat.Caching.md](Cat.Caching.md#phase-1), built first.
 
 #### Done when
 The demo uses the module, and the readme says where.
@@ -116,7 +113,7 @@ Languages. The demo works in more than one language: the client has a language s
 - `ICatLocalizer` has no culture parameter, so a provider must find the culture itself.
 
 #### Needs
-The Notifications service, which is built. The module plan [Cat.Localizations.md](Cat.Localizations.md) answered and built.
+Phase 1 of the module plan [Cat.Localizations.md](Cat.Localizations.md#phase-1), answered and built.
 
 #### Done when
 A user picks a language in the client, and the order confirmed mail arrives in that language.
@@ -180,7 +177,7 @@ Show `Cat.Resilience` in the demo, for code that runs without Aspire.
 - `Cat.Resilience` does not exist yet.
 
 #### Needs
-The module plan [Cat.Resilience.md](Cat.Resilience.md) answered first.
+Phase 1 of the module plan [Cat.Resilience.md](Cat.Resilience.md#phase-1), answered first.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
@@ -246,7 +243,7 @@ Show `Cat.Telemetry` in the demo, for code that runs without Aspire.
 - `Cat.Telemetry` does not exist yet.
 
 #### Needs
-The module plan [Cat.Telemetry.md](Cat.Telemetry.md) answered first. [Question 2](#question-2) of [Phase 11](#phase-11) answered.
+Phase 1 of the module plan [Cat.Telemetry.md](Cat.Telemetry.md#phase-1), answered first. [Question 2](#question-2) of [Phase 11](#phase-11) answered.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
@@ -293,8 +290,7 @@ The MySQL showcase. The Notifications service moves from SQL Server to MySQL, an
 
 #### Needs
 - A stable Pomelo for EF Core 11, with an Aspire MySQL package that accepts it.
-- The module plans [Cat.Db.Errors.md](Cat.Db.Errors.md) and [Cat.EFCore.md](Cat.EFCore.md), built first.
-- The Notifications service, which is built.
+- Phase 1 of the module plan [Cat.Db.Errors.md](Cat.Db.Errors.md#phase-1) and phase 2 of the module plan [Cat.EFCore.md](Cat.EFCore.md#phase-2), built first.
 
 #### Done when
 Notifications runs on a MySQL container that the AppHost starts. The outbox, the inbox and the scheduler claim store work there, and the readme says where the demo uses MySQL.
@@ -323,9 +319,6 @@ Refund an approved payment when its order is cancelled, so the money does not st
 - A payment that answers after the timeout is ignored. The order is cancelled already, and the money stays taken.
 - Cancelling a confirmed order sets the status and releases the stock. It does not touch the payment.
 - A saga compensates with explicit steps in the failure branch of the workflow, written by the developer, see the [module readme of Cat.Sagas](../modules/Cat.Sagas/README.md).
-
-#### Needs
-The place order saga of the demo, which is built.
 
 #### Done when
 An approved payment of a cancelled order is refunded, and the demo readme says where.

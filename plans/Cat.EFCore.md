@@ -55,9 +55,6 @@ Make `Cat.EFCore.Extensions` provider neutral. Phase 2 adds MySQL on top of it.
 - `ConfigureCatEntity` calls `IsClustered(false)` on the primary key `Id`, `UseIdentityColumn()` on `SequenceId` and `IsClustered()` on the unique index of `SequenceId`. `ConfigureCatReferenceEntity` calls `IsClustered(false)` too. When no schema is known, the schema falls back to `dbo`.
 - The demo services call `ConfigureCatEntity` and `ConfigureCatTemporalEntity`.
 
-#### Needs
-Nothing outside this plan. A provider for MySQL is only needed in phase 2.
-
 #### Decided
 - **How it becomes neutral.** The SQL Server calls move into `Cat.EFCore.Extensions.SqlServer`. The neutral `Cat.EFCore.Extensions` project keeps the shared part and references no provider package. A developer calls the method of the project of their database. The provider projects use the same method names, so a developer only changes a reference and a `using`. The demo changes the same way. The move is a breaking change, because `ConfigureCatEntity` moves for every developer who uses it today.
 - **A breaking change is accepted.** The module is Stable, and the change is described in the module readme. Every developer who uses `ConfigureCatEntity` changes a reference. The old methods do not stay in `Cat.EFCore.Extensions` as obsolete methods, because they would keep the one reference this plan removes.
@@ -84,8 +81,8 @@ Add MySQL to the module, on top of the provider neutral `Cat.EFCore.Extensions` 
 - The outbox, the inbox and the scheduler claim store use plain EF Core, with `HasMaxLength`, `HasIndex` and `ExecuteUpdate`. They make no provider call, and nobody has run them on MySQL.
 
 #### Needs
-- Phase 1 of this plan.
-- A stable Pomelo for EF Core 11 to prove the result on MySQL, see [Phase 13 of the demo](Demo.md#phase-13). The module plan [Cat.Db.Errors.md](Cat.Db.Errors.md) does not block this plan.
+- [Phase 1](#phase-1) of this plan.
+- A stable Pomelo for EF Core 11 to prove the result on MySQL, see [Phase 13 of the demo](Demo.md#phase-13). [Phase 1 of the module plan Cat.Db.Errors](Cat.Db.Errors.md#phase-1) does not block this plan.
 
 #### Decided
 - **A MySQL project.** `Cat.EFCore.Extensions.MySql` is added next to `Cat.EFCore.Extensions.SqlServer`, with the same method names, as decided for phase 1.
