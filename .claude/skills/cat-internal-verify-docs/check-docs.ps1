@@ -14,6 +14,7 @@ Errors
 - A relative link or image points to a file or folder that does not exist, or the case of the path is wrong.
   The published site runs on Linux, where case matters.
 - The repo overview table of the readme does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the Building badge, or the Growing badge when the plan says `**First stable version:** reached`. A built row without a plan has the Stable badge. Every plan has that line, and a plan that is not built says `not reached`. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has an empty Phases cell. Every other row has one line `[A (B): C](./plans/File.md#phase-A)` for each phase of its plan, ordered by C. A is the phase number, B is the number of open questions of the phase, and C is its priority, a whole number that is unique in the table.
+- A link in the `Needs` chapter of a plan points to another plan without a phase anchor such as `#phase-1`.
 - A link points to an anchor that no heading of the target markdown file has.
 - A code fence is not closed.
 - A Markdown table starts on the line right below a heading or a line of text, with no empty line between them. The published site shows it as plain text.
@@ -222,6 +223,20 @@ if (-not $Path -or $Path -like '*plans*') {
         }
         if (Select-String -LiteralPath $planFile.FullName -Pattern '^<!-- region (start|end): StatusBadge-->' -Quiet) {
             $errors.Add("plans\$($planFile.Name): the StatusBadge region is gone from the plan template. Remove the region and the badge.")
+        }
+        # A need that links to a plan names the phase, such as Cat.Resilience.md#phase-1, also when the plan has one phase.
+        $inNeeds = $false
+        $needLine = 0
+        foreach ($text in [System.IO.File]::ReadAllLines($planFile.FullName)) {
+            $needLine++
+            if ($text -match '^#### Needs\s*$') { $inNeeds = $true; continue }
+            if ($inNeeds -and ($text -match '^#### ' -or $text -match '^<!-- region end: ')) { $inNeeds = $false }
+            if (-not $inNeeds) { continue }
+            foreach ($m in [regex]::Matches($text, '\]\(((?:Cat\.[\w.]+|Demo|Skills)\.md)(#[^)]*)?\)')) {
+                if ($m.Groups[2].Value -notmatch '^#phase-\d+$') {
+                    $errors.Add("plans\$($planFile.Name) line ${needLine}: a need links to $($m.Groups[1].Value) without a phase. Link to the phase, such as $($m.Groups[1].Value)#phase-1.")
+                }
+            }
         }
     }
 }

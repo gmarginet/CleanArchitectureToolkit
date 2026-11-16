@@ -23,6 +23,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/cat-inter
 Errors, which you must fix:
 - A relative link, image, `src` or `href` that points to a file or folder that does not exist.
 - A path with the wrong letter case. The published site runs on Linux, where case matters, and Windows hides the mistake.
+- A link in the `Needs` chapter of a plan to another plan, without a phase anchor such as `#phase-1`.
 - A link to an anchor that no heading of the target markdown file has. Anchors follow the GitHub rules: lowercase, punctuation removed, spaces become hyphens, and a repeated heading gets `-1`, `-2`.
 - A code fence that is never closed.
 - A plan in `plans/` that has lost the line `<!-- no toc -->` of its `Phases` region.
