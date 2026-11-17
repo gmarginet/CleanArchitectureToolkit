@@ -39,6 +39,7 @@
 <!-- region start: Phases-->
 <!-- no toc -->
 - [Phase 1](#phase-1)
+- [Phase 2](#phase-2)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 1-->
@@ -71,3 +72,33 @@ Recommendation: the cleanup method on the store, plus a readme chapter that expl
 <!-- region end: Question 1-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
+
+<!-- region start: Phase 2-->
+## Phase 2
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+A developer who denies messages without a policy can still keep one message type open on purpose, and the code says so in plain words.
+
+#### What exists today
+- `CatMessageAuthorizationOptions.DenyMessagesWithoutPolicy` is `false` by default. A message type without a policy or a rule runs, so a service keeps working while its message types get their rules.
+- With the option on, a message type without a policy or a rule is denied with `Forbidden`.
+- The module readme documents one way to keep a type open then: a rule that always passes, such as `options.Require(policy => policy.RequireAssertion(_ => true))`.
+- `CatMessageAuthorizer` validates a token that is present before it looks at the rules, so a message that carries a bad token is dead lettered as `Unauthorized`, also on a type that is open.
+- The startup log warns about the message types that have no policy and no rule. To check: that a type with an always-passing rule stays out of that warning.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 2-->
+#### Question 2
+How does a developer keep a message type open when `DenyMessagesWithoutPolicy` is on? The options:
+- **Keep the always-passing rule.** The readme says how. Cost: nothing to build, but the intent is hidden in an assertion that returns true, and nothing tells the next reader that the type is open on purpose.
+- **A dedicated setting per message type,** such as `AllowAnonymous` next to `Policy`, in code and in the configuration (`CatEventProcessor:Messages:PriceChanged:AllowAnonymous`). Cost: one more member on the options and one more thing to check at startup, and a decision on what it means for a message that does carry a token (to check: validate it as today, or skip the validation).
+- **A separate option that lists the open message types.** Cost: a second place to look, away from the message type.
+
+Recommendation: the dedicated setting per message type, and still validate a token that is present. It states the intent where the type is declared, it works from the configuration too, and the startup warning can list the open types as open on purpose.
+<!-- region end: Question 2-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 2-->

@@ -45,6 +45,7 @@
 - [Phase 12](#phase-12)
 - [Phase 13](#phase-13)
 - [Phase 14](#phase-14)
+- [Phase 15](#phase-15)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 8-->
@@ -334,3 +335,33 @@ Recommendation: the message pair. It matches the payment flow, it keeps the HTTP
 <!-- region end: Question 16-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 14-->
+
+<!-- region start: Phase 15-->
+## Phase 15
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+A developer who already has SQL Server, and maybe a Service Bus, can start the demo without the Service Bus emulator and its extra containers, when that is what they want.
+
+#### What exists today
+- The AppHost always starts the Azure Service Bus emulator, in Docker with its own SQL Server container. The demo readme says so: the emulator needs Docker in every mode, also in the `Existing` mode of `Sql:Mode`.
+- The setting `Sql:Mode` picks `Container` or `Existing` for the databases only. Nothing like it exists for the messaging.
+- The services reach the emulator with the connection string `messaging`. Without it a service does not listen, as the demo readme says for Inventory and Notifications.
+- Orders creates the topic of its messages at startup, and the other services create their subscriptions, because the emulator forgets its entities at every restart. They do this with the administration client on the management port 5300 of the emulator.
+- The payment of an order goes over messages (`TakePayment` and `PaymentProcessed`), so an order cannot be confirmed without a working bus.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 17-->
+#### Question 17
+Should the emulator be optional in the demo? The options:
+- **Keep it always on.** The readme already says so. Cost: a developer with an existing SQL Server still needs Docker for the emulator.
+- **A messaging mode next to `Sql:Mode`.** `Emulator` is the default, and `Existing` passes a connection string `messaging` to the services and starts no emulator. Cost: a second mode to test and to explain. Orders and the other services create their entities at startup with the administration client, so a real Service Bus needs the same rights, or the entities made by hand (to check).
+- **A switch that turns the messaging off.** Cost: the order flow stops at the payment, because it depends on messages, so most of the demo does not work. This is no option for the main flow.
+
+Recommendation: keep it always on for now. The emulator is what makes the demo run with one command, and the order flow needs a bus. Add the messaging mode only when a developer really has a Service Bus they want to use.
+<!-- region end: Question 17-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 15-->
