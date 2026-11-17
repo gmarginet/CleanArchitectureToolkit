@@ -677,6 +677,7 @@ erDiagram
 - Payment is not an interface any more. The place order saga sends `TakePayment` to a queue and waits for `PaymentProcessed`. The part **The saga** below explains how.
 - `CatalogPriceProvider` wraps the call in `CatApiCall.ExecuteAsync`, so a failure arrives as an `ICatResponse`. A 200 gives the prices and a 404 becomes `PriceUnavailable`. Any other status, a network error or a timeout becomes an error response, because Orders never trusts a half answer. The resilience handler adds retries and a circuit breaker. Catalog reads are public, so the call sends no token. The unit tests use a fake `HttpMessageHandler` under the generated client, so they need no database and no running service. Run `Refresh-CatalogClient.ps1` in the client project to regenerate the client after Catalog changes. Catalog must run on port 5101 for it.
 - `ICatUser` tells the core service who is calling. With a login `Cat.Users` reads the claims of the token (`sub`, `name` and the `admin` role), and `IUserEmail` reads the `email` claim. Without a login, a development stub reads the `X-Demo-User` header. Orders of other users come back as not found.
+- The order overview (`GET /`) reads with plain SQL. `OrderGetListQueryHandler` inherits `CatDapperQueryHandlerBase`, runs `OrderGetListQueryHandler.sql` and returns `OrderSummaryRow` objects. The file sits next to the handler, and the source generator of `Cat.Dapper.SqlFiles` turns it into the constant `Sql`. The query joins `Order`, `OrderStatus` and `Customer` and filters on the external id of the customer. The other reads and all writes stay on EF Core. Both use the same orders database, each with its own connection.
 - Order numbers come from a `DailyOrderCounter` table, increased in one atomic statement in the same transaction that saves the order. The part **Order numbers** below explains it.
 
 **The saga.** `OrderSagaExtensions` in the Api project registers it with `AddCatDemoOrderSagas`.
@@ -823,6 +824,7 @@ erDiagram
 | `Cat.ServiceRequests`, `Cat.Queries`, `Cat.Commands`, `Cat.Validators`, `Cat.Responses` | Core service | The same use case shape as Catalog. |
 | `Cat.Minimal.Api` | Api | Endpoints and OpenAPI. |
 | `Cat.EFCore` | DataModels and Infrastructure | Entities with `Guid` ids and sequence ids. The handlers inherit the base query and command handlers. The order handler starts its own transaction. |
+| `Cat.Dapper`, `Cat.Dapper.SqlServer` and `Cat.Dapper.SqlFiles` | Infrastructure | The order overview is a read only query with plain SQL, kept in a `.sql` file. |
 | `Cat.Users` | Core service (`Cat.Users.Abstractions`) and the host | The handlers ask `ICatUser` who is calling. Customers see their own orders and an admin sees all of them. |
 | `Cat.Messaging`, `Cat.Messaging.AzureServiceBus`, `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore` | Contracts (the message), Infrastructure and Api | Publishes `OrderConfirmed` to the bus, sends `TakePayment`, and keeps the messages in the outbox until they are sent. |
 | `Cat.Sagas`, `Cat.Sagas.EFCore` | Core service (the workflow) and Api | The place order workflow stops at the payment and carries on with the answer, also after a restart. |
@@ -837,6 +839,7 @@ erDiagram
 - Interfaces with fakes let the demo run without the other services.
 - A slow or stopped payment service does not block a request. The caller gets its answer at once, and the order ends by itself: confirmed, declined or timed out.
 - A restart of Orders in the middle of a payment loses nothing, because the saga state is in the database.
+- The order overview reads only the columns it shows, with no change tracking and no mapping step.
 
 **Cons.**
 - Events cannot drive the process. They return no answer, and a failing subscriber throws. Calls that decide the next step go through interfaces instead.
@@ -851,6 +854,7 @@ erDiagram
 - The message goes out only when the status command runs. If that command fails, the order stays pending and no message is sent.
 - A command handler in Infrastructure knows about messaging.
 - The outbox adds a table, a migration and a background service to Orders.
+- The SQL of the order overview knows the table and column names of the EF Core model. A rename in the model breaks the query at run time, and no test of the demo catches it.
 
 **More.** Code in `demo/Cat.Demo.OrderService`. Requests in `OrderRequests.http`. [Events and interfaces](#events-and-interfaces). [Payment service](#payment-service).
 <!-- region end: OrdersService-->

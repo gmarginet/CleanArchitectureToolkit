@@ -1,5 +1,6 @@
 using System;
 using Cat.Api.Client.Extensions;
+using Cat.Dapper.SqlServer.Extensions;
 using Cat.Demo.CatalogService.Api.Client;
 using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Demo.InventoryService.Api.Client;
@@ -26,6 +27,9 @@ public static class ServiceCollectionExtensions
     {
         services.TryAddSingleton(TimeProvider.System);
         services.AddDbContext<OrderDbContext>(options => options.UseSqlServer(connectionString));
+
+        // Dapper reads the order overview. EF Core stays for the writes and the other reads.
+        services.AddCatDapperSqlServer(connectionString);
         return services;
     }
 

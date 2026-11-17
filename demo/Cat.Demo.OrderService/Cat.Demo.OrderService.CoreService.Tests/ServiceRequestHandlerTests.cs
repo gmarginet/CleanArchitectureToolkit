@@ -63,6 +63,15 @@ public class ServiceRequestHandlerTests
         Lines = [new OrderLine { BookId = Guid.NewGuid(), Quantity = 2, UnitPrice = 12.5m }]
     };
 
+    private static OrderSummaryRow NewSummaryRow(string statusCode) => new()
+    {
+        Id = Guid.NewGuid(),
+        OrderNumber = "20261105-0007",
+        Status = statusCode,
+        PlacedAt = new DateTime(2026, 11, 5, 10, 0, 0, DateTimeKind.Utc),
+        Total = 25m
+    };
+
     #region OrderGet
 
     [Test]
@@ -131,7 +140,11 @@ public class ServiceRequestHandlerTests
     [Test]
     public async Task OrderGetList_ShouldMapTheSummariesAndFilterOnTheCurrentUser()
     {
-        _queryProcessor.Respond<OrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([NewOrder(), NewOrder(OrderStatuses.ConfirmedCode)]));
+        _queryProcessor.Respond<OrderGetListQuery, IList<OrderSummaryRow>>(CatResponse.Ok<IList<OrderSummaryRow>>(
+        [
+            NewSummaryRow(OrderStatuses.PendingCode),
+            NewSummaryRow(OrderStatuses.ConfirmedCode)
+        ]));
         var handler = new OrderGetListRequestHandler(_queryProcessor, _currentUser);
 
         var response = await handler.HandleAsync(new OrderGetListRequest());
@@ -147,7 +160,7 @@ public class ServiceRequestHandlerTests
     public async Task OrderGetList_AsAdmin_ShouldAskForAllOrders()
     {
         _currentUser.IsAdmin = true;
-        _queryProcessor.Respond<OrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([]));
+        _queryProcessor.Respond<OrderGetListQuery, IList<OrderSummaryRow>>(CatResponse.Ok<IList<OrderSummaryRow>>([]));
         var handler = new OrderGetListRequestHandler(_queryProcessor, _currentUser);
 
         await handler.HandleAsync(new OrderGetListRequest());
