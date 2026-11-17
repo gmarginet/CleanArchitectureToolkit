@@ -1,6 +1,6 @@
 ---
 name: cat-internal-create-module-readme
-description: Create or update the README.md of a module in modules/ from module-readme.template.md. Use when a module readme is added or changed, when projects or dependencies of a module change, when the table of contents, NuGet table, namespaces table or dependencies table of a module readme needs a refresh, or when the owner changes the readme template.
+description: Create or update a module readme (modules/<ModuleName>/README.md) with its NuGet, namespaces and dependencies tables. Use when a module readme is added or changed, when the projects or dependencies of a module change, or after the module readme template changed.
 argument-hint: "[module name, for example Cat.EFCore]"
 ---
 

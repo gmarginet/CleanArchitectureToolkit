@@ -1,6 +1,6 @@
 ---
 name: cat-internal-create-demo-readme
-description: Create and update demo/README.md from demo-readme.template.md and keep the demo architecture drawing in sync with the demo app. Finds a chapter by its region, adds a block chapter, switches the boxes of the drawing between hatched (not built) and solid (built), and updates the readme after the template changed. Use whenever the demo app changes, a demo block is built, or the demo readme is edited.
+description: Update demo/README.md and the hatched and solid boxes of the demo architecture drawing. Use whenever the demo app changes, a demo block is built, the demo readme is edited, or after its template changed.
 argument-hint: "[what changed in the demo, or leave empty to resync]"
 ---
 

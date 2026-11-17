@@ -33,3 +33,5 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 - Keep the `description` specific. Claude uses it to decide when the skill applies.
 - Add or update the table row above in the same change. CLAUDE.md has the rule.
 - Helper scripts that a skill needs every time can live in the skill folder. Temporary scripts go in the scratchpad.
+- A skill loads in full each time it runs. Put rules that are needed only now and then in a separate file in the skill folder and link it from the `SKILL.md`, such as `cat-internal-create-plan/answer-flow.md`. Claude reads it only when needed.
+- A script that prints a short summary saves tokens over a full log, such as `cat-internal-verify-code/run-cake.ps1`.

@@ -1,6 +1,6 @@
 ---
 name: cat-internal-verify-docs
-description: Check the markdown of the repository locally and fast, with no web requests. Finds broken relative links, wrong letter case in paths, missing anchors, unclosed code fences, tables that touch an HTML comment, a lost readme marker, skills missing from the skills overview, and forbidden punctuation. Use at the end of a task that changed markdown, a link target, a heading or a file name, and after every rename or move.
+description: Fast local check of all markdown, with no web requests. Links, anchors, letter case, code fences, tables, the repo overview, skill rows and forbidden punctuation. Use at the end of a task that changed markdown, a heading or a file name, and after every rename or move.
 argument-hint: "[folder or file to limit the check]"
 ---
 

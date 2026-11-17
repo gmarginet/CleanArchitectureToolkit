@@ -13,9 +13,9 @@ Run this skill only when the owner asks for a commit. Asking for the skill is th
 ## Rules
 - **Logical blocks.** Several small commits, never one big one. One commit has one reason. A reader of the history should see a step, such as "Add the docs-check skill" or "Rename the Saga plan".
 - **Every commit stands on its own.** Links and references in a commit must resolve in that commit. A rename goes with the fixes of its references. A new file goes before or with the file that links to it. Order the commits so that this is true.
-- **Skip the publish when there is no code.** A push to `master` publishes NuGet packages. When a commit changes no code in `modules/`, the subject line ends with ` (skip-pub)`. See [Skip-pub](#skip-pub).
+- **Skip the publish when there is no code.** A push to `master` publishes NuGet packages. When a commit changes no code in `modules/`, the subject line ends with ` (skip-pub)`. The `Staged` mode of the script decides it. The workflow finds the text `skip-pub` anywhere in the message, so a commit that must publish never contains it, not even in the body. Never add `skip-ci`. Details in [publishing.md](publishing.md#skip-pub).
 - **Stop after a publishing commit.** A commit without ` (skip-pub)` ends the series. Make no more commits, and ask the owner whether to push first. See [Stop after a publishing commit](#stop-after-a-publishing-commit).
-- **Empty commit.** Allowed when the owner asks for one. See [Empty commit](#empty-commit).
+- **Empty commit.** Allowed when the owner asks for one. See [publishing.md](publishing.md#empty-commit).
 - **Message.** One subject line in the imperative, plain words, about 72 characters or fewer before the suffix, no full stop. Start with a verb: Add, Fix, Rename, Move, Remove, Update. Match the history: `Add the Orders demo service`, `Move the demo plan to plans and add the saga plan`. Add a short body only when the reason is not obvious. Follow the style rules in CLAUDE.md.
 - **Attribution.** End every message with the attribution line that the session instructions give.
 - **Nothing generated or private.** Never commit `bin`, `obj`, `node_modules`, `artifacts`, `*.user` files, `desktop.ini` or scratch files. If one is tracked or shows up as new, leave it out and tell the owner.
@@ -71,24 +71,8 @@ Hints:
 - Do not split so far that a commit is meaningless. Do not merge unrelated work to save time.
 - A fix for something you added in this same session belongs in the commit that added it. Fix it before you commit, not in a later commit.
 
-## Skip-pub
-A push to `master` runs `.github/workflows/build.yml`. A commit message that contains `skip-pub` makes it run the tests only, without publishing the NuGet packages.
-
-- Add ` (skip-pub)` at the end of the subject line when the commit changes no code in `modules/`.
-- Code in `modules/` is every file under `modules/` that is not markdown: C# files, project files, json and ddlinks. Generated pages and readmes (`*.md`) are not code.
-- The script also counts build files as code, because they can change the packages: `Directory.Build.props`, `Directory.Build.targets`, `Directory.Packages.props`, `build.cake`, `global.json`, `dotnet-tools.json`, anything in `tools/` and the workflows in `.github/workflows`. A commit with those gets no suffix.
-- Demo code (`demo/`), tests (`tests/`), plans, resources and `.claude` are not published, so a commit that only touches them gets ` (skip-pub)`.
-- The rule is per commit, not per session. Decide it for each commit from what is staged.
-- Never add `skip-ci`. It would also skip the tests of the build workflow.
-- The workflow looks for the text `skip-pub` anywhere in the whole message, subject and body. A commit that must publish never contains that text at all, not even in a sentence such as "this commit has no skip-pub". The same goes for `skip-ci`.
-- The build workflow reads only the newest commit of a push. Commits below it do not matter for the publish. A push whose newest commit has ` (skip-pub)` publishes nothing, even when older commits in that push changed code.
-
-## Empty commit
-The owner can ask for an empty commit, for example to make a push publish.
-- Use `git commit --allow-empty`. Stage nothing, and skip the staged check, because the script has nothing to look at.
-- The subject says why, in plain words, such as `Publish the alpha packages`.
-- The suffix follows the reason. A commit that is meant to publish has no ` (skip-pub)`. Say in the body that it is empty on purpose, and keep the words `skip-pub` and `skip-ci` out of the body, see [Skip-pub](#skip-pub).
-- It is a publishing commit, so the next rule applies.
+## Skip-pub and empty commits
+Read [publishing.md](publishing.md) when the skip-pub decision of the script is not clear, or when the owner asks for an empty commit.
 
 ## Stop after a publishing commit
 A commit without ` (skip-pub)` makes the next push publish, but only when it is the newest commit of that push. A later commit with ` (skip-pub)` on top would hide it.

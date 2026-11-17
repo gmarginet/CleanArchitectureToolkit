@@ -1,6 +1,6 @@
 ---
 name: cat-internal-create-readme
-description: Create and update the readme in the root of the repository from readme.template.md. Keeps the repo overview table in sync with the modules, the demo, the tooling and the plans, finds a chapter by its region, and updates the readme after the template changed. Use when a module, the demo or a tooling item is added, removed or changes status or description, when a plan is added or removed, when the owner asks to change or look at a chapter of the readme, or when the owner changes the readme template.
+description: Update the readme (README.md in the root) and its repo overview table, with the status badges and the Phases column. Use when a module, plan, tooling item or the demo is added, removed or changes, when a chapter of the readme is changed, or after the readme template changed.
 argument-hint: "[overview|chapter|update] [name]"
 ---
 
@@ -65,18 +65,7 @@ Status badge, from three facts: is the item built, does it still have a plan in 
 
 A module is built when its folder exists in `modules/`. The demo is built from the first stage on. A tooling item is built when its files exist.
 
-Phases column, with the header `Phases`: one line for each phase in the plan of the item. A stable item has no plan, and its cell is empty. The lines of a cell are separated by `<br>`, and they are in the order of the priority number, the lowest first. So the first line is the next phase of the item to build, and the phase numbers of the lines can be out of sequence.
-- A line looks like `[A (B): C](./plans/[[PlanFile]]#phase-A)`. A is the phase number, B is the number of open questions of the phase and C is the priority number of the phase. The link goes to the phase in the plan.
-- The priority numbers are whole numbers from 1 and unique over the whole table, so there is one order of work. 1 is the highest priority.
-- B counts the open questions of the phase. A question or a sub question counts when it has no answer and no sub question below it. A question that has a sub question does not count, because it is answered. The headings in a question region are `#### Question N`, `##### Question N.x` and `##### Answer N.x`.
-- A phase that another phase needs ranks above it. Only the needs written in the `Needs` chapter of a phase count.
-- Then the phase with fewer open questions comes first.
-- On a tie, the phase that an earlier phase of the demo needs comes first.
-- On a tie that is still open, the phase of the item that ranks higher in the table today keeps its place. For a new phase, use the alphabetical order of the name of the item.
-- A phase that waits for something outside the repository, such as a stable release of another package, ranks after all other phases. These phases keep the same rules among themselves.
-- A later phase of a plan can rank above an earlier phase of the same plan, when it has no written need on that phase.
-- Recalculate the numbers every time a plan changes, an open question is answered, a plan is created or removed, or a build is finished. When a phase is removed, the numbers after it move up.
-- The owner decides the order. Propose the new numbers with the reason when the order changes, and wait for the owner before you write them.
+Phases column: one line `[A (B): C]` for each phase of the plan of the item, ordered by the priority C. A stable item has an empty cell. Read [phases-column.md](phases-column.md) for the format, the ranking rules and when to recalculate. The owner decides the order, so propose new numbers and wait.
 
 Description: one short sentence about what the item is used for. For a module, base it on the intro of the module readme.
 
@@ -111,7 +100,7 @@ Use this when the owner changes the template and asks to update the readme.
 - [[TypeBadge]]: The TypeBadge template.
 - [[BadgeLink]]: Where the type badge links to. It is the same target as the status badge: the plan for a New, Building or Growing item, and the readme of the item for a Stable item.
 - [[StatusBadge]]: The `NewBadge`, `BuildingBadge`, `GrowingBadge` or `StableBadge` template.
-- [[PhaseLines]]: The lines of the `Phases` column, one for each phase, see the rules above. Empty for a stable item.
+- [[PhaseLines]]: The lines of the `Phases` column, one for each phase, see [phases-column.md](phases-column.md). Empty for a stable item.
 - [[Description]]: One short sentence about what the item is used for.
 - [[PlanFile]]: The file name of the plan in `plans/`, such as `Cat.Messaging.md` or `Demo.md`.
 - [[RootPath]]: The relative path to the root of the repository, used by the header. It is `.` for the readme.
