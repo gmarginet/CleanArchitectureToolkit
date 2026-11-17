@@ -370,7 +370,6 @@ The gateway and every service answer `/health` (ready) and `/alive` (running) in
 
 The dashboard has a fixed login token, `dev`. The launch profile of the AppHost sets it with `ASPIRE_DASHBOARD_FRONTEND_BROWSERTOKEN` and opens `login?t=dev`, so the browser lands in the dashboard already logged in. The token is for a local demo only. Without a fixed token the AppHost makes a new random one at every start. Do not set `ASPIRE_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS`. It opens the dashboard without a login, and the dashboard then warns that the endpoint is unsecured.
 
-To follow one order, place it and open **Traces** in the dashboard. The call `POST /orders` shows up as one trace. It holds the gateway, Orders, Keycloak, Catalog and Inventory, so you see every HTTP hop of the order in one place. The order is already answered with 202 when the payment starts, so the rest of the order is not in this trace.
 The dashboard may say "No trusted development certificate was found". The AppHost, the dashboard and the services all run on HTTP, so the demo works with the notification and it is harmless. To clear it, trust the ASP.NET Core development certificate once:
 ```
 dotnet dev-certs https --trust
@@ -381,6 +380,7 @@ dotnet dev-certs https --clean
 ```
 The `--clean` command removes every ASP.NET Core development certificate of your user, also for other projects. Run `dotnet dev-certs https --trust` again when you want a trusted one.
 
+To follow one order, place it and open **Traces** in the dashboard. The call `POST /orders` shows up as one trace. It holds the gateway, Orders, Keycloak, Catalog and Inventory, so you see every HTTP hop of the order in one place. The order is already answered with 202 when the payment starts, so the rest of the order is not in this trace.
 The message hops are not part of that trace. When Payment handles `TakePayment`, Orders handles `PaymentProcessed`, Notifications handles `OrderConfirmed`, or `StockChanged` arrives, the dashboard shows it as its own trace with only that resource in it. `Cat.Messaging` does not pass the trace context along with a message yet. Match such a trace to its order by the time and the message name.
 <!-- region end: ThingsToKnowAboutTheDashboard-->
 
