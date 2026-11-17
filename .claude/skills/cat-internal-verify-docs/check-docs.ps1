@@ -396,7 +396,6 @@ if ((Test-Path $skillsRoot) -and (Test-Path $skillsReadme)) {
             $errors.Add(".claude\skills\$($dir.Name)\SKILL.md: no name in the front matter")
         }
         if ($overview -notmatch [regex]::Escape("]($($dir.Name)/SKILL.md)")) { $errors.Add(".claude\skills\README.md: no table row for $($dir.Name)") }
-        if ($overview -notmatch "(?m)^### $([regex]::Escape($dir.Name))\s*$") { $errors.Add(".claude\skills\README.md: no '### $($dir.Name)' entry") }
     }
 }
 

@@ -66,7 +66,7 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
 Use the skill for the task and do not do its steps by hand.
 
 - Prefix `cat-internal-` is for skills for the owner of the toolkit. Prefix `cat-` is for skills for developers who use the toolkit.
-- When you add, rename, change or remove a skill in `.claude/skills/`, update the table and the entry for it in `.claude/skills/README.md` in the same change.
+- When you add, rename, change or remove a skill in `.claude/skills/`, update its table row in `.claude/skills/README.md` and in the table below in the same change.
 - Plans: put only decisions the owner made in the description of a phase, and everything else is an open question. Remove a plan only when the owner agrees.
 - The demo readme describes only what exists. Plans stay in `plans/Demo.md`.
 - Template files: load `cat-internal-template-concepts` first. Never remove a region marker, and edit only inside a region.

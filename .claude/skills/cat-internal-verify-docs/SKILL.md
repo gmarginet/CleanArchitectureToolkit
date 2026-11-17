@@ -32,7 +32,7 @@ Errors, which you must fix:
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or that has no comment line with its `RootPath`. Template files (`*.template.md`) are skipped.
 - A repo overview table in the readme that does not match the repository. Every module folder and every plan has a row. A row that is not built has the New badge and links to its plan. A built row with a plan has the Building badge, or the Growing badge when the plan says `**First stable version:** reached`. A built row without a plan has the Stable badge. Every plan has that line, and a plan that is not built says `not reached`. The rows are in order: modules, the demo, then tooling, each sorted by name. A Stable row has an empty Phases cell. Every other row has one line `[A (B): C](./plans/File.md#phase-A)` for each phase of its plan, ordered by C. A is the phase number, B is the number of open questions of the phase, and C is its priority, a whole number that is unique in the table.
 - A missing or repeated `<!-- region start: RepoOverview-->` or `<!-- region end: RepoOverview-->` marker in the readme.
-- A skill folder without `SKILL.md`, with a `name` that differs from the folder, or without a row and an entry in `.claude/skills/README.md`.
+- A skill folder without `SKILL.md`, with a `name` that differs from the folder, or without a table row in `.claude/skills/README.md`.
 
 Warnings, which you should fix unless there is a reason:
 - A long dash, `--` or an ellipsis in text. Code spans and code blocks are skipped. CLAUDE.md and template files are skipped.

@@ -30,7 +30,7 @@ Load the `cat-internal-template-concepts` skill and the `cat-internal-create-hea
    - a chapter for every task the skill must do, such as building a part of the created file,
    - the placeholders, one entry for each.
 6. Run through the checklist below.
-7. Add a table row and an entry for the skill in `.claude/skills/README.md`.
+7. Add a table row for the skill in `.claude/skills/README.md` and in the skills table of `CLAUDE.md`.
 8. Run the `cat-internal-verify-docs` skill.
 
 ## Checklist
