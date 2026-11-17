@@ -247,7 +247,7 @@ The MySQL showcase. The Notifications service moves from SQL Server to MySQL, an
 #### Background
 - A showcase on MySQL needs an EF Core provider for MySQL. The demo is on EF Core 11. The provider Pomelo has no release for EF Core 10 or 11 yet, and the Oracle provider is stable for EF Core 10 only and has an EF Core 11 preview. The facts were read on 2026-11-13 from a third-party article and from nuget.org, and nobody has tested them against this code.
 - The Aspire client package for MySQL is built on Pomelo, so a stable Pomelo keeps the integration with Aspire.
-- The module work is in two plans: [Cat.Db.Errors.md](Cat.Db.Errors.md) for the MySQL error numbers and [Cat.EFCore.md](Cat.EFCore.md) for a provider neutral `Cat.EFCore.Extensions`.
+- The MySQL error numbers are built in `Cat.Db.Errors.MySql`, see the [module readme of Cat.Db.Errors](../modules/Cat.Db.Errors/README.md). The module work that is left is in [Cat.EFCore.md](Cat.EFCore.md), for a provider neutral `Cat.EFCore.Extensions`.
 - Temporal tables and `Cat.Sql.Cdc` are SQL Server only. The MySQL service must not use them.
 
 #### What exists today
@@ -256,7 +256,7 @@ The MySQL showcase. The Notifications service moves from SQL Server to MySQL, an
 
 #### Needs
 - A stable Pomelo for EF Core 11, with an Aspire MySQL package that accepts it.
-- Phase 1 of the module plan [Cat.Db.Errors.md](Cat.Db.Errors.md#phase-1) and phase 2 of the module plan [Cat.EFCore.md](Cat.EFCore.md#phase-2), built first.
+- Phase 2 of the module plan [Cat.EFCore.md](Cat.EFCore.md#phase-2), built first.
 
 #### Done when
 Notifications runs on a MySQL container that the AppHost starts. The outbox, the inbox and the scheduler claim store work there, and the readme says where the demo uses MySQL.

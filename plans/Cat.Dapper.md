@@ -168,15 +168,12 @@ Recommendation: the unit tests of the generated SQL text, plus the tests against
 #### Goal
 Support for MySQL, with a `Cat.Dapper.MySql` project next to `Cat.Dapper.SqlServer`.
 
-#### Needs
-[Phase 1 of the plan of Cat.Db.Errors](Cat.Db.Errors.md#phase-1), which builds `Cat.Db.Errors.MySql`.
-
 #### Decided
 - **The project.** `Cat.Dapper.MySql` is added. It holds at least the MySQL specific items that `Cat.Dapper.SqlServer` has since phase 1: `MySqlConnectionFactory`, `MySqlPagingExtensions` and the registration helper for the connection string, like `AddCatDapperSqlServer`. The neutral `Cat.Dapper` project stays free of a database.
 - **Place in the demo.** The MySQL showcase of the demo ([Phase 13 of the demo](Demo.md#phase-13)) runs on EF Core, so the demo does not have to use this project.
-- **The driver.** The same driver everywhere, and the demo uses Pomelo, so the project references MySqlConnector, the driver under Pomelo. `Cat.Db.Errors.MySql` uses the same driver, see the [plan of Cat.Db.Errors](Cat.Db.Errors.md). The latest stable MySqlConnector is 3.0.0, checked on nuget.org on 2026-11-16. It has targets for `netstandard2.0`, `netstandard2.1`, `net8.0`, `net10.0` and `net11.0`, so the project can target `netstandard2.0`, as the target framework rule asks.
+- **The driver.** The same driver everywhere, and the demo uses Pomelo, so the project references MySqlConnector, the driver under Pomelo. `Cat.Db.Errors.MySql` uses the same driver, see the [module readme of Cat.Db.Errors](../modules/Cat.Db.Errors/README.md). The latest stable MySqlConnector is 3.0.0, checked on nuget.org on 2026-11-16. It has targets for `netstandard2.0`, `netstandard2.1`, `net8.0`, `net10.0` and `net11.0`, so the project can target `netstandard2.0`, as the target framework rule asks.
 - **The paging method.** `MySqlPagingExtensions` has the same method as the SQL Server one: `QueryPagedAsync` with the same arguments and the same `ICatPagedList` result, in the namespace `Cat.Dapper.MySql`. It pages with `LIMIT` and `OFFSET`, where SQL Server uses `OFFSET` and `FETCH`. A developer who changes the database changes a `using`, so the handlers stay portable. A project that uses both namespaces needs the namespace of one of them in the call. The statement follows the same rules as on SQL Server: without an `ORDER BY`, every column named, and the SQL and the order as constants.
-- **The error checks and the order of work.** `Cat.Dapper.MySql` references `Cat.Db.Errors.MySql`, as `Cat.Dapper.SqlServer` references `Cat.Db.Errors.SqlServer`. Phase 4 is built after `Cat.Db.Errors.MySql` exists. It is planned in the [plan of Cat.Db.Errors](Cat.Db.Errors.md), so that plan blocks phase 4.
+- **The error checks and the order of work.** `Cat.Dapper.MySql` references `Cat.Db.Errors.MySql`, as `Cat.Dapper.SqlServer` references `Cat.Db.Errors.SqlServer`. `Cat.Db.Errors.MySql` exists, see the [module readme of Cat.Db.Errors](../modules/Cat.Db.Errors/README.md).
 - **No bulk operations.** `Cat.Dapper.MySql` has no bulk operations. MySQL has a bulk path through the driver, but it is not the `SqlBulkCopy` of SQL Server. A MySQL developer writes the bulk code themselves for now.
 <!-- region end: PhaseDescription-->
 

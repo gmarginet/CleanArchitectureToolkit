@@ -82,8 +82,7 @@ Add MySQL to the module, on top of the provider neutral `Cat.EFCore.Extensions` 
 
 #### Needs
 - [Phase 1](#phase-1) of this plan.
-- A stable Pomelo for EF Core 11 to prove the result on MySQL, see [Phase 13 of the demo](Demo.md#phase-13). [Phase 1 of the module plan Cat.Db.Errors](Cat.Db.Errors.md#phase-1) does not block this plan.
-
+- A stable Pomelo for EF Core 11 to prove the result on MySQL, see [Phase 13 of the demo](Demo.md#phase-13).
 #### Decided
 - **A MySQL project.** `Cat.EFCore.Extensions.MySql` is added next to `Cat.EFCore.Extensions.SqlServer`, with the same method names, as decided for phase 1.
 - **The shape on MySQL.** `SequenceId` is the primary key and `Id` is a unique key. It gives MySQL the same physical design that SQL Server has today: the table is clustered on the increasing number, and the GUID sits in an index of its own, so every index stays small on a big table. The decision is for a big database, and the demo is no argument. Consequences: the two databases differ in shape, and the rest of the module and the generated clients must not depend on which column is the key. `Id` is an alternate key (`HasAlternateKey`) and not only an index, so a foreign key that points at `Id` keeps working, to check when building. `ConfigureCatReferenceEntity` stays as it is, because someone else owns those tables. `Find(guid)` does not work on MySQL, see the lookup methods below. The module readme states the differences. Check how Pomelo stores a `Guid` by default.
