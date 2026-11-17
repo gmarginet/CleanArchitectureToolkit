@@ -165,7 +165,7 @@ public class SagaTests
     [Test]
     public async Task Start_OfAWorkflowThatIsNotRegistered_Throws()
     {
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         services.AddSingleton(typeof(Microsoft.Extensions.Logging.ILogger<>), typeof(Microsoft.Extensions.Logging.Abstractions.NullLogger<>));
         Cat.FluentWorkflows.Extensions.ServiceCollectionExtensions.AddCatFluentWorkflowsModule(services);
         Cat.FluentWorkflows.Extensions.ServiceCollectionExtensions.AddCatFluentWorkflowsFlows(services, typeof(PaymentFlow));

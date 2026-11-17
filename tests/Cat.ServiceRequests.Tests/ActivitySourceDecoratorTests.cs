@@ -20,7 +20,7 @@ public class ActivitySourceDecoratorTests : UnitTestBase
 
     private ICatServiceRequestProcessor Processor => ServiceProvider.GetRequiredService<ICatServiceRequestProcessor>();
 
-    protected override void ConfigureServices(Microsoft.Extensions.DependencyInjection.ServiceCollection services)
+    protected override void ConfigureServices(ServiceCollection services)
     {
         services.AddSingleton<RequestRecorder>();
         services.AddScoped<ScopedMarker>();

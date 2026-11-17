@@ -15,7 +15,7 @@ public class LoggingDecoratorTests : UnitTestBase
 
     private LogCollector Logs => ServiceProvider.GetRequiredService<LogCollector>();
 
-    protected override void ConfigureServices(Microsoft.Extensions.DependencyInjection.ServiceCollection services)
+    protected override void ConfigureServices(ServiceCollection services)
     {
         services.AddSingleton<RequestRecorder>();
         services.AddScoped<ScopedMarker>();

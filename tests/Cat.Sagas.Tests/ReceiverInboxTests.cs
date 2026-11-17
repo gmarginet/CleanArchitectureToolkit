@@ -38,7 +38,7 @@ public class ReceiverInboxTests
         _connection = new SqliteConnection("DataSource=:memory:");
         _connection.Open();
 
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         services.AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
         services.AddDbContext<SagaDbContext>(options => options.UseSqlite(_connection));
         services.AddCatFluentWorkflowsModule();

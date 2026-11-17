@@ -16,7 +16,7 @@ public class ServiceRequestProcessorTests : UnitTestBase
 
     private RequestRecorder Recorder => ServiceProvider.GetRequiredService<RequestRecorder>();
 
-    protected override void ConfigureServices(Microsoft.Extensions.DependencyInjection.ServiceCollection services)
+    protected override void ConfigureServices(ServiceCollection services)
     {
         services.AddSingleton<RequestRecorder>();
         services.AddScoped<ScopedMarker>();
@@ -218,7 +218,7 @@ public class ServiceRequestProcessorTests : UnitTestBase
     [Test]
     public void AddCatServiceRequestsModule_RegistersTheProcessorAsScoped()
     {
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         services.AddCatServiceRequestsModule(typeof(CreateOrderRequestHandler));
 
         var descriptor = services.Single(s => s.ServiceType == typeof(ICatServiceRequestProcessor));
@@ -229,7 +229,7 @@ public class ServiceRequestProcessorTests : UnitTestBase
     [Test]
     public void AddCatServiceRequestsModule_RegistersBothKindsOfHandlersAsScoped()
     {
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         services.AddCatServiceRequestsModule(typeof(CreateOrderRequestHandler));
 
         var withoutPayload = services.Single(s => s.ServiceType == typeof(ICatServiceRequestHandler<CreateOrderRequest>));
@@ -242,7 +242,7 @@ public class ServiceRequestProcessorTests : UnitTestBase
     [Test]
     public void AddCatServiceRequestsModule_SkipsGenericHandlers()
     {
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         services.AddCatServiceRequestsModule(typeof(CreateOrderRequestHandler));
 
         Assert.That(services.Any(s => s.ImplementationType == typeof(GenericRequestHandler<>)), Is.False);
@@ -251,7 +251,7 @@ public class ServiceRequestProcessorTests : UnitTestBase
     [Test]
     public void AddCatServiceRequestsModule_AlsoRegistersTheDecoratorsModule()
     {
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         services.AddCatServiceRequestsModule(typeof(CreateOrderRequestHandler));
 
         Assert.That(services.Any(s => s.ServiceType == typeof(ICatDecoratorFactory)), Is.True);
@@ -261,7 +261,7 @@ public class ServiceRequestProcessorTests : UnitTestBase
     [Test]
     public void AddCatServiceRequestsModule_WhenTheDecoratorsModuleIsAlreadyThere_DoesNotRegisterItAgain()
     {
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         Cat.Decorators.Extensions.ServiceCollectionExtensions.AddCatDecoratorsModule(services);
 
         services.AddCatServiceRequestsModule(typeof(CreateOrderRequestHandler));

@@ -83,7 +83,7 @@ public class DecoratorOrderTests
     [TestCase("tracing,validation,logging")]
     public void RealHandler_IsWrappedFromTheOutsideInWhateverTheSequenceOfTheCalls(string sequence)
     {
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         services.AddSingleton<RequestRecorder>();
         services.AddScoped<ScopedMarker>();
         services.AddSingleton(typeof(Microsoft.Extensions.Logging.ILogger<>), typeof(CollectingLogger<>));

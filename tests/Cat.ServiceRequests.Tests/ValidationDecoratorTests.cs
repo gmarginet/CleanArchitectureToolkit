@@ -21,7 +21,7 @@ public class ValidationDecoratorTests : UnitTestBase
 
     private RequestRecorder Recorder => ServiceProvider.GetRequiredService<RequestRecorder>();
 
-    protected override void ConfigureServices(Microsoft.Extensions.DependencyInjection.ServiceCollection services)
+    protected override void ConfigureServices(ServiceCollection services)
     {
         services.AddSingleton<RequestRecorder>();
         services.AddScoped<ScopedMarker>();
@@ -141,7 +141,7 @@ public class ValidationRequiredDecoratorTests : UnitTestBase
 {
     private ICatServiceRequestProcessor Processor => ServiceProvider.GetRequiredService<ICatServiceRequestProcessor>();
 
-    protected override void ConfigureServices(Microsoft.Extensions.DependencyInjection.ServiceCollection services)
+    protected override void ConfigureServices(ServiceCollection services)
     {
         services.AddSingleton<RequestRecorder>();
         services.AddScoped<ScopedMarker>();
@@ -179,7 +179,7 @@ public class ValidationRequiredDecoratorTests : UnitTestBase
     [Test]
     public void AddCatServiceRequestsModuleValidationDecorator_ReturnsTheServiceProvider()
     {
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         services.AddCatServiceRequestsModule(typeof(CreateOrderRequestHandler));
         using var provider = services.BuildServiceProvider();
 
