@@ -38,37 +38,9 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 2](#phase-2)
 - [Phase 3](#phase-3)
 - [Phase 4](#phase-4)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 2-->
-## Phase 2
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-`.sql` files as a second place for the SQL text, turned into constants by a source generator.
-
-#### Decided
-- **SQL files.** The developer chooses between constants in the handler class and `.sql` files next to the handler. Today the SQL lives in constants in the handler class, see the [module readme](../modules/Cat.Dapper/README.md).
-- **A source generator.** A source generator creates a `const string` from each `.sql` file, so a handler uses the file like any other constant. A missing or misspelled file is then a compile error. The repository has no source generator yet, so this is the first one. A generator must target `netstandard2.0`.
-- **A partial class next to the handler.** A `.sql` file is named after the handler and sits next to it. The generator adds the constant to the handler class, which must be `partial`. A file `OrderOverviewQueryHandler.sql` gives `OrderOverviewQueryHandler` a constant `Sql`.
-- **More than one statement.** A suffix in the file name picks the statement. `OrderOverviewQueryHandler.Count.sql` gives the constant `CountSql`, and the file without a suffix gives `Sql`.
-- **Finding the handler.** The generator looks for a class with the name of the file, declared in a source file in the same folder as the `.sql` file. It does not depend on the namespace, so a namespace that differs from the folder causes no trouble. Two files with the same name in different folders never clash, because each one belongs to the class of its own folder. A handler whose source file is in another folder than its SQL file is not found.
-- **Failures.** A compile error that names the file, for every failure: no matching class, a class that is not `partial`, a name that is not valid in C#, and a constant that already exists in the class.
-- **Visibility.** The generated constant is `private`, so only the handler sees its SQL.
-- **How the files reach the generator.** The developer adds one line to the project file, `<AdditionalFiles Include="**/*.sql" />`, and the module readme says so. The package adds nothing by itself, because a global rule would pick up `.sql` files nobody meant, such as the database scripts of Inventory. A developer who forgets the line gets no constants, and a compile error where the handler uses one.
-- **No runtime loader.** The generator is the only way to use a `.sql` file. There is no loader for embedded resources. A developer who wants no generated code keeps the SQL in a constant in the handler class, which works today.
-- **No runtime cost.** The generated constants need no support at run time, so the generator has no reference to `Cat.Dapper`.
-- **A project of its own.** The generator lives in an optional project, for example `Cat.Dapper.SqlFiles`, a package that the developer adds next to `Cat.Dapper`. A developer who does not want generated code adds nothing, which follows the rule that a module never forces something on a developer. Check how an analyzer is packed in a NuGet package when you build it, because the repository packs every project the same way today.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 2-->
 
 <!-- region start: Phase 3-->
 ## Phase 3
