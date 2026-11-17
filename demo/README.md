@@ -486,7 +486,7 @@ One chapter for every block that is built. A database sits in the chapter of the
 - Keycloak is a plain container on port 8180. The realm file `keycloak/cat-demo-realm.json` is mounted and imported at the start. The official Aspire Keycloak package is only a preview, so the demo does not use it.
 - The gateway runs on port 5100. It finds Catalog, Orders, the payment service and Inventory through service discovery. The AppHost gives the gateway and every service the address of the Keycloak realm.
 - The React client runs with Vite on the fixed port 5104, because the gateway lists that port as an allowed CORS origin.
-- The AppHost passes the settings `Payment:Latency`, `Payment:ErrorPercentage` and `Payment:Outage` to the payment service. See [Payment service](#payment-service).
+- The AppHost passes the settings `Payment:Latency`, `Payment:ErrorPercentage` and `Payment:Outage` to the payment service, and `Orders:PaymentTimeoutSeconds` to the orders service. See [Payment service](#payment-service).
 - Every service still starts on its own with `dotnet run`. The AppHost is a convenience, not a requirement.
 
 **CAT modules.** None. The AppHost is demo infrastructure. The modules never depend on Aspire.
@@ -1041,7 +1041,7 @@ Under the AppHost, set `Payment:Latency`, `Payment:ErrorPercentage` or `Payment:
 dotnet user-secrets set "Payment:Outage" "true" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost
 ```
 
-Remove the secret to switch the failure off again. When you run the service on its own, change `PaymentFailures` in its `appsettings.json` or set `PaymentFailures__Outage=true`. A running service reads a changed setting again, for the handler and for the endpoint. Place an order and watch the status in the web shop: it stays `Pending` while Payment is slow or down, and ends as `Cancelled` when the wait of Orders runs out. Set `Orders:PaymentTimeoutSeconds` to a small number, such as 20, to see that without waiting 2 minutes.
+Remove the secret to switch the failure off again. When you run the service on its own, change `PaymentFailures` in its `appsettings.json` or set `PaymentFailures__Outage=true`. A running service reads a changed setting again, for the handler and for the endpoint. Place an order and watch the status in the web shop: it stays `Pending` while Payment is slow or down, and ends as `Cancelled` when the wait of Orders runs out. Set `Orders:PaymentTimeoutSeconds` to a small number, such as 20, to see that without waiting 2 minutes. Set it like the payment settings, in the configuration of the AppHost, for example `dotnet user-secrets set "Orders:PaymentTimeoutSeconds" "20" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost`, and start the AppHost again. The AppHost passes it to Orders.
 
 **CAT modules.**
 

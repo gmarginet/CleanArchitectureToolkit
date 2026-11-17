@@ -66,6 +66,14 @@ var orders = builder.AddProject<Projects.Cat_Demo_OrderService_Api>("orders")
     .WithHttpEndpoint(port: 5102, name: "http", isProxied: false)
     .WithHttpHealthCheck("/health");
 
+// Orders waits 2 minutes for the payment. Set Orders:PaymentTimeoutSeconds in the configuration of the AppHost
+// (for example in the user secrets) and restart, to show the timeout without waiting that long.
+var paymentTimeoutSeconds = builder.Configuration["Orders:PaymentTimeoutSeconds"];
+if (!string.IsNullOrWhiteSpace(paymentTimeoutSeconds))
+{
+    orders.WithEnvironment("Orders__PaymentTimeoutSeconds", paymentTimeoutSeconds);
+}
+
 // Keycloak is the identity provider of the demo. The realm file is imported at the first start.
 // The admin console is at http://localhost:8180 (admin / admin). Do not use these settings outside the demo.
 const int keycloakPort = 8180;
