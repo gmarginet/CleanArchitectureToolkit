@@ -2,6 +2,8 @@
 
 Part of the `cat-internal-create-plan` skill. The templates named here are in [plan.parts.template.md](plan.parts.template.md).
 
+New questions and sub questions go only in the plan. The reply to the owner names the question numbers and never repeats the questions.
+
 These rules apply to every question region:
 - Everything about one question stays inside its `Question N` region, in the order it happens, so the region holds the full history.
 - A new question or answer is always added at the end of the region, just before the end marker.
