@@ -38,7 +38,6 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 8](#phase-8)
 - [Phase 9](#phase-9)
 - [Phase 10](#phase-10)
 - [Phase 11](#phase-11)
@@ -47,31 +46,6 @@
 - [Phase 14](#phase-14)
 - [Phase 15](#phase-15)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 8-->
-## Phase 8
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Show `Cat.Dapper`: fast read-only order overview queries, next to EF Core for writes.
-
-#### What exists today
-- The module `Cat.Dapper` is built, see the [module readme](../modules/Cat.Dapper/README.md). Nothing in the demo uses it yet.
-- Inventory reads through the EF Core scaffold only.
-
-#### Done when
-The demo uses the module, and the readme says where.
-
-#### Decided
-- **Inventory data access.** The EF Core scaffold only for now. Dapper waits for the `Cat.Dapper` module.
-- **First case.** The read-only order overview query in Orders. Inventory can read through Dapper next to the scaffolded EF Core model (decided in the plan of `Cat.Dapper`).
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 8-->
 
 <!-- region start: Phase 9-->
 ## Phase 9
