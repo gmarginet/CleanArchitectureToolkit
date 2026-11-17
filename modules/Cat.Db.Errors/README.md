@@ -48,10 +48,11 @@ There is one project per database. Entity Framework Core and Dapper code share t
 
 ## NuGet packages
 <!-- region start: NuGet-->
-[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Db.Errors.SqlServer)](#nuget-packages)
+[![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Db.Errors.MySql)](#nuget-packages)
 
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
+| [Cat.Db.Errors.MySql](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.MySql/) | MySQL error checks | `dotnet add package gmarginet.Cat.Db.Errors.MySql` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Db.Errors.MySql)](#nuget-packages) |
 | [Cat.Db.Errors.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.SqlServer/) | SQL Server error checks | `dotnet add package gmarginet.Cat.Db.Errors.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Db.Errors.SqlServer)](#nuget-packages) |
 
 <!-- region end: NuGet-->
@@ -61,6 +62,7 @@ There is one project per database. Entity Framework Core and Dapper code share t
 
 | Namespace | What it holds |
 |-----------|---------------|
+| [Cat.Db.Errors.MySql](namespaces/Cat.Db.Errors.MySql/index.md) | The error numbers and the extension methods that recognize MySQL errors. |
 | [Cat.Db.Errors.SqlServer](namespaces/Cat.Db.Errors.SqlServer/index.md) | The error numbers and the extension methods that recognize SQL Server errors. |
 
 <!-- region end: Namespaces-->
@@ -101,7 +103,9 @@ catch (Exception ex) when (ex.IsDeadlock())
 ```
 
 ### The checks
-All checks are extension methods on `Exception`. A `null` exception, or one without a SQL Server exception inside, gives `false`.
+All checks are extension methods on `Exception`. A `null` exception, or one without an exception of the database inside, gives `false`. Pick the project of your database. The checks have the same names in both, and they sit in different namespaces: `Cat.Db.Errors.SqlServer` and `Cat.Db.Errors.MySql`.
+
+The SQL Server checks:
 
 | Method | Error numbers | Meaning |
 |--------|---------------|---------|
@@ -112,5 +116,17 @@ All checks are extension methods on `Exception`. A `null` exception, or one with
 
 `FindSqlException` returns the first `SqlException` in the chain of the exception, or `null`. The numbers are public constants in `CatSqlServerErrorNumbers`, for your own pattern match.
 
-The module references `Microsoft.Data.SqlClient` and reads `SqlException.Number`. It makes no call to the database.
-<!-- region end: Usage-->
+The project references `Microsoft.Data.SqlClient` and reads `SqlException.Number`. It makes no call to the database.
+
+The MySQL checks:
+
+| Method | Error numbers | Meaning |
+|--------|---------------|---------|
+| `IsUniqueViolation` | 1062 | A unique constraint, primary key or unique index was violated. |
+| `IsForeignKeyViolation` | 1451, 1452 | A row is still referenced, or it points to a row that does not exist. |
+| `IsDeadlock` | 1213 | The transaction was chosen as the deadlock victim. |
+| `IsTimeout` | -1, 1205 | The command timed out, or the server gave up waiting for a lock. |
+
+`FindMySqlException` returns the first `MySqlException` in the chain of the exception, or `null`. The numbers are public constants in `CatMySqlErrorNumbers`, for your own pattern match.
+
+The project references `MySqlConnector`, the driver under Pomelo, and reads `MySqlException.ErrorCode`. It makes no call to the database.<!-- region end: Usage-->

@@ -1,0 +1,16 @@
+../../../Cat.Db.Errors/namespaces/Cat.Db.Errors.MySql/
+M:Cat.Db.Errors.MySql.CatMySqlErrorExtensions.FindMySqlException(System.Exception)|CatMySqlErrorExtensions.FindMySqlException.OF12CN8MVIHSH7K1PRWVQF626.md|FindMySqlException(this Exception)
+M:Cat.Db.Errors.MySql.CatMySqlErrorExtensions.IsUniqueViolation(System.Exception)|CatMySqlErrorExtensions.IsUniqueViolation.K9XHFREJD2YB9GKXSIWCVVULD.md|IsUniqueViolation(this Exception)
+M:Cat.Db.Errors.MySql.CatMySqlErrorExtensions.IsForeignKeyViolation(System.Exception)|CatMySqlErrorExtensions.IsForeignKeyViolation.E4L0C66TJFOZKBSZHH91RUBW6.md|IsForeignKeyViolation(this Exception)
+M:Cat.Db.Errors.MySql.CatMySqlErrorExtensions.IsDeadlock(System.Exception)|CatMySqlErrorExtensions.IsDeadlock.SUTQP3KGB0V0IJHKMVBCU8EKD.md|IsDeadlock(this Exception)
+M:Cat.Db.Errors.MySql.CatMySqlErrorExtensions.IsTimeout(System.Exception)|CatMySqlErrorExtensions.IsTimeout.LNBGBGQ0M8AMM2BVELPOGVVZ3.md|IsTimeout(this Exception)
+M:Cat.Db.Errors.MySql.CatMySqlErrorExtensions.GetNumber(System.Exception)|CatMySqlErrorExtensions.GetNumber.NPMTI57MTD2AWF4FCDAMJEIN5.md|GetNumber(this Exception)
+N:Cat.Db.Errors.MySql|Cat.Db.Errors.MySql.md|Cat.Db.Errors.MySql
+T:Cat.Db.Errors.MySql.CatMySqlErrorExtensions|CatMySqlErrorExtensions.md|CatMySqlErrorExtensions
+F:Cat.Db.Errors.MySql.CatMySqlErrorNumbers.DuplicateEntry|CatMySqlErrorNumbers.DuplicateEntry.md|DuplicateEntry
+F:Cat.Db.Errors.MySql.CatMySqlErrorNumbers.RowIsReferenced|CatMySqlErrorNumbers.RowIsReferenced.md|RowIsReferenced
+F:Cat.Db.Errors.MySql.CatMySqlErrorNumbers.NoReferencedRow|CatMySqlErrorNumbers.NoReferencedRow.md|NoReferencedRow
+F:Cat.Db.Errors.MySql.CatMySqlErrorNumbers.Deadlock|CatMySqlErrorNumbers.Deadlock.md|Deadlock
+F:Cat.Db.Errors.MySql.CatMySqlErrorNumbers.LockWaitTimeout|CatMySqlErrorNumbers.LockWaitTimeout.md|LockWaitTimeout
+F:Cat.Db.Errors.MySql.CatMySqlErrorNumbers.CommandTimeout|CatMySqlErrorNumbers.CommandTimeout.md|CommandTimeout
+T:Cat.Db.Errors.MySql.CatMySqlErrorNumbers|CatMySqlErrorNumbers.md|CatMySqlErrorNumbers

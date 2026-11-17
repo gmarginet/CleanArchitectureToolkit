@@ -87,6 +87,7 @@
   </Folder>
   <Folder Name="/modules/Cat.Db.Errors/">
     <File Path="modules/Cat.Db.Errors/README.md" />
+    <Project Path="modules/Cat.Db.Errors/Cat.Db.Errors.MySql/Cat.Db.Errors.MySql.csproj" />
     <Project Path="modules/Cat.Db.Errors/Cat.Db.Errors.SqlServer/Cat.Db.Errors.SqlServer.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.Decorators/">
@@ -214,6 +215,7 @@
     <Project Path="tests/Cat.Api.Gateway.Tests/Cat.Api.Gateway.Tests.csproj" />
     <Project Path="tests/Cat.Commands.Tests/Cat.Commands.Tests.csproj" />
     <Project Path="tests/Cat.Dapper.Tests/Cat.Dapper.Tests.csproj" />
+    <Project Path="tests/Cat.Db.Errors.MySql.Tests/Cat.Db.Errors.MySql.Tests.csproj" />
     <Project Path="tests/Cat.Db.Errors.SqlServer.Tests/Cat.Db.Errors.SqlServer.Tests.csproj" />
     <Project Path="tests/Cat.Decorators.Tests/Cat.Decorators.Tests.csproj" />
     <Project Path="tests/Cat.EFCore.Tests/Cat.EFCore.Tests.csproj" />
