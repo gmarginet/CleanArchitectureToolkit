@@ -24,6 +24,8 @@ public static class EndpointRouteBuilderExtensions
     /// which takes the JSON of a message and runs it through the same pipeline as a real message.
     /// The endpoints exist only in the Development environment. In any other environment nothing is mapped.
     /// The result says what the broker would do with the message, but nothing is settled, because there is no real message.
+    /// The <c>Authorization</c> header of the request becomes the token of the message, so a message type with an authorization rule can be tried
+    /// with the same token as the API. Without the header the message has no token.
     /// The group has the OpenAPI group name <c>dev</c>, so the endpoints are not in the default OpenAPI document and no generated client gets them.
     /// To see them in an API explorer, add a document with <c>AddOpenApi("dev")</c> and map it.
     /// </summary>
@@ -60,13 +62,7 @@ public static class EndpointRouteBuilderExtensions
             using var reader = new StreamReader(request.Body, Encoding.UTF8);
             var json = await reader.ReadToEndAsync(cancellationToken);
 
-            var message = new CatIncomingMessage
-            {
-                Body = Encoding.UTF8.GetBytes(json),
-                ContentType = "application/json",
-                MessageId = Guid.NewGuid().ToString(),
-                DeliveryCount = 1
-            };
+            var message = CreateMessage(json, request.Headers.Authorization.ToString());
 
             var result = await receiver.ReceiveAsync(registration.MessageType, message, cancellationToken);
 
@@ -79,5 +75,28 @@ public static class EndpointRouteBuilderExtensions
         });
 
         return group;
+    }
+
+    /// <summary>
+    /// Builds the incoming message of a development request. A real message carries the token of its sender in the
+    /// <c>Authorization</c> property, so the <c>Authorization</c> header of the request goes into that property.
+    /// Without the header the message has no token.
+    /// </summary>
+    internal static CatIncomingMessage CreateMessage(string json, string? authorizationHeader)
+    {
+        var message = new CatIncomingMessage
+        {
+            Body = Encoding.UTF8.GetBytes(json),
+            ContentType = "application/json",
+            MessageId = Guid.NewGuid().ToString(),
+            DeliveryCount = 1
+        };
+
+        if (!string.IsNullOrWhiteSpace(authorizationHeader))
+        {
+            message.Properties[CatMessageProperties.Authorization] = authorizationHeader!;
+        }
+
+        return message;
     }
 }

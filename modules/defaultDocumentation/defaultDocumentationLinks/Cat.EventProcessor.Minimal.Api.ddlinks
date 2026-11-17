@@ -1,5 +1,6 @@
 ../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Minimal.Api/
 F:Cat.EventProcessor.Minimal.Api.Extensions.EndpointRouteBuilderExtensions.DevDocumentName|EndpointRouteBuilderExtensions.DevDocumentName.md|DevDocumentName
 M:Cat.EventProcessor.Minimal.Api.Extensions.EndpointRouteBuilderExtensions.MapCatEventProcessor(Microsoft.AspNetCore.Routing.IEndpointRouteBuilder)|EndpointRouteBuilderExtensions.MapCatEventProcessor.EUU1LTX4EQ7UK7B8J4AR190FD.md|MapCatEventProcessor(this IEndpointRouteBuilder)
+M:Cat.EventProcessor.Minimal.Api.Extensions.EndpointRouteBuilderExtensions.CreateMessage(System.String,System.String)|EndpointRouteBuilderExtensions.CreateMessage.WXITXLDV6NOJFYLGUKQWZ2ZO6.md|CreateMessage(string, string)
 N:Cat.EventProcessor.Minimal.Api.Extensions|Cat.EventProcessor.Minimal.Api.Extensions.md|Cat.EventProcessor.Minimal.Api.Extensions
 T:Cat.EventProcessor.Minimal.Api.Extensions.EndpointRouteBuilderExtensions|EndpointRouteBuilderExtensions.md|EndpointRouteBuilderExtensions

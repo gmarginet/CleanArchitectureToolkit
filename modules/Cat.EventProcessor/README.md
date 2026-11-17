@@ -254,6 +254,7 @@ app.MapCatEventProcessor();
 
 - `GET /dev/event-processor` lists the declared message types with their queue or topic.
 - `POST /dev/event-processor/{messageType}` takes the JSON of a message and runs it through the same pipeline as a real message. The answer says what the listener would do with the message: `Complete`, `Abandon` or `DeadLetter`, with the reason.
+- The `Authorization` header of the request becomes the token of the message. Send the same bearer token as for the API to try a message type with an authorization rule. Without the header the message has no token, and such a type answers `DeadLetter` with the reason `Unauthorized`.
 
 Nothing is settled on the bus, because there is no real message.
 

@@ -18,6 +18,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <InternalsVisibleTo Include="Cat.EventProcessor.Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\..\Cat.Messaging\Cat.Messaging.Abstractions\Cat.Messaging.Abstractions.csproj" />
         <ProjectReference Include="..\Cat.EventProcessor.Abstractions\Cat.EventProcessor.Abstractions.csproj" />
     </ItemGroup>

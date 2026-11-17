@@ -1,5 +1,6 @@
 using Cat.EventProcessor.Extensions;
 using Cat.EventProcessor.Minimal.Api.Extensions;
+using Cat.Messaging.Abstractions;
 using Cat.Messaging.Extensions;
 using Cat.ServiceRequests.Abstractions;
 using Microsoft.AspNetCore.Builder;
@@ -35,6 +36,24 @@ public class DevEndpointTests
         Assert.That(endpoints, Has.Count.EqualTo(2));
         Assert.That(endpoints.Select(endpoint => endpoint.Metadata.GetMetadata<IEndpointGroupNameMetadata>()?.EndpointGroupName),
             Is.All.EqualTo(Cat.EventProcessor.Minimal.Api.Extensions.EndpointRouteBuilderExtensions.DevDocumentName));
+    }
+
+    [Test]
+    public void CreateMessage_PutsTheAuthorizationHeaderInTheAuthorizationProperty()
+    {
+        var message = Cat.EventProcessor.Minimal.Api.Extensions.EndpointRouteBuilderExtensions.CreateMessage("{}", "Bearer abc");
+
+        Assert.That(message.Properties[CatMessageProperties.Authorization], Is.EqualTo("Bearer abc"));
+    }
+
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase("  ")]
+    public void CreateMessage_WithoutAHeader_HasNoToken(string? header)
+    {
+        var message = Cat.EventProcessor.Minimal.Api.Extensions.EndpointRouteBuilderExtensions.CreateMessage("{}", header);
+
+        Assert.That(message.Properties, Is.Empty);
     }
 
     [Test]
