@@ -5,6 +5,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
+      "launchUrl": "login?t=dev",
       "applicationUrl": "http://localhost:15101",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
@@ -12,7 +13,7 @@
         "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "http://localhost:19101",
         "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "http://localhost:20101",
         "ASPIRE_ALLOW_UNSECURED_TRANSPORT": "true",
-        "ASPIRE_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS": "true"
+        "ASPIRE_DASHBOARD_FRONTEND_BROWSERTOKEN": "dev"
       }
     }
   }

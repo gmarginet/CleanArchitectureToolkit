@@ -250,7 +250,7 @@ The main route is the Aspire AppHost. One command starts the gateway, Catalog, O
    dotnet run --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost --launch-profile http
    ```
 3. Wait until the dashboard shows `gateway`, `catalog`, `orders`, `payment`, `inventory` and `web` as running. The first start pulls the SQL Server, Keycloak and Service Bus emulator images, so it takes a few minutes. Keycloak needs a moment to import the realm.
-4. Open the dashboard at `http://localhost:15101`. It needs no login. It shows the logs, traces, metrics and health checks of the services.
+4. The launch profile opens the dashboard in your browser and logs you in. If you open the dashboard yourself, go to `http://localhost:15101/login?t=dev`, or enter the token `dev` on the login page. It shows the logs, traces, metrics and health checks of the services. The dashboard may show the notification "No trusted development certificate was found". See [Things to know about the dashboard](#things-to-know-about-the-dashboard).
 5. Try the endpoints. The gateway runs on `http://localhost:5100` and is the door for every call. Keycloak runs on `http://localhost:8180`. Open these files in Visual Studio or Rider and run the requests from top to bottom. Run the login requests at the top first. Later requests use ids from earlier responses.
    - `demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api/CatalogRequests.http`
    - `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Api/OrderRequests.http`
@@ -368,9 +368,18 @@ The gateway and every service answer `/health` (ready) and `/alive` (running) in
 ### Things to know about the dashboard
 <!-- region start: ThingsToKnowAboutTheDashboard-->
 
-The dashboard may say "No trusted development certificate was found". That is harmless for now, because the AppHost, the dashboard and the services all run on HTTP. Anyone on your machine can open the dashboard on localhost, which is fine for a local demo.
+The dashboard has a fixed login token, `dev`. The launch profile of the AppHost sets it with `ASPIRE_DASHBOARD_FRONTEND_BROWSERTOKEN` and opens `login?t=dev`, so the browser lands in the dashboard already logged in. The token is for a local demo only. Without a fixed token the AppHost makes a new random one at every start. Do not set `ASPIRE_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS`. It opens the dashboard without a login, and the dashboard then warns that the endpoint is unsecured.
 
 To follow one order, place it and open **Traces** in the dashboard. The call `POST /orders` shows up as one trace. It holds the gateway, Orders, Keycloak, Catalog and Inventory, so you see every HTTP hop of the order in one place. The order is already answered with 202 when the payment starts, so the rest of the order is not in this trace.
+The dashboard may say "No trusted development certificate was found". The AppHost, the dashboard and the services all run on HTTP, so the demo works with the notification and it is harmless. To clear it, trust the ASP.NET Core development certificate once:
+```
+dotnet dev-certs https --trust
+```
+Windows and macOS ask you to confirm. Start the AppHost again afterwards. This step is optional. To undo it, remove the development certificate from your machine and from the trusted certificates:
+```
+dotnet dev-certs https --clean
+```
+The `--clean` command removes every ASP.NET Core development certificate of your user, also for other projects. Run `dotnet dev-certs https --trust` again when you want a trusted one.
 
 The message hops are not part of that trace. When Payment handles `TakePayment`, Orders handles `PaymentProcessed`, Notifications handles `OrderConfirmed`, or `StockChanged` arrives, the dashboard shows it as its own trace with only that resource in it. `Cat.Messaging` does not pass the trace context along with a message yet. Match such a trace to its order by the time and the message name.
 <!-- region end: ThingsToKnowAboutTheDashboard-->

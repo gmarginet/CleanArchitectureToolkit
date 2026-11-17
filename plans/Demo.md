@@ -45,7 +45,6 @@
 - [Phase 12](#phase-12)
 - [Phase 13](#phase-13)
 - [Phase 14](#phase-14)
-- [Phase 15](#phase-15)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 8-->
@@ -242,6 +241,7 @@ Show `Cat.Telemetry` in the demo, for code that runs without Aspire.
 #### What exists today
 - Every service has telemetry from `ServiceDefaults`.
 - `Cat.Telemetry` does not exist yet.
+- The demo stays on HTTP. The owner tested it live: `dotnet dev-certs https --trust` is optional and clears the dashboard notification "No trusted development certificate was found" on HTTP. The demo readme describes it, with the command that undoes it.
 
 #### Needs
 Phase 1 of the module plan [Cat.Telemetry.md](Cat.Telemetry.md#phase-1), answered first. [Question 2](#question-2) of [Phase 11](#phase-11) answered.
@@ -249,16 +249,6 @@ Phase 1 of the module plan [Cat.Telemetry.md](Cat.Telemetry.md#phase-1), answere
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 3-->
-#### Question 3
-What do we do about the development certificate? The dashboard says "No trusted development certificate was found" when the machine has not run `dotnet dev-certs https --trust`. It is harmless now, because the AppHost, the dashboard and the services all run on HTTP (the AppHost launch settings set `ASPIRE_ALLOW_UNSECURED_TRANSPORT`). It matters once something uses HTTPS. The options:
-- **Keep HTTP and add one note.** The run steps of the demo readme say the warning is harmless. Cost: the demo shows no HTTPS.
-- **Tell the developer to trust the certificate** (`dotnet dev-certs https --trust`) and move the demo to HTTPS. Cost: one more setup step, and the unsecured transport setting goes away.
-- **Do nothing.** Cost: a new developer sees the warning and wonders.
-
-Recommendation: keep HTTP with one note in the run steps. The warning goes away by itself when something needs HTTPS, and then the step moves to the run steps.
-<!-- region end: Question 3-->
-
 <!-- region start: Question 5-->
 #### Question 5
 Should the health checks of the services cover their databases? Today every service answers `/health` (ready) and `/alive` (running) from one check, `self`, in `ServiceDefaults`, and that check is always healthy. The AppHost and the gateway watch `/health`, so a service with a database that is down still looks healthy. The options:
@@ -344,42 +334,3 @@ Recommendation: the message pair. It matches the payment flow, it keeps the HTTP
 <!-- region end: Question 16-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 14-->
-
-<!-- region start: Phase 15-->
-## Phase 15
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-The Aspire dashboard shows no "Endpoint is unsecured" notification when a developer starts the demo, and the developer needs no extra step to open it.
-
-#### What exists today
-- The launch profile of the AppHost sets `ASPIRE_ALLOW_UNSECURED_TRANSPORT` and `ASPIRE_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS`. The dashboard opens without a login.
-- The dashboard shows the notification "Endpoint is unsecured: untrusted apps can send telemetry to the dashboard, and untrusted apps can access telemetry data via the API".
-- The demo readme says the dashboard may show "No trusted development certificate was found", and that this is harmless. That notification is a separate point, see [Question 3](#question-3) of [Phase 12](#phase-12).
-
-#### Decided
-- **A fixed browser token.** The dashboard gets the browser token `dev`. The setting `ASPIRE_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS` goes out of the launch profile, so the dashboard asks for a token and the AppHost secures the telemetry endpoint with an API key.
-- **No login step in the launch profile.** The launch profile gets `"launchUrl": "login?t=dev"`, so the browser opens the dashboard already logged in.
-- **The readme.** The demo readme says to enter the token `dev` when someone starts the dashboard another way.
-
-#### To check
-These facts are not verified yet. The owner tests them live when the AppHost can be started.
-- The name of the environment variable or setting that sets the fixed browser token in the launch profile.
-- That the browser opens the dashboard logged in with `launchUrl` and the fixed token.
-- That the "Endpoint is unsecured" notification is gone, and whether another notification stays because the AppHost still runs on HTTP.
-
-#### Test order for the certificate notification
-The owner decided to try the options of [Question 3](#question-3) of [Phase 12](#phase-12) live, when the AppHost can be started. The order:
-- **First option B.** Run `dotnet dev-certs https --trust` once and keep HTTP. The owner doubts that it clears the notification while the demo stays on HTTP.
-- **Then option C when B does not work.** Move the demo to HTTPS. This is a large change, so it needs its own plan first. Nothing is decided about it.
-- **Nothing changes in the readme until a test shows what works.**
-
-#### Done when
-A developer who starts the AppHost with the launch profile sees the dashboard without a login step and without the "Endpoint is unsecured" notification. The owner has tested it live, and the demo readme describes it.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 15-->
