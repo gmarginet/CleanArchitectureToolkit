@@ -1,5 +1,6 @@
 @Gateway_HostAddress = http://localhost:5100
 @Keycloak_HostAddress = http://localhost:8180
+@Inventory_HostAddress = http://localhost:5105
 
 ### Start the AppHost first. Every call needs a token, so run the login first. The requests go through the gateway.
 ### The order number is the idempotency key. Asking again for the same order changes nothing.
@@ -83,3 +84,32 @@ Content-Type: application/json
 ### StockReleaseRequest => OK, the stock of the first order is back
 DELETE {{Gateway_HostAddress}}/inventory/reservations/20261106-9101 HTTP/1.1
 Authorization: Bearer {{alice.response.body.$.access_token}}
+
+### The development endpoint runs a message through the same pipeline as a message from the bus, without a bus.
+### It is on the port of the service, not on the gateway. The Authorization header becomes the token of the message.
+### The answer says what the listener would do: Complete, Abandon or DeadLetter, with the reason.
+
+### OrderConfirmed with a token => Complete, when the order has a reservation. Without one the answer is Abandon or DeadLetter for that reason.
+POST {{Inventory_HostAddress}}/dev/event-processor/OrderConfirmed HTTP/1.1
+Authorization: Bearer {{alice.response.body.$.access_token}}
+Content-Type: application/json
+
+{
+  "orderId": "8c7834be-682f-400f-9602-112d3977006b",
+  "orderNumber": "20261106-9101",
+  "total": 10,
+  "customerName": "Alice",
+  "customerEmail": "alice@example.com"
+}
+
+### OrderConfirmed without a token => DeadLetter, Unauthorized
+POST {{Inventory_HostAddress}}/dev/event-processor/OrderConfirmed HTTP/1.1
+Content-Type: application/json
+
+{
+  "orderId": "8c7834be-682f-400f-9602-112d3977006b",
+  "orderNumber": "20261106-9101",
+  "total": 10,
+  "customerName": "Alice",
+  "customerEmail": "alice@example.com"
+}
