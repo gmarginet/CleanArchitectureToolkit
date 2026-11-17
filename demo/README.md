@@ -382,6 +382,7 @@ The `--clean` command removes every ASP.NET Core development certificate of your
 
 To follow one order, place it and open **Traces** in the dashboard. The call `POST /orders` shows up as one trace. It holds the gateway, Orders, Keycloak, Catalog and Inventory, so you see every HTTP hop of the order in one place. The order is already answered with 202 when the payment starts, so the rest of the order is not in this trace.
 The message hops are not part of that trace. When Payment handles `TakePayment`, Orders handles `PaymentProcessed`, Notifications handles `OrderConfirmed`, or `StockChanged` arrives, the dashboard shows it as its own trace with only that resource in it. `Cat.Messaging` does not pass the trace context along with a message yet. Match such a trace to its order by the time and the message name.
+
 <!-- region end: ThingsToKnowAboutTheDashboard-->
 
 ### Run the tests
