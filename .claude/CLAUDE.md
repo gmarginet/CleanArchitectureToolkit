@@ -32,6 +32,11 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 - Sharing the `Contracts` project of a service is the developer's choice, not a rule.
 - Module projects target `netstandard2.0` as much as possible. A project that needs more, such as one that uses ASP.NET Core or EF Core, targets the latest stable .NET. Check this when you add a project.
 - A shared abstraction lives in the `Abstractions` project of the module that owns it, such as `ICatUser` in `Cat.Users.Abstractions`.
+- End a task with a short report, and leave out a part that is empty:
+  - **Done:** one line per change, grouped by topic. Name the files or commits, do not repeat the diff.
+  - **Checks:** one line per check with its result, such as `docs check: 0 errors`.
+  - **Open:** only what needs the owner, such as a decision, a push or a manual step.
+  - No background or explanations the owner did not ask for.
 
 ## Environment Constraints
 - Do NOT use Python scripts or bash utilities (`sed` and the like) for file manipulation or automation.
