@@ -15,9 +15,7 @@ Load the `cat-internal-template-concepts` skill and the `cat-internal-create-hea
 - [BaseSkill.template.md](BaseSkill.template.md): the skeleton of the `SKILL.md` of the new skill.
 
 ## What goes where
-- The main template file, `<name>.template.md`, is exactly the start of the created file. Claude copies it as it is.
-- A template that needs small templates, such as a badge or a phase, keeps them in `<name>.parts.template.md`. Claude reads that file only when it adds one of them.
-- The instructions never go into a template file. They go into the `SKILL.md`.
+- The concepts skill says what the main template file and the parts file hold. The instructions never go into a template file.
 - The `SKILL.md` documents every region, every small template and every placeholder that the template files use.
 - The skill folder is `.claude/skills/<SkillName>/`. Use the `cat-internal-` prefix for a skill for the owner of the toolkit and the `cat-` prefix for a skill for developers who use the toolkit.
 

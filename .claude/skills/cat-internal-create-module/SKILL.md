@@ -22,13 +22,13 @@ Set up a new module so it matches the others. New modules start with the status 
    Every project also gets `DefaultDocumentation/NamespaceDoc.cs`, an internal static class in the root namespace of the project. Its XML summary is the description of the namespace in the generated pages. Copy one from another project, such as `modules/Cat.Responses/Cat.Responses/DefaultDocumentation/NamespaceDoc.cs`, and write a summary that fits.
 3. **Test project.** Create `tests/<ModuleName>.Tests/<ModuleName>.Tests.csproj` like `tests/Cat.Queries.Tests`. It references the module projects and `modules/Cat.UnitTesting/Cat.UnitTesting.NUnit`. Add at least one real test.
 4. **Solution file.** Update `CleanArchitectureToolkit.slnx`:
-   - Add `<Folder Name="/modules/<ModuleName>/">` with `<File Path="modules/<ModuleName>/README.md" />` and one `<Project>` entry per project. Keep the folders sorted by name.
+   - Add `<Folder Name="/modules/<ModuleName>/">` with one `<Project>` entry per project. Keep the folders sorted by name.
    - Add the test project to the `/tests/` folder, sorted by name.
-5. **Module readme.** Run the `cat-internal-create-module-readme` skill for the new module.
-6. **Readme table.** Run the `cat-internal-create-readme` skill. The row of the module in the repo overview already exists when the module has a plan, so change its name link to the module readme and its status. A new module without a plan gets a new row. Recalculate the priorities too. The `cat-internal-create-plan` skill describes this.
-7. **Error code area.** If the module defines error codes, give it a prefix `CAT-<AREA>` with a 3 letter acronym of the module name, in one definitions class with a constant that ends with `ErrorCodePrefix`. No other module may use the same area. The check is in the `cat-internal-verify-code` skill.
-8. **Verify.** Run the `cat-internal-verify-code` skill. The build generates the `namespaces/` pages for the new projects, and the check of the error code areas runs.
-9. **Check the generated pages.** They should appear in `modules/<ModuleName>/namespaces/`. If you need to change them, change the XML docs in the code and build again.
+5. **Error code area.** If the module defines error codes, give it a prefix `CAT-<AREA>` with a 3 letter acronym of the module name, in one definitions class with a constant that ends with `ErrorCodePrefix`. No other module may use the same area. The check is in the `cat-internal-verify-code` skill.
+6. **Verify.** Run the `cat-internal-verify-code` skill. The build generates the `namespaces/` pages for the new projects, and the check of the error code areas runs.
+7. **Check the generated pages.** They should appear in `modules/<ModuleName>/namespaces/`. If you need to change them, change the XML docs in the code and build again.
+8. **Module readme.** Run the `cat-internal-create-module-readme` skill for the new module. It reads the generated namespace summaries, so it comes after the build. Then add `<File Path="modules/<ModuleName>/README.md" />` to the module folder in the solution file.
+9. **Readme table.** Run the `cat-internal-create-readme` skill. The row of the module in the repo overview already exists when the module has a plan, so change its name link to the module readme and its status. A new module without a plan gets a new row. Recalculate the priorities too, as that skill describes.
 
 ## Done when
 - All projects and the test project build and the tests pass.

@@ -39,12 +39,13 @@ Chapters, with static text that the owner decides:
 - `Intro`: The line under the title.
 - `TableOfContents`: The links to the chapters and the block chapters. Update it by hand when a heading changes.
 - `WhatTheBookshopDoes`: The functional description. Plain words, no project, module or HTTP names.
-- `Architecture`: The intro, the drawing and the sub chapters. Its sub regions are `HowThePiecesFit`, `HowARequestFlowsThroughAService`, `SharingContracts`, `LoginAndTokens`, `EventsAndInterfaces` and `WhereTheCatModulesSit`.
-- `HowToRun`: Everything for a person who just cloned the repository. Its sub regions are `Prerequisites`, `RunWithAspire`, `SqlServerModes`, `DockerMemory`, `RunOneService`, `ThingsToKnow`, `HealthChecks`, `ThingsToKnowAboutTheDashboard` and `RunTheTests`.
+- `Architecture`: The intro, the drawing and the sub chapters.
+- `HowToRun`: Everything for a person who just cloned the repository.
+- Every sub chapter of `Architecture` and `HowToRun` has its own sub region, named after its heading in PascalCase, such as `LoginAndTokens` or `RunWithAspire`. Read the demo readme for the list.
 
 Building blocks:
 - `BlockOverview`: The intro line and the overview table. It is kept in sync with the block chapters.
-- One region per block chapter, named after the block: `ReactClient`, `AspireAppHostAndDashboard`, `ApiGateway`, `Keycloak`, `ServiceBusEmulator`, `CatalogService`, `OrdersService`, `InventoryService`, `NotificationsService`, `AspireServiceDefaults` and `PaymentService`.
+- One region per block chapter, named after the chapter in PascalCase, such as `OrdersService`. The `chapter` values in [demo-blocks.json](demo-blocks.json) list the block chapters.
 
 The sub regions and the block regions live in the demo readme only. The template holds the chapter regions.
 
@@ -58,7 +59,7 @@ The block chapters follow the `BlockChapter` template of the parts file, in this
 - **Cons.** What it costs: more dependencies, more ceremony, limits. Be honest, a demo that only praises helps nobody.
 - **More.** Links to the code folder.
 
-A block chapter describes what exists. It has no status line and no future text. A block that is not built has no chapter. Its box in the drawing is hatched, and its entry in [demo-blocks.json](demo-blocks.json) has `"chapter": null`. The chapter comes when the block is built, see [Adding a block](#blocks).
+A block chapter describes what exists. It has no status line and no future text. A block that is not built has no chapter. Its box in the drawing is hatched, and its entry in [demo-blocks.json](demo-blocks.json) has `"chapter": null`. The chapter comes when the block is built, see the steps below.
 
 Adding a block:
 1. Add the chapter with the `BlockChapter` template, after the last block chapter. Name the region after the block.

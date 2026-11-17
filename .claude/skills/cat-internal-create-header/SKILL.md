@@ -32,11 +32,9 @@ Use this when the owner changes the header template and asks to update the files
 ## Generated pages
 The pages in `modules/*/namespaces` have the same header, but they are generated. The generator holds its own copy of the header in `tools/Cat.DefaultDocumentationPlugin/CatHeaderSection.cs`. Use this when the header template changes.
 1. Make the same change in `CatHeaderSection.cs`. The generator builds the header lines in code, with the paths of a generated page.
-2. Run `tools\Cat.DefaultDocumentationPlugin\BuildAndDeployPlugin.cmd`. It copies the plugin DLLs to `resources/defaultDocumentationPlugins/`.
-3. Run `dotnet cake --target=Build --configuration=Debug`. Only a Debug build regenerates the pages.
-4. Check the diff of the pages. Every page should differ only in the changed header line.
-5. Never edit the generated pages by hand.
-6. Commit the change to `tools/`, the DLLs and the regenerated pages together. The commit changes code, so it gets no ` (skip-pub)`. A push to `master` publishes the NuGet packages.
+2. Follow the chapter "Changing the generator" of the `cat-internal-verify-code` skill. It deploys the generator, regenerates the pages and says what to commit together.
+3. Check the diff of the pages. Every page should differ only in the changed header line.
+4. The commit changes code in `tools/`, so it gets no ` (skip-pub)`. A push to `master` publishes the NuGet packages.
 
 ## The repo overview anchor
 The navigation bar links to `README.md#repo-overview`. That anchor sits in the header template, in `CatHeaderSection.cs` and in `README_NUGET.md`. When the heading of the repo overview changes, change all three and search the old anchor with `git grep`.

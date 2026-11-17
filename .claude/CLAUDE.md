@@ -3,7 +3,7 @@
 Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications embracing SOLID principles for maintainability, testability, and scalability.
 
 ## 🛠️ Essential Commands
-All workflows utilize Cake. Execute via the root `./build.sh` or `.\build.ps1`:
+All workflows use Cake. Run these from the root of the repository:
 - **Clean:** `dotnet cake --target=Clean`
 - **Build:** `dotnet cake --target=Build`
 - **Test:** `dotnet cake --target=Test`
@@ -86,14 +86,15 @@ Use the skill for the task and do not do its steps by hand.
 | Mermaid diagram (ERD, UML, sequence) | `cat-internal-create-mermaid` |
 | After changes to code, XML docs or the generator | `cat-internal-verify-code` |
 | After changes to markdown, a heading or a file name, and after every rename or move | `cat-internal-verify-docs` |
-| Link check, only when the owner asks | `cat-internal-verify-site` |
+| Link check of the published site. Claude cannot start it, the owner runs `/cat-internal-verify-site` | `cat-internal-verify-site` |
+
 ## ✍️ Documentation & Comment Style
 When writing, modifying, or generating code comments, XML documentation, or markdown files, strictly adhere to these natural language rules:
 
 - **Tone:** Use a human-centric, plain, conversational, and direct tone. Write as an empathetic peer, avoiding overly technical jargon unless absolutely necessary.
 - **Punctuation:** NEVER use long dashes (`—` or `--`), ellipses (`...`), or decorative markdown wrappers. Stick to standard sentences.
 - **Structure:** Write in the active voice with short, punchy sentences. Use concise bullet fragments instead of sprawling text walls.
-- **XML Docs:** Keep C# XML `<summary>` tags descriptive but grounded. Do not write generic preambles like *"This method is used to..."*—start immediately with the action (e.g., *"Calculates the module layout boundaries."*).
+- **XML Docs:** Keep C# XML `<summary>` tags descriptive but grounded. Do not write generic preambles like *"This method is used to"*. Start immediately with the action (e.g., *"Calculates the module layout boundaries."*).
 - **Readme:** "the readme" is `README.md` in the root of the repository. Never write "root readme". The other readmes always get a qualifier: a module readme (`modules/<ModuleName>/README.md`) or the demo readme (`demo/README.md`).
 - **Words for people:** Use the same word for the same person in every skill, template, plan, readme and XML doc.
   - **Owner:** the person who owns the toolkit and decides the design. Never "author".

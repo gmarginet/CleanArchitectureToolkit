@@ -46,14 +46,14 @@ Read these before you write, and search them for the module name:
 - the demo code in `demo/` and `demo/README.md`, with the Roslyn tools for symbols and references.
 
 ## Where a module plan is linked
-Only plans of modules (`plans/Cat.*.md`) are linked from the readme. `Demo.md` and `Skills.md` are not.
+Every plan is linked from the readme, and from nowhere else.
 - Every plan has a row in the repo overview table of the readme. `Demo.md` belongs to the row `Cat.Demo` and `Skills.md` to the row `Cat.Skills`.
 - An item that is not built yet has the New badge and its name links to the plan. A built item with a plan has the Building badge, or the Growing badge when its first stable version is reached (see the `FirstStableVersion` region). The badge links to the plan in all three cases. The `cat-internal-create-readme` skill covers the table.
 - A change to a plan, an answered open question and a finished build can change the lines of the `Phases` column in the repo overview. Recalculate them with the `cat-internal-create-readme` skill.
 - When a future module is started with the `cat-internal-create-module` skill, its row changes from New to Building and its name links to the module readme.
 - Keep the plan until the module has done everything in it and the owner agrees that it can go. When the plan goes, remove its link from the readme too.
 - A module readme never links to the plan. Only the readme does. A module readme grows until it holds everything about how the module works and how to use it, so the plan can be removed.
-- The `cat-internal-verify-docs` skill checks that every module plan has exactly one place in the readme.
+- The `cat-internal-verify-docs` skill checks that every plan has exactly one row in the repo overview.
 
 ## Keeping the other documents in step
 Use this when an answer or a decision changes more than one plan, and when a module is renamed, merged or dropped.
@@ -76,6 +76,7 @@ Use this when an answer or a decision changes more than one plan, and when a mod
   1. Update the README of the module or demo the plan belongs to, using the `cat-internal-create-module-readme` or `cat-internal-create-demo-readme` skill, so it incorporates all the info from the phase description.
   2. Search the other markdown files for mentions of what the phase changed (`git grep --untracked -l`, without the generated `namespaces` pages) and update the READMEs and plans that are now out of date.
   3. Remove the phase.
+  4. Recalculate the lines of the `Phases` column in the readme with the `cat-internal-create-readme` skill. The line of the removed phase goes, or the docs check fails on its anchor.
 - If no phases are left after removing a phase that was built, Claude can ask if it can remove the plan file.
 
 ## Regions

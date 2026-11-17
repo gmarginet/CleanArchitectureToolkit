@@ -22,7 +22,7 @@ Run this skill only when the owner asks for a commit. Asking for the skill is th
 - **No shortcuts.** Never use `--no-verify`, never skip signing, never amend, rebase or force unless the owner asks. If a hook fails, fix the cause.
 
 ## Steps
-0. Check for a publish that is waiting. Run `git log @{u}..HEAD --format='%h %s'`. These are the commits that are not pushed yet. When one of them has no ` (skip-pub)` in its subject, a push publishes only when the newest commit also has none. A new commit with ` (skip-pub)` would hide the waiting publish. So warn the owner first, before you commit anything:
+0. Check for a publish that is waiting. Run `git log '@{u}..HEAD' --format='%h %s'`. Keep the quotes, because PowerShell reads a bare `@{u}` as a hash table and fails. These are the commits that are not pushed yet. When one of them has no ` (skip-pub)` in its subject, a push publishes only when the newest commit also has none. A new commit with ` (skip-pub)` would hide the waiting publish. So warn the owner first, before you commit anything:
    - Name the waiting publishing commits.
    - Ask whether to push them first, or to make the new commit a publishing one, or to accept that nothing is published.
    - Commit only after the owner answers. Never decide this alone.

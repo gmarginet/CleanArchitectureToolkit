@@ -18,7 +18,7 @@ A template is a markdown file that Claude copies to create a new file. These are
 - A template is a piece of content in a template file that Claude copies to the created file when the content is needed. A phase of a plan is an example.
 - A template starts with `<!-- ==================== template start: Name ====================-->` and ends with `<!-- ==================== template end: Name ====================-->`. The `=` signs make a template marker easy to tell from a region marker, which is also used inside the templates.
 - Match the name between `template start:` and the closing `=` signs, as for regions.
-- When Claude uses a template, he copies the content and never the template markers.
+- When Claude uses a template, it copies the content and never the template markers.
 - Replace every placeholder the template contains.
 - The content of a template is not indented. Claude follows the indentation of the place where the content gets copied to.
 
