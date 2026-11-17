@@ -24,11 +24,16 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" VersionOverride="4.8.0" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper.Abstractions\Cat.Dapper.Abstractions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper.SqlFiles\Cat.Dapper.SqlFiles.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper.SqlServer\Cat.Dapper.SqlServer.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper\Cat.Dapper.csproj" />
       <ProjectReference Include="..\..\modules\Cat.UnitTesting\Cat.UnitTesting.NUnit\Cat.UnitTesting.NUnit.csproj" />

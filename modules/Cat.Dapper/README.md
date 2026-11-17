@@ -44,6 +44,7 @@ A handler asks a session for the connection, runs a statement and returns a resp
 - [Usage](#usage)
   - [Register the module](#register-the-module)
   - [Write a query handler](#write-a-query-handler)
+  - [Keep the SQL in .sql files](#keep-the-sql-in-sql-files)
   - [Write a command handler with a transaction](#write-a-command-handler-with-a-transaction)
   - [Page a result](#page-a-result)
   - [Handle database errors](#handle-database-errors)
@@ -59,6 +60,7 @@ A handler asks a session for the connection, runs a statement and returns a resp
 |---------|------|---------|-----------|
 | [Cat.Dapper.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Dapper.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Dapper.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.Abstractions)](#nuget-packages) |
 | [Cat.Dapper](https://www.nuget.org/packages/gmarginet.Cat.Dapper/) | Implementation | `dotnet add package gmarginet.Cat.Dapper` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper)](#nuget-packages) |
+| [Cat.Dapper.SqlFiles](https://www.nuget.org/packages/gmarginet.Cat.Dapper.SqlFiles/) | Optional source generator | `dotnet add package gmarginet.Cat.Dapper.SqlFiles` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.SqlFiles)](#nuget-packages) |
 | [Cat.Dapper.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.Dapper.SqlServer/) | SQL Server support | `dotnet add package gmarginet.Cat.Dapper.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.SqlServer)](#nuget-packages) |
 
 <!-- region end: NuGet-->
@@ -70,6 +72,7 @@ A handler asks a session for the connection, runs a statement and returns a resp
 |-----------|---------------|
 | [Cat.Dapper.Abstractions](namespaces/Cat.Dapper.Abstractions/index.md) | The factory that creates connections and the session that holds one connection and its transaction. |
 | [Cat.Dapper](namespaces/Cat.Dapper/index.md) | The session, the base classes for query and command handlers and the extension methods that run SQL with Dapper. |
+| [Cat.Dapper.SqlFiles](namespaces/Cat.Dapper.SqlFiles/index.md) | The source generator that turns the `.sql` files next to a handler into constants of that handler. |
 | [Cat.Dapper.SqlServer](namespaces/Cat.Dapper.SqlServer/index.md) | The SQL Server connection factory and a paging helper that returns an `ICatPagedList`. |
 
 <!-- region end: Namespaces-->
@@ -143,6 +146,54 @@ The handler never opens the connection. The extension methods of `CatDbSessionEx
 | `PrepareAsync` | The open connection and the Dapper command, to call Dapper yourself, for example `QueryMultipleAsync`. |
 
 The query handler returns the result class straight from Dapper. There is no extra mapping step.
+
+### Keep the SQL in .sql files
+A constant in the handler class is one place for the SQL. A `.sql` file next to the handler is the other. It gets syntax highlighting and a database tool can open it. A source generator turns each file into a `const string`, so the handler uses it like the constant above. A missing or misspelled file is a compile error.
+
+This is optional. A developer who wants no generated code keeps the SQL in constants and adds nothing.
+
+1. Add the package `gmarginet.Cat.Dapper.SqlFiles` to the project of the handlers. It has no reference to `Cat.Dapper` and no cost at run time.
+2. Add one line to the project file, so the generator sees the files:
+
+```xml
+<ItemGroup>
+    <AdditionalFiles Include="**/*.sql" />
+</ItemGroup>
+```
+
+3. Make the handler class `partial` and name the file after it, in the same folder:
+
+```csharp
+// OrderOverviewQueryHandler.sql sits next to this file
+public partial class OrderOverviewQueryHandler : CatDapperQueryHandlerBase<OrderOverviewQuery, IReadOnlyList<OrderOverviewRow>>
+{
+    public OrderOverviewQueryHandler(ICatDbSession session) : base(session)
+    {
+    }
+
+    public override async Task<ICatResponse<IReadOnlyList<OrderOverviewRow>>> HandleAsync(
+        OrderOverviewQuery query, CancellationToken cancellationToken = default)
+    {
+        var rows = await Session.QueryAsync<OrderOverviewRow>(Sql, new { query.UserId }, cancellationToken);
+        return CatResponse.Ok(rows);
+    }
+}
+```
+
+The rules:
+- **Names.** `OrderOverviewQueryHandler.sql` gives the constant `Sql`. A suffix picks another statement: `OrderOverviewQueryHandler.Count.sql` gives `CountSql`.
+- **Finding the class.** The generator looks for a class with the name of the file, declared in a source file in the same folder as the `.sql` file. The namespace does not matter. Two files with the same name in different folders each belong to the class of their own folder.
+- **Visibility.** The constant is `private`, so only the handler sees its SQL.
+- **Opt in.** The package does not pick up `.sql` files by itself, because a global rule would also catch files nobody meant, such as the database scripts of a service. That is why you add the `AdditionalFiles` line. Without it there are no constants, and the handler does not compile where it uses one.
+
+A compile error names the file for each of these failures:
+
+| Id | Failure |
+|----|---------|
+| `CATSQL001` | No class with the name of the file in the folder of the file. |
+| `CATSQL002` | The class is not `partial`. |
+| `CATSQL003` | The name of the file is not valid. Use `<Class>.sql` or `<Class>.<Name>.sql`, with valid C# names. |
+| `CATSQL004` | The class already has a member with the name of the constant. |
 
 ### Write a command handler with a transaction
 Inherit `CatDapperCommandHandlerBase`. A command that runs one statement needs no transaction. For more than one statement, start one on the session and commit it yourself. A transaction that is not committed rolls back when the scope ends.

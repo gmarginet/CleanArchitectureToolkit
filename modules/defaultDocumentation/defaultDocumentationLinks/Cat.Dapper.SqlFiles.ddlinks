@@ -1,0 +1,31 @@
+../../../Cat.Dapper/namespaces/Cat.Dapper.SqlFiles/
+F:Cat.Dapper.SqlFiles.SqlFilesGenerator.Category|SqlFilesGenerator.Category.md|Category
+F:Cat.Dapper.SqlFiles.SqlFilesGenerator.NoMatchingClass|SqlFilesGenerator.NoMatchingClass.md|NoMatchingClass
+F:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassNotPartial|SqlFilesGenerator.ClassNotPartial.md|ClassNotPartial
+F:Cat.Dapper.SqlFiles.SqlFilesGenerator.InvalidName|SqlFilesGenerator.InvalidName.md|InvalidName
+F:Cat.Dapper.SqlFiles.SqlFilesGenerator.ConstantExists|SqlFilesGenerator.ConstantExists.md|ConstantExists
+M:Cat.Dapper.SqlFiles.SqlFilesGenerator.Initialize(Microsoft.CodeAnalysis.IncrementalGeneratorInitializationContext)|SqlFilesGenerator.Initialize.5X18BGZIJGGUV3LZ8Q763L554.md|Initialize(IncrementalGeneratorInitializationContext)
+M:Cat.Dapper.SqlFiles.SqlFilesGenerator.Generate(Microsoft.CodeAnalysis.SourceProductionContext,System.Collections.Immutable.ImmutableArray{Cat.Dapper.SqlFiles.SqlFilesGenerator.SqlFile},System.Collections.Immutable.ImmutableArray{Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo})|SqlFilesGenerator.Generate.GSPKSJI4P19GEA1ZTSCY8G395.md|Generate(SourceProductionContext, ImmutableArray<SqlFile>, ImmutableArray<ClassInfo>)
+M:Cat.Dapper.SqlFiles.SqlFilesGenerator.Render(Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo,System.String,System.String)|SqlFilesGenerator.Render.UVY8DM4JYKL5USKRS2AZH7HF.md|Render(ClassInfo, string, string)
+M:Cat.Dapper.SqlFiles.SqlFilesGenerator.Normalize(System.String)|SqlFilesGenerator.Normalize.HUIC8GB5WYJWOPKXPVGNU2FE2.md|Normalize(string)
+N:Cat.Dapper.SqlFiles|Cat.Dapper.SqlFiles.md|Cat.Dapper.SqlFiles
+T:Cat.Dapper.SqlFiles.SqlFilesGenerator|SqlFilesGenerator.md|SqlFilesGenerator
+P:Cat.Dapper.SqlFiles.SqlFilesGenerator.SqlFile.Path|SqlFilesGenerator.SqlFile.Path.md|Path
+P:Cat.Dapper.SqlFiles.SqlFilesGenerator.SqlFile.Text|SqlFilesGenerator.SqlFile.Text.md|Text
+M:Cat.Dapper.SqlFiles.SqlFilesGenerator.SqlFile.#ctor(System.String,System.String)|SqlFilesGenerator.SqlFile..ctor.RKRK1MWNR060FSE48GBKJY2AB.md|SqlFile(string, string)
+M:Cat.Dapper.SqlFiles.SqlFilesGenerator.SqlFile.Equals(System.Object)|SqlFilesGenerator.SqlFile.Equals.ONWG8BRZJ979MOS745TMSZKY7.md|Equals(object)
+M:Cat.Dapper.SqlFiles.SqlFilesGenerator.SqlFile.GetHashCode|SqlFilesGenerator.SqlFile.GetHashCode().md|GetHashCode()
+T:Cat.Dapper.SqlFiles.SqlFilesGenerator.SqlFile|SqlFilesGenerator.SqlFile.md|SqlFile
+P:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo.Name|SqlFilesGenerator.ClassInfo.Name.md|Name
+P:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo.Namespace|SqlFilesGenerator.ClassInfo.Namespace.md|Namespace
+P:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo.TypeParameters|SqlFilesGenerator.ClassInfo.TypeParameters.md|TypeParameters
+P:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo.TypeParameterHint|SqlFilesGenerator.ClassInfo.TypeParameterHint.md|TypeParameterHint
+P:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo.Folders|SqlFilesGenerator.ClassInfo.Folders.md|Folders
+P:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo.IsPartial|SqlFilesGenerator.ClassInfo.IsPartial.md|IsPartial
+P:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo.MemberNames|SqlFilesGenerator.ClassInfo.MemberNames.md|MemberNames
+P:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo.CancellationTokenNone|SqlFilesGenerator.ClassInfo.CancellationTokenNone.md|CancellationTokenNone
+M:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo.#ctor(System.String,System.String,System.String,System.String[],System.Boolean,System.String[])|SqlFilesGenerator.ClassInfo..ctor.1MP39649TDVJWOYC5X4WUEUJ5.md|ClassInfo(string, string, string, string[], bool, string[])
+M:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo.Create(Microsoft.CodeAnalysis.GeneratorSyntaxContext,System.Threading.CancellationToken)|SqlFilesGenerator.ClassInfo.Create.D51HZ0UMSL9X7UXW12JKUDN4A.md|Create(GeneratorSyntaxContext, CancellationToken)
+M:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo.Equals(System.Object)|SqlFilesGenerator.ClassInfo.Equals.GA1Z1F448JNF9GZC1BAL6L4X.md|Equals(object)
+M:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo.GetHashCode|SqlFilesGenerator.ClassInfo.GetHashCode().md|GetHashCode()
+T:Cat.Dapper.SqlFiles.SqlFilesGenerator.ClassInfo|SqlFilesGenerator.ClassInfo.md|ClassInfo
