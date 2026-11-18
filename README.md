@@ -92,10 +92,11 @@ Some modules depend on other modules, in the documentation of each module you ca
 ## Repo overview
 <!-- region start: RepoOverview-->
 
-> **New** means not started yet.  
-> **Building** means building has started and the first stable version is not reached yet. Breaking changes are still possible.  
-> **Growing** means the first stable version is reached, and extra features are planned. Breaking changes are not expected.  
-> **Stable** means fully built.  
+> #### Module statuses
+> - **New**: not started yet.  
+> - **Building**: building has started but the first stable version is not reached. <sup>(Breaking changes are possible.)</sup>  
+> - **Growing**: the first stable version is reached, and extra features are planned. <sup>(Breaking changes are not expected.)</sup>  
+> - **Stable**: fully built.  
 
 | Name | Description | Phases |
 |------|-------------|--------|
