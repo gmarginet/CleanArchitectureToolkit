@@ -81,6 +81,15 @@ a:focus-visible {
     padding: 20px 26px 60px;
 }
 
+/* Footer with the license note */
+.footer {
+    padding: 12px 16px;
+    background: var(--bar-bg);
+    border-top: 1px solid var(--bar-border);
+    font-size: 13px;
+    text-align: center;
+}
+
 a {
     color: var(--link);
     text-decoration: none;
