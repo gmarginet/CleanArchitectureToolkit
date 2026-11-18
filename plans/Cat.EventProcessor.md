@@ -40,6 +40,7 @@
 <!-- no toc -->
 - [Phase 1](#phase-1)
 - [Phase 2](#phase-2)
+- [Phase 3](#phase-3)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 1-->
@@ -102,3 +103,31 @@ Recommendation: the dedicated setting per message type, and still validate a tok
 <!-- region end: Question 2-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->
+
+<!-- region start: Phase 3-->
+## Phase 3
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+A handler that does its work through a command keeps the inbox row of the receiver, so a repeated message does not run it again.
+
+#### What exists today
+- The receiver adds the inbox row to the context of the current scope and runs the handler in that scope, through `ICatCurrentScopeServiceRequestProcessor`. The handler saves the row with its own work.
+- `CatCommandProcessor` opens a new scope for every command (`CreateAsyncScope`). A handler that hands its work to `ICatCommandProcessor` saves with another context than the one that holds the row, so the row is never saved.
+- A handler that saves through the context of its own scope is not affected. The saga answer handler of `Cat.Sagas` is an example.
+- There is no error and no warning. The message counts as handled, no row exists, and a repeated message runs the handler again.
+- Found in the demo: `PaymentRefundedHandler` in Orders handles `PaymentRefunded` through a command. With `UseInbox` on, a live refund updated the payment and left no inbox row. The demo receives that message without the inbox, because setting a payment to `Refunded` twice changes nothing.
+- The module readme names the limit in its chapter about the inbox.
+
+#### Done when
+A handler that starts a command with `UseInbox` on saves the inbox row together with the work of the command, and a repeated message does not run the handler again.
+
+#### Decided
+- **A current-scope command processor in `Cat.Commands`.** A new interface, like `ICatCurrentScopeServiceRequestProcessor` for service requests, runs a command in the scope of the caller. `ICatCommandProcessor` keeps its behavior and still opens a new scope for every command. The developer chooses the new interface when a command must share the scope and the transaction of the handler.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 3-->
