@@ -46,6 +46,11 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 - Rename and move with `git mv`. Search the old name with `git grep` and fix every reference in the same change.
 - Never name a PowerShell helper function like an alias, such as `R`, `Rd` or `Rm`. The alias wins and runs instead of the function, and it can delete real files.
 
+## 🚀 Running the AppHost
+- Start, check and stop it with the `cat-internal-run-apphost` skill, never by hand.
+- Never kill dotnet, dcp or container processes, and never run `docker rm -f`. It hangs Docker Desktop.
+- Never build `Debug` while the AppHost runs. Run `aspire ps` first.
+
 ## 📁 Repository Structure
 - `demo/`: Showcases module usage examples.
 - `resources/`: Assets (logos, icons, schemas, styles).
@@ -89,6 +94,7 @@ Use the skill for the task and do not do its steps by hand.
 | New template | `cat-internal-create-template` |
 | Excalidraw drawing (architecture, flow) | `cat-internal-create-excalidraw` |
 | Mermaid diagram (ERD, UML, sequence) | `cat-internal-create-mermaid` |
+| Start, check or stop the AppHost, for a live test or the emulator tests | `cat-internal-run-apphost` |
 | After changes to code, XML docs or the generator | `cat-internal-verify-code` |
 | After changes to markdown, a heading or a file name, and after every rename or move | `cat-internal-verify-docs` |
 | Link check of the published site. Claude cannot start it, the owner runs `/cat-internal-verify-site` | `cat-internal-verify-site` |

@@ -420,6 +420,7 @@ FodyWeavers.xsd
 artifacts/
 desktop.ini
 .idea/
+aspire.config.json
 
 # Jekyll
 _site/
