@@ -1,5 +1,5 @@
 using Cat.Demo.NotificationService.DataModels.Entities;
-using Cat.EFCore.Extensions;
+using Cat.EFCore.Extensions.SqlServer;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cat.Demo.NotificationService.Infrastructure.DataAccess;

@@ -49,9 +49,9 @@ Inherit from a base class, call one extension method in `OnModelCreating`, and g
 | Package | Role | Install | Downloads |
 |---------|------|---------|-----------|
 | [Cat.EFCore.Entities](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Entities/) | Entity base classes | `dotnet add package gmarginet.Cat.EFCore.Entities` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Entities)](#nuget-packages) |
-| [Cat.EFCore.Extensions](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions/) | Model builder extensions | `dotnet add package gmarginet.Cat.EFCore.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions)](#nuget-packages) |
+| [Cat.EFCore.Extensions](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions/) | Provider neutral base of the model builder extensions | `dotnet add package gmarginet.Cat.EFCore.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions)](#nuget-packages) |
 | [Cat.EFCore.Entities.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Entities.SqlServer/) | SQL Server entity base class for temporal tables | `dotnet add package gmarginet.Cat.EFCore.Entities.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Entities.SqlServer)](#nuget-packages) |
-| [Cat.EFCore.Extensions.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions.SqlServer/) | SQL Server model builder extensions for temporal tables | `dotnet add package gmarginet.Cat.EFCore.Extensions.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions.SqlServer)](#nuget-packages) |
+| [Cat.EFCore.Extensions.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions.SqlServer/) | SQL Server model builder extensions, with temporal tables | `dotnet add package gmarginet.Cat.EFCore.Extensions.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions.SqlServer)](#nuget-packages) |
 | [Cat.EFCore.Queries](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Queries/) | Base query handler and paging | `dotnet add package gmarginet.Cat.EFCore.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Queries)](#nuget-packages) |
 | [Cat.EFCore.Commands](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Commands/) | Base command handlers | `dotnet add package gmarginet.Cat.EFCore.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Commands)](#nuget-packages) |
 
@@ -63,9 +63,9 @@ Inherit from a base class, call one extension method in `OnModelCreating`, and g
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.EFCore.Entities](namespaces/Cat.EFCore.Entities/index.md) | Base classes for regular, temporal and reference data entities. |
-| [Cat.EFCore.Extensions](namespaces/Cat.EFCore.Extensions/index.md) | Model builder extensions that configure keys, indexes and tables for the base classes. |
+| [Cat.EFCore.Extensions](namespaces/Cat.EFCore.Extensions/index.md) | The part of the table setup that every database shares. It references no provider package. |
 | [Cat.EFCore.Entities.SqlServer](namespaces/Cat.EFCore.Entities.SqlServer/index.md) | The entity base class for SQL Server temporal tables. |
-| [Cat.EFCore.Extensions.SqlServer](namespaces/Cat.EFCore.Extensions.SqlServer/index.md) | Model builder extensions that configure SQL Server temporal tables. |
+| [Cat.EFCore.Extensions.SqlServer](namespaces/Cat.EFCore.Extensions.SqlServer/index.md) | Model builder extensions that configure the base classes on SQL Server, including temporal tables. |
 | [Cat.EFCore.Queries](namespaces/Cat.EFCore.Queries/index.md) | The base class for query handlers that read with EF Core, and a paging extension. |
 | [Cat.EFCore.Commands](namespaces/Cat.EFCore.Commands/index.md) | The base classes for command handlers that change data with EF Core. |
 
@@ -128,7 +128,15 @@ What you get:
 - `CatTemporalEntityBase`: the same as above, in a [temporal table](https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal/overview?view=sql-server-ver17) with a history table in the `History` schema.
 - `CatReferenceEntityBase`: a non-clustered primary key, and the table is excluded from migrations.
 
-`CatTemporalEntityBase` lives in `Cat.EFCore.Entities.SqlServer` and `ConfigureCatTemporalEntity` in `Cat.EFCore.Extensions.SqlServer`. Reference them only when you use temporal tables. The namespaces have the same names as the projects.
+`ConfigureCatEntity`, `ConfigureCatReferenceEntity` and `ConfigureCatTemporalEntity` live in `Cat.EFCore.Extensions.SqlServer`, because the keys, the identity column and the clustered index are SQL Server calls. Reference that project and add `using Cat.EFCore.Extensions.SqlServer;`. The namespaces have the same names as the projects. `CatTemporalEntityBase` lives in `Cat.EFCore.Entities.SqlServer`, and you need it only for temporal tables.
+
+`Cat.EFCore.Extensions` holds the shared part of the setup and references no provider package. A project of one database never pulls in the package of another.
+
+#### Moving from an earlier version
+`ConfigureCatEntity` and `ConfigureCatReferenceEntity` used to live in `Cat.EFCore.Extensions`. They moved, and the old methods are gone.
+- Reference `Cat.EFCore.Extensions.SqlServer` instead of `Cat.EFCore.Extensions`.
+- Change `using Cat.EFCore.Extensions;` to `using Cat.EFCore.Extensions.SqlServer;`.
+- The method names, the parameters and the SQL Server model stay the same, so you get no new migration.
 
 ### What are temporal tables
 A temporal table is a SQL Server feature. It keeps the full history of your data, not only the current rows.

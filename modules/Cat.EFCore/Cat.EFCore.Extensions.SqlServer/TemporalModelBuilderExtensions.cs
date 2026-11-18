@@ -1,5 +1,4 @@
 using Cat.EFCore.Entities.SqlServer;
-using Cat.EFCore.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

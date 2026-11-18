@@ -33,4 +33,5 @@ that configure SQL Server temporal tables for the entity base class\.
 
 | Classes | |
 | :--- | :--- |
+| [ModelBuilderExtensions](ModelBuilderExtensions.md 'Cat\.EFCore\.Extensions\.SqlServer\.ModelBuilderExtensions') | Extension methods on [Microsoft\.EntityFrameworkCore\.ModelBuilder](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.modelbuilder 'Microsoft\.EntityFrameworkCore\.ModelBuilder') that apply the standard Cat table setup on SQL Server\. |
 | [TemporalModelBuilderExtensions](TemporalModelBuilderExtensions.md 'Cat\.EFCore\.Extensions\.SqlServer\.TemporalModelBuilderExtensions') | Extension methods on [Microsoft\.EntityFrameworkCore\.ModelBuilder](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.modelbuilder 'Microsoft\.EntityFrameworkCore\.ModelBuilder') that set up SQL Server temporal tables\. |

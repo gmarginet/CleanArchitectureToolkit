@@ -976,7 +976,7 @@ erDiagram
 | Module | Where it is used | Why |
 |---|---|---|
 | `Cat.Commands` and `Cat.ServiceRequests` | Core service | The message is a service request that ends in a command. |
-| `Cat.EFCore.Commands`, `Cat.EFCore.Entities` and `Cat.EFCore.Extensions` | Infrastructure and DataModels | The command handler inherits the base handler. `SentMail` inherits the base entity. |
+| `Cat.EFCore.Commands`, `Cat.EFCore.Entities` and `Cat.EFCore.Extensions.SqlServer` | Infrastructure and DataModels | The command handler inherits the base handler. `SentMail` inherits the base entity. |
 | `Cat.Responses` | Core service | The handlers answer with a response, and the event processor settles the message from it. |
 | `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` and `Cat.EventProcessor.Minimal.Api` | Api | Receives `OrderConfirmed`, `LowStockReport` and `StockChanged` from the bus as service requests, and adds the development endpoints and the health check. |
 | `Cat.EventProcessor.Authorization` | Api | Checks the token of all three messages when there is a login. Notifications sends no messages, so it has no client of its own. |

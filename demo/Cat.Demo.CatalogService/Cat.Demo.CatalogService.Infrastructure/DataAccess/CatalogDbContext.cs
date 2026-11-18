@@ -1,5 +1,4 @@
 using Cat.Demo.CatalogService.DataModels.Entities;
-using Cat.EFCore.Extensions;
 using Cat.EFCore.Extensions.SqlServer;
 using Microsoft.EntityFrameworkCore;
 

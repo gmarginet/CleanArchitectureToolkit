@@ -1,12 +1,11 @@
 using Cat.EFCore.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Cat.EFCore.Extensions;
+namespace Cat.EFCore.Extensions.SqlServer;
 
 /// <summary>
-/// Extension methods on <see cref="ModelBuilder"/> that apply the standard Cat table setup.
+/// Extension methods on <see cref="ModelBuilder"/> that apply the standard Cat table setup on SQL Server.
 /// </summary>
 public static class ModelBuilderExtensions
 {
@@ -18,26 +17,27 @@ public static class ModelBuilderExtensions
         Action<TableBuilder<TEntity>>? tableBuildAction)
         where TEntity : CatEntityBase
     {
-        modelBuilder.Entity<TEntity>(e =>
+        Action<EntityTypeBuilder<TEntity>> internalEntityTypeBuildAction = (e) =>
         {
-            e.ToTable(tableName, schemaName, t =>
-            {
-                tableBuildAction?.Invoke(t);
-            });
-
             e.HasKey(x => x.Id)
                 .IsClustered(false);
 
             e.Property(x => x.SequenceId)
-                .UseIdentityColumn()
-                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+                .UseIdentityColumn();
 
             e.HasIndex(x => x.SequenceId)
                 .IsUnique()
                 .IsClustered();
-            
+
             entityTypeBuildAction?.Invoke(e);
-        });
+        };
+
+        CatEntityConfigurator.ConfigureCatEntityBase(
+            modelBuilder,
+            tableName,
+            schemaName,
+            internalEntityTypeBuildAction,
+            tableBuildAction);
     }
 
     /// <summary>
@@ -57,10 +57,10 @@ public static class ModelBuilderExtensions
         var entityType = modelBuilder.Model.FindEntityType(typeof(TEntity));
         var tableName = entityType?.GetTableName();
         var schemaName = entityType?.GetSchema() ?? "dbo";
-		
+
         if (tableName is null) throw new Exception("EntityType unknown");
 
-        modelBuilder.ConfigureCatEntity(tableName, schemaName, entityTypeBuildAction);
+        modelBuilder.ConfigureCatEntity(tableName, schemaName, entityTypeBuildAction, null);
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public static class ModelBuilderExtensions
         var entityType = modelBuilder.Model.FindEntityType(typeof(TEntity));
         var schemaName = entityType?.GetSchema() ?? "dbo";
 
-        modelBuilder.ConfigureCatEntity(tableName, schemaName, entityTypeBuildAction);
+        modelBuilder.ConfigureCatEntity(tableName, schemaName, entityTypeBuildAction, null);
     }
 
     /// <summary>
@@ -116,15 +116,16 @@ public static class ModelBuilderExtensions
         string schemaName = "dbo")
         where TEntity : CatReferenceEntityBase
     {
-        modelBuilder.Entity<TEntity>(e =>
+        Action<EntityTypeBuilder<TEntity>> internalEntityTypeBuildAction = (e) =>
         {
-            e.ToTable(tableName, schemaName, t =>
-            {
-                t.ExcludeFromMigrations();
-            });
-
             e.HasKey(x => x.Id)
                 .IsClustered(false);
-        });
+        };
+
+        CatEntityConfigurator.ConfigureCatReferenceEntityBase<TEntity>(
+            modelBuilder,
+            tableName,
+            schemaName,
+            internalEntityTypeBuildAction);
     }
 }

@@ -24,7 +24,7 @@
 
 # Code Reference  
   
-##### >> [Cat\.EFCore\.Extensions Assembly](index.md 'index') >> [Cat\.EFCore\.Extensions Namespace](Cat.EFCore.Extensions.md 'Cat\.EFCore\.Extensions') >> [ModelBuilderExtensions Class](ModelBuilderExtensions.md 'Cat\.EFCore\.Extensions\.ModelBuilderExtensions')
+##### >> [Cat\.EFCore\.Extensions\.SqlServer Assembly](index.md 'index') >> [Cat\.EFCore\.Extensions\.SqlServer Namespace](Cat.EFCore.Extensions.SqlServer.md 'Cat\.EFCore\.Extensions\.SqlServer') >> [ModelBuilderExtensions Class](ModelBuilderExtensions.md 'Cat\.EFCore\.Extensions\.SqlServer\.ModelBuilderExtensions')
 
 ## ModelBuilderExtensions\.ConfigureCatReferenceEntity\<TEntity\>\(this ModelBuilder, string, string\) Method
 
@@ -38,26 +38,26 @@ public static void ConfigureCatReferenceEntity<TEntity>(this Microsoft.EntityFra
 ```
 #### Type parameters
 
-<a name='Cat.EFCore.Extensions.ModelBuilderExtensions.ConfigureCatReferenceEntity_TEntity_(thisMicrosoft.EntityFrameworkCore.ModelBuilder,string,string).TEntity'></a>
+<a name='Cat.EFCore.Extensions.SqlServer.ModelBuilderExtensions.ConfigureCatReferenceEntity_TEntity_(thisMicrosoft.EntityFrameworkCore.ModelBuilder,string,string).TEntity'></a>
 
 `TEntity`
 
 The entity type\.
 #### Parameters
 
-<a name='Cat.EFCore.Extensions.ModelBuilderExtensions.ConfigureCatReferenceEntity_TEntity_(thisMicrosoft.EntityFrameworkCore.ModelBuilder,string,string).modelBuilder'></a>
+<a name='Cat.EFCore.Extensions.SqlServer.ModelBuilderExtensions.ConfigureCatReferenceEntity_TEntity_(thisMicrosoft.EntityFrameworkCore.ModelBuilder,string,string).modelBuilder'></a>
 
 `modelBuilder` [Microsoft\.EntityFrameworkCore\.ModelBuilder](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.modelbuilder 'Microsoft\.EntityFrameworkCore\.ModelBuilder')
 
 The model builder to configure\.
 
-<a name='Cat.EFCore.Extensions.ModelBuilderExtensions.ConfigureCatReferenceEntity_TEntity_(thisMicrosoft.EntityFrameworkCore.ModelBuilder,string,string).tableName'></a>
+<a name='Cat.EFCore.Extensions.SqlServer.ModelBuilderExtensions.ConfigureCatReferenceEntity_TEntity_(thisMicrosoft.EntityFrameworkCore.ModelBuilder,string,string).tableName'></a>
 
 `tableName` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
 
 The name of the table\.
 
-<a name='Cat.EFCore.Extensions.ModelBuilderExtensions.ConfigureCatReferenceEntity_TEntity_(thisMicrosoft.EntityFrameworkCore.ModelBuilder,string,string).schemaName'></a>
+<a name='Cat.EFCore.Extensions.SqlServer.ModelBuilderExtensions.ConfigureCatReferenceEntity_TEntity_(thisMicrosoft.EntityFrameworkCore.ModelBuilder,string,string).schemaName'></a>
 
 `schemaName` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
 

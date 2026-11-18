@@ -33,4 +33,4 @@ that configure keys, indexes and tables for the entity base classes\.
 
 | Classes | |
 | :--- | :--- |
-| [ModelBuilderExtensions](ModelBuilderExtensions.md 'Cat\.EFCore\.Extensions\.ModelBuilderExtensions') | Extension methods on [Microsoft\.EntityFrameworkCore\.ModelBuilder](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.modelbuilder 'Microsoft\.EntityFrameworkCore\.ModelBuilder') that apply the standard Cat table setup\. |
+| [CatEntityConfigurator](CatEntityConfigurator.md 'Cat\.EFCore\.Extensions\.CatEntityConfigurator') | Holds the part of the Cat table setup that every database shares\. The provider projects call it and add the calls that only their database knows\. |
