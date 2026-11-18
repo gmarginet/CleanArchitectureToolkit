@@ -81,6 +81,7 @@
   <Folder Name="/modules/Cat.Dapper/">
     <File Path="modules/Cat.Dapper/README.md" />
     <Project Path="modules/Cat.Dapper/Cat.Dapper.Abstractions/Cat.Dapper.Abstractions.csproj" />
+    <Project Path="modules/Cat.Dapper/Cat.Dapper.MySql/Cat.Dapper.MySql.csproj" />
     <Project Path="modules/Cat.Dapper/Cat.Dapper.SqlFiles/Cat.Dapper.SqlFiles.csproj" />
     <Project Path="modules/Cat.Dapper/Cat.Dapper.SqlServer/Cat.Dapper.SqlServer.csproj" />
     <Project Path="modules/Cat.Dapper/Cat.Dapper/Cat.Dapper.csproj" />

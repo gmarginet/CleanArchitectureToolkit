@@ -1,0 +1,53 @@
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>
+<table>
+    <tr>
+        <td colspan='6' style='text-align: center; font-weight: bold; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+             Clean Architecture Toolkit for .NET
+        </td>
+    </tr>
+    <tr>
+        <td colspan='5' style='padding: 0; vertical-align: middle; border: none;'>
+            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>
+            It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>
+        <td style='padding: 0; border: none;' width='220'>
+            <img src='../../../../resources/logo/CatLogo.svg' alt='' width='200' style='padding: 15px; float: right; background: #121314; border-radius: 10px'/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../../../../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../../../../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../../../../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[CAT.DAPPER](../../README.md)&nbsp;&nbsp;&nbsp;&#124;
+
+</td>
+</tr>
+</table>
+
+# Code Reference  
+  
+##### >> [Cat\.Dapper\.MySql Assembly](index.md 'index') >> [Cat\.Dapper\.MySql\.Extensions Namespace](Cat.Dapper.MySql.Extensions.md 'Cat\.Dapper\.MySql\.Extensions') >> [ServiceCollectionExtensions Class](ServiceCollectionExtensions.md 'Cat\.Dapper\.MySql\.Extensions\.ServiceCollectionExtensions')
+
+## ServiceCollectionExtensions\.AddCatDapperMySql\(this IServiceCollection, string\) Method
+
+Registers the MySQL connection factory as a singleton, with the connection string, and the scoped session of
+[AddCatDapperModule\(this IServiceCollection\)](../../../Cat.Dapper/namespaces/Cat.Dapper/ServiceCollectionExtensions.AddCatDapperModule.30WTJV7WW5Q08S8MUTXEA3G59.md 'Cat\.Dapper\.Extensions\.ServiceCollectionExtensions\.AddCatDapperModule\(Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)')\.
+
+```csharp
+public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddCatDapperMySql(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, string connectionString);
+```
+#### Parameters
+
+<a name='Cat.Dapper.MySql.Extensions.ServiceCollectionExtensions.AddCatDapperMySql(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection,string).services'></a>
+
+`services` [Microsoft\.Extensions\.DependencyInjection\.IServiceCollection](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection 'Microsoft\.Extensions\.DependencyInjection\.IServiceCollection')
+
+The service collection to add to\.
+
+<a name='Cat.Dapper.MySql.Extensions.ServiceCollectionExtensions.AddCatDapperMySql(thisMicrosoft.Extensions.DependencyInjection.IServiceCollection,string).connectionString'></a>
+
+`connectionString` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
+
+The connection string of the database\.
+
+#### Returns
+[Microsoft\.Extensions\.DependencyInjection\.IServiceCollection](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection 'Microsoft\.Extensions\.DependencyInjection\.IServiceCollection')  
+The same service collection, so calls can be chained\.

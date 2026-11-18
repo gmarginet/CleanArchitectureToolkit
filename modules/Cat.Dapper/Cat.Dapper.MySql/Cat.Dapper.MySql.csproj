@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Cat.Dapper.Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="DefaultDocumentation">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+        <PackageReference Include="MySqlConnector" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Cat.Db.Errors\Cat.Db.Errors.MySql\Cat.Db.Errors.MySql.csproj" />
+        <ProjectReference Include="..\..\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
+        <ProjectReference Include="..\Cat.Dapper\Cat.Dapper.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -60,6 +60,7 @@ A handler asks a session for the connection, runs a statement and returns a resp
 |---------|------|---------|-----------|
 | [Cat.Dapper.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Dapper.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Dapper.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.Abstractions)](#nuget-packages) |
 | [Cat.Dapper](https://www.nuget.org/packages/gmarginet.Cat.Dapper/) | Implementation | `dotnet add package gmarginet.Cat.Dapper` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper)](#nuget-packages) |
+| [Cat.Dapper.MySql](https://www.nuget.org/packages/gmarginet.Cat.Dapper.MySql/) | MySQL support | `dotnet add package gmarginet.Cat.Dapper.MySql` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.MySql)](#nuget-packages) |
 | [Cat.Dapper.SqlFiles](https://www.nuget.org/packages/gmarginet.Cat.Dapper.SqlFiles/) | Optional source generator | `dotnet add package gmarginet.Cat.Dapper.SqlFiles` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.SqlFiles)](#nuget-packages) |
 | [Cat.Dapper.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.Dapper.SqlServer/) | SQL Server support | `dotnet add package gmarginet.Cat.Dapper.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.SqlServer)](#nuget-packages) |
 
@@ -72,6 +73,7 @@ A handler asks a session for the connection, runs a statement and returns a resp
 |-----------|---------------|
 | [Cat.Dapper.Abstractions](namespaces/Cat.Dapper.Abstractions/index.md) | The factory that creates connections and the session that holds one connection and its transaction. |
 | [Cat.Dapper](namespaces/Cat.Dapper/index.md) | The session, the base classes for query and command handlers and the extension methods that run SQL with Dapper. |
+| [Cat.Dapper.MySql](namespaces/Cat.Dapper.MySql/index.md) | The MySQL connection factory and a paging helper that returns an `ICatPagedList`. |
 | [Cat.Dapper.SqlFiles](namespaces/Cat.Dapper.SqlFiles/index.md) | The source generator that turns the `.sql` files next to a handler into constants of that handler. |
 | [Cat.Dapper.SqlServer](namespaces/Cat.Dapper.SqlServer/index.md) | The SQL Server connection factory and a paging helper that returns an `ICatPagedList`. |
 
@@ -85,7 +87,7 @@ A handler asks a session for the connection, runs a statement and returns a resp
 | [Cat.Queries](../Cat.Queries/README.md) | The query handler base class implements the handler interface of `Cat.Queries.Abstractions`. |
 | [Cat.Commands](../Cat.Commands/README.md) | The command handler base classes implement the handler interfaces of `Cat.Commands.Abstractions`. |
 | [Cat.Responses](../Cat.Responses/README.md) | Handlers return a response, and the paging helper returns an `ICatPagedList`. |
-| [Cat.Db.Errors](../Cat.Db.Errors/README.md) | `Cat.Dapper.SqlServer` uses the SQL Server error checks, so the handler can tell a unique key violation from a deadlock. |
+| [Cat.Db.Errors](../Cat.Db.Errors/README.md) | `Cat.Dapper.SqlServer` and `Cat.Dapper.MySql` use the error checks of their database, so the handler can tell a unique key violation from a deadlock. |
 
 <!-- region end: Dependencies-->
 
@@ -104,7 +106,15 @@ Register the handlers the same way as for the other modules, with `AddCatQueries
 
 The core of a service only references the `Abstractions` project and the query and command abstractions. The infrastructure project holds the handlers and references `Cat.Dapper`. The session and the factory live in `Cat.Dapper.Abstractions`, so another module or a service can use them without Dapper.
 
-A database that is not SQL Server adds its own project next to `Cat.Dapper.SqlServer`. It registers an `ICatDbConnectionFactory` and the neutral `Cat.Dapper` project stays the same. When a service already registers a factory, `AddCatDapperModule` keeps it.
+On MySQL, use `Cat.Dapper.MySql` instead. It has the same helper with the name `AddCatDapperMySql`, and it uses the MySqlConnector driver. It has no bulk operations, so a MySQL developer writes the bulk code themselves.
+
+```csharp
+using Cat.Dapper.MySql.Extensions;
+
+services.AddCatDapperMySql(connectionString);
+```
+
+Another database adds its own project next to these two. It registers an `ICatDbConnectionFactory` and the neutral `Cat.Dapper` project stays the same. When a service already registers a factory, `AddCatDapperModule` keeps it.
 
 ### Write a query handler
 Inherit `CatDapperQueryHandlerBase`. The `Session` property is the session of the scope. Keep the SQL in a constant of the handler class, with a raw string literal.
@@ -230,7 +240,7 @@ public class StockMoveCommandHandler : CatDapperCommandHandlerBase<StockMoveComm
 The session is not thread safe. Do not share it between tasks that run at the same time.
 
 ### Page a result
-`QueryPagedAsync` is in `Cat.Dapper.SqlServer`. It returns an `ICatPagedList`, the same shape as the paging helper of `Cat.EFCore.Queries`, and it counts and reads the page in one round trip.
+`QueryPagedAsync` is in `Cat.Dapper.SqlServer` and in `Cat.Dapper.MySql`, with the same arguments. MySQL pages with `LIMIT` and `OFFSET`, SQL Server with `OFFSET` and `FETCH`. A developer who changes the database changes a `using`. A project that uses both namespaces needs the namespace of one of them in the call. It returns an `ICatPagedList`, the same shape as the paging helper of `Cat.EFCore.Queries`, and it counts and reads the page in one round trip.
 
 ```csharp
 using Cat.Dapper.SqlServer;
@@ -251,7 +261,7 @@ var page = await Session.QueryPagedAsync<OrderOverviewRow>(
 - A page number or size below 1 throws an `ArgumentOutOfRangeException`.
 
 ### Handle database errors
-`Cat.Dapper.SqlServer` references `Cat.Db.Errors.SqlServer`. Ask the exception what happened, and do not write error numbers in the handler. See the [module readme of Cat.Db.Errors](../Cat.Db.Errors/README.md) for every check.
+`Cat.Dapper.SqlServer` references `Cat.Db.Errors.SqlServer`, and `Cat.Dapper.MySql` references `Cat.Db.Errors.MySql`, with the same check names. Ask the exception what happened, and do not write error numbers in the handler. See the [module readme of Cat.Db.Errors](../Cat.Db.Errors/README.md) for every check.
 
 ```csharp
 using Cat.Db.Errors.SqlServer;

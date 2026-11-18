@@ -1,0 +1,15 @@
+../../../Cat.Dapper/namespaces/Cat.Dapper.MySql/
+F:Cat.Dapper.MySql.MySqlConnectionFactory._connectionString|MySqlConnectionFactory._connectionString.md|_connectionString
+M:Cat.Dapper.MySql.MySqlConnectionFactory.#ctor(System.String)|MySqlConnectionFactory..ctor.PKW0UWFKRJ18CLAFZ1VZIVM76.md|MySqlConnectionFactory(string)
+M:Cat.Dapper.MySql.MySqlConnectionFactory.CreateConnection|MySqlConnectionFactory.CreateConnection().md|CreateConnection()
+N:Cat.Dapper.MySql|Cat.Dapper.MySql.md|Cat.Dapper.MySql
+T:Cat.Dapper.MySql.MySqlConnectionFactory|MySqlConnectionFactory.md|MySqlConnectionFactory
+F:Cat.Dapper.MySql.MySqlPagingExtensions.SkipParameter|MySqlPagingExtensions.SkipParameter.md|SkipParameter
+F:Cat.Dapper.MySql.MySqlPagingExtensions.TakeParameter|MySqlPagingExtensions.TakeParameter.md|TakeParameter
+M:Cat.Dapper.MySql.MySqlPagingExtensions.QueryPagedAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.String,System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)|MySqlPagingExtensions.QueryPagedAsync.LIQWHK08K54GFW3PNLY1LCH6D.md|QueryPagedAsync<T>(this ICatDbSession, string, string, int, int, object, CancellationToken)
+M:Cat.Dapper.MySql.MySqlPagingExtensions.CalculateSkip(System.Int32,System.Int32)|MySqlPagingExtensions.CalculateSkip.G8JJC2RCN7M8GGFR3HQ22XUN5.md|CalculateSkip(int, int)
+M:Cat.Dapper.MySql.MySqlPagingExtensions.BuildSql(System.String,System.String)|MySqlPagingExtensions.BuildSql.QSNFF4PJAN4697UBLOWKC71P7.md|BuildSql(string, string)
+T:Cat.Dapper.MySql.MySqlPagingExtensions|MySqlPagingExtensions.md|MySqlPagingExtensions
+M:Cat.Dapper.MySql.Extensions.ServiceCollectionExtensions.AddCatDapperMySql(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)|ServiceCollectionExtensions.AddCatDapperMySql.REABKANMBKMBCKGXY6XX4SGEA.md|AddCatDapperMySql(this IServiceCollection, string)
+N:Cat.Dapper.MySql.Extensions|Cat.Dapper.MySql.Extensions.md|Cat.Dapper.MySql.Extensions
+T:Cat.Dapper.MySql.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
