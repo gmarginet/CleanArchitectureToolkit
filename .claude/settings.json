@@ -7,5 +7,10 @@
     "deny": [
       "Read(./.gma/**)"
     ]
+  },
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
   }
 }
