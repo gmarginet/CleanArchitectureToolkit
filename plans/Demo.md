@@ -283,7 +283,7 @@ Refund an approved payment when its order is cancelled, so the money does not st
 #### What exists today
 - The place order saga takes the payment over messages. A cancelled order keeps its `Approved` payment, because there is no refund step. The demo readme lists this in the Orders cons.
 - A payment that answers after the timeout is ignored. The order is cancelled already, and the money stays taken.
-- Cancelling a confirmed order sets the status and releases the stock. It does not touch the payment.
+- Cancelling a Pending or Confirmed order sets the status and releases the stock. It does not touch the payment. A shipped order cannot be cancelled.
 - A saga compensates with explicit steps in the failure branch of the workflow, written by the developer, see the [module readme of Cat.Sagas](../modules/Cat.Sagas/README.md).
 
 #### Done when

@@ -10,12 +10,17 @@ namespace Cat.Demo.OrderService.CoreService.Extensions;
 public static partial class MappingExtensions
 {
     [MapProperty(nameof(Order.OrderStatus) + "." + nameof(OrderStatus.Code), nameof(OrderModel.Status))]
+    [MapProperty(nameof(Order.OrderStatus) + "." + nameof(OrderStatus.Code), nameof(OrderModel.CanCancel), Use = nameof(CanCancel))]
     [MapperIgnoreSource(nameof(Order.SequenceId))]
     [MapperIgnoreSource(nameof(Order.CustomerId))]
     [MapperIgnoreSource(nameof(Order.OrderStatusId))]
+    [MapperIgnoreSource(nameof(Order.ConfirmedAt))]
     [MapperIgnoreSource(nameof(Order.Customer))]
     [MapperIgnoreSource(nameof(Order.Payment))]
     public static partial OrderModel ToModel(this Order order);
+
+    /// <summary>The conversion of a status code to the <c>CanCancel</c> flag of the model. The rule lives in <see cref="OrderStatuses.CanCancel"/>.</summary>
+    private static bool CanCancel(string statusCode) => OrderStatuses.CanCancel(statusCode);
 
     public static partial OrderSummaryModel ToSummaryModel(this OrderSummaryRow row);
 

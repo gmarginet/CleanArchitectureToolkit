@@ -15,6 +15,9 @@ public class Order : CatEntityBase
     public OrderStatus? OrderStatus { get; set; }
     public DateTime PlacedAt { get; set; }
 
+    /// <summary>The moment (UTC) the order became confirmed. It is empty until then.</summary>
+    public DateTime? ConfirmedAt { get; set; }
+
     /// <summary>The total in euro.</summary>
     public decimal Total { get; set; }
 

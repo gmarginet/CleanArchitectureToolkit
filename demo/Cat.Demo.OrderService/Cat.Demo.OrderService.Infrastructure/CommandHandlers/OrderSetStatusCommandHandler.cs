@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Cat.Demo.OrderService.Contracts.Messages;
@@ -13,10 +14,10 @@ using Microsoft.EntityFrameworkCore;
 namespace Cat.Demo.OrderService.Infrastructure.CommandHandlers;
 
 /// <summary>
-/// Sets the status of an order. When the order becomes confirmed, it also publishes the <see cref="OrderConfirmed"/> message.
+/// Sets the status of an order. When the order becomes confirmed, it also sets the confirmed time and publishes the <see cref="OrderConfirmed"/> message.
 /// With the outbox on, the sender stores the message in the same context, so the one <c>SaveChanges</c> saves the status and the message together.
 /// </summary>
-public class OrderSetStatusCommandHandler(OrderDbContext dbContext, ICatMessageSender messageSender)
+public class OrderSetStatusCommandHandler(OrderDbContext dbContext, ICatMessageSender messageSender, TimeProvider timeProvider)
     : CatEfCommandHandlerBase<OrderDbContext, OrderSetStatusCommand>(dbContext)
 {
     public override async Task<ICatResponse> HandleAsync(OrderSetStatusCommand command, CancellationToken cancellationToken = default)
@@ -36,6 +37,8 @@ public class OrderSetStatusCommandHandler(OrderDbContext dbContext, ICatMessageS
 
         if (command.StatusCode == OrderStatuses.ConfirmedCode)
         {
+            order.ConfirmedAt = timeProvider.GetUtcNow().UtcDateTime;
+
             await messageSender.PublishAsync(
                 new OrderConfirmed
                 {

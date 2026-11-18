@@ -94,6 +94,21 @@ public class ServiceRequestHandlerTests
         }
     }
 
+    [TestCase(OrderStatuses.PendingCode, true)]
+    [TestCase(OrderStatuses.ConfirmedCode, true)]
+    [TestCase(OrderStatuses.ShippedCode, false)]
+    [TestCase(OrderStatuses.CancelledCode, false)]
+    public async Task OrderGet_ShouldTellWhetherTheOrderCanBeCancelled(string statusCode, bool canCancel)
+    {
+        var order = NewOrder(statusCode);
+        _queryProcessor.Respond<OrderGetQuery, Order>(CatResponse.Ok(order));
+        var handler = new OrderGetRequestHandler(_queryProcessor, _currentUser);
+
+        var response = await handler.HandleAsync(new OrderGetRequest(order.Id));
+
+        Assert.That(response.Value!.CanCancel, Is.EqualTo(canCancel));
+    }
+
     [Test]
     public async Task OrderGet_AsAdmin_ShouldNotFilterOnTheUser()
     {
@@ -190,9 +205,26 @@ public class ServiceRequestHandlerTests
     }
 
     [Test]
-    public async Task CancelOrder_WhenAlreadyCancelled_ShouldReturnConflict()
+    public async Task CancelOrder_WhenPending_ShouldPublishTheCancelledEvent()
     {
-        var order = NewOrder(OrderStatuses.CancelledCode);
+        var order = NewOrder(OrderStatuses.PendingCode);
+        _queryProcessor.Respond<OrderGetQuery, Order>(CatResponse.Ok(order));
+        var handler = new CancelOrderRequestHandler(_queryProcessor, _eventAggregator, _currentUser);
+
+        var response = await handler.HandleAsync(new CancelOrderRequest(order.Id));
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response, CatIs.Succeeded);
+            Assert.That(_events.Events.Single(), Is.EqualTo(new OrderCancelledEvent(order.Id, order.OrderNumber, OrderCancelReasons.CancelledByUser)));
+        }
+    }
+
+    [TestCase(OrderStatuses.CancelledCode)]
+    [TestCase(OrderStatuses.ShippedCode)]
+    public async Task CancelOrder_WhenCancelledOrShipped_ShouldReturnConflict(string statusCode)
+    {
+        var order = NewOrder(statusCode);
         _queryProcessor.Respond<OrderGetQuery, Order>(CatResponse.Ok(order));
         var handler = new CancelOrderRequestHandler(_queryProcessor, _eventAggregator, _currentUser);
 
@@ -310,6 +342,77 @@ public class ServiceRequestHandlerTests
     }
 
     #endregion CancelStuckOrders
+
+    #region ShipConfirmedOrders
+
+    [Test]
+    public async Task ShipConfirmedOrders_ShouldAskForOrdersConfirmedBeforeTheLimitAndShipEachOne()
+    {
+        var now = new DateTimeOffset(2026, 11, 13, 12, 0, 0, TimeSpan.Zero);
+        var first = NewOrder(OrderStatuses.ConfirmedCode);
+        var second = NewOrder(OrderStatuses.ConfirmedCode);
+        _queryProcessor.Respond<ShippableOrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([first, second]));
+        var handler = new ShipConfirmedOrdersRequestHandler(_queryProcessor, _commandProcessor, new FixedTimeProvider(now));
+
+        var response = await handler.HandleAsync(new ShipConfirmedOrdersRequest());
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response, CatIs.SucceededWith(CatResponseType.NoContent));
+            Assert.That(_queryProcessor.Queries.Single(), Is.EqualTo(new ShippableOrderGetListQuery(now.UtcDateTime.AddMinutes(-5))));
+            Assert.That(
+                _commandProcessor.Of<OrderSetStatusCommand>(),
+                Is.EqualTo(new[]
+                {
+                    new OrderSetStatusCommand(first.Id, OrderStatuses.ShippedCode),
+                    new OrderSetStatusCommand(second.Id, OrderStatuses.ShippedCode)
+                }));
+        }
+    }
+
+    [Test]
+    public async Task ShipConfirmedOrders_WithoutShippableOrders_ShouldSendNoCommand()
+    {
+        _queryProcessor.Respond<ShippableOrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([]));
+        var handler = new ShipConfirmedOrdersRequestHandler(_queryProcessor, _commandProcessor, TimeProvider.System);
+
+        var response = await handler.HandleAsync(new ShipConfirmedOrdersRequest());
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response, CatIs.Succeeded);
+            Assert.That(_commandProcessor.Of<OrderSetStatusCommand>(), Is.Empty);
+        }
+    }
+
+    [Test]
+    public async Task ShipConfirmedOrders_WhenTheQueryFails_ShouldPassTheFailureOn()
+    {
+        _queryProcessor.Respond<ShippableOrderGetListQuery, IList<Order>>(CatResponse.InternalServerError<IList<Order>>());
+        var handler = new ShipConfirmedOrdersRequestHandler(_queryProcessor, _commandProcessor, TimeProvider.System);
+
+        var response = await handler.HandleAsync(new ShipConfirmedOrdersRequest());
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response, CatIs.Failed);
+            Assert.That(_commandProcessor.Of<OrderSetStatusCommand>(), Is.Empty);
+        }
+    }
+
+    [Test]
+    public async Task ShipConfirmedOrders_WhenACommandFails_ShouldPassTheFailureOn()
+    {
+        _queryProcessor.Respond<ShippableOrderGetListQuery, IList<Order>>(CatResponse.Ok<IList<Order>>([NewOrder(OrderStatuses.ConfirmedCode)]));
+        _commandProcessor.Respond<OrderSetStatusCommand>(CatResponse.InternalServerError());
+        var handler = new ShipConfirmedOrdersRequestHandler(_queryProcessor, _commandProcessor, TimeProvider.System);
+
+        var response = await handler.HandleAsync(new ShipConfirmedOrdersRequest());
+
+        Assert.That(response, CatIs.Failed);
+    }
+
+    #endregion ShipConfirmedOrders
 
     #region PlaceOrder
 

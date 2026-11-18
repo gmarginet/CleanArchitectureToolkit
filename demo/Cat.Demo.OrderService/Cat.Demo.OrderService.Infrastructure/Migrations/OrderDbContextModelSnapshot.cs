@@ -16,7 +16,7 @@ partial class OrderDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261114012637_AddSagas";
+    public override string LastMigrationId => "20261118192212_AddOrderShipping";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -107,6 +107,9 @@ partial class OrderDbContextModelSnapshot : ModelSnapshot
                 b.Property<Guid>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("uniqueidentifier");
+
+                b.Property<DateTime?>("ConfirmedAt")
+                    .HasColumnType("datetime2");
 
                 b.Property<Guid>("CustomerId")
                     .HasColumnType("uniqueidentifier");

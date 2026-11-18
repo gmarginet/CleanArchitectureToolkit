@@ -24,7 +24,7 @@ public static class OrderDatabaseInitializer
 
         var existing = await dbContext.OrderStatuses.Select(x => x.Code).ToListAsync(cancellationToken);
 
-        foreach (var code in new[] { OrderStatuses.PendingCode, OrderStatuses.ConfirmedCode, OrderStatuses.CancelledCode })
+        foreach (var code in new[] { OrderStatuses.PendingCode, OrderStatuses.ConfirmedCode, OrderStatuses.CancelledCode, OrderStatuses.ShippedCode })
         {
             if (!existing.Contains(code))
             {

@@ -47,7 +47,8 @@ public class CancelOrderRequestHandler : ICatServiceRequestHandler<CancelOrderRe
         var order = response.Value!;
         var statusCode = order.OrderStatus!.Code;
 
-        if (statusCode == OrderStatuses.CancelledCode)
+        // Only an order that is not shipped yet can be cancelled, see OrderStatuses.CanCancel.
+        if (!OrderStatuses.CanCancel(statusCode))
         {
             return CatResponse.Conflict(OrderErrorDefinitions.CannotCancel.CreateCatError(order.OrderNumber, statusCode));
         }

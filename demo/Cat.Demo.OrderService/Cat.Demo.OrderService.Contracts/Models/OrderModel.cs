@@ -8,8 +8,11 @@ public class OrderModel
     public Guid Id { get; set; }
     public required string OrderNumber { get; set; }
 
-    /// <summary>The status code: <c>Pending</c>, <c>Confirmed</c> or <c>Cancelled</c>.</summary>
+    /// <summary>The status code: <c>Pending</c>, <c>Confirmed</c>, <c>Shipped</c> or <c>Cancelled</c>.</summary>
     public required string Status { get; set; }
+
+    /// <summary>Tells whether the order can still be cancelled. A client uses it to enable or disable its cancel button.</summary>
+    public bool CanCancel { get; set; }
 
     public DateTime PlacedAt { get; set; }
 
