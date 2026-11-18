@@ -289,10 +289,10 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
     if ($start -ge 0 -and $end -gt $start) {
         for ($i = $start + 1; $i -lt $end; $i++) {
             # A row is: name | type badge, status badge, line break, description | phases
-            if ($readme[$i] -match '^\| <a id="([^"]+)"></a>(Cat\.[\w.]+) \| \[!\[(\w+)\]\([^)]*\)\]\(([^)]*)\) (\[!\[[^\]]*\]\([^)]*\)\]\(([^)]*)\))(?: \[!\[Readme\]\([^)]*\)\]\(([^)]*)\))?<br>(.+?)(?: \[Read more\]\(([^)]*)\))? \| (.*) \|$') {
-                $rows.Add([pscustomobject]@{ Anchor = $Matches[1]; Name = $Matches[2]; Type = $Matches[3]; TypeLink = $Matches[4]; Badge = $Matches[5]; BadgeLink = $Matches[6]; ReadmeLink = $Matches[7]; MoreLink = $Matches[9]; Phases = $Matches[10] })
-            } elseif ($readme[$i] -match '^\| (<a id=|\[Cat\.)') {
-                $errors.Add("README.md repo overview line $($i + 1): the row does not match anchor and name | type badge, status badge, <br>, description | phases.")
+            if ($readme[$i] -match '^\| (Cat\.[\w.]+) \| <a id="([^"]+)"></a>\[!\[(\w+)\]\([^)]*\)\]\(([^)]*)\) (\[!\[[^\]]*\]\([^)]*\)\]\(([^)]*)\))(?: \[!\[Readme\]\([^)]*\)\]\(([^)]*)\))?<br>(.+?)(?: \[Read more\]\(([^)]*)\))? \| (.*) \|$') {
+                $rows.Add([pscustomobject]@{ Name = $Matches[1]; Anchor = $Matches[2]; Type = $Matches[3]; TypeLink = $Matches[4]; Badge = $Matches[5]; BadgeLink = $Matches[6]; ReadmeLink = $Matches[7]; MoreLink = $Matches[9]; Phases = $Matches[10] })
+            } elseif ($readme[$i] -match '^\| (<a id=|\[?Cat\.)') {
+                $errors.Add("README.md repo overview line $($i + 1): the row does not match name | anchor, type badge, status badge, <br>, description | phases.")
             }
         }
     }

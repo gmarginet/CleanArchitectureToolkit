@@ -49,7 +49,7 @@ Rows, in this order. Inside a group, sort by name.
 2. **Demo.** One row, `Cat.Demo`. Type `Demo`.
 3. **Tooling.** Things that help a developer use the toolkit and that are not a module, such as `Cat.Skills` and `Cat.Templates`. Type `Tooling`.
 
-Name column: the name is plain text with an anchor in front of it, `<a id="[[Anchor]]"></a>[[Name]]`. The name is not a link. The anchor is the name in lowercase with the dots turned into hyphens, such as `cat-minimal-api`. A link without a target makes GitHub open a blank page, so the badges that have no other target link to this anchor and the reader stays where they are.
+Name column: the name is plain text, `[[Name]]`, and not a link. The anchor sits in the `Description` cell, in front of the type badge, `<a id="[[Anchor]]"></a>`. The name cell is centered vertically, so an anchor there scrolls the badges out of view. The anchor is the name in lowercase with the dots turned into hyphens, such as `cat-minimal-api`. A link without a target makes GitHub open a blank page, so the badges that have no other target link to this anchor and the reader stays where they are.
 
 Type badge: the `TypeBadge` template, with the type of the row. It comes first in the `Description` cell. It links to the anchor of the row, for every row.
 

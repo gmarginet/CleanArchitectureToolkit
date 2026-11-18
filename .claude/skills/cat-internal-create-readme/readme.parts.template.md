@@ -1,5 +1,5 @@
 <!-- ==================== template start: RepoRow ====================-->
-| <a id="[[Anchor]]"></a>[[Name]] | [[TypeBadge]] [[StatusBadge]] [[ReadmeBadge]]<br>[[Description]] [[ReadMoreLink]] | [[PhaseLines]] |
+| [[Name]] | <a id="[[Anchor]]"></a>[[TypeBadge]] [[StatusBadge]] [[ReadmeBadge]]<br>[[Description]] [[ReadMoreLink]] | [[PhaseLines]] |
 <!-- ==================== template end: RepoRow ====================-->
 
 <!-- ==================== template start: ReadmeBadge ====================-->
