@@ -1,10 +1,13 @@
 # Phases column
 
-Part of the `cat-internal-create-readme` skill. Read it when you add, change or recalculate a line of the `Phases` column of the repo overview.
+Part of the `cat-internal-create-readme` skill. Read it when you add, change or recalculate a line of the three phase columns of the repo overview.
 
-The column has the header `Phases`, with one line for each phase in the plan of the item. A stable item has no plan, and its cell is empty. The lines of a cell are separated by `<br>`, and they are in the order of the priority number, the lowest first. So the first line is the next phase of the item to build, and the phase numbers of the lines can be out of sequence.
+The phases are three columns without a header, with one line for each phase in the plan of the item. A stable item has no plan, and its cells are empty. The lines of a cell are separated by `<br>`, and they are in the order of the priority number, the lowest first. So the first line is the next phase of the item to build, and the phase numbers of the lines can be out of sequence. The nth line of each of the three cells belongs to the same phase.
 
-- A line looks like `[A (B): C](./plans/[[PlanFile]]#phase-A)`. A is the phase number, B is the number of open questions of the phase and C is the priority number of the phase. The link goes to the phase in the plan.
+- Column 1 holds C, the priority number of the phase.
+- Column 2 holds A, the phase number, as the link `[A](./plans/[[PlanFile]]#phase-A)`. The link goes to the phase in the plan.
+- Column 3 holds B, the number of open questions of the phase.
+- The verify-docs check reads the three cells as the line `[A (B): C](./plans/[[PlanFile]]#phase-A)`.
 - The priority numbers are whole numbers from 1 and unique over the whole table, so there is one order of work. 1 is the highest priority.
 - B counts the open questions of the phase. A question or a sub question counts when it has no answer and no sub question below it. A question that has a sub question does not count, because it is answered. The headings in a question region are `#### Question N`, `##### Question N.x` and `##### Answer N.x`.
 

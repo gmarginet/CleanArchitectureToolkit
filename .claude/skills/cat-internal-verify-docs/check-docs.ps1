@@ -289,10 +289,23 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
     if ($start -ge 0 -and $end -gt $start) {
         for ($i = $start + 1; $i -lt $end; $i++) {
             # A row is: name | type badge, status badge, line break, description | phases
-            if ($readme[$i] -match '^\| (Cat\.[\w.]+) \| <a id="([^"]+)"></a>\[!\[(\w+)\]\([^)]*\)\]\(([^)]*)\) (\[!\[[^\]]*\]\([^)]*\)\]\(([^)]*)\))(?: \[!\[Readme\]\([^)]*\)\]\(([^)]*)\))?<br>(.+?)(?: \[Read more\]\(([^)]*)\))? \| (.*) \|$') {
-                $rows.Add([pscustomobject]@{ Name = $Matches[1]; Anchor = $Matches[2]; Type = $Matches[3]; TypeLink = $Matches[4]; Badge = $Matches[5]; BadgeLink = $Matches[6]; ReadmeLink = $Matches[7]; MoreLink = $Matches[9]; Phases = $Matches[10] })
+            if ($readme[$i] -match '^\| (Cat\.[\w.]+) \| <a id="([^"]+)"></a>\[!\[(\w+)\]\([^)]*\)\]\(([^)]*)\) (\[!\[[^\]]*\]\([^)]*\)\]\(([^)]*)\))(?: \[!\[Readme\]\([^)]*\)\]\(([^)]*)\))?<br>(.+?)(?: \[Read more\]\(([^)]*)\))? \| (.*) \| (.*) \| (.*) \|$') {
+                $row = [pscustomobject]@{ Name = $Matches[1]; Anchor = $Matches[2]; Type = $Matches[3]; TypeLink = $Matches[4]; Badge = $Matches[5]; BadgeLink = $Matches[6]; ReadmeLink = $Matches[7]; MoreLink = $Matches[9]; Phases = '' }
+                # The three columns after the description hold the priority, the phase with its link and the open questions. Join them to one line for each phase: [A (B): C](link)
+                $priorityCells = @(if ($Matches[10].Trim() -ne '') { $Matches[10].Trim() -split '<br>' })
+                $phaseCells = @(if ($Matches[11].Trim() -ne '') { $Matches[11].Trim() -split '<br>' })
+                $openCells = @(if ($Matches[12].Trim() -ne '') { $Matches[12].Trim() -split '<br>' })
+                if ($priorityCells.Count -ne $phaseCells.Count -or $phaseCells.Count -ne $openCells.Count) {
+                    $errors.Add("README.md repo overview line $($i + 1): $($row.Name) has a different number of lines in the priority, phase and open questions columns.")
+                } else {
+                    $joined = for ($k = 0; $k -lt $phaseCells.Count; $k++) {
+                        if ($phaseCells[$k] -match '^\[(\d+)\]\((.+)\)$') { "[$($Matches[1]) ($($openCells[$k])): $($priorityCells[$k])]($($Matches[2]))" } else { "$($phaseCells[$k])" }
+                    }
+                    $row.Phases = @($joined) -join '<br>'
+                }
+                $rows.Add($row)
             } elseif ($readme[$i] -match '^\| (<a id=|\[?Cat\.)') {
-                $errors.Add("README.md repo overview line $($i + 1): the row does not match name | anchor, type badge, status badge, <br>, description | phases.")
+                $errors.Add("README.md repo overview line $($i + 1): the row does not match name | anchor, type badge, status badge, <br>, description | priority | phase | open questions.")
             }
         }
     }
@@ -330,10 +343,10 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
         }
         if (-not $built) {
             if (-not $hasPlan) { $errors.Add("README.md repo overview: $name is not built and has no plan plans\$plan.") }
-            if ($row.Badge -notlike "*badge/status-New-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name is not built. Its badge must be New and link to ./plans/$plan.") }
+            if ($row.Badge -notlike "*badge/status-New-*](#$anchor)*") { $errors.Add("README.md repo overview: $name is not built. Its badge must be New and link to #$anchor.") }
         } elseif ($hasPlan) {
             $word = if ($firstStable -eq 'reached') { 'Growing' } else { 'Building' }
-            if ($row.Badge -notlike "*badge/status-$word-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name has a plan that says the first stable version is $firstStable. Its badge must be $word and link to ./plans/$plan.") }
+            if ($row.Badge -notlike "*badge/status-$word-*](#$anchor)*") { $errors.Add("README.md repo overview: $name has a plan that says the first stable version is $firstStable. Its badge must be $word and link to #$anchor.") }
         } else {
             if ($row.Badge -notlike "*badge/status-Stable-*](#$anchor)*") { $errors.Add("README.md repo overview: $name has no plan. Its badge must be Stable and link to #$anchor.") }
         }

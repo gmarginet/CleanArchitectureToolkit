@@ -1,6 +1,6 @@
 ---
 name: cat-internal-create-readme
-description: Update the readme (README.md in the root) and its repo overview table, with the status badges and the Phases column. Use when a module, plan, tooling item or the demo is added, removed or changes, when a chapter of the readme is changed, or after the readme template changed.
+description: Update the readme (README.md in the root) and its repo overview table, with the status badges and the phase columns. Use when a module, plan, tooling item or the demo is added, removed or changes, when a chapter of the readme is changed, or after the readme template changed.
 argument-hint: "[overview|chapter|update] [name]"
 ---
 
@@ -42,7 +42,7 @@ Regions that every template has.
 Edit only inside a region. Never remove a region marker. A change to a heading changes the anchor, so search the old anchor with `git grep` and fix every link.
 
 ## Repo overview
-The `RepoOverview` region holds one table with a row for everything in the repository. The columns are `Name`, `Description` and `Phases`. The `Phases` column holds one line for each phase of the plan, with the priority of the phase. The `Description` cell starts with the type badge and the status badge, then a `<br>`, then the description. The badges sit in the wide column, because a badge in a narrow column is scaled down until it is unreadable.
+The `RepoOverview` region holds one table with a row for everything in the repository. The columns are `Name`, `Description` and three columns without a header. The three columns hold one line for each phase of the plan: the priority of the phase, the phase number with the link to the plan, and the number of open questions. The `Description` cell starts with the type badge and the status badge, then a `<br>`, then the description. The badges sit in the wide column, because a badge in a narrow column is scaled down until it is unreadable.
 
 Rows, in this order. Inside a group, sort by name.
 1. **Modules.** One row per module. Type `Module`.
@@ -54,17 +54,18 @@ Name column: the name is plain text, `[[Name]]`, and not a link. The anchor sits
 Type badge: the `TypeBadge` template, with the type of the row. It comes first in the `Description` cell. It links to the anchor of the row, for every row.
 
 Status badge, from three facts: is the item built, does it still have a plan in `plans/`, and does the plan say that the first stable version is reached. The plan says it in the line `**First stable version:**` of its `FirstStableVersion` region. The status badge comes after the type badge.
-- Not built: the `NewBadge` template. The badge links to the plan.
-- Built, the plan file exists and the first stable version is not reached: the `BuildingBadge` template. The badge links to the plan. Breaking changes are possible.
-- Built, the plan file exists and the first stable version is reached: the `GrowingBadge` template. The badge links to the plan. The item is stable, and the plan holds extra features. Breaking changes are not expected.
-- Built, and no plan file: the `StableBadge` template. There is no plan to open, so the badge links to the anchor of the row.
+Every status badge links to the anchor of the row. The plan is linked from the phase number in the three phase columns.
+- Not built: the `NewBadge` template.
+- Built, the plan file exists and the first stable version is not reached: the `BuildingBadge` template. Breaking changes are possible.
+- Built, the plan file exists and the first stable version is reached: the `GrowingBadge` template. The item is stable, and the plan holds extra features. Breaking changes are not expected.
+- Built, and no plan file: the `StableBadge` template.
 - The owner decides when the first stable version is reached. Change the line in the plan and the badge together.
 
 Readme badge and read more link: a row of a built item gets the `ReadmeBadge` template after the status badge, and the `ReadMoreLink` template at the end of the description. Both link to the readme of the item: `./modules/[[Name]]/README.md` for a module and `./demo/README.md` for `Cat.Demo`. A row of an item that is not built has neither, because there is no readme to open. Leave the placeholders out and keep no stray space.
 
 A module is built when its folder exists in `modules/`. The demo is built from the first stage on. A tooling item is built when its files exist.
 
-Phases column: one line `[A (B): C]` for each phase of the plan of the item, ordered by the priority C. A stable item has an empty cell. Read [phases-column.md](phases-column.md) for the format, the ranking rules and when to recalculate. The owner decides the order, so propose new numbers and wait.
+Phase columns: one line for each phase of the plan of the item, ordered by the priority C. Column 1 holds the priority C, column 2 the phase number A as a link to the plan and column 3 the number of open questions B. A stable item has empty cells. Read [phases-column.md](phases-column.md) for the format, the ranking rules and when to recalculate. The owner decides the order, so propose new numbers and wait.
 
 Description: one short sentence about what the item is used for. For a module, base it on the intro of the module readme.
 
@@ -79,7 +80,7 @@ Steps:
 1. List the folders in `modules/` and the files in `plans/`.
 2. Read the intro of each module readme that needs a new or changed row.
 3. Edit the rows. Keep the existing rows untouched when nothing changed.
-4. Check that every module folder and every plan has exactly one row, that the order is right, that every status badge matches the three facts, and that the lines of the `Phases` column are up to date.
+4. Check that every module folder and every plan has exactly one row, that the order is right, that every status badge matches the three facts, and that the lines of the three phase columns are up to date.
 5. Run the `cat-internal-verify-docs` skill.
 
 When a future module is started with the `cat-internal-create-module` skill, the row stays and its status and its readme links change. When a plan is removed, the status becomes stable. The `cat-internal-create-plan` skill describes where a plan is linked.
@@ -101,7 +102,7 @@ Use this when the owner changes the template and asks to update the readme.
 - [[StatusBadge]]: The `NewBadge`, `BuildingBadge`, `GrowingBadge` or `StableBadge` template.
 - [[ReadmeBadge]]: The `ReadmeBadge` template. Empty for an item that is not built.
 - [[ReadMoreLink]]: The `ReadMoreLink` template. Empty for an item that is not built.
-- [[PhaseLines]]: The lines of the `Phases` column, one for each phase, see [phases-column.md](phases-column.md). Empty for a stable item.
+- [[Priorities]], [[PhaseLinks]], [[OpenQuestions]]: The three phase columns, one line for each phase, joined with `<br>`, see [phases-column.md](phases-column.md). Empty for a stable item.
 - [[Description]]: One short sentence about what the item is used for.
 - [[PlanFile]]: The file name of the plan in `plans/`, such as `Cat.Messaging.md` or `Demo.md`.
 - [[RootPath]]: The relative path to the root of the repository, used by the header. It is `.` for the readme.
