@@ -93,10 +93,10 @@ Some modules depend on other modules, in the documentation of each module you ca
 <!-- region start: RepoOverview-->
 
 > #### Module statuses
-> - **New**: not started yet.  
-> - **Building**: building has started but the first stable version is not reached. <sup>(Breaking changes are possible.)</sup>  
-> - **Growing**: the first stable version is reached, and extra features are planned. <sup>(Breaking changes are not expected.)</sup>  
-> - **Stable**: fully built.  
+> - **<ins>New</ins>**: not started yet.  
+> - **<ins>Building</ins>**: building has started but the first stable version is not reached. <sup>(Breaking changes are possible.)</sup>  
+> - **<ins>Growing</ins>**: the first stable version is reached, and extra features are planned. <sup>(Breaking changes are not expected.)</sup>  
+> - **<ins>Stable</ins>**: fully built.  
 
 | Name | Description | Phases |
 |------|-------------|--------|
