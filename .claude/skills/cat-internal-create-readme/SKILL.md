@@ -49,19 +49,18 @@ Rows, in this order. Inside a group, sort by name.
 2. **Demo.** One row, `Cat.Demo`. Type `Demo`.
 3. **Tooling.** Things that help a developer use the toolkit and that are not a module, such as `Cat.Skills` and `Cat.Templates`. Type `Tooling`.
 
-Name column:
-- A module that is built links to its module readme, `./modules/[[Name]]/README.md`.
-- `Cat.Demo` links to the demo readme, `./demo/README.md`.
-- An item that is not built yet links to its plan, `./plans/[[PlanFile]]`.
+Name column: the name is plain text with an anchor in front of it, `<a id="[[Anchor]]"></a>[[Name]]`. The name is not a link. The anchor is the name in lowercase with the dots turned into hyphens, such as `cat-minimal-api`. A link without a target makes GitHub open a blank page, so the badges that have no other target link to this anchor and the reader stays where they are.
 
-Type badge: the `TypeBadge` template, with the type of the row. It comes first in the `Description` cell and links to the same target as the status badge.
+Type badge: the `TypeBadge` template, with the type of the row. It comes first in the `Description` cell. It links to the anchor of the row, for every row.
 
 Status badge, from three facts: is the item built, does it still have a plan in `plans/`, and does the plan say that the first stable version is reached. The plan says it in the line `**First stable version:**` of its `FirstStableVersion` region. The status badge comes after the type badge.
 - Not built: the `NewBadge` template. The badge links to the plan.
 - Built, the plan file exists and the first stable version is not reached: the `BuildingBadge` template. The badge links to the plan. Breaking changes are possible.
 - Built, the plan file exists and the first stable version is reached: the `GrowingBadge` template. The badge links to the plan. The item is stable, and the plan holds extra features. Breaking changes are not expected.
-- Built, and no plan file: the `StableBadge` template. The badge links to the readme of the item, the same target as the name link.
+- Built, and no plan file: the `StableBadge` template. There is no plan to open, so the badge links to the anchor of the row.
 - The owner decides when the first stable version is reached. Change the line in the plan and the badge together.
+
+Readme badge and read more link: a row of a built item gets the `ReadmeBadge` template after the status badge, and the `ReadMoreLink` template at the end of the description. Both link to the readme of the item: `./modules/[[Name]]/README.md` for a module and `./demo/README.md` for `Cat.Demo`. A row of an item that is not built has neither, because there is no readme to open. Leave the placeholders out and keep no stray space.
 
 A module is built when its folder exists in `modules/`. The demo is built from the first stage on. A tooling item is built when its files exist.
 
@@ -83,7 +82,7 @@ Steps:
 4. Check that every module folder and every plan has exactly one row, that the order is right, that every status badge matches the three facts, and that the lines of the `Phases` column are up to date.
 5. Run the `cat-internal-verify-docs` skill.
 
-When a future module is started with the `cat-internal-create-module` skill, the row stays and its status and name link change. When a plan is removed, the status becomes stable. The `cat-internal-create-plan` skill describes where a plan is linked.
+When a future module is started with the `cat-internal-create-module` skill, the row stays and its status and its readme links change. When a plan is removed, the status becomes stable. The `cat-internal-create-plan` skill describes where a plan is linked.
 
 ## Updating the readme after the template changed
 Use this when the owner changes the template and asks to update the readme.
@@ -95,11 +94,13 @@ Use this when the owner changes the template and asks to update the readme.
 
 ## Placeholders
 - [[Name]]: The name of the item, such as `Cat.Queries`, `Cat.Demo` or `Cat.Skills`.
-- [[NameLink]]: Where the name links to, see the name column above.
+- [[Anchor]]: The anchor of the row, see the name column above.
+- [[ReadmePath]]: The path of the readme of a built item, `./modules/[[Name]]/README.md` or `./demo/README.md`.
 - [[Type]]: `Module`, `Demo` or `Tooling`.
 - [[TypeBadge]]: The TypeBadge template.
-- [[BadgeLink]]: Where the type badge links to. It is the same target as the status badge: the plan for a New, Building or Growing item, and the readme of the item for a Stable item.
 - [[StatusBadge]]: The `NewBadge`, `BuildingBadge`, `GrowingBadge` or `StableBadge` template.
+- [[ReadmeBadge]]: The `ReadmeBadge` template. Empty for an item that is not built.
+- [[ReadMoreLink]]: The `ReadMoreLink` template. Empty for an item that is not built.
 - [[PhaseLines]]: The lines of the `Phases` column, one for each phase, see [phases-column.md](phases-column.md). Empty for a stable item.
 - [[Description]]: One short sentence about what the item is used for.
 - [[PlanFile]]: The file name of the plan in `plans/`, such as `Cat.Messaging.md` or `Demo.md`.

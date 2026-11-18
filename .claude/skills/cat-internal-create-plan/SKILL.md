@@ -49,9 +49,9 @@ Read these before you write, and search them for the module name:
 ## Where a module plan is linked
 Every plan is linked from the readme, and from nowhere else.
 - Every plan has a row in the repo overview table of the readme. `Demo.md` belongs to the row `Cat.Demo` and `Skills.md` to the row `Cat.Skills`.
-- An item that is not built yet has the New badge and its name links to the plan. A built item with a plan has the Building badge, or the Growing badge when its first stable version is reached (see the `FirstStableVersion` region). The badge links to the plan in all three cases. The `cat-internal-create-readme` skill covers the table.
+- An item that is not built yet has the New badge. A built item with a plan has the Building badge, or the Growing badge when its first stable version is reached (see the `FirstStableVersion` region). The badge links to the plan in all three cases. The `cat-internal-create-readme` skill covers the table.
 - A change to a plan, an answered open question and a finished build can change the lines of the `Phases` column in the repo overview. Recalculate them with the `cat-internal-create-readme` skill.
-- When a future module is started with the `cat-internal-create-module` skill, its row changes from New to Building and its name links to the module readme.
+- When a future module is started with the `cat-internal-create-module` skill, its row changes from New to Building and gets a Readme badge and a Read more link to the module readme.
 - Keep the plan until the module has done everything in it and the owner agrees that it can go. When the plan goes, remove its link from the readme too.
 - A module readme never links to the plan. Only the readme does. A module readme grows until it holds everything about how the module works and how to use it, so the plan can be removed.
 - The `cat-internal-verify-docs` skill checks that every plan has exactly one row in the repo overview.

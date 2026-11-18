@@ -1,9 +1,17 @@
 <!-- ==================== template start: RepoRow ====================-->
-| [[[Name]]]([[NameLink]]) | [[TypeBadge]] [[StatusBadge]]<br>[[Description]] | [[PhaseLines]] |
+| <a id="[[Anchor]]"></a>[[Name]] | [[TypeBadge]] [[StatusBadge]] [[ReadmeBadge]]<br>[[Description]] [[ReadMoreLink]] | [[PhaseLines]] |
 <!-- ==================== template end: RepoRow ====================-->
 
+<!-- ==================== template start: ReadmeBadge ====================-->
+[![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)]([[ReadmePath]])
+<!-- ==================== template end: ReadmeBadge ====================-->
+
+<!-- ==================== template start: ReadMoreLink ====================-->
+[Read more]([[ReadmePath]])
+<!-- ==================== template end: ReadMoreLink ====================-->
+
 <!-- ==================== template start: TypeBadge ====================-->
-[![[[Type]]](https://img.shields.io/badge/type-[[Type]]-yellow)]([[BadgeLink]])
+[![[[Type]]](https://img.shields.io/badge/type-[[Type]]-yellow)(#[[Anchor]])
 <!-- ==================== template end: TypeBadge ====================-->
 
 <!-- ==================== template start: NewBadge ====================-->
@@ -19,5 +27,5 @@
 <!-- ==================== template end: GrowingBadge ====================-->
 
 <!-- ==================== template start: StableBadge ====================-->
-[![Stable](https://img.shields.io/badge/status-Stable-green)]([[NameLink]])
+[![Stable](https://img.shields.io/badge/status-Stable-green)(#[[Anchor]])
 <!-- ==================== template end: StableBadge ====================-->

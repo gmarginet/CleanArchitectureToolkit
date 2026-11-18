@@ -289,10 +289,10 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
     if ($start -ge 0 -and $end -gt $start) {
         for ($i = $start + 1; $i -lt $end; $i++) {
             # A row is: name | type badge, status badge, line break, description | phases
-            if ($readme[$i] -match '^\| \[(Cat\.[\w.]+)\]\(([^)]+)\) \| \[!\[(\w+)\]\([^)]*\)\]\(([^)]*)\) (\[!\[[^\]]*\]\([^)]*\)\]\(([^)]*)\))<br>.+ \| (.*) \|$') {
-                $rows.Add([pscustomobject]@{ Name = $Matches[1]; Link = $Matches[2]; Type = $Matches[3]; TypeLink = $Matches[4]; Badge = $Matches[5]; BadgeLink = $Matches[6]; Phases = $Matches[7] })
-            } elseif ($readme[$i] -match '^\| \[Cat\.') {
-                $errors.Add("README.md repo overview line $($i + 1): the row does not match name | type badge, status badge, <br>, description | phases.")
+            if ($readme[$i] -match '^\| <a id="([^"]+)"></a>(Cat\.[\w.]+) \| \[!\[(\w+)\]\([^)]*\)\]\(([^)]*)\) (\[!\[[^\]]*\]\([^)]*\)\]\(([^)]*)\))(?: \[!\[Readme\]\([^)]*\)\]\(([^)]*)\))?<br>(.+?)(?: \[Read more\]\(([^)]*)\))? \| (.*) \|$') {
+                $rows.Add([pscustomobject]@{ Anchor = $Matches[1]; Name = $Matches[2]; Type = $Matches[3]; TypeLink = $Matches[4]; Badge = $Matches[5]; BadgeLink = $Matches[6]; ReadmeLink = $Matches[7]; MoreLink = $Matches[9]; Phases = $Matches[10] })
+            } elseif ($readme[$i] -match '^\| (<a id=|\[Cat\.)') {
+                $errors.Add("README.md repo overview line $($i + 1): the row does not match anchor and name | type badge, status badge, <br>, description | phases.")
             }
         }
     }
@@ -302,11 +302,21 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
         if ($seen.ContainsKey($name)) { $errors.Add("README.md repo overview: $name has more than one row."); continue }
         $seen[$name] = $true
         if ($row.Type -notin 'Module', 'Demo', 'Tooling') { $errors.Add("README.md repo overview: $name has the type $($row.Type). Use Module, Demo or Tooling."); continue }
-        if ($row.TypeLink -ne $row.BadgeLink) { $errors.Add("README.md repo overview: $name has a type badge that links to $($row.TypeLink). It must link to the same target as the status badge, $($row.BadgeLink).") }
         $plan = if ($planOf.ContainsKey($name)) { $planOf[$name] } else { "$name.md" }
         $hasPlan = $planFiles -contains $plan
         $built = switch ($row.Type) { 'Module' { $moduleFolders -contains $name } 'Demo' { $true } default { $row.Badge -notlike '*badge/status-New-*' } }
-        if ($row.Type -eq 'Module' -and -not $built -and $row.Link -like './modules/*') { $errors.Add("README.md repo overview: $name has no folder in modules/.") }
+        # The name is plain text with an anchor. The type badge links to that anchor, so a click keeps the reader in place.
+        $anchor = $name.ToLower().Replace('.', '-')
+        if ($row.Anchor -ne $anchor) { $errors.Add("README.md repo overview: $name has the anchor $($row.Anchor). It must be $anchor.") }
+        if ($row.TypeLink -ne "#$anchor") { $errors.Add("README.md repo overview: $name has a type badge that links to $($row.TypeLink). It must link to #$anchor.") }
+        # The Readme badge and the Read more link exist only for a built item, and both link to its readme.
+        $readmePath = switch ($row.Type) { 'Module' { "./modules/$name/README.md" } 'Demo' { './demo/README.md' } default { $row.ReadmeLink } }
+        if ($built) {
+            if (-not $readmePath -or $row.ReadmeLink -ne $readmePath) { $errors.Add("README.md repo overview: $name is built. It needs a Readme badge after the status badge that links to its readme, $readmePath.") }
+            if (-not $readmePath -or $row.MoreLink -ne $readmePath) { $errors.Add("README.md repo overview: $name is built. Its description must end with a Read more link to its readme, $readmePath.") }
+        } else {
+            if ($row.ReadmeLink -or $row.MoreLink) { $errors.Add("README.md repo overview: $name is not built. It has no readme, so it gets no Readme badge and no Read more link.") }
+        }
         # The plan says whether the first stable version is reached, in the line "**First stable version:** reached" or "not reached".
         $firstStable = $null
         if ($hasPlan) {
@@ -321,14 +331,12 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
         if (-not $built) {
             if (-not $hasPlan) { $errors.Add("README.md repo overview: $name is not built and has no plan plans\$plan.") }
             if ($row.Badge -notlike "*badge/status-New-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name is not built. Its badge must be New and link to ./plans/$plan.") }
-            if ($row.Link -ne "./plans/$plan") { $errors.Add("README.md repo overview: $name is not built. Its name must link to ./plans/$plan.") }
         } elseif ($hasPlan) {
             $word = if ($firstStable -eq 'reached') { 'Growing' } else { 'Building' }
             if ($row.Badge -notlike "*badge/status-$word-*](./plans/$plan)*") { $errors.Add("README.md repo overview: $name has a plan that says the first stable version is $firstStable. Its badge must be $word and link to ./plans/$plan.") }
         } else {
-            if ($row.Badge -notlike "*badge/status-Stable-*]($($row.Link))*") { $errors.Add("README.md repo overview: $name has no plan. Its badge must be Stable and link to $($row.Link).") }
+            if ($row.Badge -notlike "*badge/status-Stable-*](#$anchor)*") { $errors.Add("README.md repo overview: $name has no plan. Its badge must be Stable and link to #$anchor.") }
         }
-        if ($row.Type -eq 'Module' -and $built -and $row.Link -ne "./modules/$name/README.md") { $errors.Add("README.md repo overview: $name is built. Its name must link to ./modules/$name/README.md.") }
     }
     # The Phases column: one line for each phase of the plan, ordered by priority
     $priorities = @{}
