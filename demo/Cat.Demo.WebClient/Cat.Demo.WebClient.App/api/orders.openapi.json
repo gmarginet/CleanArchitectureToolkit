@@ -378,6 +378,9 @@
           "status": {
             "type": "string"
           },
+          "canCancel": {
+            "type": "boolean"
+          },
           "placedAt": {
             "type": "string",
             "format": "date-time"

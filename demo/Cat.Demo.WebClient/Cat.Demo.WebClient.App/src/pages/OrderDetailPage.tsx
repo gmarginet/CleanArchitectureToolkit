@@ -95,7 +95,7 @@ export function OrderDetailPage() {
               The order is cancelled.
             </p>
           )}
-          <button type="button" className="btn btn-outline-danger" disabled={cancel.isPending} onClick={() => cancel.mutate()}>
+          <button type="button" className="btn btn-outline-danger" disabled={cancel.isPending || !order.data.canCancel} onClick={() => cancel.mutate()}>
             {cancel.isPending ? 'Cancelling the order' : 'Cancel order'}
           </button>
         </article>

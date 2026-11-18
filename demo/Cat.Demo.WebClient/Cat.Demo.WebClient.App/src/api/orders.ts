@@ -31,23 +31,38 @@ export function useOrders(enabled: boolean) {
 /** The status of an order that waits for its payment. The shop answers 202 Accepted with this status. */
 export const pendingStatus = 'Pending'
 
+/** The status of an order that is paid and waits to be shipped. The shop ships it a few minutes later. */
+export const confirmedStatus = 'Confirmed'
+
 /** How often a pending order is asked for again, in milliseconds. */
 export const pendingPollInterval = 2000
 
+/** How often a confirmed order is asked for again, in milliseconds. The shop ships a confirmed order within minutes, so this can be slower. */
+export const confirmedPollInterval = 10000
+
+/** Gives the time to the next poll of an order with this status, or false when the status is final. */
+export function orderPollInterval(status: string | undefined): number | false {
+  if (status === pendingStatus) {
+    return pendingPollInterval
+  }
+  return status === confirmedStatus ? confirmedPollInterval : false
+}
+
 /**
- * One order. While the status is Pending, the order is asked for again every few seconds, because the payment
- * is taken in the background. The polling stops when the status changes, so a confirmed or cancelled order is not asked for again.
+ * One order. A Pending order is asked for again every few seconds, because the payment is taken in the background.
+ * A Confirmed order is asked for again every 10 seconds, until it is shipped. The polling stops when the status is
+ * Shipped or Cancelled, so a final order is not asked for again.
  */
 export function useOrder(orderId: string, enabled: boolean) {
   return useQuery({
     queryKey: ['orders', orderId],
     enabled,
     queryFn: () => unwrap(ordersApi.GET('/orders/{orderId}', { params: { path: { orderId } } })),
-    refetchInterval: (query) => (query.state.data?.status === pendingStatus ? pendingPollInterval : false),
+    refetchInterval: (query) => orderPollInterval(query.state.data?.status),
   })
 }
 
-/** Cancels an order. A conflict, such as an order that is already paid and shipped, shows as an error. */
+/** Cancels an order. A conflict, such as an order that was shipped a moment ago, shows as an error. */
 export function useCancelOrder(orderId: string) {
   const queryClient = useQueryClient()
   return useMutation({

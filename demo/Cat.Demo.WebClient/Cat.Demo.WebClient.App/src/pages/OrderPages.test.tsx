@@ -78,7 +78,7 @@ describe('OrderDetailPage', () => {
   it('shows the lines with the book title and cancels on request', async () => {
     vi.mocked(useOrder).mockReturnValue({
       isSuccess: true,
-      data: { id: 'o1', orderNumber: 'A-1', status: 'Paid', total: 25, lines: [{ bookId: 'b1', quantity: 2, unitPrice: 12.5 }] },
+      data: { id: 'o1', orderNumber: 'A-1', status: 'Confirmed', canCancel: true, total: 25, lines: [{ bookId: 'b1', quantity: 2, unitPrice: 12.5 }] },
     } as never)
     renderDetail()
 
@@ -87,8 +87,18 @@ describe('OrderDetailPage', () => {
     expect(cancelMutate).toHaveBeenCalled()
   })
 
+  it('disables the cancel button when the order can no longer be cancelled', () => {
+    vi.mocked(useOrder).mockReturnValue({
+      isSuccess: true,
+      data: { id: 'o1', orderNumber: 'A-1', status: 'Shipped', canCancel: false, total: 25, lines: [] },
+    } as never)
+    renderDetail()
+
+    expect(screen.getByRole('button', { name: 'Cancel order' })).toBeDisabled()
+  })
+
   it('shows the error of a refused cancel', () => {
-    vi.mocked(useOrder).mockReturnValue({ isSuccess: true, data: { id: 'o1', orderNumber: 'A-1', status: 'Shipped', lines: [] } } as never)
+    vi.mocked(useOrder).mockReturnValue({ isSuccess: true, data: { id: 'o1', orderNumber: 'A-1', status: 'Confirmed', canCancel: true, lines: [] } } as never)
     cancelState({ isError: true, error: toApiError(409, { catErrors: [{ code: 'DEM-ORD-1', message: 'Too late.' }] }) })
     renderDetail()
 
