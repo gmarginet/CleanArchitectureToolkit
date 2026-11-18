@@ -69,6 +69,15 @@ public static class OrderSagaExtensions
                     receive.Require(policy => policy.RequireAuthenticatedUser());
                 }
             })
+            .Receive<PaymentRefunded>(receive =>
+            {
+                // No inbox: setting a payment to Refunded twice changes nothing, and the command processor opens its own scope,
+                // so an inbox row of the receiver would never be saved with the work.
+                if (authenticationOn)
+                {
+                    receive.Require(policy => policy.RequireAuthenticatedUser());
+                }
+            })
             .Receive<CatSagaTimeout>(receive =>
             {
                 if (authenticationOn)

@@ -12,6 +12,7 @@ public static class EventSubscriberExtensions
         services.AddSingleton<OrderAuditSubscriber>();
         services.AddSingleton<OrderStatusSubscriber>();
         services.AddSingleton<StockReleaseSubscriber>();
+        services.AddSingleton<PaymentRefundSubscriber>();
         return services;
     }
 
@@ -24,6 +25,7 @@ public static class EventSubscriberExtensions
         services.GetRequiredService<OrderAuditSubscriber>();
         services.GetRequiredService<OrderStatusSubscriber>();
         services.GetRequiredService<StockReleaseSubscriber>();
+        services.GetRequiredService<PaymentRefundSubscriber>();
         return services;
     }
 }

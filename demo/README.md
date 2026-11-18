@@ -69,7 +69,7 @@ What you can do today:
 - **Place an order.** Pick books and quantities. The shop looks up the prices and checks that the books are in stock. It then answers at once that the order is pending, and asks the payment service to take the payment. The order confirms when the payment service answers, usually within a few seconds. The screen shows the status and updates by itself.
 - **Get an order number.** Every order gets a number like `20261105-0001`. The date is the day of the order. The counter starts again every day.
 - **Follow your orders.** See a list of your orders and open one to see its lines, its total and its status.
-- **Cancel an order.** Change your mind after ordering and cancel it, as long as the order is not shipped yet.
+- **Cancel an order.** Change your mind after ordering and cancel it, as long as the order is not shipped yet. When the order was paid, the shop gives the money back.
 - **Get your order shipped.** A confirmed order ships 5 minutes after the confirmation. A shipped order can no longer be cancelled.
 - **Get a confirmation mail.** When an order is confirmed, the customer gets a mail with the order number and the total. The mails are in English. The demo keeps them in a test inbox, so nothing leaves your machine.
 - **Log in or register.** Alice, Bob and the admin each have an account. A new user can register on the login page and is logged in at once. You need to be logged in to place or follow orders. Anyone can browse the catalog without a login.
@@ -80,13 +80,14 @@ What the shop does when something goes wrong:
 
 - A book that is not in stock stops the order. The order is cancelled and the customer is told which book is the problem.
 - A payment that is declined stops the order in the same way. The order shows as cancelled.
-- A payment service that is down or too slow stops the order too. The order waits for the answer for 2 minutes, a setting. After that it is cancelled and shows as cancelled. A payment service that was only busy still gets the request, because the request waits in a queue. If its answer comes after the order was cancelled, the payment is not refunded. The demo has no refund step.
+- A payment service that is down or too slow stops the order too. The order waits for the answer for 2 minutes, a setting. After that it is cancelled and shows as cancelled. A payment service that was only busy still gets the request, because the request waits in a queue. If its answer comes after the order was cancelled, the payment is not refunded. The shop only refunds a payment that it has saved.
 - A shop that restarts while an order waits for the payment does not lose the order. The wait is saved in the database, and the answer carries on where the order stopped.
 - Without the message bus nobody answers for the payment. The order stays pending until the job for stuck orders cancels it.
 - A stock service that is down or too slow stops the order in the same way. The order is cancelled and the customer is told to try again later.
 - A shop that gives up waiting while the order is placed does not leave a half finished order behind. The order is cancelled.
 - An order that stays unpaid for more than 15 minutes, for example after a crash of the shop, is cancelled by a job that runs every 5 minutes. The stock goes back.
 - A cancel of a shipped order is refused. The order has left the shop, and it stays shipped.
+- A cancel of a paid order asks the payment service for the money back. The order is cancelled at once, and the payment shows as refund pending until the payment service answers. An order that was cancelled before it was paid, or after a decline, has nothing to refund.
 
 When you start the shop with Aspire, the order asks the catalog for the real price of every book. A separate stock service keeps the stock levels and reserves the books of an order, all or nothing, so the last copy never sells twice. A separate payment service takes the payment, on request of a message. That service declines any total above 500 euro. It never charges an order twice, also when the request arrives twice.
 
@@ -116,7 +117,7 @@ Hatched boxes are not built yet. Solid boxes are. The drawing is kept in sync wi
 - **Login.** Keycloak runs as a container and holds the users. The gateway and each service check the token. A service does not trust the network. See [Things to know](#things-to-know).
 - **Services** own their data. A service never reads the database of another service. Where one needs data of another, it asks through an interface. Orders asks Catalog for prices and Inventory for stock through the gateway when you run through Aspire, and asks Payment with a message.
 - **Contracts.** Sharing the contracts of a service is a choice per connection. The React client and the price call from Orders to Catalog keep their own models. The stock call from Orders to Inventory shares the `Contracts` project of Inventory, so the demo shows both. See [Sharing contracts](#sharing-contracts).
-- **Events** stay in memory inside a service. A service tells another one about a fact with a message on Azure Service Bus. Orders publishes `OrderConfirmed` through its outbox, and Inventory and Notifications receive it. Orders also sends `TakePayment` to Payment and gets `PaymentProcessed` back, which is the one place where a message is a question with an answer. See [Events and interfaces](#events-and-interfaces).
+- **Events** stay in memory inside a service. A service tells another one about a fact with a message on Azure Service Bus. Orders publishes `OrderConfirmed` through its outbox, and Inventory and Notifications receive it. Orders also sends `TakePayment` to Payment and gets `PaymentProcessed` back, and sends `RefundPayment` and gets `PaymentRefunded` back. These are the places where a message is a question with an answer. See [Events and interfaces](#events-and-interfaces).
 - **Databases.** Every service has its own SQL Server database.
 - **Aspire** starts everything with one command: the gateway, the services, Keycloak, SQL Server and the Service Bus emulator in containers, and the dashboard. You can still start a service on its own.
 <!-- region end: HowThePiecesFit-->
@@ -141,7 +142,7 @@ The readme says that sharing the `Contracts` project of a service is a choice of
 | React client to gateway | Not shared | The client is TypeScript, so there is nothing to reference. It also keeps the demo client-agnostic. The client comes from the OpenAPI documents. |
 | Orders to Catalog (prices) | Not shared | Orders needs a price per book and nothing else. The generated Catalog client has models of its own, so Orders does not depend on the Catalog contract. |
 | Orders to Inventory (stock) | Shared | To show the other option. Orders references the `Contracts` project of Inventory and reuses its types. |
-| Orders to the payment service | Shared | The two messages `TakePayment` and `PaymentProcessed` live in the `Contracts` project of Payment, and Orders references it. A message has no generated client, so both sides need the same type or they must agree on the shape by hand. |
+| Orders to the payment service | Shared | The four messages `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded` live in the `Contracts` project of Payment, and Orders references it. A message has no generated client, so both sides need the same type or they must agree on the shape by hand. |
 
 What it costs:
 
@@ -194,18 +195,20 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 |---|---|---|
 | Reserve stock | An interface (`IStockReservation`), called from a workflow step | Yes |
 | Take payment | A message pair on Azure Service Bus (`TakePayment` and `PaymentProcessed`), sent and awaited by a saga step | Yes, later. The workflow stops and carries on when the answer arrives |
+| Refund a payment | A message pair on Azure Service Bus (`RefundPayment` and `PaymentRefunded`), sent by a subscriber of the cancelled event and answered to a plain receiver | Yes, later. Nobody waits. The payment shows `RefundPending` until the answer arrives |
 | Order confirmed, order cancelled | An event on `ICatEventAggregator` | No |
 | Order confirmed, told to another service | A message on Azure Service Bus (`OrderConfirmed`) | No |
 | Low stock, told to Notifications | A message on Azure Service Bus (`LowStockReport`), published by a scheduled job of Inventory | No |
 | Stock changed, told to Notifications | A message on Azure Service Bus (`StockChanged`), sent by `Cat.Sql.Cdc` from the change table of the stock table, without Inventory code that publishes it | No |
 
 - The workflow publishes `OrderConfirmed` and `OrderCancelled`. It knows only the aggregator, not the subscribers.
-- Subscribers: a status updater, an audit logger and the stock release.
+- Subscribers: a status updater, an audit logger, the stock release and the payment refund.
 - The in-process event `OrderConfirmedEvent` and the message `OrderConfirmed` are two different types. The status updater sets the status through a command, and that command also publishes the message. See [Orders service](#orders-service).
 - The message is a service request as well. Inventory writes a handler for it, like for any other request, and `Cat.EventProcessor` runs it. See [Inventory service](#inventory-service).
 - Events cannot drive the process. `PublishAsync` returns no answer and rethrows the exception of a failing handler.
 - Calls whose answer decides the next step and arrives at once go through an interface. A fake sits behind it when there is no host address.
 - A question that takes time goes through a saga. The place order workflow sends `TakePayment`, saves its state and stops. `PaymentProcessed` finds the saved instance by its correlation id and runs the rest of the workflow. See [Orders service](#orders-service).
+- A question that takes time but that nobody waits for needs no saga. The refund runs after the order process has ended, so a subscriber of the cancelled event sends `RefundPayment`, and a plain handler receives `PaymentRefunded`. See [Orders service](#orders-service).
 - Subscribers are long lived singletons, because the aggregator holds them with weak references. A subscriber that needs a scoped service such as the `DbContext` opens its own scope.
 <!-- region end: EventsAndInterfaces-->
 
@@ -418,7 +421,7 @@ One chapter for every block that is built. A database sits in the chapter of the
 | [Notification service](#notification-service) | Sends the order confirmed mail. |
 | [Aspire ServiceDefaults](#aspire-servicedefaults) | Shared telemetry, health checks and resilience. |
 | [Payment service](#payment-service) | A separate pretend payment service. It takes a payment from a message and can fail on purpose. |
-| [Service Bus emulator](#service-bus-emulator) | The message bus. It carries `OrderConfirmed` from Orders to Inventory and Notifications, and `TakePayment` and `PaymentProcessed` between Orders and Payment. |
+| [Service Bus emulator](#service-bus-emulator) | The message bus. It carries `OrderConfirmed` from Orders to Inventory and Notifications, and `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded` between Orders and Payment. |
 
 <!-- region end: BlockOverview-->
 
@@ -483,7 +486,7 @@ One chapter for every block that is built. A database sits in the chapter of the
 - In `Container` mode the AppHost adds a SQL Server container with a named data volume and the databases `catalog`, `orders`, `inventory` and `notifications`. The services wait for their database. The `inventory` database also gets its SQL scripts, see [Inventory service](#inventory-service).
 - The services read `GetConnectionString("catalog")`, `GetConnectionString("orders")`, `GetConnectionString("inventory")` and `GetConnectionString("notifications")` in both modes. They do not know which mode runs.
 - Orders gets the address of the gateway through service discovery. That switches on `CatalogPriceProvider` and `InventoryStockReservation`, which call Catalog and Inventory through the gateway.
-- The Azure Service Bus emulator runs next to them, see [Service Bus emulator](#service-bus-emulator). Orders, Payment, Inventory and Notifications get its connection string as `messaging`. Orders waits for Payment, which creates the queue `TakePayment` and the topic `PaymentProcessed`. Inventory and Notifications wait for Orders.
+- The Azure Service Bus emulator runs next to them, see [Service Bus emulator](#service-bus-emulator). Orders, Payment, Inventory and Notifications get its connection string as `messaging`. Orders waits for Payment, which creates the queues `TakePayment` and `RefundPayment` and the topics `PaymentProcessed` and `PaymentRefunded`. Inventory and Notifications wait for Orders.
 - Payment gets the client `cat-demo-payment` of Keycloak as `Authentication__ClientId` and `Authentication__ClientSecret`, next to the client of Orders. Inventory gets the client `cat-demo-inventory` the same way. They are demo secrets.
 - Mailpit runs as a container next to them, with the image `axllent/mailpit`. Notifications gets `Smtp:Host` and `Smtp:Port` from the AppHost and waits for Mailpit. Notifications has no route in the gateway.
 - Keycloak is a plain container on port 8180. The realm file `keycloak/cat-demo-realm.json` is mounted and imported at the start. The official Aspire Keycloak package is only a preview, so the demo does not use it.
@@ -661,7 +664,7 @@ erDiagram
   - `POST /` places an order. It answers 202 with the order in status `Pending` and a `Location` header, or 400 when the order cannot be placed before the payment, for example when a book is out of stock.
   - `GET /` lists the orders of the user.
   - `GET /{orderId}` returns one order.
-  - `POST /{orderId}/cancel` cancels an order that is `Pending` or `Confirmed`. A cancelled or shipped order answers 409 with `DEM-ORD-1004`. The rule is `OrderStatuses.CanCancel`. A status that is added later stays non-cancellable until it is listed there. `GET /{orderId}` returns the same rule as `canCancel` on the order model, so a client can disable its button.
+  - `POST /{orderId}/cancel` cancels an order that is `Pending` or `Confirmed`, and asks for the refund of a paid order, see **The refund** below. A cancelled or shipped order answers 409 with `DEM-ORD-1004`. The rule is `OrderStatuses.CanCancel`. A status that is added later stays non-cancellable until it is listed there. `GET /{orderId}` returns the same rule as `canCancel` on the order model, so a client can disable its button.
 - The place order process is a workflow, in `PlaceOrderWorkflow`. It runs as a saga of `Cat.Sagas`, so it can stop at the payment and carry on later. `PlaceOrderRequestHandler` starts it with `ICatSagaRunner.StartAsync`. The handler answers `Accepted` (202) when the saga waits, `BadRequest` when the saga failed and `Created` when it completed without waiting. The steps:
   1. Find or create the customer from the current user.
   2. Look up the price of every line and add up the total.
@@ -671,7 +674,7 @@ erDiagram
   6. Confirm the order.
 
   The error codes of a stop after step 5 (`DEM-ORD-1003` and `DEM-ORD-1006`) end up in the result of the saga, and nobody waits for that result any more. The person sees the status `Cancelled`.
-- Confirmed and cancelled are events. Subscribers set the status, write an audit record and release the stock.
+- Confirmed and cancelled are events. Subscribers set the status, write an audit record, release the stock and ask for the refund.
 - `PlaceOrderRequestHandler` catches a cancelled request token once the order exists, for example when the gateway gives up on a slow first call. It publishes the cancelled event with the reason `RequestCancelled` and its own 10 second token, then rethrows. Without it the order would stay Pending for good. A crash of the service in the middle of the workflow is not covered by this. The sweep of stuck orders covers it, see **Stuck orders** below.
 - Confirming an order also tells the other services. `OrderSetStatusCommandHandler` sets the status, and when the new status is confirmed it also sets `ConfirmedAt` and publishes the message `OrderConfirmed` with `ICatMessageSender`. The message carries the order id, the order number, the total and the name and email of the customer, so Notifications needs no call back to Orders. The message type lives in the `Contracts` project of Orders, in `Messages`. The outbox is on, so the sender does not send at once. It adds a row to the `CatOutbox` table in the same `OrderDbContext`, and the one `SaveChanges` of the handler saves the status and the message together. A background service of `Cat.Messaging.Outbox` sends the rows to the bus and marks them as sent, so a crash between the save and the send loses nothing. A message can be sent twice after such a crash, and the receiver handles that.
 - At startup, in `Development`, Orders creates the topic `OrderConfirmed` on the bus. Without the connection string `messaging`, a fake transport logs the message and sends nothing.
@@ -688,8 +691,16 @@ erDiagram
 - **The answer.** Orders listens with the subscription `orders`. `AddCatSagaAnswer<PaymentProcessed>()` finds the saga instance by the correlation id of the message, which is the id of the instance, and resumes the workflow. A message for an instance that is not waiting any more is ignored.
 - **The timeout.** The wait step schedules a `CatSagaTimeout` message for the end of the wait. If the answer comes first, the timeout finds nothing to do. If not, it resumes the workflow with `TimedOut`. Orders must listen to `CatSagaTimeout` itself, so it declares it with `Receive<CatSagaTimeout>()` next to `Receive<PaymentProcessed>()`.
 - **The inbox.** `PaymentProcessed` is received with `UseInbox`. The receiver adds a row to `CatInbox` in the same transaction that saves the saga, so an answer that arrives twice runs the workflow once. The receiver runs the handler in its own scope for this, through `ICatCurrentScopeServiceRequestProcessor`. A live order gave exactly one inbox row, and a test covers the second delivery.
-- **Startup.** In `Development`, Orders creates its subscription `orders` on the topic of `PaymentProcessed` and the queue for `CatSagaTimeout`. Payment creates the queue `TakePayment` and the topic `PaymentProcessed` itself, which is why Orders waits for Payment in the AppHost.
+- **Startup.** In `Development`, Orders creates its subscription `orders` on the topics of `PaymentProcessed` and `PaymentRefunded` and the queue for `CatSagaTimeout`. Payment creates the queues `TakePayment` and `RefundPayment` and the topics `PaymentProcessed` and `PaymentRefunded` itself, which is why Orders waits for Payment in the AppHost.
 - **Without the bus.** `AddCatDemoOrderSagas` registers the saga but no outbox and no listener, and returns `false`. The workflow reaches the wait, and the answer never comes.
+
+**The refund.** A cancelled order gets its money back, and it needs no saga. The place order saga ends when the order is confirmed, so it cannot hold a refund that starts later, when the person cancels.
+- **The request.** `PaymentRefundSubscriber` subscribes to `OrderCancelledEvent`, like the stock release, and runs `PaymentRefundRequestCommand`. `PaymentRefundRequestCommandHandler` looks for the payment of the order. Only a payment with the status `Approved` gets a refund. The handler sets the status `RefundPending` and sends `RefundPayment` with `ICatMessageSender`. The outbox is on, so the one `SaveChanges` saves the status and the message together. An order that was cancelled before it was paid, or after a decline, has no approved payment and gets no message.
+- **The cancel does not wait.** The order is `Cancelled` at once, and the payment shows `RefundPending` until Payment answers. A refund that never gets an answer stays `RefundPending`, and the demo accepts that.
+- **The answer.** Payment publishes `PaymentRefunded` on a topic with the same correlation id. `PaymentRefundedHandler` is a plain service request handler, and Orders receives the message with `Receive<PaymentRefunded>()` on the subscription `orders`. It runs `PaymentRefundedSaveCommand`, which sets the payment to `Refunded`. An answer with `Refunded` false means Payment had nothing to give back, and the payment keeps its status.
+- **No inbox.** `PaymentRefunded` is received without `UseInbox`. The handler can run twice, because setting `Refunded` again changes nothing. The command processor opens its own scope for every command, so an inbox row of the receiver would not be saved with the work.
+- **A cancel by the sweep or the caller.** The cancelled event also comes from the stuck orders job and from the cancelled request token. The same subscriber handles them, and the same rule decides whether there is anything to refund.
+- **Not covered.** A payment that answers after the timeout is ignored by the saga and never saved in Orders, so it is not refunded. A shipped order cannot be cancelled, so it has no refund.
 
 **Order numbers.** A number looks like `YYYYMMDD-0000`: the UTC year, month and day, a dash and a four digit counter. The counter restarts at `0001` every UTC day, so there is room for 9999 orders a day. Two orders at the same moment never get the same number. The unique key on `OrderNumber` is the safety net.
 
@@ -831,9 +842,9 @@ erDiagram
 | `Cat.EFCore` | DataModels and Infrastructure | Entities with `Guid` ids and sequence ids. The handlers inherit the base query and command handlers. The order handler starts its own transaction. |
 | `Cat.Dapper`, `Cat.Dapper.SqlServer` and `Cat.Dapper.SqlFiles` | Infrastructure | The order overview is a read only query with plain SQL, kept in a `.sql` file. |
 | `Cat.Users` | Core service (`Cat.Users.Abstractions`) and the host | The handlers ask `ICatUser` who is calling. Customers see their own orders and an admin sees all of them. |
-| `Cat.Messaging`, `Cat.Messaging.AzureServiceBus`, `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore` | Contracts (the message), Infrastructure and Api | Publishes `OrderConfirmed` to the bus, sends `TakePayment`, and keeps the messages in the outbox until they are sent. |
+| `Cat.Messaging`, `Cat.Messaging.AzureServiceBus`, `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore` | Contracts (the message), Infrastructure and Api | Publishes `OrderConfirmed` to the bus, sends `TakePayment` and `RefundPayment`, and keeps the messages in the outbox until they are sent. |
 | `Cat.Sagas`, `Cat.Sagas.EFCore` | Core service (the workflow) and Api | The place order workflow stops at the payment and carries on with the answer, also after a restart. |
-| `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus`, `Cat.EventProcessor.Inbox.EFCore` and `Cat.EventProcessor.Authorization` | Api | Receives `PaymentProcessed` and the saga timeout. The inbox makes an answer count once, and the authorization checks the token of the message. |
+| `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus`, `Cat.EventProcessor.Inbox.EFCore` and `Cat.EventProcessor.Authorization` | Api | Receives `PaymentProcessed`, `PaymentRefunded` and the saga timeout. The inbox makes a payment answer count once, and the authorization checks the token of the message. |
 | `Cat.Expressions` | Api | Compiled member access. |
 | `Cat.UnitTesting.Commands`, `Cat.UnitTesting.Queries` and `Cat.UnitTesting.NUnit` | Core service tests | The fake processors replace the database. `OrderCommandDefaults` sets the ids that the real handlers hand out, and `UnitTestBase` builds the service provider of the workflow and validation tests. |
 
@@ -849,7 +860,9 @@ erDiagram
 **Cons.**
 - Events cannot drive the process. They return no answer, and a failing subscriber throws. Calls that decide the next step go through interfaces instead.
 - Subscribers live as long as the app, because the aggregator holds them with weak references. A subscriber that needs the `DbContext` opens its own scope.
-- A cancelled order keeps its approved payment, because there is no refund step. This also happens when the payment answers after the timeout: the order is cancelled already, the answer is ignored and the money stays taken.
+- The order does not show its refund. The order model has no refund status, so the status `RefundPending` or `Refunded` is only in the `Payment` table. A refund that never gets an answer stays `RefundPending`, with no timeout and no retry on the Orders side.
+- A payment that answers after the timeout is still not refunded. The order is cancelled already, the saga ignores the answer and Orders never saves the payment, so the money stays taken.
+- Payment remembers its payments and its refunds in memory. After a restart of Payment, a refund of an earlier payment gets the answer `Refunded` false, and the payment in Orders stays `RefundPending`.
 - The caller learns the end result by asking again. The client polls every 2 seconds while the order is `Pending`, and every 10 seconds while it is `Confirmed`. Nothing pushes the result.
 - The token of a message sits in the queue and in the outbox table for as long as the message does.
 - The inbox and outbox tables only grow. Nothing removes old rows yet.
@@ -1023,14 +1036,15 @@ erDiagram
 ### Payment service
 <!-- region start: PaymentService-->
 
-**What it is.** A small separate service, `Cat.Demo.PaymentService`, that pretends to be a payment provider. Orders asks it for a payment with a message, and it answers with a message. It has no database. Under the AppHost it checks the token of a message like Orders does.
+**What it is.** A small separate service, `Cat.Demo.PaymentService`, that pretends to be a payment provider. Orders asks it for a payment, and for a refund, with a message, and it answers with a message. It has no database. Under the AppHost it checks the token of a message like Orders does.
 
 **How it works.**
 - **The question.** `TakePayment` is a command message with an order number and an amount. It goes to a queue. `TakePaymentHandler` is a service request handler, like every other handler, and `Cat.EventProcessor` runs it. It takes the payment with `PaymentProcessor`.
 - **The answer.** The handler publishes `PaymentProcessed` on a topic with the same correlation id as the request, which is the id of the saga instance in Orders. A declined payment is an answer too, with `Approved` false and no reference. An amount up to 500 euro is approved. A higher amount is declined. A request without an order number or with an amount of zero or less gets a failed response with `DEM-PAY-1000` and no answer message.
 - **Idempotency.** The order number is the idempotency key. `PaymentProcessor` remembers the answer per order number in memory. A request that arrives twice gets the same answer and nothing is charged twice.
-- **Contracts.** `Cat.Demo.PaymentService.Contracts` holds `TakePayment` and `PaymentProcessed`. Orders references this project, see [Sharing contracts](#sharing-contracts).
-- **Startup.** In `Development`, Payment creates the queue of `TakePayment` and the topic of `PaymentProcessed` on the bus, with `PaymentMessagingExtensions`. Orders waits for Payment in the AppHost for this reason.
+- **The refund.** `RefundPayment` is a command message with an order number. It goes to its own queue, and `RefundPaymentHandler` runs it with `PaymentProcessor.RefundAsync`. A payment that is in the ledger and was approved is refunded, and the order number is remembered as refunded. The handler publishes `PaymentRefunded` with the same correlation id and `Refunded` true. A declined payment, a payment that was never taken and a request after a restart of Payment get `Refunded` false. A request without an order number gets a failed response with `DEM-PAY-1002` and no answer message. The same refund twice gives the same answer.
+- **Contracts.** `Cat.Demo.PaymentService.Contracts` holds `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded`. Orders references this project, see [Sharing contracts](#sharing-contracts).
+- **Startup.** In `Development`, Payment creates the queues of `TakePayment` and `RefundPayment` and the topics of `PaymentProcessed` and `PaymentRefunded` on the bus, with `PaymentMessagingExtensions`. Orders waits for Payment in the AppHost for this reason.
 - **Tokens.** With a login, Payment accepts a message only from a logged in caller, and answers with a token from its own client `cat-demo-payment`. The code that fetches the token is shared in `Cat.Demo.ServiceDefaults`.
 - **Without a bus.** Payment starts with the HTTP endpoint only and listens to nothing.
 - **The HTTP endpoint.** `POST /payment/payments` is still there, with the same rules and the same failure settings. The service runs on port 5103, and the gateway has a restricted route for it. Orders does not call it any more. The generated client `Cat.Demo.PaymentService.Api.Client` stays, and nothing uses it for now.
@@ -1045,6 +1059,8 @@ erDiagram
 | `PaymentFailures:ErrorPercentage` | The share of requests, 0 to 100, that fail after the payment is taken. The handler returns a failed response, so the listener abandons the message and the bus delivers it again. A second delivery finds the answer of the first and charges nothing twice. |
 | `PaymentFailures:Outage` | `true` makes every request fail at once, and nothing is taken. No answer message is sent, so the order times out and is cancelled after its wait. In between, the listener logs a warning for every delivery (`Abandoning TakePayment ... on delivery 1: DEM-PAY-1001`). The emulator delivered the request 10 times, its default maximum, and then stopped. A message that reached the maximum goes to the dead letter queue of the queue. |
 
+The settings apply to a refund as well. An outage or a random error fails the `RefundPayment` request, and the bus delivers it again. The payment in Orders stays `RefundPending` until a delivery gets through.
+
 Under the AppHost, set `Payment:Latency`, `Payment:ErrorPercentage` or `Payment:Outage` in the configuration of the AppHost and start it again. For example:
 
 ```
@@ -1057,10 +1073,10 @@ Remove the secret to switch the failure off again. When you run the service on i
 
 | Module | Where | Why |
 |---|---|---|
-| `Cat.Messaging`, `Cat.Messaging.AzureServiceBus` | Api | Publishes `PaymentProcessed`, and creates the queue and the topic at startup. |
-| `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` | Api | Receives `TakePayment` and runs its handler. |
+| `Cat.Messaging`, `Cat.Messaging.AzureServiceBus` | Api | Publishes `PaymentProcessed` and `PaymentRefunded`, and creates the queues and the topics at startup. |
+| `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` | Api | Receives `TakePayment` and `RefundPayment` and runs their handlers. |
 | `Cat.EventProcessor.Authorization` | Api | Checks the token of a message when there is a login. |
-| `Cat.ServiceRequests` | CoreService | `TakePaymentHandler` is a service request handler. |
+| `Cat.ServiceRequests` | CoreService | `TakePaymentHandler` and `RefundPaymentHandler` are service request handlers. |
 
 **Pros.**
 - The demo shows a slow or failing partner and how the order ends: the request waits in a queue, nothing blocks and the saga times out by itself.
@@ -1078,7 +1094,7 @@ Remove the secret to switch the failure off again. When you run the service on i
 ### Service Bus emulator
 <!-- region start: ServiceBusEmulator-->
 
-**What it is.** The Azure Service Bus emulator, started by the AppHost. It carries the message `OrderConfirmed` from Orders to Inventory and Notifications, and `TakePayment` and `PaymentProcessed` between Orders and Payment. It runs in Docker with its own SQL Server container, so no Azure subscription is needed.
+**What it is.** The Azure Service Bus emulator, started by the AppHost. It carries the message `OrderConfirmed` from Orders to Inventory and Notifications, and `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded` between Orders and Payment. It runs in Docker with its own SQL Server container, so no Azure subscription is needed.
 
 **How it works.**
 - The AppHost adds it with `AddAzureServiceBus("messaging").RunAsEmulator()`. The message port is fixed to 5672 and the management port to 5300. Orders, Payment, Inventory and Notifications get the connection string `messaging` and, as `Messaging:AdministrationConnectionString`, a second string for the management port.
