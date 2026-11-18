@@ -43,13 +43,21 @@ public static class PaymentMessagingExtensions
         // and the answer carries the client credentials token of Payment. Without one, the messages run as before, with no token.
         var authenticationOn = !string.IsNullOrWhiteSpace(configuration["Authentication:Authority"]);
 
-        services.AddCatEventProcessor(configuration, processor => processor.Receive<TakePayment>(options =>
-        {
-            if (authenticationOn)
+        services.AddCatEventProcessor(configuration, processor => processor
+            .Receive<TakePayment>(options =>
             {
-                options.Require(policy => policy.RequireAuthenticatedUser());
-            }
-        }));
+                if (authenticationOn)
+                {
+                    options.Require(policy => policy.RequireAuthenticatedUser());
+                }
+            })
+            .Receive<RefundPayment>(options =>
+            {
+                if (authenticationOn)
+                {
+                    options.Require(policy => policy.RequireAuthenticatedUser());
+                }
+            }));
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
 
         if (authenticationOn)
@@ -65,7 +73,7 @@ public static class PaymentMessagingExtensions
     }
 
     /// <summary>
-    /// Creates the queue of <see cref="TakePayment"/> and the topic of <see cref="PaymentProcessed"/>. It skips what exists.
+    /// Creates the queues of <see cref="TakePayment"/> and <see cref="RefundPayment"/> and the topics of <see cref="PaymentProcessed"/> and <see cref="PaymentRefunded"/>. It skips what exists.
     /// Call it in development only. The emulator forgets its entities at every restart, so Payment creates them again at startup.
     /// Orders sends to the queue and subscribes to the topic, so Orders waits for Payment in the AppHost.
     /// </summary>

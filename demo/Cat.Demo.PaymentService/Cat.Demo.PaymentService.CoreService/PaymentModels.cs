@@ -13,3 +13,11 @@ public record PaymentOutcome(PaymentResponse? Response, bool Failed)
 
     public static PaymentOutcome Failure() => new(null, true);
 }
+
+/// <summary>The outcome of a refund. <see cref="Refunded"/> is false when there was no approved payment to give back.</summary>
+public record RefundOutcome(bool Refunded, bool Failed)
+{
+    public static RefundOutcome Done(bool refunded) => new(refunded, false);
+
+    public static RefundOutcome Failure() => new(false, true);
+}
