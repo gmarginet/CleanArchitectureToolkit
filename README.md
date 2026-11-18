@@ -62,7 +62,7 @@
 
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/gmarginet/CleanArchitectureToolkit/build.yml)](#getting-started) 
 [![nuget](https://img.shields.io/nuget/v/gmarginet.Cat.ServiceRequests)](#getting-started) 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE.md)  
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./MIT-License.md)  
 
 The `Clean Architecture Toolkit for .NET` contains a set of modules.  
 Most of the modules can be used independently.  
