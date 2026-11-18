@@ -43,8 +43,8 @@
 - [Phase 11](#phase-11)
 - [Phase 12](#phase-12)
 - [Phase 13](#phase-13)
-- [Phase 14](#phase-14)
 - [Phase 15](#phase-15)
+- [Phase 16](#phase-16)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 9-->
@@ -272,44 +272,6 @@ Notifications runs on a MySQL container that the AppHost starts. The outbox, the
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 13-->
 
-<!-- region start: Phase 14-->
-## Phase 14
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Refund an approved payment when its order is cancelled, so the money does not stay taken.
-
-#### What exists today
-- The place order saga takes the payment over messages. A cancelled order keeps its `Approved` payment, because there is no refund step. The demo readme lists this in the Orders cons.
-- A payment that answers after the timeout is ignored. The order is cancelled already, and the money stays taken.
-- Cancelling a Pending or Confirmed order sets the status and releases the stock. It does not touch the payment. A shipped order cannot be cancelled.
-- A saga compensates with explicit steps in the failure branch of the workflow, written by the developer, see the [module readme of Cat.Sagas](../modules/Cat.Sagas/README.md).
-
-#### Done when
-An approved payment of a cancelled order is refunded, and the demo readme says where.
-
-#### What the refund could cover
-These points come from the demo plan of the earlier phase 7. They are not decisions.
-- A `Refunded` payment status.
-- A subscriber on `OrderCancelledEvent` that refunds an approved payment.
-- Cancelling a confirmed order only when the refund succeeded or is on its way.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 16-->
-#### Question 16
-How does Orders ask Payment for the refund? The `IPaymentProvider` that an earlier plan named for the refund call is gone, because the payment runs over messages. The options:
-- **A message pair.** Orders sends `RefundPayment` to a queue and Payment answers with `PaymentRefunded`, like the payment itself. Cost: a second message flow, and the cancel of a confirmed order needs a place to wait for the answer, for example a small saga of its own.
-- **A message without an answer.** Orders sends `RefundPayment` and Payment refunds when it can. Cost: Orders does not know whether the refund worked, so the order cannot show a refund status.
-- **An HTTP call to the Payment endpoint.** Cost: it brings back the HTTP path that the saga replaced, and it needs retry and a circuit breaker.
-
-Recommendation: the message pair. It matches the payment flow, it keeps the HTTP path out of the order flow, and the order can show a refund status. A late payment after a timeout can use the same refund.
-<!-- region end: Question 16-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 14-->
-
 <!-- region start: Phase 15-->
 ## Phase 15
 
@@ -339,3 +301,36 @@ Recommendation: keep it always on for now. The emulator is what makes the demo r
 <!-- region end: Question 17-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 15-->
+
+<!-- region start: Phase 16-->
+## Phase 16
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+Refund a payment that answers after the payment timeout, so the money does not stay taken when the order is already cancelled.
+
+#### What exists today
+- The place order saga waits for `PaymentProcessed` for `Orders:PaymentTimeoutSeconds` (2 minutes by default). When the timeout comes first, the workflow cancels the order with the reason `PaymentUnavailable` and ends. Nothing is saved for the payment.
+- Payment keeps a `TakePayment` request in its queue while it is down or busy. It can take the payment long after the order was cancelled, and then it publishes `PaymentProcessed`.
+- The saga ignores an answer for an instance that is not waiting any more. Orders never saves that payment, so there is no `Payment` row to refund.
+- The refund of a cancelled order works for a payment that Orders saved with the status `Approved`. `PaymentRefundSubscriber` finds no such payment after a `PaymentUnavailable` cancel, so it sends nothing.
+- Payment remembers its payments and its refunds in memory. A `RefundPayment` for an order number it has no payment for answers `Refunded` false, and remembers nothing.
+- The demo readme lists this under the Orders cons.
+
+#### Done when
+A payment that answers after the order was cancelled for `PaymentUnavailable` is refunded, and the demo readme says where.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 18-->
+#### Question 18
+How does the money of a late payment come back? The options:
+- **Orders reacts to the late answer.** Orders receives the late `PaymentProcessed`, saves the payment and sends `RefundPayment`. Cost: the saga already receives this message type, so it needs checking whether a message type can have a second receiver next to the saga answer. If not, the late answer needs another route, such as a second message type.
+- **Orders asks for the refund when the timeout cancels the order.** The `PaymentUnavailable` cancel sends `RefundPayment`, and Payment keeps a note for an order number it has not charged, so it declines a later `TakePayment` for that number. Cost: Payment needs a small rule that it does not have today, and the demo has to say that a refund can come before the payment. The two queues have no fixed order, so without the note a refund that arrives first finds nothing to give back.
+
+Recommendation: ask for the refund at the timeout. It is the smaller change, it keeps the saga untouched, and the money is never taken when the note arrives first. A payment that was taken just before the note arrives is refunded by the same `RefundPayment`.
+<!-- region end: Question 18-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 16-->
