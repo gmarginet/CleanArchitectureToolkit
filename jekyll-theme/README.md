@@ -6,6 +6,7 @@ Jekyll theme for the Clean Architecture Toolkit GitHub Pages.
 - Keeps the dashed heading lines and full width tables from `resources/styles/style.css`.
 - Adds no header text of its own, so the header table of each readme is the only header.
 - Shows a `View on GitHub` button in a slim top bar.
+- Sets the favicon and the touch icon from `resources/icon`.
 
 ## How it is used
 
