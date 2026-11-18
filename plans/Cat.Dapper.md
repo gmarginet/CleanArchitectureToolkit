@@ -39,7 +39,6 @@
 <!-- region start: Phases-->
 <!-- no toc -->
 - [Phase 3](#phase-3)
-- [Phase 4](#phase-4)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 3-->
@@ -155,37 +154,9 @@ How do we prove the bulk operations? The module decided it has no tests of the S
 - **Tests against a real SQL Server in a container.** Cost: Docker for every developer and for the build workflow, and a slower test run.
 - **A small use in the demo anyway.** Cost: the demo gets a case it does not need.
 
+`Cat.Dapper.MySql` (built) has unit tests only, because it has no bulk operations and its paging is not proven on a real MySQL. When this question chooses containers, add a MySQL container to the same test project, so the build gets a container once and not per database.
+
 Recommendation: the unit tests of the generated SQL text, plus the tests against a container for the four operations only, kept in one test project, so the part that is easiest to get wrong runs against the real database. Check what the build workflow supports before you decide.
 <!-- region end: Question 17-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 3-->
-
-<!-- region start: Phase 4-->
-## Phase 4
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Support for MySQL, with a `Cat.Dapper.MySql` project next to `Cat.Dapper.SqlServer`.
-
-#### Decided
-- **The project.** `Cat.Dapper.MySql` is added. It holds at least the MySQL specific items that `Cat.Dapper.SqlServer` has since phase 1: `MySqlConnectionFactory`, `MySqlPagingExtensions` and the registration helper for the connection string, like `AddCatDapperSqlServer`. The neutral `Cat.Dapper` project stays free of a database.
-- **Place in the demo.** The MySQL showcase of the demo ([Phase 13 of the demo](Demo.md#phase-13)) runs on EF Core, so the demo does not have to use this project.
-- **The driver.** The same driver everywhere, and the demo uses Pomelo, so the project references MySqlConnector, the driver under Pomelo. `Cat.Db.Errors.MySql` uses the same driver, see the [module readme of Cat.Db.Errors](../modules/Cat.Db.Errors/README.md). The latest stable MySqlConnector is 3.0.0, checked on nuget.org on 2026-11-16. It has targets for `netstandard2.0`, `netstandard2.1`, `net8.0`, `net10.0` and `net11.0`, so the project can target `netstandard2.0`, as the target framework rule asks.
-- **The paging method.** `MySqlPagingExtensions` has the same method as the SQL Server one: `QueryPagedAsync` with the same arguments and the same `ICatPagedList` result, in the namespace `Cat.Dapper.MySql`. It pages with `LIMIT` and `OFFSET`, where SQL Server uses `OFFSET` and `FETCH`. A developer who changes the database changes a `using`, so the handlers stay portable. A project that uses both namespaces needs the namespace of one of them in the call. The statement follows the same rules as on SQL Server: without an `ORDER BY`, every column named, and the SQL and the order as constants.
-- **The error checks and the order of work.** `Cat.Dapper.MySql` references `Cat.Db.Errors.MySql`, as `Cat.Dapper.SqlServer` references `Cat.Db.Errors.SqlServer`. `Cat.Db.Errors.MySql` exists, see the [module readme of Cat.Db.Errors](../modules/Cat.Db.Errors/README.md).
-- **No bulk operations.** `Cat.Dapper.MySql` has no bulk operations. MySQL has a bulk path through the driver, but it is not the `SqlBulkCopy` of SQL Server. A MySQL developer writes the bulk code themselves for now.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 22-->
-#### Question 22
-How do we prove the MySQL paging and the factory? The module decided it has no tests of the SQL itself and that the demo proves it, and the demo does not use Dapper on MySQL. Question 17 asks the same for the bulk operations of SQL Server. The options:
-- **Unit tests of the generated SQL text and of the factory.** No database, as in phase 1. Cost: it does not prove that the paging statement runs on MySQL.
-- **Tests against a real MySQL in a container.** Cost: Docker for every developer and for the build workflow, and a slower test run. It follows the answer of question 17, if that picks a container.
-
-Recommendation: the unit tests of the generated SQL text and of the factory, and the container tests when question 17 chooses containers, so the build gets a container once and not per database.
-<!-- region end: Question 22-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 4-->
