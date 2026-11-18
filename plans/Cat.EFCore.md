@@ -38,35 +38,8 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 1](#phase-1)
 - [Phase 2](#phase-2)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 1-->
-## Phase 1
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Make `Cat.EFCore.Extensions` provider neutral. Phase 2 adds MySQL on top of it.
-
-#### What exists today
-- `Cat.EFCore.Extensions` is not neutral, although its name says so. It references `Microsoft.EntityFrameworkCore.SqlServer`, and it gives `Cat.EFCore.Extensions.SqlServer` access to its internals.
-- `ConfigureCatEntity` calls `IsClustered(false)` on the primary key `Id`, `UseIdentityColumn()` on `SequenceId` and `IsClustered()` on the unique index of `SequenceId`. `ConfigureCatReferenceEntity` calls `IsClustered(false)` too. When no schema is known, the schema falls back to `dbo`.
-- The demo services call `ConfigureCatEntity` and `ConfigureCatTemporalEntity`.
-
-#### Decided
-- **How it becomes neutral.** The SQL Server calls move into `Cat.EFCore.Extensions.SqlServer`. The neutral `Cat.EFCore.Extensions` project keeps the shared part and references no provider package. A developer calls the method of the project of their database. The provider projects use the same method names, so a developer only changes a reference and a `using`. The demo changes the same way. The move is a breaking change, because `ConfigureCatEntity` moves for every developer who uses it today.
-- **A breaking change is accepted.** The module is Stable, and the change is described in the module readme. Every developer who uses `ConfigureCatEntity` changes a reference. The old methods do not stay in `Cat.EFCore.Extensions` as obsolete methods, because they would keep the one reference this plan removes.
-
-#### Done when
-`Cat.EFCore.Extensions` references no provider package, and a developer on SQL Server keeps the same base entities. The project of one database does not pull in the provider package of another. The module readme says how, and the tests cover it.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 1-->
 
 <!-- region start: Phase 2-->
 ## Phase 2
@@ -74,18 +47,17 @@ Make `Cat.EFCore.Extensions` provider neutral. Phase 2 adds MySQL on top of it.
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-Add MySQL to the module, on top of the provider neutral `Cat.EFCore.Extensions` of phase 1. It is one of the module plans of the MySQL showcase in [Phase 13 of the demo](Demo.md#phase-13).
+Add MySQL to the module, on top of the provider neutral `Cat.EFCore.Extensions`. It is one of the module plans of the MySQL showcase in [Phase 13 of the demo](Demo.md#phase-13).
 
 #### What exists today
 - The temporal projects, `Cat.EFCore.Entities.SqlServer` and `Cat.EFCore.Extensions.SqlServer`, are SQL Server only. MySQL has no temporal tables, so they get no MySQL version.
 - The outbox, the inbox and the scheduler claim store use plain EF Core, with `HasMaxLength`, `HasIndex` and `ExecuteUpdate`. They make no provider call, and nobody has run them on MySQL.
 
 #### Needs
-- [Phase 1](#phase-1) of this plan.
 - A stable Pomelo for EF Core 11 to prove the result on MySQL, see [Phase 13 of the demo](Demo.md#phase-13).
 #### Decided
-- **A MySQL project.** `Cat.EFCore.Extensions.MySql` is added next to `Cat.EFCore.Extensions.SqlServer`, with the same method names, as decided for phase 1.
-- **The shape on MySQL.** `SequenceId` is the primary key and `Id` is a unique key. It gives MySQL the same physical design that SQL Server has today: the table is clustered on the increasing number, and the GUID sits in an index of its own, so every index stays small on a big table. The decision is for a big database, and the demo is no argument. Consequences: the two databases differ in shape, and the rest of the module and the generated clients must not depend on which column is the key. `Id` is an alternate key (`HasAlternateKey`) and not only an index, so a foreign key that points at `Id` keeps working, to check when building. `ConfigureCatReferenceEntity` stays as it is, because someone else owns those tables. `Find(guid)` does not work on MySQL, see the lookup methods below. The module readme states the differences. Check how Pomelo stores a `Guid` by default.
+- **A MySQL project.** `Cat.EFCore.Extensions.MySql` is added next to `Cat.EFCore.Extensions.SqlServer`, with the same method names. The neutral project holds a shared internal helper that the provider projects reach through `InternalsVisibleTo`, and it sets the save behavior of `SequenceId`. Each provider project adds its own key, identity and index calls.
+- **The shape on MySQL.** `SequenceId` is the primary key and `Id` is a unique key. It gives MySQL the same physical design that SQL Server has today: the table is clustered on the increasing number, and the GUID sits in an index of its own, so every index stays small on a big table. The decision is for a big database, and the demo is no argument. Consequences: the two databases differ in shape, and the rest of the module and the generated clients must not depend on which column is the key. `Id` is an alternate key (`HasAlternateKey`) and not only an index, so a foreign key that points at `Id` keeps working, to check when building. The check includes a reference entity of another service: its model uses `Id` as the key, and the foreign key of the other service points at the unique key `Id`, so a test proves that the migration works with Pomelo. The neutral `Configure` sets `SetAfterSaveBehavior(Ignore)` on `SequenceId`, and EF Core may reject that on a property that is part of a key, so a test on MySQL proves it, and the line moves to the SQL Server action when it fails. The summary of `CatReferenceEntityBase.Id` says "non-clustered primary key", which only fits SQL Server, so reword it to say "the key". `ConfigureCatReferenceEntity` gets a MySQL version on the shared helper of the neutral project, with no clustered call, because someone else owns those tables. Whether the MySQL method keeps a schema parameter is decided when the phase starts. `Find(guid)` does not work on MySQL, see the lookup methods below. The module readme states the differences. Check how Pomelo stores a `Guid` by default.
 - **Lookup methods.** `FindByIdAsync(Guid id)` and `FindBySequenceIdAsync(int sequenceId)` are extension methods on `DbSet<TEntity>` for entities that derive from `CatEntityBase`. Both exist on both databases, so the same code runs on SQL Server and on MySQL. They live in the neutral `Cat.EFCore.Extensions`, not in the provider projects, because the neutral project needs one implementation only and works on any provider. The method reads the primary key from the EF Core model. When the requested column is the key it calls `Find`, and otherwise it looks in the change tracker first and then queries. They cannot be named `Find`, because an instance method wins over an extension method and `set.Find(guid)` always binds to the built-in one, so a test proves this when building. The built-in `Find` stays, and a developer can still call it with the wrong key on a database where the column is not the key. The module readme says to use the new methods. Check the cost of reading the model at run time in a test.
 
 #### Done when
