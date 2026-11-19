@@ -380,6 +380,9 @@ public class AuthorizationTests
         public Task<bool> ExistsAsync(string messageId, CancellationToken cancellationToken = default) => Task.FromResult(false);
 
         public void Add(string messageId, string messageType) => Added.Add((messageId, messageType));
+
+        public Task<int> DeleteOlderThanAsync(DateTimeOffset handledBefore, CancellationToken cancellationToken = default) =>
+            Task.FromResult(0);
     }
 
     /// <summary>

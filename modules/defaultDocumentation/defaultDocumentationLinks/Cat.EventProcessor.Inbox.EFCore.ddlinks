@@ -8,6 +8,7 @@ F:Cat.EventProcessor.Inbox.EFCore.EfCoreInboxStore`1._dbContext|EfCoreInboxStore
 M:Cat.EventProcessor.Inbox.EFCore.EfCoreInboxStore`1.#ctor(`0)|EfCoreInboxStore_TDbContext_..ctor.3U6HOEXUCCT1SKNIVKS10VZKB.md|EfCoreInboxStore(TDbContext)
 M:Cat.EventProcessor.Inbox.EFCore.EfCoreInboxStore`1.ExistsAsync(System.String,System.Threading.CancellationToken)|EfCoreInboxStore_TDbContext_.ExistsAsync.XXXMZLL6Y1B3X4XCRHVI9DVUA.md|ExistsAsync(string, CancellationToken)
 M:Cat.EventProcessor.Inbox.EFCore.EfCoreInboxStore`1.Add(System.String,System.String)|EfCoreInboxStore_TDbContext_.Add.MI05GBXIGV3DJ75YNMGHR2XT3.md|Add(string, string)
+M:Cat.EventProcessor.Inbox.EFCore.EfCoreInboxStore`1.DeleteOlderThanAsync(System.DateTimeOffset,System.Threading.CancellationToken)|EfCoreInboxStore_TDbContext_.DeleteOlderThanAsync.2UII6HZNL14XPPH3ILQEX63W2.md|DeleteOlderThanAsync(DateTimeOffset, CancellationToken)
 T:Cat.EventProcessor.Inbox.EFCore.EfCoreInboxStore`1|EfCoreInboxStore_TDbContext_.md|EfCoreInboxStore<TDbContext>
 M:Cat.EventProcessor.Inbox.EFCore.ModelBuilderExtensions.AddCatInbox(Microsoft.EntityFrameworkCore.ModelBuilder)|ModelBuilderExtensions.AddCatInbox.E9EHKR34AM1DFIZQXF0V8XE9A.md|AddCatInbox(this ModelBuilder)
 T:Cat.EventProcessor.Inbox.EFCore.ModelBuilderExtensions|ModelBuilderExtensions.md|ModelBuilderExtensions

@@ -142,4 +142,29 @@ public class OutboxAndInboxTests
         using var readScope = _provider.CreateScope();
         Assert.That(await readScope.ServiceProvider.GetRequiredService<ICatInboxStore>().ExistsAsync(answer.MessageId.ToString()), Is.False);
     }
+
+    [Test]
+    public async Task DeleteOlderThan_DeletesOnlyTheRowsHandledBeforeTheLimit()
+    {
+        using (var scope = _provider.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<SagaDbContext>();
+            context.Set<CatInboxMessage>().AddRange(
+                new CatInboxMessage { MessageId = "old", MessageType = "T", HandledAt = DateTimeOffset.UtcNow.AddDays(-10) },
+                new CatInboxMessage { MessageId = "new", MessageType = "T", HandledAt = DateTimeOffset.UtcNow.AddDays(-1) });
+            await context.SaveChangesAsync();
+        }
+
+        int deleted;
+        using (var scope = _provider.CreateScope())
+        {
+            deleted = await scope.ServiceProvider.GetRequiredService<ICatInboxStore>().DeleteOlderThanAsync(DateTimeOffset.UtcNow.AddDays(-5));
+        }
+
+        Assert.That(deleted, Is.EqualTo(1));
+        using var readScope = _provider.CreateScope();
+        var store = readScope.ServiceProvider.GetRequiredService<ICatInboxStore>();
+        Assert.That(await store.ExistsAsync("old"), Is.False);
+        Assert.That(await store.ExistsAsync("new"), Is.True);
+    }
 }

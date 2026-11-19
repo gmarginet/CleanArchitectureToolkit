@@ -26,6 +26,9 @@ public class SagaDbContext : DbContext
         modelBuilder.AddCatSagas();
         Cat.Messaging.Outbox.EFCore.ModelBuilderExtensions.AddCatOutbox(modelBuilder);
         Cat.EventProcessor.Inbox.EFCore.ModelBuilderExtensions.AddCatInbox(modelBuilder);
+
+        // SQLite cannot compare a DateTimeOffset in SQL, so the inbox cleanup needs a number it can compare.
+        modelBuilder.Entity<Cat.EventProcessor.Inbox.EFCore.CatInboxMessage>().Property(row => row.HandledAt).HasConversion<long>();
     }
 }
 

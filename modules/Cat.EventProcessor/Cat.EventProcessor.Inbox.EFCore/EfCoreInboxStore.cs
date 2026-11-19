@@ -37,4 +37,10 @@ internal sealed class EfCoreInboxStore<TDbContext> : ICatInboxStore
             HandledAt = DateTimeOffset.UtcNow
         });
     }
+
+    /// <inheritdoc />
+    public Task<int> DeleteOlderThanAsync(DateTimeOffset handledBefore, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Set<CatInboxMessage>().Where(row => row.HandledAt < handledBefore).ExecuteDeleteAsync(cancellationToken);
+    }
 }

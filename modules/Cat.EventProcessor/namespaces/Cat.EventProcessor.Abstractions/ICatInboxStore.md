@@ -39,4 +39,5 @@ public interface ICatInboxStore
 | Methods | |
 | :--- | :--- |
 | [Add\(string, string\)](ICatInboxStore.Add.UU452UCKDNFMMBAMI19088PP6.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore\.Add\(string, string\)') | Adds the message to the inbox\. It does not save by itself\. The `SaveChanges` of the handler saves it with the work\. |
+| [DeleteOlderThanAsync\(DateTimeOffset, CancellationToken\)](ICatInboxStore.DeleteOlderThanAsync.WB2WHNQ1XCFHHLAQSSY6OFS7.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore\.DeleteOlderThanAsync\(System\.DateTimeOffset, System\.Threading\.CancellationToken\)') | Deletes the rows that were handled before the given time\. It runs at once and does not wait for a `SaveChanges`\. Call it from your own job\. Keep a row at least as long as the bus can still deliver the same message again\. |
 | [ExistsAsync\(string, CancellationToken\)](ICatInboxStore.ExistsAsync.4N8X6TCE59U7MPLFMFY3AFQ59.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore\.ExistsAsync\(string, System\.Threading\.CancellationToken\)') | Tells whether the message was handled before\. |

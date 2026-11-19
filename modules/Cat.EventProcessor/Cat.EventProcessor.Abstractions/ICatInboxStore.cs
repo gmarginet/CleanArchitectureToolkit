@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,4 +25,13 @@ public interface ICatInboxStore
     /// <param name="messageId">The ID of the message.</param>
     /// <param name="messageType">The name of the message type.</param>
     void Add(string messageId, string messageType);
+
+    /// <summary>
+    /// Deletes the rows that were handled before the given time. It runs at once and does not wait for a <c>SaveChanges</c>.
+    /// Call it from your own job. Keep a row at least as long as the bus can still deliver the same message again.
+    /// </summary>
+    /// <param name="handledBefore">The time limit. A row handled before this time is deleted.</param>
+    /// <param name="cancellationToken">Token to cancel the work.</param>
+    /// <returns>The number of deleted rows.</returns>
+    Task<int> DeleteOlderThanAsync(DateTimeOffset handledBefore, CancellationToken cancellationToken = default);
 }

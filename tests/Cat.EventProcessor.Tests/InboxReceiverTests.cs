@@ -132,5 +132,8 @@ public class InboxReceiverTests
             Task.FromResult(Known.Contains(messageId));
 
         public void Add(string messageId, string messageType) => Added.Add((messageId, messageType));
+
+        public Task<int> DeleteOlderThanAsync(DateTimeOffset handledBefore, CancellationToken cancellationToken = default) =>
+            Task.FromResult(0);
     }
 }

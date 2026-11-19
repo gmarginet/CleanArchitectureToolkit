@@ -54,6 +54,7 @@ The module settles every message for you. A handler that succeeds completes the 
   - [Try a message in development](#try-a-message-in-development)
   - [Add the health check](#add-the-health-check)
   - [The inbox](#the-inbox)
+  - [Clean the inbox](#clean-the-inbox)
   - [Competing consumers and shutdown](#competing-consumers-and-shutdown)
   - [Traces](#traces)
   - [Who sent the message and what may it do](#who-sent-the-message-and-what-may-it-do)
@@ -315,6 +316,23 @@ What to know:
 - **Missing store.** The listener fails at startup when a message type has `UseInbox` on and no `ICatInboxStore` is registered.
 - **Other stores.** `ICatInboxStore` lives in `Cat.EventProcessor.Abstractions`, so you can register a store of your own.
 - **The sender helps.** It sets the message ID, and duplicate detection of the queue or topic can drop a repeated message.
+- **Growth.** Nothing removes a row by itself. See [Clean the inbox](#clean-the-inbox).
+
+### Clean the inbox
+
+The table grows by one row for every message of a type that has `UseInbox` on. `Cat.Sagas` adds one row for every answer of a saga too. The module does not delete rows by itself, so you run a job that does.
+
+`ICatInboxStore` has a method for it:
+
+```csharp
+var deleted = await inboxStore.DeleteOlderThanAsync(DateTimeOffset.UtcNow.AddDays(-30), cancellationToken);
+```
+
+What to know:
+- **How long a row must live.** A row only matters while the bus can still deliver the same message again. Keep it at least as long as the time to live of the queue or subscription, and add a margin. A message that fails too often goes to the dead letter queue, so keep the rows longer when you resubmit dead lettered messages.
+- **It runs at once.** The method deletes the rows right away, with its own statement, and does not wait for a `SaveChanges`. Call it from a scope of its own, such as a job or a worker.
+- **Your own job.** You schedule the call. Any scheduler works, and `Cat.Scheduling` can run it, but the module does not need it.
+- **Other stores.** A store of your own implements the method too.
 
 ### Competing consumers and shutdown
 
