@@ -3,6 +3,7 @@ using Cat.EventProcessor.Inbox.EFCore;
 using Cat.EventProcessor.Inbox.EFCore.Extensions;
 using Cat.FluentWorkflows.Extensions;
 using Cat.Messaging.Extensions;
+using Cat.Messaging.Outbox;
 using Cat.Messaging.Outbox.EFCore;
 using Cat.Messaging.Outbox.EFCore.Extensions;
 using Cat.Messaging.Outbox.Extensions;
@@ -166,5 +167,33 @@ public class OutboxAndInboxTests
         var store = readScope.ServiceProvider.GetRequiredService<ICatInboxStore>();
         Assert.That(await store.ExistsAsync("old"), Is.False);
         Assert.That(await store.ExistsAsync("new"), Is.True);
+    }
+
+    [Test]
+    public async Task OutboxDeleteOlderThan_DeletesOnlyTheSentRowsBeforeTheLimit()
+    {
+        var oldSent = Guid.NewGuid();
+        var newSent = Guid.NewGuid();
+        var pending = Guid.NewGuid();
+        using (var scope = _provider.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<SagaDbContext>();
+            context.Set<CatOutboxMessage>().AddRange(
+                new CatOutboxMessage { Id = oldSent, CreatedAt = DateTimeOffset.UtcNow.AddDays(-10), SentAt = DateTimeOffset.UtcNow.AddDays(-10) },
+                new CatOutboxMessage { Id = newSent, CreatedAt = DateTimeOffset.UtcNow.AddDays(-1), SentAt = DateTimeOffset.UtcNow.AddDays(-1) },
+                new CatOutboxMessage { Id = pending, CreatedAt = DateTimeOffset.UtcNow.AddDays(-10) });
+            await context.SaveChangesAsync();
+        }
+
+        int deleted;
+        using (var scope = _provider.CreateScope())
+        {
+            deleted = await scope.ServiceProvider.GetRequiredService<ICatOutboxStore>().DeleteOlderThanAsync(DateTimeOffset.UtcNow.AddDays(-5));
+        }
+
+        Assert.That(deleted, Is.EqualTo(1));
+        using var readScope = _provider.CreateScope();
+        var ids = await readScope.ServiceProvider.GetRequiredService<SagaDbContext>().Set<CatOutboxMessage>().Select(row => row.Id).ToListAsync();
+        Assert.That(ids, Is.EquivalentTo(new[] { newSent, pending }));
     }
 }

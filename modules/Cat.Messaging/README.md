@@ -52,6 +52,7 @@ The outbox is optional. With it, a message is saved in the same `SaveChanges` as
   - [Create the queues and topics](#create-the-queues-and-topics)
   - [Change the options of Azure Service Bus](#change-the-options-of-azure-service-bus)
   - [Turn the outbox on](#turn-the-outbox-on)
+  - [Clean the outbox](#clean-the-outbox)
   - [Watch the dead letters](#watch-the-dead-letters)
   - [Where to publish from](#where-to-publish-from)
   - [The emulator](#the-emulator)
@@ -283,6 +284,24 @@ What to know:
 - The sender marks a message as sent only after the bus accepted it. A crash in between sends the message twice, never zero times. A receiver must handle a message more than once.
 - A scheduled message keeps its `scheduledAt` in the outbox and goes to the bus when the sender picks it up.
 - The sender stops at the first message that fails, so the order of the others is kept.
+- **Growth.** The sender never deletes a sent row. See [Clean the outbox](#clean-the-outbox).
+
+### Clean the outbox
+
+The table grows by one row for every message. A row holds the whole message, with its body and its token, so it is bigger than an inbox row. The module does not delete rows by itself, so you run a job that does.
+
+`ICatOutboxStore` has a method for it:
+
+```csharp
+var deleted = await outboxStore.DeleteOlderThanAsync(DateTimeOffset.UtcNow.AddDays(-30), cancellationToken);
+```
+
+What to know:
+- **Only sent rows.** The method deletes the rows with a `SentAt` before the time limit. A row that is not sent yet stays, however old it is.
+- **How long a row must live.** A sent row only helps you find a message that went missing. Keep it as long as you want that trace, and know that its token stays in the table for as long as the row does.
+- **It runs at once.** The method deletes the rows right away, with its own statement, and does not wait for a `SaveChanges`. Call it from a scope of its own, such as a job or a worker.
+- **Your own job.** You schedule the call. Any scheduler works, and `Cat.Scheduling` can run it, but the module does not need it.
+- **Other stores.** A store of your own implements the method too.
 
 ### Watch the dead letters
 

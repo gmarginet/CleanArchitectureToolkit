@@ -83,4 +83,10 @@ internal sealed class EfCoreOutboxStore<TDbContext> : ICatOutboxStore
             .Where(row => row.Id == id)
             .ExecuteUpdateAsync(setters => setters.SetProperty(row => row.SentAt, DateTimeOffset.UtcNow), cancellationToken);
     }
+
+    /// <inheritdoc />
+    public Task<int> DeleteOlderThanAsync(DateTimeOffset sentBefore, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Set<CatOutboxMessage>().Where(row => row.SentAt < sentBefore).ExecuteDeleteAsync(cancellationToken);
+    }
 }

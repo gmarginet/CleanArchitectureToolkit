@@ -101,6 +101,9 @@ public class OutboxTests
             Items.Single(i => i.Id == id).Sent = true;
             return Task.CompletedTask;
         }
+
+        public Task<int> DeleteOlderThanAsync(DateTimeOffset sentBefore, CancellationToken cancellationToken = default) =>
+            Task.FromResult(0);
     }
 
     public class StoredItem : CatOutboxItem

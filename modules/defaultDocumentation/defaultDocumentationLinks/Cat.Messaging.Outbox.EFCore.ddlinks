@@ -19,6 +19,7 @@ M:Cat.Messaging.Outbox.EFCore.EfCoreOutboxStore`1.#ctor(`0)|EfCoreOutboxStore_TD
 M:Cat.Messaging.Outbox.EFCore.EfCoreOutboxStore`1.AddAsync(Cat.Messaging.Abstractions.CatOutgoingMessage,System.Threading.CancellationToken)|EfCoreOutboxStore_TDbContext_.AddAsync.6Q12RQL78XRX34T7Y0HMMKGA1.md|AddAsync(CatOutgoingMessage, CancellationToken)
 M:Cat.Messaging.Outbox.EFCore.EfCoreOutboxStore`1.GetPendingAsync(System.Int32,System.Threading.CancellationToken)|EfCoreOutboxStore_TDbContext_.GetPendingAsync.UNO0VBIGTPEEQCB1J3NWDIDEA.md|GetPendingAsync(int, CancellationToken)
 M:Cat.Messaging.Outbox.EFCore.EfCoreOutboxStore`1.MarkSentAsync(System.Guid,System.Threading.CancellationToken)|EfCoreOutboxStore_TDbContext_.MarkSentAsync.A8R58MCHOW0LV6UZD94CPRYZE.md|MarkSentAsync(Guid, CancellationToken)
+M:Cat.Messaging.Outbox.EFCore.EfCoreOutboxStore`1.DeleteOlderThanAsync(System.DateTimeOffset,System.Threading.CancellationToken)|EfCoreOutboxStore_TDbContext_.DeleteOlderThanAsync.H81USJMNEW741XG6XWCESG614.md|DeleteOlderThanAsync(DateTimeOffset, CancellationToken)
 T:Cat.Messaging.Outbox.EFCore.EfCoreOutboxStore`1|EfCoreOutboxStore_TDbContext_.md|EfCoreOutboxStore<TDbContext>
 M:Cat.Messaging.Outbox.EFCore.ModelBuilderExtensions.AddCatOutbox(Microsoft.EntityFrameworkCore.ModelBuilder)|ModelBuilderExtensions.AddCatOutbox.0V31BQIBB44RJQ2TOGMYYN8P.md|AddCatOutbox(this ModelBuilder)
 T:Cat.Messaging.Outbox.EFCore.ModelBuilderExtensions|ModelBuilderExtensions.md|ModelBuilderExtensions

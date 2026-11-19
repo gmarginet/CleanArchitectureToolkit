@@ -34,4 +34,14 @@ public interface ICatOutboxStore
     /// <param name="cancellationToken">Token to cancel the work.</param>
     /// <returns>A task that completes when the change is saved.</returns>
     public Task MarkSentAsync(System.Guid id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Deletes the rows that were sent before the given time. A row that is not sent yet is never deleted.
+    /// It runs at once and does not wait for a <c>SaveChanges</c>.
+    /// Call it from your own job. Keep a sent row for a while, so you can still look up a message that went missing.
+    /// </summary>
+    /// <param name="sentBefore">The time limit. A row sent before this time is deleted.</param>
+    /// <param name="cancellationToken">Token to cancel the work.</param>
+    /// <returns>The number of deleted rows.</returns>
+    public Task<int> DeleteOlderThanAsync(System.DateTimeOffset sentBefore, CancellationToken cancellationToken = default);
 }

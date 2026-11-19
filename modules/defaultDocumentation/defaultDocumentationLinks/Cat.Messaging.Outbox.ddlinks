@@ -9,6 +9,7 @@ T:Cat.Messaging.Outbox.CatOutboxOptions|CatOutboxOptions.md|CatOutboxOptions
 M:Cat.Messaging.Outbox.ICatOutboxStore.AddAsync(Cat.Messaging.Abstractions.CatOutgoingMessage,System.Threading.CancellationToken)|ICatOutboxStore.AddAsync.YFPZP6FGJ9SSI4M7BALC88ZXC.md|AddAsync(CatOutgoingMessage, CancellationToken)
 M:Cat.Messaging.Outbox.ICatOutboxStore.GetPendingAsync(System.Int32,System.Threading.CancellationToken)|ICatOutboxStore.GetPendingAsync.6DHIU6ZXYUHR1N6AEHJY1EVQ3.md|GetPendingAsync(int, CancellationToken)
 M:Cat.Messaging.Outbox.ICatOutboxStore.MarkSentAsync(System.Guid,System.Threading.CancellationToken)|ICatOutboxStore.MarkSentAsync.1A6P64PUZ7EVYJPQ7C4FAPIBC.md|MarkSentAsync(Guid, CancellationToken)
+M:Cat.Messaging.Outbox.ICatOutboxStore.DeleteOlderThanAsync(System.DateTimeOffset,System.Threading.CancellationToken)|ICatOutboxStore.DeleteOlderThanAsync.0JKUZ1ZKPEI2SOF8SOMCZ8V14.md|DeleteOlderThanAsync(DateTimeOffset, CancellationToken)
 T:Cat.Messaging.Outbox.ICatOutboxStore|ICatOutboxStore.md|ICatOutboxStore
 F:Cat.Messaging.Outbox.OutboxMessageSink._store|OutboxMessageSink._store.md|_store
 M:Cat.Messaging.Outbox.OutboxMessageSink.#ctor(Cat.Messaging.Outbox.ICatOutboxStore)|OutboxMessageSink..ctor.YF9445RDU3YH03EOH6ALYRTO3.md|OutboxMessageSink(ICatOutboxStore)
