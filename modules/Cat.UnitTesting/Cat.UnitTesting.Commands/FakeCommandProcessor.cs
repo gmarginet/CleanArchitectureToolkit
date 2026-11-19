@@ -12,8 +12,9 @@ namespace Cat.UnitTesting.Commands;
 /// <summary>
 /// A command processor for unit tests. It records every command and returns what the test says.
 /// It fills no ids and sets no timestamps, the test decides the whole answer.
+/// It is also the <see cref="ICatCurrentScopeCommandProcessor"/>, and both ways record into the same list.
 /// </summary>
-public class FakeCommandProcessor : ICatCommandProcessor
+public class FakeCommandProcessor : ICatCommandProcessor, ICatCurrentScopeCommandProcessor
 {
     private readonly Dictionary<Type, Func<object, object>> _responses = new Dictionary<Type, Func<object, object>>();
 
@@ -124,4 +125,12 @@ public class FakeCommandProcessor : ICatCommandProcessor
             ? (ICatResponse<TResult>)respond(catCommand)
             : throw new NotSupportedException($"No response is set up for {catCommand.GetType().Name}. Call Respond first.");
     }
+
+    /// <inheritdoc />
+    public Task<ICatResponse> ProcessInCurrentScopeAsync(ICatCommand catCommand, CancellationToken cancellationToken = default)
+        => ProcessAsync(catCommand, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<ICatResponse<TResult>> ProcessInCurrentScopeAsync<TResult>(ICatCommand<TResult> catCommand, CancellationToken cancellationToken = default)
+        => ProcessAsync(catCommand, cancellationToken);
 }

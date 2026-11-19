@@ -32,4 +32,4 @@ A command processor for unit tests\. It records the commands and returns the res
 
 | Classes | |
 | :--- | :--- |
-| [FakeCommandProcessor](FakeCommandProcessor.md 'Cat\.UnitTesting\.Commands\.FakeCommandProcessor') | A command processor for unit tests\. It records every command and returns what the test says\. It fills no ids and sets no timestamps, the test decides the whole answer\. |
+| [FakeCommandProcessor](FakeCommandProcessor.md 'Cat\.UnitTesting\.Commands\.FakeCommandProcessor') | A command processor for unit tests\. It records every command and returns what the test says\. It fills no ids and sets no timestamps, the test decides the whole answer\. It is also the [ICatCurrentScopeCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCurrentScopeCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCurrentScopeCommandProcessor'), and both ways record into the same list\. |

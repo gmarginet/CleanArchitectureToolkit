@@ -143,6 +143,14 @@ commands.Respond<TodoCreateCommand, int>(CatResponse.Ok(42));
 commands.Respond<TodoCreateCommand, int>(command => CatResponse.Ok(command.Title.Length));
 ```
 
+The fake is also an `ICatCurrentScopeCommandProcessor`. A class that injects that interface gets the same fake, and `ProcessInCurrentScopeAsync` records into the same `Commands` list and uses the same responses. Register one instance for both interfaces:
+
+```csharp
+services.AddSingleton(commands);
+services.AddSingleton<ICatCommandProcessor>(commands);
+services.AddSingleton<ICatCurrentScopeCommandProcessor>(commands);
+```
+
 ### Fake the query processor
 
 `FakeQueryProcessor` works the same way, with two differences. Every query has a result, so `Respond` always takes both type arguments. And there is no default response, so a query without a set up response throws.

@@ -168,4 +168,31 @@ public class FakeCommandProcessorTests
             Assert.That(response.IsSucceeded, Is.True);
         }
     }
+
+    [Test]
+    public async Task ProcessInCurrentScopeAsync_ShouldRecordAndAnswerLikeProcessAsync()
+    {
+        var fake = new FakeCommandProcessor().Respond<DeleteCommand>(CatResponse.NotFound());
+        ICatCurrentScopeCommandProcessor currentScope = fake;
+        var command = new DeleteCommand();
+
+        var response = await currentScope.ProcessInCurrentScopeAsync(command);
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response.IsFailed, Is.True);
+            Assert.That(fake.Commands, Is.EqualTo(new object[] { command }));
+        }
+    }
+
+    [Test]
+    public async Task ProcessInCurrentScopeAsync_WithAResult_ShouldAnswerTheSetUpResponse()
+    {
+        var fake = new FakeCommandProcessor().Respond<CreateCommand, int>(CatResponse.Ok(42));
+        ICatCurrentScopeCommandProcessor currentScope = fake;
+
+        var response = await currentScope.ProcessInCurrentScopeAsync(new CreateCommand());
+
+        Assert.That(response.Value, Is.EqualTo(42));
+    }
 }
