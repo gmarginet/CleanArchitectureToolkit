@@ -54,7 +54,7 @@ Remove sent rows from the outbox, so the table does not grow forever.
 - The sender sets `SentAt` on a row after the bus took the message. It never deletes the row. The store has `AddAsync`, `GetPendingAsync` and `MarkSentAsync`, and no cleanup.
 - The table has an index on `SentAt` and `CreatedAt`, so a cleanup of sent rows can find them quickly.
 - A row holds the whole message, with its body and the token of the message. That makes a kept row bigger than an inbox row, and the token stays in the table for as long as the row does.
-- The same gap exists in the inbox of `Cat.EventProcessor`, see [Cat.EventProcessor.md](Cat.EventProcessor.md).
+- The same gap exists in the inbox of `Cat.EventProcessor`, see the [module readme](../modules/Cat.EventProcessor/README.md).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
@@ -67,7 +67,7 @@ How does a developer clean the outbox? The options:
 - **Delete the row when it is sent.** `MarkSentAsync` removes the row instead of setting `SentAt`. Cost: no trace of what was sent, which hurts when someone looks for a lost message, and a breaking change of the table.
 - **A retention setting for the background sender.** The sender removes old sent rows by itself, with a setting like `SentRetention`. Cost: more work in the sender and a default that fits nobody exactly.
 
-Recommendation: the cleanup method on the store, with the same shape as the one planned for the inbox, see [Cat.EventProcessor.md](Cat.EventProcessor.md). A developer then learns one pattern for both tables. Keeping sent rows for a while is useful when a message goes missing, so deleting at once is the weaker choice.
+Recommendation: the cleanup method on the store, with the same shape as the one planned for the inbox, see the [module readme](../modules/Cat.EventProcessor/README.md). A developer then learns one pattern for both tables. Keeping sent rows for a while is useful when a message goes missing, so deleting at once is the weaker choice.
 <!-- region end: Question 1-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
