@@ -314,6 +314,36 @@ public class ServiceRequestHandlerTests
 
     #endregion CleanUpInbox
 
+    #region CleanUpOutbox
+
+    [Test]
+    public async Task CleanUpOutbox_ShouldSendTheCommandWithTheRetentionLimit()
+    {
+        var now = new DateTimeOffset(2026, 11, 19, 0, 15, 0, TimeSpan.Zero);
+        var handler = new CleanUpOutboxRequestHandler(_commandProcessor, new FixedTimeProvider(now));
+
+        var response = await handler.HandleAsync(new CleanUpOutboxRequest());
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(response, CatIs.SucceededWith(CatResponseType.NoContent));
+            Assert.That(_commandProcessor.Of<OutboxCleanUpCommand>().Single().SentBefore, Is.EqualTo(now - CleanUpOutboxRequestHandler.Retention));
+        }
+    }
+
+    [Test]
+    public async Task CleanUpOutbox_WhenTheCommandFails_ShouldPassTheFailureOn()
+    {
+        _commandProcessor.Respond<OutboxCleanUpCommand>(CatResponse.InternalServerError());
+        var handler = new CleanUpOutboxRequestHandler(_commandProcessor, TimeProvider.System);
+
+        var response = await handler.HandleAsync(new CleanUpOutboxRequest());
+
+        Assert.That(response, CatIs.Failed);
+    }
+
+    #endregion CleanUpOutbox
+
     #region CancelStuckOrders
 
     private sealed class FixedTimeProvider(DateTimeOffset now) : TimeProvider

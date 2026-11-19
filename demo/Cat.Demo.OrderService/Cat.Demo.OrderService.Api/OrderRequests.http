@@ -139,3 +139,8 @@ POST {{OrderApi_HostAddress}}/development/scheduler/clean-up-order-counters
 ### Development only. It simulates the nightly run of the scheduler.
 ### Deletes the inbox rows that are older than 30 days.
 POST {{OrderApi_HostAddress}}/development/scheduler/clean-up-inbox
+
+### CleanUpOutboxRequest => No Content
+### Development only. It simulates the nightly run of the scheduler.
+### Deletes the sent outbox rows that are older than 30 days.
+POST {{OrderApi_HostAddress}}/development/scheduler/clean-up-outbox

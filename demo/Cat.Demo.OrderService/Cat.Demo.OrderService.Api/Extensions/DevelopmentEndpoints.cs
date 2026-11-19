@@ -29,6 +29,8 @@ public static class DevelopmentEndpoints
             .WithName("CleanUpOrderCounters");
         schedulerGroup.MapCatPost<CleanUpInboxRequest>("/clean-up-inbox", CatResponseType.NoContent)
             .WithName("CleanUpInbox");
+        schedulerGroup.MapCatPost<CleanUpOutboxRequest>("/clean-up-outbox", CatResponseType.NoContent)
+            .WithName("CleanUpOutbox");
         schedulerGroup.MapCatPost<CancelStuckOrdersRequest>("/cancel-stuck-orders", CatResponseType.NoContent)
             .WithName("CancelStuckOrders");
         schedulerGroup.MapCatPost<ShipConfirmedOrdersRequest>("/ship-confirmed-orders", CatResponseType.NoContent)
