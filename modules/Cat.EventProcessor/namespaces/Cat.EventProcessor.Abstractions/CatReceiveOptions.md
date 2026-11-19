@@ -38,6 +38,7 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Properties | |
 | :--- | :--- |
+| [AllowAnonymous](CatReceiveOptions.AllowAnonymous.md 'Cat\.EventProcessor\.Abstractions\.CatReceiveOptions\.AllowAnonymous') | Keeps this message type open on purpose\. It runs even when the service denies message types without a policy\. A token that the message carries is still validated\. A named policy or a rule still applies, so this setting never lets a message past them\. The default is false\. |
 | [AuthorizationRules](CatReceiveOptions.AuthorizationRules.md 'Cat\.EventProcessor\.Abstractions\.CatReceiveOptions\.AuthorizationRules') | Rules that a developer states in code next to the message type, instead of a named policy\. The project that implements [ICatMessageAuthorizer](ICatMessageAuthorizer.md 'Cat\.EventProcessor\.Abstractions\.ICatMessageAuthorizer') adds extension methods to fill this list, so this project stays free of ASP\.NET Core\. A message must pass the named policy and every rule\. |
 | [FailureOverrides](CatReceiveOptions.FailureOverrides.md 'Cat\.EventProcessor\.Abstractions\.CatReceiveOptions\.FailureOverrides') | Overrides the failure table for this message type\. The key is the name of the response type, such as `NotFound` or `InternalServerError`\. The value is what to do with the message\. |
 | [HasAuthorizationRule](CatReceiveOptions.HasAuthorizationRule.md 'Cat\.EventProcessor\.Abstractions\.CatReceiveOptions\.HasAuthorizationRule') | True when the message type has a named policy or a rule\. |

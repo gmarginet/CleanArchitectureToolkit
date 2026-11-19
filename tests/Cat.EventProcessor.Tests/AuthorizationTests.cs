@@ -297,6 +297,54 @@ public class AuthorizationTests
     }
 
     [Test]
+    public async Task AllowAnonymous_KeepsATypeOpenWhenTheSettingIsOn()
+    {
+        using var provider = Build(options => options.AllowAnonymous = true, authorization => authorization.DenyMessagesWithoutPolicy = true);
+
+        var result = await ReceiveAsync(provider, MessageOf(null));
+
+        Assert.That(result.Settlement, Is.EqualTo(CatSettlement.Complete));
+    }
+
+    [Test]
+    public async Task AllowAnonymous_StillRejectsATokenThatIsNotValid()
+    {
+        using var provider = Build(options => options.AllowAnonymous = true, authorization => authorization.DenyMessagesWithoutPolicy = true);
+
+        var result = await ReceiveAsync(provider, MessageOf("not-a-token"));
+
+        Assert.That(result.Settlement, Is.EqualTo(CatSettlement.DeadLetter));
+        Assert.That(result.Reason, Is.EqualTo("Unauthorized"));
+    }
+
+    [Test]
+    public async Task AllowAnonymous_DoesNotLetAMessagePastAPolicy()
+    {
+        using var provider = Build(options =>
+        {
+            options.AllowAnonymous = true;
+            options.Policy = "PriceAdmin";
+        });
+
+        var result = await ReceiveAsync(provider, MessageOf(null));
+
+        Assert.That(result.Settlement, Is.EqualTo(CatSettlement.DeadLetter));
+    }
+
+    [Test]
+    public void AllowAnonymous_CanBeSetFromTheConfiguration()
+    {
+        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var settings = new Dictionary<string, string?> { ["CatEventProcessor:Messages:OrderPlaced:AllowAnonymous"] = "true" };
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(settings).Build();
+        services.AddCatEventProcessor(configuration, builder => builder.Receive<OrderPlaced>());
+
+        using var provider = services.BuildServiceProvider();
+
+        Assert.That(provider.GetRequiredService<ICatReceiveRegistry>().Registrations.Single().Options.AllowAnonymous, Is.True);
+    }
+
+    [Test]
     public async Task Order_ADeniedMessageLeavesNoRowInTheInbox()
     {
         using var provider = Build(options =>
@@ -349,6 +397,54 @@ public class AuthorizationTests
         var check = provider.GetServices<IHostedService>().Single(service => service is AuthorizationStartupCheck);
 
         Assert.That(async () => await check.StartAsync(CancellationToken.None), Throws.Nothing);
+    }
+
+    [Test]
+    public async Task StartupCheck_WarnsWhenAllowAnonymousMeetsAPolicy()
+    {
+        using var provider = Build(options =>
+        {
+            options.AllowAnonymous = true;
+            options.Policy = "PriceAdmin";
+        });
+        var logger = new CapturingLogger();
+        var check = new AuthorizationStartupCheck(provider.GetRequiredService<ICatReceiveRegistry>(),
+            provider.GetRequiredService<Microsoft.AspNetCore.Authorization.IAuthorizationPolicyProvider>(), logger);
+
+        await check.StartAsync(CancellationToken.None);
+
+        Assert.That(logger.Warnings.Single(), Does.Contain("OrderPlaced"));
+    }
+
+    [Test]
+    public async Task StartupCheck_DoesNotWarnForATypeThatIsOpenOnPurpose()
+    {
+        using var provider = Build(options => options.AllowAnonymous = true);
+        var logger = new CapturingLogger();
+        var check = new AuthorizationStartupCheck(provider.GetRequiredService<ICatReceiveRegistry>(),
+            provider.GetRequiredService<Microsoft.AspNetCore.Authorization.IAuthorizationPolicyProvider>(), logger);
+
+        await check.StartAsync(CancellationToken.None);
+
+        Assert.That(logger.Warnings, Is.Empty);
+    }
+
+    private sealed class CapturingLogger : Microsoft.Extensions.Logging.ILogger<AuthorizationStartupCheck>
+    {
+        public List<string> Warnings { get; } = new();
+
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+
+        public bool IsEnabled(Microsoft.Extensions.Logging.LogLevel logLevel) => true;
+
+        public void Log<TState>(Microsoft.Extensions.Logging.LogLevel logLevel, Microsoft.Extensions.Logging.EventId eventId, TState state,
+            Exception? exception, Func<TState, Exception?, string> formatter)
+        {
+            if (logLevel == Microsoft.Extensions.Logging.LogLevel.Warning)
+            {
+                Warnings.Add(formatter(state, exception));
+            }
+        }
     }
 
     [Test]

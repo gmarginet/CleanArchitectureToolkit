@@ -27,6 +27,13 @@ public class CatReceiveOptions
     public string? Policy { get; set; }
 
     /// <summary>
+    /// Keeps this message type open on purpose. It runs even when the service denies message types without a policy.
+    /// A token that the message carries is still validated. A named policy or a rule still applies, so this setting never lets a message past them.
+    /// The default is false.
+    /// </summary>
+    public bool AllowAnonymous { get; set; }
+
+    /// <summary>
     /// Rules that a developer states in code next to the message type, instead of a named policy. The project that implements
     /// <see cref="ICatMessageAuthorizer"/> adds extension methods to fill this list, so this project stays free of ASP.NET Core.
     /// A message must pass the named policy and every rule.

@@ -52,8 +52,8 @@ internal sealed class CatMessageAuthorizer : ICatMessageAuthorizer
 
         if (!options.HasAuthorizationRule)
         {
-            return _options.Value.DenyMessagesWithoutPolicy
-                ? CatAuthorizationResult.Forbidden("The message type has no policy, and messages without a policy are denied.")
+            return _options.Value.DenyMessagesWithoutPolicy && !options.AllowAnonymous
+                ?CatAuthorizationResult.Forbidden("The message type has no policy, and messages without a policy are denied.")
                 : CatAuthorizationResult.Success;
         }
 

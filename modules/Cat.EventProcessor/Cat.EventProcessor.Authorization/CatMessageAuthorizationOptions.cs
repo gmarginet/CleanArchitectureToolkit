@@ -14,7 +14,7 @@ public class CatMessageAuthorizationOptions
     /// <summary>
     /// When true, the receiver denies a message type that has no policy and no rule. The default is false, so a service keeps working
     /// while its message types get their rules. The listener logs the message types without a rule at startup either way.
-    /// A message type that is open on purpose states a rule that always passes, such as <c>options.Require(policy =&gt; policy.RequireAssertion(_ =&gt; true))</c>.
+    /// A message type that is open on purpose sets <see cref="Cat.EventProcessor.Abstractions.CatReceiveOptions.AllowAnonymous"/>.
     /// </summary>
     public bool DenyMessagesWithoutPolicy { get; set; }
 }

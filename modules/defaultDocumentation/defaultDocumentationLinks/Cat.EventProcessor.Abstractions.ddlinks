@@ -30,6 +30,7 @@ T:Cat.EventProcessor.Abstractions.CatMessageContextData|CatMessageContextData.md
 P:Cat.EventProcessor.Abstractions.CatReceiveOptions.MaxConcurrentCalls|CatReceiveOptions.MaxConcurrentCalls.md|MaxConcurrentCalls
 P:Cat.EventProcessor.Abstractions.CatReceiveOptions.UseInbox|CatReceiveOptions.UseInbox.md|UseInbox
 P:Cat.EventProcessor.Abstractions.CatReceiveOptions.Policy|CatReceiveOptions.Policy.md|Policy
+P:Cat.EventProcessor.Abstractions.CatReceiveOptions.AllowAnonymous|CatReceiveOptions.AllowAnonymous.md|AllowAnonymous
 P:Cat.EventProcessor.Abstractions.CatReceiveOptions.AuthorizationRules|CatReceiveOptions.AuthorizationRules.md|AuthorizationRules
 P:Cat.EventProcessor.Abstractions.CatReceiveOptions.HasAuthorizationRule|CatReceiveOptions.HasAuthorizationRule.md|HasAuthorizationRule
 P:Cat.EventProcessor.Abstractions.CatReceiveOptions.FailureOverrides|CatReceiveOptions.FailureOverrides.md|FailureOverrides

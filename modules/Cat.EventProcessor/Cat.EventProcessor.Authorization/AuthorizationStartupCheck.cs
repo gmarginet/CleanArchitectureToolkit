@@ -25,13 +25,20 @@ internal sealed class AuthorizationStartupCheck : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         var withoutRule = new List<string>();
+        var open = new List<string>();
+        var openWithRule = new List<string>();
 
         foreach (var registration in _registry.Registrations)
         {
             if (!registration.Options.HasAuthorizationRule)
             {
-                withoutRule.Add(registration.MessageType.Name);
+                (registration.Options.AllowAnonymous ? open : withoutRule).Add(registration.MessageType.Name);
                 continue;
+            }
+
+            if (registration.Options.AllowAnonymous)
+            {
+                openWithRule.Add(registration.MessageType.Name);
             }
 
             var policy = registration.Options.Policy;
@@ -40,6 +47,18 @@ internal sealed class AuthorizationStartupCheck : IHostedService
                 throw new InvalidOperationException(
                     $"The policy {policy} of {registration.MessageType.Name} does not exist. Define it with AddAuthorization, or fix the name.");
             }
+        }
+
+        if (open.Count > 0)
+        {
+            _logger.LogInformation("These message types are open on purpose (AllowAnonymous): {MessageTypes}", string.Join(", ", open));
+        }
+
+        if (openWithRule.Count > 0)
+        {
+            _logger.LogWarning(
+                "These message types set AllowAnonymous and also have a policy or a rule. The policy or rule still applies, so they are not open: {MessageTypes}",
+                string.Join(", ", openWithRule));
         }
 
         if (withoutRule.Count > 0)
