@@ -11,7 +11,7 @@ namespace Cat.Commands.Extensions;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers the command processor and every command handler found in the given assemblies.
+    /// Registers the command processor, its current scope variant and every command handler found in the given assemblies.
     /// That covers handlers with a result too, see <see cref="ICatCommandHandler{TCommand,TResult}"/>.
     /// Handlers get a scoped lifetime. Open generic handlers are skipped.
     /// Registers the decorators module too, unless it is already registered.
@@ -36,5 +36,6 @@ public static class ServiceCollectionExtensions
         );
 
         services.AddScoped<ICatCommandProcessor, CatCommandProcessor>();
+        services.AddScoped<ICatCurrentScopeCommandProcessor, CatCommandProcessor>();
     }
 }

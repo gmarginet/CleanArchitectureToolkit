@@ -12,10 +12,11 @@ using Nito.AsyncEx;
 namespace Cat.Commands;
 
 /// <summary>
-/// Default <see cref="ICatCommandProcessor"/>.
+/// Default <see cref="ICatCommandProcessor"/> and <see cref="ICatCurrentScopeCommandProcessor"/>.
 /// Opens a new scope per command, gets the decorated handler from it and invokes the handler.
+/// The current scope variant skips the new scope and uses the scope of the caller.
 /// </summary>
-internal class CatCommandProcessor : ICatCommandProcessor
+internal class CatCommandProcessor : ICatCommandProcessor, ICatCurrentScopeCommandProcessor
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ICatDecoratorFactory _decoratorFactory;
@@ -35,16 +36,8 @@ internal class CatCommandProcessor : ICatCommandProcessor
     public async Task<ICatResponse> ProcessAsync(ICatCommand catCommand, CancellationToken cancellationToken = default)
     {
         await using var scope = _serviceProvider.CreateAsyncScope();
-        
-        var commandType = catCommand.GetType();
-        var handlerType = typeof(ICatCommandHandler<>).MakeGenericType(commandType);
-        var handler = _decoratorFactory.GetRequiredDecoratedService(scope.ServiceProvider, handlerType);
 
-        var method = handlerType.GetMethod("HandleAsync");
-        var task = (Task<ICatResponse>)InvokeHandler(method!, handler, catCommand, cancellationToken);
-        var result = await task;
-
-        return result;
+        return await RunHandlerAsync(scope.ServiceProvider, catCommand, cancellationToken);
     }
 
     /// <inheritdoc />
@@ -52,15 +45,42 @@ internal class CatCommandProcessor : ICatCommandProcessor
     {
         await using var scope = _serviceProvider.CreateAsyncScope();
 
+        return await RunHandlerAsync(scope.ServiceProvider, catCommand, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<ICatResponse> ProcessInCurrentScopeAsync(ICatCommand catCommand, CancellationToken cancellationToken = default)
+    {
+        // The processor is scoped, so the provider it got is the provider of the scope of the caller.
+        return RunHandlerAsync(_serviceProvider, catCommand, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<ICatResponse<TResult>> ProcessInCurrentScopeAsync<TResult>(ICatCommand<TResult> catCommand, CancellationToken cancellationToken = default)
+    {
+        return RunHandlerAsync(_serviceProvider, catCommand, cancellationToken);
+    }
+
+    private async Task<ICatResponse> RunHandlerAsync(IServiceProvider provider, ICatCommand catCommand, CancellationToken cancellationToken)
+    {
+        var commandType = catCommand.GetType();
+        var handlerType = typeof(ICatCommandHandler<>).MakeGenericType(commandType);
+        var handler = _decoratorFactory.GetRequiredDecoratedService(provider, handlerType);
+
+        var method = handlerType.GetMethod("HandleAsync");
+        var task = (Task<ICatResponse>)InvokeHandler(method!, handler, catCommand, cancellationToken);
+        return await task;
+    }
+
+    private async Task<ICatResponse<TResult>> RunHandlerAsync<TResult>(IServiceProvider provider, ICatCommand<TResult> catCommand, CancellationToken cancellationToken)
+    {
         var commandType = catCommand.GetType();
         var handlerType = typeof(ICatCommandHandler<,>).MakeGenericType(commandType, typeof(TResult));
-        var handler = _decoratorFactory.GetRequiredDecoratedService(scope.ServiceProvider, handlerType);
+        var handler = _decoratorFactory.GetRequiredDecoratedService(provider, handlerType);
 
         var method = handlerType.GetMethod("HandleAsync");
         var task = (Task<ICatResponse<TResult>>)InvokeHandler(method!, handler, catCommand, cancellationToken);
-        var result = await task;
-
-        return result;
+        return await task;
     }
 
     /// <summary>

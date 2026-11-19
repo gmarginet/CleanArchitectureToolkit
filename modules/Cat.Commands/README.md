@@ -211,6 +211,35 @@ if (response.IsFailed)
 }
 ```
 
+### Process a command in the current scope
+
+Sometimes the caller prepares work that the command must commit together with its own. A handler of a received message that has an inbox row in its `DbContext` is the example: the command handler has to see that same `DbContext`, so one `SaveChanges` saves both. Inject `ICatCurrentScopeCommandProcessor` for this. It runs the handler, with its decorators, in the scope of the caller and opens no scope of its own.
+
+```csharp
+using Cat.Commands.Abstractions;
+
+public class PaymentRefundedHandler : ICatServiceRequestHandler<PaymentRefunded>
+{
+    private readonly ICatCurrentScopeCommandProcessor _commandProcessor;
+
+    public PaymentRefundedHandler(ICatCurrentScopeCommandProcessor commandProcessor)
+    {
+        _commandProcessor = commandProcessor;
+    }
+
+    public Task<ICatResponse> HandleAsync(PaymentRefunded request, CancellationToken cancellationToken = default)
+    {
+        return _commandProcessor.ProcessInCurrentScopeAsync(new PaymentRefundedSaveCommand(request.OrderNumber), cancellationToken);
+    }
+}
+```
+
+What to know:
+- **Registered with the module.** `AddCatCommandsModule` registers it as scoped, next to `ICatCommandProcessor`.
+- **Both kinds of command.** It runs commands with and without a result.
+- **Calls share the scope.** Two calls in one scope share their scoped services, such as the `DbContext`. Use `ICatCommandProcessor` when each command needs its own.
+- **Async only.** There is no blocking `Process` method.
+
 ### Get a result from a command
 
 Sometimes the caller needs something the command made, such as an order number. There are three ways. They are listed in the order we recommend.

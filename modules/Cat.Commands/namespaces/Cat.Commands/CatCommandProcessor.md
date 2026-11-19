@@ -28,16 +28,17 @@
 
 ## CatCommandProcessor Class
 
-Default [ICatCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')\.
+Default [ICatCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor') and [ICatCurrentScopeCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCurrentScopeCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCurrentScopeCommandProcessor')\.
 Opens a new scope per command, gets the decorated handler from it and invokes the handler\.
+The current scope variant skips the new scope and uses the scope of the caller\.
 
 ```csharp
-internal class CatCommandProcessor : Cat.Commands.Abstractions.ICatCommandProcessor
+internal class CatCommandProcessor : Cat.Commands.Abstractions.ICatCommandProcessor, Cat.Commands.Abstractions.ICatCurrentScopeCommandProcessor
 ```
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatCommandProcessor
 
-Implements [ICatCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')
+Implements [ICatCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor'), [ICatCurrentScopeCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCurrentScopeCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCurrentScopeCommandProcessor')
 
 | Constructors | |
 | :--- | :--- |
@@ -53,6 +54,10 @@ Implements [ICatCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.
 | [InvokeHandler\(MethodInfo, object, object, CancellationToken\)](CatCommandProcessor.InvokeHandler.BZRUWKGR5XGF9THSZES441X68.md 'Cat\.Commands\.CatCommandProcessor\.InvokeHandler\(System\.Reflection\.MethodInfo, object, object, System\.Threading\.CancellationToken\)') | Calls the handler\. An exception thrown by the handler itself reaches the caller as it is, not wrapped in a [System\.Reflection\.TargetInvocationException](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.targetinvocationexception 'System\.Reflection\.TargetInvocationException')\. |
 | [ProcessAsync\(ICatCommand, CancellationToken\)](CatCommandProcessor.ProcessAsync.md#Cat.Commands.CatCommandProcessor.ProcessAsync(Cat.Commands.Abstractions.ICatCommand,System.Threading.CancellationToken) 'Cat\.Commands\.CatCommandProcessor\.ProcessAsync\(Cat\.Commands\.Abstractions\.ICatCommand, System\.Threading\.CancellationToken\)') | Runs a command\. |
 | [ProcessAsync&lt;TResult&gt;\(ICatCommand&lt;TResult&gt;, CancellationToken\)](CatCommandProcessor.ProcessAsync.md#Cat.Commands.CatCommandProcessor.ProcessAsync_TResult_(Cat.Commands.Abstractions.ICatCommand_TResult_,System.Threading.CancellationToken) 'Cat\.Commands\.CatCommandProcessor\.ProcessAsync\<TResult\>\(Cat\.Commands\.Abstractions\.ICatCommand\<TResult\>, System\.Threading\.CancellationToken\)') | Runs a command that returns a result\. |
+| [ProcessInCurrentScopeAsync\(ICatCommand, CancellationToken\)](CatCommandProcessor.ProcessInCurrentScopeAsync.md#Cat.Commands.CatCommandProcessor.ProcessInCurrentScopeAsync(Cat.Commands.Abstractions.ICatCommand,System.Threading.CancellationToken) 'Cat\.Commands\.CatCommandProcessor\.ProcessInCurrentScopeAsync\(Cat\.Commands\.Abstractions\.ICatCommand, System\.Threading\.CancellationToken\)') | Runs a command in the scope of the caller\. |
+| [ProcessInCurrentScopeAsync&lt;TResult&gt;\(ICatCommand&lt;TResult&gt;, CancellationToken\)](CatCommandProcessor.ProcessInCurrentScopeAsync.md#Cat.Commands.CatCommandProcessor.ProcessInCurrentScopeAsync_TResult_(Cat.Commands.Abstractions.ICatCommand_TResult_,System.Threading.CancellationToken) 'Cat\.Commands\.CatCommandProcessor\.ProcessInCurrentScopeAsync\<TResult\>\(Cat\.Commands\.Abstractions\.ICatCommand\<TResult\>, System\.Threading\.CancellationToken\)') | Runs a command that returns a result, in the scope of the caller\. |
+| [RunHandlerAsync\(IServiceProvider, ICatCommand, CancellationToken\)](CatCommandProcessor.RunHandlerAsync.md#Cat.Commands.CatCommandProcessor.RunHandlerAsync(System.IServiceProvider,Cat.Commands.Abstractions.ICatCommand,System.Threading.CancellationToken) 'Cat\.Commands\.CatCommandProcessor\.RunHandlerAsync\(System\.IServiceProvider, Cat\.Commands\.Abstractions\.ICatCommand, System\.Threading\.CancellationToken\)') | |
+| [RunHandlerAsync&lt;TResult&gt;\(IServiceProvider, ICatCommand&lt;TResult&gt;, CancellationToken\)](CatCommandProcessor.RunHandlerAsync.md#Cat.Commands.CatCommandProcessor.RunHandlerAsync_TResult_(System.IServiceProvider,Cat.Commands.Abstractions.ICatCommand_TResult_,System.Threading.CancellationToken) 'Cat\.Commands\.CatCommandProcessor\.RunHandlerAsync\<TResult\>\(System\.IServiceProvider, Cat\.Commands\.Abstractions\.ICatCommand\<TResult\>, System\.Threading\.CancellationToken\)') | |
 
 | Explicit Interface Implementations | |
 | :--- | :--- |

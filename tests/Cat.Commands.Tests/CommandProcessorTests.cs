@@ -199,7 +199,109 @@ public class CommandProcessorTests : UnitTestBase
 
     #endregion Scopes
 
+    #region Current scope
+
+    [Test]
+    public async Task ProcessInCurrentScopeAsync_RunsTheHandlerInTheScopeOfTheCaller()
+    {
+        await using var scope = ServiceProvider.CreateAsyncScope();
+        var callerMarker = scope.ServiceProvider.GetRequiredService<ScopedMarker>();
+        var processor = scope.ServiceProvider.GetRequiredService<ICatCurrentScopeCommandProcessor>();
+
+        var response = await processor.ProcessInCurrentScopeAsync(new RegisterUserCommand("anna"));
+
+        Assert.That(response, CatIs.Succeeded);
+        Assert.That(Recorder.Calls.Single().ScopeId, Is.EqualTo(callerMarker.Id));
+    }
+
+    [Test]
+    public async Task ProcessInCurrentScopeAsync_TwoCallsInOneScope_ShareTheScope()
+    {
+        await using var scope = ServiceProvider.CreateAsyncScope();
+        var processor = scope.ServiceProvider.GetRequiredService<ICatCurrentScopeCommandProcessor>();
+
+        await processor.ProcessInCurrentScopeAsync(new RegisterUserCommand("one"));
+        await processor.ProcessInCurrentScopeAsync(new RegisterUserCommand("two"));
+
+        var scopeIds = Recorder.Calls.Select(c => c.ScopeId).ToList();
+        Assert.That(scopeIds[1], Is.EqualTo(scopeIds[0]));
+    }
+
+    [Test]
+    public async Task ProcessInCurrentScopeAsync_WithAResult_RunsInTheScopeOfTheCallerAndReturnsTheResult()
+    {
+        await using var scope = ServiceProvider.CreateAsyncScope();
+        var callerMarker = scope.ServiceProvider.GetRequiredService<ScopedMarker>();
+        var processor = scope.ServiceProvider.GetRequiredService<ICatCurrentScopeCommandProcessor>();
+        var orderId = Guid.NewGuid();
+
+        var response = await processor.ProcessInCurrentScopeAsync(new CreateOrderCommand(orderId, "anna"));
+
+        Assert.That(response, CatIs.Succeeded);
+        Assert.That(response.Value, Is.EqualTo(new OrderCreated(orderId, 42)));
+        Assert.That(Recorder.Calls.Single().ScopeId, Is.EqualTo(callerMarker.Id));
+    }
+
+    [Test]
+    public async Task ProcessInCurrentScopeAsync_AFailedResponse_IsReturnedWithItsErrors()
+    {
+        await using var scope = ServiceProvider.CreateAsyncScope();
+        var processor = scope.ServiceProvider.GetRequiredService<ICatCurrentScopeCommandProcessor>();
+
+        var response = await processor.ProcessInCurrentScopeAsync(new RegisterUserCommand("fail"));
+
+        Assert.That(response, CatIs.FailedWith(CatResponseType.BadRequest));
+        Assert.That(response.ErrorList.Select(e => e.Code), Is.EqualTo(new[] { "USR-1", "USR-2" }));
+    }
+
+    [Test]
+    public async Task ProcessInCurrentScopeAsync_TheHandlerThrows_TheExceptionReachesTheCaller()
+    {
+        await using var scope = ServiceProvider.CreateAsyncScope();
+        var processor = scope.ServiceProvider.GetRequiredService<ICatCurrentScopeCommandProcessor>();
+
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await processor.ProcessInCurrentScopeAsync(new RegisterUserCommand("throw")));
+
+        Assert.That(exception!.Message, Is.EqualTo("boom"));
+    }
+
+    [Test]
+    public async Task ProcessInCurrentScopeAsync_NoHandlerIsRegistered_Throws()
+    {
+        await using var scope = ServiceProvider.CreateAsyncScope();
+        var processor = scope.ServiceProvider.GetRequiredService<ICatCurrentScopeCommandProcessor>();
+
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await processor.ProcessInCurrentScopeAsync(new UnhandledCommand()));
+    }
+
+    [Test]
+    public async Task ProcessAsync_KeepsOpeningANewScope_EvenWhenTheCallerHasOne()
+    {
+        await using var scope = ServiceProvider.CreateAsyncScope();
+        var callerMarker = scope.ServiceProvider.GetRequiredService<ScopedMarker>();
+        var processor = scope.ServiceProvider.GetRequiredService<ICatCommandProcessor>();
+
+        await processor.ProcessAsync(new RegisterUserCommand("anna"));
+
+        Assert.That(Recorder.Calls.Single().ScopeId, Is.Not.EqualTo(callerMarker.Id));
+    }
+
+    #endregion Current scope
+
     #region Registration
+
+    [Test]
+    public void AddCatCommandsModule_RegistersTheCurrentScopeProcessorAsScoped()
+    {
+        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        services.AddCatCommandsModule(typeof(RegisterUserCommandHandler));
+
+        var descriptor = services.Single(s => s.ServiceType == typeof(ICatCurrentScopeCommandProcessor));
+
+        Assert.That(descriptor.Lifetime, Is.EqualTo(ServiceLifetime.Scoped));
+    }
 
     [Test]
     public void AddCatCommandsModule_RegistersTheProcessorAsScoped()

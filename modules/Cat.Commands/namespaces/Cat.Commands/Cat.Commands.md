@@ -33,4 +33,4 @@ It resolves the matching handler, wraps it in the registered decorators and runs
 
 | Classes | |
 | :--- | :--- |
-| [CatCommandProcessor](CatCommandProcessor.md 'Cat\.Commands\.CatCommandProcessor') | Default [ICatCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor')\. Opens a new scope per command, gets the decorated handler from it and invokes the handler\. |
+| [CatCommandProcessor](CatCommandProcessor.md 'Cat\.Commands\.CatCommandProcessor') | Default [ICatCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCommandProcessor') and [ICatCurrentScopeCommandProcessor](../../../Cat.Commands/namespaces/Cat.Commands.Abstractions/ICatCurrentScopeCommandProcessor.md 'Cat\.Commands\.Abstractions\.ICatCurrentScopeCommandProcessor')\. Opens a new scope per command, gets the decorated handler from it and invokes the handler\. The current scope variant skips the new scope and uses the scope of the caller\. |
