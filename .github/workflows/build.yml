@@ -45,6 +45,7 @@ jobs:
         if: "github.event_name == 'pull_request' || contains(github.event.head_commit.message, 'skip-pub')"
         uses: cake-build/cake-action@v3
         with:
+          cake-version: 7.0.0
           target: Test
           #verbosity: Diagnostic
           arguments: |
@@ -56,6 +57,7 @@ jobs:
         env:
             NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
         with:
+          cake-version: 7.0.0
           target: Publish
           #verbosity: Diagnostic
           arguments: |
