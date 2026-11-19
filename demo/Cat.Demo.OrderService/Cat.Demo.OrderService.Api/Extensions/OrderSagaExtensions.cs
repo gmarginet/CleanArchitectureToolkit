@@ -71,8 +71,8 @@ public static class OrderSagaExtensions
             })
             .Receive<PaymentRefunded>(receive =>
             {
-                // No inbox: setting a payment to Refunded twice changes nothing, and the command processor opens its own scope,
-                // so an inbox row of the receiver would never be saved with the work.
+                // The handler runs its command in the scope of the receiver, so the inbox row is saved with the work.
+                receive.UseInbox = true;
                 if (authenticationOn)
                 {
                     receive.Require(policy => policy.RequireAuthenticatedUser());
