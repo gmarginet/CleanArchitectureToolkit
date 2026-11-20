@@ -74,6 +74,22 @@ public class DbErrorsPostgreSqlIntegrationTests : PostgreSQLDatabaseTests
     }
 
     [Test]
+    public async Task IsTimeout_OnALockThatIsNotGivenInTime_ReturnsTrue()
+    {
+        await ExecuteAsync("DROP TABLE IF EXISTS waiting_rows; CREATE TABLE waiting_rows (id int NOT NULL PRIMARY KEY, value int NOT NULL); INSERT INTO waiting_rows VALUES (1, 0);");
+        await using var holder = new NpgsqlConnection(ConnectionString);
+        await holder.OpenAsync();
+        await using var transaction = await holder.BeginTransactionAsync();
+        await new NpgsqlCommand("UPDATE waiting_rows SET value = 1 WHERE id = 1", holder, transaction).ExecuteNonQueryAsync();
+
+        var error = await Assert.ThrowsAsync<PostgresException>(() => ExecuteAsync("SET lock_timeout = 500; UPDATE waiting_rows SET value = 2 WHERE id = 1;"));
+
+        Assert.That(error.SqlState, Is.EqualTo(CatPostgreSQLErrorCodes.LockNotAvailable));
+        Assert.That(error.IsTimeout(), Is.True);
+        Assert.That(error.IsDeadlock(), Is.False);
+    }
+
+    [Test]
     public async Task IsDeadlock_OnTwoTransactionsThatWaitForEachOther_ReturnsTrueForTheVictim()
     {
         await ExecuteAsync("DROP TABLE IF EXISTS lock_rows; CREATE TABLE lock_rows (id int NOT NULL PRIMARY KEY, value int NOT NULL); INSERT INTO lock_rows VALUES (1, 0), (2, 0);");

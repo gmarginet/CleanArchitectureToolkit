@@ -65,6 +65,22 @@ public class DbErrorsSqlServerIntegrationTests : SqlServerDatabaseTests
     }
 
     [Test]
+    public async Task IsTimeout_OnALockThatIsNotGivenInTime_ReturnsTrue()
+    {
+        await ExecuteAsync("DROP TABLE IF EXISTS dbo.Waiting; CREATE TABLE dbo.Waiting (Id int NOT NULL PRIMARY KEY, Value int NOT NULL); INSERT INTO dbo.Waiting VALUES (1, 0);");
+        await using var holder = new SqlConnection(ConnectionString);
+        await holder.OpenAsync();
+        await using var transaction = (SqlTransaction)await holder.BeginTransactionAsync();
+        await new SqlCommand("UPDATE dbo.Waiting SET Value = 1 WHERE Id = 1", holder, transaction).ExecuteNonQueryAsync();
+
+        var error = await Assert.ThrowsAsync<SqlException>(() => ExecuteAsync("SET LOCK_TIMEOUT 500; UPDATE dbo.Waiting SET Value = 2 WHERE Id = 1;"));
+
+        Assert.That(error.Number, Is.EqualTo(CatSqlServerErrorNumbers.LockRequestTimeout));
+        Assert.That(error.IsTimeout(), Is.True);
+        Assert.That(error.IsDeadlock(), Is.False);
+    }
+
+    [Test]
     public async Task IsDeadlock_OnTwoTransactionsThatWaitForEachOther_ReturnsTrueForTheVictim()
     {
         await ExecuteAsync("DROP TABLE IF EXISTS dbo.Lock; CREATE TABLE dbo.Lock (Id int NOT NULL PRIMARY KEY, Value int NOT NULL); INSERT INTO dbo.Lock VALUES (1, 0), (2, 0);");
