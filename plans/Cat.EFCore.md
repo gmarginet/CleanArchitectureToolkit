@@ -54,10 +54,13 @@ Add PostgreSQL to the module, on top of the provider neutral `Cat.EFCore.Extensi
 - The outbox, the inbox and the scheduler claim store use plain EF Core, with `HasMaxLength`, `HasIndex` and `ExecuteUpdate`. They make no provider call, and nobody has run them on PostgreSQL.
 
 #### Needs
-- A stable Npgsql EF Core provider for EF Core 11, to prove the result on PostgreSQL on .NET 11, see [Phase 13 of the demo](Demo.md#phase-13). The owner decided to wait for the stable version and not to use a release candidate. The provider for EF Core 10 is stable (to check on nuget.org), see question 2.
+- A stable Npgsql EF Core provider for EF Core 11, to prove the result on PostgreSQL on .NET 11, see [Phase 13 of the demo](Demo.md#phase-13). The owner decided to wait for the stable version and not to use a release candidate. The provider for EF Core 10 is stable (to check on nuget.org).
 
 #### Decided
 - **Both versions.** The PostgreSQL project supports EF Core 10 and EF Core 11, like the rest of the module (owner, 2026-11-20).
+- **Build order.** The PostgreSQL project builds for `net10.0` now, and `net11.0` is added when the Npgsql provider for EF Core 11 is stable (owner, 2026-11-20). The demo showcase waits for it, see [Phase 13 of the demo](Demo.md#phase-13).
+- **The keys.** The same as on SQL Server: `Id` is the primary key and `SequenceId` is an identity column with a unique index, both without the clustered part, because PostgreSQL has no clustered index (owner, 2026-11-20). A test on PostgreSQL proves that `SetAfterSaveBehavior(Ignore)` on `SequenceId` works, that Npgsql stores the `Guid` as the native `uuid` type, and that a reference entity of another service works with `Id` as its key. The module readme states the differences between the databases.
+- **A sequential GUID.** `CatEntityBase` creates `Id` with `GuidV7.NewGuid()` of the `SequentialGuid` package, on SQL Server and on PostgreSQL (owner, 2026-11-20). The package has no dependencies and targets `netstandard2.0`, `net10.0` and `net11.0`, so `Cat.EFCore.Entities` stays on `netstandard2.0`, and every developer who references it gets the package. The key shape does not change: `SequenceId` stays the clustered unique index on SQL Server, and `Id` stays the non-clustered primary key. A clustered `Id` with `GuidV7.NewSqlGuid()` instead of `SequenceId` was considered and left out.
 - **A PostgreSQL project.** `Cat.EFCore.Extensions.PostgreSQL` is added next to `Cat.EFCore.Extensions.SqlServer`, with the same method names. The neutral project holds a shared internal helper that the provider projects reach through `InternalsVisibleTo`, and it sets the save behavior of `SequenceId`. Each provider project adds its own key, identity and index calls.
 - **The summary of `CatReferenceEntityBase.Id`.** It says "non-clustered primary key", which only fits SQL Server, so reword it to say "the key".
 - **The reference entity.** `ConfigureCatReferenceEntity` gets a PostgreSQL version on the shared helper of the neutral project, with no clustered call, because someone else owns those tables. Whether the PostgreSQL method keeps a schema parameter is decided when the phase starts.
@@ -69,31 +72,5 @@ A developer can use the base entities on SQL Server and on PostgreSQL, on EF Cor
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-Which column is the primary key on PostgreSQL? The earlier decision for the second database was written for MySQL. It made `SequenceId` the primary key and `Id` a unique key, so the table is clustered on the increasing number and every index stays small on a big table. PostgreSQL does not cluster a table on its primary key. It stores rows in a heap, so that reason does not hold. The options:
-- **The same shape as SQL Server.** `SequenceId` is the primary key and `Id` is an alternate key (`HasAlternateKey`). Cost: no physical gain on PostgreSQL, and a unique index on the GUID that exists anyway. Gain: one shape on every database, so the rest of the module and the generated clients never depend on which column is the key.
-- **`Id` is the primary key and `SequenceId` a unique identity column.** `Find(guid)` then works on PostgreSQL. Cost: the two databases differ in shape, and the GUID keeps the random order of its index unless the provider generates sequential values, to check for Npgsql.
-
-The first option comes with checks, carried over from the MySQL decision:
-- A foreign key that points at `Id` keeps working through the alternate key, to check when building. The check includes a reference entity of another service: its model uses `Id` as the key, and the foreign key of the other service points at the unique key `Id`, so a test proves that the migration works with Npgsql.
-- The neutral `Configure` sets `SetAfterSaveBehavior(Ignore)` on `SequenceId`, and EF Core may reject that on a property that is part of a key, so a test on PostgreSQL proves it, and the line moves to the SQL Server action when it fails.
-- `Find(guid)` does not work on PostgreSQL, see the lookup methods.
-- Check how Npgsql stores a `Guid`. It should be the native `uuid` type (to check).
-- The module readme states the differences between the databases.
-
-Recommendation: the same shape as SQL Server. PostgreSQL gains nothing from the other shape, one shape keeps the shared helper simple, and the lookup methods already hide which column is the key.
-<!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-Does the PostgreSQL project wait for the Npgsql provider of EF Core 11? The provider of EF Core 10 is stable (to check), and the one of EF Core 11 has no stable release yet. The options:
-- **Build for `net10.0` now, and add `net11.0` when the provider is stable.** The project targets `net10.0` only for a while. Cost: the module has no PostgreSQL proof on EF Core 11 until then. Gain: the module work does not wait for a release without a date, and only the demo waits, because it stays on `net11.0`.
-- **Wait for both.** Cost: the whole phase waits for the provider of EF Core 11.
-
-Recommendation: build for `net10.0` now. The module and its tests get a real PostgreSQL early, and the second target framework is a project file change when the provider arrives. The demo showcase still waits, as decided in [Phase 13 of the demo](Demo.md#phase-13).
-##### Answer 2
-As recommended
-<!-- region end: Question 2-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->
