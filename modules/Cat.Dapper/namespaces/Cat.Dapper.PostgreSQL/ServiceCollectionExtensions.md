@@ -1,0 +1,41 @@
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>
+<table>
+    <tr>
+        <td colspan='6' style='text-align: center; font-weight: bold; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+             Clean Architecture Toolkit for .NET
+        </td>
+    </tr>
+    <tr>
+        <td colspan='5' style='padding: 0; vertical-align: middle; border: none;'>
+            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>
+            It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>
+        <td style='padding: 0; border: none;' width='220'>
+            <img src='../../../../resources/logo/CatLogo.svg' alt='' width='200' style='padding: 15px; float: right; background: #121314; border-radius: 10px'/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../../../../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../../../../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../../../../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[CAT.DAPPER](../../README.md)&nbsp;&nbsp;&nbsp;&#124;
+
+</td>
+</tr>
+</table>
+
+# Code Reference  
+  
+##### >> [Cat\.Dapper\.PostgreSQL Assembly](index.md 'index') >> [Cat\.Dapper\.PostgreSQL\.Extensions Namespace](Cat.Dapper.PostgreSQL.Extensions.md 'Cat\.Dapper\.PostgreSQL\.Extensions')
+
+## ServiceCollectionExtensions Class
+
+Registration helpers for Dapper on PostgreSQL\.
+
+```csharp
+public static class ServiceCollectionExtensions
+```
+
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → ServiceCollectionExtensions
+
+| Methods | |
+| :--- | :--- |
+| [AddCatDapperPostgreSQL\(this IServiceCollection, string\)](ServiceCollectionExtensions.AddCatDapperPostgreSQL.EECAZWNJU7WLT6IQL5T7S2N7E.md 'Cat\.Dapper\.PostgreSQL\.Extensions\.ServiceCollectionExtensions\.AddCatDapperPostgreSQL\(this Microsoft\.Extensions\.DependencyInjection\.IServiceCollection, string\)') | Registers the PostgreSQL connection factory as a singleton, with the connection string, and the scoped session of [AddCatDapperModule\(this IServiceCollection\)](../../../Cat.Dapper/namespaces/Cat.Dapper/ServiceCollectionExtensions.AddCatDapperModule.30WTJV7WW5Q08S8MUTXEA3G59.md 'Cat\.Dapper\.Extensions\.ServiceCollectionExtensions\.AddCatDapperModule\(Microsoft\.Extensions\.DependencyInjection\.IServiceCollection\)')\. |

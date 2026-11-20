@@ -39,7 +39,6 @@
 <!-- region start: Phases-->
 <!-- no toc -->
 - [Phase 3](#phase-3)
-- [Phase 4](#phase-4)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 3-->
@@ -65,6 +64,8 @@ What does the developer pass as the rows of a bulk call? The options:
 - **An `IDataReader`.** Cost: only fits a developer who already has a reader, such as a copy from one database to another.
 
 Recommendation: a list of objects as the main way, and an `IDataReader` as a second overload, because `SqlBulkCopy` streams from a reader and a reader fits a big copy without holding every row in memory. Leave the `DataTable` out. It adds nothing a list does not give.
+##### Answer 9
+As recommended
 <!-- region end: Question 9-->
 
 <!-- region start: Question 10-->
@@ -78,6 +79,8 @@ And for the safety of the name:
 - **Quote it.** The module wraps every name in brackets and refuses a name that holds a bracket. Cost: none worth the name.
 
 Recommendation: the convention with an optional column list, and the quoting always. A bulk call then reads `BulkInsertAsync(rows, "dbo.Orders")`. The mapping object is more than a showcase needs.
+##### Answer 10
+As recommended
 <!-- region end: Question 10-->
 
 <!-- region start: Question 11-->
@@ -88,6 +91,8 @@ For update, delete and merge, how do the rows reach the database before the stat
 - **Batched statements.** One statement with parameters for each batch. Cost: SQL Server allows 2100 parameters in one request, so a large set takes many round trips, and it is the slow path that a bulk call is meant to avoid.
 
 Recommendation: the staging table. It needs nothing in the database, it reuses the `SqlBulkCopy` path of the insert, and the target gets one statement for all rows.
+##### Answer 11
+As recommended
 <!-- region end: Question 11-->
 
 <!-- region start: Question 12-->
@@ -101,6 +106,8 @@ And for the size of a batch and the timeout:
 - **No settings.** Cost: a developer with a very large set cannot tune it.
 
 Recommendation: use the transaction of the session when one runs, and none otherwise, so the developer decides and the module does not hide a transaction. Add the batch size and timeout as optional arguments, because a bulk load is where a developer needs them.
+##### Answer 12
+As recommended
 <!-- region end: Question 12-->
 
 <!-- region start: Question 13-->
@@ -114,6 +121,8 @@ And for the generated values, such as an identity column or a default:
 - **Returned with `OUTPUT`.** Only possible with the staging table. Cost: the slower path.
 
 Recommendation: `SqlBulkCopy` straight into the target, returning the row count. A developer who needs generated ids gives the key values themselves, such as a `Guid`.
+##### Answer 13
+As recommended
 <!-- region end: Question 13-->
 
 <!-- region start: Question 14-->
@@ -155,39 +164,9 @@ How do we prove the bulk operations? The module decided it has no tests of the S
 - **Tests against a real SQL Server in a container.** Cost: Docker for every developer and for the build workflow, and a slower test run.
 - **A small use in the demo anyway.** Cost: the demo gets a case it does not need.
 
-`Cat.Dapper.MySql` (built) has unit tests only, because it has no bulk operations and its paging is not proven on a real MySQL. `Cat.Dapper.PostgreSQL` of [phase 4](#phase-4) starts the same way. When this question chooses containers, add a MySQL and a PostgreSQL container to the same test project, so the build gets a container once and not per database.
+`Cat.Dapper.MySql` (built) has unit tests only, because it has no bulk operations and its paging is not proven on a real MySQL. `Cat.Dapper.PostgreSQL` (built) starts the same way, with unit tests only. When this question chooses containers, add a MySQL and a PostgreSQL container to the same test project, so the build gets a container once and not per database.
 
 Recommendation: the unit tests of the generated SQL text, plus the tests against a container for the four operations only, kept in one test project, so the part that is easiest to get wrong runs against the real database. Check what the build workflow supports before you decide.
 <!-- region end: Question 17-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 3-->
-
-<!-- region start: Phase 4-->
-## Phase 4
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-PostgreSQL support for `Cat.Dapper`, next to SQL Server and MySQL. The second database of the demo showcase is PostgreSQL, see [Phase 13 of the demo](Demo.md#phase-13).
-
-#### What exists today
-- `Cat.Dapper.SqlServer` and `Cat.Dapper.MySql` each hold a connection factory and a paging helper, and each references the error checks of its database. Both target `netstandard2.0`.
-- `Cat.Dapper.MySql` references `Cat.Db.Errors.MySql`, so MySQL support is complete only with both projects.
-- The driver is the Npgsql ADO.NET package. This phase does not need the Npgsql EF Core provider, so it does not wait for EF Core 11.
-
-#### Needs
-- `Cat.Db.Errors.PostgreSQL`, the PostgreSQL error checks that the project references, see [Cat.Db.Errors.md](Cat.Db.Errors.md#phase-1).
-
-#### Decided
-- **A new project.** `Cat.Dapper.PostgreSQL` is added next to `Cat.Dapper.SqlServer` and `Cat.Dapper.MySql` (owner, 2026-11-20).
-- **MySQL stays.** `Cat.Dapper.MySql` and `Cat.Db.Errors.MySql` are kept (owner, 2026-11-20).
-- **Target framework.** `net10.0;net11.0`. The rule is `netstandard2.0` if the packages allow it, and otherwise `net10.0;net11.0` (owner, 2026-11-20). Npgsql 10.0.3 targets `net8.0`, `net9.0` and `net10.0` only, read on nuget.org on 2026-11-20, so `netstandard2.0` is not possible. The version of Npgsql for `net11.0` is to check.
-
-#### Done when
-A developer can register `Cat.Dapper` on PostgreSQL, page a result and ask an exception what happened, with the same check names as on the other two databases. The module readme says how.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 4-->

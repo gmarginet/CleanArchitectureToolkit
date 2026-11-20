@@ -61,6 +61,7 @@ A handler asks a session for the connection, runs a statement and returns a resp
 | [Cat.Dapper.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Dapper.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Dapper.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Dapper.Abstractions/) |
 | [Cat.Dapper](https://www.nuget.org/packages/gmarginet.Cat.Dapper/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Dapper` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper)](https://www.nuget.org/packages/gmarginet.Cat.Dapper/) |
 | [Cat.Dapper.MySql](https://www.nuget.org/packages/gmarginet.Cat.Dapper.MySql/) | MySQL support | netstandard2.0 | `dotnet add package gmarginet.Cat.Dapper.MySql` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.MySql)](https://www.nuget.org/packages/gmarginet.Cat.Dapper.MySql/) |
+| [Cat.Dapper.PostgreSQL](https://www.nuget.org/packages/gmarginet.Cat.Dapper.PostgreSQL/) | PostgreSQL support | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Dapper.PostgreSQL` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.PostgreSQL)](https://www.nuget.org/packages/gmarginet.Cat.Dapper.PostgreSQL/) |
 | [Cat.Dapper.SqlFiles](https://www.nuget.org/packages/gmarginet.Cat.Dapper.SqlFiles/) | Optional source generator | netstandard2.0 | `dotnet add package gmarginet.Cat.Dapper.SqlFiles` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.SqlFiles)](https://www.nuget.org/packages/gmarginet.Cat.Dapper.SqlFiles/) |
 | [Cat.Dapper.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.Dapper.SqlServer/) | SQL Server support | netstandard2.0 | `dotnet add package gmarginet.Cat.Dapper.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.SqlServer)](https://www.nuget.org/packages/gmarginet.Cat.Dapper.SqlServer/) |
 
@@ -74,6 +75,7 @@ A handler asks a session for the connection, runs a statement and returns a resp
 | [Cat.Dapper.Abstractions](namespaces/Cat.Dapper.Abstractions/index.md) | The factory that creates connections and the session that holds one connection and its transaction. |
 | [Cat.Dapper](namespaces/Cat.Dapper/index.md) | The session, the base classes for query and command handlers and the extension methods that run SQL with Dapper. |
 | [Cat.Dapper.MySql](namespaces/Cat.Dapper.MySql/index.md) | The MySQL connection factory and a paging helper that returns an `ICatPagedList`. |
+| [Cat.Dapper.PostgreSQL](namespaces/Cat.Dapper.PostgreSQL/index.md) | The PostgreSQL connection factory and a paging helper that returns an `ICatPagedList`. |
 | [Cat.Dapper.SqlFiles](namespaces/Cat.Dapper.SqlFiles/index.md) | The source generator that turns the `.sql` files next to a handler into constants of that handler. |
 | [Cat.Dapper.SqlServer](namespaces/Cat.Dapper.SqlServer/index.md) | The SQL Server connection factory and a paging helper that returns an `ICatPagedList`. |
 
@@ -87,7 +89,7 @@ A handler asks a session for the connection, runs a statement and returns a resp
 | [Cat.Queries](../Cat.Queries/README.md) | The query handler base class implements the handler interface of `Cat.Queries.Abstractions`. |
 | [Cat.Commands](../Cat.Commands/README.md) | The command handler base classes implement the handler interfaces of `Cat.Commands.Abstractions`. |
 | [Cat.Responses](../Cat.Responses/README.md) | Handlers return a response, and the paging helper returns an `ICatPagedList`. |
-| [Cat.Db.Errors](../Cat.Db.Errors/README.md) | `Cat.Dapper.SqlServer` and `Cat.Dapper.MySql` use the error checks of their database, so the handler can tell a unique key violation from a deadlock. |
+| [Cat.Db.Errors](../Cat.Db.Errors/README.md) | `Cat.Dapper.SqlServer`, `Cat.Dapper.MySql` and `Cat.Dapper.PostgreSQL` use the error checks of their database, so the handler can tell a unique key violation from a deadlock. |
 
 <!-- region end: Dependencies-->
 
@@ -114,7 +116,15 @@ using Cat.Dapper.MySql.Extensions;
 services.AddCatDapperMySql(connectionString);
 ```
 
-Another database adds its own project next to these two. It registers an `ICatDbConnectionFactory` and the neutral `Cat.Dapper` project stays the same. When a service already registers a factory, `AddCatDapperModule` keeps it.
+On PostgreSQL, use `Cat.Dapper.PostgreSQL`. It has `AddCatDapperPostgreSQL` and uses the Npgsql driver. It targets `net10.0` and `net11.0`, because Npgsql has no `netstandard2.0` build. It has no bulk operations either. The paging helper uses `LIMIT` and `OFFSET`, the same as on MySQL.
+
+```csharp
+using Cat.Dapper.PostgreSQL.Extensions;
+
+services.AddCatDapperPostgreSQL(connectionString);
+```
+
+Another database adds its own project next to these. It registers an `ICatDbConnectionFactory` and the neutral `Cat.Dapper` project stays the same. When a service already registers a factory, `AddCatDapperModule` keeps it.
 
 ### Write a query handler
 Inherit `CatDapperQueryHandlerBase`. The `Session` property is the session of the scope. Keep the SQL in a constant of the handler class, with a raw string literal.

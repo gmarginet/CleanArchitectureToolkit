@@ -1,0 +1,16 @@
+../../../Cat.Db.Errors/namespaces/Cat.Db.Errors.PostgreSQL/
+F:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorCodes.UniqueViolation|CatPostgreSQLErrorCodes.UniqueViolation.md|UniqueViolation
+F:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorCodes.ForeignKeyViolation|CatPostgreSQLErrorCodes.ForeignKeyViolation.md|ForeignKeyViolation
+F:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorCodes.DeadlockDetected|CatPostgreSQLErrorCodes.DeadlockDetected.md|DeadlockDetected
+F:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorCodes.QueryCanceled|CatPostgreSQLErrorCodes.QueryCanceled.md|QueryCanceled
+F:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorCodes.LockNotAvailable|CatPostgreSQLErrorCodes.LockNotAvailable.md|LockNotAvailable
+N:Cat.Db.Errors.PostgreSQL|Cat.Db.Errors.PostgreSQL.md|Cat.Db.Errors.PostgreSQL
+T:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorCodes|CatPostgreSQLErrorCodes.md|CatPostgreSQLErrorCodes
+M:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorExtensions.FindPostgresException(System.Exception)|CatPostgreSQLErrorExtensions.FindPostgresException.HWX1NJHDGC676W6UCLIZ3HI7D.md|FindPostgresException(this Exception)
+M:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorExtensions.IsUniqueViolation(System.Exception)|CatPostgreSQLErrorExtensions.IsUniqueViolation.6ATS5P80X97KUQKZUZ1F97EA3.md|IsUniqueViolation(this Exception)
+M:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorExtensions.IsForeignKeyViolation(System.Exception)|CatPostgreSQLErrorExtensions.IsForeignKeyViolation.AJCQLMEE1FVZFFHD23YYW1QO8.md|IsForeignKeyViolation(this Exception)
+M:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorExtensions.IsDeadlock(System.Exception)|CatPostgreSQLErrorExtensions.IsDeadlock.IUEBL665HXKCFGWMT315D4TZE.md|IsDeadlock(this Exception)
+M:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorExtensions.IsTimeout(System.Exception)|CatPostgreSQLErrorExtensions.IsTimeout.EKDQY945XKWM0D3ILPLRLVBP.md|IsTimeout(this Exception)
+M:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorExtensions.GetSqlState(System.Exception)|CatPostgreSQLErrorExtensions.GetSqlState.NSH037JBFDL8JV7PJ8ZAC7WN.md|GetSqlState(this Exception)
+M:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorExtensions.HasTimeoutException(System.Exception)|CatPostgreSQLErrorExtensions.HasTimeoutException.CQNSJYW49217SFBPLFK05SBC2.md|HasTimeoutException(this Exception)
+T:Cat.Db.Errors.PostgreSQL.CatPostgreSQLErrorExtensions|CatPostgreSQLErrorExtensions.md|CatPostgreSQLErrorExtensions

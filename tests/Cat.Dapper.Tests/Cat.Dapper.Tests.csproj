@@ -34,6 +34,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper.Abstractions\Cat.Dapper.Abstractions.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper.MySql\Cat.Dapper.MySql.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper.PostgreSQL\Cat.Dapper.PostgreSQL.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper.SqlFiles\Cat.Dapper.SqlFiles.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper.SqlServer\Cat.Dapper.SqlServer.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Dapper\Cat.Dapper\Cat.Dapper.csproj" />

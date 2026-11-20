@@ -1,0 +1,15 @@
+../../../Cat.Dapper/namespaces/Cat.Dapper.PostgreSQL/
+F:Cat.Dapper.PostgreSQL.PostgreSQLConnectionFactory._connectionString|PostgreSQLConnectionFactory._connectionString.md|_connectionString
+M:Cat.Dapper.PostgreSQL.PostgreSQLConnectionFactory.#ctor(System.String)|PostgreSQLConnectionFactory..ctor.YLLNZVGTSKJ98SU02A8DPRHZ8.md|PostgreSQLConnectionFactory(string)
+M:Cat.Dapper.PostgreSQL.PostgreSQLConnectionFactory.CreateConnection|PostgreSQLConnectionFactory.CreateConnection().md|CreateConnection()
+N:Cat.Dapper.PostgreSQL|Cat.Dapper.PostgreSQL.md|Cat.Dapper.PostgreSQL
+T:Cat.Dapper.PostgreSQL.PostgreSQLConnectionFactory|PostgreSQLConnectionFactory.md|PostgreSQLConnectionFactory
+F:Cat.Dapper.PostgreSQL.PostgreSQLPagingExtensions.SkipParameter|PostgreSQLPagingExtensions.SkipParameter.md|SkipParameter
+F:Cat.Dapper.PostgreSQL.PostgreSQLPagingExtensions.TakeParameter|PostgreSQLPagingExtensions.TakeParameter.md|TakeParameter
+M:Cat.Dapper.PostgreSQL.PostgreSQLPagingExtensions.QueryPagedAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.String,System.String,System.Int32,System.Int32,System.Object,System.Threading.CancellationToken)|PostgreSQLPagingExtensions.QueryPagedAsync.18WEJMPYXTL0BUHYI2VAUT9L7.md|QueryPagedAsync<T>(this ICatDbSession, string, string, int, int, object, CancellationToken)
+M:Cat.Dapper.PostgreSQL.PostgreSQLPagingExtensions.CalculateSkip(System.Int32,System.Int32)|PostgreSQLPagingExtensions.CalculateSkip.UQ0XXGNHB1C8D5CA6VHC11E22.md|CalculateSkip(int, int)
+M:Cat.Dapper.PostgreSQL.PostgreSQLPagingExtensions.BuildSql(System.String,System.String)|PostgreSQLPagingExtensions.BuildSql.Q8L2K6CTVTGTCO9039IA9V9A8.md|BuildSql(string, string)
+T:Cat.Dapper.PostgreSQL.PostgreSQLPagingExtensions|PostgreSQLPagingExtensions.md|PostgreSQLPagingExtensions
+M:Cat.Dapper.PostgreSQL.Extensions.ServiceCollectionExtensions.AddCatDapperPostgreSQL(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)|ServiceCollectionExtensions.AddCatDapperPostgreSQL.EECAZWNJU7WLT6IQL5T7S2N7E.md|AddCatDapperPostgreSQL(this IServiceCollection, string)
+N:Cat.Dapper.PostgreSQL.Extensions|Cat.Dapper.PostgreSQL.Extensions.md|Cat.Dapper.PostgreSQL.Extensions
+T:Cat.Dapper.PostgreSQL.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

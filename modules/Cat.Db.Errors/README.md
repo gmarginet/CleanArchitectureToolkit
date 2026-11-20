@@ -32,7 +32,7 @@
 # Cat.Db.Errors <!-- omit in toc -->  
 
 <!-- region start: Intro-->
-Cat.Db.Errors recognizes database errors by their error number. Ask an exception if it is a unique key violation, a foreign key violation, a deadlock or a timeout, instead of writing the number in your handler.
+Cat.Db.Errors recognizes database errors by their error number or error code. Ask an exception if it is a unique key violation, a foreign key violation, a deadlock or a timeout, instead of writing the number in your handler.
 
 There is one project per database. Entity Framework Core and Dapper code share the same checks, because the module references neither of them.  
 <!-- region end: Intro-->
@@ -53,6 +53,7 @@ There is one project per database. Entity Framework Core and Dapper code share t
 | Package | Role | Targets | Install | Downloads |
 |---------|------|---------|---------|-----------|
 | [Cat.Db.Errors.MySql](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.MySql/) | MySQL error checks | netstandard2.0 | `dotnet add package gmarginet.Cat.Db.Errors.MySql` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Db.Errors.MySql)](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.MySql/) |
+| [Cat.Db.Errors.PostgreSQL](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.PostgreSQL/) | PostgreSQL error checks | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Db.Errors.PostgreSQL` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Db.Errors.PostgreSQL)](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.PostgreSQL/) |
 | [Cat.Db.Errors.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.SqlServer/) | SQL Server error checks | netstandard2.0 | `dotnet add package gmarginet.Cat.Db.Errors.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Db.Errors.SqlServer)](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.SqlServer/) |
 
 <!-- region end: NuGet-->
@@ -63,6 +64,7 @@ There is one project per database. Entity Framework Core and Dapper code share t
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Db.Errors.MySql](namespaces/Cat.Db.Errors.MySql/index.md) | The error numbers and the extension methods that recognize MySQL errors. |
+| [Cat.Db.Errors.PostgreSQL](namespaces/Cat.Db.Errors.PostgreSQL/index.md) | The error codes and the extension methods that recognize PostgreSQL errors. |
 | [Cat.Db.Errors.SqlServer](namespaces/Cat.Db.Errors.SqlServer/index.md) | The error numbers and the extension methods that recognize SQL Server errors. |
 
 <!-- region end: Namespaces-->
@@ -103,7 +105,7 @@ catch (Exception ex) when (ex.IsDeadlock())
 ```
 
 ### The checks
-All checks are extension methods on `Exception`. A `null` exception, or one without an exception of the database inside, gives `false`. Pick the project of your database. The checks have the same names in both, and they sit in different namespaces: `Cat.Db.Errors.SqlServer` and `Cat.Db.Errors.MySql`.
+All checks are extension methods on `Exception`. A `null` exception, or one without an exception of the database inside, gives `false`. Pick the project of your database. The checks have the same names in all projects, and they sit in different namespaces: `Cat.Db.Errors.SqlServer`, `Cat.Db.Errors.MySql` and `Cat.Db.Errors.PostgreSQL`.
 
 The SQL Server checks:
 
@@ -129,4 +131,17 @@ The MySQL checks:
 
 `FindMySqlException` returns the first `MySqlException` in the chain of the exception, or `null`. The numbers are public constants in `CatMySqlErrorNumbers`, for your own pattern match.
 
-The project references `MySqlConnector`, the driver under Pomelo, and reads `MySqlException.ErrorCode`. It makes no call to the database.<!-- region end: Usage-->
+The project references `MySqlConnector`, the driver under Pomelo, and reads `MySqlException.ErrorCode`. It makes no call to the database.
+
+The PostgreSQL checks:
+
+| Method | Error codes | Meaning |
+|--------|-------------|---------|
+| `IsUniqueViolation` | 23505 | A unique constraint, primary key or unique index was violated. |
+| `IsForeignKeyViolation` | 23503 | A foreign key constraint was violated. |
+| `IsDeadlock` | 40P01 | The transaction was chosen as the deadlock victim. |
+| `IsTimeout` | 57014, 55P03, `TimeoutException` | The server cancelled the statement, a lock was not available, or the command timed out in the client. |
+
+`FindPostgresException` returns the first `PostgresException` in the chain of the exception, or `null`. A PostgreSQL error is identified by a five character SQLSTATE code, which is text, so the public constants are in `CatPostgreSQLErrorCodes` and not in a class with numbers like the other two projects. Use them for your own pattern match on `PostgresException.SqlState`.
+
+The project references `Npgsql` and reads `PostgresException.SqlState`. It makes no call to the database. A command timeout of the client arrives as a `TimeoutException` inside an `NpgsqlException`, and the check looks for it in the whole chain.<!-- region end: Usage-->

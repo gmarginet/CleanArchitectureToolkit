@@ -82,6 +82,7 @@
     <File Path="modules/Cat.Dapper/README.md" />
     <Project Path="modules/Cat.Dapper/Cat.Dapper.Abstractions/Cat.Dapper.Abstractions.csproj" />
     <Project Path="modules/Cat.Dapper/Cat.Dapper.MySql/Cat.Dapper.MySql.csproj" />
+    <Project Path="modules/Cat.Dapper/Cat.Dapper.PostgreSQL/Cat.Dapper.PostgreSQL.csproj" />
     <Project Path="modules/Cat.Dapper/Cat.Dapper.SqlFiles/Cat.Dapper.SqlFiles.csproj" />
     <Project Path="modules/Cat.Dapper/Cat.Dapper.SqlServer/Cat.Dapper.SqlServer.csproj" />
     <Project Path="modules/Cat.Dapper/Cat.Dapper/Cat.Dapper.csproj" />
@@ -89,6 +90,7 @@
   <Folder Name="/modules/Cat.Db.Errors/">
     <File Path="modules/Cat.Db.Errors/README.md" />
     <Project Path="modules/Cat.Db.Errors/Cat.Db.Errors.MySql/Cat.Db.Errors.MySql.csproj" />
+    <Project Path="modules/Cat.Db.Errors/Cat.Db.Errors.PostgreSQL/Cat.Db.Errors.PostgreSQL.csproj" />
     <Project Path="modules/Cat.Db.Errors/Cat.Db.Errors.SqlServer/Cat.Db.Errors.SqlServer.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.Decorators/">
@@ -217,6 +219,7 @@
     <Project Path="tests/Cat.Commands.Tests/Cat.Commands.Tests.csproj" />
     <Project Path="tests/Cat.Dapper.Tests/Cat.Dapper.Tests.csproj" />
     <Project Path="tests/Cat.Db.Errors.MySql.Tests/Cat.Db.Errors.MySql.Tests.csproj" />
+    <Project Path="tests/Cat.Db.Errors.PostgreSQL.Tests/Cat.Db.Errors.PostgreSQL.Tests.csproj" />
     <Project Path="tests/Cat.Db.Errors.SqlServer.Tests/Cat.Db.Errors.SqlServer.Tests.csproj" />
     <Project Path="tests/Cat.Decorators.Tests/Cat.Decorators.Tests.csproj" />
     <Project Path="tests/Cat.EFCore.Tests/Cat.EFCore.Tests.csproj" />
