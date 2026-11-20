@@ -7,6 +7,8 @@ Jekyll theme for the Clean Architecture Toolkit GitHub Pages.
 - Adds no header text of its own, so the header table of each readme is the only header.
 - Shows a `View on GitHub` button in a slim top bar.
 - Sets the favicon and the touch icon from `resources/icon`.
+- Opens the links to nuget.org packages in a new tab.
+- Adds a copy button to every code block and to the install command in the package tables.
 
 ## How it is used
 

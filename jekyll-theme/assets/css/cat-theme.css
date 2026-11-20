@@ -235,8 +235,23 @@ pre::-webkit-scrollbar-thumb:hover {
 }
 
 .code-block:hover .copy-button,
+.inline-copy:hover .copy-button,
 .copy-button:focus-visible {
     opacity: 1;
+}
+
+/* The button next to the install command in the package tables */
+.inline-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.copy-button.inline {
+    position: static;
+    flex: none;
+    width: 24px;
+    height: 24px;
 }
 
 .copy-button:hover {
