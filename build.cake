@@ -54,6 +54,27 @@ Task("Test")
      }
 });
 
+// The integration tests start containers, so they need Docker. They never run with the Test target.
+// The projects are named *.IntegrationTests.csproj, which the pattern *.Tests.csproj of the Test target does not match.
+Task("IntegrationTest")
+    .IsDependentOn("Build")
+    .Does(context =>
+{
+     var settings = new DotNetTestSettings
+     {
+         Configuration = configuration,
+         NoBuild = true
+     };
+
+     var projectFiles = GetFiles("./integrationtests/**/*.IntegrationTests.csproj")
+         .Concat(GetFiles("./demo/**/*.IntegrationTests.csproj"));
+     foreach (var file in projectFiles)
+     {
+        context.Information("Integration testing {0}", file.FullPath);
+         DotNetTest(file.FullPath, settings);
+     }
+});
+
 Task("Pack")
     .IsDependentOn("Test")
     .Does(context =>

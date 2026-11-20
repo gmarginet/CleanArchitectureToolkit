@@ -28,6 +28,10 @@
 
 ## Cat\.Db\.Errors\.PostgreSQL Namespace
 
+Recognizes PostgreSQL errors by their SQL state, such as a unique key violation, a foreign key violation,
+a deadlock or a timeout\. The checks work on any exception that has a PostgreSQL exception inside, so they also work
+on the exception that Entity Framework Core throws around it\.
+
 | Classes | |
 | :--- | :--- |
 | [CatPostgreSQLErrorCodes](CatPostgreSQLErrorCodes.md 'Cat\.Db\.Errors\.PostgreSQL\.CatPostgreSQLErrorCodes') | The PostgreSQL error codes that [CatPostgreSQLErrorExtensions](CatPostgreSQLErrorExtensions.md 'Cat\.Db\.Errors\.PostgreSQL\.CatPostgreSQLErrorExtensions') looks for\. PostgreSQL reports a five character SQLSTATE code, so these constants are text and not numbers\. Use them when you need the code itself, for example in your own pattern match\. |

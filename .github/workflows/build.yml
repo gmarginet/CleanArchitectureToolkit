@@ -9,8 +9,30 @@ on:
       - master
 
 jobs:
+  integration-test:
+    name: Run the integration tests
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: codebeltnet/git-checkout@v1
+
+      # The integration tests start SQL Server and PostgreSQL in containers with Testcontainers.
+      # The ubuntu-latest runner has Docker. The CI environment variable is set by GitHub, so a missing Docker fails the tests.
+      - name: Install .NET
+        uses: codebeltnet/install-dotnet@v3
+
+      - name: Run Cake build - IntegrationTest
+        uses: cake-build/cake-action@v3
+        with:
+          cake-version: 7.0.0
+          target: IntegrationTest
+
   release:
     name: Publish CAT nuget packages
+    needs: integration-test
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
     runs-on: ubuntu-latest
     permissions:

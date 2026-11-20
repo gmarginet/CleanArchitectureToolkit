@@ -1,0 +1,24 @@
+../../../Cat.IntegrationTesting/namespaces/Cat.IntegrationTesting.SqlServer/
+F:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.DefaultImage|SqlServerTestContainer.DefaultImage.md|DefaultImage
+F:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.SharedContainer|SqlServerTestContainer.SharedContainer.md|SharedContainer
+F:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.SharedAgentContainer|SqlServerTestContainer.SharedAgentContainer.md|SharedAgentContainer
+F:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer._image|SqlServerTestContainer._image.md|_image
+F:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer._enableAgent|SqlServerTestContainer._enableAgent.md|_enableAgent
+F:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer._gate|SqlServerTestContainer._gate.md|_gate
+F:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer._start|SqlServerTestContainer._start.md|_start
+P:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.Shared|SqlServerTestContainer.Shared.md|Shared
+P:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.SharedWithAgent|SqlServerTestContainer.SharedWithAgent.md|SharedWithAgent
+M:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.#ctor(System.String,System.Boolean)|SqlServerTestContainer..ctor.RMFKKIRGXRBEY7PUJFVL5E93.md|SqlServerTestContainer(string, bool)
+M:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.CreateDatabaseAsync(System.Threading.CancellationToken)|SqlServerTestContainer.CreateDatabaseAsync.Z4RMFALQO6Y9N29HOKA7E9CZ.md|CreateDatabaseAsync(CancellationToken)
+M:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.DisposeAsync|SqlServerTestContainer.DisposeAsync().md|DisposeAsync()
+M:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.StartAsync|SqlServerTestContainer.StartAsync().md|StartAsync()
+M:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.StartContainerAsync|SqlServerTestContainer.StartContainerAsync().md|StartContainerAsync()
+M:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.WaitForAgentAsync(System.String)|SqlServerTestContainer.WaitForAgentAsync.PAI8B04IJ3872NJUDCFR7SUM6.md|WaitForAgentAsync(string)
+N:Cat.IntegrationTesting.SqlServer|Cat.IntegrationTesting.SqlServer.md|Cat.IntegrationTesting.SqlServer
+T:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer|SqlServerTestContainer.md|SqlServerTestContainer
+F:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.Database._master|SqlServerTestContainer.Database._master.md|_master
+P:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.Database.Name|SqlServerTestContainer.Database.Name.md|Name
+P:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.Database.ConnectionString|SqlServerTestContainer.Database.ConnectionString.md|ConnectionString
+M:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.Database.#ctor(System.String,System.String,System.String)|SqlServerTestContainer.Database..ctor.Y5JEXBDM1XY4VUL2VHKYEUIWB.md|Database(string, string, string)
+M:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.Database.DisposeAsync|SqlServerTestContainer.Database.DisposeAsync().md|DisposeAsync()
+T:Cat.IntegrationTesting.SqlServer.SqlServerTestContainer.Database|SqlServerTestContainer.Database.md|Database

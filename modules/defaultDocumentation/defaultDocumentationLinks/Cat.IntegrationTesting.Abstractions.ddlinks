@@ -1,0 +1,12 @@
+../../../Cat.IntegrationTesting/namespaces/Cat.IntegrationTesting.Abstractions/
+M:Cat.IntegrationTesting.CatContainerUnavailableException.#ctor(System.String,System.Exception)|CatContainerUnavailableException..ctor.KF16STFOY06PN876YKMPEASU8.md|CatContainerUnavailableException(string, Exception)
+N:Cat.IntegrationTesting|Cat.IntegrationTesting.md|Cat.IntegrationTesting
+T:Cat.IntegrationTesting.CatContainerUnavailableException|CatContainerUnavailableException.md|CatContainerUnavailableException
+P:Cat.IntegrationTesting.CatTestEnvironment.IsContinuousIntegration|CatTestEnvironment.IsContinuousIntegration.md|IsContinuousIntegration
+M:Cat.IntegrationTesting.CatTestEnvironment.IsContinuousIntegrationValue(System.String)|CatTestEnvironment.IsContinuousIntegrationValue.QYQGX9N31BWOY1K5UU5J71874.md|IsContinuousIntegrationValue(string)
+M:Cat.IntegrationTesting.CatTestEnvironment.IgnoreMessage(System.String)|CatTestEnvironment.IgnoreMessage.SRG20AW2VM49WM7TXXVNP4638.md|IgnoreMessage(string)
+M:Cat.IntegrationTesting.CatTestEnvironment.NewDatabaseName|CatTestEnvironment.NewDatabaseName().md|NewDatabaseName()
+T:Cat.IntegrationTesting.CatTestEnvironment|CatTestEnvironment.md|CatTestEnvironment
+P:Cat.IntegrationTesting.ICatTestDatabase.Name|ICatTestDatabase.Name.md|Name
+P:Cat.IntegrationTesting.ICatTestDatabase.ConnectionString|ICatTestDatabase.ConnectionString.md|ConnectionString
+T:Cat.IntegrationTesting.ICatTestDatabase|ICatTestDatabase.md|ICatTestDatabase

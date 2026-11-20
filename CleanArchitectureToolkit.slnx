@@ -28,6 +28,9 @@
     <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.DataModels/Cat.Demo.CatalogService.DataModels.csproj" />
     <Project Path="demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Infrastructure/Cat.Demo.CatalogService.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/demo/Cat.Demo.IntegrationTests/">
+    <Project Path="demo/Cat.Demo.IntegrationTests/Cat.Demo.IntegrationTests.csproj" />
+  </Folder>
   <Folder Name="/demo/Cat.Demo.InventoryService/">
     <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.Api.Client/Cat.Demo.InventoryService.Api.Client.csproj" />
     <Project Path="demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.Api/Cat.Demo.InventoryService.Api.csproj" />
@@ -60,6 +63,16 @@
   </Folder>
   <Folder Name="/demo/Cat.Demo.ServiceDefaults/">
     <Project Path="demo/Cat.Demo.ServiceDefaults/Cat.Demo.ServiceDefaults/Cat.Demo.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/integrationtests/">
+    <File Path="integrationtests/Directory.Build.props" />
+    <Project Path="integrationtests/Cat.Dapper.MySql.IntegrationTests/Cat.Dapper.MySql.IntegrationTests.csproj" />
+    <Project Path="integrationtests/Cat.Dapper.PostgreSQL.IntegrationTests/Cat.Dapper.PostgreSQL.IntegrationTests.csproj" />
+    <Project Path="integrationtests/Cat.Dapper.SqlServer.IntegrationTests/Cat.Dapper.SqlServer.IntegrationTests.csproj" />
+    <Project Path="integrationtests/Cat.Db.Errors.MySql.IntegrationTests/Cat.Db.Errors.MySql.IntegrationTests.csproj" />
+    <Project Path="integrationtests/Cat.EFCore.PostgreSQL.IntegrationTests/Cat.EFCore.PostgreSQL.IntegrationTests.csproj" />
+    <Project Path="integrationtests/Cat.EFCore.SqlServer.IntegrationTests/Cat.EFCore.SqlServer.IntegrationTests.csproj" />
+    <Project Path="integrationtests/Cat.Sql.Cdc.IntegrationTests/Cat.Sql.Cdc.IntegrationTests.csproj" />
   </Folder>
   <Folder Name="/modules/" />
   <Folder Name="/modules/Cat.Api.Client/">
@@ -140,6 +153,16 @@
     <Project Path="modules/Cat.FluentWorkflows/Cat.FluentWorkflows.Commands/Cat.FluentWorkflows.Commands.csproj" />
     <Project Path="modules/Cat.FluentWorkflows/Cat.FluentWorkflows.Queries/Cat.FluentWorkflows.Queries.csproj" />
     <Project Path="modules/Cat.FluentWorkflows/Cat.FluentWorkflows/Cat.FluentWorkflows.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.IntegrationTesting/">
+    <File Path="modules/Cat.IntegrationTesting/README.md" />
+    <Project Path="modules/Cat.IntegrationTesting/Cat.IntegrationTesting.Abstractions/Cat.IntegrationTesting.Abstractions.csproj" />
+    <Project Path="modules/Cat.IntegrationTesting/Cat.IntegrationTesting.MySql.NUnit/Cat.IntegrationTesting.MySql.NUnit.csproj" />
+    <Project Path="modules/Cat.IntegrationTesting/Cat.IntegrationTesting.MySql/Cat.IntegrationTesting.MySql.csproj" />
+    <Project Path="modules/Cat.IntegrationTesting/Cat.IntegrationTesting.PostgreSQL.NUnit/Cat.IntegrationTesting.PostgreSQL.NUnit.csproj" />
+    <Project Path="modules/Cat.IntegrationTesting/Cat.IntegrationTesting.PostgreSQL/Cat.IntegrationTesting.PostgreSQL.csproj" />
+    <Project Path="modules/Cat.IntegrationTesting/Cat.IntegrationTesting.SqlServer.NUnit/Cat.IntegrationTesting.SqlServer.NUnit.csproj" />
+    <Project Path="modules/Cat.IntegrationTesting/Cat.IntegrationTesting.SqlServer/Cat.IntegrationTesting.SqlServer.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.Messaging/">
     <File Path="modules/Cat.Messaging/README.md" />
@@ -230,6 +253,7 @@
     <Project Path="tests/Cat.Expressions.Tests/Cat.Expressions.Tests.csproj" />
     <Project Path="tests/Cat.Extensions.Tests/Cat.Extensions.Tests.csproj" />
     <Project Path="tests/Cat.FluentWorkflows.Tests/Cat.FluentWorkflows.Tests.csproj" />
+    <Project Path="tests/Cat.IntegrationTesting.Tests/Cat.IntegrationTesting.Tests.csproj" />
     <Project Path="tests/Cat.Messaging.Tests/Cat.Messaging.Tests.csproj" />
     <Project Path="tests/Cat.Minimal.Api.Tests/Cat.Minimal.Api.Tests.csproj" />
     <Project Path="tests/Cat.Queries.Tests/Cat.Queries.Tests.csproj" />

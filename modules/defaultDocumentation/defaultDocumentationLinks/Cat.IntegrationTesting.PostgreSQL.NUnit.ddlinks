@@ -1,0 +1,7 @@
+../../../Cat.IntegrationTesting/namespaces/Cat.IntegrationTesting.PostgreSQL.NUnit/
+F:Cat.IntegrationTesting.PostgreSQL.NUnit.PostgreSQLDatabaseTests._database|PostgreSQLDatabaseTests._database.md|_database
+P:Cat.IntegrationTesting.PostgreSQL.NUnit.PostgreSQLDatabaseTests.ConnectionString|PostgreSQLDatabaseTests.ConnectionString.md|ConnectionString
+M:Cat.IntegrationTesting.PostgreSQL.NUnit.PostgreSQLDatabaseTests.CreateDatabase|PostgreSQLDatabaseTests.CreateDatabase().md|CreateDatabase()
+M:Cat.IntegrationTesting.PostgreSQL.NUnit.PostgreSQLDatabaseTests.DropDatabase|PostgreSQLDatabaseTests.DropDatabase().md|DropDatabase()
+N:Cat.IntegrationTesting.PostgreSQL.NUnit|Cat.IntegrationTesting.PostgreSQL.NUnit.md|Cat.IntegrationTesting.PostgreSQL.NUnit
+T:Cat.IntegrationTesting.PostgreSQL.NUnit.PostgreSQLDatabaseTests|PostgreSQLDatabaseTests.md|PostgreSQLDatabaseTests

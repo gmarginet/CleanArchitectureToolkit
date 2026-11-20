@@ -30,4 +30,4 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Db\.Errors\.PostgreSQL](Cat.Db.Errors.PostgreSQL.md 'Cat\.Db\.Errors\.PostgreSQL') | |
+| [Cat\.Db\.Errors\.PostgreSQL](Cat.Db.Errors.PostgreSQL.md 'Cat\.Db\.Errors\.PostgreSQL') | Recognizes PostgreSQL errors by their SQL state, such as a unique key violation, a foreign key violation, a deadlock or a timeout\. The checks work on any exception that has a PostgreSQL exception inside, so they also work on the exception that Entity Framework Core throws around it\. |

@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <!-- Npgsql.EntityFrameworkCore.PostgreSQL has no EF Core 11 release yet, so Cat.EFCore.Extensions.PostgreSQL targets net10.0 only. -->
+        <TargetFramework>net10.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+        <PackageReference Include="NUnit"/>
+        <PackageReference Include="NUnit.Analyzers">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="NUnit3TestAdapter"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="NUnit.Framework"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- The same tests run on SQL Server and on PostgreSQL. Each project adds its own database part. -->
+        <Compile Include="..\Shared\EfCoreStoreIntegrationTests.cs" Link="Shared\EfCoreStoreIntegrationTests.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\modules\Cat.Db.Errors\Cat.Db.Errors.PostgreSQL\Cat.Db.Errors.PostgreSQL.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.EFCore\Cat.EFCore.Extensions.PostgreSQL\Cat.EFCore.Extensions.PostgreSQL.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Inbox.EFCore\Cat.EventProcessor.Inbox.EFCore.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.IntegrationTesting\Cat.IntegrationTesting.PostgreSQL.NUnit\Cat.IntegrationTesting.PostgreSQL.NUnit.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Messaging\Cat.Messaging.Outbox.EFCore\Cat.Messaging.Outbox.EFCore.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Sagas\Cat.Sagas.EFCore\Cat.Sagas.EFCore.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Scheduling\Cat.Scheduling.EFCore\Cat.Scheduling.EFCore.csproj" />
+    </ItemGroup>
+
+</Project>

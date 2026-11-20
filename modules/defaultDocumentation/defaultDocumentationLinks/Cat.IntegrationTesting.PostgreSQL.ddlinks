@@ -1,0 +1,20 @@
+../../../Cat.IntegrationTesting/namespaces/Cat.IntegrationTesting.PostgreSQL/
+F:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.DefaultImage|PostgreSQLTestContainer.DefaultImage.md|DefaultImage
+F:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.SharedContainer|PostgreSQLTestContainer.SharedContainer.md|SharedContainer
+F:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer._image|PostgreSQLTestContainer._image.md|_image
+F:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer._gate|PostgreSQLTestContainer._gate.md|_gate
+F:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer._start|PostgreSQLTestContainer._start.md|_start
+P:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.Shared|PostgreSQLTestContainer.Shared.md|Shared
+M:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.#ctor(System.String)|PostgreSQLTestContainer..ctor.B4TRGLNQ7XCKNAOTTW99QYCQD.md|PostgreSQLTestContainer(string)
+M:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.CreateDatabaseAsync(System.Threading.CancellationToken)|PostgreSQLTestContainer.CreateDatabaseAsync.ZTKQAJS522JIKC9VLREXTOJ2C.md|CreateDatabaseAsync(CancellationToken)
+M:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.DisposeAsync|PostgreSQLTestContainer.DisposeAsync().md|DisposeAsync()
+M:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.StartAsync|PostgreSQLTestContainer.StartAsync().md|StartAsync()
+M:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.StartContainerAsync|PostgreSQLTestContainer.StartContainerAsync().md|StartContainerAsync()
+N:Cat.IntegrationTesting.PostgreSQL|Cat.IntegrationTesting.PostgreSQL.md|Cat.IntegrationTesting.PostgreSQL
+T:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer|PostgreSQLTestContainer.md|PostgreSQLTestContainer
+F:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.Database._master|PostgreSQLTestContainer.Database._master.md|_master
+P:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.Database.Name|PostgreSQLTestContainer.Database.Name.md|Name
+P:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.Database.ConnectionString|PostgreSQLTestContainer.Database.ConnectionString.md|ConnectionString
+M:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.Database.#ctor(System.String,System.String,System.String)|PostgreSQLTestContainer.Database..ctor.C26NJY1RWKY53R8O98PIT8ZI8.md|Database(string, string, string)
+M:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.Database.DisposeAsync|PostgreSQLTestContainer.Database.DisposeAsync().md|DisposeAsync()
+T:Cat.IntegrationTesting.PostgreSQL.PostgreSQLTestContainer.Database|PostgreSQLTestContainer.Database.md|Database

@@ -1,0 +1,7 @@
+../../../Cat.IntegrationTesting/namespaces/Cat.IntegrationTesting.MySql.NUnit/
+F:Cat.IntegrationTesting.MySql.NUnit.MySqlDatabaseTests._database|MySqlDatabaseTests._database.md|_database
+P:Cat.IntegrationTesting.MySql.NUnit.MySqlDatabaseTests.ConnectionString|MySqlDatabaseTests.ConnectionString.md|ConnectionString
+M:Cat.IntegrationTesting.MySql.NUnit.MySqlDatabaseTests.CreateDatabase|MySqlDatabaseTests.CreateDatabase().md|CreateDatabase()
+M:Cat.IntegrationTesting.MySql.NUnit.MySqlDatabaseTests.DropDatabase|MySqlDatabaseTests.DropDatabase().md|DropDatabase()
+N:Cat.IntegrationTesting.MySql.NUnit|Cat.IntegrationTesting.MySql.NUnit.md|Cat.IntegrationTesting.MySql.NUnit
+T:Cat.IntegrationTesting.MySql.NUnit.MySqlDatabaseTests|MySqlDatabaseTests.md|MySqlDatabaseTests

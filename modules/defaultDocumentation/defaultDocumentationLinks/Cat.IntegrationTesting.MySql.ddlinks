@@ -1,0 +1,20 @@
+../../../Cat.IntegrationTesting/namespaces/Cat.IntegrationTesting.MySql/
+F:Cat.IntegrationTesting.MySql.MySqlTestContainer.DefaultImage|MySqlTestContainer.DefaultImage.md|DefaultImage
+F:Cat.IntegrationTesting.MySql.MySqlTestContainer.SharedContainer|MySqlTestContainer.SharedContainer.md|SharedContainer
+F:Cat.IntegrationTesting.MySql.MySqlTestContainer._image|MySqlTestContainer._image.md|_image
+F:Cat.IntegrationTesting.MySql.MySqlTestContainer._gate|MySqlTestContainer._gate.md|_gate
+F:Cat.IntegrationTesting.MySql.MySqlTestContainer._start|MySqlTestContainer._start.md|_start
+P:Cat.IntegrationTesting.MySql.MySqlTestContainer.Shared|MySqlTestContainer.Shared.md|Shared
+M:Cat.IntegrationTesting.MySql.MySqlTestContainer.#ctor(System.String)|MySqlTestContainer..ctor.JWIHKKAYAV2GU0PZS9TEYH3FD.md|MySqlTestContainer(string)
+M:Cat.IntegrationTesting.MySql.MySqlTestContainer.CreateDatabaseAsync(System.Threading.CancellationToken)|MySqlTestContainer.CreateDatabaseAsync.8CZ4JR87XXGQFB3LUZWQKJVBB.md|CreateDatabaseAsync(CancellationToken)
+M:Cat.IntegrationTesting.MySql.MySqlTestContainer.DisposeAsync|MySqlTestContainer.DisposeAsync().md|DisposeAsync()
+M:Cat.IntegrationTesting.MySql.MySqlTestContainer.StartAsync|MySqlTestContainer.StartAsync().md|StartAsync()
+M:Cat.IntegrationTesting.MySql.MySqlTestContainer.StartContainerAsync|MySqlTestContainer.StartContainerAsync().md|StartContainerAsync()
+N:Cat.IntegrationTesting.MySql|Cat.IntegrationTesting.MySql.md|Cat.IntegrationTesting.MySql
+T:Cat.IntegrationTesting.MySql.MySqlTestContainer|MySqlTestContainer.md|MySqlTestContainer
+F:Cat.IntegrationTesting.MySql.MySqlTestContainer.Database._master|MySqlTestContainer.Database._master.md|_master
+P:Cat.IntegrationTesting.MySql.MySqlTestContainer.Database.Name|MySqlTestContainer.Database.Name.md|Name
+P:Cat.IntegrationTesting.MySql.MySqlTestContainer.Database.ConnectionString|MySqlTestContainer.Database.ConnectionString.md|ConnectionString
+M:Cat.IntegrationTesting.MySql.MySqlTestContainer.Database.#ctor(System.String,System.String,System.String)|MySqlTestContainer.Database..ctor.EKV37EXQ4GPRF9PZ7O6XDQAD2.md|Database(string, string, string)
+M:Cat.IntegrationTesting.MySql.MySqlTestContainer.Database.DisposeAsync|MySqlTestContainer.Database.DisposeAsync().md|DisposeAsync()
+T:Cat.IntegrationTesting.MySql.MySqlTestContainer.Database|MySqlTestContainer.Database.md|Database

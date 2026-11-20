@@ -253,7 +253,7 @@ The PostgreSQL showcase. The Notifications service moves from SQL Server to Post
 
 #### What exists today
 - Every service runs on SQL Server, and the AppHost starts it with `AddSqlServer`.
-- The outbox, the inbox and the scheduler claim store are plain EF Core code. They are not tested on PostgreSQL.
+- The outbox, the inbox and the scheduler claim store are plain EF Core code. The integration tests of [Cat.IntegrationTesting](../modules/Cat.IntegrationTesting/README.md) run them on a real PostgreSQL 17 and pass.
 
 #### Needs
 - A stable Npgsql EF Core provider for EF Core 11, with an Aspire PostgreSQL package that accepts it.

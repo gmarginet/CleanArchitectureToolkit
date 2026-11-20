@@ -1,0 +1,10 @@
+../../../Cat.IntegrationTesting/namespaces/Cat.IntegrationTesting.SqlServer.NUnit/
+P:Cat.IntegrationTesting.SqlServer.NUnit.SqlServerAgentDatabaseTests.Container|SqlServerAgentDatabaseTests.Container.md|Container
+N:Cat.IntegrationTesting.SqlServer.NUnit|Cat.IntegrationTesting.SqlServer.NUnit.md|Cat.IntegrationTesting.SqlServer.NUnit
+T:Cat.IntegrationTesting.SqlServer.NUnit.SqlServerAgentDatabaseTests|SqlServerAgentDatabaseTests.md|SqlServerAgentDatabaseTests
+F:Cat.IntegrationTesting.SqlServer.NUnit.SqlServerDatabaseTests._database|SqlServerDatabaseTests._database.md|_database
+P:Cat.IntegrationTesting.SqlServer.NUnit.SqlServerDatabaseTests.Container|SqlServerDatabaseTests.Container.md|Container
+P:Cat.IntegrationTesting.SqlServer.NUnit.SqlServerDatabaseTests.ConnectionString|SqlServerDatabaseTests.ConnectionString.md|ConnectionString
+M:Cat.IntegrationTesting.SqlServer.NUnit.SqlServerDatabaseTests.CreateDatabase|SqlServerDatabaseTests.CreateDatabase().md|CreateDatabase()
+M:Cat.IntegrationTesting.SqlServer.NUnit.SqlServerDatabaseTests.DropDatabase|SqlServerDatabaseTests.DropDatabase().md|DropDatabase()
+T:Cat.IntegrationTesting.SqlServer.NUnit.SqlServerDatabaseTests|SqlServerDatabaseTests.md|SqlServerDatabaseTests
