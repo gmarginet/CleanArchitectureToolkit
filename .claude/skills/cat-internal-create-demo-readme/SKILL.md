@@ -12,10 +12,10 @@ The direction is one way. When a demo phase is built, the plan skill uses this s
 
 The drawing is the only exception. It shows hatched boxes for blocks that are not built yet, because the plan has no pictures.
 
-Load the `cat-internal-template-concepts` skill first. It explains regions, templates and placeholders.
+Load the `cat-internal-template-concepts` skill first. It explains regions, templates and placeholders. The demo readme uses only two regions, `Header` and `TemplateSkill`.
 
 ## Files
-- [demo-readme.template.md](demo-readme.template.md): the skeleton of the demo readme. It holds the chapters, the regions and the empty overview table. The static text lives in the demo readme only.
+- [demo-readme.template.md](demo-readme.template.md): the skeleton of the demo readme. It holds the chapter headings and the empty overview table. The static text lives in the demo readme only.
 - [demo-readme.parts.template.md](demo-readme.parts.template.md): the small templates, such as a block chapter, a module row and an overview row. Read it when you add one of them.
 - [demo-blocks.json](demo-blocks.json): the blocks of the drawing, their elements, their chapters and the rule that says a block is built.
 - [sync-demo-architecture.ps1](sync-demo-architecture.ps1): switches the boxes of the drawing between hatched and solid.
@@ -25,30 +25,25 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 The demo readme exists. Use this only when it is lost.
 1. Copy `demo-readme.template.md` to `demo/README.md`.
 2. Fill the `Header` region by following the `cat-internal-create-header` skill.
-3. Fill the regions from the code of the demo.
+3. Fill the chapters from the code of the demo.
 4. Run the `cat-internal-verify-docs` skill.
 
-## Regions
-A region marks a part of the demo readme, so the owner can ask Claude to look at or change one part. Edit only inside a region. Never remove a region marker. A change to a heading changes the anchor, so search the old anchor with `git grep` and fix every link.
+## Structure
+The demo readme tells the story of the demo in the order a team meets it. It has two regions, and the rest is found by its headings. A change to a heading changes the anchor, so search the old anchor with `git grep` and fix every link. Keep the headings, because other files link to them.
 
 Regions of every template:
 - `Header`: The banner and the navigation bar, filled by the `cat-internal-create-header` skill.
-- `TemplateSkill`: Points to this skill. The text in it is how Claude finds the files that were made with this template.
+- `TemplateSkill`: Points to this skill. The text in it is how Claude finds the files that were made with this template. Never remove either marker.
 
-Chapters, with static text that the owner decides:
-- `Intro`: The line under the title.
-- `TableOfContents`: The links to the chapters and the block chapters. Update it by hand when a heading changes.
-- `WhatTheBookshopDoes`: The functional description. Plain words, no project, module or HTTP names.
-- `Architecture`: The intro, the drawing and the sub chapters.
-- `HowToRun`: Everything for a person who just cloned the repository.
-- Every sub chapter of `Architecture` and `HowToRun` has its own sub region, named after its heading in PascalCase, such as `LoginAndTokens` or `RunWithAspire`. Read the demo readme for the list.
+Story chapters, with static text that the owner decides:
+- `The idea`: Why the shop, and `What the bookshop does`, the functional description in plain words, with no project, module or HTTP names.
+- `The architecture`: The decisions, each with its cost, and the sub chapters that explain them, such as `Login and tokens` and `Databases`.
+- `Running it`: Everything for a person who just cloned the repository, in sub chapters such as `Run with Aspire` and `Run the tests`.
+- `Choosing the CAT modules`: `Where the CAT modules sit`, a table per layer, and `Why each service picked its modules`.
+- `Table of contents`: The links to all chapters and sub chapters. Update it by hand when a heading changes.
 
-Building blocks:
-- `BlockOverview`: The intro line and the overview table. It is kept in sync with the block chapters.
-- One region per block chapter, named after the chapter in PascalCase, such as `OrdersService`. The `chapter` values in [demo-blocks.json](demo-blocks.json) list the block chapters.
-
-The sub regions and the block regions live in the demo readme only. The template holds the chapter regions.
-
+Reference chapter:
+- `Building blocks`: The overview table, one row per block, and then one chapter per block. The `chapter` values in [demo-blocks.json](demo-blocks.json) list the block chapters.
 ## Blocks
 The block chapters follow the `BlockChapter` template of the parts file, in this order:
 - **What it is.** Two or three sentences.
@@ -62,9 +57,10 @@ The block chapters follow the `BlockChapter` template of the parts file, in this
 A block chapter describes what exists. It has no status line and no future text. A block that is not built has no chapter. Its box in the drawing is hatched, and its entry in [demo-blocks.json](demo-blocks.json) has `"chapter": null`. The chapter comes when the block is built, see the steps below.
 
 Adding a block:
-1. Add the chapter with the `BlockChapter` template, after the last block chapter. Name the region after the block.
-2. Add a row with the `BlockOverviewRow` template to the `BlockOverview` region, and an entry with the `TocBlockEntry` template to the `TableOfContents` region.
+1. Add the chapter with the `BlockChapter` template, after the last block chapter.
+2. Add a row with the `BlockOverviewRow` template to the overview table of `Building blocks`, and an entry with the `TocBlockEntry` template under `Building blocks` in the table of contents.
 3. Add the block to [demo-blocks.json](demo-blocks.json), see [The drawing](#the-drawing).
+4. Add the modules of the block to the layer table in Where the CAT modules sit and a line to Why each service picked its modules.
 
 ## The drawing
 `../resources/schemas/CatDemoArchitecture.excalidraw.svg` shows the blocks and how they talk to each other. A box is solid when its block is built and hatched when it is not. The background color never changes, only the fill style. A dotted arrow is a connection that does not exist yet.
@@ -89,7 +85,7 @@ Not done by the script:
 ## Updating the demo readme
 1. Read `demo/README.md` and, for the changed block, the code. Check facts in the code. Use the Roslyn tools for symbols and references. Do not read the plan for facts.
 2. Run the sync script with `-Check`, then without it. Read the table it prints.
-3. Update the chapters the change touches: the functional description, the architecture details, how to run and the block chapters. A new feature goes in the functional description in plain words and in the block chapter in technical words.
+3. Update the chapters the change touches: the functional description, the architecture details, running it, the choice of modules and the block chapters. A new feature goes in the functional description in plain words and in the block chapter in technical words.
 4. Check the how to run steps against reality: ports, connection strings, commands, users.
 5. Run the `cat-internal-verify-code` skill when code or XML docs changed too.
 6. Run the `cat-internal-verify-docs` skill.
@@ -102,7 +98,7 @@ Run this skill at the end of any task that:
 - adds, removes or renames a service, project, endpoint or feature in `demo/`,
 - changes how the demo is started, configured or tested,
 - builds a block of the drawing,
-- changes which CAT modules a block uses.
+- changes which CAT modules a block or a service uses, because the choice of modules lists them too.
 
 ## Updating the demo readme after the template changed
 Use this when the owner changes the template and asks to update the demo readme.
@@ -114,7 +110,6 @@ Use this when the owner changes the template and asks to update the demo readme.
 
 ## Placeholders
 - [[BlockName]]: The name of the block, such as `Orders service`.
-- [[BlockRegion]]: The name of the region of the block, such as `OrdersService`.
 - [[BlockAnchor]]: The anchor of the block heading, such as `orders-service`.
 - [[WhatItIs]]: Two or three sentences about the block. The overview row holds the first sentence.
 - [[HowItWorks]]: One bullet about how the block works.

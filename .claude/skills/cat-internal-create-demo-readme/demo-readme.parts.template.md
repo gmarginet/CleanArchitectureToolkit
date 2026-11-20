@@ -1,6 +1,5 @@
 <!-- ==================== template start: BlockChapter ====================-->
 ### [[BlockName]]
-<!-- region start: [[BlockRegion]]-->
 
 **What it is.** [[WhatItIs]]
 
@@ -19,7 +18,6 @@
 - [[Con]]
 
 **More.** [[More]]
-<!-- region end: [[BlockRegion]]-->
 <!-- ==================== template end: BlockChapter ====================-->
 
 <!-- ==================== template start: DatabasePart ====================-->

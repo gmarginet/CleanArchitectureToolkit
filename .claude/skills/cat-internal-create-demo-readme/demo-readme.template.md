@@ -5,33 +5,25 @@
 <!-- Use the cat-internal-create-demo-readme skill to update this readme.-->
 <!-- region end: TemplateSkill-->
 
-# CAT Bookshop Demo <!-- omit in toc -->  
+# CAT Bookshop Demo <!-- omit in toc -->
 
-<!-- region start: Intro-->
-<!-- region end: Intro-->
+## Table of contents <!-- omit in toc -->
 
-## Table of contents <!-- omit in toc -->  
-<!-- region start: TableOfContents-->
-<!-- region end: TableOfContents-->
+## The idea
 
-## What the bookshop does
-<!-- region start: WhatTheBookshopDoes-->
-<!-- region end: WhatTheBookshopDoes-->
+### What the bookshop does
 
-## Architecture
-<!-- region start: Architecture-->
-<!-- region end: Architecture-->
+## The architecture
 
-## How to run
-<!-- region start: HowToRun-->
-<!-- region end: HowToRun-->
+## Running it
+
+## Choosing the CAT modules
+
+### Where the CAT modules sit
+
+### Why each service picked its modules
 
 ## Building blocks
-<!-- region start: BlockOverview-->
-
-One chapter for every block that is built. A database sits in the chapter of the service that owns it.
 
 | Block | What it is |
 |---|---|
-
-<!-- region end: BlockOverview-->
