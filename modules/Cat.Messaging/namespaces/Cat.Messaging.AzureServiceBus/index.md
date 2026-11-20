@@ -32,3 +32,4 @@
 | :--- | :--- |
 | [Cat\.Messaging\.AzureServiceBus](Cat.Messaging.AzureServiceBus.md 'Cat\.Messaging\.AzureServiceBus') | The Azure Service Bus transport of the messaging module\. It sends messages to queues and topics, creates the entities on request and can publish a metric for the dead letters\. |
 | [Cat\.Messaging\.AzureServiceBus\.Extensions](Cat.Messaging.AzureServiceBus.Extensions.md 'Cat\.Messaging\.AzureServiceBus\.Extensions') | |
+| [System\.Runtime\.CompilerServices](System.Runtime.CompilerServices.md 'System\.Runtime\.CompilerServices') | |

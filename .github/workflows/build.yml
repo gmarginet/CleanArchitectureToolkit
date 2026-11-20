@@ -20,6 +20,8 @@ jobs:
       - name: Checkout
         uses: codebeltnet/git-checkout@v1
 
+      # v3 installs the current LTS and STS SDKs, which are .NET 10 and .NET 11 today. The tests run on both.
+      # When a newer LTS or STS comes out, check that .NET 10 and .NET 11 are still installed.
       - name: Install .NET
         uses: codebeltnet/install-dotnet@v3
 

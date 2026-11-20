@@ -26,23 +26,28 @@
   
 ##### >> [Cat\.Messaging\.AzureServiceBus Assembly](index.md 'index') >> [Cat\.Messaging\.AzureServiceBus Namespace](Cat.Messaging.AzureServiceBus.md 'Cat\.Messaging\.AzureServiceBus') >> [ServiceBusTopology Class](ServiceBusTopology.md 'Cat\.Messaging\.AzureServiceBus\.ServiceBusTopology')
 
-## ServiceBusTopology\.BuildTopicOptions\(string, Action\<CreateTopicOptions\>\) Method
+## ServiceBusTopology\.BuildQueueOptions\(string, bool, Action\<CreateQueueOptions\>\) Method
 
-Builds the options of a topic\. Duplicate detection is on, so the bus drops a repeated message with the same
-message ID\. The time window keeps the default of Azure Service Bus\. The callback runs last\.
+Builds the options of a queue\. Duplicate detection is on, so the bus drops a repeated message with the same
+message ID\. The time window keeps the default of Azure Service Bus\. The callback runs next, and the session
+setting is applied after it, because the message type decides it\.
 
 ```csharp
-internal static Azure.Messaging.ServiceBus.Administration.CreateTopicOptions BuildTopicOptions(string name, System.Action<Azure.Messaging.ServiceBus.Administration.CreateTopicOptions>? configure=null);
+internal static CreateQueueOptions BuildQueueOptions(string name, bool requiresSession, System.Action<CreateQueueOptions>? configure=null);
 ```
 #### Parameters
 
-<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.BuildTopicOptions(string,System.Action_Azure.Messaging.ServiceBus.Administration.CreateTopicOptions_).name'></a>
+<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.BuildQueueOptions(string,bool,System.Action_CreateQueueOptions_).name'></a>
 
 `name` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
 
-<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.BuildTopicOptions(string,System.Action_Azure.Messaging.ServiceBus.Administration.CreateTopicOptions_).configure'></a>
+<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.BuildQueueOptions(string,bool,System.Action_CreateQueueOptions_).requiresSession'></a>
 
-`configure` [System\.Action&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')[Azure\.Messaging\.ServiceBus\.Administration\.CreateTopicOptions](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.createtopicoptions 'Azure\.Messaging\.ServiceBus\.Administration\.CreateTopicOptions')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')
+`requiresSession` [System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')
+
+<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.BuildQueueOptions(string,bool,System.Action_CreateQueueOptions_).configure'></a>
+
+`configure` [System\.Action&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')[Azure\.Messaging\.ServiceBus\.Administration\.CreateQueueOptions](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.createqueueoptions 'Azure\.Messaging\.ServiceBus\.Administration\.CreateQueueOptions')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')
 
 #### Returns
-[Azure\.Messaging\.ServiceBus\.Administration\.CreateTopicOptions](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.createtopicoptions 'Azure\.Messaging\.ServiceBus\.Administration\.CreateTopicOptions')
+[Azure\.Messaging\.ServiceBus\.Administration\.CreateQueueOptions](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.createqueueoptions 'Azure\.Messaging\.ServiceBus\.Administration\.CreateQueueOptions')

@@ -33,7 +33,7 @@ The module turns duplicate detection on before the callback runs, so the callbac
 The module sets [Azure\.Messaging\.ServiceBus\.Administration\.CreateQueueOptions\.RequiresSession](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.createqueueoptions.requiressession 'Azure\.Messaging\.ServiceBus\.Administration\.CreateQueueOptions\.RequiresSession') after the callback, because the message type decides it\.
 
 ```csharp
-public System.Action<Azure.Messaging.ServiceBus.Administration.CreateQueueOptions>? ConfigureQueue { get; set; }
+public System.Action<CreateQueueOptions>? ConfigureQueue { get; set; }
 ```
 
 #### Property Value

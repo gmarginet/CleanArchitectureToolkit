@@ -32,7 +32,7 @@ Changes the options of the [Azure\.Messaging\.ServiceBus\.Administration\.Servic
 The module sets nothing here, so the defaults of the SDK apply\.
 
 ```csharp
-public System.Action<Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClientOptions>? ConfigureAdministrationClient { get; set; }
+public System.Action<ServiceBusAdministrationClientOptions>? ConfigureAdministrationClient { get; set; }
 ```
 
 #### Property Value

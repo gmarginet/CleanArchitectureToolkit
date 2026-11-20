@@ -72,8 +72,13 @@ public static class TemporalModelBuilderExtensions
             t.IsTemporal(tt =>
             {
                 tt.UseHistoryTable(tableName, "History");
+#if NET11_0_OR_GREATER
                 tt.HasPeriodStart(x => x.ValidFrom);
                 tt.HasPeriodEnd(x => x.ValidUntil);
+#else
+                tt.HasPeriodStart("ValidFrom");
+                tt.HasPeriodEnd("ValidUntil");
+#endif
             });
         });
     }

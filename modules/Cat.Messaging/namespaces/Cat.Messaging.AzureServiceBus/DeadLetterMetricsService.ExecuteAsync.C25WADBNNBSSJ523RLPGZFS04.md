@@ -28,9 +28,6 @@
 
 ## DeadLetterMetricsService\.ExecuteAsync\(CancellationToken\) Method
 
-This method is called when the [Microsoft\.Extensions\.Hosting\.IHostedService](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.hosting.ihostedservice 'Microsoft\.Extensions\.Hosting\.IHostedService') starts\. The implementation should return a task that represents
-the lifetime of the long running operation\(s\) being performed\.
-
 ```csharp
 protected override System.Threading.Tasks.Task ExecuteAsync(System.Threading.CancellationToken stoppingToken);
 ```
@@ -40,11 +37,5 @@ protected override System.Threading.Tasks.Task ExecuteAsync(System.Threading.Can
 
 `stoppingToken` [System\.Threading\.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System\.Threading\.CancellationToken')
 
-Triggered when [Microsoft\.Extensions\.Hosting\.IHostedService\.StopAsync\(System\.Threading\.CancellationToken\)](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.hosting.ihostedservice.stopasync#microsoft-extensions-hosting-ihostedservice-stopasync(system-threading-cancellationtoken) 'Microsoft\.Extensions\.Hosting\.IHostedService\.StopAsync\(System\.Threading\.CancellationToken\)') is called\.
-
 #### Returns
-[System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task')  
-A [System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task') that represents the long running operations\.
-
-### Remarks
-See [Worker Services in \.NET](https://learn.microsoft.com/dotnet/core/extensions/workers 'https://learn\.microsoft\.com/dotnet/core/extensions/workers') for implementation guidelines\.
+[System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task')

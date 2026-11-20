@@ -29,7 +29,7 @@
 ## ServiceCollectionExtensions\.CreateAdministrationClient\(CatServiceBusOptions\) Method
 
 ```csharp
-internal static Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient CreateAdministrationClient(Cat.Messaging.AzureServiceBus.CatServiceBusOptions options);
+internal static ServiceBusAdministrationClient CreateAdministrationClient(Cat.Messaging.AzureServiceBus.CatServiceBusOptions options);
 ```
 #### Parameters
 

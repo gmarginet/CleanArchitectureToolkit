@@ -32,19 +32,19 @@ Builds the options of a processor\. The concurrency of the message type is set f
 and `AutoCompleteMessages` is set to false after it, because the listener settles every message itself\.
 
 ```csharp
-internal static Azure.Messaging.ServiceBus.ServiceBusProcessorOptions BuildProcessorOptions(System.Type messageType, System.Nullable<int> maxConcurrentCalls, System.Action<System.Type,Azure.Messaging.ServiceBus.ServiceBusProcessorOptions>? configure);
+internal static ServiceBusProcessorOptions BuildProcessorOptions(System.Type messageType, System.Nullable<int> maxConcurrentCalls, System.Action<System.Type,ServiceBusProcessorOptions>? configure);
 ```
 #### Parameters
 
-<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.BuildProcessorOptions(System.Type,System.Nullable_int_,System.Action_System.Type,Azure.Messaging.ServiceBus.ServiceBusProcessorOptions_).messageType'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.BuildProcessorOptions(System.Type,System.Nullable_int_,System.Action_System.Type,ServiceBusProcessorOptions_).messageType'></a>
 
 `messageType` [System\.Type](https://learn.microsoft.com/en-us/dotnet/api/system.type 'System\.Type')
 
-<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.BuildProcessorOptions(System.Type,System.Nullable_int_,System.Action_System.Type,Azure.Messaging.ServiceBus.ServiceBusProcessorOptions_).maxConcurrentCalls'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.BuildProcessorOptions(System.Type,System.Nullable_int_,System.Action_System.Type,ServiceBusProcessorOptions_).maxConcurrentCalls'></a>
 
 `maxConcurrentCalls` [System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')
 
-<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.BuildProcessorOptions(System.Type,System.Nullable_int_,System.Action_System.Type,Azure.Messaging.ServiceBus.ServiceBusProcessorOptions_).configure'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.BuildProcessorOptions(System.Type,System.Nullable_int_,System.Action_System.Type,ServiceBusProcessorOptions_).configure'></a>
 
 `configure` [System\.Action&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-2 'System\.Action\`2')[System\.Type](https://learn.microsoft.com/en-us/dotnet/api/system.type 'System\.Type')[,](https://learn.microsoft.com/en-us/dotnet/api/system.action-2 'System\.Action\`2')[Azure\.Messaging\.ServiceBus\.ServiceBusProcessorOptions](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.servicebusprocessoroptions 'Azure\.Messaging\.ServiceBus\.ServiceBusProcessorOptions')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-2 'System\.Action\`2')
 

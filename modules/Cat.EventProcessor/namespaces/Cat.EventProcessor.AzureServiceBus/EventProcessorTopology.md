@@ -40,7 +40,7 @@ Implements [ICatEventProcessorTopology](ICatEventProcessorTopology.md 'Cat\.Even
 
 | Constructors | |
 | :--- | :--- |
-| [EventProcessorTopology\(ServiceBusAdministrationClient, ICatReceiveRegistry, ICatMessageNameResolver, IOptions&lt;CatEventProcessorServiceBusOptions&gt;\)](EventProcessorTopology..ctor.4QURCUS2Y4JGH7FB4ZYX1LXI2.md 'Cat\.EventProcessor\.AzureServiceBus\.EventProcessorTopology\.EventProcessorTopology\(Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClient, Cat\.EventProcessor\.Abstractions\.ICatReceiveRegistry, Cat\.Messaging\.Abstractions\.ICatMessageNameResolver, Microsoft\.Extensions\.Options\.IOptions\<Cat\.EventProcessor\.AzureServiceBus\.CatEventProcessorServiceBusOptions\>\)') | Creates the topology helper\. |
+| [EventProcessorTopology\(ServiceBusAdministrationClient, ICatReceiveRegistry, ICatMessageNameResolver, IOptions&lt;CatEventProcessorServiceBusOptions&gt;\)](EventProcessorTopology..ctor.FG9QW4TKX85KSNS1Q0INPQDX4.md 'Cat\.EventProcessor\.AzureServiceBus\.EventProcessorTopology\.EventProcessorTopology\(ServiceBusAdministrationClient, Cat\.EventProcessor\.Abstractions\.ICatReceiveRegistry, Cat\.Messaging\.Abstractions\.ICatMessageNameResolver, Microsoft\.Extensions\.Options\.IOptions\<Cat\.EventProcessor\.AzureServiceBus\.CatEventProcessorServiceBusOptions\>\)') | Creates the topology helper\. |
 
 | Fields | |
 | :--- | :--- |
@@ -51,5 +51,5 @@ Implements [ICatEventProcessorTopology](ICatEventProcessorTopology.md 'Cat\.Even
 
 | Methods | |
 | :--- | :--- |
-| [BuildSubscriptionOptions\(string, string, Action&lt;CreateSubscriptionOptions&gt;\)](EventProcessorTopology.BuildSubscriptionOptions.I97E2YGYRSC9P8XOPK04PGS5D.md 'Cat\.EventProcessor\.AzureServiceBus\.EventProcessorTopology\.BuildSubscriptionOptions\(string, string, System\.Action\<Azure\.Messaging\.ServiceBus\.Administration\.CreateSubscriptionOptions\>\)') | Builds the options of a subscription\. The module sets only the names, so the defaults of Azure Service Bus apply until the callback changes them\. |
+| [BuildSubscriptionOptions\(string, string, Action&lt;CreateSubscriptionOptions&gt;\)](EventProcessorTopology.BuildSubscriptionOptions.FSHU8AT037RAGHIUY3RHGT8P3.md 'Cat\.EventProcessor\.AzureServiceBus\.EventProcessorTopology\.BuildSubscriptionOptions\(string, string, System\.Action\<CreateSubscriptionOptions\>\)') | Builds the options of a subscription\. The module sets only the names, so the defaults of Azure Service Bus apply until the callback changes them\. |
 | [EnsureSubscriptionsAsync\(CancellationToken\)](EventProcessorTopology.EnsureSubscriptionsAsync.WPZKOWE2CD1DA50DA4WAH79X5.md 'Cat\.EventProcessor\.AzureServiceBus\.EventProcessorTopology\.EnsureSubscriptionsAsync\(System\.Threading\.CancellationToken\)') | Creates the subscription of this service on the topic of every declared event, and skips what exists\. The topic must exist already\. |

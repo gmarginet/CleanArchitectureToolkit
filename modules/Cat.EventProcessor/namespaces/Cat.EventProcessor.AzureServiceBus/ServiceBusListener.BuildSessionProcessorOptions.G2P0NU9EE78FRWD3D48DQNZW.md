@@ -32,19 +32,19 @@ Builds the options of a session processor\. The number of sessions of the messag
 and `AutoCompleteMessages` is set to false after it, because the listener settles every message itself\.
 
 ```csharp
-internal static Azure.Messaging.ServiceBus.ServiceBusSessionProcessorOptions BuildSessionProcessorOptions(System.Type messageType, System.Nullable<int> maxConcurrentSessions, System.Action<System.Type,Azure.Messaging.ServiceBus.ServiceBusSessionProcessorOptions>? configure);
+internal static ServiceBusSessionProcessorOptions BuildSessionProcessorOptions(System.Type messageType, System.Nullable<int> maxConcurrentSessions, System.Action<System.Type,ServiceBusSessionProcessorOptions>? configure);
 ```
 #### Parameters
 
-<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.BuildSessionProcessorOptions(System.Type,System.Nullable_int_,System.Action_System.Type,Azure.Messaging.ServiceBus.ServiceBusSessionProcessorOptions_).messageType'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.BuildSessionProcessorOptions(System.Type,System.Nullable_int_,System.Action_System.Type,ServiceBusSessionProcessorOptions_).messageType'></a>
 
 `messageType` [System\.Type](https://learn.microsoft.com/en-us/dotnet/api/system.type 'System\.Type')
 
-<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.BuildSessionProcessorOptions(System.Type,System.Nullable_int_,System.Action_System.Type,Azure.Messaging.ServiceBus.ServiceBusSessionProcessorOptions_).maxConcurrentSessions'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.BuildSessionProcessorOptions(System.Type,System.Nullable_int_,System.Action_System.Type,ServiceBusSessionProcessorOptions_).maxConcurrentSessions'></a>
 
 `maxConcurrentSessions` [System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')
 
-<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.BuildSessionProcessorOptions(System.Type,System.Nullable_int_,System.Action_System.Type,Azure.Messaging.ServiceBus.ServiceBusSessionProcessorOptions_).configure'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.BuildSessionProcessorOptions(System.Type,System.Nullable_int_,System.Action_System.Type,ServiceBusSessionProcessorOptions_).configure'></a>
 
 `configure` [System\.Action&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-2 'System\.Action\`2')[System\.Type](https://learn.microsoft.com/en-us/dotnet/api/system.type 'System\.Type')[,](https://learn.microsoft.com/en-us/dotnet/api/system.action-2 'System\.Action\`2')[Azure\.Messaging\.ServiceBus\.ServiceBusSessionProcessorOptions](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.servicebussessionprocessoroptions 'Azure\.Messaging\.ServiceBus\.ServiceBusSessionProcessorOptions')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-2 'System\.Action\`2')
 

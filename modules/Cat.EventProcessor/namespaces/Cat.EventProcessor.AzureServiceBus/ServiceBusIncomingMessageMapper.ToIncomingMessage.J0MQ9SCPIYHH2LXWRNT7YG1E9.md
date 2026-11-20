@@ -24,18 +24,23 @@
 
 # Code Reference  
   
-##### >> [Cat\.EventProcessor\.AzureServiceBus Assembly](index.md 'index') >> [Cat\.EventProcessor\.AzureServiceBus Namespace](Cat.EventProcessor.AzureServiceBus.md 'Cat\.EventProcessor\.AzureServiceBus') >> [ServiceBusListener Class](ServiceBusListener.md 'Cat\.EventProcessor\.AzureServiceBus\.ServiceBusListener')
+##### >> [Cat\.EventProcessor\.AzureServiceBus Assembly](index.md 'index') >> [Cat\.EventProcessor\.AzureServiceBus Namespace](Cat.EventProcessor.AzureServiceBus.md 'Cat\.EventProcessor\.AzureServiceBus') >> [ServiceBusIncomingMessageMapper Class](ServiceBusIncomingMessageMapper.md 'Cat\.EventProcessor\.AzureServiceBus\.ServiceBusIncomingMessageMapper')
 
-## ServiceBusListener\.HandleErrorAsync\(ProcessErrorEventArgs\) Method
+## ServiceBusIncomingMessageMapper\.ToIncomingMessage\(ServiceBusReceivedMessage\) Method
+
+Maps the message\. The application properties are copied as text\.
 
 ```csharp
-private System.Threading.Tasks.Task HandleErrorAsync(Azure.Messaging.ServiceBus.ProcessErrorEventArgs args);
+public static Cat.EventProcessor.Abstractions.CatIncomingMessage ToIncomingMessage(ServiceBusReceivedMessage message);
 ```
 #### Parameters
 
-<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusListener.HandleErrorAsync(Azure.Messaging.ServiceBus.ProcessErrorEventArgs).args'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.ServiceBusIncomingMessageMapper.ToIncomingMessage(ServiceBusReceivedMessage).message'></a>
 
-`args` [Azure\.Messaging\.ServiceBus\.ProcessErrorEventArgs](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.processerroreventargs 'Azure\.Messaging\.ServiceBus\.ProcessErrorEventArgs')
+`message` [Azure\.Messaging\.ServiceBus\.ServiceBusReceivedMessage](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.servicebusreceivedmessage 'Azure\.Messaging\.ServiceBus\.ServiceBusReceivedMessage')
+
+The received message\.
 
 #### Returns
-[System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task')
+[CatIncomingMessage](../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/CatIncomingMessage.md 'Cat\.EventProcessor\.Abstractions\.CatIncomingMessage')  
+The broker neutral message\.

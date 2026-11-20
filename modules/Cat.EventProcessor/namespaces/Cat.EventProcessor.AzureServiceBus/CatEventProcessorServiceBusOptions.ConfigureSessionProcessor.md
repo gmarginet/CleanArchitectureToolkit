@@ -34,7 +34,7 @@ so the callback wins\. The listener sets [Azure\.Messaging\.ServiceBus\.ServiceB
 because it settles every message itself\.
 
 ```csharp
-public System.Action<System.Type,Azure.Messaging.ServiceBus.ServiceBusSessionProcessorOptions>? ConfigureSessionProcessor { get; set; }
+public System.Action<System.Type,ServiceBusSessionProcessorOptions>? ConfigureSessionProcessor { get; set; }
 ```
 
 #### Property Value

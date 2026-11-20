@@ -31,29 +31,29 @@
 Creates the topology helper\.
 
 ```csharp
-public EventProcessorTopology(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient admin, Cat.EventProcessor.Abstractions.ICatReceiveRegistry registry, Cat.Messaging.Abstractions.ICatMessageNameResolver nameResolver, Microsoft.Extensions.Options.IOptions<Cat.EventProcessor.AzureServiceBus.CatEventProcessorServiceBusOptions> options);
+public EventProcessorTopology(ServiceBusAdministrationClient admin, Cat.EventProcessor.Abstractions.ICatReceiveRegistry registry, Cat.Messaging.Abstractions.ICatMessageNameResolver nameResolver, Microsoft.Extensions.Options.IOptions<Cat.EventProcessor.AzureServiceBus.CatEventProcessorServiceBusOptions> options);
 ```
 #### Parameters
 
-<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.EventProcessorTopology(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient,Cat.EventProcessor.Abstractions.ICatReceiveRegistry,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.EventProcessor.AzureServiceBus.CatEventProcessorServiceBusOptions_).admin'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.EventProcessorTopology(ServiceBusAdministrationClient,Cat.EventProcessor.Abstractions.ICatReceiveRegistry,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.EventProcessor.AzureServiceBus.CatEventProcessorServiceBusOptions_).admin'></a>
 
 `admin` [Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClient](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.servicebusadministrationclient 'Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClient')
 
 The administration client\. It needs the manage right\.
 
-<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.EventProcessorTopology(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient,Cat.EventProcessor.Abstractions.ICatReceiveRegistry,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.EventProcessor.AzureServiceBus.CatEventProcessorServiceBusOptions_).registry'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.EventProcessorTopology(ServiceBusAdministrationClient,Cat.EventProcessor.Abstractions.ICatReceiveRegistry,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.EventProcessor.AzureServiceBus.CatEventProcessorServiceBusOptions_).registry'></a>
 
 `registry` [ICatReceiveRegistry](../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/ICatReceiveRegistry.md 'Cat\.EventProcessor\.Abstractions\.ICatReceiveRegistry')
 
 The declared message types\.
 
-<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.EventProcessorTopology(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient,Cat.EventProcessor.Abstractions.ICatReceiveRegistry,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.EventProcessor.AzureServiceBus.CatEventProcessorServiceBusOptions_).nameResolver'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.EventProcessorTopology(ServiceBusAdministrationClient,Cat.EventProcessor.Abstractions.ICatReceiveRegistry,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.EventProcessor.AzureServiceBus.CatEventProcessorServiceBusOptions_).nameResolver'></a>
 
 `nameResolver` [ICatMessageNameResolver](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessageNameResolver.md 'Cat\.Messaging\.Abstractions\.ICatMessageNameResolver')
 
 Finds the topic name and the kind of a message type\.
 
-<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.EventProcessorTopology(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient,Cat.EventProcessor.Abstractions.ICatReceiveRegistry,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.EventProcessor.AzureServiceBus.CatEventProcessorServiceBusOptions_).options'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.EventProcessorTopology(ServiceBusAdministrationClient,Cat.EventProcessor.Abstractions.ICatReceiveRegistry,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.EventProcessor.AzureServiceBus.CatEventProcessorServiceBusOptions_).options'></a>
 
 `options` [Microsoft\.Extensions\.Options\.IOptions&lt;](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.options.ioptions-1 'Microsoft\.Extensions\.Options\.IOptions\`1')[CatEventProcessorServiceBusOptions](CatEventProcessorServiceBusOptions.md 'Cat\.EventProcessor\.AzureServiceBus\.CatEventProcessorServiceBusOptions')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.options.ioptions-1 'Microsoft\.Extensions\.Options\.IOptions\`1')
 

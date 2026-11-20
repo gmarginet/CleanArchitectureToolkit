@@ -31,11 +31,11 @@
 Creates the transport\.
 
 ```csharp
-public ServiceBusMessageTransport(Azure.Messaging.ServiceBus.ServiceBusClient client);
+public ServiceBusMessageTransport(ServiceBusClient client);
 ```
 #### Parameters
 
-<a name='Cat.Messaging.AzureServiceBus.ServiceBusMessageTransport.ServiceBusMessageTransport(Azure.Messaging.ServiceBus.ServiceBusClient).client'></a>
+<a name='Cat.Messaging.AzureServiceBus.ServiceBusMessageTransport.ServiceBusMessageTransport(ServiceBusClient).client'></a>
 
 `client` [Azure\.Messaging\.ServiceBus\.ServiceBusClient](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.servicebusclient 'Azure\.Messaging\.ServiceBus\.ServiceBusClient')
 

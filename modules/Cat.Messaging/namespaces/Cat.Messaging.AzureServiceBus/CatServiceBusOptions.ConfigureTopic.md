@@ -32,7 +32,7 @@ Changes the options of a topic that the topology helper creates\.
 The module turns duplicate detection on before the callback runs, so the callback can turn it off\.
 
 ```csharp
-public System.Action<Azure.Messaging.ServiceBus.Administration.CreateTopicOptions>? ConfigureTopic { get; set; }
+public System.Action<CreateTopicOptions>? ConfigureTopic { get; set; }
 ```
 
 #### Property Value

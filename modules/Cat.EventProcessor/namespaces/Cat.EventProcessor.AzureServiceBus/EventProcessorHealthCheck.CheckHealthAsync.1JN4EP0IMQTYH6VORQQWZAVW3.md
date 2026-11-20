@@ -28,8 +28,6 @@
 
 ## EventProcessorHealthCheck\.CheckHealthAsync\(HealthCheckContext, CancellationToken\) Method
 
-Runs the health check, returning the status of the component being checked\.
-
 ```csharp
 public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken=default(System.Threading.CancellationToken));
 ```
@@ -39,16 +37,11 @@ public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks
 
 `context` [Microsoft\.Extensions\.Diagnostics\.HealthChecks\.HealthCheckContext](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.diagnostics.healthchecks.healthcheckcontext 'Microsoft\.Extensions\.Diagnostics\.HealthChecks\.HealthCheckContext')
 
-A context object associated with the current execution\.
-
 <a name='Cat.EventProcessor.AzureServiceBus.EventProcessorHealthCheck.CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext,System.Threading.CancellationToken).cancellationToken'></a>
 
 `cancellationToken` [System\.Threading\.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System\.Threading\.CancellationToken')
 
-A [System\.Threading\.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System\.Threading\.CancellationToken') that can be used to cancel the health check\.
-
 Implements [CheckHealthAsync\(HealthCheckContext, CancellationToken\)](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.diagnostics.healthchecks.ihealthcheck.checkhealthasync#microsoft-extensions-diagnostics-healthchecks-ihealthcheck-checkhealthasync(microsoft-extensions-diagnostics-healthchecks-healthcheckcontext-system-threading-cancellationtoken) 'Microsoft\.Extensions\.Diagnostics\.HealthChecks\.IHealthCheck\.CheckHealthAsync\(Microsoft\.Extensions\.Diagnostics\.HealthChecks\.HealthCheckContext,System\.Threading\.CancellationToken\)')
 
 #### Returns
-[System\.Threading\.Tasks\.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')[Microsoft\.Extensions\.Diagnostics\.HealthChecks\.HealthCheckResult](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.diagnostics.healthchecks.healthcheckresult 'Microsoft\.Extensions\.Diagnostics\.HealthChecks\.HealthCheckResult')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')  
-A [System\.Threading\.Tasks\.Task&lt;&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1') that completes when the health check has finished, yielding the status of the component being checked\.
+[System\.Threading\.Tasks\.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')[Microsoft\.Extensions\.Diagnostics\.HealthChecks\.HealthCheckResult](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.diagnostics.healthchecks.healthcheckresult 'Microsoft\.Extensions\.Diagnostics\.HealthChecks\.HealthCheckResult')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')

@@ -31,23 +31,23 @@
 Creates the service\.
 
 ```csharp
-public DeadLetterMetricsService(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient admin, Microsoft.Extensions.Options.IOptions<Cat.Messaging.AzureServiceBus.CatDeadLetterMetricsOptions> options, Microsoft.Extensions.Logging.ILogger<Cat.Messaging.AzureServiceBus.DeadLetterMetricsService> logger);
+public DeadLetterMetricsService(ServiceBusAdministrationClient admin, Microsoft.Extensions.Options.IOptions<Cat.Messaging.AzureServiceBus.CatDeadLetterMetricsOptions> options, Microsoft.Extensions.Logging.ILogger<Cat.Messaging.AzureServiceBus.DeadLetterMetricsService> logger);
 ```
 #### Parameters
 
-<a name='Cat.Messaging.AzureServiceBus.DeadLetterMetricsService.DeadLetterMetricsService(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient,Microsoft.Extensions.Options.IOptions_Cat.Messaging.AzureServiceBus.CatDeadLetterMetricsOptions_,Microsoft.Extensions.Logging.ILogger_Cat.Messaging.AzureServiceBus.DeadLetterMetricsService_).admin'></a>
+<a name='Cat.Messaging.AzureServiceBus.DeadLetterMetricsService.DeadLetterMetricsService(ServiceBusAdministrationClient,Microsoft.Extensions.Options.IOptions_Cat.Messaging.AzureServiceBus.CatDeadLetterMetricsOptions_,Microsoft.Extensions.Logging.ILogger_Cat.Messaging.AzureServiceBus.DeadLetterMetricsService_).admin'></a>
 
 `admin` [Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClient](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.servicebusadministrationclient 'Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClient')
 
 The administration client that reads the counts\.
 
-<a name='Cat.Messaging.AzureServiceBus.DeadLetterMetricsService.DeadLetterMetricsService(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient,Microsoft.Extensions.Options.IOptions_Cat.Messaging.AzureServiceBus.CatDeadLetterMetricsOptions_,Microsoft.Extensions.Logging.ILogger_Cat.Messaging.AzureServiceBus.DeadLetterMetricsService_).options'></a>
+<a name='Cat.Messaging.AzureServiceBus.DeadLetterMetricsService.DeadLetterMetricsService(ServiceBusAdministrationClient,Microsoft.Extensions.Options.IOptions_Cat.Messaging.AzureServiceBus.CatDeadLetterMetricsOptions_,Microsoft.Extensions.Logging.ILogger_Cat.Messaging.AzureServiceBus.DeadLetterMetricsService_).options'></a>
 
 `options` [Microsoft\.Extensions\.Options\.IOptions&lt;](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.options.ioptions-1 'Microsoft\.Extensions\.Options\.IOptions\`1')[CatDeadLetterMetricsOptions](CatDeadLetterMetricsOptions.md 'Cat\.Messaging\.AzureServiceBus\.CatDeadLetterMetricsOptions')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.options.ioptions-1 'Microsoft\.Extensions\.Options\.IOptions\`1')
 
 The entities to watch\.
 
-<a name='Cat.Messaging.AzureServiceBus.DeadLetterMetricsService.DeadLetterMetricsService(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient,Microsoft.Extensions.Options.IOptions_Cat.Messaging.AzureServiceBus.CatDeadLetterMetricsOptions_,Microsoft.Extensions.Logging.ILogger_Cat.Messaging.AzureServiceBus.DeadLetterMetricsService_).logger'></a>
+<a name='Cat.Messaging.AzureServiceBus.DeadLetterMetricsService.DeadLetterMetricsService(ServiceBusAdministrationClient,Microsoft.Extensions.Options.IOptions_Cat.Messaging.AzureServiceBus.CatDeadLetterMetricsOptions_,Microsoft.Extensions.Logging.ILogger_Cat.Messaging.AzureServiceBus.DeadLetterMetricsService_).logger'></a>
 
 `logger` [Microsoft\.Extensions\.Logging\.ILogger&lt;](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger-1 'Microsoft\.Extensions\.Logging\.ILogger\`1')[DeadLetterMetricsService](DeadLetterMetricsService.md 'Cat\.Messaging\.AzureServiceBus\.DeadLetterMetricsService')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger-1 'Microsoft\.Extensions\.Logging\.ILogger\`1')
 

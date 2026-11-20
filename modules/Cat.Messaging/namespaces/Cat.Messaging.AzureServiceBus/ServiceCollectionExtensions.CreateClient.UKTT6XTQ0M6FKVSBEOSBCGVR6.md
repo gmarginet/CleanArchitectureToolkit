@@ -29,7 +29,7 @@
 ## ServiceCollectionExtensions\.CreateClient\(CatServiceBusOptions\) Method
 
 ```csharp
-internal static Azure.Messaging.ServiceBus.ServiceBusClient CreateClient(Cat.Messaging.AzureServiceBus.CatServiceBusOptions options);
+internal static ServiceBusClient CreateClient(Cat.Messaging.AzureServiceBus.CatServiceBusOptions options);
 ```
 #### Parameters
 

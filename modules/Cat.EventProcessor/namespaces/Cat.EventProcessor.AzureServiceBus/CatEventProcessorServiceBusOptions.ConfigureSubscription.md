@@ -32,7 +32,7 @@ Changes the options of a subscription that the topology helper creates, such as 
 The subscription options hold the names of the topic and the subscription\.
 
 ```csharp
-public System.Action<Azure.Messaging.ServiceBus.Administration.CreateSubscriptionOptions>? ConfigureSubscription { get; set; }
+public System.Action<CreateSubscriptionOptions>? ConfigureSubscription { get; set; }
 ```
 
 #### Property Value

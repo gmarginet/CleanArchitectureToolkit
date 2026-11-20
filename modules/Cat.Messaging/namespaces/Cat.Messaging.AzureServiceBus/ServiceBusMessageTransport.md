@@ -40,7 +40,7 @@ Implements [ICatMessageTransport](../../../Cat.Messaging/namespaces/Cat.Messagin
 
 | Constructors | |
 | :--- | :--- |
-| [ServiceBusMessageTransport\(ServiceBusClient\)](ServiceBusMessageTransport..ctor.PKYVG6LTWB6ABL9P12QRW90GD.md 'Cat\.Messaging\.AzureServiceBus\.ServiceBusMessageTransport\.ServiceBusMessageTransport\(Azure\.Messaging\.ServiceBus\.ServiceBusClient\)') | Creates the transport\. |
+| [ServiceBusMessageTransport\(ServiceBusClient\)](ServiceBusMessageTransport..ctor.T60RHQG5LONN3HEUTGQ6D2F54.md 'Cat\.Messaging\.AzureServiceBus\.ServiceBusMessageTransport\.ServiceBusMessageTransport\(ServiceBusClient\)') | Creates the transport\. |
 
 | Fields | |
 | :--- | :--- |

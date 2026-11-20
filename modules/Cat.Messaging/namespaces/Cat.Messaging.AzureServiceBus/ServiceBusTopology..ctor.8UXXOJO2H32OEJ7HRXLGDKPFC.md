@@ -31,23 +31,23 @@
 Creates the topology helper\.
 
 ```csharp
-public ServiceBusTopology(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient admin, Cat.Messaging.Abstractions.ICatMessageNameResolver nameResolver, Microsoft.Extensions.Options.IOptions<Cat.Messaging.AzureServiceBus.CatServiceBusOptions> options);
+public ServiceBusTopology(ServiceBusAdministrationClient admin, Cat.Messaging.Abstractions.ICatMessageNameResolver nameResolver, Microsoft.Extensions.Options.IOptions<Cat.Messaging.AzureServiceBus.CatServiceBusOptions> options);
 ```
 #### Parameters
 
-<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.ServiceBusTopology(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.Messaging.AzureServiceBus.CatServiceBusOptions_).admin'></a>
+<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.ServiceBusTopology(ServiceBusAdministrationClient,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.Messaging.AzureServiceBus.CatServiceBusOptions_).admin'></a>
 
 `admin` [Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClient](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.servicebusadministrationclient 'Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClient')
 
 The administration client\. It needs the manage right\.
 
-<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.ServiceBusTopology(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.Messaging.AzureServiceBus.CatServiceBusOptions_).nameResolver'></a>
+<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.ServiceBusTopology(ServiceBusAdministrationClient,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.Messaging.AzureServiceBus.CatServiceBusOptions_).nameResolver'></a>
 
 `nameResolver` [ICatMessageNameResolver](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessageNameResolver.md 'Cat\.Messaging\.Abstractions\.ICatMessageNameResolver')
 
 Finds the entity name and the kind of a message type\.
 
-<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.ServiceBusTopology(Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.Messaging.AzureServiceBus.CatServiceBusOptions_).options'></a>
+<a name='Cat.Messaging.AzureServiceBus.ServiceBusTopology.ServiceBusTopology(ServiceBusAdministrationClient,Cat.Messaging.Abstractions.ICatMessageNameResolver,Microsoft.Extensions.Options.IOptions_Cat.Messaging.AzureServiceBus.CatServiceBusOptions_).options'></a>
 
 `options` [Microsoft\.Extensions\.Options\.IOptions&lt;](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.options.ioptions-1 'Microsoft\.Extensions\.Options\.IOptions\`1')[CatServiceBusOptions](CatServiceBusOptions.md 'Cat\.Messaging\.AzureServiceBus\.CatServiceBusOptions')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.options.ioptions-1 'Microsoft\.Extensions\.Options\.IOptions\`1')
 

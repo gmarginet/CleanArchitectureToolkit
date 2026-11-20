@@ -39,7 +39,7 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Constructors | |
 | :--- | :--- |
-| [DeadLetterMetricsService\(ServiceBusAdministrationClient, IOptions&lt;CatDeadLetterMetricsOptions&gt;, ILogger&lt;DeadLetterMetricsService&gt;\)](DeadLetterMetricsService..ctor.ZTKQ2X9MDTRUKZ4R19BJQR2P9.md 'Cat\.Messaging\.AzureServiceBus\.DeadLetterMetricsService\.DeadLetterMetricsService\(Azure\.Messaging\.ServiceBus\.Administration\.ServiceBusAdministrationClient, Microsoft\.Extensions\.Options\.IOptions\<Cat\.Messaging\.AzureServiceBus\.CatDeadLetterMetricsOptions\>, Microsoft\.Extensions\.Logging\.ILogger\<Cat\.Messaging\.AzureServiceBus\.DeadLetterMetricsService\>\)') | Creates the service\. |
+| [DeadLetterMetricsService\(ServiceBusAdministrationClient, IOptions&lt;CatDeadLetterMetricsOptions&gt;, ILogger&lt;DeadLetterMetricsService&gt;\)](DeadLetterMetricsService..ctor.EBQA2UW7DCOHEIPCTRYQFSRG7.md 'Cat\.Messaging\.AzureServiceBus\.DeadLetterMetricsService\.DeadLetterMetricsService\(ServiceBusAdministrationClient, Microsoft\.Extensions\.Options\.IOptions\<Cat\.Messaging\.AzureServiceBus\.CatDeadLetterMetricsOptions\>, Microsoft\.Extensions\.Logging\.ILogger\<Cat\.Messaging\.AzureServiceBus\.DeadLetterMetricsService\>\)') | Creates the service\. |
 
 | Fields | |
 | :--- | :--- |
@@ -53,5 +53,5 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 | Methods | |
 | :--- | :--- |
 | [Dispose\(\)](DeadLetterMetricsService.Dispose().md 'Cat\.Messaging\.AzureServiceBus\.DeadLetterMetricsService\.Dispose\(\)') | Performs application\-defined tasks associated with freeing, releasing, or resetting unmanaged resources\. |
-| [ExecuteAsync\(CancellationToken\)](DeadLetterMetricsService.ExecuteAsync.C25WADBNNBSSJ523RLPGZFS04.md 'Cat\.Messaging\.AzureServiceBus\.DeadLetterMetricsService\.ExecuteAsync\(System\.Threading\.CancellationToken\)') | This method is called when the [Microsoft\.Extensions\.Hosting\.IHostedService](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.hosting.ihostedservice 'Microsoft\.Extensions\.Hosting\.IHostedService') starts\. The implementation should return a task that represents the lifetime of the long running operation\(s\) being performed\. |
+| [ExecuteAsync\(CancellationToken\)](DeadLetterMetricsService.ExecuteAsync.C25WADBNNBSSJ523RLPGZFS04.md 'Cat\.Messaging\.AzureServiceBus\.DeadLetterMetricsService\.ExecuteAsync\(System\.Threading\.CancellationToken\)') | |
 | [ReadCountsAsync\(CancellationToken\)](DeadLetterMetricsService.ReadCountsAsync.AGIBOLUT3ETH2H04PN9RBLE98.md 'Cat\.Messaging\.AzureServiceBus\.DeadLetterMetricsService\.ReadCountsAsync\(System\.Threading\.CancellationToken\)') | |

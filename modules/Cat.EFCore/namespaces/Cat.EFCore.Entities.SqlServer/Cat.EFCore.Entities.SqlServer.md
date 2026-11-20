@@ -32,4 +32,4 @@ Holds the entity base class for SQL Server temporal tables\.
 
 | Classes | |
 | :--- | :--- |
-| [CatTemporalEntityBase](CatTemporalEntityBase.md 'Cat\.EFCore\.Entities\.SqlServer\.CatTemporalEntityBase') | Base class for entities that live in a temporal table\. The database keeps the history of every change in a separate history table\. |
+| [CatTemporalEntityBase](CatTemporalEntityBase.md 'Cat\.EFCore\.Entities\.SqlServer\.CatTemporalEntityBase') | Base class for entities that live in a temporal table\. The database keeps the history of every change in a separate history table\. The period properties exist on `net11.0` only, because EF Core 10 needs them as shadow properties\. |

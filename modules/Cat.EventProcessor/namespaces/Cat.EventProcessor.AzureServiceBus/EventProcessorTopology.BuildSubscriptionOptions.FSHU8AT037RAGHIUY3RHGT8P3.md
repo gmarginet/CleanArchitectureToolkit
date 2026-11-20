@@ -32,19 +32,19 @@ Builds the options of a subscription\. The module sets only the names, so the de
 until the callback changes them\.
 
 ```csharp
-internal static Azure.Messaging.ServiceBus.Administration.CreateSubscriptionOptions BuildSubscriptionOptions(string topic, string subscription, System.Action<Azure.Messaging.ServiceBus.Administration.CreateSubscriptionOptions>? configure=null);
+internal static CreateSubscriptionOptions BuildSubscriptionOptions(string topic, string subscription, System.Action<CreateSubscriptionOptions>? configure=null);
 ```
 #### Parameters
 
-<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.BuildSubscriptionOptions(string,string,System.Action_Azure.Messaging.ServiceBus.Administration.CreateSubscriptionOptions_).topic'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.BuildSubscriptionOptions(string,string,System.Action_CreateSubscriptionOptions_).topic'></a>
 
 `topic` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
 
-<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.BuildSubscriptionOptions(string,string,System.Action_Azure.Messaging.ServiceBus.Administration.CreateSubscriptionOptions_).subscription'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.BuildSubscriptionOptions(string,string,System.Action_CreateSubscriptionOptions_).subscription'></a>
 
 `subscription` [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
 
-<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.BuildSubscriptionOptions(string,string,System.Action_Azure.Messaging.ServiceBus.Administration.CreateSubscriptionOptions_).configure'></a>
+<a name='Cat.EventProcessor.AzureServiceBus.EventProcessorTopology.BuildSubscriptionOptions(string,string,System.Action_CreateSubscriptionOptions_).configure'></a>
 
 `configure` [System\.Action&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')[Azure\.Messaging\.ServiceBus\.Administration\.CreateSubscriptionOptions](https://learn.microsoft.com/en-us/dotnet/api/azure.messaging.servicebus.administration.createsubscriptionoptions 'Azure\.Messaging\.ServiceBus\.Administration\.CreateSubscriptionOptions')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')
 

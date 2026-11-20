@@ -38,4 +38,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Methods | |
 | :--- | :--- |
-| [ToIncomingMessage\(ServiceBusReceivedMessage\)](ServiceBusIncomingMessageMapper.ToIncomingMessage.NIMQ2CJ5G2VV5P2B4SHZ2GEMD.md 'Cat\.EventProcessor\.AzureServiceBus\.ServiceBusIncomingMessageMapper\.ToIncomingMessage\(Azure\.Messaging\.ServiceBus\.ServiceBusReceivedMessage\)') | Maps the message\. The application properties are copied as text\. |
+| [ToIncomingMessage\(ServiceBusReceivedMessage\)](ServiceBusIncomingMessageMapper.ToIncomingMessage.J0MQ9SCPIYHH2LXWRNT7YG1E9.md 'Cat\.EventProcessor\.AzureServiceBus\.ServiceBusIncomingMessageMapper\.ToIncomingMessage\(ServiceBusReceivedMessage\)') | Maps the message\. The application properties are copied as text\. |

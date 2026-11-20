@@ -1,4 +1,11 @@
 <Project>
+    <!-- A project for more than one target framework writes its documentation for net11.0 only. Every target framework would write the same files at the same time. -->
+    <PropertyGroup Condition="'$(TargetFrameworks)' != '' AND '$(TargetFramework)' != 'net11.0'">
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+        <DocumentationFile></DocumentationFile>
+        <DisableDefaultDocumentation>true</DisableDefaultDocumentation>
+    </PropertyGroup>
+
     <!-- DefaultDocumentation writes CRLF on Windows. The repo stores text with LF, so convert the generated files after each run. -->
     <UsingTask TaskName="CatNormalizeLineEndings" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
         <ParameterGroup>

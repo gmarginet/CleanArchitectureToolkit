@@ -32,7 +32,7 @@ Maps the message\. The message ID is copied, so duplicate detection of the bus c
 The trace context is not added here, the Service Bus SDK puts its `Diagnostic-Id` on the message when it sends\.
 
 ```csharp
-public static Azure.Messaging.ServiceBus.ServiceBusMessage ToServiceBusMessage(Cat.Messaging.Abstractions.CatOutgoingMessage message);
+public static ServiceBusMessage ToServiceBusMessage(Cat.Messaging.Abstractions.CatOutgoingMessage message);
 ```
 #### Parameters
 

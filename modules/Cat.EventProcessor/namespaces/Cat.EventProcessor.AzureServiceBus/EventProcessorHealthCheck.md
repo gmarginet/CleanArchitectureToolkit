@@ -50,4 +50,4 @@ Implements [Microsoft\.Extensions\.Diagnostics\.HealthChecks\.IHealthCheck](http
 
 | Methods | |
 | :--- | :--- |
-| [CheckHealthAsync\(HealthCheckContext, CancellationToken\)](EventProcessorHealthCheck.CheckHealthAsync.1JN4EP0IMQTYH6VORQQWZAVW3.md 'Cat\.EventProcessor\.AzureServiceBus\.EventProcessorHealthCheck\.CheckHealthAsync\(Microsoft\.Extensions\.Diagnostics\.HealthChecks\.HealthCheckContext, System\.Threading\.CancellationToken\)') | Runs the health check, returning the status of the component being checked\. |
+| [CheckHealthAsync\(HealthCheckContext, CancellationToken\)](EventProcessorHealthCheck.CheckHealthAsync.1JN4EP0IMQTYH6VORQQWZAVW3.md 'Cat\.EventProcessor\.AzureServiceBus\.EventProcessorHealthCheck\.CheckHealthAsync\(Microsoft\.Extensions\.Diagnostics\.HealthChecks\.HealthCheckContext, System\.Threading\.CancellationToken\)') | |

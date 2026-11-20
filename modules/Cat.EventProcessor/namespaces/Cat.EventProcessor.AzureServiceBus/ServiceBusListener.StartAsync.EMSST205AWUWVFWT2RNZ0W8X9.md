@@ -28,8 +28,6 @@
 
 ## ServiceBusListener\.StartAsync\(CancellationToken\) Method
 
-Triggered when the application host is ready to start the service\.
-
 ```csharp
 public System.Threading.Tasks.Task StartAsync(System.Threading.CancellationToken cancellationToken);
 ```
@@ -39,10 +37,7 @@ public System.Threading.Tasks.Task StartAsync(System.Threading.CancellationToken
 
 `cancellationToken` [System\.Threading\.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System\.Threading\.CancellationToken')
 
-Indicates that the start process has been aborted\.
-
 Implements [StartAsync\(CancellationToken\)](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.hosting.ihostedservice.startasync#microsoft-extensions-hosting-ihostedservice-startasync(system-threading-cancellationtoken) 'Microsoft\.Extensions\.Hosting\.IHostedService\.StartAsync\(System\.Threading\.CancellationToken\)')
 
 #### Returns
-[System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task')  
-A [System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task') that represents the asynchronous Start operation\.
+[System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task')

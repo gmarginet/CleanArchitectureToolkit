@@ -32,7 +32,7 @@ Changes the options of the [Azure\.Messaging\.ServiceBus\.ServiceBusClient](http
 The module sets nothing here, so the defaults of the SDK apply\.
 
 ```csharp
-public System.Action<Azure.Messaging.ServiceBus.ServiceBusClientOptions>? ConfigureClient { get; set; }
+public System.Action<ServiceBusClientOptions>? ConfigureClient { get; set; }
 ```
 
 #### Property Value

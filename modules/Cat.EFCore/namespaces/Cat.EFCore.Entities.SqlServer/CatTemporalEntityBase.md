@@ -30,6 +30,7 @@
 
 Base class for entities that live in a temporal table\.
 The database keeps the history of every change in a separate history table\.
+The period properties exist on `net11.0` only, because EF Core 10 needs them as shadow properties\.
 
 ```csharp
 public class CatTemporalEntityBase : Cat.EFCore.Entities.CatEntityBase
