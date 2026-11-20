@@ -57,7 +57,7 @@ PostgreSQL error checks, in a new project `Cat.Db.Errors.PostgreSQL` next to the
 #### Decided
 - **A new project.** `Cat.Db.Errors.PostgreSQL` is added next to the other two (owner, 2026-11-20).
 - **MySQL stays.** `Cat.Db.Errors.MySql` is kept, because `Cat.Dapper.MySql` references it (owner, 2026-11-20).
-- **Target framework.** `netstandard2.0` if Npgsql allows it, otherwise `net10.0;net11.0` (owner, 2026-11-20), see [Cat.TargetFrameworks.md](Cat.TargetFrameworks.md#phase-1). Check the targets of the Npgsql package on nuget.org first.
+- **Target framework.** `net10.0;net11.0`. The rule is `netstandard2.0` if the packages allow it, and otherwise `net10.0;net11.0` (owner, 2026-11-20). Npgsql 10.0.3 targets `net8.0`, `net9.0` and `net10.0` only, read on nuget.org on 2026-11-20, so `netstandard2.0` is not possible. The version of Npgsql for `net11.0` is to check.
 
 #### Done when
 A developer can ask an exception for a unique key violation, a foreign key violation, a deadlock and a timeout on PostgreSQL, with the same check names as on the other two databases. The module readme and the tests cover it.

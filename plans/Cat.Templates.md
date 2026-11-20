@@ -226,7 +226,7 @@ Recommendation: no, for now. It is a bigger version of question 4 (Aspire) and q
 
 <!-- region start: Question 16-->
 #### Question 16
-Which target framework does a generated service get? The modules support .NET 10 and .NET 11, see [Cat.TargetFrameworks.md](Cat.TargetFrameworks.md), and the demo stays on .NET 11. The options:
+Which target framework does a generated service get? The modules support .NET 10 and .NET 11, see the target framework rule in `CLAUDE.md`, and the demo stays on .NET 11. The options:
 - **`net11.0` only.** Cost: a developer on the .NET 10 LTS release edits every project file after the template ran.
 - **A choice parameter,** `net10.0` or `net11.0`, with the package versions of question 11 per choice. Cost: the template holds both sets of versions, and the build test of question 13 runs for both.
 

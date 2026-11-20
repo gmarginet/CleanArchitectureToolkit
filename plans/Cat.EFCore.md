@@ -54,7 +54,6 @@ Add PostgreSQL to the module, on top of the provider neutral `Cat.EFCore.Extensi
 - The outbox, the inbox and the scheduler claim store use plain EF Core, with `HasMaxLength`, `HasIndex` and `ExecuteUpdate`. They make no provider call, and nobody has run them on PostgreSQL.
 
 #### Needs
-- Phase 2 of [Cat.TargetFrameworks.md](Cat.TargetFrameworks.md#phase-2), so the EF Core projects build for EF Core 10 and 11 first.
 - A stable Npgsql EF Core provider for EF Core 11, to prove the result on PostgreSQL on .NET 11, see [Phase 13 of the demo](Demo.md#phase-13). The owner decided to wait for the stable version and not to use a release candidate. The provider for EF Core 10 is stable (to check on nuget.org), see question 2.
 
 #### Decided

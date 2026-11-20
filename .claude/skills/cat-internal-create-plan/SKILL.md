@@ -55,7 +55,7 @@ Every plan is linked from the readme, and from nowhere else. A plan without a ro
 - Keep the plan until the module has done everything in it and the owner agrees that it can go. When the plan goes, remove its link from the readme too.
 - A module readme never links to the plan. Only the readme does. A module readme grows until it holds everything about how the module works and how to use it, so the plan can be removed.
 - The `cat-internal-verify-docs` skill checks that every plan has exactly one row in the repo overview.
-- One exception: a plan that covers the whole repository and not one item, such as `Cat.TargetFrameworks.md`, has no row. The owner decides this. The plan says so with the line `<!-- no overview row-->` in its `TemplateSkill` region, and the readme does not link it. Its phases have no priority number. The plan is built first, and every phase in the repo overview waits until it is built. Other plans link to its phases in a `Needs` chapter as usual.
+- One exception: a plan that covers the whole repository and not one item has no row. The owner decides this. The plan says so with the line `<!-- no overview row-->` in its `TemplateSkill` region, and the readme does not link it. Its phases have no priority number. The plan is built first, and every phase in the repo overview waits until it is built. Other plans link to its phases in a `Needs` chapter as usual.
 
 ## Keeping the other documents in step
 Use this when an answer or a decision changes more than one plan, and when a module is renamed, merged or dropped.

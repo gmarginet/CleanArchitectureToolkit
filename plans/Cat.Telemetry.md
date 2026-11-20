@@ -116,7 +116,7 @@ Recommendation: OpenTelemetry only, with `System.Diagnostics` as the API in the 
 #### Question 3
 Which exporters do we support, and which telemetry backend will you really use in Azure? The options:
 - **OTLP only.** Every backend (Grafana, Aspire dashboard, Azure Monitor through a collector) takes OTLP. Cost: the developer sets up a collector for Azure Monitor.
-- **OTLP plus the Azure Monitor exporter** as an optional project. Cost: one more project, and it targets `net10.0;net11.0` when it cannot target `netstandard2.0`, see [Cat.TargetFrameworks.md](Cat.TargetFrameworks.md).
+- **OTLP plus the Azure Monitor exporter** as an optional project. Cost: one more project, and it targets `net10.0;net11.0` when it cannot target `netstandard2.0`, see the target framework rule in `CLAUDE.md`.
 - **Leave exporters to the application.** The module only sets up the sources. Cost: none, and it is what `ServiceDefaults` does with its OTLP switch.
 
 Recommendation: OTLP built in (switched on by `OTEL_EXPORTER_OTLP_ENDPOINT`, like `ServiceDefaults`), the rest the application's choice. This needs the owner's answer for Azure: Application Insights, Grafana or something else decides whether the optional Azure project is worth it.

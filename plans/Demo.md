@@ -246,7 +246,7 @@ The PostgreSQL showcase. The Notifications service moves from SQL Server to Post
 #### Background
 - A showcase on PostgreSQL needs the Npgsql EF Core provider. The demo is on EF Core 11. The provider has no stable release for EF Core 11 yet. The latest is `11.0.0-rc.3`, pinned to a release candidate of EF Core 11. The facts were read on 2026-11-19 from nuget.org through a web search, and nobody has tested them against this code. Check the NuGet page before pinning a version.
 - The Aspire client package for PostgreSQL, `Aspire.Npgsql.EntityFrameworkCore.PostgreSQL`, depends on Npgsql 10.0.3 or higher. Nobody has tested it with Npgsql 11.
-- The demo stays on `net11.0` and EF Core 11, while the modules support .NET 10 and EF Core 10 as well, see [Cat.TargetFrameworks.md](Cat.TargetFrameworks.md). The PostgreSQL project of the modules can be proved on EF Core 10 before the demo moves, see question 2 of [Cat.EFCore.md](Cat.EFCore.md#phase-2).
+- The demo stays on `net11.0` and EF Core 11, while the modules support .NET 10 and EF Core 10 as well, see the target framework rule in `CLAUDE.md`. The PostgreSQL project of the modules can be proved on EF Core 10 before the demo moves, see question 2 of [Cat.EFCore.md](Cat.EFCore.md#phase-2).
 - `Cat.Db.Errors` has checks for SQL Server and MySQL, see the [module readme of Cat.Db.Errors](../modules/Cat.Db.Errors/README.md). The PostgreSQL checks are planned in [Cat.Db.Errors.md](Cat.Db.Errors.md#phase-1). Notifications needs them when a handler maps a database error, to check when building.
 - The module work that is left is in [Cat.EFCore.md](Cat.EFCore.md), for a provider neutral `Cat.EFCore.Extensions`.
 - Temporal tables and `Cat.Sql.Cdc` are SQL Server only. The PostgreSQL service must not use them.
