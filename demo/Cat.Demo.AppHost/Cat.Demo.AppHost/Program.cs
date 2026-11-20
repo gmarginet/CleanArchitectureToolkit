@@ -7,22 +7,18 @@ using Microsoft.Extensions.Configuration;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Sql:Mode picks where the databases live.
-// Container starts a SQL Server container. Existing uses the connection strings from the configuration.
-var sqlMode = builder.Configuration["Sql:Mode"] ?? "Container";
-var useContainer = sqlMode.Equals("Container", StringComparison.OrdinalIgnoreCase);
-if (!useContainer && !sqlMode.Equals("Existing", StringComparison.OrdinalIgnoreCase))
-{
-    throw new NotSupportedException($"Sql:Mode '{sqlMode}' is not supported. Use 'Container' or 'Existing'.");
-}
+// The services have no launch settings, so the AppHost says that they run in Development.
+// That is where they apply their migrations and create the topics of the bus.
 
 var catalog = builder.AddProject<Projects.Cat_Demo_CatalogService_Api>("catalog")
+    .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
     .WithHttpEndpoint(port: 5101, name: "http", isProxied: false)
     .WithHttpHealthCheck("/health");
 
 // The payment service can fail on purpose. Set Payment:Latency, Payment:ErrorPercentage or Payment:Outage in the
 // configuration of the AppHost (for example in the user secrets) and restart. The demo readme explains the values.
 var payment = builder.AddProject<Projects.Cat_Demo_PaymentService_Api>("payment")
+    .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
     .WithHttpEndpoint(port: 5103, name: "http", isProxied: false)
     .WithHttpHealthCheck("/health");
 
@@ -42,6 +38,7 @@ foreach (var (setting, variable) in new[]
 
 // Inventory is the database first service. Its database comes from the SQL scripts of the Database folder.
 var inventory = builder.AddProject<Projects.Cat_Demo_InventoryService_Api>("inventory")
+    .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
     .WithHttpEndpoint(port: 5105, name: "http", isProxied: false)
     .WithHttpHealthCheck("/health");
 
@@ -53,6 +50,7 @@ var mailpit = builder.AddContainer("mailpit", "axllent/mailpit")
     .WithEndpoint(port: smtpPort, targetPort: 1025, name: "smtp", scheme: "tcp", isProxied: false)
     .WithHttpEndpoint(port: mailInboxPort, targetPort: 8025, name: "http", isProxied: false);
 var notifications = builder.AddProject<Projects.Cat_Demo_NotificationService_Api>("notifications")
+    .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
     .WithHttpEndpoint(port: 5106, name: "http", isProxied: false)
     .WithHttpHealthCheck("/health")
     .WithEnvironment("Smtp__Host", "localhost")
@@ -63,6 +61,7 @@ var notifications = builder.AddProject<Projects.Cat_Demo_NotificationService_Api
 // and not the services.
 // The gateway waits for Orders, so Orders must not wait for the gateway.
 var orders = builder.AddProject<Projects.Cat_Demo_OrderService_Api>("orders")
+    .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
     .WithHttpEndpoint(port: 5102, name: "http", isProxied: false)
     .WithHttpHealthCheck("/health");
 
@@ -144,6 +143,7 @@ const int webPort = 5104;
 var gatewayUrl = $"http://localhost:{gatewayPort}";
 var webUrl = $"http://localhost:{webPort}";
 var gateway = builder.AddProject<Projects.Cat_Demo_Api_Gateway>("gateway")
+    .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
     .WithHttpEndpoint(port: gatewayPort, name: "http", isProxied: false)
     .WithReference(catalog)
     .WithReference(orders)
@@ -175,53 +175,32 @@ builder.AddViteApp("web", "../../Cat.Demo.WebClient/Cat.Demo.WebClient.App")
     .WithEnvironment("VITE_AUTHORITY", authority)
     .WaitFor(gateway);
 
-if (useContainer)
-{
-    // The data volume keeps the databases when the container is removed.
-    // The memory limit stops SQL Server from taking all the memory it can get.
-    // The SQL Server Agent runs the capture job of change data capture. The Inventory change capture needs it.
-    var sql = builder.AddSqlServer("sql")
-        .WithDataVolume("cat-demo-sql-data")
-        .WithEnvironment("MSSQL_MEMORY_LIMIT_MB", "2048")
-        .WithEnvironment("MSSQL_AGENT_ENABLED", "true");
+// The data volume keeps the databases when the container is removed.
+// The memory limit stops SQL Server from taking all the memory it can get.
+// The SQL Server Agent runs the capture job of change data capture. The Inventory change capture needs it.
+var sql = builder.AddSqlServer("sql")
+    .WithDataVolume("cat-demo-sql-data")
+    .WithEnvironment("MSSQL_MEMORY_LIMIT_MB", "2048")
+    .WithEnvironment("MSSQL_AGENT_ENABLED", "true");
 
-    // The resource names must differ from the project names. The connection names stay catalog and orders,
-    // because the services read GetConnectionString("catalog") and GetConnectionString("orders").
-    var catalogDb = sql.AddDatabase("catalog-db", databaseName: "catalog");
-    var ordersDb = sql.AddDatabase("orders-db", databaseName: "orders");
+// The resource names must differ from the project names. The connection names stay catalog and orders,
+// because the services read GetConnectionString("catalog") and GetConnectionString("orders").
+var catalogDb = sql.AddDatabase("catalog-db", databaseName: "catalog");
+var ordersDb = sql.AddDatabase("orders-db", databaseName: "orders");
 
-    catalog.WithReference(catalogDb, connectionName: "catalog").WaitFor(catalogDb);
-    orders.WithReference(ordersDb, connectionName: "orders").WaitFor(ordersDb);
+catalog.WithReference(catalogDb, connectionName: "catalog").WaitFor(catalogDb);
+orders.WithReference(ordersDb, connectionName: "orders").WaitFor(ordersDb);
 
-    var notificationsDb = sql.AddDatabase("notifications-db", databaseName: "notifications");
-    notifications.WithReference(notificationsDb, connectionName: "notifications").WaitFor(notificationsDb);
+var notificationsDb = sql.AddDatabase("notifications-db", databaseName: "notifications");
+notifications.WithReference(notificationsDb, connectionName: "notifications").WaitFor(notificationsDb);
 
-    // The inventory database is database first. The creation script creates the database and runs the SQL scripts
-    // of the Database folder. The scripts only create what is missing, so they can run at every start.
-    var inventoryDb = sql.AddDatabase("inventory-db", databaseName: "inventory")
-        .WithCreationScript(BuildInventoryCreationScript(builder.AppHostDirectory));
-    // The scripts switch change data capture on in this mode, so Inventory may read the change table.
-    inventory.WithReference(inventoryDb, connectionName: "inventory").WaitFor(inventoryDb)
-        .WithEnvironment("Inventory__ChangeCapture", "true");
-}
-else
-{
-    var catalogConnection = builder.Configuration["ConnectionStrings:catalog"]
-        ?? throw new InvalidOperationException("ConnectionStrings:catalog is missing.");
-    var ordersConnection = builder.Configuration["ConnectionStrings:orders"]
-        ?? throw new InvalidOperationException("ConnectionStrings:orders is missing.");
-    var notificationsConnection = builder.Configuration["ConnectionStrings:notifications"]
-        ?? throw new InvalidOperationException("ConnectionStrings:notifications is missing.");
-
-    // The owner of an existing inventory database owns its schema. In this mode the AppHost does not run the scripts.
-    var inventoryConnection = builder.Configuration["ConnectionStrings:inventory"]
-        ?? throw new InvalidOperationException("ConnectionStrings:inventory is missing.");
-
-    catalog.WithEnvironment("ConnectionStrings__catalog", catalogConnection);
-    orders.WithEnvironment("ConnectionStrings__orders", ordersConnection);
-    notifications.WithEnvironment("ConnectionStrings__notifications", notificationsConnection);
-    inventory.WithEnvironment("ConnectionStrings__inventory", inventoryConnection);
-}
+// The inventory database is database first. The creation script creates the database and runs the SQL scripts
+// of the Database folder. The scripts only create what is missing, so they can run at every start.
+var inventoryDb = sql.AddDatabase("inventory-db", databaseName: "inventory")
+    .WithCreationScript(BuildInventoryCreationScript(builder.AppHostDirectory));
+// The scripts switch change data capture on, so Inventory may read the change table.
+inventory.WithReference(inventoryDb, connectionName: "inventory").WaitFor(inventoryDb)
+    .WithEnvironment("Inventory__ChangeCapture", "true");
 
 builder.Build().Run();
 

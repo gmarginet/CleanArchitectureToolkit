@@ -22,17 +22,12 @@ public static class EventProcessorExtensions
 
     /// <summary>
     /// Declares the messages Notifications receives and starts the listener for them.
-    /// It only works when the host gives Notifications the connection string <c>messaging</c> (Aspire does).
-    /// Without it nothing is registered, so <c>dotnet run</c> keeps working on its own.
+    /// The AppHost gives Notifications the connection string <c>messaging</c> of the Service Bus emulator.
     /// </summary>
-    /// <returns><c>true</c> when the listener is registered.</returns>
-    public static bool AddCatDemoNotificationEventProcessor(this IServiceCollection services, IConfiguration configuration)
+    public static void AddCatDemoNotificationEventProcessor(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("messaging");
-        if (string.IsNullOrWhiteSpace(connectionString))
-        {
-            return false;
-        }
+        var connectionString = configuration.GetConnectionString("messaging")
+            ?? throw new InvalidOperationException("The connection string messaging is missing. Start the demo with the AppHost.");
 
         services.AddCatMessagingModule();
         services.AddCatMessagingAzureServiceBus(options =>
@@ -41,33 +36,19 @@ public static class EventProcessorExtensions
             options.AdministrationConnectionString = configuration["Messaging:AdministrationConnectionString"] ?? string.Empty;
         });
 
-        // With an authority in the configuration (the AppHost sets it) a message needs a valid token of a logged in caller.
-        // Notifications sends no messages, so it needs no token of its own. Without an authority the messages run with no token.
-        var authenticationOn = !string.IsNullOrWhiteSpace(configuration["Authentication:Authority"]);
-
+        // A message needs a valid token of a logged in caller. Notifications sends no messages, so it needs no token of its own.
         services.AddCatEventProcessor(configuration, processor => processor
-            .Receive<OrderConfirmed>(RequireLogin(authenticationOn))
-            .Receive<LowStockReport>(RequireLogin(authenticationOn))
-            .Receive<StockChanged>(RequireLogin(authenticationOn)));
+            .Receive<OrderConfirmed>(RequireLogin)
+            .Receive<LowStockReport>(RequireLogin)
+            .Receive<StockChanged>(RequireLogin));
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
 
-        if (authenticationOn)
-        {
-            services.AddCatEventProcessorAuthorization();
-        }
+        services.AddCatEventProcessorAuthorization();
 
         services.AddHealthChecks().AddCatEventProcessorHealthCheck();
-
-        return true;
     }
 
-    private static Action<CatReceiveOptions> RequireLogin(bool authenticationOn) => options =>
-    {
-        if (authenticationOn)
-        {
-            options.Require(policy => policy.RequireAuthenticatedUser());
-        }
-    };
+    private static void RequireLogin(CatReceiveOptions options) => options.Require(policy => policy.RequireAuthenticatedUser());
 
     /// <summary>
     /// Creates the subscription of Notifications on the topic of every message it receives. It skips what exists.

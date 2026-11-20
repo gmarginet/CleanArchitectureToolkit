@@ -7,8 +7,8 @@ using Cat.Responses.Abstractions;
 namespace Cat.Demo.OrderService.CoreService.Abstractions;
 
 /// <summary>
-/// Gives the current price of books, with the ISBN that Inventory knows them by. Under the AppHost a call to the Catalog service
-/// through the gateway implements it. Without the AppHost a fake does.
+/// Gives the current price of books, with the ISBN that Inventory knows them by. A call to the Catalog service
+/// through the gateway implements it. The tests use a fake.
 /// </summary>
 public interface IPriceProvider
 {

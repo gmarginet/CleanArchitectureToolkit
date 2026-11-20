@@ -38,47 +38,32 @@ var connectionString = builder.Configuration.GetConnectionString("notifications"
 builder.Services.AddCatDemoNotificationDatabase(connectionString);
 builder.Services.AddCatDemoNotificationMail(builder.Configuration);
 
-// The listener for the messages of other services. It is on when the host gives Notifications the connection string "messaging".
-var eventProcessorOn = builder.Services.AddCatDemoNotificationEventProcessor(builder.Configuration);
+// The listener for the messages of other services.
+builder.Services.AddCatDemoNotificationEventProcessor(builder.Configuration);
 
 // The development endpoints of the event processor are not in the default OpenAPI document.
 // The dev document holds them, and Scalar shows it next to the default one.
 var devDocument = Cat.EventProcessor.Minimal.Api.Extensions.EndpointRouteBuilderExtensions.DevDocumentName;
-if (eventProcessorOn)
-{
-    builder.Services.AddOpenApi(devDocument);
-}
+builder.Services.AddOpenApi(devDocument);
 
-// With an authority in the configuration (the AppHost sets it) the listener accepts a message only with a valid token.
-var authenticationOn = builder.AddDemoJwtAuthentication();
+// The listener accepts a message only with a valid token.
+builder.AddDemoJwtAuthentication();
 
 var app = builder.Build();
 app.UseCatMinimalApiModule();
 
-if (authenticationOn)
-{
-    app.UseAuthentication();
-    app.UseAuthorization();
-}
+app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference(options =>
-    {
-        if (eventProcessorOn)
-        {
-            options.AddDocuments("v1", devDocument);
-        }
-    });
+    app.MapScalarApiReference(options => options.AddDocuments("v1", devDocument));
 
     await app.Services.InitializeNotificationDatabaseAsync();
 
-    if (eventProcessorOn)
-    {
-        await app.Services.InitializeNotificationEventProcessorAsync();
-        app.MapCatEventProcessor();
-    }
+    await app.Services.InitializeNotificationEventProcessorAsync();
+    app.MapCatEventProcessor();
 }
 
 app.UseHttpsRedirection();

@@ -55,7 +55,7 @@ public class BookSaveAuthorizationTests
         _app.UseCatMinimalApiModule();
         _app.UseAuthentication();
         _app.UseAuthorization();
-        _app.MapCatalogServiceEndpoints(requireLogin: true);
+        _app.MapCatalogServiceEndpoints();
         await _app.StartAsync();
 
         var address = _app.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()!.Addresses.First();

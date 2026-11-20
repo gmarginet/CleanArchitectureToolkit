@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Cat.Demo.OrderService.CoreService.Abstractions;
 
 /// <summary>
-/// Reserves stock for an order in the Inventory service. Without the AppHost a fake implements it.
+/// Reserves stock for an order in the Inventory service. The tests use a fake.
 /// Inventory identifies an order by its order number and a book by its ISBN.
 /// </summary>
 public interface IStockReservation

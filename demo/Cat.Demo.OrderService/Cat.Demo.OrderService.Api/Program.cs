@@ -71,30 +71,18 @@ builder.Services.AddCatDemoOrderPriceProvider(builder.Configuration);
 builder.Services.AddCatDemoOrderStockReservation(builder.Configuration);
 builder.Services.AddCatDemoOrderScheduler(builder.Configuration);
 
-// With an authority in the configuration (the AppHost sets it) the service checks the token and reads the user from it.
-// Without one, a plain dotnet run uses the stub with three demo users.
-var authenticationOn = builder.AddDemoJwtAuthentication();
+// The service checks the token and reads the user from it.
+builder.AddDemoJwtAuthentication();
 builder.Services.AddHttpContextAccessor();
-if (authenticationOn)
-{
-    // AddDemoJwtAuthentication has registered Cat.Users, so ICatUser comes from the token. Only the email is read here.
-    builder.Services.AddScoped<IUserEmail, TokenUserEmail>();
-}
-else
-{
-    builder.Services.AddScoped<DevelopmentUser>();
-    builder.Services.AddScoped<ICatUser>(provider => provider.GetRequiredService<DevelopmentUser>());
-    builder.Services.AddScoped<IUserEmail>(provider => provider.GetRequiredService<DevelopmentUser>());
-}
+
+// AddDemoJwtAuthentication has registered Cat.Users, so ICatUser comes from the token. Only the email is read here.
+builder.Services.AddScoped<IUserEmail, TokenUserEmail>();
 
 var app = builder.Build();
 app.UseCatMinimalApiModule();
 
-if (authenticationOn)
-{
-    app.UseAuthentication();
-    app.UseAuthorization();
-}
+app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
@@ -108,7 +96,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapDefaultEndpoints();
-app.MapOrderServiceEndpoints(authenticationOn);
+app.MapOrderServiceEndpoints();
 
 if (app.Environment.IsDevelopment())
 {

@@ -14,18 +14,13 @@ public static class ClientCredentialsExtensions
     /// Registers the client credentials token of the service, for work that has no user, such as the jobs of the Scheduler
     /// or the answer to a message. It needs <c>Authentication:Authority</c>, <c>Authentication:ClientId</c> and
     /// <c>Authentication:ClientSecret</c> in the configuration (the AppHost sets them).
-    /// Without one of them nothing is registered, and such work goes out without a token.
     /// </summary>
     /// <returns>The same service collection, so calls can be chained.</returns>
     public static IServiceCollection AddDemoClientCredentials(this IServiceCollection services, IConfiguration configuration)
     {
-        var authority = configuration["Authentication:Authority"];
-        var clientId = configuration["Authentication:ClientId"];
-        var clientSecret = configuration["Authentication:ClientSecret"];
-        if (string.IsNullOrWhiteSpace(authority) || string.IsNullOrWhiteSpace(clientId) || string.IsNullOrWhiteSpace(clientSecret))
-        {
-            return services;
-        }
+        var authority = Required(configuration, "Authentication:Authority");
+        var clientId = Required(configuration, "Authentication:ClientId");
+        var clientSecret = Required(configuration, "Authentication:ClientSecret");
 
         services.TryAddSingleton(TimeProvider.System);
         services.AddHttpClient(ClientCredentialsTokenProvider.HttpClientName);
@@ -33,6 +28,11 @@ public static class ClientCredentialsExtensions
         services.TryAddSingleton<IClientTokenProvider, ClientCredentialsTokenProvider>();
         return services;
     }
+
+    private static string Required(IConfiguration configuration, string key) =>
+        configuration[key] is { Length: > 0 } value
+            ? value
+            : throw new InvalidOperationException($"{key} is missing. Start the demo with the AppHost.");
 
     /// <summary>
     /// Registers <see cref="DemoMessageTokenProvider"/>, so the messages of the service carry a token.

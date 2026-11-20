@@ -7,7 +7,6 @@ using Cat.Demo.InventoryService.Api.Client;
 using Cat.Demo.OrderService.Infrastructure.ApiClients;
 using Cat.Demo.OrderService.Infrastructure.Catalog;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
-using Cat.Demo.OrderService.Infrastructure.Fakes;
 using Cat.Demo.OrderService.Infrastructure.Inventory;
 using Cat.Demo.ServiceDefaults;
 using Microsoft.EntityFrameworkCore;
@@ -34,50 +33,32 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Registers the price provider. When the host gives Orders an address for the <c>gateway</c>
-    /// (Aspire does, as <c>services:gateway:*</c>), <see cref="CatalogPriceProvider"/> asks Catalog for the prices
-    /// through the gateway, with the generated client. Services never call each other directly.
-    /// Without an address, <see cref="FakePriceProvider"/> answers, so <c>dotnet run</c> keeps working on its own.
+    /// Registers the price provider. <see cref="CatalogPriceProvider"/> asks Catalog for the prices
+    /// through the gateway, with the generated client. The AppHost gives Orders the address of the <c>gateway</c>.
+    /// Services never call each other directly.
     /// </summary>
     public static IServiceCollection AddCatDemoOrderPriceProvider(this IServiceCollection services, IConfiguration configuration)
     {
-        if (configuration.GetSection("services:gateway").Exists())
-        {
-            // The resilience handler of ServiceDefaults adds retries and a circuit breaker to this client.
-            services.AddCatApiClient<ICatalogClient, CatalogClient>("https+http://gateway");
-            services.AddScoped<IPriceProvider, CatalogPriceProvider>();
-        }
-        else
-        {
-            services.AddSingleton<IPriceProvider, FakePriceProvider>();
-        }
-
+        // The resilience handler of ServiceDefaults adds retries and a circuit breaker to this client.
+        services.AddCatApiClient<ICatalogClient, CatalogClient>("https+http://gateway");
+        services.AddScoped<IPriceProvider, CatalogPriceProvider>();
         return services;
     }
 
     /// <summary>
-    /// Registers the stock reservation. When the host gives Orders an address for the <c>gateway</c>,
-    /// <see cref="InventoryStockReservation"/> reserves the stock at the Inventory service through the gateway, with the generated client.
+    /// Registers the stock reservation. <see cref="InventoryStockReservation"/> reserves the stock at the Inventory service
+    /// through the gateway, with the generated client.
     /// The call forwards the token of the user, because the inventory route is not anonymous.
-    /// Without an address, <see cref="FakeStockReservation"/> answers. It is a singleton, because it remembers its reservations in memory.
     /// </summary>
     public static IServiceCollection AddCatDemoOrderStockReservation(this IServiceCollection services, IConfiguration configuration)
     {
-        if (configuration.GetSection("services:gateway").Exists())
-        {
-            services.AddHttpContextAccessor();
-            services.AddDemoClientCredentials(configuration);
-            services.TryAddTransient<ForwardBearerTokenHandler>();
-            services.AddCatApiClient<IInventoryClient, InventoryClient>("https+http://gateway")
-                .AddHttpMessageHandler<ForwardBearerTokenHandler>()
-                .UseFastFailResilience();
-            services.AddScoped<IStockReservation, InventoryStockReservation>();
-        }
-        else
-        {
-            services.AddSingleton<IStockReservation, FakeStockReservation>();
-        }
-
+        services.AddHttpContextAccessor();
+        services.AddDemoClientCredentials(configuration);
+        services.TryAddTransient<ForwardBearerTokenHandler>();
+        services.AddCatApiClient<IInventoryClient, InventoryClient>("https+http://gateway")
+            .AddHttpMessageHandler<ForwardBearerTokenHandler>()
+            .UseFastFailResilience();
+        services.AddScoped<IStockReservation, InventoryStockReservation>();
         return services;
     }
 

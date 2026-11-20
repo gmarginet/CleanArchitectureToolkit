@@ -20,17 +20,12 @@ public static class PaymentMessagingExtensions
 
     /// <summary>
     /// Declares the messages Payment receives and starts the listener for them, and registers the sender for its answer.
-    /// It only works when the host gives Payment the connection string <c>messaging</c> (Aspire does).
-    /// Without it nothing is registered, so <c>dotnet run</c> keeps working on its own, with the HTTP endpoint only.
+    /// The AppHost gives Payment the connection string <c>messaging</c> of the Service Bus emulator.
     /// </summary>
-    /// <returns><c>true</c> when the listener is registered.</returns>
-    public static bool AddCatDemoPaymentMessaging(this IServiceCollection services, IConfiguration configuration)
+    public static void AddCatDemoPaymentMessaging(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("messaging");
-        if (string.IsNullOrWhiteSpace(connectionString))
-        {
-            return false;
-        }
+        var connectionString = configuration.GetConnectionString("messaging")
+            ?? throw new InvalidOperationException("The connection string messaging is missing. Start the demo with the AppHost.");
 
         services.AddCatMessagingModule();
         services.AddCatMessagingAzureServiceBus(options =>
@@ -39,37 +34,17 @@ public static class PaymentMessagingExtensions
             options.AdministrationConnectionString = configuration["Messaging:AdministrationConnectionString"] ?? string.Empty;
         });
 
-        // With an authority in the configuration (the AppHost sets it) a message needs a valid token of a logged in caller,
-        // and the answer carries the client credentials token of Payment. Without one, the messages run as before, with no token.
-        var authenticationOn = !string.IsNullOrWhiteSpace(configuration["Authentication:Authority"]);
-
+        // A message needs a valid token of a logged in caller, and the answer carries the client credentials token of Payment.
         services.AddCatEventProcessor(configuration, processor => processor
-            .Receive<TakePayment>(options =>
-            {
-                if (authenticationOn)
-                {
-                    options.Require(policy => policy.RequireAuthenticatedUser());
-                }
-            })
-            .Receive<RefundPayment>(options =>
-            {
-                if (authenticationOn)
-                {
-                    options.Require(policy => policy.RequireAuthenticatedUser());
-                }
-            }));
+            .Receive<TakePayment>(options => options.Require(policy => policy.RequireAuthenticatedUser()))
+            .Receive<RefundPayment>(options => options.Require(policy => policy.RequireAuthenticatedUser())));
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
 
-        if (authenticationOn)
-        {
-            services.AddDemoClientCredentials(configuration);
-            services.AddDemoMessageTokens();
-            services.AddCatEventProcessorAuthorization();
-        }
+        services.AddDemoClientCredentials(configuration);
+        services.AddDemoMessageTokens();
+        services.AddCatEventProcessorAuthorization();
 
         services.AddHealthChecks().AddCatEventProcessorHealthCheck();
-
-        return true;
     }
 
     /// <summary>

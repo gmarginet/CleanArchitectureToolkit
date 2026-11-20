@@ -49,9 +49,7 @@ This readme tells the story of the demo in the order a team meets it. First come
 - [Running it](#running-it)
   - [Prerequisites](#prerequisites)
   - [Run with Aspire](#run-with-aspire)
-  - [SQL Server modes](#sql-server-modes)
   - [Docker memory](#docker-memory)
-  - [Run one service](#run-one-service)
   - [Things to know](#things-to-know)
   - [Health checks](#health-checks)
   - [Things to know about the dashboard](#things-to-know-about-the-dashboard)
@@ -125,8 +123,6 @@ Every night a job in the stock service looks for books with fewer than 10 copies
 
 The admin also gets a mail at the moment a book drops below the limit, a few seconds after the stock changes. This happens for every change of the stock table, also one made by a person or a script in the database. The stock service has no code that sends it. Only the drop from the limit or more to below the limit sends a mail, so a book that stays low does not send a mail on every order.
 
-Without Aspire stock is pretend. Any line of more than 50 copies is out of stock.
-
 ## The architecture
 
 With the functions known, the team asks which technical shape carries them. The demo makes these decisions:
@@ -154,7 +150,7 @@ Hatched boxes are not built yet. Solid boxes are. The drawing is kept in sync wi
 - **Contracts.** Sharing the contracts of a service is a choice per connection. The React client and the price call from Orders to Catalog keep their own models. The stock call from Orders to Inventory shares the `Contracts` project of Inventory, so the demo shows both. See [Sharing contracts](#sharing-contracts).
 - **Events** stay in memory inside a service. A service tells another one about a fact with a message on Azure Service Bus. Orders publishes `OrderConfirmed` through its outbox, and Inventory and Notifications receive it. Orders also sends `TakePayment` to Payment and gets `PaymentProcessed` back, and sends `RefundPayment` and gets `PaymentRefunded` back. These are the places where a message is a question with an answer. See [Events and interfaces](#events-and-interfaces).
 - **Databases.** Every service has its own SQL Server database.
-- **Aspire** starts everything with one command: the gateway, the services, Keycloak, SQL Server and the Service Bus emulator in containers, and the dashboard. You can still start a service on its own.
+- **Aspire** starts everything with one command: the gateway, the services, Keycloak, SQL Server and the Service Bus emulator in containers, and the dashboard.
 
 ### How a request flows through a service
 
@@ -212,7 +208,6 @@ In the code:
 - The business logic asks for `ICatUser` of [Cat.Users](../modules/Cat.Users/README.md) and never sees `HttpContext`. It has `UserId`, `Name`, `IsAuthenticated` and `IsInRole`. The `CoreService` project of Orders only references `Cat.Users.Abstractions`.
 - `IsAdmin` is a small extension method over `IsInRole("admin")`. `Email` is not part of `ICatUser`, so Orders has its own small `IUserEmail` that the Api project fills from the `email` claim.
 - `AddDemoJwtAuthentication` in `ServiceDefaults` registers `Cat.Users` and `Cat.Users.JwtBearer`. `ICatUser` then comes from the claims of the token, with the flat `roles` claim that Keycloak emits. `MapInboundClaims` is false, so `sub` keeps its name.
-- A stub reads the `X-Demo-User` header when the service runs without a login. It is `ICatUser` and `IUserEmail` in one.
 - Ownership is a filter in the query. The queries get the external id of the customer, or none for an admin, so the orders of others come back as not found and nothing leaks.
 
 Other ways were rejected. Entra ID or Auth0 would make every person who clones the repository create a tenant. An own token service is a lot of code that is not about CAT. `dotnet user-jwts` has no login flow for the client.
@@ -236,7 +231,7 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 - The in-process event `OrderConfirmedEvent` and the message `OrderConfirmed` are two different types. The status updater sets the status through a command, and that command also publishes the message. See [Orders service](#orders-service).
 - The message is a service request as well. Inventory writes a handler for it, like for any other request, and `Cat.EventProcessor` runs it. See [Inventory service](#inventory-service).
 - Events cannot drive the process. `PublishAsync` returns no answer and rethrows the exception of a failing handler.
-- Calls whose answer decides the next step and arrives at once go through an interface. A fake sits behind it when there is no host address.
+- Calls whose answer decides the next step and arrives at once go through an interface. The tests put a fake behind it.
 - A question that takes time goes through a saga. The place order workflow sends `TakePayment`, saves its state and stops. `PaymentProcessed` finds the saved instance by its correlation id and runs the rest of the workflow. See [Orders service](#orders-service).
 - A question that takes time but that nobody waits for needs no saga. The refund runs after the order process has ended, so a subscriber of the cancelled event sends `RefundPayment`, and a plain handler receives `PaymentRefunded`. See [Orders service](#orders-service).
 - Subscribers are long lived singletons, because the aggregator holds them with weak references. A subscriber that needs a scoped service such as the `DbContext` opens its own scope.
@@ -269,26 +264,24 @@ What it costs:
 - The first start pulls a SQL Server image of about 1.5 GB, and the Keycloak image.
 - It is one more thing to learn.
 
-Three rules keep Aspire from taking over the demo:
+Two rules keep Aspire from taking over the demo:
 
-- **The services still run on their own.** Every service starts with `dotnet run` and its own `appsettings`. The AppHost is a convenience, not a requirement. See [Run one service](#run-one-service).
 - **The modules never depend on Aspire.** Only the demo uses the shared `ServiceDefaults` project.
 - **The parts that need a container come with the AppHost.** SQL Server, Keycloak, the Service Bus emulator and Mailpit each have a reason:
-  - SQL Server in a container, with a mode that points to a SQL Server you already have. See [SQL Server modes](#sql-server-modes).
+  - SQL Server in a container. Temporal tables need SQL Server, so SQLite and PostgreSQL do not work.
   - Keycloak gives real tokens with no account to create. The realm is a file in the repository, so every clone gets the same users. The official Aspire Keycloak package is only a preview, so the demo uses a plain container.
   - The Service Bus emulator gives a real bus on your machine with no cloud account. Everything is gone after a restart, and the services create their own topics and queues at startup.
   - Mailpit is a test mail server. No mail leaves your machine.
 
 The demo is made for a local machine. Several settings, such as the plain text secrets of Keycloak, are fine for a demo and wrong for production.
 
-The main route is the Aspire AppHost. One command starts the gateway, Catalog, Orders, the payment service, Keycloak, SQL Server and the React client, and opens the dashboard. You can also start one service on its own, see [Run one service](#run-one-service).
+The main route is the Aspire AppHost. One command starts the gateway, Catalog, Orders, the payment service, Keycloak, SQL Server and the React client, and opens the dashboard.
 
 ### Prerequisites
 
 - The .NET SDK that `global.json` asks for.
 - **Node.js 24 or newer** for the React client. The AppHost runs `npm install` and `npm run dev` for you, so you only need Node and npm on the path.
-- **Docker Desktop** for the default route. SQL Server, Keycloak and the Service Bus emulator run in containers. The emulator needs Docker in every mode, because the AppHost always starts it.
-- Or a SQL Server you already have, for the databases. Temporal tables need SQL Server, so SQLite and PostgreSQL do not work.
+- **Docker Desktop** for the default route. SQL Server, Keycloak, the Service Bus emulator and Mailpit run in containers.
 
 ### Run with Aspire
 
@@ -314,29 +307,6 @@ To start again with empty databases, stop the AppHost and remove the volume:
 docker volume rm cat-demo-sql-data
 ```
 
-### SQL Server modes
-
-The setting `Sql:Mode` of the AppHost picks where the databases live.
-
-| Mode | What happens | Needs |
-|---|---|---|
-| `Container` (default) | The AppHost starts a SQL Server container with the data volume and creates the databases `catalog`, `orders`, `inventory` and `notifications`. It starts the SQL Server Agent in the container (`MSSQL_AGENT_ENABLED=true`) and runs the SQL scripts of Inventory in the `inventory` database, which also switch change data capture on. It sets `Inventory:ChangeCapture` for Inventory. The password is generated and kept in the user secrets. | Docker |
-| `Existing` | The AppHost passes the connection strings `ConnectionStrings:catalog`, `ConnectionStrings:orders`, `ConnectionStrings:inventory` and `ConnectionStrings:notifications` to the services. The defaults point to the local default instance. It does not run the SQL scripts, because the owner of an existing database owns its schema. | A SQL Server you can reach |
-
-To use `Existing`, set the mode in the user secrets of the AppHost:
-
-```
-dotnet user-secrets set "Sql:Mode" "Existing" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost
-```
-
-To point it at another server, set `ConnectionStrings:catalog`, `ConnectionStrings:orders`, `ConnectionStrings:inventory` and `ConnectionStrings:notifications` in the same way. The defaults use Windows authentication, which works for a local process only.
-
-The owner of an existing inventory database creates the table of the scheduler by hand. Run `004-scheduling.sql` from `demo/Cat.Demo.InventoryService/Cat.Demo.InventoryService.Database` on it. Without the table the nightly low stock report fails.
-
-The same owner switches change data capture on by hand to get the mail for a stock drop. Run `005-change-capture.sql` from the same folder on the inventory database. It needs a running SQL Server Agent, because the Agent runs the capture job. Then set `Inventory:ChangeCapture` to `true` for Inventory, for example in its user secrets. Without the setting Inventory reads no changes.
-
-Two lighter ways exist. LocalDB is the real SQL Server engine, so temporal tables work. It needs no virtual machine and stops by itself when idle. Point the connection strings at it. A plain `docker-compose.yml` with only SQL Server suits people who want a container but no Aspire. Temporal tables tie the demo to SQL Server, so SQLite and PostgreSQL do not work.
-
 ### Docker memory
 
 Docker Desktop on Windows runs on WSL2. By default the WSL2 virtual machine can take half of your RAM and keeps it while it runs.
@@ -356,48 +326,17 @@ Docker Desktop on Windows runs on WSL2. By default the WSL2 virtual machine can 
 - **SQL Server is capped.** The AppHost sets `MSSQL_MEMORY_LIMIT_MB` to 2048 on the container. An idle container uses about 620 MiB.
 - **Give the memory back.** When you are done, quit Docker Desktop and run `wsl --shutdown`.
 
-### Run one service
-
-Every service still starts on its own, with its own `appsettings`. It needs a SQL Server that you start yourself, and no Docker is involved. Without the AppHost, Orders uses a fake for prices, and there is no gateway and no login.
-
-1. Start the Catalog service. First check the connection string in `demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api/appsettings.Development.json`. The default points to the local default instance:
-   ```
-   Server=.;Database=catalog;Trusted_Connection=True;TrustServerCertificate=True
-   ```
-   Then run:
-   ```
-   dotnet run --project demo/Cat.Demo.CatalogService/Cat.Demo.CatalogService.Api
-   ```
-   Open `http://localhost:5101`. The OpenAPI document is at `http://localhost:5101/openapi/v1.json`.
-2. Start the Order service in a second terminal. It needs its own database. The Catalog service does not have to run. Check `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Api/appsettings.Development.json`:
-   ```
-   Server=.;Database=orders;Trusted_Connection=True;TrustServerCertificate=True
-   ```
-   Then run:
-   ```
-   dotnet run --project demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Api
-   ```
-   Open `http://localhost:5102`.
-3. Call the services directly on ports 5101 and 5102. The requests in the `.http` files that go through the gateway need the AppHost. Change their host to the service port and remove the `Authorization` line to use them here.
-
-In `Development` both services apply their EF Core migrations at startup. Catalog adds 4 categories and 7 books when its tables are empty. Orders adds the four order statuses.
-
 ### Things to know
 
 - **Users.** Keycloak holds three users: `alice`, `bob` and `admin`. The password is the same as the name. Alice and Bob only see their own orders. The admin sees all orders and may save books. The Keycloak admin console at `http://localhost:8180` uses `admin` and `admin`. Use these settings in the demo only. A person who registers on the login page becomes a normal user, with no admin role. Keycloak does not check the email address, because the demo has no mail server for it.
 - **Tokens.** The `.http` files get a token from Keycloak with the password grant of the client `cat-demo-cli`. The gateway needs a valid token for everything except reading books and categories. The services check the token again, so a call straight to port 5101 or 5102 without a token gets a 401 too.
-- **Run without the AppHost.** Without the setting `Authentication:Authority` a service has no login. Orders then reads the `X-Demo-User` header (`alice` by default, `bob` or `admin`).
-- **Fakes for the other services.** Prices, stock and the message bus are fakes only without the AppHost. Without a bus, Orders only logs the `OrderConfirmed` message, and Inventory and Notifications do not listen. Payment has no fake. Without a bus nothing answers the payment request, so an order stays pending until the job for stuck orders cancels it, 15 minutes later.
-  - Prices are real under the AppHost, because Orders asks Catalog. Without the AppHost the price of a book is made from its id, between 5.95 and 44.95 euro, with a made up ISBN.
-  - Stock is real under the AppHost, because Orders asks Inventory. Every book starts with 50 copies. Without the AppHost a line of more than 50 copies is out of stock.
-  - A total above 500 euro is declined by the payment service, which runs under the AppHost only, together with the bus.
-- **Mails.** Under the AppHost the confirmation mails go to Mailpit, a test mail server in a container. Open `http://localhost:8025` to read them. Without the setting `Smtp:Host` Notifications only writes the mail to its log. Alice and the others have `@example.com` addresses, and no mail leaves your machine.
+- **Mails.** The confirmation mails go to Mailpit, a test mail server in a container. Open `http://localhost:8025` to read them. Alice and the others have `@example.com` addresses, and no mail leaves your machine.
 - **Payment failures.** The payment service can fail on purpose, to show the wait, the redelivery and the timeout of an order. See [Payment service](#payment-service) for the settings. `Orders:PaymentTimeoutSeconds` sets how long an order waits for the payment, 120 seconds by default.
 - **An order is asynchronous.** `POST /orders` answers 202 with the order in status `Pending` and a `Location` header. The status changes when the payment answers. Follow it with `GET /orders/{id}`. The React client does this every 2 seconds while the status is `Pending`, and every 10 seconds while it is `Confirmed`, until the order is shipped.
 - **Currency.** All amounts are in euro.
 - **Order numbers** look like `20261105-0001`. The counter restarts every UTC day. The Scheduler removes the counters of earlier days every night. The development endpoint `POST /development/scheduler/clean-up-order-counters` does the same at once.
 - **Scheduled jobs.** Orders runs `clean-up-order-counters`, `clean-up-inbox` and `clean-up-outbox` every night and `cancel-stuck-orders` every 5 minutes. Inventory runs `low-stock-report` every night at 02:00 UTC. In `Development` each job has an endpoint in the group `/development/scheduler` of its service, so you can run it without waiting. These endpoints are not in the default OpenAPI document, so no generated client gets them. Scalar shows them in a second document named `dev`. `CatScheduling:Jobs:<job name>:Cron` changes the time of a job and `Enabled` switches it off. To see a low stock mail, set the stock of a book below 10 in the `inventory` database, run `POST /development/scheduler/low-stock-report` on port 5105, and open Mailpit. The mail goes to the address in `Notifications:AdminEmail`, which is `admin@example.com` by default. `Inventory:LowStockLimit` changes the limit.
-- **Stock drop mail.** Under the AppHost, a book whose stock drops from the limit or more to below the limit sends a mail to the admin, about 4 seconds later. To see one, change the stock in the `inventory` database, for example `UPDATE dbo.StockItem SET QuantityOnHand = 5 WHERE Id = 3`, and open Mailpit. A change that is no drop sends nothing. The limit is the same setting as for the nightly report. Without the AppHost nothing reads the change table. The development endpoint `POST /dev/event-processor/StockChanged` on port 5106 runs a message through Notifications without a bus. Send the bearer token of a login in the `Authorization` header, or the message is dead lettered as `Unauthorized`. `NotificationRequests.http` has both calls.
+- **Stock drop mail.** A book whose stock drops from the limit or more to below the limit sends a mail to the admin, about 4 seconds later. To see one, change the stock in the `inventory` database, for example `UPDATE dbo.StockItem SET QuantityOnHand = 5 WHERE Id = 3`, and open Mailpit. A change that is no drop sends nothing. The limit is the same setting as for the nightly report. The development endpoint `POST /dev/event-processor/StockChanged` on port 5106 runs a message through Notifications without a bus. Send the bearer token of a login in the `Authorization` header, or the message is dead lettered as `Unauthorized`. `NotificationRequests.http` has both calls.
 
 ### Health checks
 
@@ -554,9 +493,8 @@ The chapters above tell why. The chapters below hold the facts of every block th
 
 **How it works.**
 - `demo/Cat.Demo.AppHost/Cat.Demo.AppHost` adds the Api project of each service. The services keep their fixed ports with no Aspire proxy: gateway 5100, Catalog 5101, Orders 5102, payment 5103, web client 5104, Inventory 5105 and Notifications 5106. Mailpit uses 1025 for SMTP and 8025 for its web inbox. The dashboard runs on 15101.
-- The setting `Sql:Mode` picks `Container` (the default) or `Existing`. See [SQL Server modes](#sql-server-modes).
-- In `Container` mode the AppHost adds a SQL Server container with a named data volume and the databases `catalog`, `orders`, `inventory` and `notifications`. The services wait for their database. The `inventory` database also gets its SQL scripts, see [Inventory service](#inventory-service).
-- The services read `GetConnectionString("catalog")`, `GetConnectionString("orders")`, `GetConnectionString("inventory")` and `GetConnectionString("notifications")` in both modes. They do not know which mode runs.
+- The AppHost adds a SQL Server container with a named data volume and the databases `catalog`, `orders`, `inventory` and `notifications`. The services wait for their database. The `inventory` database also gets its SQL scripts, see [Inventory service](#inventory-service).
+- The services read `GetConnectionString("catalog")`, `GetConnectionString("orders")`, `GetConnectionString("inventory")` and `GetConnectionString("notifications")`.
 - Orders gets the address of the gateway through service discovery. That switches on `CatalogPriceProvider` and `InventoryStockReservation`, which call Catalog and Inventory through the gateway.
 - The Azure Service Bus emulator runs next to them, see [Service Bus emulator](#service-bus-emulator). Orders, Payment, Inventory and Notifications get its connection string as `messaging`. Orders waits for Payment, which creates the queues `TakePayment` and `RefundPayment` and the topics `PaymentProcessed` and `PaymentRefunded`. Inventory and Notifications wait for Orders.
 - Payment gets the client `cat-demo-payment` of Keycloak as `Authentication__ClientId` and `Authentication__ClientSecret`, next to the client of Orders. Inventory gets the client `cat-demo-inventory` the same way. They are demo secrets.
@@ -565,7 +503,6 @@ The chapters above tell why. The chapters below hold the facts of every block th
 - The gateway runs on port 5100. It finds Catalog, Orders, the payment service and Inventory through service discovery. The AppHost gives the gateway and every service the address of the Keycloak realm.
 - The React client runs with Vite on the fixed port 5104, because the gateway lists that port as an allowed CORS origin.
 - The AppHost passes the settings `Payment:Latency`, `Payment:ErrorPercentage` and `Payment:Outage` to the payment service, and `Orders:PaymentTimeoutSeconds` to the orders service. See [Payment service](#payment-service).
-- Every service still starts on its own with `dotnet run`. The AppHost is a convenience, not a requirement.
 
 **CAT modules.** None. The AppHost is demo infrastructure. The modules never depend on Aspire.
 
@@ -588,7 +525,7 @@ The chapters above tell why. The chapters below hold the facts of every block th
 **How it works.**
 - `demo/Cat.Demo.Api.Gateway/Cat.Demo.Api.Gateway` is a web project of about twenty lines. It calls `AddCatApiGateway`, adds the Aspire service discovery for YARP, and calls `UseCatApiGateway` and `MapCatApiGateway`.
 - The `CatGateway` section of `appsettings.json` names the services `catalog`, `orders`, `payment` and `inventory`. The path of a service is its name, so `/catalog/**` goes to Catalog, `/orders/**` to Orders, `/payment/**` to the payment service and `/inventory/**` to Inventory. The services already use that prefix, so `StripPrefix` is off.
-- The AppHost sets the addresses to `http://catalog`, `http://orders`, `http://payment` and `http://inventory`, which service discovery resolves. Without the AppHost the defaults point to the ports 5101, 5102, 5103 and 5105.
+- The AppHost sets the addresses to `http://catalog`, `http://orders`, `http://payment` and `http://inventory`, which service discovery resolves.
 - Catalog lists `GET /books/**` and `GET /categories/**` as public. Everything else needs a token, also the payment and the inventory routes. Saving a book needs a token, and the Catalog service wants the `admin` role on top.
 - The gateway checks that the token comes from the Keycloak realm and has the audience `cat-gateway`. It does not look at roles. It forwards the token unchanged, and the service checks it again.
 - Identity headers a caller sends, such as `X-Demo-User`, never reach a service.
@@ -645,7 +582,7 @@ The gateway only option of the module is not used in the demo. The services chec
 - Endpoints, all under `/catalog`:
   - `GET /books` searches books.
   - `GET /books/{bookId}` returns one book.
-  - `GET /books/prices` returns the price list with the ISBN of every book. Orders uses it under the AppHost, and Inventory knows a book by its ISBN.
+  - `GET /books/prices` returns the price list with the ISBN of every book. Orders uses it, and Inventory knows a book by its ISBN.
   - `POST /books` adds or changes a book.
   - `GET /categories` lists the categories.
 - Each endpoint maps to a service request such as `BookSearchRequest`. A handler turns it into queries and commands.
@@ -741,11 +678,11 @@ erDiagram
 - Confirmed and cancelled are events. Subscribers set the status, write an audit record, release the stock and ask for the refund.
 - `PlaceOrderRequestHandler` catches a cancelled request token once the order exists, for example when the gateway gives up on a slow first call. It publishes the cancelled event with the reason `RequestCancelled` and its own 10 second token, then rethrows. Without it the order would stay Pending for good. A crash of the service in the middle of the workflow is not covered by this. The sweep of stuck orders covers it, see **Stuck orders** below.
 - Confirming an order also tells the other services. `OrderSetStatusCommandHandler` sets the status, and when the new status is confirmed it also sets `ConfirmedAt` and publishes the message `OrderConfirmed` with `ICatMessageSender`. The message carries the order id, the order number, the total and the name and email of the customer, so Notifications needs no call back to Orders. The message type lives in the `Contracts` project of Orders, in `Messages`. The outbox is on, so the sender does not send at once. It adds a row to the `CatOutbox` table in the same `OrderDbContext`, and the one `SaveChanges` of the handler saves the status and the message together. A background service of `Cat.Messaging.Outbox` sends the rows to the bus and marks them as sent, so a crash between the save and the send loses nothing. A message can be sent twice after such a crash, and the receiver handles that.
-- At startup, in `Development`, Orders creates the topic `OrderConfirmed` on the bus. Without the connection string `messaging`, a fake transport logs the message and sends nothing.
+- At startup, in `Development`, Orders creates the topic `OrderConfirmed` on the bus.
 - Stock and price sit behind interfaces: `IStockReservation` and `IPriceProvider`. For stock, `InventoryStockReservation` uses the generated `IInventoryClient` of `Cat.Demo.InventoryService.Api.Client`, which shares the `Contracts` project of Inventory. It reserves all lines with `POST /inventory/reservations`, with the ISBN of each book, and releases with `DELETE /inventory/reservations/{orderNumber}`. A 409 or a 404 means out of stock. Any other failure or a timeout means unavailable, and the workflow cancels the order with `DEM-ORD-1007`. A failed release is logged and not thrown, and a cancel because Inventory did not answer skips the release. `FakeStockReservation` answers without a gateway address. For prices, `CatalogPriceProvider` uses the generated `ICatalogClient` of `Cat.Demo.CatalogService.Api.Client`. It calls `GET /catalog/books/prices` through the gateway when the host gives Orders the address of the gateway, as the AppHost does. Without it, `FakePriceProvider` answers. The inventory route is not anonymous, so `ForwardBearerTokenHandler` passes the token of the user on to the call. A call without a request, such as a job of the Scheduler, has no user token. `ForwardBearerTokenHandler` then asks `IClientTokenProvider` for a client credentials token of the client `cat-demo-orders`. `ClientCredentialsTokenProvider` fetches it from Keycloak and keeps it until 30 seconds before it expires. It needs the settings `Authentication:Authority`, `Authentication:ClientId` and `Authentication:ClientSecret`, which the AppHost sets. Without them, or when Keycloak does not answer, the call goes out without a token and gets a 401, which counts as unavailable. The token code lives in `Cat.Demo.ServiceDefaults` and Payment uses it too. Run `Refresh-InventoryClient.ps1` in the client project after the inventory service changes.
 - Payment is not an interface any more. The place order saga sends `TakePayment` to a queue and waits for `PaymentProcessed`. The part **The saga** below explains how.
 - `CatalogPriceProvider` wraps the call in `CatApiCall.ExecuteAsync`, so a failure arrives as an `ICatResponse`. A 200 gives the prices and a 404 becomes `PriceUnavailable`. Any other status, a network error or a timeout becomes an error response, because Orders never trusts a half answer. The resilience handler adds retries and a circuit breaker. Catalog reads are public, so the call sends no token. The unit tests use a fake `HttpMessageHandler` under the generated client, so they need no database and no running service. Run `Refresh-CatalogClient.ps1` in the client project to regenerate the client after Catalog changes. Catalog must run on port 5101 for it.
-- `ICatUser` tells the core service who is calling. With a login `Cat.Users` reads the claims of the token (`sub`, `name` and the `admin` role), and `IUserEmail` reads the `email` claim. Without a login, a development stub reads the `X-Demo-User` header. Orders of other users come back as not found.
+- `ICatUser` tells the core service who is calling. With a login `Cat.Users` reads the claims of the token (`sub`, `name` and the `admin` role), and `IUserEmail` reads the `email` claim. Orders of other users come back as not found.
 - The order overview (`GET /`) reads with plain SQL. `OrderGetListQueryHandler` inherits `CatDapperQueryHandlerBase`, runs `OrderGetListQueryHandler.sql` and returns `OrderSummaryRow` objects. The file sits next to the handler, and the source generator of `Cat.Dapper.SqlFiles` turns it into the constant `Sql`. The query joins `Order`, `OrderStatus` and `Customer` and filters on the external id of the customer. The other reads and all writes stay on EF Core. Both use the same orders database, each with its own connection.
 - Order numbers come from a `DailyOrderCounter` table, increased in one atomic statement in the same transaction that saves the order. The part **Order numbers** below explains it.
 
@@ -756,7 +693,6 @@ erDiagram
 - **The timeout.** The wait step schedules a `CatSagaTimeout` message for the end of the wait. If the answer comes first, the timeout finds nothing to do. If not, it resumes the workflow with `TimedOut`. Orders must listen to `CatSagaTimeout` itself, so it declares it with `Receive<CatSagaTimeout>()` next to `Receive<PaymentProcessed>()`.
 - **The inbox.** `PaymentProcessed` is received with `UseInbox`. The receiver adds a row to `CatInbox` in the same transaction that saves the saga, so an answer that arrives twice runs the workflow once. The receiver runs the handler in its own scope for this, through `ICatCurrentScopeServiceRequestProcessor`. A live order gave exactly one inbox row, and a test covers the second delivery.
 - **Startup.** In `Development`, Orders creates its subscription `orders` on the topics of `PaymentProcessed` and `PaymentRefunded` and the queue for `CatSagaTimeout`. Payment creates the queues `TakePayment` and `RefundPayment` and the topics `PaymentProcessed` and `PaymentRefunded` itself, which is why Orders waits for Payment in the AppHost.
-- **Without the bus.** `AddCatDemoOrderSagas` registers the saga but no outbox and no listener, and returns `false`. The workflow reaches the wait, and the answer never comes.
 
 **The refund.** A cancelled order gets its money back, and it needs no saga. The place order saga ends when the order is confirmed, so it cannot hold a refund that starts later, when the person cancels.
 - **The request.** `PaymentRefundSubscriber` subscribes to `OrderCancelledEvent`, like the stock release, and runs `PaymentRefundRequestCommand`. `PaymentRefundRequestCommandHandler` looks for the payment of the order. Only a payment with the status `Approved` gets a refund. The handler sets the status `RefundPending` and sends `RefundPayment` with `ICatMessageSender`. The outbox is on, so the one `SaveChanges` saves the status and the message together. An order that was cancelled before it was paid, or after a decline, has no approved payment and gets no message.
@@ -920,7 +856,6 @@ erDiagram
 - The business process is one readable class.
 - The status and the message are saved in one `SaveChanges`, so an order never confirms without telling the others.
 - Events keep the status update, audit and cleanup out of the workflow.
-- Interfaces with fakes let the demo run without the other services.
 - A slow or stopped payment service does not block a request. The caller gets its answer at once, and the order ends by itself: confirmed, declined or timed out.
 - A restart of Orders in the middle of a payment loses nothing, because the saga state is in the database.
 - The order overview reads only the columns it shows, with no change tracking and no mapping step.
@@ -934,7 +869,6 @@ erDiagram
 - The caller learns the end result by asking again. The client polls every 2 seconds while the order is `Pending`, and every 10 seconds while it is `Confirmed`. Nothing pushes the result.
 - The token of a message sits in the queue and in the outbox table for as long as the message does.
 - The inbox and outbox tables have a nightly cleanup of rows older than 30 days. Until it runs, they grow.
-- Without the bus the order waits for an answer that never comes. The job for stuck orders cancels it after 15 minutes.
 - A stock reservation can leak. A release that fails is logged and not retried, and a cancel because Inventory did not answer skips the release.
 - The order status and the saga state are two places that must agree.
 - The message goes out only when the status command runs. If that command fails, the order stays pending and no message is sent.
@@ -956,9 +890,9 @@ erDiagram
 - Not enough stock gives a 409 with `DEM-INV-1000`. An unknown ISBN gives a 404 with `DEM-INV-1001`.
 - The generated client in `Cat.Demo.InventoryService.Api.Client` shares the `Contracts` project, so Orders and Inventory use the same request models. Run `Refresh-InventoryClient.ps1` in that project after the service changes, with the AppHost running.
 - Inventory also listens to the bus. The `Api` project declares the messages it receives in `EventProcessorExtensions`, with `AddCatEventProcessor`. It receives `OrderConfirmed` from Orders, so the `CoreService` and `Api` projects reference the `Contracts` project of Orders. The listener reads the subscription `inventory` on the topic `OrderConfirmed`. With a login (an authority in the configuration) the listener accepts the message only with a valid token of a logged in caller, and Inventory sends its own messages with the client credentials token of the client `cat-demo-inventory`.
-- Inventory also publishes. The message `LowStockReport` lives in the `Contracts` project of Inventory, in `Messages`. It holds the limit and the low stock items, each with its ISBN, warehouse and quantity. At startup, in `Development`, Inventory creates the topic `LowStockReport`, so Notifications waits for Inventory in the AppHost. Without the connection string `messaging`, a fake transport logs the message and sends nothing.
+- Inventory also publishes. The message `LowStockReport` lives in the `Contracts` project of Inventory, in `Messages`. It holds the limit and the low stock items, each with its ISBN, warehouse and quantity. At startup, in `Development`, Inventory creates the topic `LowStockReport`, so Notifications waits for Inventory in the AppHost.
 - The nightly report is a scheduled job of `Cat.Scheduling`. The Scheduler runs the `LowStockReportRequest` every night at 02:00 UTC as the system user `inventory`, under the job name `low-stock-report`. `LowStockReportRequestHandler` runs `LowStockReportPublishCommand` with the limit of `LowStockSettings`, which is the setting `Inventory:LowStockLimit` and 10 when it is not set. The command handler reads the stock items below the limit, lowest first, and publishes one `LowStockReport` with `ICatMessageSender`. It publishes nothing when no item is low. It only reads, so it needs no outbox. The development endpoint `POST /development/scheduler/low-stock-report` runs the same request without the Scheduler.
-- The message `StockChanged` has no publisher in the Inventory code. `Cat.Sql.Cdc` reads the change table of `dbo.StockItem` and sends one message for every change, with the ISBN, the warehouse, the old and the new quantity and the limit. A mapping cannot skip a change, so the message goes out for every reserve and release as well, and Notifications decides what it means. `StockChangeMapper` in the `CoreService` project maps a change to the message, and it is the only code that knows the table. `ChangeCaptureExtensions` in the `Api` project registers the reader, the mapping and the sink of `Cat.Sql.Cdc.Messaging`, and the health check of the reader. The reader uses the inventory connection string and keeps its position in `catcdc.Position`, in the same database. It runs when `Inventory:ChangeCapture` is `true`. The AppHost sets it in the container mode only, because the capture must be on first. The script `005-change-capture.sql` switches change data capture on for the database and the table, and waits for the SQL Server Agent, which runs the capture job. Delivery is at least once, so Notifications can see a change twice.
+- The message `StockChanged` has no publisher in the Inventory code. `Cat.Sql.Cdc` reads the change table of `dbo.StockItem` and sends one message for every change, with the ISBN, the warehouse, the old and the new quantity and the limit. A mapping cannot skip a change, so the message goes out for every reserve and release as well, and Notifications decides what it means. `StockChangeMapper` in the `CoreService` project maps a change to the message, and it is the only code that knows the table. `ChangeCaptureExtensions` in the `Api` project registers the reader, the mapping and the sink of `Cat.Sql.Cdc.Messaging`, and the health check of the reader. The reader uses the inventory connection string and keeps its position in `catcdc.Position`, in the same database. It runs when `Inventory:ChangeCapture` is `true`. The AppHost sets it, because the capture must be on first. The script `005-change-capture.sql` switches change data capture on for the database and the table, and waits for the SQL Server Agent, which runs the capture job. Delivery is at least once, so Notifications can see a change twice.
 - The Scheduler claims each run in the inventory database, in the table `CatJobRun`, so two instances never run the job twice. The script `004-scheduling.sql` creates the table. The partial class `InventoryDbContext.Scheduling.cs` maps it with `AddCatScheduling()`.
 - `OrderConfirmedHandler` is the service request handler of the message. It runs `StockReservationConfirmCommand`, and the command handler sets `ConfirmedAt` on the reservations of the order that have none. A repeated message finds nothing to update and succeeds, so no inbox is needed. An order number without a reservation gives a not found response with `DEM-INV-1002`, and the failure table of `Cat.EventProcessor` dead letters the message.
 - At startup, in `Development`, Inventory creates its subscription. Orders creates the topic first, so Inventory waits for Orders in the AppHost. In `Development` the API has the endpoint `POST /dev/event-processor/OrderConfirmed`, which runs a message through the same pipeline without a bus. Send the bearer token of a login in the `Authorization` header, or the message is dead lettered as `Unauthorized`. `InventoryRequests.http` has both calls. The development endpoints are not in the OpenAPI document that the generated client is built from. Scalar shows them in a second document named `dev`. Without the connection string `messaging` Inventory does not listen.
@@ -971,7 +905,7 @@ erDiagram
 | `DEM-INV-1001` | `UnknownBook` | `Book {Isbn} is not in the warehouse. Order {OrderNumber} got no stock.` |
 | `DEM-INV-1002` | `UnknownOrder` | `Order {OrderNumber} has no reservation.` |
 
-**Database.** The `inventory` database comes from the SQL scripts in `Cat.Demo.InventoryService.Database`. A stock database often exists already, owned by a warehouse team, so the schema comes from SQL scripts and not from C# classes. In `Container` mode the AppHost creates the database and runs the scripts with `WithCreationScript`. The scripts can run again. In `Existing` mode it does nothing, because the owner of the database owns its schema, and the connection string `ConnectionStrings:inventory` points at it. The seed gives one warehouse and 50 copies of each of the 7 seed books. The entities are scaffolded with `dotnet ef dbcontext scaffold` into the Infrastructure project, and nobody edits the generated files. Run `Scaffold-InventoryModel.ps1` after a schema change. The scaffold takes the three stock tables only. The table `CatJobRun` of the scheduler comes from `004-scheduling.sql`. It is not in the diagram, and the scaffold skips it. The entities do not inherit `CatEntityBase` and have no `SequenceId`. Two unique constraints span two columns: `(WarehouseId, Isbn)` on `StockItem` and `(StockItemId, OrderNumber)` on `StockReservation`. The diagram marks both columns of each. The second one makes a repeated reserve call safe. The script `003-reservation-confirmed.sql` adds the column `ConfirmedAt`, which is empty until the message `OrderConfirmed` arrives. The diagram marks it as nullable. The scaffolded entity has the column. The confirm handler still sets it with one SQL command, so one statement updates all reservations of the order with the clock of the database.
+**Database.** The `inventory` database comes from the SQL scripts in `Cat.Demo.InventoryService.Database`. A stock database often exists already, owned by a warehouse team, so the schema comes from SQL scripts and not from C# classes. The AppHost creates the database and runs the scripts with `WithCreationScript`. The scripts can run again. The seed gives one warehouse and 50 copies of each of the 7 seed books. The entities are scaffolded with `dotnet ef dbcontext scaffold` into the Infrastructure project, and nobody edits the generated files. Run `Scaffold-InventoryModel.ps1` after a schema change. The scaffold takes the three stock tables only. The table `CatJobRun` of the scheduler comes from `004-scheduling.sql`. It is not in the diagram, and the scaffold skips it. The entities do not inherit `CatEntityBase` and have no `SequenceId`. Two unique constraints span two columns: `(WarehouseId, Isbn)` on `StockItem` and `(StockItemId, OrderNumber)` on `StockReservation`. The diagram marks both columns of each. The second one makes a repeated reserve call safe. The script `003-reservation-confirmed.sql` adds the column `ConfirmedAt`, which is empty until the message `OrderConfirmed` arrives. The diagram marks it as nullable. The scaffolded entity has the column. The confirm handler still sets it with one SQL command, so one statement updates all reservations of the order with the clock of the database.
 
 ```mermaid
 erDiagram
@@ -1032,13 +966,13 @@ The service uses no entity base classes. It shows that you use only the modules 
 - The `Api` project declares the message it receives in `EventProcessorExtensions`, with `AddCatEventProcessor`. It receives `OrderConfirmed` from Orders, so the `CoreService` and `Api` projects reference the `Contracts` project of Orders. The listener reads the subscription `notifications` on the topic `OrderConfirmed`.
 - `OrderConfirmedHandler` is the service request handler of the message. A customer without an email address gets no mail, and the message counts as handled. Otherwise it runs `SendOrderConfirmedMailCommand`.
 - `SendOrderConfirmedMailCommandHandler` in `Cat.Demo.NotificationService.Infrastructure` looks for a `SentMail` row of the order and the kind `OrderConfirmed`. A row means the mail went out, and the handler does nothing. Without a row it builds the text with `OrderConfirmedMailBuilder`, sends the mail, and saves the row. The unique index on the order and the kind backs this up. The mail goes out before the row is saved, so a crash in between sends the mail twice at worst and never loses it.
-- The core service only knows `IMailSender`. `SmtpMailSender` sends over SMTP with the settings `Smtp:Host`, `Smtp:Port` and `Smtp:From`. The AppHost points them at Mailpit. Without `Smtp:Host`, `LogMailSender` writes the mail to the log.
+- The core service only knows `IMailSender`. `SmtpMailSender` sends over SMTP with the settings `Smtp:Host`, `Smtp:Port` and `Smtp:From`. The AppHost points them at Mailpit.
 - The mails are in English.
 - It also receives `LowStockReport` from Inventory, so the `CoreService` and `Api` projects reference the `Contracts` project of Inventory. `LowStockReportHandler` mails the report to the admin with `LowStockReportMailBuilder`. The address is `NotificationSettings.AdminEmail`, which is the setting `Notifications:AdminEmail` and `admin@example.com` when it is not set. A report without items sends no mail. The report is not stored in `SentMail`, which holds mails of orders only, so a message that arrives twice sends two reports. That does no harm for a report.
 - It also receives `StockChanged` from Inventory, which holds one change of the stock table. `StockChangedHandler` decides what it means: only a drop from the limit or more to below the limit, in `IsDrop`, sends a mail to the admin with `StockDropMailBuilder`. Every other change is a normal case. The handler answers success and sends nothing, so the message is completed. The mail is not stored, so a message that arrives twice sends two mails, which does no harm for an alert. `StockChangedValidator` only rejects a malformed message, such as one without an ISBN or with a negative quantity. It answers `BadRequest`, which dead letters the message, because sending it again gives the same answer. The `Api` project runs the validation decorator, so the validator runs before the handler.
 - At startup, in `Development`, Notifications applies its migrations and creates its subscriptions. Orders and Inventory create the topics first, so Notifications waits for both in the AppHost. In `Development` the API has the endpoints `POST /dev/event-processor/OrderConfirmed`, `POST /dev/event-processor/LowStockReport` and `POST /dev/event-processor/StockChanged`, which run a message through the same pipeline without a bus. Without the connection string `messaging` Notifications does not listen.
 
-**Database.** The `notifications` database is built code first with EF Core migrations, like Orders. In `Development` the service applies the migrations at startup. In `Container` mode the AppHost creates the empty database. The table `SentMail` holds one row for every mail that went out. The entity inherits `CatEntityBase` and uses `ConfigureCatEntity`, with no temporal table and no SQL Server only code.
+**Database.** The `notifications` database is built code first with EF Core migrations, like Orders. In `Development` the service applies the migrations at startup. The AppHost creates the empty database. The table `SentMail` holds one row for every mail that went out. The entity inherits `CatEntityBase` and uses `ConfigureCatEntity`, with no temporal table and no SQL Server only code.
 
 ```mermaid
 erDiagram
@@ -1096,7 +1030,7 @@ erDiagram
 
 ### Payment service
 
-**What it is.** A small separate service, `Cat.Demo.PaymentService`, that pretends to be a payment provider. Orders asks it for a payment, and for a refund, with a message, and it answers with a message. It has no database. Under the AppHost it checks the token of a message like Orders does.
+**What it is.** A small separate service, `Cat.Demo.PaymentService`, that pretends to be a payment provider. Orders asks it for a payment, and for a refund, with a message, and it answers with a message. It has no database. It checks the token of a message like Orders does.
 
 **How it works.**
 - **The question.** `TakePayment` is a command message with an order number and an amount. It goes to a queue. `TakePaymentHandler` is a service request handler, like every other handler, and `Cat.EventProcessor` runs it. It takes the payment with `PaymentProcessor`.
@@ -1106,7 +1040,6 @@ erDiagram
 - **Contracts.** `Cat.Demo.PaymentService.Contracts` holds `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded`. Orders references this project, see [Sharing contracts](#sharing-contracts).
 - **Startup.** In `Development`, Payment creates the queues of `TakePayment` and `RefundPayment` and the topics of `PaymentProcessed` and `PaymentRefunded` on the bus, with `PaymentMessagingExtensions`. Orders waits for Payment in the AppHost for this reason.
 - **Tokens.** With a login, Payment accepts a message only from a logged in caller, and answers with a token from its own client `cat-demo-payment`. The code that fetches the token is shared in `Cat.Demo.ServiceDefaults`.
-- **Without a bus.** Payment starts with the HTTP endpoint only and listens to nothing.
 - **The HTTP endpoint.** `POST /payment/payments` is still there, with the same rules and the same failure settings. The service runs on port 5103, and the gateway has a restricted route for it. Orders does not call it any more. The generated client `Cat.Demo.PaymentService.Api.Client` stays, and nothing uses it for now.
 - The `Cat.Demo.PaymentService.CoreService` project holds the rules, the handler and the failure switches. The `Api` project has the endpoint and the messaging setup.
 - The service defines two error codes with the prefix `DEM-PAY`: `DEM-PAY-1000` for a bad request and `DEM-PAY-1001` for a failure that was switched on.
@@ -1121,13 +1054,13 @@ erDiagram
 
 The settings apply to a refund as well. An outage or a random error fails the `RefundPayment` request, and the bus delivers it again. The payment in Orders stays `RefundPending` until a delivery gets through.
 
-Under the AppHost, set `Payment:Latency`, `Payment:ErrorPercentage` or `Payment:Outage` in the configuration of the AppHost and start it again. For example:
+Set `Payment:Latency`, `Payment:ErrorPercentage` or `Payment:Outage` in the configuration of the AppHost and start it again. For example:
 
 ```
 dotnet user-secrets set "Payment:Outage" "true" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost
 ```
 
-Remove the secret to switch the failure off again. When you run the service on its own, change `PaymentFailures` in its `appsettings.json` or set `PaymentFailures__Outage=true`. A running service reads a changed setting again, for the handler and for the endpoint. Place an order and watch the status in the web shop: it stays `Pending` while Payment is slow or down, and ends as `Cancelled` when the wait of Orders runs out. Set `Orders:PaymentTimeoutSeconds` to a small number, such as 20, to see that without waiting 2 minutes. Set it like the payment settings, in the configuration of the AppHost, for example `dotnet user-secrets set "Orders:PaymentTimeoutSeconds" "20" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost`, and start the AppHost again. The AppHost passes it to Orders.
+Remove the secret to switch the failure off again. A running service reads a changed setting again, for the handler and for the endpoint. Place an order and watch the status in the web shop: it stays `Pending` while Payment is slow or down, and ends as `Cancelled` when the wait of Orders runs out. Set `Orders:PaymentTimeoutSeconds` to a small number, such as 20, to see that without waiting 2 minutes. Set it like the payment settings, in the configuration of the AppHost, for example `dotnet user-secrets set "Orders:PaymentTimeoutSeconds" "20" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost`, and start the AppHost again. The AppHost passes it to Orders.
 
 **CAT modules.**
 

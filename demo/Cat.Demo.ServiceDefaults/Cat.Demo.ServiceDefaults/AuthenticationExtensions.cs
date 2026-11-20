@@ -1,3 +1,4 @@
+using System;
 using Cat.Users.Extensions;
 using Cat.Users.JwtBearer.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,18 +17,12 @@ public static class AuthenticationExtensions
     public const string AdminPolicy = "admin";
 
     /// <summary>
-    /// Adds JWT bearer authentication when <c>Authentication:Authority</c> is set. The AppHost sets it.
-    /// Without an authority a plain <c>dotnet run</c> keeps working, with no login.
+    /// Adds JWT bearer authentication. The AppHost gives every service <c>Authentication:Authority</c>, the address of the Keycloak realm.
     /// </summary>
-    /// <returns>True when authentication is on.</returns>
-    public static bool AddDemoJwtAuthentication(this WebApplicationBuilder builder)
+    public static void AddDemoJwtAuthentication(this WebApplicationBuilder builder)
     {
-        var authority = builder.Configuration["Authentication:Authority"];
-        if (string.IsNullOrWhiteSpace(authority))
-        {
-            return false;
-        }
-
+        var authority = builder.Configuration["Authentication:Authority"]
+            ?? throw new InvalidOperationException("Authentication:Authority is missing. Start the demo with the AppHost.");
         var audience = builder.Configuration["Authentication:Audience"] ?? "cat-gateway";
 
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -46,8 +41,6 @@ public static class AuthenticationExtensions
         builder.Services.AddCatUsersJwtBearer();
 
         builder.Services.AddDemoAuthorization();
-
-        return true;
     }
 
     /// <summary>

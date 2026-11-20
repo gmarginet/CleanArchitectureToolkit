@@ -10,7 +10,7 @@ namespace Cat.Demo.CatalogService.Api.Extensions;
 
 public static class CatalogEndpoints
 {
-    public static IEndpointRouteBuilder MapCatalogServiceEndpoints(this IEndpointRouteBuilder builder, bool requireLogin = false)
+    public static IEndpointRouteBuilder MapCatalogServiceEndpoints(this IEndpointRouteBuilder builder)
     {
         var catalogBuilder = builder.MapGroup("/catalog");
 
@@ -21,13 +21,10 @@ public static class CatalogEndpoints
             .WithName("GetBookPrices");
         booksBuilder.MapCatGet<BookGetRequest, BookModel>("/{bookId:guid}", CatResponseType.Ok, CatResponseType.NotFound)
             .WithName("GetBook");
-        var save = booksBuilder.MapCatPost<BookSaveRequest>("/", CatResponseType.Ok)
-            .WithName("SaveBook");
-        if (requireLogin)
-        {
-            save.RequireAuthorization(AuthenticationExtensions.AdminPolicy);
-        }
-        
+        booksBuilder.MapCatPost<BookSaveRequest>("/", CatResponseType.Ok)
+            .WithName("SaveBook")
+            .RequireAuthorization(AuthenticationExtensions.AdminPolicy);
+
         catalogBuilder.MapCatGetList<CategoryGetListRequest, CategoryModel>("/categories")
             .WithName("GetCategories");
 

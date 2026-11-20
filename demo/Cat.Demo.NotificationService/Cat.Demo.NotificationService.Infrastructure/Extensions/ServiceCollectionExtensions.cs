@@ -23,8 +23,8 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Registers the mail sender. With <c>Smtp:Host</c> in the configuration (the AppHost sets it) <see cref="SmtpMailSender"/> sends the mail.
-    /// Without it, <see cref="LogMailSender"/> only logs, so <c>dotnet run</c> keeps working on its own.
+    /// Registers the mail sender. <see cref="SmtpMailSender"/> sends the mail with the settings <c>Smtp:Host</c> and <c>Smtp:Port</c>,
+    /// which the AppHost sets to Mailpit.
     /// </summary>
     public static IServiceCollection AddCatDemoNotificationMail(this IServiceCollection services, IConfiguration configuration)
     {
@@ -33,14 +33,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton(new NotificationSettings(
             string.IsNullOrWhiteSpace(adminEmail) ? NotificationSettings.DefaultAdminEmail : adminEmail));
 
-        if (!string.IsNullOrWhiteSpace(configuration["Smtp:Host"]))
-        {
-            services.AddSingleton<IMailSender, SmtpMailSender>();
-        }
-        else
-        {
-            services.AddSingleton<IMailSender, LogMailSender>();
-        }
+        services.AddSingleton<IMailSender, SmtpMailSender>();
 
         return services;
     }

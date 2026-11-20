@@ -1,9 +1,6 @@
 using Cat.Demo.InventoryService.Contracts.ServiceRequests;
 using Cat.Demo.InventoryService.CoreService;
 using Cat.Demo.InventoryService.Infrastructure.DataAccess;
-using Cat.Demo.InventoryService.Infrastructure.Fakes;
-using Cat.Messaging.Abstractions;
-using Cat.Messaging.Extensions;
 using Cat.Scheduling.EFCore.Extensions;
 using Cat.Scheduling.Extensions;
 using Microsoft.Extensions.Configuration;
@@ -25,17 +22,8 @@ public static class SchedulerExtensions
     /// The limit comes from <c>Inventory:LowStockLimit</c>, with <see cref="LowStockSettings.DefaultLimit"/> as the default.
     /// The development endpoint <c>POST /development/scheduler/low-stock-report</c> still triggers the request without the scheduler.
     /// </summary>
-    /// <remarks>
-    /// The report goes out as a message. When the host gives no bus (<c>ConnectionStrings:messaging</c>), a fake transport only logs it.
-    /// </remarks>
     public static IServiceCollection AddCatDemoInventoryScheduler(this IServiceCollection services, IConfiguration configuration)
     {
-        if (string.IsNullOrWhiteSpace(configuration.GetConnectionString("messaging")))
-        {
-            services.AddCatMessagingModule();
-            services.AddSingleton<ICatMessageTransport, FakeMessageTransport>();
-        }
-
         services.AddSingleton(new LowStockSettings(configuration.GetValue(LowStockSettings.ConfigurationKey, LowStockSettings.DefaultLimit)));
 
         services.AddCatSchedulingEFCore<InventoryDbContext>();

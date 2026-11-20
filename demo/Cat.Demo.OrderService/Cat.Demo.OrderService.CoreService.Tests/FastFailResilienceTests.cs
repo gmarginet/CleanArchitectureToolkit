@@ -30,7 +30,13 @@ public class FastFailResilienceTests
         // The default of AddServiceDefaults in the ServiceDefaults project.
         services.ConfigureHttpClientDefaults(http => http.AddStandardResilienceHandler());
         services.AddCatDemoOrderStockReservation(new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string?> { ["services:gateway:http:0"] = "http://localhost:5100" })
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["services:gateway:http:0"] = "http://localhost:5100",
+                ["Authentication:Authority"] = "http://localhost:8180/realms/cat-demo",
+                ["Authentication:ClientId"] = "cat-demo-orders",
+                ["Authentication:ClientSecret"] = "test"
+            })
             .Build());
         services.AddHttpClient("IInventoryClient").ConfigurePrimaryHttpMessageHandler(() => handler);
         await using var provider = services.BuildServiceProvider();

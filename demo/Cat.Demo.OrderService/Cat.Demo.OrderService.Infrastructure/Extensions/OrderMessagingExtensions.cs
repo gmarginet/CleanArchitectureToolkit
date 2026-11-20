@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cat.Demo.OrderService.Contracts.Messages;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
-using Cat.Demo.OrderService.Infrastructure.Fakes;
 using Cat.Messaging.Abstractions;
 using Cat.Messaging.AzureServiceBus;
 using Cat.Messaging.AzureServiceBus.Extensions;
@@ -21,28 +20,21 @@ public static class OrderMessagingExtensions
     /// <summary>
     /// Registers messaging with the outbox in the order database. A message that a command handler publishes is saved
     /// with the order data and sent to the bus by a background service afterwards.
-    /// The bus is on when the host gives Orders the connection string <c>messaging</c> (Aspire does).
-    /// Without it, <see cref="FakeMessageTransport"/> logs the messages, so <c>dotnet run</c> keeps working on its own.
+    /// The AppHost gives Orders the connection string <c>messaging</c> of the Service Bus emulator.
     /// </summary>
     public static IServiceCollection AddCatDemoOrderMessaging(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddCatMessagingModule();
 
-        var connectionString = configuration.GetConnectionString("messaging");
-        if (!string.IsNullOrWhiteSpace(connectionString))
+        var connectionString = configuration.GetConnectionString("messaging")
+            ?? throw new InvalidOperationException("The connection string messaging is missing. Start the demo with the AppHost.");
+        services.AddCatMessagingAzureServiceBus(options =>
         {
-            services.AddCatMessagingAzureServiceBus(options =>
-            {
-                options.ConnectionString = connectionString;
-                options.AdministrationConnectionString = configuration["Messaging:AdministrationConnectionString"] ?? string.Empty;
-            });
-            services.AddCatMessagingOutboxEfCore<OrderDbContext>();
-            services.AddCatMessagingOutbox(options => options.PollInterval = TimeSpan.FromSeconds(1));
-        }
-        else
-        {
-            services.AddSingleton<ICatMessageTransport, FakeMessageTransport>();
-        }
+            options.ConnectionString = connectionString;
+            options.AdministrationConnectionString = configuration["Messaging:AdministrationConnectionString"] ?? string.Empty;
+        });
+        services.AddCatMessagingOutboxEfCore<OrderDbContext>();
+        services.AddCatMessagingOutbox(options => options.PollInterval = TimeSpan.FromSeconds(1));
 
         return services;
     }

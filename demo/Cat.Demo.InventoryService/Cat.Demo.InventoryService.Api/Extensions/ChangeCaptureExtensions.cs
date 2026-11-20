@@ -15,12 +15,10 @@ public static class ChangeCaptureExtensions
     /// <summary>
     /// Sends every change of the stock table as a <c>StockChanged</c> message, without any Inventory code publishing it.
     /// <c>Cat.Sql.Cdc</c> reads the change table of SQL Server. Change data capture must be on for the table, see <c>005-change-capture.sql</c>,
-    /// so the AppHost switches this on only in the container mode, where it runs the scripts.
-    /// With an existing database the developer enables change data capture by hand and then sets <see cref="ConfigurationKey"/> to <c>true</c>.
+    /// so the AppHost runs the scripts and sets <see cref="ConfigurationKey"/> to <c>true</c>.
     /// </summary>
     /// <remarks>
-    /// The reader uses the inventory connection string. The messages go through <c>ICatMessageSender</c>, which the scheduler extension
-    /// registers, with a fake transport when the host gives no bus.
+    /// The reader uses the inventory connection string. The messages go through <c>ICatMessageSender</c>.
     /// </remarks>
     /// <returns><c>true</c> when the reader is registered.</returns>
     public static bool AddCatDemoInventoryChangeCapture(this IServiceCollection services, IConfiguration configuration, string connectionString)

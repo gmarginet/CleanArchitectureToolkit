@@ -38,8 +38,8 @@ var connectionString = builder.Configuration.GetConnectionString("inventory")
     ?? throw new InvalidOperationException("Connection string 'inventory' is missing.");
 builder.Services.AddCatDemoInventoryDatabase(connectionString);
 
-// The listener for the messages of other services. It is on when the host gives Inventory the connection string "messaging".
-var eventProcessorOn = builder.Services.AddCatDemoInventoryEventProcessor(builder.Configuration);
+// The listener for the messages of other services.
+builder.Services.AddCatDemoInventoryEventProcessor(builder.Configuration);
 
 // The scheduler runs the nightly low stock report. The claim table is in the inventory database.
 builder.Services.AddCatDemoInventoryScheduler(builder.Configuration);
@@ -51,16 +51,13 @@ builder.Services.AddCatDemoInventoryChangeCapture(builder.Configuration, connect
 // so no client gets them. The dev document holds them, and Scalar shows it next to the default one.
 builder.Services.AddOpenApi(DevelopmentEndpoints.DevDocumentName);
 
-var authenticationOn = builder.AddDemoJwtAuthentication();
+builder.AddDemoJwtAuthentication();
 
 var app = builder.Build();
 app.UseCatMinimalApiModule();
 
-if (authenticationOn)
-{
-    app.UseAuthentication();
-    app.UseAuthorization();
-}
+app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
@@ -69,11 +66,8 @@ if (app.Environment.IsDevelopment())
 
     await app.Services.InitializeInventoryMessagingAsync();
 
-    if (eventProcessorOn)
-    {
-        await app.Services.InitializeInventoryEventProcessorAsync();
-        app.MapCatEventProcessor();
-    }
+    await app.Services.InitializeInventoryEventProcessorAsync();
+    app.MapCatEventProcessor();
 
     app.MapInventoryServiceDevelopmentEndpoints();
 }
@@ -81,7 +75,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapDefaultEndpoints();
-app.MapInventoryServiceEndpoints(authenticationOn);
+app.MapInventoryServiceEndpoints();
 app.Services.AddCatServiceRequestsModuleValidationDecorator();
 app.Services.AddCatServiceRequestsModuleLoggingDecorator();
 app.Services.AddCatServiceRequestsModuleActivitySourceDecorator();

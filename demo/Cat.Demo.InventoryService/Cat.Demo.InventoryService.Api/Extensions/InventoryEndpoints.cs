@@ -8,14 +8,11 @@ namespace Cat.Demo.InventoryService.Api.Extensions;
 
 public static class InventoryEndpoints
 {
-    public static IEndpointRouteBuilder MapInventoryServiceEndpoints(this IEndpointRouteBuilder builder, bool requireLogin = false)
+    public static IEndpointRouteBuilder MapInventoryServiceEndpoints(this IEndpointRouteBuilder builder)
     {
         var inventoryBuilder = builder.MapGroup("/inventory");
 
-        if (requireLogin)
-        {
-            inventoryBuilder.RequireAuthorization();
-        }
+        inventoryBuilder.RequireAuthorization();
 
         var reservationsBuilder = inventoryBuilder.MapGroup("/reservations");
 

@@ -57,21 +57,13 @@ var connectionString = builder.Configuration.GetConnectionString("catalog")
     ?? throw new InvalidOperationException("Connection string 'catalog' is missing.");
 builder.Services.AddCatDemoCatalogDatabase(connectionString);
 
-var authenticationOn = builder.AddDemoJwtAuthentication();
-if (!authenticationOn)
-{
-    // A plain dotnet run has no token, so every call is the anonymous user.
-    builder.Services.AddCatUsers();
-}
+builder.AddDemoJwtAuthentication();
 
 var app = builder.Build();
 app.UseCatMinimalApiModule();
 
-if (authenticationOn)
-{
-    app.UseAuthentication();
-    app.UseAuthorization();
-}
+app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
@@ -83,7 +75,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapDefaultEndpoints();
-app.MapCatalogServiceEndpoints(authenticationOn);
+app.MapCatalogServiceEndpoints();
 app.Services.AddCatServiceRequestsModuleValidationDecorator();
 app.Services.AddCatServiceRequestsModuleLoggingDecorator();
 app.Services.AddCatServiceRequestsModuleActivitySourceDecorator();

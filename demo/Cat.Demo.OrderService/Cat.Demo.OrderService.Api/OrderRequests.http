@@ -30,11 +30,10 @@ grant_type=password&client_id=cat-demo-cli&username=admin&password=admin
 ### Run the requests from top to bottom. Later requests use ids from earlier responses.
 ### Start Catalog and Orders together, for example with the AppHost. The first request reads the book ids from Catalog,
 ### because Catalog creates them when it seeds the database and they differ on every machine.
-### The token picks the user: alice, bob or admin. Without the AppHost, a plain dotnet run has no login and uses the X-Demo-User header, so these requests need the AppHost.
-### Stock comes from a fake: a line of more than 50 copies is out of stock.
-### Under the AppHost the payment is taken at the payment service, and a total above 500 euro is declined.
-### Without the AppHost a fake does the same. When the payment service is down, the order is cancelled with DEM-ORD-1006.
-### Prices come from Catalog when Orders runs under the AppHost. Without the AppHost a fake makes the price from the book id.
+### The token picks the user: alice, bob or admin. Start the AppHost first, because Orders needs Keycloak, the gateway and the other services.
+### Stock is reserved at Inventory: a line of more than 50 copies is out of stock.
+### The payment is taken at the payment service, and a total above 500 euro is declined. When the payment service is down, the order is cancelled with DEM-ORD-1006.
+### Prices come from Catalog.
 
 ### BookSearchRequest (Catalog) => OK (the seeded books, whose ids the orders below use)
 # @name books
@@ -85,7 +84,7 @@ Content-Type: application/json
 }
 
 ### PlaceOrderRequest => Bad request, the payment is declined (DEM-ORD-1003). The order is saved with status Cancelled.
-### 100 copies cost far more than the 500 euro limit of the fake, whatever the books cost.
+### 100 copies cost far more than the 500 euro limit, whatever the books cost.
 POST {{OrderApi_HostAddress}}/orders HTTP/1.1
 Authorization: Bearer {{alice.response.body.$.access_token}}
 Content-Type: application/json

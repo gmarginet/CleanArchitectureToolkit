@@ -25,17 +25,12 @@ public static class EventProcessorExtensions
 
     /// <summary>
     /// Declares the messages Inventory receives and starts the listener for them.
-    /// It only works when the host gives Inventory the connection string <c>messaging</c> (Aspire does).
-    /// Without it nothing is registered, so <c>dotnet run</c> keeps working on its own.
+    /// The AppHost gives Inventory the connection string <c>messaging</c> of the Service Bus emulator.
     /// </summary>
-    /// <returns><c>true</c> when the listener is registered.</returns>
-    public static bool AddCatDemoInventoryEventProcessor(this IServiceCollection services, IConfiguration configuration)
+    public static void AddCatDemoInventoryEventProcessor(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("messaging");
-        if (string.IsNullOrWhiteSpace(connectionString))
-        {
-            return false;
-        }
+        var connectionString = configuration.GetConnectionString("messaging")
+            ?? throw new InvalidOperationException("The connection string messaging is missing. Start the demo with the AppHost.");
 
         services.AddCatMessagingModule();
         services.AddCatMessagingAzureServiceBus(options =>
@@ -44,29 +39,16 @@ public static class EventProcessorExtensions
             options.AdministrationConnectionString = configuration["Messaging:AdministrationConnectionString"] ?? string.Empty;
         });
 
-        // With an authority in the configuration (the AppHost sets it) a message needs a valid token of a logged in caller,
-        // and a message of Inventory carries the client credentials token of Inventory. Without one, the messages run with no token.
-        var authenticationOn = !string.IsNullOrWhiteSpace(configuration["Authentication:Authority"]);
-
+        // A message needs a valid token of a logged in caller, and a message of Inventory carries the client credentials token of Inventory.
         services.AddCatEventProcessor(configuration, processor => processor.Receive<OrderConfirmed>(options =>
-        {
-            if (authenticationOn)
-            {
-                options.Require(policy => policy.RequireAuthenticatedUser());
-            }
-        }));
+            options.Require(policy => policy.RequireAuthenticatedUser())));
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
 
-        if (authenticationOn)
-        {
-            services.AddDemoClientCredentials(configuration);
-            services.AddDemoMessageTokens();
-            services.AddCatEventProcessorAuthorization();
-        }
+        services.AddDemoClientCredentials(configuration);
+        services.AddDemoMessageTokens();
+        services.AddCatEventProcessorAuthorization();
 
         services.AddHealthChecks().AddCatEventProcessorHealthCheck();
-
-        return true;
     }
 
     /// <summary>

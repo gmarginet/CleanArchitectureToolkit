@@ -29,8 +29,7 @@ public static class OrderSagaExtensions
     /// Registers the place order saga. The instances live in the order database, next to the orders.
     /// The settings of the workflow come from the section <c>Orders</c>: <c>PaymentTimeoutSeconds</c> is how long an order waits for Payment.
     /// </summary>
-    /// <returns><c>true</c> when the listener for the answers is registered, which needs the connection string <c>messaging</c> (Aspire gives it).</returns>
-    public static bool AddCatDemoOrderSagas(this IServiceCollection services, IConfiguration configuration)
+    public static void AddCatDemoOrderSagas(this IServiceCollection services, IConfiguration configuration)
     {
         var placeOrderOptions = new PlaceOrderOptions();
         var seconds = configuration.GetValue<int?>("Orders:PaymentTimeoutSeconds");
@@ -46,58 +45,32 @@ public static class OrderSagaExtensions
         services.AddCatSaga<PlaceOrderWorkflow, PlaceOrderState>();
         services.AddCatSagaAnswer<PaymentProcessed>();
 
-        var busOn = !string.IsNullOrWhiteSpace(configuration.GetConnectionString("messaging"));
-        if (!busOn)
-        {
-            // Without the bus the order waits for an answer that never comes. The listener and the outbox need the bus.
-            return false;
-        }
-
         // The request goes into the outbox table and the instance is saved in the same transaction.
         services.AddCatSagasOutbox();
 
-        // With an authority in the configuration (the AppHost sets it) a message needs a valid token of a logged in caller,
-        // and a message of Orders carries the token of the user, or the client credentials token of Orders when there is no user request.
-        var authenticationOn = !string.IsNullOrWhiteSpace(configuration["Authentication:Authority"]);
-
+        // A message needs a valid token of a logged in caller, and a message of Orders carries the token of the user,
+        // or the client credentials token of Orders when there is no user request.
         services.AddCatEventProcessor(configuration, processor => processor
             .Receive<PaymentProcessed>(receive =>
             {
                 receive.UseInbox = true;
-                if (authenticationOn)
-                {
-                    receive.Require(policy => policy.RequireAuthenticatedUser());
-                }
+                receive.Require(policy => policy.RequireAuthenticatedUser());
             })
             .Receive<PaymentRefunded>(receive =>
             {
                 // The handler runs its command in the scope of the receiver, so the inbox row is saved with the work.
                 receive.UseInbox = true;
-                if (authenticationOn)
-                {
-                    receive.Require(policy => policy.RequireAuthenticatedUser());
-                }
+                receive.Require(policy => policy.RequireAuthenticatedUser());
             })
-            .Receive<CatSagaTimeout>(receive =>
-            {
-                if (authenticationOn)
-                {
-                    receive.Require(policy => policy.RequireAuthenticatedUser());
-                }
-            }));
+            .Receive<CatSagaTimeout>(receive => receive.Require(policy => policy.RequireAuthenticatedUser())));
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
         services.AddCatEventProcessorInbox<OrderDbContext>();
 
-        if (authenticationOn)
-        {
-            services.AddDemoClientCredentials(configuration);
-            services.AddDemoMessageTokens();
-            services.AddCatEventProcessorAuthorization();
-        }
+        services.AddDemoClientCredentials(configuration);
+        services.AddDemoMessageTokens();
+        services.AddCatEventProcessorAuthorization();
 
         services.AddHealthChecks().AddCatEventProcessorHealthCheck();
-
-        return true;
     }
 
     /// <summary>
