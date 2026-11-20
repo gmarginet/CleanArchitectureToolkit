@@ -182,6 +182,8 @@ public class BaseEntityIntegrationTests : SqlServerDatabaseTests
 
         foreach (var name in new[] { "v2", "v3" })
         {
+            // SQL Server leaves out a version whose period has no length. A fast machine can save two versions in the same clock tick.
+            await Task.Delay(200);
             await using var context = NewContext();
             var gadget = await context.Set<Gadget>().FindByIdAsync(id);
             gadget!.Name = name;
