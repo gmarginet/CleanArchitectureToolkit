@@ -61,9 +61,7 @@ You decide which response types your handler returns. The OpenAPI description li
 
 | Package | Role | Targets | Install | Downloads |
 |---------|------|---------|---------|-----------|
-| [Cat.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.Minimal.Api/) | Implementation | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Minimal.Api)](#nuget-packages) |
-
-`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
+| [Cat.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.Minimal.Api/) | Implementation | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Minimal.Api)](https://www.nuget.org/packages/gmarginet.Cat.Minimal.Api/) |
 
 <!-- region end: NuGet-->
 

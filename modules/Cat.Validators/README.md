@@ -72,10 +72,8 @@ Rules never stop at the first failure. One call reports every problem.
 
 | Package | Role | Targets | Install | Downloads |
 |---------|------|---------|---------|-----------|
-| [Cat.Validators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Validators.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Validators.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Validators.Abstractions)](#nuget-packages) |
-| [Cat.Validators](https://www.nuget.org/packages/gmarginet.Cat.Validators/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Validators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Validators)](#nuget-packages) |
-
-`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
+| [Cat.Validators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Validators.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Validators.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Validators.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Validators.Abstractions/) |
+| [Cat.Validators](https://www.nuget.org/packages/gmarginet.Cat.Validators/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Validators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Validators)](https://www.nuget.org/packages/gmarginet.Cat.Validators/) |
 
 <!-- region end: NuGet-->
 

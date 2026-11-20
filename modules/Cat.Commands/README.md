@@ -59,11 +59,9 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 
 | Package | Role | Targets | Install | Downloads |
 |---------|------|---------|---------|-----------|
-| [Cat.Commands.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Commands.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Commands.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands.Abstractions)](#nuget-packages) |
-| [Cat.Commands](https://www.nuget.org/packages/gmarginet.Cat.Commands/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands)](#nuget-packages) |
-| [Cat.Commands.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Commands.Decorators.Logging/) | Optional decorator | netstandard2.0 | `dotnet add package gmarginet.Cat.Commands.Decorators.Logging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands.Decorators.Logging)](#nuget-packages) |
-
-`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
+| [Cat.Commands.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Commands.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Commands.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Commands.Abstractions/) |
+| [Cat.Commands](https://www.nuget.org/packages/gmarginet.Cat.Commands/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands)](https://www.nuget.org/packages/gmarginet.Cat.Commands/) |
+| [Cat.Commands.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Commands.Decorators.Logging/) | Optional decorator | netstandard2.0 | `dotnet add package gmarginet.Cat.Commands.Decorators.Logging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Commands.Decorators.Logging)](https://www.nuget.org/packages/gmarginet.Cat.Commands.Decorators.Logging/) |
 
 <!-- region end: NuGet-->
 

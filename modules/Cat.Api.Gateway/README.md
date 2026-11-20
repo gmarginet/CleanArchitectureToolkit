@@ -64,11 +64,9 @@ You list your services and their addresses. The gateway derives the routes from 
 
 | Package | Role | Targets | Install | Downloads |
 |---------|------|---------|---------|-----------|
-| [Cat.Api.Gateway.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Api.Gateway.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Api.Gateway.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Api.Gateway.Abstractions)](#nuget-packages) |
-| [Cat.Api.Gateway](https://www.nuget.org/packages/gmarginet.Cat.Api.Gateway/) | Implementation | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Api.Gateway` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Api.Gateway)](#nuget-packages) |
-| [Cat.Api.Gateway.Verification](https://www.nuget.org/packages/gmarginet.Cat.Api.Gateway.Verification/) | Optional check in a service | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Api.Gateway.Verification` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Api.Gateway.Verification)](#nuget-packages) |
-
-`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
+| [Cat.Api.Gateway.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Api.Gateway.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Api.Gateway.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Api.Gateway.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Api.Gateway.Abstractions/) |
+| [Cat.Api.Gateway](https://www.nuget.org/packages/gmarginet.Cat.Api.Gateway/) | Implementation | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Api.Gateway` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Api.Gateway)](https://www.nuget.org/packages/gmarginet.Cat.Api.Gateway/) |
+| [Cat.Api.Gateway.Verification](https://www.nuget.org/packages/gmarginet.Cat.Api.Gateway.Verification/) | Optional check in a service | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Api.Gateway.Verification` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Api.Gateway.Verification)](https://www.nuget.org/packages/gmarginet.Cat.Api.Gateway.Verification/) |
 
 <!-- region end: NuGet-->
 

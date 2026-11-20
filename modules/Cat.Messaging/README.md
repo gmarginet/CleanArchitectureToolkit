@@ -63,13 +63,11 @@ The outbox is optional. With it, a message is saved in the same `SaveChanges` as
 
 | Package | Role | Targets | Install | Downloads |
 |---------|------|---------|---------|-----------|
-| [Cat.Messaging.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Messaging.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging.Abstractions)](#nuget-packages) |
-| [Cat.Messaging](https://www.nuget.org/packages/gmarginet.Cat.Messaging/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Messaging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging)](#nuget-packages) |
-| [Cat.Messaging.AzureServiceBus](https://www.nuget.org/packages/gmarginet.Cat.Messaging.AzureServiceBus/) | Azure Service Bus transport | netstandard2.0 | `dotnet add package gmarginet.Cat.Messaging.AzureServiceBus` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging.AzureServiceBus)](#nuget-packages) |
-| [Cat.Messaging.Outbox](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Outbox/) | Optional outbox | netstandard2.0 | `dotnet add package gmarginet.Cat.Messaging.Outbox` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging.Outbox)](#nuget-packages) |
-| [Cat.Messaging.Outbox.EFCore](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Outbox.EFCore/) | Optional outbox storage for EF Core | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Messaging.Outbox.EFCore` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging.Outbox.EFCore)](#nuget-packages) |
-
-`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
+| [Cat.Messaging.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Messaging.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Abstractions/) |
+| [Cat.Messaging](https://www.nuget.org/packages/gmarginet.Cat.Messaging/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Messaging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging)](https://www.nuget.org/packages/gmarginet.Cat.Messaging/) |
+| [Cat.Messaging.AzureServiceBus](https://www.nuget.org/packages/gmarginet.Cat.Messaging.AzureServiceBus/) | Azure Service Bus transport | netstandard2.0 | `dotnet add package gmarginet.Cat.Messaging.AzureServiceBus` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging.AzureServiceBus)](https://www.nuget.org/packages/gmarginet.Cat.Messaging.AzureServiceBus/) |
+| [Cat.Messaging.Outbox](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Outbox/) | Optional outbox | netstandard2.0 | `dotnet add package gmarginet.Cat.Messaging.Outbox` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging.Outbox)](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Outbox/) |
+| [Cat.Messaging.Outbox.EFCore](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Outbox.EFCore/) | Optional outbox storage for EF Core | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Messaging.Outbox.EFCore` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging.Outbox.EFCore)](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Outbox.EFCore/) |
 
 <!-- region end: NuGet-->
 

@@ -44,13 +44,13 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 - `NuGet`: The version badge and the table of packages.
   - Start with one version badge for the main package, the package named like the module. If no project is named like the module, use the first project. All packages of a module share the same version.
   - Wrap the badge in a link to `#nuget-packages`.
-  - The table has the columns `Package`, `Role`, `Targets`, `Install` and `Downloads`, one row per project. `Targets` holds the monikers of the project file, joined with a comma and a space, such as `netstandard2.0` or `net10.0, net11.0`. Read them from `TargetFramework` or `TargetFrameworks` in the project file. Keep the legend line under the table. Every project has a package named `gmarginet.` followed by its root namespace.
+  - The table has the columns `Package`, `Role`, `Targets`, `Install` and `Downloads`, one row per project. `Targets` holds the monikers of the project file, joined with a comma and a space, such as `netstandard2.0` or `net10.0, net11.0`. Read them from `TargetFramework` or `TargetFrameworks` in the project file. Every project has a package named `gmarginet.` followed by its root namespace.
 - `Namespaces`: A table with the columns `Namespace` and `What it holds`, one row per project.
 - `Dependencies`: A table with the columns `Module` and `Why [[ModuleName]] needs it`, one row per dependency. No dependencies? Replace the table with the `NoDependencies` template.
 - `Usage`: Code examples and the explanation of how to use the module.
 
 ## Rules
-- Always wrap a badge in a link to a heading anchor on the same page (`#nuget-packages`, `#getting-started` or `#repo-overview`). An unlinked image becomes a link to a blank page with only the badge.
+- Always wrap a badge in a link to a heading anchor on the same page (`#nuget-packages`, `#getting-started` or `#repo-overview`). An unlinked image becomes a link to a blank page with only the badge. The exception is the downloads badge in the NuGet table, which links to the package page on nuget.org, the same page as the package name.
 - Always leave a blank line between a region marker and the table or text below it, and between the last table row and the end marker of the region. Without the blank lines Jekyll shows the table as plain text.
 - Keep the table of contents up to date with the chapters that exist in the readme. Ignore the chapters marked with `<!-- omit in toc -->`.
 - Follow the documentation style in CLAUDE.md: plain and direct, short sentences, no long dashes, no ellipses.

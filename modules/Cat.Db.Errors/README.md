@@ -52,10 +52,8 @@ There is one project per database. Entity Framework Core and Dapper code share t
 
 | Package | Role | Targets | Install | Downloads |
 |---------|------|---------|---------|-----------|
-| [Cat.Db.Errors.MySql](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.MySql/) | MySQL error checks | netstandard2.0 | `dotnet add package gmarginet.Cat.Db.Errors.MySql` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Db.Errors.MySql)](#nuget-packages) |
-| [Cat.Db.Errors.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.SqlServer/) | SQL Server error checks | netstandard2.0 | `dotnet add package gmarginet.Cat.Db.Errors.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Db.Errors.SqlServer)](#nuget-packages) |
-
-`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
+| [Cat.Db.Errors.MySql](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.MySql/) | MySQL error checks | netstandard2.0 | `dotnet add package gmarginet.Cat.Db.Errors.MySql` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Db.Errors.MySql)](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.MySql/) |
+| [Cat.Db.Errors.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.SqlServer/) | SQL Server error checks | netstandard2.0 | `dotnet add package gmarginet.Cat.Db.Errors.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Db.Errors.SqlServer)](https://www.nuget.org/packages/gmarginet.Cat.Db.Errors.SqlServer/) |
 
 <!-- region end: NuGet-->
 

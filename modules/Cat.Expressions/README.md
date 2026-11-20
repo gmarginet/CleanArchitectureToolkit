@@ -54,10 +54,8 @@ Use the caching implementation when the same expression gets called repeatedly, 
 
 | Package | Role | Targets | Install | Downloads |
 |---------|------|---------|---------|-----------|
-| [Cat.Expressions.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Expressions.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Expressions.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions.Abstractions)](#nuget-packages) |
-| [Cat.Expressions](https://www.nuget.org/packages/gmarginet.Cat.Expressions/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Expressions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions)](#nuget-packages) |
-
-`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
+| [Cat.Expressions.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Expressions.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Expressions.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Expressions.Abstractions/) |
+| [Cat.Expressions](https://www.nuget.org/packages/gmarginet.Cat.Expressions/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Expressions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Expressions)](https://www.nuget.org/packages/gmarginet.Cat.Expressions/) |
 
 <!-- region end: NuGet-->
 

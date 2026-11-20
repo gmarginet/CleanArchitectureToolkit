@@ -59,10 +59,8 @@ Handlers across the other CAT modules (commands, queries, service requests) retu
 
 | Package | Role | Targets | Install | Downloads |
 |---------|------|---------|---------|-----------|
-| [Cat.Responses.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Responses.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Responses.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Responses.Abstractions)](#nuget-packages) |
-| [Cat.Responses](https://www.nuget.org/packages/gmarginet.Cat.Responses/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Responses` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Responses)](#nuget-packages) |
-
-`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
+| [Cat.Responses.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Responses.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Responses.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Responses.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Responses.Abstractions/) |
+| [Cat.Responses](https://www.nuget.org/packages/gmarginet.Cat.Responses/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Responses` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Responses)](https://www.nuget.org/packages/gmarginet.Cat.Responses/) |
 
 <!-- region end: NuGet-->
 

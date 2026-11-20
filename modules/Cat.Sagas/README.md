@@ -64,11 +64,9 @@ A message that arrives twice, or a workflow that changed while instances wait, d
 
 | Package | Role | Targets | Install | Downloads |
 |---------|------|---------|---------|-----------|
-| [Cat.Sagas.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Sagas.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Sagas.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Sagas.Abstractions)](#nuget-packages) |
-| [Cat.Sagas](https://www.nuget.org/packages/gmarginet.Cat.Sagas/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Sagas` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Sagas)](#nuget-packages) |
-| [Cat.Sagas.EFCore](https://www.nuget.org/packages/gmarginet.Cat.Sagas.EFCore/) | Optional store for EF Core | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Sagas.EFCore` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Sagas.EFCore)](#nuget-packages) |
-
-`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
+| [Cat.Sagas.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Sagas.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Sagas.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Sagas.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Sagas.Abstractions/) |
+| [Cat.Sagas](https://www.nuget.org/packages/gmarginet.Cat.Sagas/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Sagas` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Sagas)](https://www.nuget.org/packages/gmarginet.Cat.Sagas/) |
+| [Cat.Sagas.EFCore](https://www.nuget.org/packages/gmarginet.Cat.Sagas.EFCore/) | Optional store for EF Core | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Sagas.EFCore` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Sagas.EFCore)](https://www.nuget.org/packages/gmarginet.Cat.Sagas.EFCore/) |
 
 <!-- region end: NuGet-->
 
