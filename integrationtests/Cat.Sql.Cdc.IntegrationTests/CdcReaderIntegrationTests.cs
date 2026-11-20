@@ -43,13 +43,15 @@ public class CdcReaderIntegrationTests : SqlServerAgentDatabaseTests
         $"CREATE TABLE dbo.{table} (Id int NOT NULL PRIMARY KEY, Title nvarchar(50) NOT NULL); " +
         $"EXEC sys.sp_cdc_enable_table @source_schema = N'dbo', @source_name = N'{table}', @role_name = NULL, @supports_net_changes = 0;");
 
-    private async Task<(ServiceProvider Provider, RecordingSink Sink, IHostedService Reader)> StartReaderAsync(string table)
+    private async Task<(ServiceProvider Provider, RecordingSink Sink, IHostedService Reader)> StartReaderAsync(string table, TimeSpan? claimLease = null)
     {
-        var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
+        var values = new Dictionary<string, string?>
         {
             ["CatSqlCdc:ConnectionString"] = ConnectionString,
             ["CatSqlCdc:PollInterval"] = "00:00:00.200"
-        }).Build();
+        };
+        if (claimLease.HasValue) values["CatSqlCdc:ClaimLease"] = claimLease.Value.ToString("c");
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(values).Build();
         var sink = new RecordingSink();
         var services = new ServiceCollection();
         services.AddLogging();
@@ -128,6 +130,76 @@ public class CdcReaderIntegrationTests : SqlServerAgentDatabaseTests
         {
             await secondReader.StopAsync(CancellationToken.None);
             await secondProvider.DisposeAsync();
+        }
+    }
+
+    private static IEnumerable<int> Ids(RecordingSink sink) => sink.Changes.Select(c => Convert.ToInt32(c.Keys["Id"]));
+
+    [Test]
+    public async Task Reader_TwoInstancesOnOneTable_OnlyTheClaimHolderDeliversTheChanges()
+    {
+        await CreateCapturedTableAsync("BookC");
+        var (firstProvider, firstSink, firstReader) = await StartReaderAsync("BookC", TimeSpan.FromSeconds(3));
+        var (secondProvider, secondSink, secondReader) = await StartReaderAsync("BookC", TimeSpan.FromSeconds(3));
+        try
+        {
+            await ExecuteAsync("INSERT INTO dbo.BookC (Id, Title) VALUES (1, N'one'), (2, N'two'), (3, N'three');");
+            await WaitForAsync(() => firstSink.Changes.Count + secondSink.Changes.Count >= 3, "three changes");
+            await ExecuteAsync("INSERT INTO dbo.BookC (Id, Title) VALUES (4, N'four');");
+            await WaitForAsync(() => firstSink.Changes.Count + secondSink.Changes.Count >= 4, "the fourth change");
+
+            // Longer than the lease, so a second claim would have shown up by now.
+            await Task.Delay(TimeSpan.FromSeconds(5));
+
+            var holder = firstSink.Changes.IsEmpty ? secondSink : firstSink;
+            var other = holder == firstSink ? secondSink : firstSink;
+            Assert.That(Ids(holder), Is.EqualTo(new[] { 1, 2, 3, 4 }));
+            Assert.That(other.Changes, Is.Empty);
+        }
+        finally
+        {
+            await firstReader.StopAsync(CancellationToken.None);
+            await secondReader.StopAsync(CancellationToken.None);
+            await firstProvider.DisposeAsync();
+            await secondProvider.DisposeAsync();
+        }
+    }
+
+    [Test]
+    public async Task Reader_WhenTheClaimHolderStops_TheOtherTakesOverAfterTheLeaseWhereTheHolderStopped()
+    {
+        await CreateCapturedTableAsync("BookD");
+        var lease = TimeSpan.FromSeconds(3);
+        var first = await StartReaderAsync("BookD", lease);
+        var second = await StartReaderAsync("BookD", lease);
+        var stopped = new List<(ServiceProvider Provider, IHostedService Reader)>();
+        try
+        {
+            await ExecuteAsync("INSERT INTO dbo.BookD (Id, Title) VALUES (1, N'one'), (2, N'two');");
+            await WaitForAsync(() => first.Sink.Changes.Count + second.Sink.Changes.Count >= 2, "the first two changes");
+
+            var (holder, other) = first.Sink.Changes.IsEmpty ? (second, first) : (first, second);
+            await holder.Reader.StopAsync(CancellationToken.None);
+            stopped.Add((holder.Provider, holder.Reader));
+            var stoppedAt = DateTime.UtcNow;
+
+            await ExecuteAsync("INSERT INTO dbo.BookD (Id, Title) VALUES (3, N'three');");
+            await WaitForAsync(() => !other.Sink.Changes.IsEmpty, "the other instance to take over");
+            var tookOverAfter = DateTime.UtcNow - stoppedAt;
+            await Task.Delay(2000);
+
+            Assert.That(Ids(holder.Sink), Is.EqualTo(new[] { 1, 2 }));
+            Assert.That(Ids(other.Sink), Is.EqualTo(new[] { 3 }));
+            // The holder renewed its claim on its last round, so the other waits for most of a lease.
+            Assert.That(tookOverAfter, Is.GreaterThan(lease - TimeSpan.FromSeconds(1)));
+        }
+        finally
+        {
+            foreach (var instance in new[] { first, second })
+            {
+                if (!stopped.Any(s => s.Reader == instance.Reader)) await instance.Reader.StopAsync(CancellationToken.None);
+                await instance.Provider.DisposeAsync();
+            }
         }
     }
 }
