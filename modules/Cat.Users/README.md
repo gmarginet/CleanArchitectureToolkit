@@ -52,11 +52,13 @@ The module builds the user from the claims of a validated token. A worker, such 
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Users)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.Users.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Users.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Users.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Users.Abstractions)](#nuget-packages) |
-| [Cat.Users](https://www.nuget.org/packages/gmarginet.Cat.Users/) | Implementation | `dotnet add package gmarginet.Cat.Users` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Users)](#nuget-packages) |
-| [Cat.Users.JwtBearer](https://www.nuget.org/packages/gmarginet.Cat.Users.JwtBearer/) | Optional JWT bearer setting | `dotnet add package gmarginet.Cat.Users.JwtBearer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Users.JwtBearer)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.Users.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Users.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Users.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Users.Abstractions)](#nuget-packages) |
+| [Cat.Users](https://www.nuget.org/packages/gmarginet.Cat.Users/) | Implementation | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Users` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Users)](#nuget-packages) |
+| [Cat.Users.JwtBearer](https://www.nuget.org/packages/gmarginet.Cat.Users.JwtBearer/) | Optional JWT bearer setting | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Users.JwtBearer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Users.JwtBearer)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 

@@ -59,10 +59,12 @@ CAT registers its handlers as open generics, like `ICatQueryHandler<,>`, so Scru
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Decorators)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.Decorators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Decorators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Decorators.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators.Abstractions)](#nuget-packages) |
-| [Cat.Decorators](https://www.nuget.org/packages/gmarginet.Cat.Decorators/) | Implementation | `dotnet add package gmarginet.Cat.Decorators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.Decorators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Decorators.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Decorators.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators.Abstractions)](#nuget-packages) |
+| [Cat.Decorators](https://www.nuget.org/packages/gmarginet.Cat.Decorators/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Decorators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Decorators)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 

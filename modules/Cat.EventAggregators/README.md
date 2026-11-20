@@ -55,10 +55,12 @@ A publisher raises an event, and any subscriber that handles that event type get
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.EventAggregators)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.EventAggregators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.EventAggregators.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators.Abstractions)](#nuget-packages) |
-| [Cat.EventAggregators](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators/) | Implementation | `dotnet add package gmarginet.Cat.EventAggregators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.EventAggregators.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.EventAggregators.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators.Abstractions)](#nuget-packages) |
+| [Cat.EventAggregators](https://www.nuget.org/packages/gmarginet.Cat.EventAggregators/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.EventAggregators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventAggregators)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 

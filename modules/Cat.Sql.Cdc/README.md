@@ -57,11 +57,13 @@ The position is kept in your own database, so a restart carries on where it stop
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Sql.Cdc)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.Sql.Cdc.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Sql.Cdc.Abstractions/) | Change type and sink contract | `dotnet add package gmarginet.Cat.Sql.Cdc.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Sql.Cdc.Abstractions)](#nuget-packages) |
-| [Cat.Sql.Cdc](https://www.nuget.org/packages/gmarginet.Cat.Sql.Cdc/) | Reader, position store and health check | `dotnet add package gmarginet.Cat.Sql.Cdc` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Sql.Cdc)](#nuget-packages) |
-| [Cat.Sql.Cdc.Messaging](https://www.nuget.org/packages/gmarginet.Cat.Sql.Cdc.Messaging/) | Sink that sends changes through Cat.Messaging | `dotnet add package gmarginet.Cat.Sql.Cdc.Messaging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Sql.Cdc.Messaging)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.Sql.Cdc.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Sql.Cdc.Abstractions/) | Change type and sink contract | netstandard2.0 | `dotnet add package gmarginet.Cat.Sql.Cdc.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Sql.Cdc.Abstractions)](#nuget-packages) |
+| [Cat.Sql.Cdc](https://www.nuget.org/packages/gmarginet.Cat.Sql.Cdc/) | Reader, position store and health check | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Sql.Cdc` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Sql.Cdc)](#nuget-packages) |
+| [Cat.Sql.Cdc.Messaging](https://www.nuget.org/packages/gmarginet.Cat.Sql.Cdc.Messaging/) | Sink that sends changes through Cat.Messaging | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Sql.Cdc.Messaging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Sql.Cdc.Messaging)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 

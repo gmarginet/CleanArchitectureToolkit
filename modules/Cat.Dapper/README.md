@@ -56,13 +56,15 @@ A handler asks a session for the connection, runs a statement and returns a resp
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Dapper)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.Dapper.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Dapper.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Dapper.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.Abstractions)](#nuget-packages) |
-| [Cat.Dapper](https://www.nuget.org/packages/gmarginet.Cat.Dapper/) | Implementation | `dotnet add package gmarginet.Cat.Dapper` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper)](#nuget-packages) |
-| [Cat.Dapper.MySql](https://www.nuget.org/packages/gmarginet.Cat.Dapper.MySql/) | MySQL support | `dotnet add package gmarginet.Cat.Dapper.MySql` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.MySql)](#nuget-packages) |
-| [Cat.Dapper.SqlFiles](https://www.nuget.org/packages/gmarginet.Cat.Dapper.SqlFiles/) | Optional source generator | `dotnet add package gmarginet.Cat.Dapper.SqlFiles` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.SqlFiles)](#nuget-packages) |
-| [Cat.Dapper.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.Dapper.SqlServer/) | SQL Server support | `dotnet add package gmarginet.Cat.Dapper.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.SqlServer)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.Dapper.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Dapper.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Dapper.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.Abstractions)](#nuget-packages) |
+| [Cat.Dapper](https://www.nuget.org/packages/gmarginet.Cat.Dapper/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Dapper` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper)](#nuget-packages) |
+| [Cat.Dapper.MySql](https://www.nuget.org/packages/gmarginet.Cat.Dapper.MySql/) | MySQL support | netstandard2.0 | `dotnet add package gmarginet.Cat.Dapper.MySql` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.MySql)](#nuget-packages) |
+| [Cat.Dapper.SqlFiles](https://www.nuget.org/packages/gmarginet.Cat.Dapper.SqlFiles/) | Optional source generator | netstandard2.0 | `dotnet add package gmarginet.Cat.Dapper.SqlFiles` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.SqlFiles)](#nuget-packages) |
+| [Cat.Dapper.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.Dapper.SqlServer/) | SQL Server support | netstandard2.0 | `dotnet add package gmarginet.Cat.Dapper.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Dapper.SqlServer)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 

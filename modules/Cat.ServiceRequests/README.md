@@ -58,14 +58,16 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships t
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.ServiceRequests)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.ServiceRequests.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.ServiceRequests.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Abstractions)](#nuget-packages) |
-| [Cat.ServiceRequests](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests/) | Implementation | `dotnet add package gmarginet.Cat.ServiceRequests` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests)](#nuget-packages) |
-| [Cat.ServiceRequests.Decorators.ActivitySource](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.ActivitySource` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource)](#nuget-packages) |
-| [Cat.ServiceRequests.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Logging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Logging)](#nuget-packages) |
-| [Cat.ServiceRequests.Decorators.Validation](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Validation/) | Optional decorator | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Validation` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Validation)](#nuget-packages) |
-| [Cat.ServiceRequests.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Minimal.Api/) | Optional integration | `dotnet add package gmarginet.Cat.ServiceRequests.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Minimal.Api)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.ServiceRequests.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.ServiceRequests.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Abstractions)](#nuget-packages) |
+| [Cat.ServiceRequests](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.ServiceRequests` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests)](#nuget-packages) |
+| [Cat.ServiceRequests.Decorators.ActivitySource](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource/) | Optional decorator | netstandard2.0 | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.ActivitySource` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.ActivitySource)](#nuget-packages) |
+| [Cat.ServiceRequests.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Logging/) | Optional decorator | netstandard2.0 | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Logging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Logging)](#nuget-packages) |
+| [Cat.ServiceRequests.Decorators.Validation](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Decorators.Validation/) | Optional decorator | netstandard2.0 | `dotnet add package gmarginet.Cat.ServiceRequests.Decorators.Validation` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Decorators.Validation)](#nuget-packages) |
+| [Cat.ServiceRequests.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.ServiceRequests.Minimal.Api/) | Optional integration | net10.0, net11.0 | `dotnet add package gmarginet.Cat.ServiceRequests.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.ServiceRequests.Minimal.Api)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 
@@ -249,7 +251,7 @@ What to know:
 
 The `Cat.ServiceRequests.Minimal.Api` package holds `PatchDocumentRequest<TRouteParameters, TModel>`. It is a request that carries a JSON Patch document and the route values that identify the resource. [Cat.Minimal.Api](../Cat.Minimal.Api/README.md#patch-with-a-json-patch-document) maps it with `MapCatPatchDocument`.
 
-The package targets `net11.0`, because the patch types come from `Microsoft.AspNetCore.JsonPatch.SystemTextJson`.
+The package targets `net10.0` and `net11.0`, because the patch types come from `Microsoft.AspNetCore.JsonPatch.SystemTextJson`.
 
 Write a handler for the request like any other. Apply the patch to the model you loaded, then save it:
 

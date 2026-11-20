@@ -61,11 +61,13 @@ A service can run several instances. Before a run, an instance claims the due ti
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Scheduling)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.Scheduling.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Scheduling.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Scheduling.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Scheduling.Abstractions)](#nuget-packages) |
-| [Cat.Scheduling](https://www.nuget.org/packages/gmarginet.Cat.Scheduling/) | Implementation | `dotnet add package gmarginet.Cat.Scheduling` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Scheduling)](#nuget-packages) |
-| [Cat.Scheduling.EFCore](https://www.nuget.org/packages/gmarginet.Cat.Scheduling.EFCore/) | Claim store and run history in the database | `dotnet add package gmarginet.Cat.Scheduling.EFCore` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Scheduling.EFCore)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.Scheduling.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Scheduling.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Scheduling.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Scheduling.Abstractions)](#nuget-packages) |
+| [Cat.Scheduling](https://www.nuget.org/packages/gmarginet.Cat.Scheduling/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Scheduling` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Scheduling)](#nuget-packages) |
+| [Cat.Scheduling.EFCore](https://www.nuget.org/packages/gmarginet.Cat.Scheduling.EFCore/) | Claim store and run history in the database | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Scheduling.EFCore` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Scheduling.EFCore)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 

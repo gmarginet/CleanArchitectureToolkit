@@ -82,12 +82,14 @@ The module ships the common steps for you, and you can write your own.
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.FluentWorkflows)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.FluentWorkflows.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.FluentWorkflows.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Abstractions)](#nuget-packages) |
-| [Cat.FluentWorkflows](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows/) | Implementation | `dotnet add package gmarginet.Cat.FluentWorkflows` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows)](#nuget-packages) |
-| [Cat.FluentWorkflows.Commands](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Commands/) | Optional steps | `dotnet add package gmarginet.Cat.FluentWorkflows.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Commands)](#nuget-packages) |
-| [Cat.FluentWorkflows.Queries](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Queries/) | Optional steps | `dotnet add package gmarginet.Cat.FluentWorkflows.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Queries)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.FluentWorkflows.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.FluentWorkflows.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Abstractions)](#nuget-packages) |
+| [Cat.FluentWorkflows](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.FluentWorkflows` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows)](#nuget-packages) |
+| [Cat.FluentWorkflows.Commands](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Commands/) | Optional steps | netstandard2.0 | `dotnet add package gmarginet.Cat.FluentWorkflows.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Commands)](#nuget-packages) |
+| [Cat.FluentWorkflows.Queries](https://www.nuget.org/packages/gmarginet.Cat.FluentWorkflows.Queries/) | Optional steps | netstandard2.0 | `dotnet add package gmarginet.Cat.FluentWorkflows.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.FluentWorkflows.Queries)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 

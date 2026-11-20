@@ -64,14 +64,16 @@ The module settles every message for you. A handler that succeeds completes the 
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.EventProcessor)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.EventProcessor.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.EventProcessor.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Abstractions)](#nuget-packages) |
-| [Cat.EventProcessor](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor/) | Implementation | `dotnet add package gmarginet.Cat.EventProcessor` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor)](#nuget-packages) |
-| [Cat.EventProcessor.Authorization](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Authorization/) | Optional token and policy check | `dotnet add package gmarginet.Cat.EventProcessor.Authorization` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Authorization)](#nuget-packages) |
-| [Cat.EventProcessor.AzureServiceBus](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.AzureServiceBus/) | Azure Service Bus listener | `dotnet add package gmarginet.Cat.EventProcessor.AzureServiceBus` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.AzureServiceBus)](#nuget-packages) |
-| [Cat.EventProcessor.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Minimal.Api/) | Optional development endpoint | `dotnet add package gmarginet.Cat.EventProcessor.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Minimal.Api)](#nuget-packages) |
-| [Cat.EventProcessor.Inbox.EFCore](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Inbox.EFCore/) | Optional inbox for EF Core | `dotnet add package gmarginet.Cat.EventProcessor.Inbox.EFCore` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Inbox.EFCore)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.EventProcessor.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.EventProcessor.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Abstractions)](#nuget-packages) |
+| [Cat.EventProcessor](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.EventProcessor` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor)](#nuget-packages) |
+| [Cat.EventProcessor.Authorization](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Authorization/) | Optional token and policy check | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EventProcessor.Authorization` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Authorization)](#nuget-packages) |
+| [Cat.EventProcessor.AzureServiceBus](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.AzureServiceBus/) | Azure Service Bus listener | netstandard2.0 | `dotnet add package gmarginet.Cat.EventProcessor.AzureServiceBus` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.AzureServiceBus)](#nuget-packages) |
+| [Cat.EventProcessor.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Minimal.Api/) | Optional development endpoint | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EventProcessor.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Minimal.Api)](#nuget-packages) |
+| [Cat.EventProcessor.Inbox.EFCore](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Inbox.EFCore/) | Optional inbox for EF Core | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EventProcessor.Inbox.EFCore` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Inbox.EFCore)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 
@@ -378,7 +380,7 @@ How it works:
 
 Set the policy from the configuration too, with `CatEventProcessor:Messages:PriceChanged:Policy`. `AllowAnonymous` works the same way, with `CatEventProcessor:Messages:PriceChanged:AllowAnonymous`. The inline rules come from code only.
 
-The project targets the latest .NET, because it uses the JWT bearer package of ASP.NET Core. The token stays in the message, so it is in the queue, in the dead letter queue and in the outbox table. Keep the risk small:
+The project targets `net10.0` and `net11.0`, because it uses the JWT bearer package of ASP.NET Core. The token stays in the message, so it is in the queue, in the dead letter queue and in the outbox table. Keep the risk small:
 
 - Use short lived tokens.
 - Keep message bodies out of the logs.

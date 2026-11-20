@@ -61,16 +61,18 @@ A fake is dumb on purpose. It returns what the test sets up. It fills no ids and
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.UnitTesting.Commands)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.UnitTesting.Commands](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.Commands/) | Fake command processor | `dotnet add package gmarginet.Cat.UnitTesting.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.Commands)](#nuget-packages) |
-| [Cat.UnitTesting.EventAggregators](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.EventAggregators/) | Recording subscriber and fake event aggregator | `dotnet add package gmarginet.Cat.UnitTesting.EventAggregators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.EventAggregators)](#nuget-packages) |
-| [Cat.UnitTesting.Messaging](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.Messaging/) | Fake message sender | `dotnet add package gmarginet.Cat.UnitTesting.Messaging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.Messaging)](#nuget-packages) |
-| [Cat.UnitTesting.NUnit](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.NUnit/) | NUnit base class and decorator recorder | `dotnet add package gmarginet.Cat.UnitTesting.NUnit` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.NUnit)](#nuget-packages) |
-| [Cat.UnitTesting.Queries](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.Queries/) | Fake query processor | `dotnet add package gmarginet.Cat.UnitTesting.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.Queries)](#nuget-packages) |
-| [Cat.UnitTesting.Responses.NUnit](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.Responses.NUnit/) | NUnit constraints for responses | `dotnet add package gmarginet.Cat.UnitTesting.Responses.NUnit` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.Responses.NUnit)](#nuget-packages) |
-| [Cat.UnitTesting.ServiceRequests](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.ServiceRequests/) | Fake service request processor | `dotnet add package gmarginet.Cat.UnitTesting.ServiceRequests` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.ServiceRequests)](#nuget-packages) |
-| [Cat.UnitTesting.Users](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.Users/) | Fake user and user accessor | `dotnet add package gmarginet.Cat.UnitTesting.Users` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.Users)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.UnitTesting.Commands](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.Commands/) | Fake command processor | netstandard2.0 | `dotnet add package gmarginet.Cat.UnitTesting.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.Commands)](#nuget-packages) |
+| [Cat.UnitTesting.EventAggregators](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.EventAggregators/) | Recording subscriber and fake event aggregator | netstandard2.0 | `dotnet add package gmarginet.Cat.UnitTesting.EventAggregators` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.EventAggregators)](#nuget-packages) |
+| [Cat.UnitTesting.Messaging](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.Messaging/) | Fake message sender | netstandard2.0 | `dotnet add package gmarginet.Cat.UnitTesting.Messaging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.Messaging)](#nuget-packages) |
+| [Cat.UnitTesting.NUnit](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.NUnit/) | NUnit base class and decorator recorder | net10.0, net11.0 | `dotnet add package gmarginet.Cat.UnitTesting.NUnit` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.NUnit)](#nuget-packages) |
+| [Cat.UnitTesting.Queries](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.Queries/) | Fake query processor | netstandard2.0 | `dotnet add package gmarginet.Cat.UnitTesting.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.Queries)](#nuget-packages) |
+| [Cat.UnitTesting.Responses.NUnit](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.Responses.NUnit/) | NUnit constraints for responses | net10.0, net11.0 | `dotnet add package gmarginet.Cat.UnitTesting.Responses.NUnit` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.Responses.NUnit)](#nuget-packages) |
+| [Cat.UnitTesting.ServiceRequests](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.ServiceRequests/) | Fake service request processor | netstandard2.0 | `dotnet add package gmarginet.Cat.UnitTesting.ServiceRequests` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.ServiceRequests)](#nuget-packages) |
+| [Cat.UnitTesting.Users](https://www.nuget.org/packages/gmarginet.Cat.UnitTesting.Users/) | Fake user and user accessor | netstandard2.0 | `dotnet add package gmarginet.Cat.UnitTesting.Users` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.UnitTesting.Users)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 
@@ -223,7 +225,7 @@ Assert.That(response, CatIs.FailedWithCode("DEM-ORD-1004"));
 Assert.That(response, CatIs.FailedWith(CatResponseType.NotFound, "DEM-ORD-1004"));
 ```
 
-`FailedWithCode` accepts the code anywhere in the list of errors. The constraints work with `!` and `&`, like other NUnit constraints. The package targets the latest stable .NET, because NUnit 5 has no `netstandard2.0` build.
+`FailedWithCode` accepts the code anywhere in the list of errors. The constraints work with `!` and `&`, like other NUnit constraints. The package targets `net10.0` and `net11.0`, because NUnit 5 has no `netstandard2.0` build.
 
 ### A user for the test
 
@@ -271,7 +273,7 @@ public class TodoQueryTests : UnitTestBase
 }
 ```
 
-The package targets the latest stable .NET. The fakes of the other projects target `netstandard2.0`.
+The package targets `net10.0` and `net11.0`. The fakes of the other projects target `netstandard2.0`.
 
 ### Check which decorators a module adds
 

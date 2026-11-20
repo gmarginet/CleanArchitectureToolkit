@@ -59,9 +59,11 @@ You decide which response types your handler returns. The OpenAPI description li
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Minimal.Api)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.Minimal.Api/) | Implementation | `dotnet add package gmarginet.Cat.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Minimal.Api)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.Minimal.Api/) | Implementation | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Minimal.Api)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 
@@ -247,7 +249,7 @@ Content-Type: application/json-patch+json
 
 A request without a patch document in its body gets a 400. A request with another content type gets a 415.
 
-The patch types come from `Microsoft.AspNetCore.JsonPatch.SystemTextJson`, which supports `net11.0` and up.
+The patch types come from `Microsoft.AspNetCore.JsonPatch.SystemTextJson`, which has a release for `net10.0` and one for `net11.0`.
 
 ### What the endpoint returns
 

@@ -55,11 +55,13 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Queries)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.Queries.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Queries.Abstractions/) | Contracts | `dotnet add package gmarginet.Cat.Queries.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Abstractions)](#nuget-packages) |
-| [Cat.Queries](https://www.nuget.org/packages/gmarginet.Cat.Queries/) | Implementation | `dotnet add package gmarginet.Cat.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries)](#nuget-packages) |
-| [Cat.Queries.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Queries.Decorators.Logging/) | Optional decorator | `dotnet add package gmarginet.Cat.Queries.Decorators.Logging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Decorators.Logging)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.Queries.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Queries.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Queries.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Abstractions)](#nuget-packages) |
+| [Cat.Queries](https://www.nuget.org/packages/gmarginet.Cat.Queries/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries)](#nuget-packages) |
+| [Cat.Queries.Decorators.Logging](https://www.nuget.org/packages/gmarginet.Cat.Queries.Decorators.Logging/) | Optional decorator | netstandard2.0 | `dotnet add package gmarginet.Cat.Queries.Decorators.Logging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Queries.Decorators.Logging)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 

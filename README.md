@@ -67,6 +67,7 @@
 The `Clean Architecture Toolkit for .NET` contains a set of modules.  
 Most of the modules can be used independently.  
 Some modules depend on other modules, in the documentation of each module you can find the list of the dependencies.  
+A package targets `netstandard2.0` where possible and otherwise `net10.0` and `net11.0`. The package table of each module shows which. EF Core 10 and 11 are supported, and the demo runs on .NET 11.  
 <!-- region end: GettingStarted-->
 
 ## About this project

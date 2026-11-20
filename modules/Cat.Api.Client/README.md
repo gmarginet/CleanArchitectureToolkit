@@ -58,9 +58,11 @@ The client class is generated from the OpenAPI document of the other service. Th
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.Api.Client)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.Api.Client](https://www.nuget.org/packages/gmarginet.Cat.Api.Client/) | Implementation | `dotnet add package gmarginet.Cat.Api.Client` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Api.Client)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.Api.Client](https://www.nuget.org/packages/gmarginet.Cat.Api.Client/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Api.Client` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Api.Client)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 

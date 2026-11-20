@@ -46,14 +46,16 @@ Inherit from a base class, call one extension method in `OnModelCreating`, and g
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.Cat.EFCore.Entities)](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
-| [Cat.EFCore.Entities](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Entities/) | Entity base classes | `dotnet add package gmarginet.Cat.EFCore.Entities` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Entities)](#nuget-packages) |
-| [Cat.EFCore.Extensions](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions/) | Provider neutral base of the model builder extensions | `dotnet add package gmarginet.Cat.EFCore.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions)](#nuget-packages) |
-| [Cat.EFCore.Entities.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Entities.SqlServer/) | SQL Server entity base class for temporal tables | `dotnet add package gmarginet.Cat.EFCore.Entities.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Entities.SqlServer)](#nuget-packages) |
-| [Cat.EFCore.Extensions.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions.SqlServer/) | SQL Server model builder extensions, with temporal tables | `dotnet add package gmarginet.Cat.EFCore.Extensions.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions.SqlServer)](#nuget-packages) |
-| [Cat.EFCore.Queries](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Queries/) | Base query handler and paging | `dotnet add package gmarginet.Cat.EFCore.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Queries)](#nuget-packages) |
-| [Cat.EFCore.Commands](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Commands/) | Base command handlers | `dotnet add package gmarginet.Cat.EFCore.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Commands)](#nuget-packages) |
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+| [Cat.EFCore.Entities](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Entities/) | Entity base classes | netstandard2.0 | `dotnet add package gmarginet.Cat.EFCore.Entities` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Entities)](#nuget-packages) |
+| [Cat.EFCore.Extensions](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions/) | Provider neutral base of the model builder extensions | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EFCore.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions)](#nuget-packages) |
+| [Cat.EFCore.Entities.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Entities.SqlServer/) | SQL Server entity base class for temporal tables | netstandard2.0, net11.0 | `dotnet add package gmarginet.Cat.EFCore.Entities.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Entities.SqlServer)](#nuget-packages) |
+| [Cat.EFCore.Extensions.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions.SqlServer/) | SQL Server model builder extensions, with temporal tables | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EFCore.Extensions.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions.SqlServer)](#nuget-packages) |
+| [Cat.EFCore.Queries](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Queries/) | Base query handler and paging | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EFCore.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Queries)](#nuget-packages) |
+| [Cat.EFCore.Commands](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Commands/) | Base command handlers | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EFCore.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Commands)](#nuget-packages) |
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 
@@ -80,7 +82,7 @@ Inherit from a base class, call one extension method in `OnModelCreating`, and g
 | [Cat.Commands](../Cat.Commands/README.md) | `Cat.EFCore.Commands` implements `ICatCommandHandler` in its base classes. |
 | [Cat.Responses](../Cat.Responses/README.md) | `Cat.EFCore.Queries` returns an `ICatPagedList` from the paging extension. |
 
-Every project references only what it needs, so you pick the projects you use. `Cat.EFCore.Entities` and `Cat.EFCore.Entities.SqlServer` target `netstandard2.0` and have no reference to EF Core. The other projects use EF Core 11 and target `net11.0`.  
+Every project references only what it needs, so you pick the projects you use. `Cat.EFCore.Entities` targets `netstandard2.0`, and `Cat.EFCore.Entities.SqlServer` targets `netstandard2.0` and `net11.0`. Neither has a reference to EF Core. The other projects target `net10.0` and `net11.0`, and use EF Core 10 on `net10.0` and EF Core 11 on `net11.0`.  
 <!-- region end: Dependencies-->
 
 ## Usage
@@ -143,7 +145,7 @@ A temporal table is a SQL Server feature. It keeps the full history of your data
 
 - SQL Server stores the current rows in the table itself.
 - Every update or delete moves the old row to a history table.
-- Two period columns, `ValidFrom` and `ValidUntil`, say when a row version was valid. `CatTemporalEntityBase` has them as properties, so you can read them in a query. EF Core and SQL Server set the values, so never set them yourself.
+- Two period columns, `ValidFrom` and `ValidUntil`, say when a row version was valid. On `net11.0`, `CatTemporalEntityBase` has them as properties, so you can read them in a query. EF Core 10 only accepts a period column as a shadow property, so on `net10.0` the class has no such properties, and you read them with `EF.Property<DateTime>(entity, "ValidFrom")`. EF Core and SQL Server set the values, so never set them yourself.
 - You can query the data as it was at any point in time.
 - Only SQL Server supports them. Read the [overview of temporal tables](https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal/overview?view=sql-server-ver17) for the details.
 
