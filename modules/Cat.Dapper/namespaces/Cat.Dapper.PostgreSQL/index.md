@@ -30,5 +30,5 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Dapper\.PostgreSQL](Cat.Dapper.PostgreSQL.md 'Cat\.Dapper\.PostgreSQL') | Holds what is specific to PostgreSQL: the connection factory and a paging helper that returns an [ICatPagedList&lt;TList&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatPagedList_TList_.md 'Cat\.Responses\.Abstractions\.ICatPagedList\`1')\. |
+| [Cat\.Dapper\.PostgreSQL](Cat.Dapper.PostgreSQL.md 'Cat\.Dapper\.PostgreSQL') | Holds what is specific to PostgreSQL: the connection factory, a paging helper that returns an [ICatPagedList&lt;TList&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatPagedList_TList_.md 'Cat\.Responses\.Abstractions\.ICatPagedList\`1') and the bulk operations\. |
 | [Cat\.Dapper\.PostgreSQL\.Extensions](Cat.Dapper.PostgreSQL.Extensions.md 'Cat\.Dapper\.PostgreSQL\.Extensions') | |

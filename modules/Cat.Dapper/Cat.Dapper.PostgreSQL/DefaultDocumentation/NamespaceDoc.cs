@@ -6,7 +6,7 @@ namespace Cat.Dapper.PostgreSQL;
 // The XML documentation of this class can be used for a general description of the namespace.
 
 /// <summary>
-/// Holds what is specific to PostgreSQL: the connection factory and a paging helper that returns an
-/// <see cref="Cat.Responses.Abstractions.ICatPagedList{TList}"/>.
+/// Holds what is specific to PostgreSQL: the connection factory, a paging helper that returns an
+/// <see cref="Cat.Responses.Abstractions.ICatPagedList{TList}"/> and the bulk operations.
 /// </summary>
 internal static class NamespaceDoc { }

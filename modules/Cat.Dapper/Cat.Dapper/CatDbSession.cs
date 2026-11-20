@@ -33,8 +33,22 @@ public sealed class CatDbSession : ICatDbSession
     {
         get
         {
+            var transaction = _transaction;
+
             // A transaction that was committed or rolled back gives up its connection.
-            return _transaction?.Connection == null ? null : _transaction;
+            if (transaction?.Connection == null) return null;
+
+            // Npgsql keeps the connection of a transaction that is completed, and throws when it is asked for its isolation level.
+            try
+            {
+                _ = transaction.IsolationLevel;
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+
+            return transaction;
         }
     }
 

@@ -6,6 +6,8 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="Cat.Dapper.Tests" />
+        <InternalsVisibleTo Include="Cat.Dapper.SqlServer" />
+        <InternalsVisibleTo Include="Cat.Dapper.PostgreSQL" />
     </ItemGroup>
 
     <ItemGroup>

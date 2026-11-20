@@ -33,4 +33,4 @@ private readonly IReadOnlyList<BulkColumn> _columns;
 ```
 
 #### Field Value
-[System\.Collections\.Generic\.IReadOnlyList&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1 'System\.Collections\.Generic\.IReadOnlyList\`1')[BulkColumn](BulkColumn.md 'Cat\.Dapper\.SqlServer\.BulkColumn')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1 'System\.Collections\.Generic\.IReadOnlyList\`1')
+[System\.Collections\.Generic\.IReadOnlyList&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1 'System\.Collections\.Generic\.IReadOnlyList\`1')[BulkColumn](../../../Cat.Dapper/namespaces/Cat.Dapper/BulkColumn.md 'Cat\.Dapper\.BulkColumn')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1 'System\.Collections\.Generic\.IReadOnlyList\`1')

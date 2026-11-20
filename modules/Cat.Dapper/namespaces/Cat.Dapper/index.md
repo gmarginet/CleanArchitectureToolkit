@@ -30,5 +30,5 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Dapper](Cat.Dapper.md 'Cat\.Dapper') | Holds the session that gives a handler one connection, the base classes for query and command handlers that use plain SQL, and the extension methods that run the SQL with Dapper\. It works with any database\. |
+| [Cat\.Dapper](Cat.Dapper.md 'Cat\.Dapper') | Holds the session that gives a handler one connection, the base classes for query and command handlers that use plain SQL, the extension methods that run the SQL with Dapper, and the result of a bulk merge\. It works with any database\. |
 | [Cat\.Dapper\.Extensions](Cat.Dapper.Extensions.md 'Cat\.Dapper\.Extensions') | |

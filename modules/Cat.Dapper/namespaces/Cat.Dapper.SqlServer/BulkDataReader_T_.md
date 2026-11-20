@@ -43,7 +43,7 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Constructors | |
 | :--- | :--- |
-| [BulkDataReader\(IEnumerable&lt;T&gt;, IReadOnlyList&lt;BulkColumn&gt;\)](BulkDataReader_T_..ctor.2N78BMISNNQ03OC2YLRZL9B21.md 'Cat\.Dapper\.SqlServer\.BulkDataReader\<T\>\.BulkDataReader\(System\.Collections\.Generic\.IEnumerable\<T\>, System\.Collections\.Generic\.IReadOnlyList\<Cat\.Dapper\.SqlServer\.BulkColumn\>\)') | |
+| [BulkDataReader\(IEnumerable&lt;T&gt;, IReadOnlyList&lt;BulkColumn&gt;\)](BulkDataReader_T_..ctor.CQECQUQW9OTQZ4Q4PLQZNHYC9.md 'Cat\.Dapper\.SqlServer\.BulkDataReader\<T\>\.BulkDataReader\(System\.Collections\.Generic\.IEnumerable\<T\>, System\.Collections\.Generic\.IReadOnlyList\<Cat\.Dapper\.BulkColumn\>\)') | |
 
 | Fields | |
 | :--- | :--- |

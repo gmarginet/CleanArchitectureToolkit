@@ -46,11 +46,11 @@ public static class SqlServerBulkExtensions
         int? timeoutSeconds = null,
         CancellationToken cancellationToken = default)
     {
-        Require(session, rows, table);
+        BulkPlan.Require(session, rows, table);
         var selected = BulkColumns.Select(typeof(T), columns, nameof(columns));
         ValidateColumns(selected);
         SqlServerBulkSql.QuoteName(table);
-        if (IsEmpty(rows)) return 0;
+        if (BulkPlan.IsEmpty(rows)) return 0;
 
         var (connection, transaction) = await GetSqlAsync(session, cancellationToken).ConfigureAwait(false);
         using var reader = new BulkDataReader<T>(rows, selected);
@@ -119,10 +119,10 @@ public static class SqlServerBulkExtensions
         int? timeoutSeconds = null,
         CancellationToken cancellationToken = default)
     {
-        Require(session, rows, table);
-        var plan = Plan(typeof(T), keyColumns, updateColumns);
+        BulkPlan.Require(session, rows, table);
+        var plan = BulkPlan.Plan(typeof(T), keyColumns, updateColumns, false, ValidateColumn);
         SqlServerBulkSql.QuoteName(table);
-        if (IsEmpty(rows)) return 0;
+        if (BulkPlan.IsEmpty(rows)) return 0;
 
         var staged = plan.Keys.Concat(plan.Update).ToList();
         return await RunStagedAsync(session, rows, staged, table, batchSize, timeoutSeconds, cancellationToken,
@@ -153,12 +153,12 @@ public static class SqlServerBulkExtensions
         int? timeoutSeconds = null,
         CancellationToken cancellationToken = default)
     {
-        Require(session, rows, table);
+        BulkPlan.Require(session, rows, table);
         if (keyColumns is null) throw new ArgumentNullException(nameof(keyColumns));
         var keys = BulkColumns.Select(typeof(T), keyColumns, nameof(keyColumns));
         ValidateColumns(keys);
         SqlServerBulkSql.QuoteName(table);
-        if (IsEmpty(rows)) return 0;
+        if (BulkPlan.IsEmpty(rows)) return 0;
 
         var keyNames = keys.Select(k => k.Name).ToList();
         return await RunStagedAsync(session, rows, keys, table, batchSize, timeoutSeconds, cancellationToken,
@@ -189,13 +189,13 @@ public static class SqlServerBulkExtensions
         int? timeoutSeconds = null,
         CancellationToken cancellationToken = default)
     {
-        Require(session, keys, table);
+        BulkPlan.Require(session, keys, table);
         if (keyColumn is null) throw new ArgumentNullException(nameof(keyColumn));
         SqlServerBulkSql.QuoteColumn(keyColumn);
         SqlServerBulkSql.QuoteName(table);
-        if (IsEmpty(keys)) return 0;
+        if (BulkPlan.IsEmpty(keys)) return 0;
 
-        var column = ValueColumn<TKey>(keyColumn);
+        var column = BulkPlan.ValueColumn<TKey>(keyColumn);
         return await RunStagedAsync(session, keys, new[] { column }, table, batchSize, timeoutSeconds, cancellationToken,
             staging => SqlServerBulkSql.BuildDelete(staging, table, new[] { keyColumn }),
             async command => await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false)).ConfigureAwait(false);
@@ -230,10 +230,10 @@ public static class SqlServerBulkExtensions
         int? timeoutSeconds = null,
         CancellationToken cancellationToken = default)
     {
-        Require(session, rows, table);
-        var plan = Plan(typeof(T), keyColumns, updateColumns, allowNoUpdate: true);
+        BulkPlan.Require(session, rows, table);
+        var plan = BulkPlan.Plan(typeof(T), keyColumns, updateColumns, true, ValidateColumn);
         SqlServerBulkSql.QuoteName(table);
-        if (IsEmpty(rows)) return new CatBulkMergeResult(0, 0);
+        if (BulkPlan.IsEmpty(rows)) return new CatBulkMergeResult(0, 0);
 
         var all = BulkColumns.ForType(typeof(T));
         var allNames = all.Select(c => c.Name).ToList();
@@ -256,72 +256,9 @@ public static class SqlServerBulkExtensions
             }).ConfigureAwait(false);
     }
 
-    private sealed class ColumnPlan
-    {
-        internal ColumnPlan(IReadOnlyList<BulkColumn> keys, IReadOnlyList<BulkColumn> update)
-        {
-            Keys = keys;
-            Update = update;
-            KeyNames = keys.Select(c => c.Name).ToList();
-            UpdateNames = update.Select(c => c.Name).ToList();
-        }
+    private static void ValidateColumns(IEnumerable<BulkColumn> columns) => BulkPlan.Validate(columns, ValidateColumn);
 
-        internal IReadOnlyList<BulkColumn> Keys { get; }
-
-        internal IReadOnlyList<BulkColumn> Update { get; }
-
-        internal IReadOnlyList<string> KeyNames { get; }
-
-        internal IReadOnlyList<string> UpdateNames { get; }
-    }
-
-    private static ColumnPlan Plan(Type type, IEnumerable<string> keyColumns, IEnumerable<string>? updateColumns, bool allowNoUpdate = false)
-    {
-        if (keyColumns is null) throw new ArgumentNullException(nameof(keyColumns));
-        var keys = BulkColumns.Select(type, keyColumns, nameof(keyColumns));
-        ValidateColumns(keys);
-
-        IReadOnlyList<BulkColumn> update;
-        if (updateColumns is null)
-        {
-            update = BulkColumns.ForType(type).Where(c => !keys.Contains(c)).ToList();
-        }
-        else
-        {
-            update = BulkColumns.Select(type, updateColumns, nameof(updateColumns));
-            if (update.Any(keys.Contains)) throw new ArgumentException("A key column cannot be an update column.", nameof(updateColumns));
-        }
-
-        ValidateColumns(update);
-        if (update.Count == 0 && !allowNoUpdate)
-        {
-            throw new ArgumentException("There is no column to update. Every property is a key column.", nameof(updateColumns));
-        }
-
-        return new ColumnPlan(keys, update);
-    }
-
-    private static void ValidateColumns(IEnumerable<BulkColumn> columns)
-    {
-        foreach (var column in columns) SqlServerBulkSql.QuoteColumn(column.Name);
-    }
-
-    private static void Require<T>(ICatDbSession session, IEnumerable<T> rows, string table)
-    {
-        if (session is null) throw new ArgumentNullException(nameof(session));
-        if (rows is null) throw new ArgumentNullException(nameof(rows));
-        if (table is null) throw new ArgumentNullException(nameof(table));
-    }
-
-    private static bool IsEmpty<T>(IEnumerable<T> rows) =>
-        rows is ICollection<T> { Count: 0 } || rows is IReadOnlyCollection<T> { Count: 0 };
-
-    private static BulkColumn ValueColumn<TKey>(string name)
-    {
-        var type = Nullable.GetUnderlyingType(typeof(TKey)) ?? typeof(TKey);
-        if (type.IsEnum) type = Enum.GetUnderlyingType(type);
-        return new BulkColumn(name, type, value => value);
-    }
+    private static void ValidateColumn(string column) => SqlServerBulkSql.QuoteColumn(column);
 
     private static async Task<(SqlConnection, SqlTransaction?)> GetSqlAsync(ICatDbSession session, CancellationToken cancellationToken)
     {

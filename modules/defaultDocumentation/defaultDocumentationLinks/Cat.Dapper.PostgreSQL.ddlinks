@@ -1,8 +1,58 @@
 ../../../Cat.Dapper/namespaces/Cat.Dapper.PostgreSQL/
+P:Cat.Dapper.PostgreSQL.BulkRowSource.FieldCount|BulkRowSource.FieldCount.md|FieldCount
+M:Cat.Dapper.PostgreSQL.BulkRowSource.Read|BulkRowSource.Read().md|Read()
+M:Cat.Dapper.PostgreSQL.BulkRowSource.GetValue(System.Int32)|BulkRowSource.GetValue.89XXFC8ZFQJN15CH9XE990F3.md|GetValue(int)
+M:Cat.Dapper.PostgreSQL.BulkRowSource.Dispose|BulkRowSource.Dispose().md|Dispose()
+N:Cat.Dapper.PostgreSQL|Cat.Dapper.PostgreSQL.md|Cat.Dapper.PostgreSQL
+T:Cat.Dapper.PostgreSQL.BulkRowSource|BulkRowSource.md|BulkRowSource
+F:Cat.Dapper.PostgreSQL.EnumerableRowSource`1._rows|EnumerableRowSource_T_._rows.md|_rows
+F:Cat.Dapper.PostgreSQL.EnumerableRowSource`1._columns|EnumerableRowSource_T_._columns.md|_columns
+P:Cat.Dapper.PostgreSQL.EnumerableRowSource`1.FieldCount|EnumerableRowSource_T_.FieldCount.md|FieldCount
+M:Cat.Dapper.PostgreSQL.EnumerableRowSource`1.#ctor(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IReadOnlyList{Cat.Dapper.BulkColumn})|EnumerableRowSource_T_..ctor.LKJ66ZZ15UA3TKSTQ09ZDWE09.md|EnumerableRowSource(IEnumerable<T>, IReadOnlyList<BulkColumn>)
+M:Cat.Dapper.PostgreSQL.EnumerableRowSource`1.Read|EnumerableRowSource_T_.Read().md|Read()
+M:Cat.Dapper.PostgreSQL.EnumerableRowSource`1.GetValue(System.Int32)|EnumerableRowSource_T_.GetValue.92X6FWBUQ2N3AF9GRJ69WLSV6.md|GetValue(int)
+M:Cat.Dapper.PostgreSQL.EnumerableRowSource`1.Dispose|EnumerableRowSource_T_.Dispose().md|Dispose()
+T:Cat.Dapper.PostgreSQL.EnumerableRowSource`1|EnumerableRowSource_T_.md|EnumerableRowSource<T>
+F:Cat.Dapper.PostgreSQL.ReaderRowSource._reader|ReaderRowSource._reader.md|_reader
+P:Cat.Dapper.PostgreSQL.ReaderRowSource.FieldCount|ReaderRowSource.FieldCount.md|FieldCount
+M:Cat.Dapper.PostgreSQL.ReaderRowSource.#ctor(System.Data.IDataReader)|ReaderRowSource..ctor.O7JNICGC7FK06AKUFUAT7KPBC.md|ReaderRowSource(IDataReader)
+M:Cat.Dapper.PostgreSQL.ReaderRowSource.Read|ReaderRowSource.Read().md|Read()
+M:Cat.Dapper.PostgreSQL.ReaderRowSource.GetValue(System.Int32)|ReaderRowSource.GetValue.86DXU0Z849MFPA25MC1L63L5D.md|GetValue(int)
+T:Cat.Dapper.PostgreSQL.ReaderRowSource|ReaderRowSource.md|ReaderRowSource
+F:Cat.Dapper.PostgreSQL.ImporterWriter.Writers|ImporterWriter.Writers.md|Writers
+F:Cat.Dapper.PostgreSQL.ImporterWriter.WriteTypedMethod|ImporterWriter.WriteTypedMethod.md|WriteTypedMethod
+M:Cat.Dapper.PostgreSQL.ImporterWriter.WriteAsync(Npgsql.NpgsqlBinaryImporter,System.Object,System.Threading.CancellationToken)|ImporterWriter.WriteAsync.SJ4AP8M5442G8DF99YQ1IISAC.md|WriteAsync(NpgsqlBinaryImporter, object, CancellationToken)
+M:Cat.Dapper.PostgreSQL.ImporterWriter.WriteTyped``1(Npgsql.NpgsqlBinaryImporter,System.Object,System.Threading.CancellationToken)|ImporterWriter.WriteTyped.53BZHUDAPGUFI8NGJ6UB9OPCB.md|WriteTyped<TValue>(NpgsqlBinaryImporter, object, CancellationToken)
+M:Cat.Dapper.PostgreSQL.ImporterWriter.#cctor|ImporterWriter.ImporterWriter().md|ImporterWriter()
+T:Cat.Dapper.PostgreSQL.ImporterWriter|ImporterWriter.md|ImporterWriter
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.BulkInsertAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.String,System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|PostgreSQLBulkExtensions.BulkInsertAsync.md#Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.BulkInsertAsync_T_(thisCat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable_T_,string,System.Collections.Generic.IEnumerable_string_,int,System.Nullable_int_,System.Threading.CancellationToken)|BulkInsertAsync<T>(this ICatDbSession, IEnumerable<T>, string, IEnumerable<string>, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.BulkInsertAsync(Cat.Dapper.Abstractions.ICatDbSession,System.Data.IDataReader,System.String,System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|PostgreSQLBulkExtensions.BulkInsertAsync.md#Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.BulkInsertAsync(thisCat.Dapper.Abstractions.ICatDbSession,System.Data.IDataReader,string,int,System.Nullable_int_,System.Threading.CancellationToken)|BulkInsertAsync(this ICatDbSession, IDataReader, string, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.BulkUpdateAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|PostgreSQLBulkExtensions.BulkUpdateAsync.89YTCMXP4DL8FRVBMCDE8IIW2.md|BulkUpdateAsync<T>(this ICatDbSession, IEnumerable<T>, string, IEnumerable<string>, IEnumerable<string>, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.BulkDeleteAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.String,System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|PostgreSQLBulkExtensions.BulkDeleteAsync.md#Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.BulkDeleteAsync_T_(thisCat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable_T_,string,System.Collections.Generic.IEnumerable_string_,int,System.Nullable_int_,System.Threading.CancellationToken)|BulkDeleteAsync<T>(this ICatDbSession, IEnumerable<T>, string, IEnumerable<string>, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.BulkDeleteAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.String,System.String,System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|PostgreSQLBulkExtensions.BulkDeleteAsync.md#Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.BulkDeleteAsync_TKey_(thisCat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable_TKey_,string,string,int,System.Nullable_int_,System.Threading.CancellationToken)|BulkDeleteAsync<TKey>(this ICatDbSession, IEnumerable<TKey>, string, string, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.BulkMergeAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|PostgreSQLBulkExtensions.BulkMergeAsync.CWVO1227XWE1FETOVQMZHB4R5.md|BulkMergeAsync<T>(this ICatDbSession, IEnumerable<T>, string, IEnumerable<string>, IEnumerable<string>, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.ValidateColumns(System.Collections.Generic.IEnumerable{Cat.Dapper.BulkColumn})|PostgreSQLBulkExtensions.ValidateColumns.B6HP81J2VWWIY7VPQDO1TQV8D.md|ValidateColumns(IEnumerable<BulkColumn>)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.ValidateColumn(System.String)|PostgreSQLBulkExtensions.ValidateColumn.CV7M7FQSHQCFBDBA2WV8CHX1.md|ValidateColumn(string)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.GetNpgsqlAsync(Cat.Dapper.Abstractions.ICatDbSession,System.Threading.CancellationToken)|PostgreSQLBulkExtensions.GetNpgsqlAsync.C9BZ7PFF9KJTUJUT0CV53ETR5.md|GetNpgsqlAsync(ICatDbSession, CancellationToken)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.CopyAsync(Npgsql.NpgsqlConnection,Cat.Dapper.PostgreSQL.BulkRowSource,System.String,System.Collections.Generic.IReadOnlyList{System.String},System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|PostgreSQLBulkExtensions.CopyAsync.YW4FJFFI4YT3605EDGI4K4OQC.md|CopyAsync(NpgsqlConnection, BulkRowSource, string, IReadOnlyList<string>, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.RunStagedAsync``2(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IReadOnlyList{Cat.Dapper.BulkColumn},System.String,System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken,System.Func{System.String,System.String},System.Func{Npgsql.NpgsqlCommand,System.Threading.Tasks.Task{``1}})|PostgreSQLBulkExtensions.RunStagedAsync.ECH73ZIRA7NB5BGLGEGSXC6WD.md|RunStagedAsync<T,TResult>(ICatDbSession, IEnumerable<T>, IReadOnlyList<BulkColumn>, string, int, Nullable<int>, CancellationToken, Func<string,string>, Func<NpgsqlCommand,Task<TResult>>)
+T:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions|PostgreSQLBulkExtensions.md|PostgreSQLBulkExtensions
+F:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql.InsertedColumn|PostgreSQLBulkSql.InsertedColumn.md|InsertedColumn
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql.QuoteName(System.String)|PostgreSQLBulkSql.QuoteName.BTCXSMZ5IG7MGGZ4A39TGZAA1.md|QuoteName(string)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql.QuoteColumn(System.String)|PostgreSQLBulkSql.QuoteColumn.8G9ZBFTZMKL6OKDYQE3UXGGH5.md|QuoteColumn(string)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql.NewStagingName|PostgreSQLBulkSql.NewStagingName().md|NewStagingName()
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql.BuildCreateStaging(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Boolean)|PostgreSQLBulkSql.BuildCreateStaging.B785O9RRQOU3C2VUEL7M1LX8C.md|BuildCreateStaging(string, string, IEnumerable<string>, bool)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql.BuildDropStaging(System.String)|PostgreSQLBulkSql.BuildDropStaging.PZSNOCH0AUISS3SMXUMV51Z97.md|BuildDropStaging(string)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql.BuildCopy(System.String,System.Collections.Generic.IEnumerable{System.String})|PostgreSQLBulkSql.BuildCopy.0P05SB6Z6FG5X44VBNFPOSQ83.md|BuildCopy(string, IEnumerable<string>)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql.BuildUpdate(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String},System.Collections.Generic.IReadOnlyList{System.String})|PostgreSQLBulkSql.BuildUpdate.R1220O1WDGM5DT4FH8SVRPQU6.md|BuildUpdate(string, string, IReadOnlyList<string>, IReadOnlyList<string>)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql.BuildDelete(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String})|PostgreSQLBulkSql.BuildDelete.R7F59FHDYY9Y0BJJKRGFYHB31.md|BuildDelete(string, string, IReadOnlyList<string>)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql.BuildMerge(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String},System.Collections.Generic.IReadOnlyList{System.String},System.Collections.Generic.IReadOnlyList{System.String})|PostgreSQLBulkSql.BuildMerge.XOLTJ6XE6Q3XZGPGIAQM476K6.md|BuildMerge(string, string, IReadOnlyList<string>, IReadOnlyList<string>, IReadOnlyList<string>)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql.JoinOn(System.Collections.Generic.IEnumerable{System.String})|PostgreSQLBulkSql.JoinOn.IGSVSYMFFV00XRQ9YA0BIRSHD.md|JoinOn(IEnumerable<string>)
+M:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql.ColumnList(System.Collections.Generic.IEnumerable{System.String},System.String)|PostgreSQLBulkSql.ColumnList.TP0WESOYXYQUXVL4GUGTBAE61.md|ColumnList(IEnumerable<string>, string)
+T:Cat.Dapper.PostgreSQL.PostgreSQLBulkSql|PostgreSQLBulkSql.md|PostgreSQLBulkSql
 F:Cat.Dapper.PostgreSQL.PostgreSQLConnectionFactory._connectionString|PostgreSQLConnectionFactory._connectionString.md|_connectionString
 M:Cat.Dapper.PostgreSQL.PostgreSQLConnectionFactory.#ctor(System.String)|PostgreSQLConnectionFactory..ctor.YLLNZVGTSKJ98SU02A8DPRHZ8.md|PostgreSQLConnectionFactory(string)
 M:Cat.Dapper.PostgreSQL.PostgreSQLConnectionFactory.CreateConnection|PostgreSQLConnectionFactory.CreateConnection().md|CreateConnection()
-N:Cat.Dapper.PostgreSQL|Cat.Dapper.PostgreSQL.md|Cat.Dapper.PostgreSQL
 T:Cat.Dapper.PostgreSQL.PostgreSQLConnectionFactory|PostgreSQLConnectionFactory.md|PostgreSQLConnectionFactory
 F:Cat.Dapper.PostgreSQL.PostgreSQLPagingExtensions.SkipParameter|PostgreSQLPagingExtensions.SkipParameter.md|SkipParameter
 F:Cat.Dapper.PostgreSQL.PostgreSQLPagingExtensions.TakeParameter|PostgreSQLPagingExtensions.TakeParameter.md|TakeParameter
@@ -13,3 +63,5 @@ T:Cat.Dapper.PostgreSQL.PostgreSQLPagingExtensions|PostgreSQLPagingExtensions.md
 M:Cat.Dapper.PostgreSQL.Extensions.ServiceCollectionExtensions.AddCatDapperPostgreSQL(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)|ServiceCollectionExtensions.AddCatDapperPostgreSQL.EECAZWNJU7WLT6IQL5T7S2N7E.md|AddCatDapperPostgreSQL(this IServiceCollection, string)
 N:Cat.Dapper.PostgreSQL.Extensions|Cat.Dapper.PostgreSQL.Extensions.md|Cat.Dapper.PostgreSQL.Extensions
 T:Cat.Dapper.PostgreSQL.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+?:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.BulkInsertAsync|PostgreSQLBulkExtensions.BulkInsertAsync.md|BulkInsertAsync
+?:Cat.Dapper.PostgreSQL.PostgreSQLBulkExtensions.BulkDeleteAsync|PostgreSQLBulkExtensions.BulkDeleteAsync.md|BulkDeleteAsync

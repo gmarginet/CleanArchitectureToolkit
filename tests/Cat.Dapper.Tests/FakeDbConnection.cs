@@ -17,6 +17,11 @@ public class FakeDbConnection : DbConnection
 
     public FakeDbTransaction? LastTransaction { get; private set; }
 
+    /// <summary>
+    /// Makes the transactions behave like the ones of Npgsql: a completed transaction keeps its connection and throws when it is asked for its isolation level.
+    /// </summary>
+    public bool CompletedTransactionsKeepTheirConnection { get; set; }
+
     [System.Diagnostics.CodeAnalysis.AllowNull]
     public override string ConnectionString { get; set; } = string.Empty;
 
@@ -42,7 +47,7 @@ public class FakeDbConnection : DbConnection
 
     protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
     {
-        LastTransaction = new FakeDbTransaction(this, isolationLevel);
+        LastTransaction = new FakeDbTransaction(this, isolationLevel, CompletedTransactionsKeepTheirConnection);
         return LastTransaction;
     }
 
@@ -57,38 +62,49 @@ public class FakeDbConnection : DbConnection
 
 public class FakeDbTransaction : DbTransaction
 {
+    private readonly IsolationLevel _isolationLevel;
+    private readonly bool _keepsConnection;
     private DbConnection? _connection;
+    private bool _completed;
 
-    public FakeDbTransaction(DbConnection connection, IsolationLevel isolationLevel)
+    public FakeDbTransaction(DbConnection connection, IsolationLevel isolationLevel, bool keepsConnection = false)
     {
         _connection = connection;
-        IsolationLevel = isolationLevel;
+        _isolationLevel = isolationLevel;
+        _keepsConnection = keepsConnection;
     }
 
     public bool Committed { get; private set; }
 
     public bool RolledBack { get; private set; }
 
-    public override IsolationLevel IsolationLevel { get; }
+    public override IsolationLevel IsolationLevel =>
+        _keepsConnection && _completed ? throw new InvalidOperationException("Transaction is already completed") : _isolationLevel;
 
     protected override DbConnection? DbConnection => _connection;
 
     public override void Commit()
     {
         Committed = true;
-        _connection = null;
+        Complete();
     }
 
     public override void Rollback()
     {
         RolledBack = true;
-        _connection = null;
+        Complete();
+    }
+
+    private void Complete()
+    {
+        _completed = true;
+        if (!_keepsConnection) _connection = null;
     }
 
     protected override void Dispose(bool disposing)
     {
         // Like a real transaction, a transaction that is not completed rolls back when it is disposed.
-        if (_connection != null)
+        if (!_completed)
         {
             Rollback();
         }
@@ -101,9 +117,11 @@ public class FakeDbConnectionFactory : ICatDbConnectionFactory
 {
     public List<FakeDbConnection> Created { get; } = new();
 
+    public bool CompletedTransactionsKeepTheirConnection { get; set; }
+
     public DbConnection CreateConnection()
     {
-        var connection = new FakeDbConnection();
+        var connection = new FakeDbConnection { CompletedTransactionsKeepTheirConnection = CompletedTransactionsKeepTheirConnection };
         Created.Add(connection);
         return connection;
     }

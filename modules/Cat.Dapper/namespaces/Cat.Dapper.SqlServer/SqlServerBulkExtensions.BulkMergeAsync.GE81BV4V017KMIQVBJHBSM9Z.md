@@ -32,7 +32,7 @@ Updates the rows that exist and inserts the rows that do not, with one `MERGE` s
 Rows that are missing from the given set are left alone\.
 
 ```csharp
-public static System.Threading.Tasks.Task<Cat.Dapper.SqlServer.CatBulkMergeResult> BulkMergeAsync<T>(this Cat.Dapper.Abstractions.ICatDbSession session, System.Collections.Generic.IEnumerable<T> rows, string table, System.Collections.Generic.IEnumerable<string> keyColumns, System.Collections.Generic.IEnumerable<string>? updateColumns=null, int batchSize=0, System.Nullable<int> timeoutSeconds=null, System.Threading.CancellationToken cancellationToken=default(System.Threading.CancellationToken));
+public static System.Threading.Tasks.Task<Cat.Dapper.CatBulkMergeResult> BulkMergeAsync<T>(this Cat.Dapper.Abstractions.ICatDbSession session, System.Collections.Generic.IEnumerable<T> rows, string table, System.Collections.Generic.IEnumerable<string> keyColumns, System.Collections.Generic.IEnumerable<string>? updateColumns=null, int batchSize=0, System.Nullable<int> timeoutSeconds=null, System.Threading.CancellationToken cancellationToken=default(System.Threading.CancellationToken));
 ```
 #### Type parameters
 
@@ -92,7 +92,7 @@ The timeout in seconds, or `null` for the default\. 0 means no timeout\.
 Token to cancel the work\.
 
 #### Returns
-[System\.Threading\.Tasks\.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')[CatBulkMergeResult](CatBulkMergeResult.md 'Cat\.Dapper\.SqlServer\.CatBulkMergeResult')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')  
+[System\.Threading\.Tasks\.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')[CatBulkMergeResult](../../../Cat.Dapper/namespaces/Cat.Dapper/CatBulkMergeResult.md 'Cat\.Dapper\.CatBulkMergeResult')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')  
 The number of inserted and the number of updated rows\.
 
 #### Exceptions

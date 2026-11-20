@@ -1,8 +1,36 @@
 ../../../Cat.Dapper/namespaces/Cat.Dapper/
+P:Cat.Dapper.BulkColumn.Name|BulkColumn.Name.md|Name
+P:Cat.Dapper.BulkColumn.FieldType|BulkColumn.FieldType.md|FieldType
+P:Cat.Dapper.BulkColumn.Getter|BulkColumn.Getter.md|Getter
+M:Cat.Dapper.BulkColumn.#ctor(System.String,System.Type,System.Func{System.Object,System.Object})|BulkColumn..ctor.Q3PSXED2RJD75911KAHHAE83.md|BulkColumn(string, Type, Func<object,object>)
+N:Cat.Dapper|Cat.Dapper.md|Cat.Dapper
+T:Cat.Dapper.BulkColumn|BulkColumn.md|BulkColumn
+F:Cat.Dapper.BulkColumns.Cache|BulkColumns.Cache.md|Cache
+M:Cat.Dapper.BulkColumns.ForType(System.Type)|BulkColumns.ForType.YCO463D3TBVXQJ6QK7L4IZMYA.md|ForType(Type)
+M:Cat.Dapper.BulkColumns.Select(System.Type,System.Collections.Generic.IEnumerable{System.String},System.String)|BulkColumns.Select.C6OFSBTLLDV69UMDYPOBYP0JE.md|Select(Type, IEnumerable<string>, string)
+M:Cat.Dapper.BulkColumns.Build(System.Type)|BulkColumns.Build.SVVGUBTYPP8ABGZQZQCHVOR19.md|Build(Type)
+M:Cat.Dapper.BulkColumns.Create(System.Type,System.Reflection.PropertyInfo)|BulkColumns.Create.O2W80KRXJ23L66O4G7NDGZ5I2.md|Create(Type, PropertyInfo)
+M:Cat.Dapper.BulkColumns.#cctor|BulkColumns.BulkColumns().md|BulkColumns()
+T:Cat.Dapper.BulkColumns|BulkColumns.md|BulkColumns
+P:Cat.Dapper.ColumnPlan.Keys|ColumnPlan.Keys.md|Keys
+P:Cat.Dapper.ColumnPlan.Update|ColumnPlan.Update.md|Update
+P:Cat.Dapper.ColumnPlan.KeyNames|ColumnPlan.KeyNames.md|KeyNames
+P:Cat.Dapper.ColumnPlan.UpdateNames|ColumnPlan.UpdateNames.md|UpdateNames
+M:Cat.Dapper.ColumnPlan.#ctor(System.Collections.Generic.IReadOnlyList{Cat.Dapper.BulkColumn},System.Collections.Generic.IReadOnlyList{Cat.Dapper.BulkColumn})|ColumnPlan..ctor.FWWREXUT51EHLYDXHUBF2ZQ15.md|ColumnPlan(IReadOnlyList<BulkColumn>, IReadOnlyList<BulkColumn>)
+T:Cat.Dapper.ColumnPlan|ColumnPlan.md|ColumnPlan
+M:Cat.Dapper.BulkPlan.Plan(System.Type,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Action{System.String})|BulkPlan.Plan.9347788T91E29T7O7ITKSZ2S8.md|Plan(Type, IEnumerable<string>, IEnumerable<string>, bool, Action<string>)
+M:Cat.Dapper.BulkPlan.Validate(System.Collections.Generic.IEnumerable{Cat.Dapper.BulkColumn},System.Action{System.String})|BulkPlan.Validate.I5AXVRQA83ZYTZ93G111C3KH9.md|Validate(IEnumerable<BulkColumn>, Action<string>)
+M:Cat.Dapper.BulkPlan.Require``1(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.String)|BulkPlan.Require.LBA8MFNCTUWOIT6D799MVKAME.md|Require<T>(ICatDbSession, IEnumerable<T>, string)
+M:Cat.Dapper.BulkPlan.IsEmpty``1(System.Collections.Generic.IEnumerable{``0})|BulkPlan.IsEmpty.AKCV9I9IYJDKHDPZ9SH094KK8.md|IsEmpty<T>(IEnumerable<T>)
+M:Cat.Dapper.BulkPlan.ValueColumn``1(System.String)|BulkPlan.ValueColumn.1FM20G3UC8P7Q501MC3ECE238.md|ValueColumn<TKey>(string)
+T:Cat.Dapper.BulkPlan|BulkPlan.md|BulkPlan
+P:Cat.Dapper.CatBulkMergeResult.Inserted|CatBulkMergeResult.Inserted.md|Inserted
+P:Cat.Dapper.CatBulkMergeResult.Updated|CatBulkMergeResult.Updated.md|Updated
+M:Cat.Dapper.CatBulkMergeResult.#ctor(System.Int32,System.Int32)|CatBulkMergeResult..ctor.CDYK4NOY127AOJW95H7UOVL45.md|CatBulkMergeResult(int, int)
+T:Cat.Dapper.CatBulkMergeResult|CatBulkMergeResult.md|CatBulkMergeResult
 P:Cat.Dapper.CatDapperCommandHandlerBase`2.Session|CatDapperCommandHandlerBase_TCommand,TResult_.Session.md|Session
 M:Cat.Dapper.CatDapperCommandHandlerBase`2.#ctor(Cat.Dapper.Abstractions.ICatDbSession)|CatDapperCommandHandlerBase_TCommand,TResult_..ctor.9SJYQLWKZIJ6L7DKASZ7NHRY9.md|CatDapperCommandHandlerBase(ICatDbSession)
 M:Cat.Dapper.CatDapperCommandHandlerBase`2.HandleAsync(`0,System.Threading.CancellationToken)|CatDapperCommandHandlerBase_TCommand,TResult_.HandleAsync.B7UNI8HW2E0YPJ9OPRQY38SSD.md|HandleAsync(TCommand, CancellationToken)
-N:Cat.Dapper|Cat.Dapper.md|Cat.Dapper
 T:Cat.Dapper.CatDapperCommandHandlerBase`2|CatDapperCommandHandlerBase_TCommand,TResult_.md|CatDapperCommandHandlerBase<TCommand,TResult>
 P:Cat.Dapper.CatDapperCommandHandlerBase`1.Session|CatDapperCommandHandlerBase_TCommand_.Session.md|Session
 M:Cat.Dapper.CatDapperCommandHandlerBase`1.#ctor(Cat.Dapper.Abstractions.ICatDbSession)|CatDapperCommandHandlerBase_TCommand_..ctor.XO1142EZWI4NKDYW0S905UOIB.md|CatDapperCommandHandlerBase(ICatDbSession)

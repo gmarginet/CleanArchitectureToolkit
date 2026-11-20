@@ -30,5 +30,5 @@
 
 | Namespaces | |
 | :--- | :--- |
-| [Cat\.Dapper\.SqlServer](Cat.Dapper.SqlServer.md 'Cat\.Dapper\.SqlServer') | Holds what is specific to SQL Server: the connection factory and a paging helper that returns an [ICatPagedList&lt;TList&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatPagedList_TList_.md 'Cat\.Responses\.Abstractions\.ICatPagedList\`1')\. |
+| [Cat\.Dapper\.SqlServer](Cat.Dapper.SqlServer.md 'Cat\.Dapper\.SqlServer') | Holds what is specific to SQL Server: the connection factory, a paging helper that returns an [ICatPagedList&lt;TList&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatPagedList_TList_.md 'Cat\.Responses\.Abstractions\.ICatPagedList\`1') and the bulk operations\. |
 | [Cat\.Dapper\.SqlServer\.Extensions](Cat.Dapper.SqlServer.Extensions.md 'Cat\.Dapper\.SqlServer\.Extensions') | |

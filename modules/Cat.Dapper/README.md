@@ -76,7 +76,7 @@ A handler asks a session for the connection, runs a statement and returns a resp
 | [Cat.Dapper.Abstractions](namespaces/Cat.Dapper.Abstractions/index.md) | The factory that creates connections and the session that holds one connection and its transaction. |
 | [Cat.Dapper](namespaces/Cat.Dapper/index.md) | The session, the base classes for query and command handlers and the extension methods that run SQL with Dapper. |
 | [Cat.Dapper.MySql](namespaces/Cat.Dapper.MySql/index.md) | The MySQL connection factory and a paging helper that returns an `ICatPagedList`. |
-| [Cat.Dapper.PostgreSQL](namespaces/Cat.Dapper.PostgreSQL/index.md) | The PostgreSQL connection factory and a paging helper that returns an `ICatPagedList`. |
+| [Cat.Dapper.PostgreSQL](namespaces/Cat.Dapper.PostgreSQL/index.md) | The PostgreSQL connection factory, a paging helper that returns an `ICatPagedList` and the bulk operations. |
 | [Cat.Dapper.SqlFiles](namespaces/Cat.Dapper.SqlFiles/index.md) | The source generator that turns the `.sql` files next to a handler into constants of that handler. |
 | [Cat.Dapper.SqlServer](namespaces/Cat.Dapper.SqlServer/index.md) | The SQL Server connection factory, a paging helper that returns an `ICatPagedList` and the bulk operations. |
 
@@ -117,7 +117,7 @@ using Cat.Dapper.MySql.Extensions;
 services.AddCatDapperMySql(connectionString);
 ```
 
-On PostgreSQL, use `Cat.Dapper.PostgreSQL`. It has `AddCatDapperPostgreSQL` and uses the Npgsql driver. It targets `net10.0` and `net11.0`, because Npgsql has no `netstandard2.0` build. It has no bulk operations either. The paging helper uses `LIMIT` and `OFFSET`, the same as on MySQL.
+On PostgreSQL, use `Cat.Dapper.PostgreSQL`. It has `AddCatDapperPostgreSQL` and uses the Npgsql driver. It targets `net10.0` and `net11.0`, because Npgsql has no `netstandard2.0` build. It has bulk operations, see [Insert, update, delete and merge many rows](#insert-update-delete-and-merge-many-rows). The paging helper uses `LIMIT` and `OFFSET`, the same as on MySQL.
 
 ```csharp
 using Cat.Dapper.PostgreSQL.Extensions;
@@ -272,7 +272,7 @@ var page = await Session.QueryPagedAsync<OrderOverviewRow>(
 - A page number or size below 1 throws an `ArgumentOutOfRangeException`.
 
 ### Handle database errors
-`Cat.Dapper.SqlServer` references `Cat.Db.Errors.SqlServer`, and `Cat.Dapper.MySql` references `Cat.Db.Errors.MySql`, with the same check names. Ask the exception what happened, and do not write error numbers in the handler. See the [module readme of Cat.Db.Errors](../Cat.Db.Errors/README.md) for every check.
+`Cat.Dapper.SqlServer` references `Cat.Db.Errors.SqlServer`, `Cat.Dapper.MySql` references `Cat.Db.Errors.MySql` and `Cat.Dapper.PostgreSQL` references `Cat.Db.Errors.PostgreSQL`, with the same check names. Ask the exception what happened, and do not write error numbers in the handler. See the [module readme of Cat.Db.Errors](../Cat.Db.Errors/README.md) for every check.
 
 ```csharp
 using Cat.Db.Errors.SqlServer;
@@ -288,7 +288,7 @@ catch (Exception exception) when (exception.IsUniqueViolation())
 ```
 
 ### Insert, update, delete and merge many rows
-`Cat.Dapper.SqlServer` has bulk operations on the session. They use the connection and the transaction of the session, so they take part in the transaction of a command handler. MySQL and PostgreSQL have none, so write that SQL yourself.
+`Cat.Dapper.SqlServer` and `Cat.Dapper.PostgreSQL` have bulk operations on the session, with the same method names and arguments. They use the connection and the transaction of the session, so they take part in the transaction of a command handler. Change the `using` to change the database. MySQL has none, so write that SQL yourself. The result of a merge, `CatBulkMergeResult`, is in the namespace `Cat.Dapper` and is the same on both databases.
 
 ```csharp
 using Cat.Dapper.SqlServer;
@@ -302,13 +302,15 @@ var result = await Session.BulkMergeAsync(orders, "dbo.Orders", new[] { "Id" }, 
 ```
 
 - **Rows.** A list of objects of the classes you already use with Dapper. A property name is a column name, matched without regard to case. Pass a list of column names to use fewer columns. A plain list of values deletes by one key column, and the `IDataReader` overload of insert copies from a reader on another connection. There is no `DataTable` overload.
-- **Names.** The table name is a string such as `dbo.Orders`. The helpers wrap every name in brackets and refuse a name with a bracket. Use constants, never user input.
+- **Names.** The table name is a string such as `dbo.Orders`, or `public.Orders` on PostgreSQL. The helpers wrap every name in brackets (double quotes on PostgreSQL) and refuse a name with a bracket or a quote. Use constants, never user input. PostgreSQL treats a quoted name as case sensitive, and the helpers quote the name exactly as given. A property name is the column name, so on a database with snake case columns pass a list of column names with the real names.
 - **Insert.** Uses `SqlBulkCopy` straight into the table and returns the number of copied rows. It does not return generated values such as an identity, so give the key values yourself, such as a `Guid`.
 - **Update, delete and merge.** The rows go into a temporary table on the connection with `SqlBulkCopy`. One statement joins that table to the target, and the table is dropped afterwards. The update returns the number of updated rows and the delete the number of deleted rows.
 - **Update columns.** Give the key columns. Every other property is updated, unless you give a list of columns to update.
 - **Merge.** One `MERGE` with `HOLDLOCK` that updates the rows that exist and inserts the rest. It never deletes rows that are missing from the list. Use a bulk delete for that. Every property is inserted, so a key column that is an identity column needs `IDENTITY_INSERT`.
+- **On PostgreSQL.** Insert uses a binary `COPY`, and the rows stream to the server. Update and delete fill a temporary table with `COPY` that has the column types of the target, and then run one `UPDATE ... FROM` or `DELETE ... USING`. The temporary table drops on commit inside a transaction, and the module drops it itself without one. The merge is an `INSERT ... ON CONFLICT DO UPDATE`, so the key columns need a unique constraint or a unique index, and the given rows may not hold the same key twice. A column that the database always generates, such as `GENERATED ALWAYS AS IDENTITY`, cannot be a property of the row class, or must be left out of the column list.
+- **Types on PostgreSQL.** A binary `COPY` is strict about types. The .NET type of a property must match the type of the column: `Guid` for `uuid`, `int` for `integer`, `long` for `bigint`, `decimal` for `numeric` and a `DateTime` of kind Utc for `timestamptz`. An enum is written as the number of its underlying type, so its column must have that type.
 - **Transaction.** The helpers use the transaction of the session when one runs, and none otherwise. Without a transaction, a failure in the middle leaves the batches that were already written.
-- **Batches and timeout.** `batchSize` and `timeoutSeconds` are optional arguments. A batch size of 0 sends all rows in one batch.
+- **Batches and timeout.** `batchSize` and `timeoutSeconds` are optional arguments. A batch size of 0 sends all rows in one batch. On PostgreSQL a batch is one `COPY`.
 - **Nothing to do.** An empty list returns 0 and sends nothing to the database.
 
 ### Keep the SQL safe

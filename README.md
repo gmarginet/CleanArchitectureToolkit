@@ -52,7 +52,6 @@
   - [ServiceName.Infrastructure](#servicenameinfrastructure)
   - [ServiceName.Contracts](#servicenamecontracts)
   - [ServiceName.DataModels](#servicenamedatamodels)
-  - [ServiceName.Infrastructure.DataAccessTooling](#servicenameinfrastructuredataaccesstooling)
   - [ServiceName.CoreService.Tests](#servicenamecoreservicetests)
   - [Reference rules](#reference-rules)
 <!-- region end: TableOfContents-->
@@ -106,16 +105,16 @@ A package targets `netstandard2.0` where possible and otherwise `net10.0` and `n
 | Cat.Api.Gateway | <a id="cat-api-gateway"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-api-gateway) [![Stable](https://img.shields.io/badge/status-Stable-green)](#cat-api-gateway) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.Api.Gateway/README.md)<br>The single front door of an application. It routes the calls of clients and services to the right service, checks the token in one place and builds on YARP. [Read more](./modules/Cat.Api.Gateway/README.md) |  |  |  |
 | Cat.Caching | <a id="cat-caching"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-caching) [![New](https://img.shields.io/badge/status-New-blue)](#cat-caching)<br>A caching decorator for queries. | 11 | [1](./plans/Cat.Caching.md#phase-1) | 16 |
 | Cat.Commands | <a id="cat-commands"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-commands) [![Stable](https://img.shields.io/badge/status-Stable-green)](#cat-commands) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.Commands/README.md)<br>Change state through one entry point. Describe a change as a command, write one handler for it, and let the processor find the handler. [Read more](./modules/Cat.Commands/README.md) |  |  |  |
-| Cat.Dapper | <a id="cat-dapper"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-dapper) [![Growing](https://img.shields.io/badge/status-Growing-yellowgreen)](#cat-dapper) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.Dapper/README.md)<br>Write query and command handlers with plain SQL and Dapper, with one connection and one transaction for each scope. [Read more](./modules/Cat.Dapper/README.md) | 1 | [1](./plans/Cat.Dapper.md#phase-1) | 6 |
+| Cat.Dapper | <a id="cat-dapper"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-dapper) [![Stable](https://img.shields.io/badge/status-Stable-green)](#cat-dapper) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.Dapper/README.md)<br>Write query and command handlers with plain SQL and Dapper, with one connection and one transaction for each scope. [Read more](./modules/Cat.Dapper/README.md) |  |  |  |
 | Cat.Db.Errors | <a id="cat-db-errors"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-db-errors) [![Stable](https://img.shields.io/badge/status-Stable-green)](#cat-db-errors) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.Db.Errors/README.md)<br>Recognize database errors by their number or code, one project per database, shared by the EF Core and Dapper modules. [Read more](./modules/Cat.Db.Errors/README.md) |  |  |  |
 | Cat.Decorators | <a id="cat-decorators"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-decorators) [![Stable](https://img.shields.io/badge/status-Stable-green)](#cat-decorators) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.Decorators/README.md)<br>Wrap handlers in decorators for cross-cutting work like logging, validation or tracing. [Read more](./modules/Cat.Decorators/README.md) |  |  |  |
-| Cat.EFCore | <a id="cat-efcore"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-efcore) [![Growing](https://img.shields.io/badge/status-Growing-yellowgreen)](#cat-efcore) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.EFCore/README.md)<br>Configure Entity Framework Core entities the same way every time, and write query and command handlers on top of them with a base class. [Read more](./modules/Cat.EFCore/README.md) | 16 | [3](./plans/Cat.EFCore.md#phase-3) | 0 |
+| Cat.EFCore | <a id="cat-efcore"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-efcore) [![Growing](https://img.shields.io/badge/status-Growing-yellowgreen)](#cat-efcore) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.EFCore/README.md)<br>Configure Entity Framework Core entities the same way every time, and write query and command handlers on top of them with a base class. [Read more](./modules/Cat.EFCore/README.md) | 15 | [3](./plans/Cat.EFCore.md#phase-3) | 0 |
 | Cat.EventAggregators | <a id="cat-eventaggregators"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-eventaggregators) [![Stable](https://img.shields.io/badge/status-Stable-green)](#cat-eventaggregators) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.EventAggregators/README.md)<br>Let parts of your app talk to each other through in-process events, without direct dependencies. [Read more](./modules/Cat.EventAggregators/README.md) |  |  |  |
 | Cat.EventProcessor | <a id="cat-eventprocessor"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-eventprocessor) [![Stable](https://img.shields.io/badge/status-Stable-green)](#cat-eventprocessor) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.EventProcessor/README.md)<br>Worker support that turns incoming messages into service requests. [Read more](./modules/Cat.EventProcessor/README.md) |  |  |  |
 | Cat.Expressions | <a id="cat-expressions"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-expressions) [![Stable](https://img.shields.io/badge/status-Stable-green)](#cat-expressions) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.Expressions/README.md)<br>Compile member access expressions once and reuse them, so repeated calls stay fast. [Read more](./modules/Cat.Expressions/README.md) |  |  |  |
 | Cat.Extensions | <a id="cat-extensions"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-extensions) [![Stable](https://img.shields.io/badge/status-Stable-green)](#cat-extensions) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.Extensions/README.md)<br>Small extension method libraries for enumerables, expressions, objects, service collections and strings. [Read more](./modules/Cat.Extensions/README.md) |  |  |  |
 | Cat.FluentWorkflows | <a id="cat-fluentworkflows"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-fluentworkflows) [![Stable](https://img.shields.io/badge/status-Stable-green)](#cat-fluentworkflows) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.FluentWorkflows/README.md)<br>Describe a business process as a list of steps in plain C#. [Read more](./modules/Cat.FluentWorkflows/README.md) |  |  |  |
-| Cat.IntegrationTesting | <a id="cat-integrationtesting"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-integrationtesting) [![New](https://img.shields.io/badge/status-New-blue)](#cat-integrationtesting)<br>Integration tests that run on a real SQL Server in a container, apart from the unit tests. | 15 | [1](./plans/Cat.IntegrationTesting.md#phase-1) | 4 |
+| Cat.IntegrationTesting | <a id="cat-integrationtesting"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-integrationtesting) [![New](https://img.shields.io/badge/status-New-blue)](#cat-integrationtesting)<br>Integration tests that run on a real SQL Server in a container, apart from the unit tests. | 1 | [1](./plans/Cat.IntegrationTesting.md#phase-1) | 4 |
 | Cat.Localizations | <a id="cat-localizations"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-localizations) [![New](https://img.shields.io/badge/status-New-blue)](#cat-localizations)<br>Look up localized strings by key, without tying your app to one localization provider. | 2 | [1](./plans/Cat.Localizations.md#phase-1) | 4 |
 | Cat.Messaging | <a id="cat-messaging"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-messaging) [![Stable](https://img.shields.io/badge/status-Stable-green)](#cat-messaging) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.Messaging/README.md)<br>Send messages to other services over Azure Service Bus, with an optional outbox so a message is never lost. [Read more](./modules/Cat.Messaging/README.md) |  |  |  |
 | Cat.Minimal.Api | <a id="cat-minimal-api"></a>[![Module](https://img.shields.io/badge/type-Module-yellow)](#cat-minimal-api) [![Stable](https://img.shields.io/badge/status-Stable-green)](#cat-minimal-api) [![Readme](https://img.shields.io/badge/docs-Readme-lightgrey)](./modules/Cat.Minimal.Api/README.md)<br>Map service requests to minimal API endpoints that document the responses they return and share one error shape. [Read more](./modules/Cat.Minimal.Api/README.md) |  |  |  |
@@ -149,7 +148,6 @@ Take what fits your application and leave the rest.
 ![Application Architecture](./resources/schemas/CatArchitecture.excalidraw.svg)
 
 The diagram shows the building blocks and how they talk to each other.  
-Everything runs as containers in Azure Container Apps.  
 
 ### Clients
 
@@ -174,7 +172,7 @@ It receives every request from the clients, and every call between services, and
 A service is a small, independently deployable application with one clear responsibility.  
 Services are where the business logic lives.  
 
-- Each service is a container, so it can be built, deployed and scaled on its own.  
+- Each service is built, deployed and scaled on its own.  
 - Each service owns its data and decides how it is stored. No other service reads or writes it directly.  
 - Services expose their functionality through an API.  
 - Services handle use cases as service requests, and split reads (queries) from writes (commands).  
@@ -275,7 +273,7 @@ The diagram uses `ServiceName` as a placeholder for the name of your service.
 ### ServiceName.Api
 
 The API is the one and only host of the service.  
-It is the executable that runs in the container, and every service has one.  
+It is the executable, and every service has one.  
 
 The API contains no business logic.  
 It sets up the application, registers the modules in the DI container and passes the work on to the core.  
@@ -366,18 +364,6 @@ The data models project holds the data classes that come out of the database.
 
 Both the `CoreService` and the `Infrastructure` project use them.  
 They are internal to the service. Never hand them out through the API. Map them to a contract model first. We suggest the [Mapperly](https://mapperly.riok.app/) NuGet package for this.  
-
-### ServiceName.Infrastructure.DataAccessTooling
-
-This project is only needed when the service uses a database first approach.  
-It generates the entities and the database context from an existing database, for example with the Entity Framework Core scaffold command.  
-
-- The generated entities go to the `DataModels` project.  
-- The generated database context goes to the `Infrastructure` project.  
-- It references the `Infrastructure` project.  
-
-Does the service use a code first approach? Then skip this project.  
-The entities are written by hand in the `DataModels` project, and the migrations live in the `Infrastructure` project.  
 
 ### ServiceName.CoreService.Tests
 

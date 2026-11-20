@@ -95,6 +95,21 @@ public class CatDbSessionTests
         Assert.That(second, Is.Not.SameAs(first));
     }
 
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task Transaction_AfterCommitOrRollback_IsNullAlsoWhenTheDriverKeepsTheConnection(bool commit)
+    {
+        _factory.CompletedTransactionsKeepTheirConnection = true;
+        var first = await _session.BeginTransactionAsync();
+        Assert.That(_session.Transaction, Is.SameAs(first));
+
+        if (commit) first.Commit(); else first.Rollback();
+
+        Assert.That(_session.Transaction, Is.Null);
+        var second = await _session.BeginTransactionAsync();
+        Assert.That(second, Is.Not.SameAs(first));
+    }
+
     [Test]
     public async Task Dispose_TransactionNotCommitted_RollsBackAndDisposesTheConnection()
     {
