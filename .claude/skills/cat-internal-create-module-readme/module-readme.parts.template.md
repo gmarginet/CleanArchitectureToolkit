@@ -1,5 +1,5 @@
 <!-- ==================== template start: NuGetRow ====================-->
-| [[[NamespaceName]]](https://www.nuget.org/packages/gmarginet.[[NamespaceName]]/) | [[PackageRole]] | `dotnet add package gmarginet.[[NamespaceName]]` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.[[NamespaceName]])](#nuget-packages) |
+| [[[NamespaceName]]](https://www.nuget.org/packages/gmarginet.[[NamespaceName]]/) | [[PackageRole]] | [[TargetFrameworks]] | `dotnet add package gmarginet.[[NamespaceName]]` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.[[NamespaceName]])](#nuget-packages) |
 <!-- ==================== template end: NuGetRow ====================-->
 
 <!-- ==================== template start: NamespaceRow ====================-->

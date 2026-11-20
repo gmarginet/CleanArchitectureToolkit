@@ -30,7 +30,9 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 - A module splits into an `Abstractions` project, the implementation and optional parts such as decorators. The core of a service only references abstractions.
 - Modules never depend on Aspire or on the demo `ServiceDefaults`.
 - Sharing the `Contracts` project of a service is the developer's choice, not a rule.
-- Module projects target `netstandard2.0` as much as possible. A project that needs more, such as one that uses ASP.NET Core or EF Core, targets the latest stable .NET. Check this when you add a project.
+- Module projects target `netstandard2.0` as much as possible. A project that needs more, such as one that uses ASP.NET Core or EF Core, targets `net10.0;net11.0`, the LTS release and the latest stable release. The demo targets `net11.0`. Check this when you add a project.
+- Package versions that follow the release of .NET (EF Core, ASP.NET Core, `Microsoft.Extensions.*`, `System.Text.Json`) come per target framework from `Directory.Packages.props`. `netstandard2.0` and `net10.0` use the 10.0 versions, `net11.0` uses the 11.0 versions. Add a package to both groups when a project for both frameworks needs it.
+- A test project targets `net10.0;net11.0` when every project it references does. `dotnet cake --target=Test` runs both. Only a `net11.0` build writes the namespaces pages.
 - A shared abstraction lives in the `Abstractions` project of the module that owns it, such as `ICatUser` in `Cat.Users.Abstractions`.
 - End a task with a short report, and leave out a part that is empty:
   - **Done:** one line per change, grouped by topic. Name the files or commits, do not repeat the diff.

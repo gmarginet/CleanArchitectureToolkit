@@ -20,8 +20,10 @@
 <!-- region start: NuGet-->
 [![NuGet Version](https://img.shields.io/nuget/vpre/gmarginet.[[MainPackageName]])](#nuget-packages)
 
-| Package | Role | Install | Downloads |
-|---------|------|---------|-----------|
+| Package | Role | Targets | Install | Downloads |
+|---------|------|---------|---------|-----------|
+
+`netstandard2.0` runs on .NET 10 and .NET 11. A package with `net10.0` and `net11.0` has a build for each, and NuGet picks the one that matches your project.
 
 <!-- region end: NuGet-->
 

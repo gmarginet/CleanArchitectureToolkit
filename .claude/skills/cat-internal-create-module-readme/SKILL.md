@@ -44,7 +44,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 - `NuGet`: The version badge and the table of packages.
   - Start with one version badge for the main package, the package named like the module. If no project is named like the module, use the first project. All packages of a module share the same version.
   - Wrap the badge in a link to `#nuget-packages`.
-  - The table has the columns `Package`, `Role`, `Install` and `Downloads`, one row per project. Every project has a package named `gmarginet.` followed by its root namespace.
+  - The table has the columns `Package`, `Role`, `Targets`, `Install` and `Downloads`, one row per project. `Targets` holds the monikers of the project file, joined with a comma and a space, such as `netstandard2.0` or `net10.0, net11.0`. Read them from `TargetFramework` or `TargetFrameworks` in the project file. Keep the legend line under the table. Every project has a package named `gmarginet.` followed by its root namespace.
 - `Namespaces`: A table with the columns `Namespace` and `What it holds`, one row per project.
 - `Dependencies`: A table with the columns `Module` and `Why [[ModuleName]] needs it`, one row per dependency. No dependencies? Replace the table with the `NoDependencies` template.
 - `Usage`: Code examples and the explanation of how to use the module.
@@ -73,6 +73,7 @@ Use this when the owner changes `module-readme.template.md` or `module-readme.pa
 - [[MainPackageName]]: The name of the main package without the `gmarginet.` prefix. It is the project named like the module, or the first project if there is none.
 - [[NamespaceName]]: The root namespace of a project. One row per project.
 - [[PackageRole]]: A short label such as `Contracts`, `Implementation` or `Optional decorator`.
+- [[TargetFrameworks]]: The target framework monikers of the project, read from its project file.
 - [[NamespaceDescription]]: One short sentence, based on the namespace summary.
 - [[DependentModuleName]]: The module that is depended on. One row per dependency.
 - [[DependencyReason]]: One short reason why the module needs it.
