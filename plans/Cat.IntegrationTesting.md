@@ -59,50 +59,20 @@ Integration tests that run on a real SQL Server in a container, for the modules 
 - `tests/Cat.Sagas.Tests` runs the saga, the outbox and the inbox on SQLite in memory. The tests `DeleteOlderThan_DeletesOnlyTheRowsHandledBeforeTheLimit` and `OutboxDeleteOlderThan_DeletesOnlyTheSentRowsBeforeTheLimit` in `OutboxAndInboxTests.cs` are two of them. SQLite cannot compare a `DateTimeOffset` in SQL, so the test context in `EfCoreSagaStoreTests.cs` maps `HandledAt` and `SentAt` to a number. The SQL that runs there is not the SQL that SQL Server runs.
 
 #### Decided
-- Integration tests run on a real SQL Server in a container.
+- Integration tests run on a real SQL Server and on a real PostgreSQL, in containers.
 - They cover the modules and the demo, and they are a showcase in the demo.
 - They do not run with the unit tests.
+- There are two modules for them: `Cat.IntegrationTesting.SqlServer` and `Cat.IntegrationTesting.PostgreSQL`.
+- The module integration tests target `net10.0;net11.0`, and the container is shared between the two runs. The demo integration tests target `net11.0`, because the demo stays on .NET 11.
+- The SQLite test `DeleteOlderThan_DeletesOnlyTheRowsHandledBeforeTheLimit` in `Cat.Sagas.Tests` stays until the integration tests exist. Then it moves to them, and the test-only conversion of `HandledAt` and `SentAt` goes.
+- Integration test projects are named `*.IntegrationTests.csproj`. The `Test` target only picks `*.Tests.csproj`, so they never run with it. A new Cake target, such as `IntegrationTest`, runs them. The workflow decides when that target runs, as a separate step or job, and publishing depends only on the unit tests.
+- The integration tests of the modules live in a new folder `integrationtests` at the root of the repository, with a solution folder of the same name.
+- The integration tests of the demo live in one project, `demo/Cat.Demo.IntegrationTests`, because they can test a flow across services. A project per service can come later, when a service has a test that needs only its own database.
+- The containers start with Testcontainers, using `Testcontainers.MsSql` and `Testcontainers.PostgreSql`. Each of the two modules holds one container fixture that the tests of a run share.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-How do the integration tests stay apart from the unit tests? The options:
-- **A different project name,** such as `*.IntegrationTests.csproj`, in the same `tests/` and `demo/` folders. The `Test` target only picks `*.Tests.csproj`, so these projects never run with it. A new Cake target, such as `IntegrationTest`, runs them. Cost: one more target and one more workflow step.
-- **A category in the same project,** such as `[Category("Integration")]` with a filter, like the emulator tests. Cost: the project still starts with the unit tests unless every call has a filter, and a forgotten filter makes every local run need Docker.
-- **A separate solution folder or repository.** Cost: more to maintain, and a weaker showcase.
 
-Recommendation: the different project name with its own Cake target. It cannot run by accident, and the workflow decides when it runs. The workflow can run it as a separate step or job, and publishing can depend only on the unit tests.
-<!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-Does this need a module, like `Cat.UnitTesting`? The options:
-- **No module, a test project per place.** Each project references a container package such as Testcontainers and starts its own SQL Server. Cost: every project repeats the start code, and a container per project is slow.
-- **A module, such as `Cat.IntegrationTesting.SqlServer`.** It holds a shared container fixture and a database per test run. Cost: a new module to build and document. A developer gets it for their own services too.
-- **The demo first, a module later.** Build the first integration tests in the demo and extract the module when two places need the same fixture. Cost: some moving of code later.
-
-Recommendation: the demo first, a module later. It forces nothing on other modules, and it avoids designing a module before we know what it needs.
-<!-- region end: Question 2-->
-
-<!-- region start: Question 3-->
-#### Question 3
-What happens to the SQLite test `DeleteOlderThan_DeletesOnlyTheRowsHandledBeforeTheLimit` in `Cat.Sagas.Tests`? The options:
-- **Keep it.** It passes today and proves the filter logic and the `ExecuteDelete` call. Cost: the test-only conversion, and it does not prove the SQL Server translation.
-- **Move it to the integration tests when they exist.** Remove the test-only conversion with it. Cost: until then nothing tests the cleanup in the test run, and only the live test of the demo covers it.
-- **Remove it now and add the test to this plan.** Cost: the same gap as the second option, starting today.
-
-Recommendation: keep it until the integration tests exist, then move it and remove the conversion. The test passes and covers the filter logic, and there is no gain in an empty gap in between.
-<!-- region end: Question 3-->
-
-<!-- region start: Question 4-->
-#### Question 4
-On which target frameworks do the integration tests run? The modules support .NET 10 and .NET 11, and the demo stays on .NET 11, see the target framework rule in `CLAUDE.md`. The options:
-- **Both.** A test project targets `net10.0;net11.0`, and the container starts for each. Cost: the slowest tests run twice. Gain: the SQL that EF Core 10 and EF Core 11 generate is proved on a real SQL Server.
-- **`net11.0` only.** Cost: EF Core 10 is proved by the unit tests on SQLite only, and the SQL differs there, see what exists today.
-
-Recommendation: both for the module tests, and `net11.0` for the demo tests, because the demo stays on .NET 11. The container can be shared between the two runs.
-<!-- region end: Question 4-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
