@@ -34,6 +34,8 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 - Package versions that follow the release of .NET (EF Core, ASP.NET Core, `Microsoft.Extensions.*`, `System.Text.Json`) come per target framework from `Directory.Packages.props`. `netstandard2.0` and `net10.0` use the 10.0 versions, `net11.0` uses the 11.0 versions. Add a package to both groups when a project for both frameworks needs it.
 - A test project targets `net10.0;net11.0` when every project it references does. `dotnet cake --target=Test` runs both. Only a `net11.0` build writes the namespaces pages.
 - A shared abstraction lives in the `Abstractions` project of the module that owns it, such as `ICatUser` in `Cat.Users.Abstractions`.
+- SQL Server code in a module gets a PostgreSQL counterpart with the same API, such as `Cat.Dapper.SqlServer` and `Cat.Dapper.PostgreSQL`. Plan both together. A feature that PostgreSQL does not have, such as temporal tables, stays SQL Server only, and the plan says why.
+- Database code in a module gets an integration test on a real database in `integrationtests/`, with the containers of `Cat.IntegrationTesting`. Check this when you plan or add database code. Code that only holds a `DbContext` or a session needs none. Run them with `dotnet cake --target=IntegrationTest`. It needs Docker.
 - End a task with a short report, and leave out a part that is empty:
   - **Done:** one line per change, grouped by topic. Name the files or commits, do not repeat the diff.
   - **Checks:** one line per check with its result, such as `docs check: 0 errors`.

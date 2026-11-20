@@ -1,6 +1,6 @@
 ---
 name: cat-internal-verify-code
-description: Build and test the solution with Cake, check the diff of the regenerated namespaces pages, and check that no two modules share an error code area. Use at the end of a task, after changing code, XML docs or the documentation generator.
+description: Build and test the solution with Cake, check the diff of the regenerated namespaces pages, check that no two modules share an error code area, and check that database code has its integration tests and its PostgreSQL counterpart. Use at the end of a task, after changing code, XML docs or the documentation generator.
 allowed-tools: Bash(dotnet cake:*), PowerShell(dotnet cake:*), PowerShell(powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/cat-internal-verify-code/*), PowerShell(git status:*), PowerShell(git diff:*)
 ---
 
@@ -21,7 +21,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/cat-inter
 3. Check what the build regenerated: `git status --short modules` and `git diff --stat -- modules`.
 4. For each changed page in `modules/*/namespaces/`, read the diff and decide if it matches the change you made.
 5. Check the error code areas, see [Error code areas](#error-code-areas).
-6. Report the result.
+6. Check the database code, see [Database code](#database-code).
+7. Report the result.
 
 ## Rules
 - Never edit the files in `modules/*/namespaces/` by hand or with a script. They are generated.
@@ -40,6 +41,17 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/cat-inter
 - A clash is an error to fix, not to report only. Pick another area for the module that came last.
 - A module whose constant does not end with `ErrorCodePrefix` is not seen. Name it that way.
 
+## Database code
+Use this when the change adds or changes database code in `modules/`, such as SQL text, a `DbContext` store, a bulk or paging extension or an error check.
+1. Check that an integration test in `integrationtests/` covers it on a real database. A project that only holds a `DbContext` or a session needs none.
+2. Check that SQL Server code has its PostgreSQL counterpart, unless PostgreSQL has no such feature.
+3. Add what is missing, or name it in the report when the owner has to decide.
+4. Run the integration tests. They need Docker, and run `aspire ps` first, because the `Build` they depend on is the default `Release`.
+
+```
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/cat-internal-verify-code/run-cake.ps1 -Target IntegrationTest -LogDir <scratchpad path>
+```
+
 ## Changing the generator
 The build loads the generator as a committed binary from `resources/defaultDocumentationPlugins/`. Use this when you change `tools/Cat.DefaultDocumentationPlugin/`.
 1. Run `tools\Cat.DefaultDocumentationPlugin\BuildAndDeployPlugin.cmd`. A change in the generator only takes effect after this.
@@ -52,4 +64,5 @@ The build loads the generator as a committed binary from `resources/defaultDocum
 - Tests: number passed, failed and skipped. On failure, name the failing tests and the message.
 - Generated pages: which pages changed, and whether each change is expected.
 - Error code areas: passed, or which modules share a prefix.
+- Database code: the integration test totals, and any code without an integration test or a PostgreSQL counterpart.
 - Anything you skipped, and why.
