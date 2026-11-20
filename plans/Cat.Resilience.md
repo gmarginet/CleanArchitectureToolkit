@@ -89,7 +89,7 @@ From the module conventions:
 #### Question 1
 The module is for projects without Aspire. May we depend on Polly for that? This is the blocking question, and questions 4, 6, 8 and 11 follow from it. `Microsoft.Extensions.Http.Resilience`, which `ServiceDefaults` uses, is built on Polly v8 already, and `Polly.Core` targets `netstandard2.0` (to verify when the project is added). The options:
 - **Polly v8 (`Polly.Core`) directly.** The standard, well known, supports retry, circuit breaker, timeout and fallback as one pipeline. Cost: a dependency, and its API leaks into any extension point we expose.
-- **`Microsoft.Extensions.Resilience`** (Polly with the .NET registration and telemetry). Cost: the latest .NET, and a bigger set of packages.
+- **`Microsoft.Extensions.Resilience`** (Polly with the .NET registration and telemetry). Cost: `net10.0;net11.0` instead of `netstandard2.0`, see [Cat.TargetFrameworks.md](Cat.TargetFrameworks.md), and a bigger set of packages.
 - **Our own small policies.** Cost: a lot of subtle code (jitter, breaker states) that Polly already solved.
 
 Recommendation: Polly v8 behind our own small settings classes, so the decorators expose `CatRetryOptions` and not Polly types. The toolbox rule is satisfied because a developer who does not use the module pulls in nothing.

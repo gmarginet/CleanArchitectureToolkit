@@ -65,7 +65,7 @@
 #### Question 2
 Which real provider do we ship or document first? This is the blocking question, and questions 3 and 4 depend on it. Each provider is its own project, so a developer can pick it or skip it.
 - **Resource files (`.resx`) through a small adapter.** Familiar to most .NET developers, works offline, and a translator can edit the files. Cost: strings are compiled in, so a change needs a deploy.
-- **`IStringLocalizer` from ASP.NET Core.** One adapter project over what the framework already has, so the developer gets all its sources. Cost: the project targets the latest .NET instead of `netstandard2.0`, and it pulls in `Microsoft.Extensions.Localization`.
+- **`IStringLocalizer` from ASP.NET Core.** One adapter project over what the framework already has, so the developer gets all its sources. Cost: the project targets `net10.0;net11.0` instead of `netstandard2.0`, see [Cat.TargetFrameworks.md](Cat.TargetFrameworks.md), and it pulls in `Microsoft.Extensions.Localization`.
 - **A database provider.** Strings can change without a deploy, and it fits data that lives in the database (question 4). Cost: the most work, a schema and caching, and a choice between `Cat.EFCore` and `Cat.Dapper`.
 - **Only a contract, and document how to write your own provider.** Cost: the module is a contract and nothing else, so it gives a developer little.
 

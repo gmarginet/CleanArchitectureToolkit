@@ -241,28 +241,31 @@ Recommendation: a database check per service on `/health` only, and keep `/alive
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-The MySQL showcase. The Notifications service moves from SQL Server to MySQL, and shows that the modules work on another database.
+The PostgreSQL showcase. The Notifications service moves from SQL Server to PostgreSQL, and shows that the modules work on another database.
 
 #### Background
-- A showcase on MySQL needs an EF Core provider for MySQL. The demo is on EF Core 11. The provider Pomelo has no release for EF Core 10 or 11 yet, and the Oracle provider is stable for EF Core 10 only and has an EF Core 11 preview. The facts were read on 2026-11-13 from a third-party article and from nuget.org, and nobody has tested them against this code.
-- The Aspire client package for MySQL is built on Pomelo, so a stable Pomelo keeps the integration with Aspire.
-- The MySQL error numbers are built in `Cat.Db.Errors.MySql`, see the [module readme of Cat.Db.Errors](../modules/Cat.Db.Errors/README.md). The module work that is left is in [Cat.EFCore.md](Cat.EFCore.md), for a provider neutral `Cat.EFCore.Extensions`.
-- Temporal tables and `Cat.Sql.Cdc` are SQL Server only. The MySQL service must not use them.
+- A showcase on PostgreSQL needs the Npgsql EF Core provider. The demo is on EF Core 11. The provider has no stable release for EF Core 11 yet. The latest is `11.0.0-rc.3`, pinned to a release candidate of EF Core 11. The facts were read on 2026-11-19 from nuget.org through a web search, and nobody has tested them against this code. Check the NuGet page before pinning a version.
+- The Aspire client package for PostgreSQL, `Aspire.Npgsql.EntityFrameworkCore.PostgreSQL`, depends on Npgsql 10.0.3 or higher. Nobody has tested it with Npgsql 11.
+- The demo stays on `net11.0` and EF Core 11, while the modules support .NET 10 and EF Core 10 as well, see [Cat.TargetFrameworks.md](Cat.TargetFrameworks.md). The PostgreSQL project of the modules can be proved on EF Core 10 before the demo moves, see question 2 of [Cat.EFCore.md](Cat.EFCore.md#phase-2).
+- `Cat.Db.Errors` has checks for SQL Server and MySQL, see the [module readme of Cat.Db.Errors](../modules/Cat.Db.Errors/README.md). The PostgreSQL checks are planned in [Cat.Db.Errors.md](Cat.Db.Errors.md#phase-1). Notifications needs them when a handler maps a database error, to check when building.
+- The module work that is left is in [Cat.EFCore.md](Cat.EFCore.md), for a provider neutral `Cat.EFCore.Extensions`.
+- Temporal tables and `Cat.Sql.Cdc` are SQL Server only. The PostgreSQL service must not use them.
 
 #### What exists today
 - Every service runs on SQL Server, and the AppHost starts it with `AddSqlServer`.
-- The outbox, the inbox and the scheduler claim store are plain EF Core code. They are not tested on MySQL.
+- The outbox, the inbox and the scheduler claim store are plain EF Core code. They are not tested on PostgreSQL.
 
 #### Needs
-- A stable Pomelo for EF Core 11, with an Aspire MySQL package that accepts it.
+- A stable Npgsql EF Core provider for EF Core 11, with an Aspire PostgreSQL package that accepts it.
 - Phase 2 of the module plan [Cat.EFCore.md](Cat.EFCore.md#phase-2), built first.
 
 #### Done when
-Notifications runs on a MySQL container that the AppHost starts. The outbox, the inbox and the scheduler claim store work there, and the readme says where the demo uses MySQL.
+Notifications runs on a PostgreSQL container that the AppHost starts. The outbox, the inbox and the scheduler claim store work there, and the readme says where the demo uses PostgreSQL.
 
 #### Decided
-- **Provider.** The demo waits for a stable Pomelo, so the Aspire integration stays. The Oracle preview is not used.
-- **Which service.** Notifications moves to MySQL after it is built on SQL Server.
+- **Database.** PostgreSQL is the second database of the showcase, and not MySQL (owner, 2026-11-20).
+- **Provider.** The demo waits for a stable Npgsql provider for EF Core 11, so the Aspire integration stays. A release candidate is not used (owner, 2026-11-20).
+- **Which service.** Notifications moves to PostgreSQL after it is built on SQL Server.
 - **Entities.** Notifications uses the CAT base entities and `ConfigureCatEntity`, with no temporal tables and no raw SQL Server code. The move waits for the neutral `Cat.EFCore.Extensions` of [Cat.EFCore.md](Cat.EFCore.md), and that change must keep these calls source compatible.
 <!-- region end: PhaseDescription-->
 

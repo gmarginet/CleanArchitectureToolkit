@@ -39,6 +39,7 @@
 <!-- region start: Phases-->
 <!-- no toc -->
 - [Phase 3](#phase-3)
+- [Phase 4](#phase-4)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 3-->
@@ -154,9 +155,39 @@ How do we prove the bulk operations? The module decided it has no tests of the S
 - **Tests against a real SQL Server in a container.** Cost: Docker for every developer and for the build workflow, and a slower test run.
 - **A small use in the demo anyway.** Cost: the demo gets a case it does not need.
 
-`Cat.Dapper.MySql` (built) has unit tests only, because it has no bulk operations and its paging is not proven on a real MySQL. When this question chooses containers, add a MySQL container to the same test project, so the build gets a container once and not per database.
+`Cat.Dapper.MySql` (built) has unit tests only, because it has no bulk operations and its paging is not proven on a real MySQL. `Cat.Dapper.PostgreSQL` of [phase 4](#phase-4) starts the same way. When this question chooses containers, add a MySQL and a PostgreSQL container to the same test project, so the build gets a container once and not per database.
 
 Recommendation: the unit tests of the generated SQL text, plus the tests against a container for the four operations only, kept in one test project, so the part that is easiest to get wrong runs against the real database. Check what the build workflow supports before you decide.
 <!-- region end: Question 17-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 3-->
+
+<!-- region start: Phase 4-->
+## Phase 4
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+PostgreSQL support for `Cat.Dapper`, next to SQL Server and MySQL. The second database of the demo showcase is PostgreSQL, see [Phase 13 of the demo](Demo.md#phase-13).
+
+#### What exists today
+- `Cat.Dapper.SqlServer` and `Cat.Dapper.MySql` each hold a connection factory and a paging helper, and each references the error checks of its database. Both target `netstandard2.0`.
+- `Cat.Dapper.MySql` references `Cat.Db.Errors.MySql`, so MySQL support is complete only with both projects.
+- The driver is the Npgsql ADO.NET package. This phase does not need the Npgsql EF Core provider, so it does not wait for EF Core 11.
+
+#### Needs
+- `Cat.Db.Errors.PostgreSQL`, the PostgreSQL error checks that the project references, see [Cat.Db.Errors.md](Cat.Db.Errors.md#phase-1).
+
+#### Decided
+- **A new project.** `Cat.Dapper.PostgreSQL` is added next to `Cat.Dapper.SqlServer` and `Cat.Dapper.MySql` (owner, 2026-11-20).
+- **MySQL stays.** `Cat.Dapper.MySql` and `Cat.Db.Errors.MySql` are kept (owner, 2026-11-20).
+- **Target framework.** `netstandard2.0` if Npgsql allows it, otherwise `net10.0;net11.0` (owner, 2026-11-20), see [Cat.TargetFrameworks.md](Cat.TargetFrameworks.md#phase-1). Check the targets of the Npgsql package on nuget.org first.
+
+#### Done when
+A developer can register `Cat.Dapper` on PostgreSQL, page a result and ask an exception what happened, with the same check names as on the other two databases. The module readme says how.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 4-->

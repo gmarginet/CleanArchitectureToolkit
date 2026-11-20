@@ -93,5 +93,14 @@ What happens to the SQLite test `DeleteOlderThan_DeletesOnlyTheRowsHandledBefore
 
 Recommendation: keep it until the integration tests exist, then move it and remove the conversion. The test passes and covers the filter logic, and there is no gain in an empty gap in between.
 <!-- region end: Question 3-->
+
+<!-- region start: Question 4-->
+#### Question 4
+On which target frameworks do the integration tests run? The modules support .NET 10 and .NET 11, and the demo stays on .NET 11, see [Cat.TargetFrameworks.md](Cat.TargetFrameworks.md#phase-1). The options:
+- **Both.** A test project targets `net10.0;net11.0`, and the container starts for each. Cost: the slowest tests run twice. Gain: the SQL that EF Core 10 and EF Core 11 generate is proved on a real SQL Server.
+- **`net11.0` only.** Cost: EF Core 10 is proved by the unit tests on SQLite only, and the SQL differs there, see what exists today.
+
+Recommendation: both for the module tests, and `net11.0` for the demo tests, because the demo stays on .NET 11. The container can be shared between the two runs.
+<!-- region end: Question 4-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
