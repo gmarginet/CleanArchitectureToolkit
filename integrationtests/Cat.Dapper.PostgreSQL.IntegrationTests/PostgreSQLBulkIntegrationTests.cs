@@ -216,6 +216,22 @@ public class PostgreSQLBulkIntegrationTests : PostgreSQLDatabaseTests
     }
 
     [Test]
+    public async Task BulkUpdate_WithAFailingStatement_StillDropsTheTemporaryTable()
+    {
+        var order = NewOrder("a", 1);
+        await _session.BulkInsertAsync(new[] { order }, "Orders");
+
+        // The name column allows 50 characters, so the copy to the temporary table fails.
+        await Assert.CatchAsync<NpgsqlException>(() => _session.BulkUpdateAsync(
+            new[] { new Order { Id = order.Id, Name = new string('x', 100), Quantity = 1 } },
+            "Orders",
+            new[] { "Id" }));
+
+        Assert.That(await TemporaryTablesAsync(), Is.Zero);
+        Assert.That((await ReadOrdersAsync()).Single().Name, Is.EqualTo("a"));
+    }
+
+    [Test]
     public async Task QueryPaged_ReadsOnePageAndTheTotal()
     {
         await _session.BulkInsertAsync(Enumerable.Range(1, 25).Select(i => NewOrder("n" + i.ToString("00"), i)), "Orders");
