@@ -42,4 +42,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Properties | |
 | :--- | :--- |
-| [Id](CatReferenceEntityBase.Id.md 'Cat\.EFCore\.Entities\.CatReferenceEntityBase\.Id') | Gets or sets the unique id of the entity\. It is the non\-clustered primary key\. |
+| [Id](CatReferenceEntityBase.Id.md 'Cat\.EFCore\.Entities\.CatReferenceEntityBase\.Id') | Gets or sets the unique id of the entity\. It is the key\. |

@@ -103,6 +103,7 @@
     <Project Path="modules/Cat.EFCore/Cat.EFCore.Entities/Cat.EFCore.Entities.csproj" />
     <Project Path="modules/Cat.EFCore/Cat.EFCore.Entities.SqlServer/Cat.EFCore.Entities.SqlServer.csproj" />
     <Project Path="modules/Cat.EFCore/Cat.EFCore.Extensions/Cat.EFCore.Extensions.csproj" />
+    <Project Path="modules/Cat.EFCore/Cat.EFCore.Extensions.PostgreSQL/Cat.EFCore.Extensions.PostgreSQL.csproj" />
     <Project Path="modules/Cat.EFCore/Cat.EFCore.Extensions.SqlServer/Cat.EFCore.Extensions.SqlServer.csproj" />
     <Project Path="modules/Cat.EFCore/Cat.EFCore.Queries/Cat.EFCore.Queries.csproj" />
   </Folder>
@@ -222,6 +223,7 @@
     <Project Path="tests/Cat.Db.Errors.PostgreSQL.Tests/Cat.Db.Errors.PostgreSQL.Tests.csproj" />
     <Project Path="tests/Cat.Db.Errors.SqlServer.Tests/Cat.Db.Errors.SqlServer.Tests.csproj" />
     <Project Path="tests/Cat.Decorators.Tests/Cat.Decorators.Tests.csproj" />
+    <Project Path="tests/Cat.EFCore.PostgreSQL.Tests/Cat.EFCore.PostgreSQL.Tests.csproj" />
     <Project Path="tests/Cat.EFCore.Tests/Cat.EFCore.Tests.csproj" />
     <Project Path="tests/Cat.EventAggregators.Tests/Cat.EventAggregators.Tests.csproj" />
     <Project Path="tests/Cat.EventProcessor.Tests/Cat.EventProcessor.Tests.csproj" />

@@ -10,7 +10,7 @@ namespace Cat.EFCore.Entities;
 public class CatReferenceEntityBase
 {
     /// <summary>
-    /// Gets or sets the unique id of the entity. It is the non-clustered primary key.
+    /// Gets or sets the unique id of the entity. It is the key.
     /// </summary>
     public Guid Id { get; set; }
 }

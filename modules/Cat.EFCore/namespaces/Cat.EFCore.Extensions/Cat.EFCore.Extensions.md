@@ -34,3 +34,4 @@ that configure keys, indexes and tables for the entity base classes\.
 | Classes | |
 | :--- | :--- |
 | [CatEntityConfigurator](CatEntityConfigurator.md 'Cat\.EFCore\.Extensions\.CatEntityConfigurator') | Holds the part of the Cat table setup that every database shares\. The provider projects call it and add the calls that only their database knows\. |
+| [DbSetLookupExtensions](DbSetLookupExtensions.md 'Cat\.EFCore\.Extensions\.DbSetLookupExtensions') | Lookup methods for entities that derive from [CatEntityBase](../../../Cat.EFCore/namespaces/Cat.EFCore.Entities/CatEntityBase.md 'Cat\.EFCore\.Entities\.CatEntityBase')\. They give the same result on every database and read the primary key from the EF Core model, so the code does not depend on which column is the key\. |

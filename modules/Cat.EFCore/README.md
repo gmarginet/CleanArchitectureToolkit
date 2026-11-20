@@ -33,7 +33,7 @@
 
 <!-- region start: Intro-->
 Set up Entity Framework Core entities the same way every time.  
-Inherit from a base class, call one extension method in `OnModelCreating`, and get a Guid key, an identity sequence column, and optional temporal tables.  
+Inherit from a base class, call one extension method in `OnModelCreating`, and get a time ordered Guid key, an identity sequence column, and optional temporal tables on SQL Server.  
 <!-- region end: Intro-->
 
 ## Table of contents <!-- omit in toc -->  
@@ -52,6 +52,7 @@ Inherit from a base class, call one extension method in `OnModelCreating`, and g
 | [Cat.EFCore.Extensions](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions/) | Provider neutral base of the model builder extensions | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EFCore.Extensions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions)](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions/) |
 | [Cat.EFCore.Entities.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Entities.SqlServer/) | SQL Server entity base class for temporal tables | netstandard2.0, net11.0 | `dotnet add package gmarginet.Cat.EFCore.Entities.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Entities.SqlServer)](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Entities.SqlServer/) |
 | [Cat.EFCore.Extensions.SqlServer](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions.SqlServer/) | SQL Server model builder extensions, with temporal tables | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EFCore.Extensions.SqlServer` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions.SqlServer)](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions.SqlServer/) |
+| [Cat.EFCore.Extensions.PostgreSQL](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions.PostgreSQL/) | PostgreSQL model builder extensions | net10.0 | `dotnet add package gmarginet.Cat.EFCore.Extensions.PostgreSQL` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Extensions.PostgreSQL)](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Extensions.PostgreSQL/) |
 | [Cat.EFCore.Queries](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Queries/) | Base query handler and paging | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EFCore.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Queries)](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Queries/) |
 | [Cat.EFCore.Commands](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Commands/) | Base command handlers | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EFCore.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EFCore.Commands)](https://www.nuget.org/packages/gmarginet.Cat.EFCore.Commands/) |
 
@@ -66,6 +67,7 @@ Inherit from a base class, call one extension method in `OnModelCreating`, and g
 | [Cat.EFCore.Extensions](namespaces/Cat.EFCore.Extensions/index.md) | The part of the table setup that every database shares. It references no provider package. |
 | [Cat.EFCore.Entities.SqlServer](namespaces/Cat.EFCore.Entities.SqlServer/index.md) | The entity base class for SQL Server temporal tables. |
 | [Cat.EFCore.Extensions.SqlServer](namespaces/Cat.EFCore.Extensions.SqlServer/index.md) | Model builder extensions that configure the base classes on SQL Server, including temporal tables. |
+| [Cat.EFCore.Extensions.PostgreSQL](namespaces/Cat.EFCore.Extensions.PostgreSQL/index.md) | Model builder extensions that configure the base classes on PostgreSQL. |
 | [Cat.EFCore.Queries](namespaces/Cat.EFCore.Queries/index.md) | The base class for query handlers that read with EF Core, and a paging extension. |
 | [Cat.EFCore.Commands](namespaces/Cat.EFCore.Commands/index.md) | The base classes for command handlers that change data with EF Core. |
 
@@ -80,7 +82,7 @@ Inherit from a base class, call one extension method in `OnModelCreating`, and g
 | [Cat.Commands](../Cat.Commands/README.md) | `Cat.EFCore.Commands` implements `ICatCommandHandler` in its base classes. |
 | [Cat.Responses](../Cat.Responses/README.md) | `Cat.EFCore.Queries` returns an `ICatPagedList` from the paging extension. |
 
-Every project references only what it needs, so you pick the projects you use. `Cat.EFCore.Entities` targets `netstandard2.0`, and `Cat.EFCore.Entities.SqlServer` targets `netstandard2.0` and `net11.0`. Neither has a reference to EF Core. The other projects target `net10.0` and `net11.0`, and use EF Core 10 on `net10.0` and EF Core 11 on `net11.0`.  
+Every project references only what it needs, so you pick the projects you use. `Cat.EFCore.Entities` targets `netstandard2.0`, and `Cat.EFCore.Entities.SqlServer` targets `netstandard2.0` and `net11.0`. Neither has a reference to EF Core. `Cat.EFCore.Entities` references the [SequentialGuid](https://www.nuget.org/packages/SequentialGuid/) package, which creates the time ordered Guid of `CatEntityBase.Id`. The other projects target `net10.0` and `net11.0`, and use EF Core 10 on `net10.0` and EF Core 11 on `net11.0`. `Cat.EFCore.Extensions.PostgreSQL` targets `net10.0` only for now.  
 <!-- region end: Dependencies-->
 
 ## Usage
@@ -124,9 +126,9 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 ```
 
 What you get:
-- `CatEntityBase`: a non-clustered Guid primary key on `Id` and a unique clustered index on the identity column `SequenceId`.
+- `CatEntityBase`: a Guid primary key on `Id` and an identity column `SequenceId` with a unique index. On SQL Server the key is non-clustered and the index on `SequenceId` is clustered. `Id` gets a time ordered Guid (UUID version 7) when you create the entity, so its index fills at the end.
 - `CatTemporalEntityBase`: the same as above, in a [temporal table](https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal/overview?view=sql-server-ver17) with a history table in the `History` schema.
-- `CatReferenceEntityBase`: a non-clustered primary key, and the table is excluded from migrations.
+- `CatReferenceEntityBase`: the primary key on `Id` (non-clustered on SQL Server), and the table is excluded from migrations.
 
 `ConfigureCatEntity`, `ConfigureCatReferenceEntity` and `ConfigureCatTemporalEntity` live in `Cat.EFCore.Extensions.SqlServer`, because the keys, the identity column and the clustered index are SQL Server calls. Reference that project and add `using Cat.EFCore.Extensions.SqlServer;`. The namespaces have the same names as the projects. `CatTemporalEntityBase` lives in `Cat.EFCore.Entities.SqlServer`, and you need it only for temporal tables.
 
@@ -137,6 +139,28 @@ What you get:
 - Reference `Cat.EFCore.Extensions.SqlServer` instead of `Cat.EFCore.Extensions`.
 - Change `using Cat.EFCore.Extensions;` to `using Cat.EFCore.Extensions.SqlServer;`.
 - The method names, the parameters and the SQL Server model stay the same, so you get no new migration.
+
+### Use PostgreSQL
+`Cat.EFCore.Extensions.PostgreSQL` has the same method names as the SQL Server project, `ConfigureCatEntity` and `ConfigureCatReferenceEntity`, in the namespace `Cat.EFCore.Extensions.PostgreSQL`. Reference that project instead and change the `using`. It uses the Npgsql provider and targets `net10.0` for now. The `net11.0` build follows when the Npgsql provider for EF Core 11 is stable.
+
+The model has the same keys as on SQL Server. The differences:
+- **No clustered index.** PostgreSQL stores a table as a heap, so the keys and the index on `SequenceId` have no clustered part. The Guid of `Id` is a time ordered one, so the primary key index still fills at the end.
+- **The sequence column.** `SequenceId` is `GENERATED ALWAYS AS IDENTITY`. The database fills it, and an insert that gives a value fails. EF Core never writes it after the first save.
+- **The schema.** The default schema is `public` and not `dbo`.
+- **Temporal tables.** PostgreSQL has none, so there is no PostgreSQL version of `ConfigureCatTemporalEntity`.
+- **The Guid** is stored as the native `uuid` type.
+
+### Find an entity by id or sequence number
+`FindByIdAsync` and `FindBySequenceIdAsync` are extension methods on `DbSet<TEntity>` in `Cat.EFCore.Extensions`. They work on every database. They read the primary key from the model. When the column you ask for is the key, they call `Find`. Otherwise they look in the change tracker first, like `Find` does, and then query the database.
+
+```csharp
+using Cat.EFCore.Extensions;
+
+var todo = await context.Todos.FindByIdAsync(id, cancellationToken);
+var other = await context.Todos.FindBySequenceIdAsync(42, cancellationToken);
+```
+
+Use them instead of the built-in `Find`. An extension method cannot be called `Find`, because the built-in instance method wins, and `Find(guid)` is wrong on a model where the Guid is not the key.
 
 ### What are temporal tables
 A temporal table is a SQL Server feature. It keeps the full history of your data, not only the current rows.

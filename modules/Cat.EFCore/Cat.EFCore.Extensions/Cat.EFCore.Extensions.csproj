@@ -18,6 +18,7 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="Cat.EFCore.Extensions.SqlServer" />
+        <InternalsVisibleTo Include="Cat.EFCore.Extensions.PostgreSQL" />
     </ItemGroup>
 
     <ItemGroup>

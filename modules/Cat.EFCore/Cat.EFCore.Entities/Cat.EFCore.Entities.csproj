@@ -13,6 +13,7 @@
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
         <PackageReference Include="Scrutor" />
+        <PackageReference Include="SequentialGuid" />
     </ItemGroup>
 
 </Project>

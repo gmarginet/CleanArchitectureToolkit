@@ -28,7 +28,7 @@
 
 ## CatReferenceEntityBase\.Id Property
 
-Gets or sets the unique id of the entity\. It is the non\-clustered primary key\.
+Gets or sets the unique id of the entity\. It is the key\.
 
 ```csharp
 public System.Guid Id { get; set; }

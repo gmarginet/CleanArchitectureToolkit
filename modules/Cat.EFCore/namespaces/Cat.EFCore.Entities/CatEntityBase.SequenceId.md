@@ -29,7 +29,7 @@
 ## CatEntityBase\.SequenceId Property
 
 Gets or sets the sequence number of the entity\.
-The database generates it as an identity column and it is the clustered index\.
+The database generates it as an identity column\. On SQL Server it is the clustered index\.
 It never changes after the first save\.
 
 ```csharp

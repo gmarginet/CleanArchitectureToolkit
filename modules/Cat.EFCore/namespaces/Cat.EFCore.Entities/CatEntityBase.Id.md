@@ -28,8 +28,9 @@
 
 ## CatEntityBase\.Id Property
 
-Gets or sets the unique id of the entity\. It is the non\-clustered primary key\.
-A new [System\.Guid](https://learn.microsoft.com/en-us/dotnet/api/system.guid 'System\.Guid') is created when the entity is instantiated\.
+Gets or sets the unique id of the entity\. It is the primary key, and on SQL Server a non\-clustered one\.
+A new time ordered [System\.Guid](https://learn.microsoft.com/en-us/dotnet/api/system.guid 'System\.Guid') \(UUID version 7\) is created when the entity is instantiated,
+so the index on the id fills at the end and not at random places\.
 
 ```csharp
 public System.Guid Id { get; set; }
