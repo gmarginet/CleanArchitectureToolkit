@@ -1,8 +1,90 @@
 ../../../Cat.Dapper/namespaces/Cat.Dapper.SqlServer/
+P:Cat.Dapper.SqlServer.BulkColumn.Name|BulkColumn.Name.md|Name
+P:Cat.Dapper.SqlServer.BulkColumn.FieldType|BulkColumn.FieldType.md|FieldType
+P:Cat.Dapper.SqlServer.BulkColumn.Getter|BulkColumn.Getter.md|Getter
+M:Cat.Dapper.SqlServer.BulkColumn.#ctor(System.String,System.Type,System.Func{System.Object,System.Object})|BulkColumn..ctor.B4VN2D038J0THXTXCEF1PV476.md|BulkColumn(string, Type, Func<object,object>)
+N:Cat.Dapper.SqlServer|Cat.Dapper.SqlServer.md|Cat.Dapper.SqlServer
+T:Cat.Dapper.SqlServer.BulkColumn|BulkColumn.md|BulkColumn
+F:Cat.Dapper.SqlServer.BulkColumns.Cache|BulkColumns.Cache.md|Cache
+M:Cat.Dapper.SqlServer.BulkColumns.ForType(System.Type)|BulkColumns.ForType.EM4JPYTDQCFJ9OJK7D4JK6CZ1.md|ForType(Type)
+M:Cat.Dapper.SqlServer.BulkColumns.Select(System.Type,System.Collections.Generic.IEnumerable{System.String},System.String)|BulkColumns.Select.3KXB87D8P3POC3JFMTESRJOPB.md|Select(Type, IEnumerable<string>, string)
+M:Cat.Dapper.SqlServer.BulkColumns.Build(System.Type)|BulkColumns.Build.8QIM9EOGQ7Q3XWK98ZLP4F565.md|Build(Type)
+M:Cat.Dapper.SqlServer.BulkColumns.Create(System.Type,System.Reflection.PropertyInfo)|BulkColumns.Create.SSM8GWSYBQZ3UCSW91HLTCQK3.md|Create(Type, PropertyInfo)
+M:Cat.Dapper.SqlServer.BulkColumns.#cctor|BulkColumns.BulkColumns().md|BulkColumns()
+T:Cat.Dapper.SqlServer.BulkColumns|BulkColumns.md|BulkColumns
+F:Cat.Dapper.SqlServer.BulkDataReader`1._rows|BulkDataReader_T_._rows.md|_rows
+F:Cat.Dapper.SqlServer.BulkDataReader`1._columns|BulkDataReader_T_._columns.md|_columns
+F:Cat.Dapper.SqlServer.BulkDataReader`1._closed|BulkDataReader_T_._closed.md|_closed
+P:Cat.Dapper.SqlServer.BulkDataReader`1.RowCount|BulkDataReader_T_.RowCount.md|RowCount
+P:Cat.Dapper.SqlServer.BulkDataReader`1.FieldCount|BulkDataReader_T_.FieldCount.md|FieldCount
+P:Cat.Dapper.SqlServer.BulkDataReader`1.HasRows|BulkDataReader_T_.HasRows.md|HasRows
+P:Cat.Dapper.SqlServer.BulkDataReader`1.IsClosed|BulkDataReader_T_.IsClosed.md|IsClosed
+P:Cat.Dapper.SqlServer.BulkDataReader`1.Depth|BulkDataReader_T_.Depth.md|Depth
+P:Cat.Dapper.SqlServer.BulkDataReader`1.RecordsAffected|BulkDataReader_T_.RecordsAffected.md|RecordsAffected
+P:Cat.Dapper.SqlServer.BulkDataReader`1.Item(System.Int32)|BulkDataReader_T_.Item.MYDQOVV1WHG51S1MMVYSVY5L8.md|this[int]
+P:Cat.Dapper.SqlServer.BulkDataReader`1.Item(System.String)|BulkDataReader_T_.Item.IMA3O31ATKIQUWMHQK3CVGO4F.md|this[string]
+M:Cat.Dapper.SqlServer.BulkDataReader`1.#ctor(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IReadOnlyList{Cat.Dapper.SqlServer.BulkColumn})|BulkDataReader_T_..ctor.2N78BMISNNQ03OC2YLRZL9B21.md|BulkDataReader(IEnumerable<T>, IReadOnlyList<BulkColumn>)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.Read|BulkDataReader_T_.Read().md|Read()
+M:Cat.Dapper.SqlServer.BulkDataReader`1.NextResult|BulkDataReader_T_.NextResult().md|NextResult()
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetName(System.Int32)|BulkDataReader_T_.GetName.MIF4UWXWHKDMLV1NDZG1KXAL3.md|GetName(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetOrdinal(System.String)|BulkDataReader_T_.GetOrdinal.SVIRIOW0DSPIE53ASDV6D3H98.md|GetOrdinal(string)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetFieldType(System.Int32)|BulkDataReader_T_.GetFieldType.BKN41VHZYRXEAOOBNO9XZWWU8.md|GetFieldType(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetDataTypeName(System.Int32)|BulkDataReader_T_.GetDataTypeName.LD6RJJKDAMCS7CADO1I5ZR7UB.md|GetDataTypeName(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetValue(System.Int32)|BulkDataReader_T_.GetValue.JL7EMOLDVP16WZO5GARVRA9W8.md|GetValue(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetValues(System.Object[])|BulkDataReader_T_.GetValues.VJU8SR867N01T3K7NQ8KP9G3.md|GetValues(object[])
+M:Cat.Dapper.SqlServer.BulkDataReader`1.IsDBNull(System.Int32)|BulkDataReader_T_.IsDBNull.GLEJXPJ0ZOCUCKMBWBUT91VQ4.md|IsDBNull(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetBoolean(System.Int32)|BulkDataReader_T_.GetBoolean.BS5W3RWZQCVY0G9S4ZHZDRQS5.md|GetBoolean(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetByte(System.Int32)|BulkDataReader_T_.GetByte.RD465E1G1CI6D6OHXOVTWNQF3.md|GetByte(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetChar(System.Int32)|BulkDataReader_T_.GetChar.YEL2WIN8VVOSCRADZZ5PZN53B.md|GetChar(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetDateTime(System.Int32)|BulkDataReader_T_.GetDateTime.LAJ6DP1JDT2C77SBASHESTXDC.md|GetDateTime(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetDecimal(System.Int32)|BulkDataReader_T_.GetDecimal.K43J5WHBRJV53YN4QAWHJ7AH8.md|GetDecimal(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetDouble(System.Int32)|BulkDataReader_T_.GetDouble.MASUP0FXNK1OMYITA5EULYWLE.md|GetDouble(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetFloat(System.Int32)|BulkDataReader_T_.GetFloat.0VPHFXOY1WJ5JW8ZTCPG6R7N1.md|GetFloat(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetGuid(System.Int32)|BulkDataReader_T_.GetGuid.YKVQSEB16JXXPOREKJUZE9XI6.md|GetGuid(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetInt16(System.Int32)|BulkDataReader_T_.GetInt16.X3Z00PKJOP1YU5QLBEYQH13G7.md|GetInt16(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetInt32(System.Int32)|BulkDataReader_T_.GetInt32.85A6L29K8QUY9MP3N3P2C7MOC.md|GetInt32(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetInt64(System.Int32)|BulkDataReader_T_.GetInt64.IXDYP7N1OT2U7LPPGFPNEL033.md|GetInt64(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetString(System.Int32)|BulkDataReader_T_.GetString.03MIA6CDGQ7KSKQO1KASOF2V4.md|GetString(int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)|BulkDataReader_T_.GetBytes.17W1CIUL87R399UQVYASRQ373.md|GetBytes(int, long, byte[], int, int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)|BulkDataReader_T_.GetChars.GDUBCE0TNLEQNKLJCT57HRF96.md|GetChars(int, long, char[], int, int)
+M:Cat.Dapper.SqlServer.BulkDataReader`1.GetEnumerator|BulkDataReader_T_.GetEnumerator().md|GetEnumerator()
+M:Cat.Dapper.SqlServer.BulkDataReader`1.Close|BulkDataReader_T_.Close().md|Close()
+M:Cat.Dapper.SqlServer.BulkDataReader`1.Dispose(System.Boolean)|BulkDataReader_T_.Dispose.QEP8Q4UHF7ARH9S9YJK8UCY6.md|Dispose(bool)
+T:Cat.Dapper.SqlServer.BulkDataReader`1|BulkDataReader_T_.md|BulkDataReader<T>
+P:Cat.Dapper.SqlServer.CatBulkMergeResult.Inserted|CatBulkMergeResult.Inserted.md|Inserted
+P:Cat.Dapper.SqlServer.CatBulkMergeResult.Updated|CatBulkMergeResult.Updated.md|Updated
+M:Cat.Dapper.SqlServer.CatBulkMergeResult.#ctor(System.Int32,System.Int32)|CatBulkMergeResult..ctor.BEFI7HDN43RGKGQJYXF4LR25F.md|CatBulkMergeResult(int, int)
+T:Cat.Dapper.SqlServer.CatBulkMergeResult|CatBulkMergeResult.md|CatBulkMergeResult
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.BulkInsertAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.String,System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|SqlServerBulkExtensions.BulkInsertAsync.md#Cat.Dapper.SqlServer.SqlServerBulkExtensions.BulkInsertAsync_T_(thisCat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable_T_,string,System.Collections.Generic.IEnumerable_string_,int,System.Nullable_int_,System.Threading.CancellationToken)|BulkInsertAsync<T>(this ICatDbSession, IEnumerable<T>, string, IEnumerable<string>, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.BulkInsertAsync(Cat.Dapper.Abstractions.ICatDbSession,System.Data.IDataReader,System.String,System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|SqlServerBulkExtensions.BulkInsertAsync.md#Cat.Dapper.SqlServer.SqlServerBulkExtensions.BulkInsertAsync(thisCat.Dapper.Abstractions.ICatDbSession,System.Data.IDataReader,string,int,System.Nullable_int_,System.Threading.CancellationToken)|BulkInsertAsync(this ICatDbSession, IDataReader, string, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.BulkUpdateAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|SqlServerBulkExtensions.BulkUpdateAsync.5285D4H0R1YNA8R23HN0JXSC8.md|BulkUpdateAsync<T>(this ICatDbSession, IEnumerable<T>, string, IEnumerable<string>, IEnumerable<string>, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.BulkDeleteAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.String,System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|SqlServerBulkExtensions.BulkDeleteAsync.md#Cat.Dapper.SqlServer.SqlServerBulkExtensions.BulkDeleteAsync_T_(thisCat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable_T_,string,System.Collections.Generic.IEnumerable_string_,int,System.Nullable_int_,System.Threading.CancellationToken)|BulkDeleteAsync<T>(this ICatDbSession, IEnumerable<T>, string, IEnumerable<string>, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.BulkDeleteAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.String,System.String,System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|SqlServerBulkExtensions.BulkDeleteAsync.md#Cat.Dapper.SqlServer.SqlServerBulkExtensions.BulkDeleteAsync_TKey_(thisCat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable_TKey_,string,string,int,System.Nullable_int_,System.Threading.CancellationToken)|BulkDeleteAsync<TKey>(this ICatDbSession, IEnumerable<TKey>, string, string, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.BulkMergeAsync``1(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken)|SqlServerBulkExtensions.BulkMergeAsync.GE81BV4V017KMIQVBJHBSM9Z.md|BulkMergeAsync<T>(this ICatDbSession, IEnumerable<T>, string, IEnumerable<string>, IEnumerable<string>, int, Nullable<int>, CancellationToken)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.Plan(System.Type,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Boolean)|SqlServerBulkExtensions.Plan.SCLNG2LKOXW6INDKR5R23IXN8.md|Plan(Type, IEnumerable<string>, IEnumerable<string>, bool)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.ValidateColumns(System.Collections.Generic.IEnumerable{Cat.Dapper.SqlServer.BulkColumn})|SqlServerBulkExtensions.ValidateColumns.9CRI1HU6LQL472CW6O93R8F67.md|ValidateColumns(IEnumerable<BulkColumn>)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.Require``1(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.String)|SqlServerBulkExtensions.Require.2JRK3SB42OY78G33MR84V1Q04.md|Require<T>(ICatDbSession, IEnumerable<T>, string)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.IsEmpty``1(System.Collections.Generic.IEnumerable{``0})|SqlServerBulkExtensions.IsEmpty.94IX6F01P9ZWC95LIARTJ1UR4.md|IsEmpty<T>(IEnumerable<T>)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.ValueColumn``1(System.String)|SqlServerBulkExtensions.ValueColumn.PZPFSRZDPJ0523N559OEOWI1A.md|ValueColumn<TKey>(string)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.GetSqlAsync(Cat.Dapper.Abstractions.ICatDbSession,System.Threading.CancellationToken)|SqlServerBulkExtensions.GetSqlAsync.6Z0WZQH7MQD6AXZ9VCZJV6TR7.md|GetSqlAsync(ICatDbSession, CancellationToken)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.CopyAsync(Microsoft.Data.SqlClient.SqlConnection,Microsoft.Data.SqlClient.SqlTransaction,System.Data.IDataReader,System.String,System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken,System.Action{System.Int32})|SqlServerBulkExtensions.CopyAsync.I1UWSODXKQ176G6GSIC2DE237.md|CopyAsync(SqlConnection, SqlTransaction, IDataReader, string, IEnumerable<string>, int, Nullable<int>, CancellationToken, Action<int>)
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.RunStagedAsync``2(Cat.Dapper.Abstractions.ICatDbSession,System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IReadOnlyList{Cat.Dapper.SqlServer.BulkColumn},System.String,System.Int32,System.Nullable{System.Int32},System.Threading.CancellationToken,System.Func{System.String,System.String},System.Func{Microsoft.Data.SqlClient.SqlCommand,System.Threading.Tasks.Task{``1}})|SqlServerBulkExtensions.RunStagedAsync.H2KH6JIIQ8EZV2B51ODGLVBK4.md|RunStagedAsync<T,TResult>(ICatDbSession, IEnumerable<T>, IReadOnlyList<BulkColumn>, string, int, Nullable<int>, CancellationToken, Func<string,string>, Func<SqlCommand,Task<TResult>>)
+T:Cat.Dapper.SqlServer.SqlServerBulkExtensions|SqlServerBulkExtensions.md|SqlServerBulkExtensions
+F:Cat.Dapper.SqlServer.SqlServerBulkSql.ActionColumn|SqlServerBulkSql.ActionColumn.md|ActionColumn
+M:Cat.Dapper.SqlServer.SqlServerBulkSql.QuoteName(System.String)|SqlServerBulkSql.QuoteName.YWQRMXMN2RQ1R9COJGRX9YWU9.md|QuoteName(string)
+M:Cat.Dapper.SqlServer.SqlServerBulkSql.QuoteColumn(System.String)|SqlServerBulkSql.QuoteColumn.V2EY4WZ39PU5E5YDE37DU4JH2.md|QuoteColumn(string)
+M:Cat.Dapper.SqlServer.SqlServerBulkSql.NewStagingName|SqlServerBulkSql.NewStagingName().md|NewStagingName()
+M:Cat.Dapper.SqlServer.SqlServerBulkSql.BuildCreateStaging(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})|SqlServerBulkSql.BuildCreateStaging.2IU62K1XU522LJIWZ9JGLBPEE.md|BuildCreateStaging(string, string, IEnumerable<string>)
+M:Cat.Dapper.SqlServer.SqlServerBulkSql.BuildDropStaging(System.String)|SqlServerBulkSql.BuildDropStaging.PHXJNV51OQV12MFYLCSHE0N83.md|BuildDropStaging(string)
+M:Cat.Dapper.SqlServer.SqlServerBulkSql.BuildUpdate(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String},System.Collections.Generic.IReadOnlyList{System.String})|SqlServerBulkSql.BuildUpdate.0EBP7WKH8J4D8RE0D34T4NTH9.md|BuildUpdate(string, string, IReadOnlyList<string>, IReadOnlyList<string>)
+M:Cat.Dapper.SqlServer.SqlServerBulkSql.BuildDelete(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String})|SqlServerBulkSql.BuildDelete.J3TATM06B4SI8I3Y2Q1GCS4G9.md|BuildDelete(string, string, IReadOnlyList<string>)
+M:Cat.Dapper.SqlServer.SqlServerBulkSql.BuildMerge(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String},System.Collections.Generic.IReadOnlyList{System.String},System.Collections.Generic.IReadOnlyList{System.String})|SqlServerBulkSql.BuildMerge.77C127N278O9QOXSVG68A0VN4.md|BuildMerge(string, string, IReadOnlyList<string>, IReadOnlyList<string>, IReadOnlyList<string>)
+M:Cat.Dapper.SqlServer.SqlServerBulkSql.JoinOn(System.Collections.Generic.IEnumerable{System.String})|SqlServerBulkSql.JoinOn.TGNW1BBBELKDNZXZIJ2ONJQKC.md|JoinOn(IEnumerable<string>)
+M:Cat.Dapper.SqlServer.SqlServerBulkSql.ColumnList(System.Collections.Generic.IEnumerable{System.String},System.String)|SqlServerBulkSql.ColumnList.JGDY9QQK8V2QOO3JIXO0BQE5A.md|ColumnList(IEnumerable<string>, string)
+T:Cat.Dapper.SqlServer.SqlServerBulkSql|SqlServerBulkSql.md|SqlServerBulkSql
 F:Cat.Dapper.SqlServer.SqlServerConnectionFactory._connectionString|SqlServerConnectionFactory._connectionString.md|_connectionString
 M:Cat.Dapper.SqlServer.SqlServerConnectionFactory.#ctor(System.String)|SqlServerConnectionFactory..ctor.A1H9RGDQ1S7P9JCORWO32Y4B2.md|SqlServerConnectionFactory(string)
 M:Cat.Dapper.SqlServer.SqlServerConnectionFactory.CreateConnection|SqlServerConnectionFactory.CreateConnection().md|CreateConnection()
-N:Cat.Dapper.SqlServer|Cat.Dapper.SqlServer.md|Cat.Dapper.SqlServer
 T:Cat.Dapper.SqlServer.SqlServerConnectionFactory|SqlServerConnectionFactory.md|SqlServerConnectionFactory
 F:Cat.Dapper.SqlServer.SqlServerPagingExtensions.SkipParameter|SqlServerPagingExtensions.SkipParameter.md|SkipParameter
 F:Cat.Dapper.SqlServer.SqlServerPagingExtensions.TakeParameter|SqlServerPagingExtensions.TakeParameter.md|TakeParameter
@@ -13,3 +95,11 @@ T:Cat.Dapper.SqlServer.SqlServerPagingExtensions|SqlServerPagingExtensions.md|Sq
 M:Cat.Dapper.SqlServer.Extensions.ServiceCollectionExtensions.AddCatDapperSqlServer(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)|ServiceCollectionExtensions.AddCatDapperSqlServer.D2N4TYSPNDNK7OV1HRB793OM8.md|AddCatDapperSqlServer(this IServiceCollection, string)
 N:Cat.Dapper.SqlServer.Extensions|Cat.Dapper.SqlServer.Extensions.md|Cat.Dapper.SqlServer.Extensions
 T:Cat.Dapper.SqlServer.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+P:Cat.Dapper.SqlServer.SqlServerBulkExtensions.ColumnPlan.Keys|SqlServerBulkExtensions.ColumnPlan.Keys.md|Keys
+P:Cat.Dapper.SqlServer.SqlServerBulkExtensions.ColumnPlan.Update|SqlServerBulkExtensions.ColumnPlan.Update.md|Update
+P:Cat.Dapper.SqlServer.SqlServerBulkExtensions.ColumnPlan.KeyNames|SqlServerBulkExtensions.ColumnPlan.KeyNames.md|KeyNames
+P:Cat.Dapper.SqlServer.SqlServerBulkExtensions.ColumnPlan.UpdateNames|SqlServerBulkExtensions.ColumnPlan.UpdateNames.md|UpdateNames
+M:Cat.Dapper.SqlServer.SqlServerBulkExtensions.ColumnPlan.#ctor(System.Collections.Generic.IReadOnlyList{Cat.Dapper.SqlServer.BulkColumn},System.Collections.Generic.IReadOnlyList{Cat.Dapper.SqlServer.BulkColumn})|SqlServerBulkExtensions.ColumnPlan..ctor.A1QMGWY2PKPN98R3XQWRMC9SA.md|ColumnPlan(IReadOnlyList<BulkColumn>, IReadOnlyList<BulkColumn>)
+T:Cat.Dapper.SqlServer.SqlServerBulkExtensions.ColumnPlan|SqlServerBulkExtensions.ColumnPlan.md|ColumnPlan
+?:Cat.Dapper.SqlServer.SqlServerBulkExtensions.BulkInsertAsync|SqlServerBulkExtensions.BulkInsertAsync.md|BulkInsertAsync
+?:Cat.Dapper.SqlServer.SqlServerBulkExtensions.BulkDeleteAsync|SqlServerBulkExtensions.BulkDeleteAsync.md|BulkDeleteAsync

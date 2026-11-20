@@ -92,6 +92,8 @@ Does the PostgreSQL project wait for the Npgsql provider of EF Core 11? The prov
 - **Wait for both.** Cost: the whole phase waits for the provider of EF Core 11.
 
 Recommendation: build for `net10.0` now. The module and its tests get a real PostgreSQL early, and the second target framework is a project file change when the provider arrives. The demo showcase still waits, as decided in [Phase 13 of the demo](Demo.md#phase-13).
+##### Answer 2
+As recommended
 <!-- region end: Question 2-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->

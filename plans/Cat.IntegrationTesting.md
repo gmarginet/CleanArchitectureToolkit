@@ -54,6 +54,7 @@ Integration tests that run on a real SQL Server in a container, for the modules 
 - `.github/workflows/build.yml` runs on `ubuntu-latest` and calls Cake. To check: that Docker is available on that runner, so a container can start in the workflow.
 - `tests/Cat.Messaging.Tests/EmulatorTests.cs` is the only test that needs the AppHost. It uses a test category and runs on demand, see the `cat-internal-run-apphost` skill.
 - `Cat.UnitTesting` holds the helpers for unit tests, in small projects a developer picks from.
+- The bulk operations of `Cat.Dapper.SqlServer` (insert, update, delete and merge) have unit tests of the generated SQL text only. The owner decided that the tests of the statements against a real SQL Server in a container belong in this phase. They were checked once by hand against SQL Server 2022: update, merge, delete, rollback and the temporary tables that are dropped.
 - `tests/Cat.Sagas.Tests` runs the saga, the outbox and the inbox on SQLite in memory. The tests `DeleteOlderThan_DeletesOnlyTheRowsHandledBeforeTheLimit` and `OutboxDeleteOlderThan_DeletesOnlyTheSentRowsBeforeTheLimit` in `OutboxAndInboxTests.cs` are two of them. SQLite cannot compare a `DateTimeOffset` in SQL, so the test context in `EfCoreSagaStoreTests.cs` maps `HandledAt` and `SentAt` to a number. The SQL that runs there is not the SQL that SQL Server runs.
 
 #### Decided

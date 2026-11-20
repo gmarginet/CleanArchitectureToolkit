@@ -48,6 +48,7 @@ A handler asks a session for the connection, runs a statement and returns a resp
   - [Write a command handler with a transaction](#write-a-command-handler-with-a-transaction)
   - [Page a result](#page-a-result)
   - [Handle database errors](#handle-database-errors)
+  - [Insert, update, delete and merge many rows](#insert-update-delete-and-merge-many-rows)
   - [Keep the SQL safe](#keep-the-sql-safe)
   - [Map columns to a result class](#map-columns-to-a-result-class)
   - [Test the handlers](#test-the-handlers)
@@ -77,7 +78,7 @@ A handler asks a session for the connection, runs a statement and returns a resp
 | [Cat.Dapper.MySql](namespaces/Cat.Dapper.MySql/index.md) | The MySQL connection factory and a paging helper that returns an `ICatPagedList`. |
 | [Cat.Dapper.PostgreSQL](namespaces/Cat.Dapper.PostgreSQL/index.md) | The PostgreSQL connection factory and a paging helper that returns an `ICatPagedList`. |
 | [Cat.Dapper.SqlFiles](namespaces/Cat.Dapper.SqlFiles/index.md) | The source generator that turns the `.sql` files next to a handler into constants of that handler. |
-| [Cat.Dapper.SqlServer](namespaces/Cat.Dapper.SqlServer/index.md) | The SQL Server connection factory and a paging helper that returns an `ICatPagedList`. |
+| [Cat.Dapper.SqlServer](namespaces/Cat.Dapper.SqlServer/index.md) | The SQL Server connection factory, a paging helper that returns an `ICatPagedList` and the bulk operations. |
 
 <!-- region end: Namespaces-->
 
@@ -286,6 +287,30 @@ catch (Exception exception) when (exception.IsUniqueViolation())
 }
 ```
 
+### Insert, update, delete and merge many rows
+`Cat.Dapper.SqlServer` has bulk operations on the session. They use the connection and the transaction of the session, so they take part in the transaction of a command handler. MySQL and PostgreSQL have none, so write that SQL yourself.
+
+```csharp
+using Cat.Dapper.SqlServer;
+
+await Session.BulkInsertAsync(orders, "dbo.Orders", cancellationToken: cancellationToken);
+await Session.BulkUpdateAsync(orders, "dbo.Orders", new[] { "Id" }, cancellationToken: cancellationToken);
+await Session.BulkDeleteAsync(orders, "dbo.Orders", new[] { "Id" }, cancellationToken: cancellationToken);
+await Session.BulkDeleteAsync(ids, "dbo.Orders", "Id", cancellationToken: cancellationToken);
+var result = await Session.BulkMergeAsync(orders, "dbo.Orders", new[] { "Id" }, cancellationToken: cancellationToken);
+// result.Inserted and result.Updated
+```
+
+- **Rows.** A list of objects of the classes you already use with Dapper. A property name is a column name, matched without regard to case. Pass a list of column names to use fewer columns. A plain list of values deletes by one key column, and the `IDataReader` overload of insert copies from a reader on another connection. There is no `DataTable` overload.
+- **Names.** The table name is a string such as `dbo.Orders`. The helpers wrap every name in brackets and refuse a name with a bracket. Use constants, never user input.
+- **Insert.** Uses `SqlBulkCopy` straight into the table and returns the number of copied rows. It does not return generated values such as an identity, so give the key values yourself, such as a `Guid`.
+- **Update, delete and merge.** The rows go into a temporary table on the connection with `SqlBulkCopy`. One statement joins that table to the target, and the table is dropped afterwards. The update returns the number of updated rows and the delete the number of deleted rows.
+- **Update columns.** Give the key columns. Every other property is updated, unless you give a list of columns to update.
+- **Merge.** One `MERGE` with `HOLDLOCK` that updates the rows that exist and inserts the rest. It never deletes rows that are missing from the list. Use a bulk delete for that. Every property is inserted, so a key column that is an identity column needs `IDENTITY_INSERT`.
+- **Transaction.** The helpers use the transaction of the session when one runs, and none otherwise. Without a transaction, a failure in the middle leaves the batches that were already written.
+- **Batches and timeout.** `batchSize` and `timeoutSeconds` are optional arguments. A batch size of 0 sends all rows in one batch.
+- **Nothing to do.** An empty list returns 0 and sends nothing to the database.
+
 ### Keep the SQL safe
 - Pass every value through the parameters object, and never build the SQL text from user input. Dapper sends the values as parameters.
 - The methods take the SQL as a plain `string` and the parameters as an object. The module does not check for string concatenation, so review it yourself.
@@ -301,7 +326,7 @@ The developer handles the mapping. The module has no helpers for it, because Dap
 - **Static type handlers.** `SqlMapper.AddTypeHandler` changes Dapper for the whole process. Register it once at startup, and know that it affects every service in the same process, such as the tests.
 
 ### Test the handlers
-The module has no tests of the SQL itself. It needs no container and no in memory database. Run the SQL against a real database, as the demo does.
+The module has unit tests of the SQL text that the bulk operations build, and no tests of the SQL itself. It needs no container and no in memory database. Run the SQL against a real database, as the demo does.
 
 A handler can still be unit tested in the service that owns it. The core of the service only knows the query and command abstractions, so test the code that sends them with the fakes of `Cat.UnitTesting`.
 <!-- region end: Usage-->
