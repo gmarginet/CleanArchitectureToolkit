@@ -29,19 +29,36 @@
 <!-- Use the cat-internal-create-demo-readme skill to update this readme.-->
 <!-- region end: TemplateSkill-->
 
+# CAT Bookshop Demo <!-- omit in toc -->
 
-# CAT Bookshop Demo <!-- omit in toc -->  
+A small bookshop that shows how the Clean Architecture Toolkit modules work together.
 
-<!-- region start: Intro-->
-A small bookshop that shows how the Clean Architecture Toolkit modules work together.  
-<!-- region end: Intro-->
+This readme tells the story of the demo in the order a team meets it. First comes what the shop does. Then comes the architecture that carries it. Then comes how to run it. Then comes the choice of CAT modules. At every step you read what was decided, why, and what it costs. The facts of every block are at the end, in the [building blocks](#building-blocks).
 
-## Table of contents <!-- omit in toc -->  
-<!-- region start: TableOfContents-->
+## Table of contents <!-- omit in toc -->
 
-- [What the bookshop does](#what-the-bookshop-does)
-- [Architecture](#architecture)
-- [How to run](#how-to-run)
+- [The idea](#the-idea)
+  - [What the bookshop does](#what-the-bookshop-does)
+- [The architecture](#the-architecture)
+  - [How the pieces fit](#how-the-pieces-fit)
+  - [How a request flows through a service](#how-a-request-flows-through-a-service)
+  - [Sharing contracts](#sharing-contracts)
+  - [Login and tokens](#login-and-tokens)
+  - [Events and interfaces](#events-and-interfaces)
+  - [Databases](#databases)
+- [Running it](#running-it)
+  - [Prerequisites](#prerequisites)
+  - [Run with Aspire](#run-with-aspire)
+  - [SQL Server modes](#sql-server-modes)
+  - [Docker memory](#docker-memory)
+  - [Run one service](#run-one-service)
+  - [Things to know](#things-to-know)
+  - [Health checks](#health-checks)
+  - [Things to know about the dashboard](#things-to-know-about-the-dashboard)
+  - [Run the tests](#run-the-tests)
+- [Choosing the CAT modules](#choosing-the-cat-modules)
+  - [Where the CAT modules sit](#where-the-cat-modules-sit)
+  - [Why each service picked its modules](#why-each-service-picked-its-modules)
 - [Building blocks](#building-blocks)
   - [React client](#react-client)
   - [Aspire AppHost and dashboard](#aspire-apphost-and-dashboard)
@@ -54,10 +71,21 @@ A small bookshop that shows how the Clean Architecture Toolkit modules work toge
   - [Aspire ServiceDefaults](#aspire-servicedefaults)
   - [Payment service](#payment-service)
   - [Service Bus emulator](#service-bus-emulator)
-<!-- region end: TableOfContents-->
 
-## What the bookshop does
-<!-- region start: WhatTheBookshopDoes-->
+## The idea
+
+A team that starts a new project first talks about what the application must do. The demo starts there too.
+
+An online bookshop fits the job. Everybody knows how a shop works, so you can follow the code without a lesson in the domain. It still has the hard parts of a real system: a price that changes over time, a stock that two customers want at once, a payment that takes time and can fail, and a mail that must go out once.
+
+These choices shaped the functions below:
+
+- **Ordering is not instant.** The shop answers at once that the order is pending, and the payment decides the end result a few seconds later. The screen follows the status by itself. The gain is a process that waits, which shows what the modules do. The cost is that the client has to ask again for the end result.
+- **Stock, payment and mail are services of their own.** Each one shows another way to work with CAT. The cost is more projects to run.
+- **The partners are pretend.** The payment service is a fake that can fail on purpose, and the mails go to a test inbox. Failures are easy to show, and nothing leaves your machine. The cost is that the demo proves nothing about a real provider.
+- **Failures are part of the story.** An order can stop at stock, at payment or at a timeout, and the shop always ends in a clear state. The list of what the shop does when something goes wrong is as important as the list of what it does when all is well.
+
+### What the bookshop does
 
 The demo is an online bookshop. Customers look at books and place orders. An admin keeps the catalog up to date.
 
@@ -99,10 +127,18 @@ The admin also gets a mail at the moment a book drops below the limit, a few sec
 
 Without Aspire stock is pretend. Any line of more than 50 copies is out of stock.
 
-<!-- region end: WhatTheBookshopDoes-->
+## The architecture
 
-## Architecture
-<!-- region start: Architecture-->
+With the functions known, the team asks which technical shape carries them. The demo makes these decisions:
+
+- **Separate services that own their data.** Catalog, Orders, Inventory, Notifications and Payment each have their own database. Where one needs data of another, it asks. The cost shows in the details. Inventory knows a book by its ISBN and not by its id, and an order line holds a book id with no foreign key.
+- **One door for clients.** An API gateway checks the login. Clients know one address, and the token check sits in one place. The cost is one more hop and one more process.
+- **The same structure in every service.** Every use case has the same shape, so a new one is easy to add. The cost is many small types for a small service.
+- **Keycloak for the login.** Real tokens and a real login flow, with no account to create.
+- **A choice per connection for the contracts.** Sharing the types of a service is not a rule. The demo shows both options.
+- **Interfaces, events, messages and sagas for different jobs.** Each way to stay loosely coupled fits one kind of question.
+
+The next parts explain each decision.
 
 The demo is a small system of services, each with its own database. The services are built the same way, with the project structure from the [readme](../README.md#service-project-structure). A client talks to them through an API gateway, which checks the login. Services call each other through the gateway.
 
@@ -111,7 +147,6 @@ The demo is a small system of services, each with its own database. The services
 Hatched boxes are not built yet. Solid boxes are. The drawing is kept in sync with the code.
 
 ### How the pieces fit
-<!-- region start: HowThePiecesFit-->
 
 - **Clients** only talk to the API gateway. It checks the token, lets the public catalog reads through and forwards the call with the token unchanged. Orders asks Catalog for prices and Inventory for stock through the gateway as well, with clients generated by `Cat.Api.Client`. Payment is the exception: Orders talks to it with messages, see [Events and interfaces](#events-and-interfaces).
 - **Login.** Keycloak runs as a container and holds the users. The gateway and each service check the token. A service does not trust the network. See [Things to know](#things-to-know).
@@ -120,20 +155,19 @@ Hatched boxes are not built yet. Solid boxes are. The drawing is kept in sync wi
 - **Events** stay in memory inside a service. A service tells another one about a fact with a message on Azure Service Bus. Orders publishes `OrderConfirmed` through its outbox, and Inventory and Notifications receive it. Orders also sends `TakePayment` to Payment and gets `PaymentProcessed` back, and sends `RefundPayment` and gets `PaymentRefunded` back. These are the places where a message is a question with an answer. See [Events and interfaces](#events-and-interfaces).
 - **Databases.** Every service has its own SQL Server database.
 - **Aspire** starts everything with one command: the gateway, the services, Keycloak, SQL Server and the Service Bus emulator in containers, and the dashboard. You can still start a service on its own.
-<!-- region end: HowThePiecesFit-->
 
 ### How a request flows through a service
-<!-- region start: HowARequestFlowsThroughAService-->
+
+Inside a service every use case follows the same path. The decorators do the cross cutting work once, and the handlers only hold what is special about the use case. That is why a new use case is easy to add. It is also why a small service has many small types: a request, a handler, a query, a query handler and a validator. The core service has no web or database code, so it is easy to unit test.
+
 
 1. An endpoint receives the HTTP request and turns it into a service request.
 2. The service request processor runs the decorators: logging, tracing and validation.
 3. A handler runs the use case. It reads through queries and changes data through commands.
 4. The result comes back as a response, either a value or a list of errors.
 5. The endpoint turns the response into an HTTP status code and a body.
-<!-- region end: HowARequestFlowsThroughAService-->
 
 ### Sharing contracts
-<!-- region start: SharingContracts-->
 
 The readme says that sharing the `Contracts` project of a service is a choice of the developer. The demo makes a choice per connection and shows both options.
 
@@ -150,10 +184,8 @@ What it costs:
 - Shared: coupling to the types and the release rhythm of the other service.
 
 The choice is made per connection. Another application can choose differently.
-<!-- region end: SharingContracts-->
 
 ### Login and tokens
-<!-- region start: LoginAndTokens-->
 
 A clone must start with one command, and the demo must still show the proper way. Keycloak runs as a container with an imported realm, so no signup and no external account are needed. See [Keycloak](#keycloak).
 
@@ -184,10 +216,8 @@ In the code:
 - Ownership is a filter in the query. The queries get the external id of the customer, or none for an admin, so the orders of others come back as not found and nothing leaks.
 
 Other ways were rejected. Entra ID or Auth0 would make every person who clones the repository create a tenant. An own token service is a lot of code that is not about CAT. `dotnet user-jwts` has no login flow for the client.
-<!-- region end: LoginAndTokens-->
 
 ### Events and interfaces
-<!-- region start: EventsAndInterfaces-->
 
 Orders uses two ways to stay loosely coupled. They are for different jobs.
 
@@ -210,44 +240,57 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 - A question that takes time goes through a saga. The place order workflow sends `TakePayment`, saves its state and stops. `PaymentProcessed` finds the saved instance by its correlation id and runs the rest of the workflow. See [Orders service](#orders-service).
 - A question that takes time but that nobody waits for needs no saga. The refund runs after the order process has ended, so a subscriber of the cancelled event sends `RefundPayment`, and a plain handler receives `PaymentRefunded`. See [Orders service](#orders-service).
 - Subscribers are long lived singletons, because the aggregator holds them with weak references. A subscriber that needs a scoped service such as the `DbContext` opens its own scope.
-<!-- region end: EventsAndInterfaces-->
 
-### Where the CAT modules sit
-<!-- region start: WhereTheCatModulesSit-->
+### Databases
 
-| Layer | Modules |
-|---|---|
-| API | `Cat.Minimal.Api` |
-| Core service | `Cat.ServiceRequests`, `Cat.Queries`, `Cat.Commands`, `Cat.Validators`, `Cat.Responses`, and in Orders also `Cat.FluentWorkflows` and `Cat.EventAggregators` |
-| Infrastructure | `Cat.EFCore`, and in Orders `Cat.Messaging` with the outbox |
-| Saga | `Cat.Sagas` and `Cat.Sagas.EFCore` (Orders) |
-| Scheduler | `Cat.Scheduling` and `Cat.Scheduling.EFCore` (Orders and Inventory) |
-| EventProcessor | `Cat.EventProcessor` (Orders, Payment, Inventory and Notifications), with its inbox in Orders and `Cat.EventProcessor.Authorization` in Orders, Payment, Inventory and Notifications |
-| Messaging | `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` (Orders, Payment, Inventory and Notifications) |
-| Users | `Cat.Users.Abstractions` in the core service and the infrastructure, `Cat.Users` and `Cat.Users.JwtBearer` in the host |
-| Core service tests | `Cat.UnitTesting.Commands`, `Cat.UnitTesting.Queries` and `Cat.UnitTesting.NUnit` |
-| Everywhere | `Cat.Expressions` |
+Every service has its own SQL Server database, and the demo builds them in two ways to show that CAT works with both.
 
-The [building blocks](#building-blocks) explain where each module is used and why.
-<!-- region end: WhereTheCatModulesSit-->
-<!-- region end: Architecture-->
+- **Code first.** Catalog, Orders and Notifications describe the tables in C# and apply EF Core migrations. Every entity inherits a base class from `Cat.EFCore`. Catalog uses a temporal table for the book price, so every old price stays in the history. The cost is that temporal tables tie the demo to SQL Server, so SQLite and PostgreSQL do not work.
+- **Database first.** A stock database often exists already, owned by a warehouse team. So Inventory takes its schema from SQL scripts, and the entities are scaffolded from the database. The atomic update that reserves stock stays plain SQL, and the commands and responses stay the same as in the other services. The cost is two ways to build a service, which means two ways to explain, and both need care after a schema change.
+- **Plain SQL for one read.** The order overview of Orders reads with Dapper and a `.sql` file, because it is a read only query that needs only the columns it shows. The cost is that the SQL knows the table and column names of the EF Core model, so a rename in the model breaks the query at run time and no test of the demo catches it.
 
-## How to run
-<!-- region start: HowToRun-->
+The tables and columns of every database are in the chapters of the services: [Catalog service](#catalog-service), [Orders service](#orders-service), [Inventory service](#inventory-service) and [Notification service](#notification-service). Payment has no database.
+
+## Running it
+
+Next the team asks how the application runs. The demo must start with one command on a fresh clone, and it needs a database, an identity provider, a message bus and a mail server.
+
+The decision is the Aspire AppHost. One project describes the whole system, and one command starts the gateway, the services, the React client and the containers. The dashboard shows the logs, the traces, the metrics and the health checks.
+
+What it gives:
+
+- One command to start everything.
+- Traces across services in one place.
+- A fresh clone needs no connection strings.
+
+What it costs:
+
+- Docker Desktop eats memory. See [Docker memory](#docker-memory) for the limits.
+- The first start pulls a SQL Server image of about 1.5 GB, and the Keycloak image.
+- It is one more thing to learn.
+
+Three rules keep Aspire from taking over the demo:
+
+- **The services still run on their own.** Every service starts with `dotnet run` and its own `appsettings`. The AppHost is a convenience, not a requirement. See [Run one service](#run-one-service).
+- **The modules never depend on Aspire.** Only the demo uses the shared `ServiceDefaults` project.
+- **The parts that need a container come with the AppHost.** SQL Server, Keycloak, the Service Bus emulator and Mailpit each have a reason:
+  - SQL Server in a container, with a mode that points to a SQL Server you already have. See [SQL Server modes](#sql-server-modes).
+  - Keycloak gives real tokens with no account to create. The realm is a file in the repository, so every clone gets the same users. The official Aspire Keycloak package is only a preview, so the demo uses a plain container.
+  - The Service Bus emulator gives a real bus on your machine with no cloud account. Everything is gone after a restart, and the services create their own topics and queues at startup.
+  - Mailpit is a test mail server. No mail leaves your machine.
+
+The demo is made for a local machine. Several settings, such as the plain text secrets of Keycloak, are fine for a demo and wrong for production.
 
 The main route is the Aspire AppHost. One command starts the gateway, Catalog, Orders, the payment service, Keycloak, SQL Server and the React client, and opens the dashboard. You can also start one service on its own, see [Run one service](#run-one-service).
 
 ### Prerequisites
-<!-- region start: Prerequisites-->
 
 - The .NET SDK that `global.json` asks for.
 - **Node.js 24 or newer** for the React client. The AppHost runs `npm install` and `npm run dev` for you, so you only need Node and npm on the path.
 - **Docker Desktop** for the default route. SQL Server, Keycloak and the Service Bus emulator run in containers. The emulator needs Docker in every mode, because the AppHost always starts it.
 - Or a SQL Server you already have, for the databases. Temporal tables need SQL Server, so SQLite and PostgreSQL do not work.
-<!-- region end: Prerequisites-->
 
 ### Run with Aspire
-<!-- region start: RunWithAspire-->
 
 1. Clone the repository and open a terminal in its root folder.
 2. Start the AppHost:
@@ -270,10 +313,8 @@ To start again with empty databases, stop the AppHost and remove the volume:
 ```
 docker volume rm cat-demo-sql-data
 ```
-<!-- region end: RunWithAspire-->
 
 ### SQL Server modes
-<!-- region start: SqlServerModes-->
 
 The setting `Sql:Mode` of the AppHost picks where the databases live.
 
@@ -295,10 +336,8 @@ The owner of an existing inventory database creates the table of the scheduler b
 The same owner switches change data capture on by hand to get the mail for a stock drop. Run `005-change-capture.sql` from the same folder on the inventory database. It needs a running SQL Server Agent, because the Agent runs the capture job. Then set `Inventory:ChangeCapture` to `true` for Inventory, for example in its user secrets. Without the setting Inventory reads no changes.
 
 Two lighter ways exist. LocalDB is the real SQL Server engine, so temporal tables work. It needs no virtual machine and stops by itself when idle. Point the connection strings at it. A plain `docker-compose.yml` with only SQL Server suits people who want a container but no Aspire. Temporal tables tie the demo to SQL Server, so SQLite and PostgreSQL do not work.
-<!-- region end: SqlServerModes-->
 
 ### Docker memory
-<!-- region start: DockerMemory-->
 
 Docker Desktop on Windows runs on WSL2. By default the WSL2 virtual machine can take half of your RAM and keeps it while it runs.
 
@@ -316,10 +355,8 @@ Docker Desktop on Windows runs on WSL2. By default the WSL2 virtual machine can 
 - **Use the WSL 2 backend** in Docker Desktop, and turn off start at sign-in.
 - **SQL Server is capped.** The AppHost sets `MSSQL_MEMORY_LIMIT_MB` to 2048 on the container. An idle container uses about 620 MiB.
 - **Give the memory back.** When you are done, quit Docker Desktop and run `wsl --shutdown`.
-<!-- region end: DockerMemory-->
 
 ### Run one service
-<!-- region start: RunOneService-->
 
 Every service still starts on its own, with its own `appsettings`. It needs a SQL Server that you start yourself, and no Docker is involved. Without the AppHost, Orders uses a fake for prices, and there is no gateway and no login.
 
@@ -344,10 +381,8 @@ Every service still starts on its own, with its own `appsettings`. It needs a SQ
 3. Call the services directly on ports 5101 and 5102. The requests in the `.http` files that go through the gateway need the AppHost. Change their host to the service port and remove the `Authorization` line to use them here.
 
 In `Development` both services apply their EF Core migrations at startup. Catalog adds 4 categories and 7 books when its tables are empty. Orders adds the four order statuses.
-<!-- region end: RunOneService-->
 
 ### Things to know
-<!-- region start: ThingsToKnow-->
 
 - **Users.** Keycloak holds three users: `alice`, `bob` and `admin`. The password is the same as the name. Alice and Bob only see their own orders. The admin sees all orders and may save books. The Keycloak admin console at `http://localhost:8180` uses `admin` and `admin`. Use these settings in the demo only. A person who registers on the login page becomes a normal user, with no admin role. Keycloak does not check the email address, because the demo has no mail server for it.
 - **Tokens.** The `.http` files get a token from Keycloak with the password grant of the client `cat-demo-cli`. The gateway needs a valid token for everything except reading books and categories. The services check the token again, so a call straight to port 5101 or 5102 without a token gets a 401 too.
@@ -363,16 +398,12 @@ In `Development` both services apply their EF Core migrations at startup. Catalo
 - **Order numbers** look like `20261105-0001`. The counter restarts every UTC day. The Scheduler removes the counters of earlier days every night. The development endpoint `POST /development/scheduler/clean-up-order-counters` does the same at once.
 - **Scheduled jobs.** Orders runs `clean-up-order-counters`, `clean-up-inbox` and `clean-up-outbox` every night and `cancel-stuck-orders` every 5 minutes. Inventory runs `low-stock-report` every night at 02:00 UTC. In `Development` each job has an endpoint in the group `/development/scheduler` of its service, so you can run it without waiting. These endpoints are not in the default OpenAPI document, so no generated client gets them. Scalar shows them in a second document named `dev`. `CatScheduling:Jobs:<job name>:Cron` changes the time of a job and `Enabled` switches it off. To see a low stock mail, set the stock of a book below 10 in the `inventory` database, run `POST /development/scheduler/low-stock-report` on port 5105, and open Mailpit. The mail goes to the address in `Notifications:AdminEmail`, which is `admin@example.com` by default. `Inventory:LowStockLimit` changes the limit.
 - **Stock drop mail.** Under the AppHost, a book whose stock drops from the limit or more to below the limit sends a mail to the admin, about 4 seconds later. To see one, change the stock in the `inventory` database, for example `UPDATE dbo.StockItem SET QuantityOnHand = 5 WHERE Id = 3`, and open Mailpit. A change that is no drop sends nothing. The limit is the same setting as for the nightly report. Without the AppHost nothing reads the change table. The development endpoint `POST /dev/event-processor/StockChanged` on port 5106 runs a message through Notifications without a bus. Send the bearer token of a login in the `Authorization` header, or the message is dead lettered as `Unauthorized`. `NotificationRequests.http` has both calls.
-<!-- region end: ThingsToKnow-->
 
 ### Health checks
-<!-- region start: HealthChecks-->
 
 The gateway and every service answer `/health` (ready) and `/alive` (running) in every environment, with a plain `Healthy` or `Unhealthy`, and no token is needed. The AppHost watches `/health` of all of them. The gateway also calls `/health` of its services and stops sending calls to an instance that fails.
-<!-- region end: HealthChecks-->
 
 ### Things to know about the dashboard
-<!-- region start: ThingsToKnowAboutTheDashboard-->
 
 The dashboard has a fixed login token, `dev`. The launch profile of the AppHost sets it with `ASPIRE_DASHBOARD_FRONTEND_BROWSERTOKEN` and opens `login?t=dev`, so the browser lands in the dashboard already logged in. The token is for a local demo only. Without a fixed token the AppHost makes a new random one at every start. Do not set `ASPIRE_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS`. It opens the dashboard without a login, and the dashboard then warns that the endpoint is unsecured.
 
@@ -389,10 +420,8 @@ The `--clean` command removes every ASP.NET Core development certificate of your
 To follow one order, place it and open **Traces** in the dashboard. The call `POST /orders` shows up as one trace. It holds the gateway, Orders, Keycloak, Catalog and Inventory, so you see every HTTP hop of the order in one place. The order is already answered with 202 when the payment starts, so the rest of the order is not in this trace.
 
 The message hops are not part of that trace. When Payment handles `TakePayment`, Orders handles `PaymentProcessed`, Notifications handles `OrderConfirmed`, or `StockChanged` arrives, the dashboard shows it as its own trace with only that resource in it. `Cat.Messaging` does not pass the trace context along with a message yet. Match such a trace to its order by the time and the message name.
-<!-- region end: ThingsToKnowAboutTheDashboard-->
 
 ### Run the tests
-<!-- region start: RunTheTests-->
 
 Run all tests of the repository, including the demo tests:
 
@@ -401,13 +430,61 @@ dotnet cake --target=Test
 ```
 
 The unit tests of a service sit in its `CoreService.Tests` project. They use the fake processors of `Cat.UnitTesting` instead of a database.
-<!-- region end: RunTheTests-->
-<!-- region end: HowToRun-->
+
+## Choosing the CAT modules
+
+The last question is which modules to use. CAT is a toolbox. A developer picks the modules and the projects they want, and a module never forces another one on them. The demo follows that rule, so the services use different sets of modules.
+
+### Where the CAT modules sit
+
+| Layer | Modules |
+|---|---|
+| API | `Cat.Minimal.Api` |
+| Core service | `Cat.ServiceRequests`, `Cat.Queries`, `Cat.Commands`, `Cat.Validators`, `Cat.Responses`, and in Orders also `Cat.FluentWorkflows` and `Cat.EventAggregators` |
+| Infrastructure | `Cat.EFCore`, and in Orders `Cat.Messaging` with the outbox |
+| Saga | `Cat.Sagas` and `Cat.Sagas.EFCore` (Orders) |
+| Scheduler | `Cat.Scheduling` and `Cat.Scheduling.EFCore` (Orders and Inventory) |
+| EventProcessor | `Cat.EventProcessor` (Orders, Payment, Inventory and Notifications), with its inbox in Orders and `Cat.EventProcessor.Authorization` in Orders, Payment, Inventory and Notifications |
+| Messaging | `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` (Orders, Payment, Inventory and Notifications) |
+| Users | `Cat.Users.Abstractions` in the core service and the infrastructure, `Cat.Users` and `Cat.Users.JwtBearer` in the host |
+| Core service tests | `Cat.UnitTesting.Commands`, `Cat.UnitTesting.Queries` and `Cat.UnitTesting.NUnit` |
+| Everywhere | `Cat.Expressions` |
+
+The [building blocks](#building-blocks) explain where each module is used and why.
+
+### Why each service picked its modules
+
+**Catalog** is the baseline. It uses the modules that every service needs.
+
+- `Cat.ServiceRequests` with its decorators gives one entry point per use case, with logging, tracing and validation done once.
+- `Cat.Queries` and `Cat.Commands` keep reads and writes in separate handlers that are easy to test.
+- `Cat.Responses` makes a result a value or a list of errors, with no exceptions for business failures.
+- `Cat.EFCore` brings the entity base classes and the temporal price table.
+- The cost is many small types for a small service.
+
+**Orders** is the main service, so it adds more.
+
+- `Cat.FluentWorkflows` makes the place order process read as a list of steps.
+- `Cat.EventAggregators` keep the status update, the audit and the cleanup out of the workflow.
+- `Cat.Sagas` lets the workflow stop at the payment and carry on with the answer, also after a restart.
+- `Cat.Messaging` with its outbox saves the status and the message in one `SaveChanges`, so an order never confirms without telling the others.
+- `Cat.EventProcessor` with its inbox makes an answer count once.
+- `Cat.Scheduling` runs the nightly cleanups, the sweep of stuck orders and the shipping.
+- The cost is that events cannot drive the process, that the order status and the saga state are two places that must agree, and that the outbox adds a table, a migration and a background service.
+
+**Inventory** shows that CAT also works when the database comes first. It uses no entity base classes, so it shows that a developer uses only the modules they need. It adds `Cat.Api.Client` for the generated client, `Cat.Scheduling` for the nightly report and `Cat.Sql.Cdc`, which turns a change in the stock table into a message with no publishing code, so a change made by a script is seen as well. The cost is that change capture works on SQL Server only and needs the SQL Server Agent.
+
+**Notifications** only receives. `Cat.EventProcessor` runs its handlers, and the table of sent mails shows idempotent handling without an inbox. A second receiver of `OrderConfirmed` also shows that a message has more than one reader.
+
+**Payment** is a fake partner. `Cat.Messaging` and `Cat.EventProcessor` receive the question and publish the answer, so the demo shows a slow or failing partner and how the order ends.
+
+**The gateway** is a small host on `Cat.Api.Gateway`. It takes the routes, the token check, the header cleaning and the rate limits from configuration. The gateway only option of the module is not used, because the services check the token themselves.
+
+**The React client** uses no module. It is built from the OpenAPI documents that `Cat.Minimal.Api` produces, so the client stays independent of .NET. The cost is that a change in a service needs a refresh of the saved document.
 
 ## Building blocks
-<!-- region start: BlockOverview-->
 
-One chapter for every block that is built. A database sits in the chapter of the service that owns it.
+The chapters above tell why. The chapters below hold the facts of every block that is built: what it is, how it works, which CAT modules it uses, and what it gives and costs. A database sits in the chapter of the service that owns it.
 
 | Block | What it is |
 |---|---|
@@ -423,10 +500,7 @@ One chapter for every block that is built. A database sits in the chapter of the
 | [Payment service](#payment-service) | A separate pretend payment service. It takes a payment from a message and can fail on purpose. |
 | [Service Bus emulator](#service-bus-emulator) | The message bus. It carries `OrderConfirmed` from Orders to Inventory and Notifications, and `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded` between Orders and Payment. |
 
-<!-- region end: BlockOverview-->
-
 ### React client
-<!-- region start: ReactClient-->
 
 **What it is.** A thin web client with a book list, a basket, an order overview and an admin screen for books. It uses React with TypeScript, built with Vite.
 
@@ -473,10 +547,8 @@ One chapter for every block that is built. A database sits in the chapter of the
 - Blazor WebAssembly would share the contracts, but it makes the demo look .NET only.
 
 **More.** `demo/Cat.Demo.WebClient`. [Sharing contracts](#sharing-contracts) explains why the client has no shared code.
-<!-- region end: ReactClient-->
 
 ### Aspire AppHost and dashboard
-<!-- region start: AspireAppHostAndDashboard-->
 
 **What it is.** One project that describes the system: the gateway, Catalog, Orders, Inventory, Notifications, the payment service, Keycloak, SQL Server, the Service Bus emulator, Mailpit and the React client. The Aspire dashboard shows logs, traces, metrics and health checks.
 
@@ -508,10 +580,8 @@ One chapter for every block that is built. A database sits in the chapter of the
 - It is one more thing to learn.
 
 **More.** `demo/Cat.Demo.AppHost`.
-<!-- region end: AspireAppHostAndDashboard-->
 
 ### API Gateway
-<!-- region start: ApiGateway-->
 
 **What it is.** The one door for clients. It checks the token and forwards calls to Catalog, Orders, the payment service and Inventory. It holds no business logic. The block is a small host project on top of the `Cat.Api.Gateway` module.
 
@@ -542,10 +612,8 @@ The gateway only option of the module is not used in the demo. The services chec
 - The demo keeps its Keycloak settings in plain text. That is fine for a demo and wrong for production.
 
 **More.** `demo/Cat.Demo.Api.Gateway`. [Login and tokens](#login-and-tokens).
-<!-- region end: ApiGateway-->
 
 ### Keycloak
-<!-- region start: Keycloak-->
 
 **What it is.** The identity provider of the demo. It holds the users, checks passwords and signs the access tokens. Any OpenID Connect provider would do. Keycloak is only the demo choice.
 
@@ -568,10 +636,8 @@ The gateway only option of the module is not used in the demo. The services chec
 - The passwords and the admin console login are public and simple. That is fine for a demo and wrong for production.
 
 **More.** `demo/Cat.Demo.AppHost/Cat.Demo.AppHost/keycloak`. [Login and tokens](#login-and-tokens).
-<!-- region end: Keycloak-->
 
 ### Catalog service
-<!-- region start: CatalogService-->
 
 **What it is.** Books, categories and prices. Mostly reads, with a small admin part. It is the first service of the demo and is built code first.
 
@@ -652,10 +718,8 @@ erDiagram
 - Category names are plain text.
 
 **More.** Code in `demo/Cat.Demo.CatalogService`. Requests in `CatalogRequests.http`.
-<!-- region end: CatalogService-->
 
 ### Orders service
-<!-- region start: OrdersService-->
 
 **What it is.** The main service. Customers place and track orders. Built code first.
 
@@ -879,10 +943,8 @@ erDiagram
 - The SQL of the order overview knows the table and column names of the EF Core model. A rename in the model breaks the query at run time, and no test of the demo catches it.
 
 **More.** Code in `demo/Cat.Demo.OrderService`. Requests in `OrderRequests.http`. [Events and interfaces](#events-and-interfaces). [Payment service](#payment-service).
-<!-- region end: OrdersService-->
 
 ### Inventory service
-<!-- region start: InventoryService-->
 
 **What it is.** Tracks stock and reserves it when an order comes in. It is built database first, with SQL scripts that the AppHost runs.
 
@@ -961,10 +1023,8 @@ The service uses no entity base classes. It shows that you use only the modules 
 **Cons.** Two ways to build a service means two ways to explain. The scaffolded entities and the hand written SQL both need care after a schema change. Sharing the contracts ties Orders to the models of Inventory. The change capture works on SQL Server only and needs the SQL Server Agent. Every change of the stock table becomes a message, also those that nobody needs, because a mapping cannot skip a change.
 
 **More.** Code in `demo/Cat.Demo.InventoryService`. Requests in `InventoryRequests.http`.
-<!-- region end: InventoryService-->
 
 ### Notification service
-<!-- region start: NotificationService-->
 
 **What it is.** Sends the order confirmed mail, the low stock report and the mail for a stock drop. It has no HTTP endpoint for clients. A message from another service is its only way in.
 
@@ -1011,10 +1071,8 @@ erDiagram
 **Cons.** The mail text is built in code and only in English. A mail that is sent but not yet saved can go out twice after a crash. The test inbox shows the mail, but it does not show how a real mail provider behaves.
 
 **More.** Code in `demo/Cat.Demo.NotificationService`.
-<!-- region end: NotificationService-->
 
 ### Aspire ServiceDefaults
-<!-- region start: AspireServiceDefaults-->
 
 **What it is.** A shared project with the defaults every service uses. Only the demo uses it. The CAT modules never reference it.
 
@@ -1035,10 +1093,8 @@ erDiagram
 - The health checks only say that the process runs. They check no database.
 
 **More.** `demo/Cat.Demo.ServiceDefaults`.
-<!-- region end: AspireServiceDefaults-->
 
 ### Payment service
-<!-- region start: PaymentService-->
 
 **What it is.** A small separate service, `Cat.Demo.PaymentService`, that pretends to be a payment provider. Orders asks it for a payment, and for a refund, with a message, and it answers with a message. It has no database. Under the AppHost it checks the token of a message like Orders does.
 
@@ -1093,10 +1149,8 @@ Remove the secret to switch the failure off again. When you run the service on i
 - The HTTP endpoint and its client are not used by Orders any more. They stay for now.
 
 **More.** `demo/Cat.Demo.PaymentService`, `PlaceOrderWorkflow` in `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.CoreService/Workflows`. [Orders service](#orders-service).
-<!-- region end: PaymentService-->
 
 ### Service Bus emulator
-<!-- region start: ServiceBusEmulator-->
 
 **What it is.** The Azure Service Bus emulator, started by the AppHost. It carries the message `OrderConfirmed` from Orders to Inventory and Notifications, and `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded` between Orders and Payment. It runs in Docker with its own SQL Server container, so no Azure subscription is needed.
 
@@ -1122,4 +1176,3 @@ Remove the secret to switch the failure off again. When you run the service on i
 - The emulator is not the real service. It reports 0 for every message count, so the dead letter metric of `Cat.Messaging` shows 0 against it. Dead letters, sessions, scheduled messages and duplicate detection work, see the module readme of `Cat.Messaging`.
 
 **More.** `demo/Cat.Demo.AppHost/Cat.Demo.AppHost/Program.cs`. [Orders service](#orders-service), [Payment service](#payment-service) and [Inventory service](#inventory-service).
-<!-- region end: ServiceBusEmulator-->
