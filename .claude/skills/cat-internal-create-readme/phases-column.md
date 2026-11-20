@@ -12,6 +12,7 @@ The phases are three columns without a header, with one line for each phase in t
 - B counts the open questions of the phase. A question or a sub question counts when it has no answer and no sub question below it. A question that has a sub question does not count, because it is answered. The headings in a question region are `#### Question N`, `##### Question N.x` and `##### Answer N.x`.
 
 ## Ranking
+- A plan with the line `<!-- no overview row-->` has no row and no priority. Its phases are built first, so every phase in the table ranks after them.
 - A phase that another phase needs ranks above it. Only the needs written in the `Needs` chapter of a phase count.
 - Then the phase with fewer open questions comes first.
 - On a tie, the phase that an earlier phase of the demo needs comes first.

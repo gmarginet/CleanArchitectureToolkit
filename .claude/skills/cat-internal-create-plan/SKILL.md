@@ -47,7 +47,7 @@ Read these before you write, and search them for the module name:
 - the demo code in `demo/` and `demo/README.md`, with the Roslyn tools for symbols and references.
 
 ## Where a module plan is linked
-Every plan is linked from the readme, and from nowhere else.
+Every plan is linked from the readme, and from nowhere else. A plan without a row is the exception, see the last point.
 - Every plan has a row in the repo overview table of the readme. `Demo.md` belongs to the row `Cat.Demo` and `Skills.md` to the row `Cat.Skills`.
 - An item that is not built yet has the New badge. A built item with a plan has the Building badge, or the Growing badge when its first stable version is reached (see the `FirstStableVersion` region). The badge links to the plan in all three cases. The `cat-internal-create-readme` skill covers the table.
 - A change to a plan, an answered open question and a finished build can change the lines of the `Phases` column in the repo overview. Recalculate them with the `cat-internal-create-readme` skill.
@@ -55,6 +55,7 @@ Every plan is linked from the readme, and from nowhere else.
 - Keep the plan until the module has done everything in it and the owner agrees that it can go. When the plan goes, remove its link from the readme too.
 - A module readme never links to the plan. Only the readme does. A module readme grows until it holds everything about how the module works and how to use it, so the plan can be removed.
 - The `cat-internal-verify-docs` skill checks that every plan has exactly one row in the repo overview.
+- One exception: a plan that covers the whole repository and not one item, such as `Cat.TargetFrameworks.md`, has no row. The owner decides this. The plan says so with the line `<!-- no overview row-->` in its `TemplateSkill` region, and the readme does not link it. Its phases have no priority number. The plan is built first, and every phase in the repo overview waits until it is built. Other plans link to its phases in a `Needs` chapter as usual.
 
 ## Keeping the other documents in step
 Use this when an answer or a decision changes more than one plan, and when a module is renamed, merged or dropped.

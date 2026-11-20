@@ -394,6 +394,8 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
     }
     foreach ($plan in $planFiles) {
         $name = if ($plan -eq 'Demo.md') { 'Cat.Demo' } elseif ($plan -eq 'Skills.md') { 'Cat.Skills' } else { [System.IO.Path]::GetFileNameWithoutExtension($plan) }
+        # A plan that says <!-- no overview row--> covers the whole repository and has no row.
+        if ([System.IO.File]::ReadAllText((Join-Path $plansRoot $plan)) -match '(?m)^<!-- no overview row-->\s*$') { continue }
         if (-not $seen.ContainsKey($name)) { $errors.Add("plans\${plan}: $name has no row in the repo overview of the readme.") }
     }
     $rank = @{ 'Module' = 0; 'Demo' = 1; 'Tooling' = 2 }
