@@ -1,0 +1,45 @@
+../../../Cat.Resilience/namespaces/Cat.Resilience.Abstractions/
+F:Cat.Resilience.Abstractions.CatBackoffType.Constant|CatBackoffType.md#Cat.Resilience.Abstractions.CatBackoffType.Constant|Constant
+F:Cat.Resilience.Abstractions.CatBackoffType.Linear|CatBackoffType.md#Cat.Resilience.Abstractions.CatBackoffType.Linear|Linear
+F:Cat.Resilience.Abstractions.CatBackoffType.Exponential|CatBackoffType.md#Cat.Resilience.Abstractions.CatBackoffType.Exponential|Exponential
+N:Cat.Resilience.Abstractions|Cat.Resilience.Abstractions.md|Cat.Resilience.Abstractions
+T:Cat.Resilience.Abstractions.CatBackoffType|CatBackoffType.md|CatBackoffType
+P:Cat.Resilience.Abstractions.CatCircuitBreakerOptions.FailureRatio|CatCircuitBreakerOptions.FailureRatio.md|FailureRatio
+P:Cat.Resilience.Abstractions.CatCircuitBreakerOptions.MinimumThroughput|CatCircuitBreakerOptions.MinimumThroughput.md|MinimumThroughput
+P:Cat.Resilience.Abstractions.CatCircuitBreakerOptions.SamplingDuration|CatCircuitBreakerOptions.SamplingDuration.md|SamplingDuration
+P:Cat.Resilience.Abstractions.CatCircuitBreakerOptions.BreakDuration|CatCircuitBreakerOptions.BreakDuration.md|BreakDuration
+T:Cat.Resilience.Abstractions.CatCircuitBreakerOptions|CatCircuitBreakerOptions.md|CatCircuitBreakerOptions
+P:Cat.Resilience.Abstractions.CatRateLimiterOptions.PermitLimit|CatRateLimiterOptions.PermitLimit.md|PermitLimit
+P:Cat.Resilience.Abstractions.CatRateLimiterOptions.QueueLimit|CatRateLimiterOptions.QueueLimit.md|QueueLimit
+T:Cat.Resilience.Abstractions.CatRateLimiterOptions|CatRateLimiterOptions.md|CatRateLimiterOptions
+F:Cat.Resilience.Abstractions.CatResilienceOptions.ConfigurationSection|CatResilienceOptions.ConfigurationSection.md|ConfigurationSection
+P:Cat.Resilience.Abstractions.CatResilienceOptions.Profiles|CatResilienceOptions.Profiles.md|Profiles
+M:Cat.Resilience.Abstractions.CatResilienceOptions.#ctor|CatResilienceOptions.CatResilienceOptions().md|CatResilienceOptions()
+M:Cat.Resilience.Abstractions.CatResilienceOptions.AddProfile(System.String,System.Action{Cat.Resilience.Abstractions.CatResilienceProfileOptions})|CatResilienceOptions.AddProfile.MRRFSYZE29FJ7504RMUP2JDTE.md|AddProfile(string, Action<CatResilienceProfileOptions>)
+M:Cat.Resilience.Abstractions.CatResilienceOptions.CreateExternalDefaults|CatResilienceOptions.CreateExternalDefaults().md|CreateExternalDefaults()
+T:Cat.Resilience.Abstractions.CatResilienceOptions|CatResilienceOptions.md|CatResilienceOptions
+F:Cat.Resilience.Abstractions.CatResilienceProfile.Internal|CatResilienceProfile.Internal.md|Internal
+F:Cat.Resilience.Abstractions.CatResilienceProfile.External|CatResilienceProfile.External.md|External
+T:Cat.Resilience.Abstractions.CatResilienceProfile|CatResilienceProfile.md|CatResilienceProfile
+P:Cat.Resilience.Abstractions.CatResilienceProfileOptions.RateLimiter|CatResilienceProfileOptions.RateLimiter.md|RateLimiter
+P:Cat.Resilience.Abstractions.CatResilienceProfileOptions.TotalTimeout|CatResilienceProfileOptions.TotalTimeout.md|TotalTimeout
+P:Cat.Resilience.Abstractions.CatResilienceProfileOptions.Retry|CatResilienceProfileOptions.Retry.md|Retry
+P:Cat.Resilience.Abstractions.CatResilienceProfileOptions.CircuitBreaker|CatResilienceProfileOptions.CircuitBreaker.md|CircuitBreaker
+P:Cat.Resilience.Abstractions.CatResilienceProfileOptions.AttemptTimeout|CatResilienceProfileOptions.AttemptTimeout.md|AttemptTimeout
+T:Cat.Resilience.Abstractions.CatResilienceProfileOptions|CatResilienceProfileOptions.md|CatResilienceProfileOptions
+P:Cat.Resilience.Abstractions.CatRetryOptions.MaxRetryAttempts|CatRetryOptions.MaxRetryAttempts.md|MaxRetryAttempts
+P:Cat.Resilience.Abstractions.CatRetryOptions.Delay|CatRetryOptions.Delay.md|Delay
+P:Cat.Resilience.Abstractions.CatRetryOptions.BackoffType|CatRetryOptions.BackoffType.md|BackoffType
+P:Cat.Resilience.Abstractions.CatRetryOptions.UseJitter|CatRetryOptions.UseJitter.md|UseJitter
+P:Cat.Resilience.Abstractions.CatRetryOptions.UseRetryAfterHeader|CatRetryOptions.UseRetryAfterHeader.md|UseRetryAfterHeader
+P:Cat.Resilience.Abstractions.CatRetryOptions.RequireIdempotencyKeyForUnsafeMethods|CatRetryOptions.RequireIdempotencyKeyForUnsafeMethods.md|RequireIdempotencyKeyForUnsafeMethods
+P:Cat.Resilience.Abstractions.CatRetryOptions.IdempotencyHeaderName|CatRetryOptions.IdempotencyHeaderName.md|IdempotencyHeaderName
+T:Cat.Resilience.Abstractions.CatRetryOptions|CatRetryOptions.md|CatRetryOptions
+P:Cat.Resilience.Abstractions.CatTimeoutOptions.Timeout|CatTimeoutOptions.Timeout.md|Timeout
+T:Cat.Resilience.Abstractions.CatTimeoutOptions|CatTimeoutOptions.md|CatTimeoutOptions
+M:Cat.Resilience.Abstractions.ICatResiliencePipeline.ExecuteAsync(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)|ICatResiliencePipeline.ExecuteAsync.md#Cat.Resilience.Abstractions.ICatResiliencePipeline.ExecuteAsync(System.Func_System.Threading.CancellationToken,System.Threading.Tasks.Task_,System.Threading.CancellationToken)|ExecuteAsync(Func<CancellationToken,Task>, CancellationToken)
+M:Cat.Resilience.Abstractions.ICatResiliencePipeline.ExecuteAsync``1(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},System.Threading.CancellationToken)|ICatResiliencePipeline.ExecuteAsync.md#Cat.Resilience.Abstractions.ICatResiliencePipeline.ExecuteAsync_TResult_(System.Func_System.Threading.CancellationToken,System.Threading.Tasks.Task_TResult__,System.Threading.CancellationToken)|ExecuteAsync<TResult>(Func<CancellationToken,Task<TResult>>, CancellationToken)
+T:Cat.Resilience.Abstractions.ICatResiliencePipeline|ICatResiliencePipeline.md|ICatResiliencePipeline
+M:Cat.Resilience.Abstractions.ICatResiliencePipelines.Get(System.String)|ICatResiliencePipelines.Get.S4ROUGAUYAPFYV3SZXSXB4UZ7.md|Get(string)
+T:Cat.Resilience.Abstractions.ICatResiliencePipelines|ICatResiliencePipelines.md|ICatResiliencePipelines
+?:Cat.Resilience.Abstractions.ICatResiliencePipeline.ExecuteAsync|ICatResiliencePipeline.ExecuteAsync.md|ExecuteAsync

@@ -1,0 +1,36 @@
+../../../Cat.Resilience/namespaces/Cat.Resilience/
+M:Cat.Resilience.CatResilienceConfigurationSetup.#ctor(System.IServiceProvider)|CatResilienceConfigurationSetup..ctor.ZLV9O8YEM0R1B95ZZ4HICSN14.md|CatResilienceConfigurationSetup(IServiceProvider)
+M:Cat.Resilience.CatResilienceConfigurationSetup.PostConfigure(System.String,Cat.Resilience.Abstractions.CatResilienceOptions)|CatResilienceConfigurationSetup.PostConfigure.HGZ2F5LPLV7039WSSPBI3LFR7.md|PostConfigure(string, CatResilienceOptions)
+N:Cat.Resilience|Cat.Resilience.md|Cat.Resilience
+T:Cat.Resilience.CatResilienceConfigurationSetup|CatResilienceConfigurationSetup.md|CatResilienceConfigurationSetup
+F:Cat.Resilience.CatResiliencePipelines._pipelines|CatResiliencePipelines._pipelines.md|_pipelines
+M:Cat.Resilience.CatResiliencePipelines.#ctor(Cat.Resilience.CatResilienceProfiles,Microsoft.Extensions.Logging.ILoggerFactory,System.TimeProvider)|CatResiliencePipelines..ctor.5XM1R4FL260Y56W9V83GD8ZP8.md|CatResiliencePipelines(CatResilienceProfiles, ILoggerFactory, TimeProvider)
+M:Cat.Resilience.CatResiliencePipelines.Get(System.String)|CatResiliencePipelines.Get.GP5ASI83KIZI5KBE2XJZ2C6I.md|Get(string)
+M:Cat.Resilience.CatResiliencePipelines.Build(System.String,Cat.Resilience.Abstractions.CatResilienceProfileOptions)|CatResiliencePipelines.Build.NV7BL97HB8GY20XLY2DUNZ096.md|Build(string, CatResilienceProfileOptions)
+M:Cat.Resilience.CatResiliencePipelines.ToPolly(Cat.Resilience.Abstractions.CatBackoffType)|CatResiliencePipelines.ToPolly.LD9LKJSSLFW24F16T73B4A1K7.md|ToPolly(CatBackoffType)
+T:Cat.Resilience.CatResiliencePipelines|CatResiliencePipelines.md|CatResiliencePipelines
+M:Cat.Resilience.CatResilienceProfiles.#ctor(Microsoft.Extensions.Options.IOptions{Cat.Resilience.Abstractions.CatResilienceOptions})|CatResilienceProfiles..ctor.4O2HXSFBN5GNRK60QTDKOGNLB.md|CatResilienceProfiles(IOptions<CatResilienceOptions>)
+M:Cat.Resilience.CatResilienceProfiles.Get(System.String)|CatResilienceProfiles.Get.3V4Q9YLAPQ9G2L5H9PPE48JX4.md|Get(string)
+M:Cat.Resilience.CatResilienceProfiles.Exists(System.String)|CatResilienceProfiles.Exists.0YJ4W6KVJ81ZHHWL1XD7ENOTD.md|Exists(string)
+T:Cat.Resilience.CatResilienceProfiles|CatResilienceProfiles.md|CatResilienceProfiles
+M:Cat.Resilience.CatResilienceStartupValidator.#ctor(System.Collections.Generic.IEnumerable{Cat.Resilience.CatResilienceUse},Cat.Resilience.CatResilienceProfiles)|CatResilienceStartupValidator..ctor.MNIHBRKIO6X8QY3S5NQBNIQV1.md|CatResilienceStartupValidator(IEnumerable<CatResilienceUse>, CatResilienceProfiles)
+M:Cat.Resilience.CatResilienceStartupValidator.StartAsync(System.Threading.CancellationToken)|CatResilienceStartupValidator.StartAsync.R7O96QDO04GGEX0TZSWFN5T09.md|StartAsync(CancellationToken)
+M:Cat.Resilience.CatResilienceStartupValidator.StopAsync(System.Threading.CancellationToken)|CatResilienceStartupValidator.StopAsync.JGTKG211KXAOYSKQQRYAXP306.md|StopAsync(CancellationToken)
+T:Cat.Resilience.CatResilienceStartupValidator|CatResilienceStartupValidator.md|CatResilienceStartupValidator
+P:Cat.Resilience.CatResilienceUse.ProfileName|CatResilienceUse.ProfileName.md|ProfileName
+M:Cat.Resilience.CatResilienceUse.#ctor(System.String)|CatResilienceUse..ctor.N2O6ZQUNQNYENMEQMI6YCR1TB.md|CatResilienceUse(string)
+T:Cat.Resilience.CatResilienceUse|CatResilienceUse.md|CatResilienceUse
+F:Cat.Resilience.Extensions.HttpClientBuilderExtensions.TooManyRequests|HttpClientBuilderExtensions.TooManyRequests.md|TooManyRequests
+M:Cat.Resilience.Extensions.HttpClientBuilderExtensions.AddCatResilience(Microsoft.Extensions.DependencyInjection.IHttpClientBuilder,System.String)|HttpClientBuilderExtensions.AddCatResilience.FXCLOKNB1SDIMB6GI4NZN9BU7.md|AddCatResilience(this IHttpClientBuilder, string)
+M:Cat.Resilience.Extensions.HttpClientBuilderExtensions.Build(Polly.ResiliencePipelineBuilder{System.Net.Http.HttpResponseMessage},Cat.Resilience.Abstractions.CatResilienceProfileOptions,System.TimeProvider)|HttpClientBuilderExtensions.Build.CZ54FVRQ6H981UCA4EWWFJRI1.md|Build(ResiliencePipelineBuilder<HttpResponseMessage>, CatResilienceProfileOptions, TimeProvider)
+M:Cat.Resilience.Extensions.HttpClientBuilderExtensions.ShouldRetry(Polly.Retry.RetryPredicateArguments{System.Net.Http.HttpResponseMessage},Cat.Resilience.Abstractions.CatRetryOptions)|HttpClientBuilderExtensions.ShouldRetry.PROX5SBRN3LP5NJFIPX9WKMU9.md|ShouldRetry(RetryPredicateArguments<HttpResponseMessage>, CatRetryOptions)
+M:Cat.Resilience.Extensions.HttpClientBuilderExtensions.IsSafe(System.Net.Http.HttpMethod)|HttpClientBuilderExtensions.IsSafe.XI8LYRTY7VBFW2ZC49IQ88ZP5.md|IsSafe(HttpMethod)
+N:Cat.Resilience.Extensions|Cat.Resilience.Extensions.md|Cat.Resilience.Extensions
+T:Cat.Resilience.Extensions.HttpClientBuilderExtensions|HttpClientBuilderExtensions.md|HttpClientBuilderExtensions
+M:Cat.Resilience.Extensions.ServiceCollectionExtensions.AddCatResilienceModule(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Cat.Resilience.Abstractions.CatResilienceOptions})|ServiceCollectionExtensions.AddCatResilienceModule.5UB2WOLLX95VBEC3WR5ZPV1I2.md|AddCatResilienceModule(this IServiceCollection, Action<CatResilienceOptions>)
+T:Cat.Resilience.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+M:Cat.Resilience.CatResiliencePipelines.CatResiliencePipeline.#ctor(Polly.ResiliencePipeline)|CatResiliencePipelines.CatResiliencePipeline..ctor.OFHH25EBA9E3VIVT1ZZKR99J8.md|CatResiliencePipeline(ResiliencePipeline)
+M:Cat.Resilience.CatResiliencePipelines.CatResiliencePipeline.ExecuteAsync(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)|CatResiliencePipelines.CatResiliencePipeline.ExecuteAsync.md#Cat.Resilience.CatResiliencePipelines.CatResiliencePipeline.ExecuteAsync(System.Func_System.Threading.CancellationToken,System.Threading.Tasks.Task_,System.Threading.CancellationToken)|ExecuteAsync(Func<CancellationToken,Task>, CancellationToken)
+M:Cat.Resilience.CatResiliencePipelines.CatResiliencePipeline.ExecuteAsync``1(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},System.Threading.CancellationToken)|CatResiliencePipelines.CatResiliencePipeline.ExecuteAsync.md#Cat.Resilience.CatResiliencePipelines.CatResiliencePipeline.ExecuteAsync_TResult_(System.Func_System.Threading.CancellationToken,System.Threading.Tasks.Task_TResult__,System.Threading.CancellationToken)|ExecuteAsync<TResult>(Func<CancellationToken,Task<TResult>>, CancellationToken)
+T:Cat.Resilience.CatResiliencePipelines.CatResiliencePipeline|CatResiliencePipelines.CatResiliencePipeline.md|CatResiliencePipeline
+?:Cat.Resilience.CatResiliencePipelines.CatResiliencePipeline.ExecuteAsync|CatResiliencePipelines.CatResiliencePipeline.ExecuteAsync.md|ExecuteAsync

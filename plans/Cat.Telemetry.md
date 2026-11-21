@@ -74,7 +74,7 @@ From the packages (read in the local NuGet cache, 2026-11-21):
 - `OpenTelemetry.Extensions.Hosting`, `OpenTelemetry.Instrumentation.AspNetCore` and `OpenTelemetry.Instrumentation.Http` 1.21.0 target `netstandard2.0`, `net10.0` and `net11.0`. `Directory.Packages.props` pins them at 1.21.0.
 
 From the resilience plan:
-- `Cat.Resilience` uses the metrics of Polly on the meter `Polly`, with no meter of its own, and `Cat.Telemetry` lists that meter. See [Cat.Resilience.md](Cat.Resilience.md#phase-1). It is the one meter in the list with a name outside the naming scheme in the Decided list.
+- `Cat.Resilience` uses the metrics of Polly on the meter `Polly`, with no meter of its own, and `Cat.Telemetry` lists that meter. See the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md). It is the one meter in the list with a name outside the naming scheme in the Decided list.
 
 From the saga plan:
 - Save the trace context in a stored workflow instance, so the second half of a workflow joins the same trace.

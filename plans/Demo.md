@@ -188,16 +188,15 @@ Show `Cat.Resilience` in the demo, as the base of the resilience in every servic
 
 #### Background
 - `Aspire ServiceDefaults` already gives every service telemetry, health checks and the standard resilience handler. The demo uses Aspire, so it does not use `Cat.Resilience` today.
-- `Cat.Resilience` is the base for every project, and `ServiceDefaults` calls it. See the Decided list of [Cat.Resilience.md](Cat.Resilience.md#phase-1).
+- `Cat.Resilience` is the base for every project, and `ServiceDefaults` calls it. See the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md).
 - The demo case for `Cat.Resilience`: the internal profile on every client, and the external profile on the client of the outside payment provider, which [Phase 17](#phase-17) builds.
 
 #### What exists today
 - Orders replaces the standard resilience handler of the Inventory client with a shorter one in `UseFastFailResilience`: one retry after 500 ms, 5 seconds per try and 12 seconds in total. `FastFailResilienceTests` covers it.
-- The `ServiceDefaults` pipeline is chosen per authority with `SelectPipelineByAuthority()`. Every call to our own services goes through the gateway, so two clients on that pipeline share one circuit. Today only the Catalog client of Orders uses it, and the Inventory client has its own fast fail pipeline. The module keeps a circuit per client, see [Cat.Resilience.md](Cat.Resilience.md#phase-1).
-- `Cat.Resilience` does not exist yet.
+- The `ServiceDefaults` pipeline is chosen per authority with `SelectPipelineByAuthority()`. Every call to our own services goes through the gateway, so two clients on that pipeline share one circuit. Today only the Catalog client of Orders uses it, and the Inventory client has its own fast fail pipeline. The module keeps a circuit per client, see the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md).
+- `Cat.Resilience` exists, see its [module readme](../modules/Cat.Resilience/README.md). The demo does not use it yet.
 
 #### Needs
-- Phase 1 of the module plan [Cat.Resilience.md](Cat.Resilience.md#phase-1), answered first.
 - [Phase 17](#phase-17), built first.
 
 #### Decided
