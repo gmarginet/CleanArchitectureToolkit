@@ -49,5 +49,8 @@ M:Cat.Messaging.Abstractions.ICatOutgoingMessageSink.AcceptAsync(Cat.Messaging.A
 T:Cat.Messaging.Abstractions.ICatOutgoingMessageSink|ICatOutgoingMessageSink.md|ICatOutgoingMessageSink
 P:Cat.Messaging.Abstractions.ICatSessionMessage.SessionId|ICatSessionMessage.SessionId.md|SessionId
 T:Cat.Messaging.Abstractions.ICatSessionMessage|ICatSessionMessage.md|ICatSessionMessage
+M:Cat.Messaging.Abstractions.ICatSystemMessageSender.PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|ICatSystemMessageSender.PublishAsync.9WIODA0X15ADH92FRBWRFE7W7.md|PublishAsync(ICatEventMessage, Nullable<DateTimeOffset>, CancellationToken)
+M:Cat.Messaging.Abstractions.ICatSystemMessageSender.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|ICatSystemMessageSender.SendAsync.9G0NIHIR9HV3IFGD3MQNJRI47.md|SendAsync(ICatCommandMessage, Nullable<DateTimeOffset>, CancellationToken)
+T:Cat.Messaging.Abstractions.ICatSystemMessageSender|ICatSystemMessageSender.md|ICatSystemMessageSender
 M:Cat.Messaging.Abstractions.ICatTokenProvider.GetTokenAsync(Cat.Messaging.Abstractions.CatTokenSubject,System.Threading.CancellationToken)|ICatTokenProvider.GetTokenAsync.CZ5VQS30IHHLX98RWFUMEV7S8.md|GetTokenAsync(CatTokenSubject, CancellationToken)
 T:Cat.Messaging.Abstractions.ICatTokenProvider|ICatTokenProvider.md|ICatTokenProvider

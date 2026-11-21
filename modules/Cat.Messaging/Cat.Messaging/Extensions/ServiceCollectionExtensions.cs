@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
         services.TryAddSingleton<ICatMessageSerializer, SystemTextJsonMessageSerializer>();
         services.TryAddScoped<ICatOutgoingMessageSink, DirectMessageSink>();
         services.TryAddScoped<ICatMessageSender, CatMessageSender>();
+        services.TryAddScoped<ICatSystemMessageSender, CatSystemMessageSender>();
 
         return services;
     }

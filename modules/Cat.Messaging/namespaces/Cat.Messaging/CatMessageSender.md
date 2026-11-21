@@ -28,30 +28,18 @@
 
 ## CatMessageSender Class
 
-Default [ICatMessageSender](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessageSender.md 'Cat\.Messaging\.Abstractions\.ICatMessageSender')\.
-Builds a [CatOutgoingMessage](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/CatOutgoingMessage.md 'Cat\.Messaging\.Abstractions\.CatOutgoingMessage') from the message and gives it to the [ICatOutgoingMessageSink](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatOutgoingMessageSink.md 'Cat\.Messaging\.Abstractions\.ICatOutgoingMessageSink')\.
-
 ```csharp
-internal sealed class CatMessageSender : Cat.Messaging.Abstractions.ICatMessageSender
+internal sealed class CatMessageSender : Cat.Messaging.CatMessageSenderBase, Cat.Messaging.Abstractions.ICatMessageSender
 ```
 
-Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatMessageSender
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → [CatMessageSenderBase](CatMessageSenderBase.md 'Cat\.Messaging\.CatMessageSenderBase') → CatMessageSender
 
 Implements [ICatMessageSender](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessageSender.md 'Cat\.Messaging\.Abstractions\.ICatMessageSender')
 
 | Constructors | |
 | :--- | :--- |
-| [CatMessageSender\(ICatMessageNameResolver, ICatMessageSerializer, ICatOutgoingMessageSink, ICatTokenProvider\)](CatMessageSender..ctor.G7M5SJROLG4ZAIAA4SOXQ94A9.md 'Cat\.Messaging\.CatMessageSender\.CatMessageSender\(Cat\.Messaging\.Abstractions\.ICatMessageNameResolver, Cat\.Messaging\.ICatMessageSerializer, Cat\.Messaging\.Abstractions\.ICatOutgoingMessageSink, Cat\.Messaging\.Abstractions\.ICatTokenProvider\)') | Creates the sender\. |
-
-| Fields | |
-| :--- | :--- |
-| [\_nameResolver](CatMessageSender._nameResolver.md 'Cat\.Messaging\.CatMessageSender\.\_nameResolver') | |
-| [\_serializer](CatMessageSender._serializer.md 'Cat\.Messaging\.CatMessageSender\.\_serializer') | |
-| [\_sink](CatMessageSender._sink.md 'Cat\.Messaging\.CatMessageSender\.\_sink') | |
-| [\_tokenProvider](CatMessageSender._tokenProvider.md 'Cat\.Messaging\.CatMessageSender\.\_tokenProvider') | |
+| [CatMessageSender\(ICatMessageNameResolver, ICatMessageSerializer, ICatOutgoingMessageSink, ICatTokenProvider\)](CatMessageSender..ctor.G7M5SJROLG4ZAIAA4SOXQ94A9.md 'Cat\.Messaging\.CatMessageSender\.CatMessageSender\(Cat\.Messaging\.Abstractions\.ICatMessageNameResolver, Cat\.Messaging\.ICatMessageSerializer, Cat\.Messaging\.Abstractions\.ICatOutgoingMessageSink, Cat\.Messaging\.Abstractions\.ICatTokenProvider\)') | |
 
 | Methods | |
 | :--- | :--- |
-| [AcceptAsync\(ICatMessage, CatMessageKind, Nullable&lt;DateTimeOffset&gt;, CancellationToken\)](CatMessageSender.AcceptAsync.5R1ASBXJOGKPLUT5AQ349EKQ.md 'Cat\.Messaging\.CatMessageSender\.AcceptAsync\(Cat\.Messaging\.Abstractions\.ICatMessage, Cat\.Messaging\.Abstractions\.CatMessageKind, System\.Nullable\<System\.DateTimeOffset\>, System\.Threading\.CancellationToken\)') | |
-| [PublishAsync\(ICatEventMessage, Nullable&lt;DateTimeOffset&gt;, CancellationToken\)](CatMessageSender.PublishAsync.ZEXHIX2911PSUWEAKC0G8NP3D.md 'Cat\.Messaging\.CatMessageSender\.PublishAsync\(Cat\.Messaging\.Abstractions\.ICatEventMessage, System\.Nullable\<System\.DateTimeOffset\>, System\.Threading\.CancellationToken\)') | Publishes an event to its topic\. |
-| [SendAsync\(ICatCommandMessage, Nullable&lt;DateTimeOffset&gt;, CancellationToken\)](CatMessageSender.SendAsync.WSQRBKEN9WV1HFOAL8OYEJYXE.md 'Cat\.Messaging\.CatMessageSender\.SendAsync\(Cat\.Messaging\.Abstractions\.ICatCommandMessage, System\.Nullable\<System\.DateTimeOffset\>, System\.Threading\.CancellationToken\)') | Sends a command message to its queue\. |
+| [ChooseSubject\(Nullable&lt;DateTimeOffset&gt;\)](CatMessageSender.ChooseSubject.UITUJ9ILVI7QILIXCWROQZSBA.md 'Cat\.Messaging\.CatMessageSender\.ChooseSubject\(System\.Nullable\<System\.DateTimeOffset\>\)') | |

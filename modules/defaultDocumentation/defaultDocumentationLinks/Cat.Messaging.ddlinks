@@ -4,15 +4,24 @@ M:Cat.Messaging.CatMessageNameResolver.RequiresSession(System.Type)|CatMessageNa
 M:Cat.Messaging.CatMessageNameResolver.GetKind(System.Type)|CatMessageNameResolver.GetKind.MUD5TAE7RQ25F7621AXZPU6QD.md|GetKind(Type)
 N:Cat.Messaging|Cat.Messaging.md|Cat.Messaging
 T:Cat.Messaging.CatMessageNameResolver|CatMessageNameResolver.md|CatMessageNameResolver
-F:Cat.Messaging.CatMessageSender._nameResolver|CatMessageSender._nameResolver.md|_nameResolver
-F:Cat.Messaging.CatMessageSender._serializer|CatMessageSender._serializer.md|_serializer
-F:Cat.Messaging.CatMessageSender._sink|CatMessageSender._sink.md|_sink
-F:Cat.Messaging.CatMessageSender._tokenProvider|CatMessageSender._tokenProvider.md|_tokenProvider
 M:Cat.Messaging.CatMessageSender.#ctor(Cat.Messaging.Abstractions.ICatMessageNameResolver,Cat.Messaging.ICatMessageSerializer,Cat.Messaging.Abstractions.ICatOutgoingMessageSink,Cat.Messaging.Abstractions.ICatTokenProvider)|CatMessageSender..ctor.G7M5SJROLG4ZAIAA4SOXQ94A9.md|CatMessageSender(ICatMessageNameResolver, ICatMessageSerializer, ICatOutgoingMessageSink, ICatTokenProvider)
-M:Cat.Messaging.CatMessageSender.PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|CatMessageSender.PublishAsync.ZEXHIX2911PSUWEAKC0G8NP3D.md|PublishAsync(ICatEventMessage, Nullable<DateTimeOffset>, CancellationToken)
-M:Cat.Messaging.CatMessageSender.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|CatMessageSender.SendAsync.WSQRBKEN9WV1HFOAL8OYEJYXE.md|SendAsync(ICatCommandMessage, Nullable<DateTimeOffset>, CancellationToken)
-M:Cat.Messaging.CatMessageSender.AcceptAsync(Cat.Messaging.Abstractions.ICatMessage,Cat.Messaging.Abstractions.CatMessageKind,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|CatMessageSender.AcceptAsync.5R1ASBXJOGKPLUT5AQ349EKQ.md|AcceptAsync(ICatMessage, CatMessageKind, Nullable<DateTimeOffset>, CancellationToken)
+M:Cat.Messaging.CatMessageSender.ChooseSubject(System.Nullable{System.DateTimeOffset})|CatMessageSender.ChooseSubject.UITUJ9ILVI7QILIXCWROQZSBA.md|ChooseSubject(Nullable<DateTimeOffset>)
 T:Cat.Messaging.CatMessageSender|CatMessageSender.md|CatMessageSender
+F:Cat.Messaging.CatMessageSenderBase._nameResolver|CatMessageSenderBase._nameResolver.md|_nameResolver
+F:Cat.Messaging.CatMessageSenderBase._serializer|CatMessageSenderBase._serializer.md|_serializer
+F:Cat.Messaging.CatMessageSenderBase._sink|CatMessageSenderBase._sink.md|_sink
+F:Cat.Messaging.CatMessageSenderBase._tokenProvider|CatMessageSenderBase._tokenProvider.md|_tokenProvider
+M:Cat.Messaging.CatMessageSenderBase.#ctor(Cat.Messaging.Abstractions.ICatMessageNameResolver,Cat.Messaging.ICatMessageSerializer,Cat.Messaging.Abstractions.ICatOutgoingMessageSink,Cat.Messaging.Abstractions.ICatTokenProvider)|CatMessageSenderBase..ctor.5YZYH0GB7I5SDJBBD8VQZIMP5.md|CatMessageSenderBase(ICatMessageNameResolver, ICatMessageSerializer, ICatOutgoingMessageSink, ICatTokenProvider)
+M:Cat.Messaging.CatMessageSenderBase.PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|CatMessageSenderBase.PublishAsync.QCNY5VPI4Y8N4MTO7DJFOBLL6.md|PublishAsync(ICatEventMessage, Nullable<DateTimeOffset>, CancellationToken)
+M:Cat.Messaging.CatMessageSenderBase.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|CatMessageSenderBase.SendAsync.N88L6B85A08JT8RMO3IPZUY17.md|SendAsync(ICatCommandMessage, Nullable<DateTimeOffset>, CancellationToken)
+M:Cat.Messaging.CatMessageSenderBase.AcceptAsync(Cat.Messaging.Abstractions.ICatMessage,Cat.Messaging.Abstractions.CatMessageKind,System.Nullable{System.DateTimeOffset},System.Threading.CancellationToken)|CatMessageSenderBase.AcceptAsync.W3MTURH0RD1S3AYUPJKJHEX87.md|AcceptAsync(ICatMessage, CatMessageKind, Nullable<DateTimeOffset>, CancellationToken)
+M:Cat.Messaging.CatMessageSenderBase.ChooseSubject(System.Nullable{System.DateTimeOffset})|CatMessageSenderBase.ChooseSubject.FHBXR3GMPDIOOTZN5FTL9A26E.md|ChooseSubject(Nullable<DateTimeOffset>)
+M:Cat.Messaging.CatMessageSenderBase.RequireNoTokenProvider|CatMessageSenderBase.RequireNoTokenProvider().md|RequireNoTokenProvider()
+T:Cat.Messaging.CatMessageSenderBase|CatMessageSenderBase.md|CatMessageSenderBase
+M:Cat.Messaging.CatSystemMessageSender.#ctor(Cat.Messaging.Abstractions.ICatMessageNameResolver,Cat.Messaging.ICatMessageSerializer,Cat.Messaging.Abstractions.ICatOutgoingMessageSink,Cat.Messaging.Abstractions.ICatTokenProvider)|CatSystemMessageSender..ctor.GZR9FZHSQHUFRKMJRVY87FBBA.md|CatSystemMessageSender(ICatMessageNameResolver, ICatMessageSerializer, ICatOutgoingMessageSink, ICatTokenProvider)
+M:Cat.Messaging.CatSystemMessageSender.ChooseSubject(System.Nullable{System.DateTimeOffset})|CatSystemMessageSender.ChooseSubject.6VU8R72RLQT6YRK7KLAPHK87C.md|ChooseSubject(Nullable<DateTimeOffset>)
+M:Cat.Messaging.CatSystemMessageSender.RequireNoTokenProvider|CatSystemMessageSender.RequireNoTokenProvider().md|RequireNoTokenProvider()
+T:Cat.Messaging.CatSystemMessageSender|CatSystemMessageSender.md|CatSystemMessageSender
 F:Cat.Messaging.DirectMessageSink._transport|DirectMessageSink._transport.md|_transport
 M:Cat.Messaging.DirectMessageSink.#ctor(Cat.Messaging.Abstractions.ICatMessageTransport)|DirectMessageSink..ctor.GRYGPPK1SC4U8ZAC0GVITGH5.md|DirectMessageSink(ICatMessageTransport)
 M:Cat.Messaging.DirectMessageSink.AcceptAsync(Cat.Messaging.Abstractions.CatOutgoingMessage,System.Threading.CancellationToken)|DirectMessageSink.AcceptAsync.X1LU69VCS1NEYD3EXH7W3KRE1.md|AcceptAsync(CatOutgoingMessage, CancellationToken)

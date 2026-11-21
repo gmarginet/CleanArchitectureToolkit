@@ -47,6 +47,52 @@ public class TokenSenderTests
     }
 
     [Test]
+    public async Task SystemSend_AsksForTheTokenOfTheSystemAlsoWhenTheMessageIsNotScheduled()
+    {
+        using var root = Build(new FakeTokenProvider());
+        using var scope = root.CreateScope();
+
+        await scope.ServiceProvider.GetRequiredService<ICatSystemMessageSender>().SendAsync(new ReserveStock { Quantity = 1 });
+
+        Assert.That(_transport.Sent.Single().Properties[CatMessageProperties.Authorization], Is.EqualTo("Bearer system-token"));
+    }
+
+    [Test]
+    public async Task SystemPublish_AsksForTheTokenOfTheSystem()
+    {
+        using var root = Build(new FakeTokenProvider());
+        using var scope = root.CreateScope();
+
+        await scope.ServiceProvider.GetRequiredService<ICatSystemMessageSender>().PublishAsync(new OrderPlaced());
+
+        Assert.That(_transport.Sent.Single().Properties[CatMessageProperties.Authorization], Is.EqualTo("Bearer system-token"));
+    }
+
+    [Test]
+    public async Task SystemSend_WithoutAProvider_FailsInsteadOfSendingAnAnonymousMessage()
+    {
+        using var root = Build(null);
+        using var scope = root.CreateScope();
+
+        await Assert.ThatAsync(() =>
+            scope.ServiceProvider.GetRequiredService<ICatSystemMessageSender>().SendAsync(new ReserveStock { Quantity = 1 }),
+            Throws.InvalidOperationException);
+
+        Assert.That(_transport.Sent, Is.Empty);
+    }
+
+    [Test]
+    public async Task Send_OfTheNormalSender_StillAsksForTheCurrentUser()
+    {
+        using var root = Build(new FakeTokenProvider());
+        using var scope = root.CreateScope();
+
+        await scope.ServiceProvider.GetRequiredService<ICatMessageSender>().PublishAsync(new OrderPlaced());
+
+        Assert.That(_transport.Sent.Single().Properties[CatMessageProperties.Authorization], Is.EqualTo("Bearer user-token"));
+    }
+
+    [Test]
     public async Task Send_AddsNoPropertyWithoutAProvider()
     {
         using var root = Build(null);

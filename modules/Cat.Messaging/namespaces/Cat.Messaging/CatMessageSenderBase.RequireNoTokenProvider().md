@@ -24,13 +24,12 @@
 
 # Code Reference  
   
-##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageSender Class](CatMessageSender.md 'Cat\.Messaging\.CatMessageSender')
+##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageSenderBase Class](CatMessageSenderBase.md 'Cat\.Messaging\.CatMessageSenderBase')
 
-## CatMessageSender\.\_tokenProvider Field
+## CatMessageSenderBase\.RequireNoTokenProvider\(\) Method
+
+Called when no token provider is registered\. The default sends the message without a token\.
 
 ```csharp
-private readonly ICatTokenProvider? _tokenProvider;
+protected virtual void RequireNoTokenProvider();
 ```
-
-#### Field Value
-[ICatTokenProvider](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatTokenProvider.md 'Cat\.Messaging\.Abstractions\.ICatTokenProvider')

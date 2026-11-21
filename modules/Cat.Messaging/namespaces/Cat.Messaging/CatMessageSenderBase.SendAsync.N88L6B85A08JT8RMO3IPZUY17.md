@@ -24,37 +24,26 @@
 
 # Code Reference  
   
-##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageSender Class](CatMessageSender.md 'Cat\.Messaging\.CatMessageSender')
+##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageSenderBase Class](CatMessageSenderBase.md 'Cat\.Messaging\.CatMessageSenderBase')
 
-## CatMessageSender\.SendAsync\(ICatCommandMessage, Nullable\<DateTimeOffset\>, CancellationToken\) Method
-
-Sends a command message to its queue\.
+## CatMessageSenderBase\.SendAsync\(ICatCommandMessage, Nullable\<DateTimeOffset\>, CancellationToken\) Method
 
 ```csharp
 public System.Threading.Tasks.Task SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage message, System.Nullable<System.DateTimeOffset> scheduledAt=null, System.Threading.CancellationToken cancellationToken=default(System.Threading.CancellationToken));
 ```
 #### Parameters
 
-<a name='Cat.Messaging.CatMessageSender.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).message'></a>
+<a name='Cat.Messaging.CatMessageSenderBase.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).message'></a>
 
 `message` [ICatCommandMessage](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatCommandMessage.md 'Cat\.Messaging\.Abstractions\.ICatCommandMessage')
 
-The command message to send\.
-
-<a name='Cat.Messaging.CatMessageSender.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).scheduledAt'></a>
+<a name='Cat.Messaging.CatMessageSenderBase.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).scheduledAt'></a>
 
 `scheduledAt` [System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[System\.DateTimeOffset](https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset 'System\.DateTimeOffset')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')
 
-The moment the bus must deliver the message\. Null means as soon as possible\.
-
-<a name='Cat.Messaging.CatMessageSender.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).cancellationToken'></a>
+<a name='Cat.Messaging.CatMessageSenderBase.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).cancellationToken'></a>
 
 `cancellationToken` [System\.Threading\.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System\.Threading\.CancellationToken')
 
-Token to cancel the work\.
-
-Implements [SendAsync\(ICatCommandMessage, Nullable&lt;DateTimeOffset&gt;, CancellationToken\)](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessageSender.SendAsync.OVZEFSEJM5EVI7JZG3U8EL09B.md 'Cat\.Messaging\.Abstractions\.ICatMessageSender\.SendAsync\(Cat\.Messaging\.Abstractions\.ICatCommandMessage,System\.Nullable\{System\.DateTimeOffset\},System\.Threading\.CancellationToken\)')
-
 #### Returns
-[System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task')  
-A task that completes when the message is sent, or stored when the outbox is on\.
+[System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task')

@@ -24,13 +24,10 @@
 
 # Code Reference  
   
-##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageSender Class](CatMessageSender.md 'Cat\.Messaging\.CatMessageSender')
+##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatSystemMessageSender Class](CatSystemMessageSender.md 'Cat\.Messaging\.CatSystemMessageSender')
 
-## CatMessageSender\.\_nameResolver Field
+## CatSystemMessageSender\.RequireNoTokenProvider\(\) Method
 
 ```csharp
-private readonly ICatMessageNameResolver _nameResolver;
+protected override void RequireNoTokenProvider();
 ```
-
-#### Field Value
-[ICatMessageNameResolver](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessageNameResolver.md 'Cat\.Messaging\.Abstractions\.ICatMessageNameResolver')

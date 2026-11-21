@@ -48,6 +48,7 @@ The outbox is optional. With it, a message is saved in the same `SaveChanges` as
   - [Register the module](#register-the-module)
   - [Send a message](#send-a-message)
   - [Send the token of the caller](#send-the-token-of-the-caller)
+  - [Send work that has no user](#send-work-that-has-no-user)
   - [Names and sessions](#names-and-sessions)
   - [Create the queues and topics](#create-the-queues-and-topics)
   - [Change the options of Azure Service Bus](#change-the-options-of-azure-service-bus)
@@ -179,6 +180,22 @@ public class RequestTokenProvider(IHttpContextAccessor accessor, ISystemTokenSou
 
 A message with a scheduled time asks for `CatTokenSubject.System`, because a token of a user is expired when the bus delivers the message. The system token must be one that the receiving service accepts. The receiver skips the lifetime check for a scheduled message, see `Cat.EventProcessor`. The sender passes what the handler needs in the message, because the user is not known there. The token stays in the message, so it is in the queue and in the outbox table. Use short lived tokens.
 
+### Send work that has no user
+
+A webhook arrives without a user. The endpoint checks the signature and wants to hand the work off as a message, so it can answer the provider at once. Inject `ICatSystemMessageSender` there. It has `SendAsync` and `PublishAsync` like `ICatMessageSender`, and it always asks `ICatTokenProvider` for `CatTokenSubject.System`, also when the message is not scheduled.
+
+```csharp
+app.MapPost("/webhooks/payment", async (PaymentWebhook webhook, ICatSystemMessageSender sender, CancellationToken cancellationToken) =>
+{
+    await sender.SendAsync(new SettlePayment { Reference = webhook.Reference }, cancellationToken: cancellationToken);
+    return Results.Accepted();
+});
+```
+
+What to know:
+- **On purpose.** Running as the system is never a default. `ICatMessageSender` keeps asking for the current user. Only the code that injects `ICatSystemMessageSender` sends as the system, so a handler that runs for a user cannot do it by accident, and a search for the type finds every place that does.
+- **A provider is needed.** Without a registered `ICatTokenProvider` the sender throws, because the message would go out as the anonymous user.
+- **The receiver decides.** The receiver checks the policy of the message type against the system token, as for a scheduled message. A system token on a message that is not scheduled gets the normal lifetime check, so the system token must be fresh when the bus delivers the message.
 ### Names and sessions
 
 By convention the queue, the topic and the subject use the name of the message type. Override that with `CatMessageAttribute`:

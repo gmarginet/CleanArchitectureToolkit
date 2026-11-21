@@ -24,36 +24,34 @@
 
 # Code Reference  
   
-##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageSender Class](CatMessageSender.md 'Cat\.Messaging\.CatMessageSender')
+##### >> [Cat\.Messaging\.Abstractions Assembly](index.md 'index') >> [Cat\.Messaging\.Abstractions Namespace](Cat.Messaging.Abstractions.md 'Cat\.Messaging\.Abstractions') >> [ICatSystemMessageSender Interface](ICatSystemMessageSender.md 'Cat\.Messaging\.Abstractions\.ICatSystemMessageSender')
 
-## CatMessageSender\.PublishAsync\(ICatEventMessage, Nullable\<DateTimeOffset\>, CancellationToken\) Method
+## ICatSystemMessageSender\.PublishAsync\(ICatEventMessage, Nullable\<DateTimeOffset\>, CancellationToken\) Method
 
-Publishes an event to its topic\.
+Publishes an event to its topic, with the token of the system\.
 
 ```csharp
-public System.Threading.Tasks.Task PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage message, System.Nullable<System.DateTimeOffset> scheduledAt=null, System.Threading.CancellationToken cancellationToken=default(System.Threading.CancellationToken));
+System.Threading.Tasks.Task PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage message, System.Nullable<System.DateTimeOffset> scheduledAt=null, System.Threading.CancellationToken cancellationToken=default(System.Threading.CancellationToken));
 ```
 #### Parameters
 
-<a name='Cat.Messaging.CatMessageSender.PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).message'></a>
+<a name='Cat.Messaging.Abstractions.ICatSystemMessageSender.PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).message'></a>
 
-`message` [ICatEventMessage](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatEventMessage.md 'Cat\.Messaging\.Abstractions\.ICatEventMessage')
+`message` [ICatEventMessage](ICatEventMessage.md 'Cat\.Messaging\.Abstractions\.ICatEventMessage')
 
 The event to publish\.
 
-<a name='Cat.Messaging.CatMessageSender.PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).scheduledAt'></a>
+<a name='Cat.Messaging.Abstractions.ICatSystemMessageSender.PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).scheduledAt'></a>
 
 `scheduledAt` [System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[System\.DateTimeOffset](https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset 'System\.DateTimeOffset')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')
 
 The moment the bus must deliver the event\. Null means as soon as possible\.
 
-<a name='Cat.Messaging.CatMessageSender.PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).cancellationToken'></a>
+<a name='Cat.Messaging.Abstractions.ICatSystemMessageSender.PublishAsync(Cat.Messaging.Abstractions.ICatEventMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).cancellationToken'></a>
 
 `cancellationToken` [System\.Threading\.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System\.Threading\.CancellationToken')
 
 Token to cancel the work\.
-
-Implements [PublishAsync\(ICatEventMessage, Nullable&lt;DateTimeOffset&gt;, CancellationToken\)](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessageSender.PublishAsync.4E8W5QCL2ENIUVTRBILDV6YA7.md 'Cat\.Messaging\.Abstractions\.ICatMessageSender\.PublishAsync\(Cat\.Messaging\.Abstractions\.ICatEventMessage,System\.Nullable\{System\.DateTimeOffset\},System\.Threading\.CancellationToken\)')
 
 #### Returns
 [System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task')  

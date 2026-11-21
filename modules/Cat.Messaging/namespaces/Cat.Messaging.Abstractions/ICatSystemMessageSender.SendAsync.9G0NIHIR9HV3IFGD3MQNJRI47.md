@@ -24,30 +24,35 @@
 
 # Code Reference  
   
-##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageSender Class](CatMessageSender.md 'Cat\.Messaging\.CatMessageSender')
+##### >> [Cat\.Messaging\.Abstractions Assembly](index.md 'index') >> [Cat\.Messaging\.Abstractions Namespace](Cat.Messaging.Abstractions.md 'Cat\.Messaging\.Abstractions') >> [ICatSystemMessageSender Interface](ICatSystemMessageSender.md 'Cat\.Messaging\.Abstractions\.ICatSystemMessageSender')
 
-## CatMessageSender\.AcceptAsync\(ICatMessage, CatMessageKind, Nullable\<DateTimeOffset\>, CancellationToken\) Method
+## ICatSystemMessageSender\.SendAsync\(ICatCommandMessage, Nullable\<DateTimeOffset\>, CancellationToken\) Method
+
+Sends a command message to its queue, with the token of the system\.
 
 ```csharp
-private System.Threading.Tasks.Task AcceptAsync(Cat.Messaging.Abstractions.ICatMessage message, Cat.Messaging.Abstractions.CatMessageKind kind, System.Nullable<System.DateTimeOffset> scheduledAt, System.Threading.CancellationToken cancellationToken);
+System.Threading.Tasks.Task SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage message, System.Nullable<System.DateTimeOffset> scheduledAt=null, System.Threading.CancellationToken cancellationToken=default(System.Threading.CancellationToken));
 ```
 #### Parameters
 
-<a name='Cat.Messaging.CatMessageSender.AcceptAsync(Cat.Messaging.Abstractions.ICatMessage,Cat.Messaging.Abstractions.CatMessageKind,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).message'></a>
+<a name='Cat.Messaging.Abstractions.ICatSystemMessageSender.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).message'></a>
 
-`message` [ICatMessage](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/ICatMessage.md 'Cat\.Messaging\.Abstractions\.ICatMessage')
+`message` [ICatCommandMessage](ICatCommandMessage.md 'Cat\.Messaging\.Abstractions\.ICatCommandMessage')
 
-<a name='Cat.Messaging.CatMessageSender.AcceptAsync(Cat.Messaging.Abstractions.ICatMessage,Cat.Messaging.Abstractions.CatMessageKind,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).kind'></a>
+The command message to send\.
 
-`kind` [CatMessageKind](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/CatMessageKind.md 'Cat\.Messaging\.Abstractions\.CatMessageKind')
-
-<a name='Cat.Messaging.CatMessageSender.AcceptAsync(Cat.Messaging.Abstractions.ICatMessage,Cat.Messaging.Abstractions.CatMessageKind,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).scheduledAt'></a>
+<a name='Cat.Messaging.Abstractions.ICatSystemMessageSender.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).scheduledAt'></a>
 
 `scheduledAt` [System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[System\.DateTimeOffset](https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset 'System\.DateTimeOffset')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')
 
-<a name='Cat.Messaging.CatMessageSender.AcceptAsync(Cat.Messaging.Abstractions.ICatMessage,Cat.Messaging.Abstractions.CatMessageKind,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).cancellationToken'></a>
+The moment the bus must deliver the message\. Null means as soon as possible\.
+
+<a name='Cat.Messaging.Abstractions.ICatSystemMessageSender.SendAsync(Cat.Messaging.Abstractions.ICatCommandMessage,System.Nullable_System.DateTimeOffset_,System.Threading.CancellationToken).cancellationToken'></a>
 
 `cancellationToken` [System\.Threading\.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System\.Threading\.CancellationToken')
 
+Token to cancel the work\.
+
 #### Returns
-[System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task')
+[System\.Threading\.Tasks\.Task](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task 'System\.Threading\.Tasks\.Task')  
+A task that completes when the message is sent, or stored when the outbox is on\.

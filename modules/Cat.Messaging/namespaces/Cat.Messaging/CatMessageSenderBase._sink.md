@@ -24,9 +24,9 @@
 
 # Code Reference  
   
-##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageSender Class](CatMessageSender.md 'Cat\.Messaging\.CatMessageSender')
+##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageSenderBase Class](CatMessageSenderBase.md 'Cat\.Messaging\.CatMessageSenderBase')
 
-## CatMessageSender\.\_sink Field
+## CatMessageSenderBase\.\_sink Field
 
 ```csharp
 private readonly ICatOutgoingMessageSink _sink;

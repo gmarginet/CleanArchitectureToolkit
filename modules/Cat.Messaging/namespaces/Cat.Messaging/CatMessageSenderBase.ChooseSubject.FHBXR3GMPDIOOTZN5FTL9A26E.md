@@ -24,13 +24,20 @@
 
 # Code Reference  
   
-##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageSender Class](CatMessageSender.md 'Cat\.Messaging\.CatMessageSender')
+##### >> [Cat\.Messaging Assembly](index.md 'index') >> [Cat\.Messaging Namespace](Cat.Messaging.md 'Cat\.Messaging') >> [CatMessageSenderBase Class](CatMessageSenderBase.md 'Cat\.Messaging\.CatMessageSenderBase')
 
-## CatMessageSender\.\_serializer Field
+## CatMessageSenderBase\.ChooseSubject\(Nullable\<DateTimeOffset\>\) Method
+
+Picks the subject of the token for a message\.
 
 ```csharp
-private readonly ICatMessageSerializer _serializer;
+protected abstract Cat.Messaging.Abstractions.CatTokenSubject ChooseSubject(System.Nullable<System.DateTimeOffset> scheduledAt);
 ```
+#### Parameters
 
-#### Field Value
-[ICatMessageSerializer](ICatMessageSerializer.md 'Cat\.Messaging\.ICatMessageSerializer')
+<a name='Cat.Messaging.CatMessageSenderBase.ChooseSubject(System.Nullable_System.DateTimeOffset_).scheduledAt'></a>
+
+`scheduledAt` [System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[System\.DateTimeOffset](https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset 'System\.DateTimeOffset')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')
+
+#### Returns
+[CatTokenSubject](../../../Cat.Messaging/namespaces/Cat.Messaging.Abstractions/CatTokenSubject.md 'Cat\.Messaging\.Abstractions\.CatTokenSubject')
