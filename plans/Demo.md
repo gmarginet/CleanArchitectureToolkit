@@ -40,7 +40,6 @@
 <!-- no toc -->
 - [Phase 9](#phase-9)
 - [Phase 10](#phase-10)
-- [Phase 12](#phase-12)
 - [Phase 13](#phase-13)
 - [Phase 16](#phase-16)
 - [Phase 18](#phase-18)
@@ -176,30 +175,6 @@ Recommendation: yes, if the module gets a data part. Categories are the one piec
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 10-->
 
-<!-- region start: Phase 12-->
-## Phase 12
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Show `Cat.Telemetry` in the demo, as the base of the telemetry in every service.
-
-#### Background
-- `Aspire ServiceDefaults` gives every service telemetry and health checks, and it calls `Cat.Telemetry` for the telemetry.
-- Cat.Telemetry is the base for every project, and `ServiceDefaults` calls it. See the [module readme of Cat.Telemetry](../modules/Cat.Telemetry/README.md).
-- The demo case for `Cat.Telemetry` is tracing one order across all services. Payment is an outside provider, see the [demo readme](../demo/README.md#payment-service), so the trace stops at the edge of Orders.
-
-#### What exists today
-- Every service has telemetry from `ServiceDefaults`, which calls `AddCatTelemetry` of `Cat.Telemetry`, see its [module readme](../modules/Cat.Telemetry/README.md).
-- Payment is an outside provider that exports no telemetry, see the [demo readme](../demo/README.md#payment-service). Its client in Orders has the trace boundary `AddCatTelemetryBoundary()`, so the dashboard shows the call as a span in Orders, with no trace on the side of the provider.
-- The demo stays on HTTP. The owner tested it live: `dotnet dev-certs https --trust` is optional and clears the dashboard notification "No trusted development certificate was found" on HTTP. The demo readme describes it, with the command that undoes it.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 12-->
-
 <!-- region start: Phase 13-->
 ## Phase 13
 
@@ -287,7 +262,7 @@ The health check of every service covers its database, so a service with a datab
 
 #### Decided
 - **A database check per service.** Every service adds `AddDbContextCheck<TContext>()` from `Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore`, on `/health` only. `/alive` stays as it is. The package goes into both groups of `Directory.Packages.props` (owner, 2026-11-21).
-- **Own phase.** The check needs no module, so it does not wait for `Cat.Telemetry` in [Phase 12](#phase-12) (owner, 2026-11-21).
+- **Own phase.** The check needs no module, so it does not wait for the telemetry of the demo (owner, 2026-11-21).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
