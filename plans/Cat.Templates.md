@@ -77,7 +77,7 @@ From the repository:
 
 From the other plans:
 - Cat.Resilience and Cat.Telemetry are the base that `ServiceDefaults` calls. A project without Aspire calls them in its `Program`, see the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md#without-aspire) and the [module readme of Cat.Telemetry](../modules/Cat.Telemetry/README.md#without-aspire).
-- Health checks are out of the scope of `Cat.Telemetry`. Its module readme shows the plain ASP.NET Core lines for `/health` and `/alive`, and demo phase 18 adds `AddDbContextCheck` per service, see [Demo.md](Demo.md#phase-18).
+- Health checks are out of the scope of `Cat.Telemetry`. Its module readme shows the plain ASP.NET Core lines for `/health` and `/alive`, and the demo adds `AddDbContextCheck` per service, see the [demo readme](../demo/README.md).
 - The toolkit is in alpha and the demo is the only user, so a breaking change is allowed (owner, 2026-11-21).
 
 #### What exists today

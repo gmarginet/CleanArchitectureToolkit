@@ -31,6 +31,7 @@
       <!-- The shared framework also brings Microsoft.Extensions.Http and the dependency injection abstractions. -->
       <AdditionalFiles Include="**/*.sql" />
       <FrameworkReference Include="Microsoft.AspNetCore.App" />
+      <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
       <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
     </ItemGroup>
 

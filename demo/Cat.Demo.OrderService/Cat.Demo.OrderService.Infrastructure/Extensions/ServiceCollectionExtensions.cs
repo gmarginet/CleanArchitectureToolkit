@@ -31,6 +31,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCatDemoOrderDatabase(this IServiceCollection services, string connectionString)
     {
         services.TryAddSingleton(TimeProvider.System);
+        services.AddHealthChecks().AddDbContextCheck<OrderDbContext>();
         services.AddDbContext<OrderDbContext>(options => options.UseSqlServer(connectionString));
 
         // Dapper reads the order overview. EF Core stays for the writes and the other reads.

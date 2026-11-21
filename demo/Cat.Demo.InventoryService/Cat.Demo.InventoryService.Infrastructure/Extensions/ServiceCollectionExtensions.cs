@@ -12,6 +12,7 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddCatDemoInventoryDatabase(this IServiceCollection services, string connectionString)
     {
+        services.AddHealthChecks().AddDbContextCheck<InventoryDbContext>();
         services.AddDbContext<InventoryDbContext>(options => options.UseSqlServer(connectionString));
         return services;
     }

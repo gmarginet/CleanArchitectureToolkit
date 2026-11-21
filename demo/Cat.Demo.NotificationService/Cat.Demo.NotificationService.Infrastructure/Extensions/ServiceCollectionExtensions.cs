@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCatDemoNotificationDatabase(this IServiceCollection services, string connectionString)
     {
         services.TryAddSingleton(TimeProvider.System);
+        services.AddHealthChecks().AddDbContextCheck<NotificationDbContext>();
         services.AddDbContext<NotificationDbContext>(options => options.UseSqlServer(connectionString));
         return services;
     }

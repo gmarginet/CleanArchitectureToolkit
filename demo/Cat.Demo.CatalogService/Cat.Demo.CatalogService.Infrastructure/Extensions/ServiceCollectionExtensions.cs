@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddCatDemoCatalogDatabase(this IServiceCollection services, string connectionString)
     {
+        services.AddHealthChecks().AddDbContextCheck<CatalogDbContext>();
         services.AddDbContext<CatalogDbContext>(options => options.UseSqlServer(connectionString));
         return services;
     }

@@ -340,7 +340,7 @@ Docker Desktop on Windows runs on WSL2. By default the WSL2 virtual machine can 
 
 ### Health checks
 
-The gateway and every service answer `/health` (ready) and `/alive` (running) in every environment, with a plain `Healthy` or `Unhealthy`, and no token is needed. The AppHost watches `/health` of all of them. The gateway also calls `/health` of its services and stops sending calls to an instance that fails.
+The gateway and every service answer `/health` (ready) and `/alive` (running) in every environment, with a plain `Healthy` or `Unhealthy`, and no token is needed. Every service with a database adds a check of its `DbContext` to `/health` only, through `AddDbContextCheck`, so a service whose database is down shows `Unhealthy`. `/alive` stays a plain process check. The AppHost watches `/health` of all of them. The gateway also calls `/health` of its services and stops sending calls to an instance that fails.
 
 ### Things to know about the dashboard
 
@@ -1029,7 +1029,7 @@ erDiagram
 - It shows that CAT sits next to the standard .NET tools.
 
 **Cons.**
-- The health checks only say that the process runs. They check no database.
+- The `/health` check of a service with a database opens a connection to it on every call, so a database that is down also makes the AppHost and the gateway treat the service as not ready. That is the point, but it also means a short database outage takes the service out of the gateway.
 
 **More.** `demo/Cat.Demo.ServiceDefaults`.
 

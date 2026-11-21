@@ -41,7 +41,6 @@
 - [Phase 9](#phase-9)
 - [Phase 10](#phase-10)
 - [Phase 13](#phase-13)
-- [Phase 18](#phase-18)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 9-->
@@ -212,26 +211,3 @@ Notifications runs on a PostgreSQL container that the AppHost starts. The outbox
 <!-- region start: PhaseOpenQuestions-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 13-->
-
-<!-- region start: Phase 18-->
-## Phase 18
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-The health check of every service covers its database, so a service with a database that is down shows unhealthy.
-
-#### What exists today
-- Every service answers `/health` (ready) and `/alive` (running) from one check, `self`, in `ServiceDefaults`. That check is always healthy.
-- The AppHost and the gateway watch `/health`, so a service with a database that is down still looks healthy, and a call ends in an error after a database timeout.
-- All four services with a database have an EF Core `DbContext`: `CatalogDbContext`, `OrderDbContext`, `InventoryDbContext` and `NotificationDbContext`.
-
-#### Decided
-- **A database check per service.** Every service adds `AddDbContextCheck<TContext>()` from `Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore`, on `/health` only. `/alive` stays as it is. The package goes into both groups of `Directory.Packages.props` (owner, 2026-11-21).
-- **Own phase.** The check needs no module, so it does not wait for the telemetry of the demo (owner, 2026-11-21).
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 18-->
