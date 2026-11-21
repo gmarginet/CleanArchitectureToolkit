@@ -38,36 +38,4 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 3](#phase-3)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 3-->
-## Phase 3
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Add `net11.0` to `Cat.EFCore.Extensions.PostgreSQL` and prove the PostgreSQL support on EF Core 11. It is one of the module plans of the PostgreSQL showcase in [Phase 13 of the demo](Demo.md#phase-13).
-
-#### What exists today
-- `Cat.EFCore.Extensions.PostgreSQL` is built for `net10.0` with the Npgsql provider 10.0.3, see the [module readme](../modules/Cat.EFCore/README.md). The base entities, the lookup methods and the model shape tests run on EF Core 10.
-- The outbox, the inbox and the scheduler claim store use plain EF Core, with `HasMaxLength`, `HasIndex` and `ExecuteUpdate`. They make no provider call. The integration tests of the [module readme of Cat.IntegrationTesting](../modules/Cat.IntegrationTesting/README.md) run them on a real PostgreSQL 17 and pass.
-- The test project `Cat.EFCore.PostgreSQL.Tests` targets `net10.0` only, because the Npgsql provider 10.0.3 needs EF Core 10.
-- The integration test project `integrationtests/Cat.EFCore.PostgreSQL.IntegrationTests` targets `net10.0` only for the same reason. It runs the base entities, the outbox, the inbox, the saga store and the scheduler claim store on a real PostgreSQL 17. The projects of `Cat.IntegrationTesting.PostgreSQL` already target `net10.0` and `net11.0`.
-
-#### Needs
-- A stable Npgsql EF Core provider for EF Core 11. The latest release is `11.0.0-rc.3`, and the owner decided to wait for the stable version and not to use a release candidate.
-
-#### Decided
-- **Both versions.** The PostgreSQL project supports EF Core 10 and EF Core 11, like the rest of the module (owner, 2026-11-20).
-- **Integration tests.** The integration tests of `Cat.EFCore.Extensions.PostgreSQL` run on `net10.0` and `net11.0` as well, and part of this phase is to make them (owner, 2026-11-20).
-- **Build order.** `net10.0` came first, and `net11.0` is added when the Npgsql provider for EF Core 11 is stable (owner, 2026-11-20). The demo showcase waits for it, see [Phase 13 of the demo](Demo.md#phase-13).
-
-#### Done when
-`Cat.EFCore.Extensions.PostgreSQL` targets `net10.0` and `net11.0`, and its tests and its integration tests run on both. The package versions of the provider per target framework are in `Directory.Packages.props`. The module readme drops the note that the project targets `net10.0` only.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 3-->
