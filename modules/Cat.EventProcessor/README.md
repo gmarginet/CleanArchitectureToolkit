@@ -329,7 +329,12 @@ When the service stops, the listener stops taking new messages and finishes the 
 
 ### Traces
 
-The trace of the sender continues in the service. The Azure Service Bus SDK reads the `Diagnostic-Id` of the message and starts the activity of the handling from it, so the second half of a flow joins the same trace. The module adds nothing for this, apart from the log scope below. Register the `Azure.Messaging.ServiceBus` source in the OpenTelemetry setup of the service.
+The trace of the sender continues in the service. The receiver reads the `Diagnostic-Id` of the message, a W3C `traceparent`, and starts the activity of the handling with it as the parent, so the second half of a flow joins the same trace. The span is named `Cat.EventProcessor.Receive <message type>`, has the kind `Consumer` and the tag `messaging.message.id`. It does not depend on the SDK of the broker, so it works the same with another broker.
+
+- **The source.** Add `CatEventProcessorTelemetry.SourceName`, which is `Cat.EventProcessor`, to the OpenTelemetry setup of the service. `AddCatTelemetry` of `Cat.Telemetry` does it for you.
+- **No `Diagnostic-Id`.** A message without one, or with a value that is not a `traceparent`, gets a span that starts a new trace.
+- **No double span.** When the current activity already belongs to the trace of the sender, for example because the SDK of the broker started it, the receiver starts no second span.
+- **Nobody listens.** Without a listener on the source nothing is started, and the handling runs as before.
 
 ### Log scope
 

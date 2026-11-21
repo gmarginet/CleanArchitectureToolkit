@@ -122,6 +122,7 @@ Every CAT module that traces or measures uses its own name for the source and fo
 
 | Name | Module | Holds |
 |------|--------|-------|
+| `Cat.EventProcessor` | `Cat.EventProcessor` | Source. The span of the handling of a message, with the trace of the sender as its parent, and the tag `messaging.message.id`. |
 | `Cat.FluentWorkflows` | `Cat.FluentWorkflows` | Source. A span for every run and every resume of a workflow. |
 | `Cat.Messaging` | `Cat.Messaging` | Meter. `cat.messaging.dead_letters`, the dead letter messages per entity. |
 | `Cat.Scheduling` | `Cat.Scheduling` | Source and meter. The span of a run, with the tags `cat.scheduling.job` and `cat.scheduling.attempts`. The counter `cat.scheduling.runs` with the tags `job` and `status`, and the gauge `cat.scheduling.last_run`. |

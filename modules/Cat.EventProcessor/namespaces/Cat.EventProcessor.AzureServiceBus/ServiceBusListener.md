@@ -31,7 +31,7 @@
 Hosted service that starts one Azure Service Bus processor per declared message type, and stops them together\.
 A command message is read from its queue, an event from the subscription of this service on its topic\.
 A message type that needs sessions gets a session processor\.
-The SDK continues the trace of the sender from the `Diagnostic-Id` of the message\.
+The receiver continues the trace of the sender from the `Diagnostic-Id` of the message\.
 
 ```csharp
 internal sealed class ServiceBusListener : Microsoft.Extensions.Hosting.IHostedService, System.IAsyncDisposable

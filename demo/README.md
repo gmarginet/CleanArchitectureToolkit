@@ -358,7 +358,7 @@ The `--clean` command removes every ASP.NET Core development certificate of your
 
 To follow one order, place it and open **Traces** in the dashboard. The call `POST /orders` shows up as one trace. It holds the gateway, Orders, Keycloak, Catalog and Inventory, so you see every HTTP hop of the order in one place. The order is already answered with 202 when the payment starts, so the rest of the order is not in this trace. The payment provider exports no telemetry, and the client of Orders has a trace boundary (`AddCatTelemetryBoundary`), so no trace header reaches the provider. The call shows only as a client span of Orders, in the trace of the message that asked for it.
 
-The message hops are not part of that trace. When Orders handles `TakePayment`, Orders handles `PaymentProcessed`, Notifications handles `OrderConfirmed`, or `StockChanged` arrives, the dashboard shows it as its own trace with only that resource in it. The outbox of Orders already sends the trace of the caller with every message, but the receiving side does not continue it yet. Match such a trace to its order by the time and the message name.
+The message hops that start from an order are part of the trace of `POST /orders`, because the outbox of Orders sends the trace of the caller with every message and the receiver of `Cat.EventProcessor` continues it. `TakePayment` and `PaymentProcessed` in Orders and `OrderConfirmed` in Inventory and in Notifications show as a `Cat.EventProcessor.Receive` span in that trace. `StockChanged` is the exception. Inventory sends it from the change data capture, which runs in the background and has no caller, so Notifications handles it in a trace of its own. Match such a trace to its change by the time and the message name.
 
 ### Run the tests
 

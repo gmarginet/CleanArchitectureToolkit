@@ -45,6 +45,7 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 | Fields | |
 | :--- | :--- |
 | [CorrelationIdTag](CatTelemetryNames.CorrelationIdTag.md 'Cat\.Telemetry\.CatTelemetryNames\.CorrelationIdTag') | The tag of a span or a log scope that holds the correlation id of a request or a message\. |
+| [EventProcessor](CatTelemetryNames.EventProcessor.md 'Cat\.Telemetry\.CatTelemetryNames\.EventProcessor') | The source of `Cat.EventProcessor`, with the handling of a message as a span in the trace of its sender\. |
 | [FluentWorkflows](CatTelemetryNames.FluentWorkflows.md 'Cat\.Telemetry\.CatTelemetryNames\.FluentWorkflows') | The source of the workflow processor of `Cat.FluentWorkflows`\. |
 | [Messaging](CatTelemetryNames.Messaging.md 'Cat\.Telemetry\.CatTelemetryNames\.Messaging') | The meter of `Cat.Messaging`, with the number of dead letter messages\. |
 | [Polly](CatTelemetryNames.Polly.md 'Cat\.Telemetry\.CatTelemetryNames\.Polly') | The meter of Polly, which `Cat.Resilience` uses\. Its name is outside the naming scheme of the CAT modules, because the module has no meter of its own\. |

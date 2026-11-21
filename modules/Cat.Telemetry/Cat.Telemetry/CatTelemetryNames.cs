@@ -9,6 +9,9 @@ namespace Cat.Telemetry;
 /// </summary>
 public static class CatTelemetryNames
 {
+    /// <summary>The source of <c>Cat.EventProcessor</c>, with the handling of a message as a span in the trace of its sender.</summary>
+    public const string EventProcessor = "Cat.EventProcessor";
+
     /// <summary>The source of the workflow processor of <c>Cat.FluentWorkflows</c>.</summary>
     public const string FluentWorkflows = "Cat.FluentWorkflows";
 
@@ -41,6 +44,6 @@ public static class CatTelemetryNames
     /// </summary>
     public static IReadOnlyList<string> Modules { get; } = new[]
     {
-        FluentWorkflows, Messaging, Scheduling, ServiceRequests, SqlCdc
+        EventProcessor, FluentWorkflows, Messaging, Scheduling, ServiceRequests, SqlCdc
     };
 }

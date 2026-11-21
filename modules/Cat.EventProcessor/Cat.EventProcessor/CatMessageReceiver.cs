@@ -59,6 +59,8 @@ internal sealed class CatMessageReceiver : ICatMessageReceiver
 
         var options = FindOptions(messageType);
 
+        // The handling joins the trace of the sender, through the Diagnostic-Id of the message, whatever the broker is.
+        using var activity = CatEventProcessorTelemetry.StartReceive(messageType.Name, message);
         using var context = CatMessageContext.Begin(message.MessageId, message.DeliveryCount);
         using var scope = _scopeFactory.CreateScope();
 

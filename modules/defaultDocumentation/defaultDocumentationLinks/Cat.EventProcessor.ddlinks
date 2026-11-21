@@ -4,6 +4,12 @@ P:Cat.EventProcessor.CatEventProcessorBuilder.Registrations|CatEventProcessorBui
 M:Cat.EventProcessor.CatEventProcessorBuilder.Receive``1(System.Action{Cat.EventProcessor.Abstractions.CatReceiveOptions})|CatEventProcessorBuilder.Receive.FO1Z0GKCKQIMQV1EOMJQ71GB2.md|Receive<TMessage>(Action<CatReceiveOptions>)
 N:Cat.EventProcessor|Cat.EventProcessor.md|Cat.EventProcessor
 T:Cat.EventProcessor.CatEventProcessorBuilder|CatEventProcessorBuilder.md|CatEventProcessorBuilder
+F:Cat.EventProcessor.CatEventProcessorTelemetry.SourceName|CatEventProcessorTelemetry.SourceName.md|SourceName
+F:Cat.EventProcessor.CatEventProcessorTelemetry.DiagnosticIdProperty|CatEventProcessorTelemetry.DiagnosticIdProperty.md|DiagnosticIdProperty
+F:Cat.EventProcessor.CatEventProcessorTelemetry.ActivitySource|CatEventProcessorTelemetry.ActivitySource.md|ActivitySource
+M:Cat.EventProcessor.CatEventProcessorTelemetry.StartReceive(System.String,Cat.EventProcessor.Abstractions.CatIncomingMessage)|CatEventProcessorTelemetry.StartReceive.CTYLQVWTMA214YDW1ZH23L8E1.md|StartReceive(string, CatIncomingMessage)
+M:Cat.EventProcessor.CatEventProcessorTelemetry.#cctor|CatEventProcessorTelemetry.CatEventProcessorTelemetry().md|CatEventProcessorTelemetry()
+T:Cat.EventProcessor.CatEventProcessorTelemetry|CatEventProcessorTelemetry.md|CatEventProcessorTelemetry
 M:Cat.EventProcessor.CatFailureTable.Settle(Cat.Responses.Abstractions.ICatResponse,Cat.EventProcessor.Abstractions.CatReceiveOptions)|CatFailureTable.Settle.L1B9M3KZE5XQ7WSABXXBA7NF2.md|Settle(ICatResponse, CatReceiveOptions)
 M:Cat.EventProcessor.CatFailureTable.DefaultFor(Cat.Responses.Abstractions.CatResponseType)|CatFailureTable.DefaultFor.18UN3XXOX96NR8A4VC7B9EO2C.md|DefaultFor(CatResponseType)
 T:Cat.EventProcessor.CatFailureTable|CatFailureTable.md|CatFailureTable

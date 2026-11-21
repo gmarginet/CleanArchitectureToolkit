@@ -132,7 +132,7 @@ What to know:
 
 ### Keep the trace of the caller
 
-A message that goes through the outbox keeps the trace of the code that sent it. When the message is stored, the store saves the W3C `traceparent` of the running activity in the column `TraceParent`. When the background service sends the message, the store puts that value on it as the property `Diagnostic-Id`. A receiver that reads `Diagnostic-Id` can continue the trace of the caller. The listener of `Cat.EventProcessor` does not do that yet, so the receiving service still starts a new trace.
+A message that goes through the outbox keeps the trace of the code that sent it. When the message is stored, the store saves the W3C `traceparent` of the running activity in the column `TraceParent`. When the background service sends the message, the store puts that value on it as the property `Diagnostic-Id`. A receiver that reads `Diagnostic-Id` can continue the trace of the caller. The receiver of `Cat.EventProcessor` does that, see [Traces](../Cat.EventProcessor/README.md#traces).
 
 What to know:
 - **New column.** `CatOutbox` has the column `TraceParent`, `nvarchar(55)` and nullable. Add a migration for it. A row that is already stored has no trace and is sent as before.

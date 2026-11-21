@@ -81,6 +81,7 @@ public class AddCatTelemetryTests
         Assert.That(paths, Is.EqualTo(new[] { "/health" }));
     }
 
+    [TestCase("Cat.EventProcessor")]
     [TestCase("Cat.FluentWorkflows")]
     [TestCase("Cat.Scheduling")]
     [TestCase("Cat.ServiceRequests")]
@@ -124,7 +125,7 @@ public class AddCatTelemetryTests
     {
         Assert.That(CatTelemetryNames.Modules, Is.EquivalentTo(new[]
         {
-            "Cat.FluentWorkflows", "Cat.Messaging", "Cat.Scheduling", "Cat.ServiceRequests", "Cat.Sql.Cdc"
+            "Cat.EventProcessor", "Cat.FluentWorkflows", "Cat.Messaging", "Cat.Scheduling", "Cat.ServiceRequests", "Cat.Sql.Cdc"
         }));
     }
 }
