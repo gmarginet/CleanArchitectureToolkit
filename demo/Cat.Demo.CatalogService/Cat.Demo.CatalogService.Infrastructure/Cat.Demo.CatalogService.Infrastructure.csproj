@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\modules\Cat.Caching\Cat.Caching.Abstractions\Cat.Caching.Abstractions.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Db.Errors\Cat.Db.Errors.SqlServer\Cat.Db.Errors.SqlServer.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Commands\Cat.EFCore.Commands.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Extensions.SqlServer\Cat.EFCore.Extensions.SqlServer.csproj" />

@@ -53,6 +53,9 @@ builder.Services.AddCatServiceRequestsModule(typeof(BookGetRequestHandler));
 builder.Services.AddCatQueriesModule(typeof(BookGetQueryHandler));
 builder.Services.AddCatCommandsModule(typeof(BookSaveCommandHandler));
 
+builder.Services.AddCatalogQueryCaching();
+builder.Services.AddCatalogQueryLatency(builder.Configuration.GetValue<TimeSpan>("Catalog:QueryLatency"));
+
 var connectionString = builder.Configuration.GetConnectionString("catalog")
     ?? throw new InvalidOperationException("Connection string 'catalog' is missing.");
 builder.Services.AddCatDemoCatalogDatabase(connectionString);

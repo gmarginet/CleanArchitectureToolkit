@@ -591,6 +591,8 @@ The gateway only option of the module is not used in the demo. The services chec
 - Entities are `Category`, `Book` and `BookPrice`. `BookPrice` is a temporal table, so every old price stays in the history.
 - `BookPrice` has a `LastUpdatedBy` column, so the history also shows who set each price. The command handler of the save fills it with the `UserId` of `ICatUser`, the id and not the name or the email. The seed prices belong to the named system user `catalog`.
 - Saving a book checks that the ISBN is unique.
+- Two queries are cached with `Cat.Caching`: `CategoryGetListQuery` and `BookSearchQuery`. Both use `Shared()`, because no Catalog query depends on the user, so every user shares one entry. The default lifetime of 5 minutes applies. `BookSearchQuery` has the tag `books` (the constant `CatalogCacheTags.Books`), and `BookSaveCommandHandler` clears that tag with `ICatQueryCache.RemoveByTagAsync` after a save, so the next search shows the saved book.
+- `BookPriceListQuery` and `CheckIsbnExistsQuery` are not cached on purpose. A stale price list lets Orders take an order at an old price, and a stale ISBN check lets a duplicate book pass the validator. See [What to never cache](../modules/Cat.Caching/README.md#what-to-never-cache). A test over `CatQueryCacheOptions.Rules` fails if either query is ever listed.
 - Saving a book needs the `admin` role. A test starts the real endpoint mapping and the real `admin` policy on a local server, and checks that a call without a login gets a 401 and a user who is not an admin gets a 403. In both cases the command does not run.
 - The folder is `demo/Cat.Demo.CatalogService`, with the projects of the service project structure.
 
@@ -643,6 +645,7 @@ erDiagram
 | `Cat.Minimal.Api` | Api | Maps service requests to endpoints and documents the responses. |
 | `Cat.EFCore` | DataModels and Infrastructure | Entity base classes, and the temporal price table from the SQL Server projects. The query and command handlers inherit the base handlers, so they only hold what is special about them. |
 | `Cat.Users` | Infrastructure (`Cat.Users.Abstractions`) and the host | The save handler asks `ICatUser` for the id that goes into `LastUpdatedBy`. The `admin` policy on the endpoint is the role check. |
+| `Cat.Caching` | Api (`Cat.Caching`) and Infrastructure (`Cat.Caching.Abstractions`) | Answers the category list and the book search from a cache. The save handler clears the `books` tag. |
 | `Cat.Expressions` | Api | Compiled member access that is reused. |
 | `Cat.UnitTesting.Commands`, `Cat.UnitTesting.Queries` and `Cat.UnitTesting.NUnit` | Core service tests | `FakeCommandProcessor` and `FakeQueryProcessor` stand in for the processors, and `UnitTestBase` builds the service provider of the validation tests. |
 
@@ -655,6 +658,14 @@ erDiagram
 - Many small types for a small service: a request, a handler, a query, a query handler and a validator.
 - Temporal tables tie the demo to SQL Server.
 - Category names are plain text.
+
+**See the cache work.** Set `Catalog:QueryLatency` in the configuration of the AppHost and start it again. Catalog then waits that long before the two cached queries run. The wait is a demo only wrapper around the query processor (`AddCatalogQueryLatency`, registered with `AddCatQueryProcessorWrapper` below the cache), so the handlers stay as they are and a hit never waits. For example:
+
+```
+dotnet user-secrets set "Catalog:QueryLatency" "00:00:02" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost
+```
+
+The first search is slow, and the same search again is instant. Save a book as an admin and search again: that search is slow once more, because the save cleared the `books` tag. The counters `cat.caching.hits` and `cat.caching.misses` of the meter `Cat.Caching` show the same in the dashboard, with the tag `query`. The setting is off by default. Remove the secret to switch it off.
 
 **More.** Code in `demo/Cat.Demo.CatalogService`. Requests in `CatalogRequests.http`.
 

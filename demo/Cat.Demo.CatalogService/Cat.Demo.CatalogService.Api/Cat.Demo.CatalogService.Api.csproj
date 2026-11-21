@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\modules\Cat.Caching\Cat.Caching\Cat.Caching.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Commands\Cat.Commands.Decorators.Logging\Cat.Commands.Decorators.Logging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Commands\Cat.Commands\Cat.Commands.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Expressions\Cat.Expressions\Cat.Expressions.csproj" />

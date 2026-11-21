@@ -15,6 +15,14 @@ var catalog = builder.AddProject<Projects.Cat_Demo_CatalogService_Api>("catalog"
     .WithHttpEndpoint(port: 5101, name: "http", isProxied: false)
     .WithHttpHealthCheck("/health");
 
+// Catalog caches two queries. Set Catalog:QueryLatency, for example 00:00:02, in the configuration of the AppHost
+// (for example in the user secrets) and restart. Catalog then waits that long inside those two handlers, so a miss
+// is slow and a hit is instant. The demo readme explains it.
+if (!string.IsNullOrWhiteSpace(builder.Configuration["Catalog:QueryLatency"]))
+{
+    catalog.WithEnvironment("Catalog__QueryLatency", builder.Configuration["Catalog:QueryLatency"]);
+}
+
 // The payment provider is a stand-in for an outside payment provider. It is a plain REST API with no CAT modules,
 // and it is not behind the gateway. Orders knows it by its address and an API key.
 // It can fail on purpose. Set Payment:Latency, Payment:ErrorPercentage or Payment:Outage in the

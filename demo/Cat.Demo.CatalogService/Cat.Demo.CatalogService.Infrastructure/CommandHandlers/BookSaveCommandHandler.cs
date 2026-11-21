@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Cat.Caching.Abstractions;
 using Cat.Demo.CatalogService.CoreService;
 using Cat.Demo.CatalogService.CoreService.Commands;
 using Cat.Demo.CatalogService.DataModels.Entities;
@@ -13,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cat.Demo.CatalogService.Infrastructure.CommandHandlers;
 
-public class BookSaveCommandHandler(CatalogDbContext dbContext, ICatUser user)
+public class BookSaveCommandHandler(CatalogDbContext dbContext, ICatUser user, ICatQueryCache queryCache)
     : CatEfCommandHandlerBase<CatalogDbContext, BookSaveCommand>(dbContext)
 {
     public override async Task<ICatResponse> HandleAsync(BookSaveCommand command, CancellationToken cancellationToken = default)
@@ -60,6 +61,9 @@ public class BookSaveCommandHandler(CatalogDbContext dbContext, ICatUser user)
             // Two saves with the same new ISBN passed the validator at the same moment. The unique index stopped the second.
             return CatResponse.BadRequest(CatalogErrorDefinitions.IsbnAlreadyExists.CreateCatError(book.Isbn));
         }
+
+        // The saved book must show in the next search, so the cached searches go.
+        await queryCache.RemoveByTagAsync(CatalogCacheTags.Books, cancellationToken);
 
         return CatResponse.Ok();
     }
