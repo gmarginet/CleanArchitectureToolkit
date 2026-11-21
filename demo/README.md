@@ -1061,6 +1061,22 @@ dotnet user-secrets set "Payment:Outage" "true" --project demo/Cat.Demo.AppHost/
 
 Remove the secret to switch the failure off again. A running service reads a changed setting again. Place an order and watch the status in the web shop: it stays `Pending` while the provider is slow or down, and ends as `Cancelled` when the wait of Orders runs out. Set `Orders:PaymentTimeoutSeconds` to a small number, such as 20, to see that without waiting 2 minutes. Set it like the payment settings, in the configuration of the AppHost, for example `dotnet user-secrets set "Orders:PaymentTimeoutSeconds" "20" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost`, and start the AppHost again. The AppHost passes it to Orders.
 
+**What the External profile does.** Orders calls the provider with the `External` profile of `Cat.Resilience`: 15 seconds per try, two retries, a circuit breaker that opens at 50% failures over 10 calls, and the same `Idempotency-Key` on every try. Each failure on purpose was tried once on the AppHost on 2026-11-21, with an order placed as the user alice, and the log of Orders was read afterwards. The numbers vary a little from run to run.
+
+| Failure | Setting | What happened |
+|---|---|---|
+| Latency | `Payment__Latency=00:00:20`, longer than the 15 seconds per try | Every try timed out after 15 seconds and was tried again, so one delivery of `TakePayment` made 3 calls and took about 45 seconds. Orders then abandoned the message with `DEM-ORD-1008`, and the bus delivered it again, with the same result. The order was cancelled after 135 seconds with the reason `PaymentUnavailable`. |
+| Error percentage | `Payment__ErrorPercentage=50`, 8 orders | The 8 orders made 10 calls to the provider, 2 of them a retry after a 503. All 8 orders were confirmed, each within 2 seconds, apart from the first one, which waited for the services to warm up. No message was abandoned and the circuit stayed closed. |
+| Outage | `Payment__Outage=true` | Orders made 10 calls in the first 4 deliveries of `TakePayment`, and then the circuit opened. The deliveries after that failed at once with a `BrokenCircuitException`, with no call to the provider, and the bus kept delivering and abandoning the message. The order was cancelled after 128 seconds with the reason `PaymentUnavailable`. |
+
+What to take from it:
+- **A slow provider costs three tries.** With the defaults, a provider that is slower than 15 seconds makes one delivery take about 45 seconds. Each delivery repeats this until the order wait ends.
+- **Retries and the bus add up.** A retry inside the call and the redelivery of the message both ask the provider again. That is safe because the key is the same, and it is the reason the module readme tells a developer to pick one layer.
+- **The circuit protects the provider.** After 10 failed calls Orders stops calling at all, and the redeliveries cost nothing until the breaker closes again.
+- **The order ends the same way.** In both bad cases the order is cancelled with `PaymentUnavailable`. The wait is the 2 minutes of `Orders:PaymentTimeoutSeconds`.
+
+To repeat a run, set the variable in the environment of the shell that starts the AppHost, for example `$env:Payment__Outage = "true"`, and remove it afterwards.
+
 **CAT modules.** None. The service is outside the toolkit on purpose, because a real provider does not use it either. The tests use `NUnit` only.
 
 **Pros.**
