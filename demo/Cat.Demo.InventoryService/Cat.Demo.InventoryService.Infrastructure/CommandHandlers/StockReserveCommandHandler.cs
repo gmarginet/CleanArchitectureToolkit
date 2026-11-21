@@ -6,7 +6,7 @@ using Cat.Db.Errors.SqlServer;
 using Cat.Demo.InventoryService.CoreService;
 using Cat.Demo.InventoryService.CoreService.Commands;
 using Cat.Demo.InventoryService.Infrastructure.DataAccess;
-using Cat.Demo.InventoryService.Infrastructure.Entities;
+using Cat.Demo.InventoryService.DataModels.Entities;
 using Cat.EFCore.Commands;
 using Cat.Responses;
 using Cat.Responses.Abstractions;

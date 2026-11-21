@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cat.Demo.InventoryService.Infrastructure.Entities;
+using Cat.Demo.InventoryService.DataModels.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cat.Demo.InventoryService.Infrastructure.DataAccess;

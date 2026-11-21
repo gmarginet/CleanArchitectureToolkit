@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Cat.Demo.InventoryService.Infrastructure.Entities;
+namespace Cat.Demo.InventoryService.DataModels.Entities;
 
 public partial class Warehouse
 {

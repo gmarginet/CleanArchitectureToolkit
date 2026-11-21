@@ -1,8 +1,8 @@
 <#
-Generates the entities and the DbContext of the inventory database again.
+Generates the entities in the DataModels project and the DbContext in this project from the inventory database again.
 
 The database is the source of truth, so nobody edits the generated files. Custom behavior goes in partial classes.
-Create the inventory database first and run the scripts of the Database project on it, in order.
+Create the inventory database first and run the scripts of the Database folder on it, in order.
 The scaffold takes only the tables of the stock. The table CatJobRun of the scheduler is not part of it, because the
 partial class in InventoryDbContext.Scheduling.cs maps it with AddCatScheduling().
 
@@ -16,8 +16,8 @@ $ErrorActionPreference = 'Stop'
 Set-Location $PSScriptRoot
 
 dotnet ef dbcontext scaffold $ConnectionString Microsoft.EntityFrameworkCore.SqlServer `
-    --context InventoryDbContext --context-dir DataAccess --output-dir Entities `
-    --namespace Cat.Demo.InventoryService.Infrastructure.Entities `
+    --context InventoryDbContext --context-dir DataAccess --output-dir ..\Cat.Demo.InventoryService.DataModels\Entities `
+    --namespace Cat.Demo.InventoryService.DataModels.Entities `
     --context-namespace Cat.Demo.InventoryService.Infrastructure.DataAccess `
     --table dbo.Warehouse --table dbo.StockItem --table dbo.StockReservation `
     --no-onconfiguring --force

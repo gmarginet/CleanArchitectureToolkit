@@ -10,6 +10,7 @@
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.Abstractions\Cat.Messaging.Abstractions.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Scheduling\Cat.Scheduling.EFCore\Cat.Scheduling.EFCore.csproj" />
       <ProjectReference Include="..\Cat.Demo.InventoryService.CoreService\Cat.Demo.InventoryService.CoreService.csproj" />
+      <ProjectReference Include="..\Cat.Demo.InventoryService.DataModels\Cat.Demo.InventoryService.DataModels.csproj" />
     </ItemGroup>
 
     <ItemGroup>
