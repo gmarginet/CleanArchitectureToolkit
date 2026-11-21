@@ -232,6 +232,8 @@ Is a decorator the way to apply caching? The owner is not sure, for the same rea
 - **D. A cache around the handler, set up in the registration of the handler.** Cost: a new way to register handlers, in `Cat.Queries`.
 
 Recommendation: A, as question 7 assumes, because the handler stays as it is and only the queries with a setting are cached. This is the owner's call, and the discussion stays open.
+
+The same worry came up for `Cat.Resilience`. There the owner chose, for a later phase, to act only for the types a developer lists, with nothing by default. The retry there wraps the command and query processors and not the handlers, because every try needs a fresh scope, see [Cat.Resilience.md](Cat.Resilience.md#phase-2). A cache needs no fresh scope, so that reason does not apply here.
 <!-- region end: Question 16-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

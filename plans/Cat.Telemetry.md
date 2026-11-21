@@ -52,7 +52,7 @@ A new module, `Cat.Telemetry`, with a shared tracing and metrics setup for all s
 #### The idea
 With many small services, one slow order can touch five of them. Without traces and metrics nobody can follow it. Every service needs the same setup, with the same names, so the pieces fit together.
 
-`Cat.Telemetry` is that shared setup, for projects that do not use Aspire. A project that uses Aspire already has it in `ServiceDefaults` and does not need this module, except to extend it.
+`Cat.Telemetry` is that shared setup, for every project. The demo `ServiceDefaults` calls it, and a project without Aspire calls it in its `Program`.
 
 #### Background
 From the existing modules:
@@ -62,9 +62,19 @@ From the existing modules:
 From the demo plan and the Aspire plan:
 - The demo case is tracing one order across all services.
 - `Aspire ServiceDefaults` sets up logs, metrics and traces with OpenTelemetry, a readiness and a liveness check, and the resilience handler. It exports through OTLP when `OTEL_EXPORTER_OTLP_ENDPOINT` is set.
-- That overlaps with this module on purpose. CAT is a toolbox, so the developer picks what to use. A project with Aspire uses `ServiceDefaults`. A project without Aspire uses this module.
+- None of that needs Aspire. `ServiceDefaults` calls the OpenTelemetry SDK, its instrumentation and the OTLP exporter, which are plain .NET packages.
 - `Cat.Telemetry` must work in projects that do not use Aspire. Modules must not depend on Aspire or on `ServiceDefaults`.
-- In the demo, `ServiceDefaults` covers the basics, and the CAT modules add what it does not, such as the decorators on service requests.
+- In the demo, the CAT modules add what OpenTelemetry does not, such as the decorators on service requests.
+
+From the discussion with the owner (2026-11-20):
+- The payment service becomes an outside provider, called directly from the infrastructure of Orders, see [Demo.md](Demo.md#phase-17). No trace headers should go to a third party, while Orders still records the call as a span.
+- Trace headers are written in the innermost handler, after every `DelegatingHandler`. A boundary for one client therefore sets the propagator of its primary handler, for example to `DistributedContextPropagator.CreateNoOutputPropagator()`. The property for that, `SocketsHttpHandler.ActivityHeadersPropagator`, does not exist in `netstandard2.0`.
+
+From the packages (read in the local NuGet cache, 2026-11-21):
+- `OpenTelemetry.Extensions.Hosting`, `OpenTelemetry.Instrumentation.AspNetCore` and `OpenTelemetry.Instrumentation.Http` 1.21.0 target `netstandard2.0`, `net10.0` and `net11.0`. `Directory.Packages.props` pins them at 1.21.0.
+
+From the resilience plan:
+- `Cat.Resilience` uses the metrics of Polly on the meter `Polly`, with no meter of its own, and `Cat.Telemetry` lists that meter. See [Cat.Resilience.md](Cat.Resilience.md#phase-1). It is the one meter in the list with a name outside the naming scheme in the Decided list.
 
 From the saga plan:
 - Save the trace context in a stored workflow instance, so the second half of a workflow joins the same trace.
@@ -75,135 +85,38 @@ From the architecture:
 
 #### What exists today
 - The module does not exist yet. It is listed in the repo overview of the readme with the status New.
-- The activity sources of the modules exist: `Cat.ServiceRequests` in the service request decorator and `Cat.FluentWorkFlows` in the workflow processor.
+- The activity sources of the modules exist: `Cat.ServiceRequests` in the service request decorator and `Cat.FluentWorkflows` in the workflow processor.
 - `ConfigureOpenTelemetry` in the demo `ServiceDefaults` sets up logs, metrics and traces.
   - Tracing adds the application name and the `Cat.*` sources, plus ASP.NET Core and `HttpClient` instrumentation.
   - Tracing leaves out the `/health` and `/alive` paths.
   - Metrics cover ASP.NET Core, `HttpClient` and the runtime.
   - The OTLP exporter switches on when `OTEL_EXPORTER_OTLP_ENDPOINT` is set.
 - The health checks of `ServiceDefaults` only say the process runs. They check no database yet.
-- Nothing carries the trace context over the Service Bus yet.
+- `Cat.Messaging` leaves the trace context to the Service Bus SDK, which puts its `Diagnostic-Id` on a message when it sends. A message that goes through the outbox is sent later by a background service, so it loses the context of the caller. The listener of `Cat.EventProcessor` continues the trace from the `Diagnostic-Id`.
 
 #### Decided
 - **Independence.** The module works without Aspire.
-- **Overlap.** With Aspire, use `ServiceDefaults` and skip this module. The module exists for projects without Aspire. It may also hold extensions of `ServiceDefaults`, so they are useful outside the demo.
-- **Existing tracing.** The `Cat.*` activity sources stay as they are.
-- **Trace story in the demo.** The demo shows "one order across all services" now, with the trace of a place order call in the Aspire dashboard, and a section in the demo readme with the steps. `ServiceDefaults` already does the HTTP part. Still to check: whether the message hops of `Cat.Messaging` and the Notifications service join the same trace. A hop that does not join is written down in the demo readme as a known gap, and the fix belongs to this module.
+- **Role next to `ServiceDefaults`.** The module is the base for every project. It holds the telemetry setup, and the demo `ServiceDefaults` calls it. A project without Aspire makes the same call in its `Program`. The dependency goes from `ServiceDefaults` to the module, never back (owner, 2026-11-20).
+- **A real module.** One extension method, `AddCatTelemetry`, sets up traces, metrics and logs with the `Cat.*` sources, the filters and the exporter. It follows from the role above, which needs the whole setup in the module (owner, 2026-11-20).
+- **Without Aspire.** The module readme gets a chapter "Without Aspire" with the calls a `Program` makes in place of `ServiceDefaults`, and a note that the telemetry goes over OTLP to any collector. There is no second demo application without Aspire (owner, 2026-11-20).
+- **One project.** `Cat.Telemetry`, with no Abstractions project, like `Cat.Api.Client` and `Cat.Minimal.Api`. Only the host and the infrastructure call it, and each module keeps its own source names. It targets `netstandard2.0;net10.0;net11.0`, because the trace boundary needs `net10.0` or later. It drops `netstandard2.0` when the ASP.NET Core instrumentation does not build for it (owner, 2026-11-21).
+- **Trace boundary.** `AddCatTelemetryBoundary()` on `IHttpClientBuilder` sets the no-output propagator on the primary handler of that client, so no `traceparent`, `tracestate` or `baggage` leaves, and the call is still a span in Orders. It exists only in the `net10.0` and `net11.0` builds. It configures the handler that ends up as primary and never creates one of its own, so a primary handler that the developer set, such as one with a client certificate, stays. A test covers that order. The infrastructure of Orders calls it on the client of the payment provider, next to the external profile of `Cat.Resilience` (owner, 2026-11-21).
+- **Foundation.** OpenTelemetry, with nothing hidden. The modules trace with `ActivitySource` and `Meter` of `System.Diagnostics`. `AddCatTelemetry` sets up the OpenTelemetry SDK and takes callbacks with the OpenTelemetry builders, so a developer adds instrumentation, sources or exporters there. Other backends plug in as OpenTelemetry exporters (owner, 2026-11-21).
+- **Exporters.** OTLP is built in and switched on by `OTEL_EXPORTER_OTLP_ENDPOINT`, as in `ServiceDefaults` today. Every other exporter is the developer's choice, added in the callback. There is no Azure Monitor project in the module. To check: Azure Container Apps has a managed OpenTelemetry agent that takes OTLP and forwards it to Application Insights, Datadog or any OTLP endpoint (owner, 2026-11-21).
+- **Backend.** The toolkit picks no telemetry backend. The developer chooses it, and the module readme only shows how OTLP reaches one. The demo never runs on Azure, so it uses the Aspire dashboard only (owner, 2026-11-21).
+- **Naming scheme.** The source and the meter of a module equal the module name, as they already do: `Cat.FluentWorkflows`, `Cat.Messaging`, `Cat.Scheduling`, `Cat.ServiceRequests` and `Cat.Sql.Cdc`. Span tags use `cat.<module>.<name>` in lowercase snake case, such as `cat.scheduling.job`. Metric tags stay short, such as `job` and `table`, because the meter already names the module. The module readme lists every name. Existing names that do not fit are renamed, such as `ServiceRequestType` to `cat.service_requests.type`. The toolkit is in alpha and the demo is the only user, so a rename breaks nothing outside the repository (owner, 2026-11-21).
+- **Trace context over the Service Bus.** `Cat.Messaging` leaves it to the Service Bus SDK, and `Cat.Outbox` carries it for a message that goes through the outbox, see [Cat.Outbox.md](Cat.Outbox.md#phase-2). `Cat.Telemetry` only lists the `Cat.Messaging` source (owner, 2026-11-21).
+- **Logs and traces.** The OpenTelemetry logging provider links every log record to the trace and the span that run, with no code. The listener of `Cat.EventProcessor` also adds the `CorrelationId` of a message to the log scope, as the gateway does for a request, so all logs of one business flow can be found, also across a trace that broke. See [Cat.EventProcessor.md](Cat.EventProcessor.md#phase-2) (owner, 2026-11-21).
+- **Sampling.** Every trace is kept by default. With a ratio set, the first service keeps that part of the traces and every service after it follows the choice of its caller (a parent based ratio sampler), so a trace is always whole or gone. To check when building: whether the OpenTelemetry SDK for .NET reads `OTEL_TRACES_SAMPLER` and `OTEL_TRACES_SAMPLER_ARG`. If it does, the module uses those variables and adds no setting of its own. If not, the setting is `Cat:Telemetry:SamplingRatio` (owner, 2026-11-21).
+- **Tracing filters.** The module drops the traces of the health endpoints, as `ServiceDefaults` does. The paths are a setting, with `/health` and `/alive` as the defaults, so a developer with other paths, such as `/healthz`, changes the list (owner, 2026-11-21).
+- **Personal data.** The module readme has a guideline: personal data stays out of tags and span names. The tags the toolkit sets itself carry ids, never names or email addresses. The module adds no filter on tag names. The readme shows how a developer adds an OpenTelemetry processor of their own in the callback. To check when building: whether the ASP.NET Core instrumentation hides query strings by default (owner, 2026-11-21).
+- **Metrics.** `Cat.Telemetry` adds no metrics of its own. It lists the meters of the modules, plus the ASP.NET Core, `HttpClient` and runtime metrics, as `ServiceDefaults` does. As part of this phase, the service request decorator of `Cat.ServiceRequests` gets the meter `Cat.ServiceRequests`, with a count and a duration per call and the tags `type` and `outcome`. Commands and queries get no meter until a real case asks for one (owner, 2026-11-21).
+- **Health checks.** Out of scope, because they are not telemetry. The chapter "Without Aspire" of the module readme shows the plain ASP.NET Core lines for `/health` and `/alive`. A module that has something to check offers its own `IHealthCheck`, as `Cat.EventProcessor` does (owner, 2026-11-21).
+- **Existing tracing.** Each module keeps its own activity source and meter, with the names of the naming scheme. `Cat.Telemetry` only lists them in `AddCatTelemetry`. Nothing moves into this module, so no module depends on it, and a developer with an own OpenTelemetry setup adds the sources by name (owner, 2026-11-21).
+- **Trace story in the demo.** The demo shows "one order across all services" now, with the trace of a place order call in the Aspire dashboard, and a section in the demo readme with the steps. `ServiceDefaults` already does the HTTP part. Still to check: whether the message hops of `Cat.Messaging` and the Notifications service join the same trace. A hop that does not join is written down in the demo readme as a known gap. The fix for the outbox belongs to `Cat.Outbox`, see the decision on the trace context above (owner, 2026-11-21).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-Is it a module at all? This is the blocking question. What does it add beyond a few lines of OpenTelemetry setup? The module is for projects without Aspire, so it needs a minimum setup, and the rest only extends `ServiceDefaults`. The options:
-- **A real module.** One extension method sets up traces, metrics and logs with the `Cat.*` sources, the filters and the exporter. Cost: it repeats what `ServiceDefaults` does, and has to keep up with OpenTelemetry versions.
-- **A small module with only what Aspire lacks.** The naming constants, the trace context over messages (question 6), the personal data filter (question 10) and the `Cat.*` source list. The setup stays a few documented lines. Cost: the module is thin.
-- **Documentation only.** A readme chapter with the setup. Cost: no code to reuse, and developers copy and paste.
-
-Recommendation: the small module. The setup is a few lines that every developer knows from the OpenTelemetry docs, and the real value is the shared names and the propagation. It still gives one `AddCatTelemetry` call as a convenience.
-<!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-What is the foundation: OpenTelemetry only, or other backends too? How much of the OpenTelemetry API do we hide, and how much do we expose? The options:
-- **OpenTelemetry only, nothing hidden.** The module uses `ActivitySource` and `Meter` from .NET and the OpenTelemetry SDK. Cost: none, and it is the standard.
-- **Our own abstraction** over tracing. Cost: a lot of surface for no gain, since `System.Diagnostics` is already the abstraction.
-
-Recommendation: OpenTelemetry only, with `System.Diagnostics` as the API in the modules. Other backends plug in as OpenTelemetry exporters.
-<!-- region end: Question 2-->
-
-<!-- region start: Question 3-->
-#### Question 3
-Which exporters do we support, and which telemetry backend will you really use in Azure? The options:
-- **OTLP only.** Every backend (Grafana, Aspire dashboard, Azure Monitor through a collector) takes OTLP. Cost: the developer sets up a collector for Azure Monitor.
-- **OTLP plus the Azure Monitor exporter** as an optional project. Cost: one more project, and it targets `net10.0;net11.0` when it cannot target `netstandard2.0`, see the target framework rule in `CLAUDE.md`.
-- **Leave exporters to the application.** The module only sets up the sources. Cost: none, and it is what `ServiceDefaults` does with its OTLP switch.
-
-Recommendation: OTLP built in (switched on by `OTEL_EXPORTER_OTLP_ENDPOINT`, like `ServiceDefaults`), the rest the application's choice. This needs the owner's answer for Azure: Application Insights, Grafana or something else decides whether the optional Azure project is worth it.
-<!-- region end: Question 3-->
-
-<!-- region start: Question 4-->
-#### Question 4
-Which metrics, for which parts? The options:
-- **Counts and durations per service request only,** since the service request decorator already has an activity.
-- **Per command, query and workflow too.** Cost: more instruments and more cardinality.
-- **Only on request by the developer,** with a switch per part. Cost: a setting per part.
-
-Recommendation: counts, durations and failure counts per service request, and the same for command and query as an option in the registration. The owner decides which metrics matter first, and this is the recommended minimum.
-<!-- region end: Question 4-->
-
-<!-- region start: Question 5-->
-#### Question 5
-Do we want one naming scheme for activity sources, meters, tags and span names? The `Cat.*` prefix is the start, and today it is not consistent: the workflow source is `Cat.FluentWorkFlows`, which is now `Cat.FluentWorkflows`, see the [module readme of Cat.FluentWorkflows](../modules/Cat.FluentWorkflows/README.md). The options:
-- **Yes, one scheme:** source and meter names equal the module name (`Cat.Messaging`), tags in a `cat.` prefix (`cat.job.name`). Cost: a rename of a few existing names.
-- **No scheme,** each module picks. Cost: a developer cannot predict names.
-
-Recommendation: yes, the module name as the source and meter name, and a short tag list in the module readme. The rename of the workflow source goes with the FluentWorkflows answer.
-<!-- region end: Question 5-->
-
-<!-- region start: Question 6-->
-#### Question 6
-Who carries the trace context over the Service Bus: this module or `Cat.Messaging`? The Service Bus SDK already puts the trace context (`Diagnostic-Id`) on a message, see [Cat.Messaging.md](../modules/Cat.Messaging/README.md). The options:
-- **`Cat.Messaging`,** since the SDK does it and the module sets the properties. Cost: none for `Cat.Telemetry`.
-- **This module** with a helper that writes and reads the context. Cost: messaging then depends on telemetry, which the toolbox rule does not like.
-
-Recommendation: `Cat.Messaging`. `Cat.Telemetry` only makes sure the `Cat.Messaging` source is listed.
-<!-- region end: Question 6-->
-
-<!-- region start: Question 7-->
-#### Question 7
-How do logs relate to traces? The options:
-- **The built-in .NET link.** The logger adds the trace id and span id to every log record while an activity is on. Cost: none, if the OpenTelemetry logging provider is on.
-- **A correlation id in every log scope too.** Cost: one more id to carry, and the `CorrelationId` of a message (see [Cat.Messaging.md](../modules/Cat.Messaging/README.md)) already covers a business flow.
-
-Recommendation: the built-in link by default, and the correlation id of the message as a log scope in the event processor.
-<!-- region end: Question 7-->
-
-<!-- region start: Question 8-->
-#### Question 8
-What are the defaults and the configuration for sampling? The options:
-- **Always on** (the default of OpenTelemetry in a demo). Cost: expensive in production.
-- **A ratio based sampler,** configured in `appsettings`. Cost: a setting.
-- **Left to the application.** Cost: none, but no default.
-
-Recommendation: always on by default, with the ratio in a setting (`Cat:Telemetry:SamplingRatio`). A demo needs all traces, and a real service sets a ratio.
-<!-- region end: Question 8-->
-
-<!-- region start: Question 9-->
-#### Question 9
-Are health checks in scope or not? `ServiceDefaults` has them today (the `self` check only). The options:
-- **Out of scope.** They are not telemetry. Cost: a project without Aspire must write its own.
-- **In scope** as an optional project with the readiness and liveness endpoints. Cost: scope creep, and it overlaps with the optional health check in the [module readme of Cat.EventProcessor](../modules/Cat.EventProcessor/README.md).
-
-Recommendation: out of scope. The name is `Cat.Telemetry`, and a health check is a separate concern. Other modules offer their own `IHealthCheck`.
-<!-- region end: Question 9-->
-
-<!-- region start: Question 10-->
-#### Question 10
-Do we want a rule for personal data in telemetry? Personal data must stay out of tags. The options:
-- **A guideline in the readme.** Cost: nobody enforces it.
-- **A filter** that removes known tags (such as `user.email`) before export. Cost: a list of names that is never complete.
-- **Both.**
-
-Recommendation: both, with a small filter on a short list of tag names.
-<!-- region end: Question 10-->
-
-<!-- region start: Question 11-->
-#### Question 11
-Do we also adopt the tracing filters of `ServiceDefaults`, such as the `/health` paths, in the module? The options:
-- **Yes, the same filters,** for health checks and alive endpoints. Cost: none, and the traces look the same in both setups.
-- **No.** Cost: a project without Aspire gets noisy traces.
-
-Recommendation: yes, the same filters, with the paths as a setting.
-<!-- region end: Question 11-->
-
-<!-- region start: Question 12-->
-#### Question 12
-Should the existing activity sources move into this module, or stay in their own decorators? The options:
-- **Stay.** Each module owns its source, and this module only lists them. Cost: none.
-- **Move.** Cost: every module that traces then depends on `Cat.Telemetry`, which breaks the toolbox rule.
-
-Recommendation: stay. This module lists the `Cat.*` sources in one place and sets the naming scheme (question 5).
-<!-- region end: Question 12-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

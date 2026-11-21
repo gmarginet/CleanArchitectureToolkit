@@ -119,6 +119,8 @@ Which Aspire parts, if any, may the template include? The modules never depend o
 - **An option that also creates a `ServiceDefaults` project.** Cost: the template then holds Aspire code that has to stay current.
 
 Recommendation: none in the first version, and a readme in the generated service with the three lines to add. The `cat-internal-create-demo-unit` skill does the same by hand for the demo, which shows how much the wiring varies.
+
+`Cat.Resilience` and `Cat.Telemetry` are planned as the base that `ServiceDefaults` calls, and a project without Aspire calls them in its `Program`, see [Cat.Resilience.md](Cat.Resilience.md#phase-1) and [Cat.Telemetry.md](Cat.Telemetry.md#phase-1). A template without Aspire could then add those two calls, once the modules exist.
 <!-- region end: Question 4-->
 
 <!-- region start: Question 5-->
