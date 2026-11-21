@@ -41,7 +41,6 @@
 - [Phase 9](#phase-9)
 - [Phase 10](#phase-10)
 - [Phase 13](#phase-13)
-- [Phase 16](#phase-16)
 - [Phase 18](#phase-18)
 <!-- region end: Phases-->
 
@@ -213,39 +212,6 @@ Notifications runs on a PostgreSQL container that the AppHost starts. The outbox
 <!-- region start: PhaseOpenQuestions-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 13-->
-
-<!-- region start: Phase 16-->
-## Phase 16
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Refund a payment that answers after the payment timeout, so the money does not stay taken when the order is already cancelled.
-
-#### What exists today
-- The place order saga waits for `PaymentProcessed` for `Orders:PaymentTimeoutSeconds` (2 minutes by default). When the timeout comes first, the workflow cancels the order with the reason `PaymentUnavailable` and ends. Nothing is saved for the payment.
-- Payment keeps a `TakePayment` request in its queue while it is down or busy. It can take the payment long after the order was cancelled, and then it publishes `PaymentProcessed`.
-- The saga ignores an answer for an instance that is not waiting any more. Orders never saves that payment, so there is no `Payment` row to refund.
-- The refund of a cancelled order works for a payment that Orders saved with the status `Approved`. `PaymentRefundSubscriber` finds no such payment after a `PaymentUnavailable` cancel, so it sends nothing.
-- Payment remembers its payments and its refunds in memory. A `RefundPayment` for an order number it has no payment for answers `Refunded` false, and remembers nothing.
-- The demo readme lists this under the Orders cons.
-
-#### What changed with the outside provider
-- Payment is an outside provider, see the [demo readme](../demo/README.md#payment-service). `TakePayment` waits in a queue of Orders, and the handler of Orders calls the provider. The late payment happens when that handler runs after the saga timed out, for example when the provider was down and the message comes in again.
-- A rule inside the provider, such as a note for an order number that was not charged, is no longer realistic. A real provider does not get rules from us.
-- `ICatSagaStore.FindAsync` in `Cat.Sagas.Abstractions` returns the instance with its status, so the handler can see whether the saga still waits.
-
-#### Done when
-A payment that answers after the order was cancelled for `PaymentUnavailable` is refunded, and the demo readme says where.
-
-#### Decided
-- **The handler checks the saga.** Before it calls the provider, the handler of `TakePayment` reads the saga instance with `ICatSagaStore.FindAsync`. When the saga no longer waits, it does not charge. When the saga timed out while the call ran, the handler sees that after the call and calls the refund endpoint of the provider at once, with the saga id as the idempotency key. A crash between the charge and the refund is safe, because the repeated message gets the first charge back from the provider and then refunds. The demo readme explains the race (owner, 2026-11-21).
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 16-->
 
 <!-- region start: Phase 18-->
 ## Phase 18

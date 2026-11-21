@@ -2,6 +2,7 @@ using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Demo.OrderService.CoreService.Commands;
 using Cat.Demo.OrderService.CoreService.Messages;
 using Cat.Demo.OrderService.CoreService.ServiceRequestHandlers;
+using Cat.Sagas.Abstractions;
 using Cat.UnitTesting.Commands;
 
 namespace Cat.Demo.OrderService.CoreService.Tests;
@@ -32,13 +33,32 @@ public class PaymentProviderHandlerTests
         }
     }
 
+    private sealed class FakeSagaStore : ICatSagaStore
+    {
+        public Queue<CatSagaStatus?> Statuses { get; } = new();
+
+        public CatSagaStatus? Default { get; set; } = CatSagaStatus.Waiting;
+
+        public Task<CatSagaInstance?> FindAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var status = Statuses.Count > 0 ? Statuses.Dequeue() : Default;
+            return Task.FromResult(status is null ? null : new CatSagaInstance { Id = id, Status = status.Value });
+        }
+
+        public Task AddAsync(CatSagaInstance instance, CancellationToken cancellationToken = default) => throw new NotSupportedException();
+
+        public Task UpdateAsync(CatSagaInstance instance, CancellationToken cancellationToken = default) => throw new NotSupportedException();
+    }
+
     private FakePaymentProvider _provider = null!;
+    private FakeSagaStore _sagas = null!;
     private FakeCommandProcessor _commands = null!;
 
     [SetUp]
     public void SetUp()
     {
         _provider = new FakePaymentProvider();
+        _sagas = new FakeSagaStore();
         _commands = new FakeCommandProcessor().Apply();
     }
 
@@ -47,7 +67,7 @@ public class PaymentProviderHandlerTests
     {
         var request = new TakePayment { OrderNumber = "20261121-0001", Amount = 42.5m };
 
-        var response = await new TakePaymentHandler(_provider, _commands).HandleAsync(request);
+        var response = await new TakePaymentHandler(_provider, _commands, _sagas).HandleAsync(request);
 
         Assert.That(response.IsSucceeded, Is.True);
         Assert.That(_provider.Charges.Single(), Is.EqualTo((request.CorrelationId.ToString(), "20261121-0001", 42.5m)));
@@ -61,7 +81,7 @@ public class PaymentProviderHandlerTests
         _provider.Charge = new PaymentChargeResult(false, null);
         var request = new TakePayment { OrderNumber = "20261121-0001", Amount = 900m };
 
-        var response = await new TakePaymentHandler(_provider, _commands).HandleAsync(request);
+        var response = await new TakePaymentHandler(_provider, _commands, _sagas).HandleAsync(request);
 
         Assert.That(response.IsSucceeded, Is.True);
         Assert.That(_commands.Of<PaymentProcessedPublishCommand>().Single().Approved, Is.False);
@@ -72,11 +92,64 @@ public class PaymentProviderHandlerTests
     {
         _provider.Charge = new PaymentChargeResult(false, null, Unavailable: true);
 
-        var response = await new TakePaymentHandler(_provider, _commands)
+        var response = await new TakePaymentHandler(_provider, _commands, _sagas)
             .HandleAsync(new TakePayment { OrderNumber = "20261121-0001", Amount = 10m });
 
         Assert.That(response.IsFailed, Is.True);
         Assert.That(_commands.Of<PaymentProcessedPublishCommand>(), Is.Empty);
+    }
+
+    [Test]
+    public async Task TakePayment_ASagaThatNoLongerWaits_DoesNotChargeAndRefundsWithTheSagaIdAsTheKey()
+    {
+        _sagas.Default = CatSagaStatus.Completed;
+        var request = new TakePayment { OrderNumber = "20261121-0001", Amount = 42.5m };
+
+        var response = await new TakePaymentHandler(_provider, _commands, _sagas).HandleAsync(request);
+
+        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(_provider.Charges, Is.Empty);
+        Assert.That(_provider.Refunds.Single(), Is.EqualTo((request.CorrelationId.ToString(), "20261121-0001")));
+        Assert.That(_commands.Of<PaymentProcessedPublishCommand>(), Is.Empty);
+    }
+
+    [Test]
+    public async Task TakePayment_ASagaThatTimesOutWhileTheProviderWorks_RefundsTheChargeAtOnce()
+    {
+        _sagas.Statuses.Enqueue(CatSagaStatus.Waiting);
+        _sagas.Statuses.Enqueue(CatSagaStatus.Completed);
+        var request = new TakePayment { OrderNumber = "20261121-0001", Amount = 42.5m };
+
+        var response = await new TakePaymentHandler(_provider, _commands, _sagas).HandleAsync(request);
+
+        Assert.That(response.IsSucceeded, Is.True);
+        Assert.That(_provider.Charges, Has.Count.EqualTo(1));
+        Assert.That(_provider.Refunds.Single(), Is.EqualTo((request.CorrelationId.ToString(), "20261121-0001")));
+        Assert.That(_commands.Of<PaymentProcessedPublishCommand>(), Is.Empty);
+    }
+
+    [Test]
+    public async Task TakePayment_ALateRefundThatCannotBeAnswered_FailsSoTheMessageComesAgain()
+    {
+        _sagas.Default = CatSagaStatus.Completed;
+        _provider.Refund = new PaymentRefundResult(false, Unavailable: true);
+
+        var response = await new TakePaymentHandler(_provider, _commands, _sagas)
+            .HandleAsync(new TakePayment { OrderNumber = "20261121-0001", Amount = 10m });
+
+        Assert.That(response.IsFailed, Is.True);
+    }
+
+    [Test]
+    public async Task TakePayment_ADeclineAfterTheSagaTimedOut_IsNotRefunded()
+    {
+        _sagas.Statuses.Enqueue(CatSagaStatus.Waiting);
+        _sagas.Statuses.Enqueue(CatSagaStatus.Completed);
+        _provider.Charge = new PaymentChargeResult(false, null);
+
+        await new TakePaymentHandler(_provider, _commands, _sagas).HandleAsync(new TakePayment { OrderNumber = "20261121-0001", Amount = 10m });
+
+        Assert.That(_provider.Refunds, Is.Empty);
     }
 
     [Test]
