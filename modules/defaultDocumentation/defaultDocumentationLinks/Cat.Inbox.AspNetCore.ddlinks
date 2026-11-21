@@ -1,0 +1,12 @@
+../../../Cat.Inbox/namespaces/Cat.Inbox.AspNetCore/
+F:Cat.Inbox.AspNetCore.CatInboxEndpointFilter.MessageTypeMaxLength|CatInboxEndpointFilter.MessageTypeMaxLength.md|MessageTypeMaxLength
+M:Cat.Inbox.AspNetCore.CatInboxEndpointFilter.InvokeAsync(Microsoft.AspNetCore.Http.EndpointFilterInvocationContext,Microsoft.AspNetCore.Http.EndpointFilterDelegate,System.Func{Microsoft.AspNetCore.Http.EndpointFilterInvocationContext,System.String},System.String,System.Int32)|CatInboxEndpointFilter.InvokeAsync.41LCSYPP9Q371KV72IKYKILE8.md|InvokeAsync(EndpointFilterInvocationContext, EndpointFilterDelegate, Func<EndpointFilterInvocationContext,string>, string, int)
+M:Cat.Inbox.AspNetCore.CatInboxEndpointFilter.IsFailure(System.Object)|CatInboxEndpointFilter.IsFailure.Z389552NJHX5N5YS9SMJX1MP3.md|IsFailure(object)
+M:Cat.Inbox.AspNetCore.CatInboxEndpointFilter.MessageTypeOf(Microsoft.AspNetCore.Http.HttpContext)|CatInboxEndpointFilter.MessageTypeOf.ZHE42MOQ58OC8MJ7CZPQTCWB7.md|MessageTypeOf(HttpContext)
+N:Cat.Inbox.AspNetCore|Cat.Inbox.AspNetCore.md|Cat.Inbox.AspNetCore
+T:Cat.Inbox.AspNetCore.CatInboxEndpointFilter|CatInboxEndpointFilter.md|CatInboxEndpointFilter
+M:Cat.Inbox.AspNetCore.Extensions.EndpointConventionBuilderExtensions.WithCatInbox``1(``0,System.String,System.Int32)|EndpointConventionBuilderExtensions.WithCatInbox.md#Cat.Inbox.AspNetCore.Extensions.EndpointConventionBuilderExtensions.WithCatInbox_TBuilder_(thisTBuilder,string,int)|WithCatInbox<TBuilder>(this TBuilder, string, int)
+M:Cat.Inbox.AspNetCore.Extensions.EndpointConventionBuilderExtensions.WithCatInbox``2(``0,System.Func{``1,System.String},System.Int32)|EndpointConventionBuilderExtensions.WithCatInbox.md#Cat.Inbox.AspNetCore.Extensions.EndpointConventionBuilderExtensions.WithCatInbox_TBuilder,TArgument_(thisTBuilder,System.Func_TArgument,string_,int)|WithCatInbox<TBuilder,TArgument>(this TBuilder, Func<TArgument,string>, int)
+N:Cat.Inbox.AspNetCore.Extensions|Cat.Inbox.AspNetCore.Extensions.md|Cat.Inbox.AspNetCore.Extensions
+T:Cat.Inbox.AspNetCore.Extensions.EndpointConventionBuilderExtensions|EndpointConventionBuilderExtensions.md|EndpointConventionBuilderExtensions
+?:Cat.Inbox.AspNetCore.Extensions.EndpointConventionBuilderExtensions.WithCatInbox|EndpointConventionBuilderExtensions.WithCatInbox.md|WithCatInbox

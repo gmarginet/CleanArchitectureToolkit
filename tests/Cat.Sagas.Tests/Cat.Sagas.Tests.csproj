@@ -30,7 +30,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\modules\Cat.FluentWorkflows\Cat.FluentWorkflows\Cat.FluentWorkflows.csproj" />
-      <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Inbox.EFCore\Cat.EventProcessor.Inbox.EFCore.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Inbox\Cat.EventProcessor.Inbox.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Inbox\Cat.Inbox.EFCore\Cat.Inbox.EFCore.csproj" />
       <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor\Cat.EventProcessor.csproj" />
       <ProjectReference Include="..\..\modules\Cat.ServiceRequests\Cat.ServiceRequests\Cat.ServiceRequests.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Outbox\Cat.Outbox.EFCore\Cat.Outbox.EFCore.csproj" />

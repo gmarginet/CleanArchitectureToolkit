@@ -1,6 +1,7 @@
 using Cat.EventProcessor.Abstractions;
-using Cat.EventProcessor.Inbox.EFCore;
-using Cat.EventProcessor.Inbox.EFCore.Extensions;
+using Cat.Inbox.Abstractions;
+using Cat.Inbox.EFCore;
+using Cat.Inbox.EFCore.Extensions;
 using Cat.Messaging.Abstractions;
 using Cat.Outbox.Abstractions;
 using Cat.Outbox.EFCore;
@@ -29,7 +30,7 @@ public class StoreDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         Cat.Outbox.EFCore.ModelBuilderExtensions.AddCatOutbox(modelBuilder);
-        Cat.EventProcessor.Inbox.EFCore.ModelBuilderExtensions.AddCatInbox(modelBuilder);
+        Cat.Inbox.EFCore.ModelBuilderExtensions.AddCatInbox(modelBuilder);
         Cat.Scheduling.EFCore.ModelBuilderExtensions.AddCatScheduling(modelBuilder);
         Cat.Sagas.EFCore.ModelBuilderExtensions.AddCatSagas(modelBuilder);
     }
@@ -49,7 +50,7 @@ public partial class EfCoreStoreIntegrationTests
         var services = new ServiceCollection();
         services.AddDbContext<StoreDbContext>(options => UseDatabase(options, ConnectionString));
         services.AddCatOutboxEfCore<StoreDbContext>();
-        services.AddCatEventProcessorInbox<StoreDbContext>();
+        services.AddCatInboxEfCore<StoreDbContext>();
         services.AddCatSchedulingEFCore<StoreDbContext>();
         services.AddCatSagasEFCore<StoreDbContext>();
         _provider = services.BuildServiceProvider();

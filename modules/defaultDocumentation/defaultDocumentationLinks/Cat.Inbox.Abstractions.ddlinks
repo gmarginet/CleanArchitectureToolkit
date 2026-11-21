@@ -1,0 +1,6 @@
+../../../Cat.Inbox/namespaces/Cat.Inbox.Abstractions/
+M:Cat.Inbox.Abstractions.ICatInboxStore.ExistsAsync(System.String,System.Threading.CancellationToken)|ICatInboxStore.ExistsAsync.NC4ZVEIUW9TNMFK0HOYNLR8L8.md|ExistsAsync(string, CancellationToken)
+M:Cat.Inbox.Abstractions.ICatInboxStore.Add(System.String,System.String)|ICatInboxStore.Add.U5V1EPHTLIOR0PP9HU7E6POH5.md|Add(string, string)
+M:Cat.Inbox.Abstractions.ICatInboxStore.DeleteOlderThanAsync(System.DateTimeOffset,System.Threading.CancellationToken)|ICatInboxStore.DeleteOlderThanAsync.ZSNZ2XNKS2TRPMDQ6MEZAWH6.md|DeleteOlderThanAsync(DateTimeOffset, CancellationToken)
+N:Cat.Inbox.Abstractions|Cat.Inbox.Abstractions.md|Cat.Inbox.Abstractions
+T:Cat.Inbox.Abstractions.ICatInboxStore|ICatInboxStore.md|ICatInboxStore

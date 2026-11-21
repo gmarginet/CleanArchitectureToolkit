@@ -49,10 +49,9 @@ P:Cat.EventProcessor.Abstractions.CatSettlementResult.Reason|CatSettlementResult
 P:Cat.EventProcessor.Abstractions.CatSettlementResult.Description|CatSettlementResult.Description.md|Description
 M:Cat.EventProcessor.Abstractions.CatSettlementResult.#ctor(Cat.EventProcessor.Abstractions.CatSettlement,System.String,System.String)|CatSettlementResult..ctor.8L1211XEWVENYM40Q5RLHWTC.md|CatSettlementResult(CatSettlement, string, string)
 T:Cat.EventProcessor.Abstractions.CatSettlementResult|CatSettlementResult.md|CatSettlementResult
-M:Cat.EventProcessor.Abstractions.ICatInboxStore.ExistsAsync(System.String,System.Threading.CancellationToken)|ICatInboxStore.ExistsAsync.4N8X6TCE59U7MPLFMFY3AFQ59.md|ExistsAsync(string, CancellationToken)
-M:Cat.EventProcessor.Abstractions.ICatInboxStore.Add(System.String,System.String)|ICatInboxStore.Add.UU452UCKDNFMMBAMI19088PP6.md|Add(string, string)
-M:Cat.EventProcessor.Abstractions.ICatInboxStore.DeleteOlderThanAsync(System.DateTimeOffset,System.Threading.CancellationToken)|ICatInboxStore.DeleteOlderThanAsync.WB2WHNQ1XCFHHLAQSSY6OFS7.md|DeleteOlderThanAsync(DateTimeOffset, CancellationToken)
-T:Cat.EventProcessor.Abstractions.ICatInboxStore|ICatInboxStore.md|ICatInboxStore
+M:Cat.EventProcessor.Abstractions.ICatHandledMessages.WasHandledAsync(System.String,System.Threading.CancellationToken)|ICatHandledMessages.WasHandledAsync.JBNDRWBMDFI99Q1KSK1VT93T6.md|WasHandledAsync(string, CancellationToken)
+M:Cat.EventProcessor.Abstractions.ICatHandledMessages.MarkHandled(System.String,System.String)|ICatHandledMessages.MarkHandled.V2UADE1CLQW8M7YJS2VYHCE7D.md|MarkHandled(string, string)
+T:Cat.EventProcessor.Abstractions.ICatHandledMessages|ICatHandledMessages.md|ICatHandledMessages
 M:Cat.EventProcessor.Abstractions.ICatMessageAuthorizer.AuthorizeAsync(Cat.EventProcessor.Abstractions.CatIncomingMessage,Cat.EventProcessor.Abstractions.CatReceiveOptions,System.Threading.CancellationToken)|ICatMessageAuthorizer.AuthorizeAsync.TPMAGSOMK6XLIJQYYP93QM4O8.md|AuthorizeAsync(CatIncomingMessage, CatReceiveOptions, CancellationToken)
 T:Cat.EventProcessor.Abstractions.ICatMessageAuthorizer|ICatMessageAuthorizer.md|ICatMessageAuthorizer
 M:Cat.EventProcessor.Abstractions.ICatMessageReceiver.ReceiveAsync(System.Type,Cat.EventProcessor.Abstractions.CatIncomingMessage,System.Threading.CancellationToken)|ICatMessageReceiver.ReceiveAsync.UJS0V9JE5RJ3PJ8Y16HANUS24.md|ReceiveAsync(Type, CatIncomingMessage, CancellationToken)

@@ -12,7 +12,7 @@
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Commands\Cat.EFCore.Commands.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Extensions.SqlServer\Cat.EFCore.Extensions.SqlServer.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Queries\Cat.EFCore.Queries.csproj" />
-      <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Inbox.EFCore\Cat.EventProcessor.Inbox.EFCore.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Inbox\Cat.Inbox.EFCore\Cat.Inbox.EFCore.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging\Cat.Messaging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.AzureServiceBus\Cat.Messaging.AzureServiceBus.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Outbox\Cat.Outbox.EFCore\Cat.Outbox.EFCore.csproj" />

@@ -29,7 +29,7 @@
 ## CatReceiveOptions\.UseInbox Property
 
 Switches the inbox on for this message type\. The receiver then skips a message that was handled before\.
-It needs an [ICatInboxStore](ICatInboxStore.md 'Cat\.EventProcessor\.Abstractions\.ICatInboxStore') in the service, such as the one of `Cat.EventProcessor.Inbox.EFCore`\.
+It needs an [ICatHandledMessages](ICatHandledMessages.md 'Cat\.EventProcessor\.Abstractions\.ICatHandledMessages') in the service, such as the one of `Cat.EventProcessor.Inbox`, which uses the inbox of `Cat.Inbox`\.
 The default is false, so a message type has no inbox unless you ask for it\.
 
 ```csharp

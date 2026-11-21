@@ -1,0 +1,17 @@
+../../../Cat.Inbox/namespaces/Cat.Inbox.EFCore/
+P:Cat.Inbox.EFCore.CatInboxMessage.MessageId|CatInboxMessage.MessageId.md|MessageId
+P:Cat.Inbox.EFCore.CatInboxMessage.MessageType|CatInboxMessage.MessageType.md|MessageType
+P:Cat.Inbox.EFCore.CatInboxMessage.HandledAt|CatInboxMessage.HandledAt.md|HandledAt
+N:Cat.Inbox.EFCore|Cat.Inbox.EFCore.md|Cat.Inbox.EFCore
+T:Cat.Inbox.EFCore.CatInboxMessage|CatInboxMessage.md|CatInboxMessage
+F:Cat.Inbox.EFCore.EfCoreInboxStore`1._dbContext|EfCoreInboxStore_TDbContext_._dbContext.md|_dbContext
+M:Cat.Inbox.EFCore.EfCoreInboxStore`1.#ctor(`0)|EfCoreInboxStore_TDbContext_..ctor.3NDP0LCS64OG6ENCMLJ8E9S0F.md|EfCoreInboxStore(TDbContext)
+M:Cat.Inbox.EFCore.EfCoreInboxStore`1.ExistsAsync(System.String,System.Threading.CancellationToken)|EfCoreInboxStore_TDbContext_.ExistsAsync.M8IPLW4QKNSR7KJUJ5UH2QKF1.md|ExistsAsync(string, CancellationToken)
+M:Cat.Inbox.EFCore.EfCoreInboxStore`1.Add(System.String,System.String)|EfCoreInboxStore_TDbContext_.Add.8520AR5FQZLUJWHGWT5HKWALE.md|Add(string, string)
+M:Cat.Inbox.EFCore.EfCoreInboxStore`1.DeleteOlderThanAsync(System.DateTimeOffset,System.Threading.CancellationToken)|EfCoreInboxStore_TDbContext_.DeleteOlderThanAsync.T3H8ACNC0L2Q4VN44IF79SNQ3.md|DeleteOlderThanAsync(DateTimeOffset, CancellationToken)
+T:Cat.Inbox.EFCore.EfCoreInboxStore`1|EfCoreInboxStore_TDbContext_.md|EfCoreInboxStore<TDbContext>
+M:Cat.Inbox.EFCore.ModelBuilderExtensions.AddCatInbox(Microsoft.EntityFrameworkCore.ModelBuilder)|ModelBuilderExtensions.AddCatInbox.63AAC2LQWDZDZ9K1VLGFR1HHB.md|AddCatInbox(this ModelBuilder)
+T:Cat.Inbox.EFCore.ModelBuilderExtensions|ModelBuilderExtensions.md|ModelBuilderExtensions
+M:Cat.Inbox.EFCore.Extensions.ServiceCollectionExtensions.AddCatInboxEfCore``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatInboxEfCore.AQ1FVW8WB6F7HQOF875OPMA99.md|AddCatInboxEfCore<TDbContext>(this IServiceCollection)
+N:Cat.Inbox.EFCore.Extensions|Cat.Inbox.EFCore.Extensions.md|Cat.Inbox.EFCore.Extensions
+T:Cat.Inbox.EFCore.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

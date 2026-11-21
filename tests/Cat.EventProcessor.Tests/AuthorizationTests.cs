@@ -61,7 +61,7 @@ public class AuthorizationTests
         services.AddScoped<ICatServiceRequestProcessor>(provider => new SeenProcessor(_processor, provider.GetService<ICatUserAccessor>()));
         if (withStore)
         {
-            services.AddScoped<ICatInboxStore>(_ => _store);
+            services.AddScoped<ICatHandledMessages>(_ => _store);
         }
 
         var configuration = new ConfigurationBuilder().Build();
@@ -469,16 +469,13 @@ public class AuthorizationTests
         Options.Create(new CatEventProcessorServiceBusOptions()), new ListenerStatus(), NullLogger<ServiceBusListener>.Instance,
         provider.GetRequiredService<IServiceProviderIsService>());
 
-    private sealed class FakeStore : ICatInboxStore
+    private sealed class FakeStore : ICatHandledMessages
     {
         public List<(string Id, string Type)> Added { get; } = new();
 
-        public Task<bool> ExistsAsync(string messageId, CancellationToken cancellationToken = default) => Task.FromResult(false);
+        public Task<bool> WasHandledAsync(string messageId, CancellationToken cancellationToken = default) => Task.FromResult(false);
 
-        public void Add(string messageId, string messageType) => Added.Add((messageId, messageType));
-
-        public Task<int> DeleteOlderThanAsync(DateTimeOffset handledBefore, CancellationToken cancellationToken = default) =>
-            Task.FromResult(0);
+        public void MarkHandled(string messageId, string messageType) => Added.Add((messageId, messageType));
     }
 
     /// <summary>

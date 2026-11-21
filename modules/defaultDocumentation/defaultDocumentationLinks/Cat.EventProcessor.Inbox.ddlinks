@@ -1,0 +1,10 @@
+../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Inbox/
+F:Cat.EventProcessor.Inbox.InboxHandledMessages._store|InboxHandledMessages._store.md|_store
+M:Cat.EventProcessor.Inbox.InboxHandledMessages.#ctor(Cat.Inbox.Abstractions.ICatInboxStore)|InboxHandledMessages..ctor.T9U27FQMUCMXF8FG79CRDENE2.md|InboxHandledMessages(ICatInboxStore)
+M:Cat.EventProcessor.Inbox.InboxHandledMessages.WasHandledAsync(System.String,System.Threading.CancellationToken)|InboxHandledMessages.WasHandledAsync.B79SADYNEIHXQ6Z9MFXFUT0N2.md|WasHandledAsync(string, CancellationToken)
+M:Cat.EventProcessor.Inbox.InboxHandledMessages.MarkHandled(System.String,System.String)|InboxHandledMessages.MarkHandled.H9D508EPGI2VLXP65T2X9RAD2.md|MarkHandled(string, string)
+N:Cat.EventProcessor.Inbox|Cat.EventProcessor.Inbox.md|Cat.EventProcessor.Inbox
+T:Cat.EventProcessor.Inbox.InboxHandledMessages|InboxHandledMessages.md|InboxHandledMessages
+M:Cat.EventProcessor.Inbox.Extensions.ServiceCollectionExtensions.AddCatEventProcessorInbox(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatEventProcessorInbox.RHS76NL4766H6RKDT54T6HNK7.md|AddCatEventProcessorInbox(this IServiceCollection)
+N:Cat.EventProcessor.Inbox.Extensions|Cat.EventProcessor.Inbox.Extensions.md|Cat.EventProcessor.Inbox.Extensions
+T:Cat.EventProcessor.Inbox.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

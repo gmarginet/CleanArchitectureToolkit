@@ -54,7 +54,6 @@ The module settles every message for you. A handler that succeeds completes the 
   - [Try a message in development](#try-a-message-in-development)
   - [Add the health check](#add-the-health-check)
   - [The inbox](#the-inbox)
-  - [Clean the inbox](#clean-the-inbox)
   - [Competing consumers and shutdown](#competing-consumers-and-shutdown)
   - [Traces](#traces)
   - [Log scope](#log-scope)
@@ -72,7 +71,7 @@ The module settles every message for you. A handler that succeeds completes the 
 | [Cat.EventProcessor.Authorization](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Authorization/) | Optional token and policy check | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EventProcessor.Authorization` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Authorization)](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Authorization/) |
 | [Cat.EventProcessor.AzureServiceBus](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.AzureServiceBus/) | Azure Service Bus listener | netstandard2.0 | `dotnet add package gmarginet.Cat.EventProcessor.AzureServiceBus` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.AzureServiceBus)](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.AzureServiceBus/) |
 | [Cat.EventProcessor.Minimal.Api](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Minimal.Api/) | Optional development endpoint | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EventProcessor.Minimal.Api` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Minimal.Api)](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Minimal.Api/) |
-| [Cat.EventProcessor.Inbox.EFCore](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Inbox.EFCore/) | Optional inbox for EF Core | net10.0, net11.0 | `dotnet add package gmarginet.Cat.EventProcessor.Inbox.EFCore` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Inbox.EFCore)](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Inbox.EFCore/) |
+| [Cat.EventProcessor.Inbox](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Inbox/) | Optional bridge to the inbox | netstandard2.0 | `dotnet add package gmarginet.Cat.EventProcessor.Inbox` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.EventProcessor.Inbox)](https://www.nuget.org/packages/gmarginet.Cat.EventProcessor.Inbox/) |
 
 <!-- region end: NuGet-->
 
@@ -81,12 +80,12 @@ The module settles every message for you. A handler that succeeds completes the 
 
 | Namespace | What it holds |
 |-----------|---------------|
-| [Cat.EventProcessor.Abstractions](namespaces/Cat.EventProcessor.Abstractions/index.md) | The incoming message, the settlement, the receiver, the contract of the inbox store and the settings per message type. |
+| [Cat.EventProcessor.Abstractions](namespaces/Cat.EventProcessor.Abstractions/index.md) | The incoming message, the settlement, the receiver, the contract of the handled messages and the settings per message type. |
 | [Cat.EventProcessor](namespaces/Cat.EventProcessor/index.md) | The receiver, the failure table, the builder for the message types and the module registration. |
 | [Cat.EventProcessor.Authorization](namespaces/Cat.EventProcessor.Authorization/index.md) | The token validation, the user of the message and the policy check. |
 | [Cat.EventProcessor.AzureServiceBus](namespaces/Cat.EventProcessor.AzureServiceBus/index.md) | The Azure Service Bus listener, the health check and the creation of the subscriptions. |
 | [Cat.EventProcessor.Minimal.Api](namespaces/Cat.EventProcessor.Minimal.Api/index.md) | The development endpoint that simulates an incoming message. |
-| [Cat.EventProcessor.Inbox.EFCore](namespaces/Cat.EventProcessor.Inbox.EFCore/index.md) | The inbox table and its store. |
+| [Cat.EventProcessor.Inbox](namespaces/Cat.EventProcessor.Inbox/index.md) | The bridge from the receiver to the inbox store of `Cat.Inbox`. |
 
 <!-- region end: Namespaces-->
 
@@ -98,6 +97,7 @@ The module settles every message for you. A handler that succeeds completes the 
 | [Cat.Messaging](../Cat.Messaging/README.md) | The message types, the name convention and the Azure Service Bus connection. |
 | [Cat.ServiceRequests](../Cat.ServiceRequests/README.md) | The message is the service request, and its handler runs through the service request processor. |
 | [Cat.Responses](../Cat.Responses/README.md) | The response of the handler decides what happens to the message. |
+| [Cat.Inbox](../Cat.Inbox/README.md) | Only the optional bridge project. It stores the ids of handled messages in the inbox. |
 | [Cat.Users](../Cat.Users/README.md) | Only the optional authorization project. It sets the user of the message. |
 
 <!-- region end: Dependencies-->
@@ -280,13 +280,14 @@ It is unhealthy when a listener has stopped, and degraded for a minute after a l
 
 ### The inbox
 
-Use the inbox only when a handler cannot run twice for the same message. It stores the ID of a handled message in the service database, in the same `SaveChanges` as the work of the handler. A repeated message hits the key of the table and is skipped.
+Use the inbox only when a handler cannot run twice for the same message. It stores the ID of a handled message in the service database, in the same `SaveChanges` as the work of the handler. A repeated message hits the key of the table and is skipped. The inbox itself is the module `Cat.Inbox`, see its [module readme](../Cat.Inbox/README.md). This module only has the bridge to it.
 
-Add the `Cat.EventProcessor.Inbox.EFCore` package. Map the table in the context that the handlers use and register the store:
+Add the packages `Cat.EventProcessor.Inbox` and `Cat.Inbox.EFCore`. Map the table in the context that the handlers use, register the store and register the bridge:
 
 ```csharp
-using Cat.EventProcessor.Inbox.EFCore;
-using Cat.EventProcessor.Inbox.EFCore.Extensions;
+using Cat.EventProcessor.Inbox.Extensions;
+using Cat.Inbox.EFCore;
+using Cat.Inbox.EFCore.Extensions;
 
 public class InventoryDbContext : DbContext
 {
@@ -296,7 +297,8 @@ public class InventoryDbContext : DbContext
     }
 }
 
-builder.Services.AddCatEventProcessorInbox<InventoryDbContext>();
+builder.Services.AddCatInboxEfCore<InventoryDbContext>();
+builder.Services.AddCatEventProcessorInbox();
 ```
 
 Add a migration afterwards, so the `CatInbox` table exists. Then switch the inbox on for the message types that need it:
@@ -314,26 +316,10 @@ What to know:
 - **A handler that starts a command.** Start it with `ICatCurrentScopeCommandProcessor` of `Cat.Commands`, so the command runs in the scope of the handler and saves the row with its work. `ICatCommandProcessor` opens a new scope for every command, so the command handler saves with another context than the receiver. The row of the receiver is then never saved, and a repeated message runs the handler again, with no error. With `UseInbox` on, use the current scope processor, let the handler save through the context of its own scope, or write the handler so that it can run twice and leave `UseInbox` off.
 - **Two copies at once.** The key of the table fails the second save, the message is abandoned, and the next delivery finds the row and skips it.
 - **No message ID.** A message without an ID is handled without the inbox.
-- **Missing store.** The listener fails at startup when a message type has `UseInbox` on and no `ICatInboxStore` is registered.
-- **Other stores.** `ICatInboxStore` lives in `Cat.EventProcessor.Abstractions`, so you can register a store of your own.
+- **Missing bridge.** The listener fails at startup when a message type has `UseInbox` on and no `ICatHandledMessages` is registered. `AddCatEventProcessorInbox` registers it on top of the `ICatInboxStore` of `Cat.Inbox`.
+- **The bridge.** The receiver never references `Cat.Inbox`. It asks the container for `ICatHandledMessages` of `Cat.EventProcessor.Abstractions`, as it does for `ICatMessageAuthorizer`. A service that does not use the inbox pulls in neither project. You can register an `ICatHandledMessages` of your own.
 - **The sender helps.** It sets the message ID, and duplicate detection of the queue or topic can drop a repeated message.
-- **Growth.** Nothing removes a row by itself. See [Clean the inbox](#clean-the-inbox).
-
-### Clean the inbox
-
-The table grows by one row for every message of a type that has `UseInbox` on. `Cat.Sagas` adds one row for every answer of a saga too. The module does not delete rows by itself, so you run a job that does.
-
-`ICatInboxStore` has a method for it:
-
-```csharp
-var deleted = await inboxStore.DeleteOlderThanAsync(DateTimeOffset.UtcNow.AddDays(-30), cancellationToken);
-```
-
-What to know:
-- **How long a row must live.** A row only matters while the bus can still deliver the same message again. Keep it at least as long as the time to live of the queue or subscription, and add a margin. A message that fails too often goes to the dead letter queue, so keep the rows longer when you resubmit dead lettered messages.
-- **It runs at once.** The method deletes the rows right away, with its own statement, and does not wait for a `SaveChanges`. Call it from a scope of its own, such as a job or a worker.
-- **Your own job.** You schedule the call. Any scheduler works, and `Cat.Scheduling` can run it, but the module does not need it.
-- **Other stores.** A store of your own implements the method too.
+- **Growth.** Nothing removes a row by itself. See [Clean the inbox](../Cat.Inbox/README.md#clean-the-inbox).
 
 ### Competing consumers and shutdown
 

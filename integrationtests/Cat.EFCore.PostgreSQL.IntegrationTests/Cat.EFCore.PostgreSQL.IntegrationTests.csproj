@@ -33,13 +33,16 @@
         <!-- The same tests run on SQL Server and on PostgreSQL. Each project adds its own database part. -->
         <Compile Include="..\Shared\EfCoreStoreIntegrationTests.cs" Link="Shared\EfCoreStoreIntegrationTests.cs" />
         <Compile Include="..\Shared\ReceiverInboxIntegrationTests.cs" Link="Shared\ReceiverInboxIntegrationTests.cs" />
+        <Compile Include="..\Shared\InboxEndpointIntegrationTests.cs" Link="Shared\InboxEndpointIntegrationTests.cs" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\modules\Cat.Db.Errors\Cat.Db.Errors.PostgreSQL\Cat.Db.Errors.PostgreSQL.csproj" />
       <ProjectReference Include="..\..\modules\Cat.EFCore\Cat.EFCore.Extensions.PostgreSQL\Cat.EFCore.Extensions.PostgreSQL.csproj" />
       <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor\Cat.EventProcessor.csproj" />
-      <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Inbox.EFCore\Cat.EventProcessor.Inbox.EFCore.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Inbox\Cat.EventProcessor.Inbox.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Inbox\Cat.Inbox.EFCore\Cat.Inbox.EFCore.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Inbox\Cat.Inbox.AspNetCore\Cat.Inbox.AspNetCore.csproj" />
       <ProjectReference Include="..\..\modules\Cat.IntegrationTesting\Cat.IntegrationTesting.PostgreSQL.NUnit\Cat.IntegrationTesting.PostgreSQL.NUnit.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Outbox\Cat.Outbox.EFCore\Cat.Outbox.EFCore.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />

@@ -9,7 +9,8 @@ using Cat.EventProcessor.Authorization.Extensions;
 using Cat.EventProcessor.AzureServiceBus;
 using Cat.EventProcessor.AzureServiceBus.Extensions;
 using Cat.EventProcessor.Extensions;
-using Cat.EventProcessor.Inbox.EFCore.Extensions;
+using Cat.EventProcessor.Inbox.Extensions;
+using Cat.Inbox.EFCore.Extensions;
 using Cat.Sagas;
 using Cat.Sagas.EFCore.Extensions;
 using Cat.Sagas.Extensions;
@@ -76,7 +77,8 @@ public static class OrderSagaExtensions
             })
             .Receive<CatSagaTimeout>(receive => receive.Require(policy => policy.RequireAuthenticatedUser())));
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
-        services.AddCatEventProcessorInbox<OrderDbContext>();
+        services.AddCatInboxEfCore<OrderDbContext>();
+        services.AddCatEventProcessorInbox();
 
         services.AddDemoClientCredentials(configuration);
         services.AddDemoMessageTokens();

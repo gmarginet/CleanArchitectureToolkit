@@ -25,7 +25,7 @@ public class SagaDbContext : DbContext
     {
         modelBuilder.AddCatSagas();
         Cat.Outbox.EFCore.ModelBuilderExtensions.AddCatOutbox(modelBuilder);
-        Cat.EventProcessor.Inbox.EFCore.ModelBuilderExtensions.AddCatInbox(modelBuilder);
+        Cat.Inbox.EFCore.ModelBuilderExtensions.AddCatInbox(modelBuilder);
     }
 }
 

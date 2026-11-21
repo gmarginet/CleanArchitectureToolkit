@@ -36,8 +36,7 @@
       <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Abstractions\Cat.EventProcessor.Abstractions.csproj" />
       <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Authorization\Cat.EventProcessor.Authorization.csproj" />
       <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.AzureServiceBus\Cat.EventProcessor.AzureServiceBus.csproj" />
-      <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Inbox.EFCore\Cat.EventProcessor.Inbox.EFCore.csproj" />
-      <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Minimal.Api\Cat.EventProcessor.Minimal.Api.csproj" />
+     <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Minimal.Api\Cat.EventProcessor.Minimal.Api.csproj" />
       <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor\Cat.EventProcessor.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Messaging\Cat.Messaging\Cat.Messaging.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />

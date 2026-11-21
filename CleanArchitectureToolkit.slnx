@@ -129,7 +129,7 @@
     <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.Abstractions/Cat.EventProcessor.Abstractions.csproj" />
     <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.Authorization/Cat.EventProcessor.Authorization.csproj" />
     <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.AzureServiceBus/Cat.EventProcessor.AzureServiceBus.csproj" />
-    <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.Inbox.EFCore/Cat.EventProcessor.Inbox.EFCore.csproj" />
+    <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.Inbox/Cat.EventProcessor.Inbox.csproj" />
     <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor.Minimal.Api/Cat.EventProcessor.Minimal.Api.csproj" />
     <Project Path="modules/Cat.EventProcessor/Cat.EventProcessor/Cat.EventProcessor.csproj" />
   </Folder>
@@ -152,6 +152,12 @@
     <Project Path="modules/Cat.FluentWorkflows/Cat.FluentWorkflows.Commands/Cat.FluentWorkflows.Commands.csproj" />
     <Project Path="modules/Cat.FluentWorkflows/Cat.FluentWorkflows.Queries/Cat.FluentWorkflows.Queries.csproj" />
     <Project Path="modules/Cat.FluentWorkflows/Cat.FluentWorkflows/Cat.FluentWorkflows.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.Inbox/">
+    <File Path="modules/Cat.Inbox/README.md" />
+    <Project Path="modules/Cat.Inbox/Cat.Inbox.Abstractions/Cat.Inbox.Abstractions.csproj" />
+    <Project Path="modules/Cat.Inbox/Cat.Inbox.AspNetCore/Cat.Inbox.AspNetCore.csproj" />
+    <Project Path="modules/Cat.Inbox/Cat.Inbox.EFCore/Cat.Inbox.EFCore.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.IntegrationTesting/">
     <File Path="modules/Cat.IntegrationTesting/README.md" />
@@ -266,6 +272,7 @@
     <Project Path="tests/Cat.Expressions.Tests/Cat.Expressions.Tests.csproj" />
     <Project Path="tests/Cat.Extensions.Tests/Cat.Extensions.Tests.csproj" />
     <Project Path="tests/Cat.FluentWorkflows.Tests/Cat.FluentWorkflows.Tests.csproj" />
+    <Project Path="tests/Cat.Inbox.Tests/Cat.Inbox.Tests.csproj" />
     <Project Path="tests/Cat.IntegrationTesting.Tests/Cat.IntegrationTesting.Tests.csproj" />
     <Project Path="tests/Cat.Messaging.Tests/Cat.Messaging.Tests.csproj" />
     <Project Path="tests/Cat.Minimal.Api.Tests/Cat.Minimal.Api.Tests.csproj" />

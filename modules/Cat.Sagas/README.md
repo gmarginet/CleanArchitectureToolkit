@@ -230,7 +230,8 @@ Switch the inbox on for the answer message types, and map its table in the same 
 ```csharp
 builder.Services.AddCatEventProcessor(builder.Configuration, processor => processor
     .Receive<PaymentTaken>(options => options.UseInbox = true));
-builder.Services.AddCatEventProcessorInbox<OrdersDbContext>();
+builder.Services.AddCatInboxEfCore<OrdersDbContext>();
+builder.Services.AddCatEventProcessorInbox();
 ```
 
 ```csharp

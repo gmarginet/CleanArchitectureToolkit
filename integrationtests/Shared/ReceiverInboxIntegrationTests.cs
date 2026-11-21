@@ -1,8 +1,9 @@
 using System.Text.Json;
 using Cat.EventProcessor.Abstractions;
 using Cat.EventProcessor.Extensions;
-using Cat.EventProcessor.Inbox.EFCore;
-using Cat.EventProcessor.Inbox.EFCore.Extensions;
+using Cat.EventProcessor.Inbox.Extensions;
+using Cat.Inbox.EFCore;
+using Cat.Inbox.EFCore.Extensions;
 using Cat.Messaging.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
@@ -35,7 +36,7 @@ public class ReceiverDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        Cat.EventProcessor.Inbox.EFCore.ModelBuilderExtensions.AddCatInbox(modelBuilder);
+        Cat.Inbox.EFCore.ModelBuilderExtensions.AddCatInbox(modelBuilder);
         modelBuilder.Entity<Visit>(entity =>
         {
             entity.ToTable("Visits");
@@ -130,7 +131,8 @@ public partial class ReceiverInboxIntegrationTests
         services.AddLogging();
         services.AddSingleton(gate);
         services.AddDbContext<ReceiverDbContext>(options => UseDatabase(options, ConnectionString));
-        services.AddCatEventProcessorInbox<ReceiverDbContext>();
+        services.AddCatInboxEfCore<ReceiverDbContext>();
+        services.AddCatEventProcessorInbox();
         services.AddCatServiceRequestsModule(typeof(RecordVisitHandler));
         services.AddCatEventProcessor(new ConfigurationBuilder().Build(), processor => processor
             .Receive<RecordVisit>(options => options.UseInbox = true));

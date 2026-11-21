@@ -1,8 +1,9 @@
 using System.Text.Json;
 using Cat.EventProcessor.Abstractions;
 using Cat.EventProcessor.Extensions;
-using Cat.EventProcessor.Inbox.EFCore;
-using Cat.EventProcessor.Inbox.EFCore.Extensions;
+using Cat.EventProcessor.Inbox.Extensions;
+using Cat.Inbox.EFCore;
+using Cat.Inbox.EFCore.Extensions;
 using Cat.FluentWorkflows.Extensions;
 using Cat.Messaging.Extensions;
 using Cat.Outbox.EFCore.Extensions;
@@ -46,7 +47,8 @@ public class ReceiverInboxTests
         services.AddCatMessagingModule();
         services.AddCatOutboxEfCore<SagaDbContext>();
         services.AddCatOutbox();
-        services.AddCatEventProcessorInbox<SagaDbContext>();
+        services.AddCatInboxEfCore<SagaDbContext>();
+        services.AddCatEventProcessorInbox();
         services.AddCatSagasModule();
         services.AddCatSagasOutbox();
         services.AddCatSagasEFCore<SagaDbContext>();

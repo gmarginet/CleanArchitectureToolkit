@@ -88,13 +88,13 @@ internal sealed class CatMessageReceiver : ICatMessageReceiver
 
             if (options.UseInbox && !string.IsNullOrEmpty(message.MessageId))
             {
-                var store = scope.ServiceProvider.GetRequiredService<ICatInboxStore>();
-                if (await store.ExistsAsync(message.MessageId, cancellationToken).ConfigureAwait(false))
+                var store = scope.ServiceProvider.GetRequiredService<ICatHandledMessages>();
+                if (await store.WasHandledAsync(message.MessageId, cancellationToken).ConfigureAwait(false))
                 {
                     return new CatSettlementResult(CatSettlement.Complete);
                 }
 
-                store.Add(message.MessageId, messageType.Name);
+                store.MarkHandled(message.MessageId, messageType.Name);
             }
 
             var response = currentScopeProcessor != null

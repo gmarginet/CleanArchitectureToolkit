@@ -1,6 +1,7 @@
 using Cat.EventProcessor.Abstractions;
-using Cat.EventProcessor.Inbox.EFCore;
-using Cat.EventProcessor.Inbox.EFCore.Extensions;
+using Cat.Inbox.Abstractions;
+using Cat.Inbox.EFCore;
+using Cat.Inbox.EFCore.Extensions;
 using Cat.FluentWorkflows.Extensions;
 using Cat.Messaging.Extensions;
 using Cat.Outbox.Abstractions;
@@ -41,7 +42,7 @@ public class OutboxAndInboxTests
         services.AddCatMessagingModule();
         services.AddCatOutboxEfCore<SagaDbContext>();
         services.AddCatOutbox();
-        services.AddCatEventProcessorInbox<SagaDbContext>();
+        services.AddCatInboxEfCore<SagaDbContext>();
         services.AddCatSagasModule();
         services.AddCatSagasOutbox();
         services.AddCatSagasEFCore<SagaDbContext>();

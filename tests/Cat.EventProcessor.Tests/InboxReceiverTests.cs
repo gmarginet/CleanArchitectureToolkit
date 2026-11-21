@@ -29,7 +29,7 @@ public class InboxReceiverTests
         services.AddScoped<ICatServiceRequestProcessor>(_ => _processor);
         if (withStore)
         {
-            services.AddScoped<ICatInboxStore>(_ => _store);
+            services.AddScoped<ICatHandledMessages>(_ => _store);
         }
 
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(settings ?? new Dictionary<string, string?>()).Build();
@@ -114,7 +114,7 @@ public class InboxReceiverTests
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => CreateListener(provider).StartAsync(CancellationToken.None));
 
-        Assert.That(exception!.Message, Does.Contain("OrderPlaced").And.Contain("ICatInboxStore"));
+        Assert.That(exception!.Message, Does.Contain("OrderPlaced").And.Contain("ICatHandledMessages"));
     }
 
     private static ServiceBusListener CreateListener(ServiceProvider provider) => new(
@@ -123,17 +123,14 @@ public class InboxReceiverTests
         Options.Create(new CatEventProcessorServiceBusOptions()), new ListenerStatus(), NullLogger<ServiceBusListener>.Instance,
         provider.GetRequiredService<IServiceProviderIsService>());
 
-    private sealed class FakeInboxStore : ICatInboxStore
+    private sealed class FakeInboxStore : ICatHandledMessages
     {
         public HashSet<string> Known { get; } = new();
         public List<(string Id, string Type)> Added { get; } = new();
 
-        public Task<bool> ExistsAsync(string messageId, CancellationToken cancellationToken = default) =>
+        public Task<bool> WasHandledAsync(string messageId, CancellationToken cancellationToken = default) =>
             Task.FromResult(Known.Contains(messageId));
 
-        public void Add(string messageId, string messageType) => Added.Add((messageId, messageType));
-
-        public Task<int> DeleteOlderThanAsync(DateTimeOffset handledBefore, CancellationToken cancellationToken = default) =>
-            Task.FromResult(0);
+        public void MarkHandled(string messageId, string messageType) => Added.Add((messageId, messageType));
     }
 }
