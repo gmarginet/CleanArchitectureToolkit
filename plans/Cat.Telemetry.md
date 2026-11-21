@@ -67,7 +67,7 @@ From the demo plan and the Aspire plan:
 - In the demo, the CAT modules add what OpenTelemetry does not, such as the decorators on service requests.
 
 From the discussion with the owner (2026-11-20):
-- The payment service becomes an outside provider, called directly from the infrastructure of Orders, see [Demo.md](Demo.md#phase-17). No trace headers should go to a third party, while Orders still records the call as a span.
+- The payment service becomes an outside provider, called directly from the infrastructure of Orders, see the [demo readme](../demo/README.md#payment-service). No trace headers should go to a third party, while Orders still records the call as a span.
 - Trace headers are written in the innermost handler, after every `DelegatingHandler`. A boundary for one client therefore sets the propagator of its primary handler, for example to `DistributedContextPropagator.CreateNoOutputPropagator()`. The property for that, `SocketsHttpHandler.ActivityHeadersPropagator`, does not exist in `netstandard2.0`.
 
 From the packages (read in the local NuGet cache, 2026-11-21):

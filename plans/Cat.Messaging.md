@@ -60,7 +60,7 @@ From the code and the module readmes:
 - The receiver checks a normal message against the time the bus received it, and skips the lifetime check only for a scheduled message. A system token on a message that is not scheduled gets the normal check.
 
 From the demo plan:
-- The demo has no webhook. The payment provider answers in the call itself, see [Demo.md](Demo.md#phase-17). This phase makes a webhook possible for a developer, and the demo does not show it.
+- The demo has no webhook. The payment provider answers in the call itself, see the [demo readme](../demo/README.md#payment-service). This phase makes a webhook possible for a developer, and the demo does not show it.
 
 #### What exists today
 - The token of a message comes from `ICatTokenProvider`, with the subject that `CatMessageSender` picks.

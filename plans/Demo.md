@@ -44,7 +44,6 @@
 - [Phase 12](#phase-12)
 - [Phase 13](#phase-13)
 - [Phase 16](#phase-16)
-- [Phase 17](#phase-17)
 - [Phase 18](#phase-18)
 <!-- region end: Phases-->
 
@@ -189,19 +188,16 @@ Show `Cat.Resilience` in the demo, as the base of the resilience in every servic
 #### Background
 - `Aspire ServiceDefaults` already gives every service telemetry, health checks and the standard resilience handler. The demo uses Aspire, so it does not use `Cat.Resilience` today.
 - `Cat.Resilience` is the base for every project, and `ServiceDefaults` calls it. See the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md).
-- The demo case for `Cat.Resilience`: the internal profile on every client, and the external profile on the client of the outside payment provider, which [Phase 17](#phase-17) builds.
+- The demo case for `Cat.Resilience`: the internal profile on every client, and the external profile on the client of the outside payment provider, which is built, see the [demo readme](../demo/README.md#payment-service).
 
 #### What exists today
 - Orders replaces the standard resilience handler of the Inventory client with a shorter one in `UseFastFailResilience`: one retry after 500 ms, 5 seconds per try and 12 seconds in total. `FastFailResilienceTests` covers it.
 - The `ServiceDefaults` pipeline is chosen per authority with `SelectPipelineByAuthority()`. Every call to our own services goes through the gateway, so two clients on that pipeline share one circuit. Today only the Catalog client of Orders uses it, and the Inventory client has its own fast fail pipeline. The module keeps a circuit per client, see the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md).
 - `Cat.Resilience` exists, see its [module readme](../modules/Cat.Resilience/README.md). The demo does not use it yet.
 
-#### Needs
-- [Phase 17](#phase-17), built first.
-
 #### Decided
 - **Where the demo uses the module.** In every service, because `ServiceDefaults` calls `Cat.Resilience` for every `HttpClient`. The client of the payment provider in Orders gets the external profile. The demo readme then says where (owner, 2026-11-20).
-- **Split.** The move of payment to an outside provider is its own phase, [Phase 17](#phase-17). This phase only holds the showcase of the module (owner, 2026-11-21).
+- **Split.** The move of payment to an outside provider is built, see the [demo readme](../demo/README.md#payment-service). This phase only holds the showcase of the module (owner, 2026-11-21).
 
 #### Done when
 The latency, the error percentage and the outage of the payment provider are each tried once on the direct call from Orders, through the external profile, and the demo readme says what happened (owner, 2026-11-21).
@@ -223,12 +219,12 @@ Show `Cat.Telemetry` in the demo, as the base of the telemetry in every service.
 #### Background
 - `Aspire ServiceDefaults` already gives every service telemetry and health checks. The demo uses Aspire, so it does not use `Cat.Telemetry` today.
 - `Cat.Telemetry` is the base for every project, and `ServiceDefaults` calls it. See the Decided list of [Cat.Telemetry.md](Cat.Telemetry.md#phase-1).
-- The demo case for `Cat.Telemetry` is tracing one order across all services. Payment is an outside provider, see the Decided list of [Phase 17](#phase-17), so the trace stops at the edge of Orders.
+- The demo case for `Cat.Telemetry` is tracing one order across all services. Payment is an outside provider, see the [demo readme](../demo/README.md#payment-service), so the trace stops at the edge of Orders.
 
 #### What exists today
 - Every service has telemetry from `ServiceDefaults`.
 - `Cat.Telemetry` does not exist yet.
-- Payment becomes an outside provider that exports no telemetry, see the Decided list of [Phase 17](#phase-17). Its client in Orders gets the trace boundary `AddCatTelemetryBoundary()` of [Cat.Telemetry.md](Cat.Telemetry.md#phase-1), so the dashboard shows the call as a span in Orders, with no trace on the side of the provider.
+- Payment is an outside provider that exports no telemetry, see the [demo readme](../demo/README.md#payment-service). Its client in Orders gets the trace boundary `AddCatTelemetryBoundary()` of [Cat.Telemetry.md](Cat.Telemetry.md#phase-1), so the dashboard shows the call as a span in Orders, with no trace on the side of the provider.
 - The demo stays on HTTP. The owner tested it live: `dotnet dev-certs https --trust` is optional and clears the dashboard notification "No trusted development certificate was found" on HTTP. The demo readme describes it, with the command that undoes it.
 
 #### Needs
@@ -295,13 +291,10 @@ Refund a payment that answers after the payment timeout, so the money does not s
 - Payment remembers its payments and its refunds in memory. A `RefundPayment` for an order number it has no payment for answers `Refunded` false, and remembers nothing.
 - The demo readme lists this under the Orders cons.
 
-#### What changes with phase 17
-- Payment becomes an outside provider, see the Decided list of [Phase 17](#phase-17). `TakePayment` then waits in a queue of Orders, and the handler of Orders calls the provider. The late payment happens when that handler runs after the saga timed out, for example when the provider was down and the message comes in again.
+#### What changed with the outside provider
+- Payment is an outside provider, see the [demo readme](../demo/README.md#payment-service). `TakePayment` waits in a queue of Orders, and the handler of Orders calls the provider. The late payment happens when that handler runs after the saga timed out, for example when the provider was down and the message comes in again.
 - A rule inside the provider, such as a note for an order number that was not charged, is no longer realistic. A real provider does not get rules from us.
 - `ICatSagaStore.FindAsync` in `Cat.Sagas.Abstractions` returns the instance with its status, so the handler can see whether the saga still waits.
-
-#### Needs
-[Phase 17](#phase-17), built first.
 
 #### Done when
 A payment that answers after the order was cancelled for `PaymentUnavailable` is refunded, and the demo readme says where.
@@ -314,42 +307,6 @@ A payment that answers after the order was cancelled for `PaymentUnavailable` is
 <!-- region start: PhaseOpenQuestions-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 16-->
-
-<!-- region start: Phase 17-->
-## Phase 17
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Payment becomes a stand-in for an outside payment provider, and Orders calls it directly from its infrastructure. It needs no CAT module, so it can be built before `Cat.Resilience` exists.
-
-#### What exists today
-- The payment service is a service of ours, behind the gateway, with `ServiceDefaults`. It can fail on purpose with the settings `PaymentFailures:Latency`, `PaymentFailures:ErrorPercentage` and `PaymentFailures:Outage`.
-- The saga of Orders sends `TakePayment` over Service Bus, and Payment answers with `PaymentProcessed` on a topic. A refund goes the same way: `PaymentRefundRequestCommandHandler` sends `RefundPayment`, and Payment answers with `PaymentRefunded`. The four messages live in `Cat.Demo.PaymentService.Contracts`, which Orders references.
-- Payment checks the token that the gateway forwards, and signs its answers with a token of its own Keycloak client, `cat-demo-payment`. The gateway has a route `payment`.
-- Payment also has an HTTP endpoint, `POST /payment/payments`, and a generated client in `Cat.Demo.PaymentService.Api.Client`. Nothing uses that client.
-
-#### Decided
-- **Outside payment provider.** The payment service becomes a stand-in for an outside payment provider. It is a plain REST API with no CAT modules and no `ServiceDefaults`, and it does not sit behind our gateway (owner, 2026-11-20).
-- **Outbound route.** Orders calls the provider directly from its infrastructure. The saga sends a command, and its handler calls the provider with a typed `HttpClient` and the API key from the configuration of Orders. The call does not go through the API gateway. The readme rule that a call to another service goes through the gateway covers our own services, and an outside provider is an integration (owner, 2026-11-20).
-- **Answer style.** The provider answers in the call itself, with approved or declined. The saga keeps `SendAndWait<TakePayment, PaymentProcessed>`: `TakePayment` goes through the outbox to a queue of Orders, and the handler there calls the provider and sends `PaymentProcessed` to the saga. The saga id is the idempotency key of the call. The demo has no webhook (owner, 2026-11-20).
-- **Own phase.** This move is split from [Phase 11](#phase-11). Until `Cat.Resilience` exists, the client of the provider keeps the standard handler of `ServiceDefaults` (owner, 2026-11-21).
-- **Refund route.** The refund takes the same route as the payment. `PaymentRefundRequestCommandHandler` keeps saving `RefundPending` and `RefundPayment` in one save. `RefundPayment` goes to the queue of Orders, and the handler there calls the refund endpoint of the provider and sends `PaymentRefunded` (owner, 2026-11-21).
-- **Where the messages live.** `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded` move into the core of Orders, next to the saga that sends them, for example `Cat.Demo.OrderService.CoreService/Messages`. They are internal to Orders and never reach the provider. `Cat.Demo.PaymentService.Contracts` and `Cat.Demo.PaymentService.Api.Client` go away, because an outside provider ships no contracts or client project (owner, 2026-11-21).
-- **Client of the provider.** The stand-in serves its OpenAPI document. Orders keeps a copy of it, `payment-provider.openapi.json`, with an `nswag.json`, a refresh script and the generated client in its infrastructure, the same setup as `Cat.Demo.PaymentService.Api.Client` has today. The client is registered with a plain `AddHttpClient`, not on the `Cat.Api.Client` base. The handler translates between the messages of Orders and the types of the provider (owner, 2026-11-21).
-- **API of the stand-in.** `POST /charges` and `POST /refunds`, with the API key in `Authorization: Bearer` and an `Idempotency-Key` header that holds the saga id. A decline answers `200` with `status: declined`, so a decline is never taken for a failure to retry. A repeated key returns the first answer. The AppHost passes the address and the key to Orders as environment variables, the key as a secret parameter, with no `WithReference`. Orders reads them as `PaymentProvider:Url` and `PaymentProvider:ApiKey` (owner, 2026-11-21).
-
-#### Follows from the decisions
-- The stand-in drops `ServiceDefaults`, `Cat.ServiceRequests`, `Cat.Messaging`, `Cat.EventProcessor` and the Keycloak check. The Keycloak client `cat-demo-payment` and the gateway route `payment` go away.
-- The stand-in exports no telemetry, so the call shows only as a client span of Orders in the dashboard.
-- Orders gets its own queue for `TakePayment`, and creates it at startup, as Payment does today.
-- The stand-in keeps its failure switches, and remembers an idempotency key, so a repeated charge gives the same answer.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 17-->
 
 <!-- region start: Phase 18-->
 ## Phase 18

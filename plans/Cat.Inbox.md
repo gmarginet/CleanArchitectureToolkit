@@ -62,7 +62,7 @@ From the code and the module readme:
 - Many providers send an event id with every webhook. The Standard Webhooks specification names the headers `webhook-id`, `webhook-timestamp` and `webhook-signature`. To check when building, since this was not read from the specification in this repository.
 
 From the demo plan:
-- The demo has no webhook. The payment provider answers in the call itself, see [Demo.md](Demo.md#phase-17). This phase makes a webhook possible for a developer, and the demo does not show it.
+- The demo has no webhook. The payment provider answers in the call itself, see the [demo readme](../demo/README.md#payment-service). This phase makes a webhook possible for a developer, and the demo does not show it.
 
 #### What exists today
 - The inbox for bus messages lives in `Cat.EventProcessor`: `ICatInboxStore` and `UseInbox` on `CatReceiveOptions` in `Cat.EventProcessor.Abstractions`, and the table `CatInbox` with its store in `Cat.EventProcessor.Inbox.EFCore`.

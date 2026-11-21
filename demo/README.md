@@ -79,8 +79,8 @@ An online bookshop fits the job. Everybody knows how a shop works, so you can fo
 These choices shaped the functions below:
 
 - **Ordering is not instant.** The shop answers at once that the order is pending, and the payment decides the end result a few seconds later. The screen follows the status by itself. The gain is a process that waits, which shows what the modules do. The cost is that the client has to ask again for the end result.
-- **Stock, payment and mail are services of their own.** Each one shows another way to work with CAT. The cost is more projects to run.
-- **The partners are pretend.** The payment service is a fake that can fail on purpose, and the mails go to a test inbox. Failures are easy to show, and nothing leaves your machine. The cost is that the demo proves nothing about a real provider.
+- **Stock and mail are services of their own, and payment is an outside provider.** Each one shows another way to work with CAT. The cost is more projects to run.
+- **The partners are pretend.** The payment provider is a fake that can fail on purpose, and the mails go to a test inbox. Failures are easy to show, and nothing leaves your machine. The cost is that the demo proves nothing about a real provider.
 - **Failures are part of the story.** An order can stop at stock, at payment or at a timeout, and the shop always ends in a clear state. The list of what the shop does when something goes wrong is as important as the list of what it does when all is well.
 
 ### What the bookshop does
@@ -92,7 +92,7 @@ What you can do today:
 - **Browse the catalog.** See the categories and the books in them. Search for a book. Open a book to see its details.
 - **See prices.** Every book has a current price in euro. The shop keeps the older prices as well.
 - **Manage the catalog.** An admin can add a book or change one.
-- **Place an order.** Pick books and quantities. The shop looks up the prices and checks that the books are in stock. It then answers at once that the order is pending, and asks the payment service to take the payment. The order confirms when the payment service answers, usually within a few seconds. The screen shows the status and updates by itself.
+- **Place an order.** Pick books and quantities. The shop looks up the prices and checks that the books are in stock. It then answers at once that the order is pending, and asks the payment provider to take the payment. The order confirms when the provider answers, usually within a few seconds. The screen shows the status and updates by itself.
 - **Get an order number.** Every order gets a number like `20261105-0001`. The date is the day of the order. The counter starts again every day.
 - **Follow your orders.** See a list of your orders and open one to see its lines, its total and its status.
 - **Cancel an order.** Change your mind after ordering and cancel it, as long as the order is not shipped yet. When the order was paid, the shop gives the money back.
@@ -106,16 +106,16 @@ What the shop does when something goes wrong:
 
 - A book that is not in stock stops the order. The order is cancelled and the customer is told which book is the problem.
 - A payment that is declined stops the order in the same way. The order shows as cancelled.
-- A payment service that is down or too slow stops the order too. The order waits for the answer for 2 minutes, a setting. After that it is cancelled and shows as cancelled. A payment service that was only busy still gets the request, because the request waits in a queue. If its answer comes after the order was cancelled, the payment is not refunded. The shop only refunds a payment that it has saved.
+- A payment provider that is down or too slow stops the order too. The order waits for the answer for 2 minutes, a setting. After that it is cancelled and shows as cancelled. The request waits in a queue of the shop, and the shop asks the provider again until it answers. If the answer comes after the order was cancelled, the payment is not refunded. The shop only refunds a payment that it has saved.
 - A shop that restarts while an order waits for the payment does not lose the order. The wait is saved in the database, and the answer carries on where the order stopped.
-- Without the message bus nobody answers for the payment. The order stays pending until the job for stuck orders cancels it.
+- Without the message bus the request for the payment never reaches the provider. The order stays pending until the job for stuck orders cancels it.
 - A stock service that is down or too slow stops the order in the same way. The order is cancelled and the customer is told to try again later.
 - A shop that gives up waiting while the order is placed does not leave a half finished order behind. The order is cancelled.
 - An order that stays unpaid for more than 15 minutes, for example after a crash of the shop, is cancelled by a job that runs every 5 minutes. The stock goes back.
 - A cancel of a shipped order is refused. The order has left the shop, and it stays shipped.
-- A cancel of a paid order asks the payment service for the money back. The order is cancelled at once, and the payment shows as refund pending until the payment service answers. An order that was cancelled before it was paid, or after a decline, has nothing to refund.
+- A cancel of a paid order asks the payment provider for the money back. The order is cancelled at once, and the payment shows as refund pending until the provider answers. An order that was cancelled before it was paid, or after a decline, has nothing to refund.
 
-When you start the shop with Aspire, the order asks the catalog for the real price of every book. A separate stock service keeps the stock levels and reserves the books of an order, all or nothing, so the last copy never sells twice. A separate payment service takes the payment, on request of a message. That service declines any total above 500 euro. It never charges an order twice, also when the request arrives twice.
+When you start the shop with Aspire, the order asks the catalog for the real price of every book. A separate stock service keeps the stock levels and reserves the books of an order, all or nothing, so the last copy never sells twice. A pretend payment provider takes the payment. It is a plain REST API that the shop calls with an API key, and it is outside the shop like a real provider would be. It declines any total above 500 euro. It never charges an order twice, also when the shop sends the request twice, because every call carries an idempotency key.
 
 A separate notification service sends the confirmation mail. A mail for the same order goes out once, also when the message arrives twice.
 
@@ -127,7 +127,7 @@ The admin also gets a mail at the moment a book drops below the limit, a few sec
 
 With the functions known, the team asks which technical shape carries them. The demo makes these decisions:
 
-- **Separate services that own their data.** Catalog, Orders, Inventory, Notifications and Payment each have their own database. Where one needs data of another, it asks. The cost shows in the details. Inventory knows a book by its ISBN and not by its id, and an order line holds a book id with no foreign key.
+- **Separate services that own their data.** Catalog, Orders, Inventory and Notifications each have their own database. Where one needs data of another, it asks. The cost shows in the details. Inventory knows a book by its ISBN and not by its id, and an order line holds a book id with no foreign key.
 - **One door for clients.** An API gateway checks the login. Clients know one address, and the token check sits in one place. The cost is one more hop and one more process.
 - **The same structure in every service.** Every use case has the same shape, so a new one is easy to add. The cost is many small types for a small service.
 - **Keycloak for the login.** Real tokens and a real login flow, with no account to create.
@@ -144,11 +144,11 @@ Hatched boxes are not built yet. Solid boxes are. The drawing is kept in sync wi
 
 ### How the pieces fit
 
-- **Clients** only talk to the API gateway. It checks the token, lets the public catalog reads through and forwards the call with the token unchanged. Orders asks Catalog for prices and Inventory for stock through the gateway as well, with clients generated by `Cat.Api.Client`. Payment is the exception: Orders talks to it with messages, see [Events and interfaces](#events-and-interfaces).
+- **Clients** only talk to the API gateway. It checks the token, lets the public catalog reads through and forwards the call with the token unchanged. Orders asks Catalog for prices and Inventory for stock through the gateway as well, with clients generated by `Cat.Api.Client`. The payment provider is the exception. It is outside the shop, so Orders calls it directly from its infrastructure with an API key, and not through the gateway.
 - **Login.** Keycloak runs as a container and holds the users. The gateway and each service check the token. A service does not trust the network. See [Things to know](#things-to-know).
-- **Services** own their data. A service never reads the database of another service. Where one needs data of another, it asks through an interface. Orders asks Catalog for prices and Inventory for stock through the gateway when you run through Aspire, and asks Payment with a message.
+- **Services** own their data. A service never reads the database of another service. Where one needs data of another, it asks through an interface. Orders asks Catalog for prices and Inventory for stock through the gateway when you run through Aspire, and calls the payment provider directly.
 - **Contracts.** Sharing the contracts of a service is a choice per connection. The React client and the price call from Orders to Catalog keep their own models. The stock call from Orders to Inventory shares the `Contracts` project of Inventory, so the demo shows both. See [Sharing contracts](#sharing-contracts).
-- **Events** stay in memory inside a service. A service tells another one about a fact with a message on Azure Service Bus. Orders publishes `OrderConfirmed` through its outbox, and Inventory and Notifications receive it. Orders also sends `TakePayment` to Payment and gets `PaymentProcessed` back, and sends `RefundPayment` and gets `PaymentRefunded` back. These are the places where a message is a question with an answer. See [Events and interfaces](#events-and-interfaces).
+- **Events** stay in memory inside a service. A service tells another one about a fact with a message on Azure Service Bus. Orders publishes `OrderConfirmed` through its outbox, and Inventory and Notifications receive it. Orders also sends `TakePayment` to a queue of its own, and a handler calls the payment provider and publishes `PaymentProcessed`. A refund goes the same way with `RefundPayment` and `PaymentRefunded`. These are the places where a message is a question with an answer. See [Events and interfaces](#events-and-interfaces).
 - **Databases.** Every service has its own SQL Server database.
 - **Aspire** starts everything with one command: the gateway, the services, Keycloak, SQL Server and the Service Bus emulator in containers, and the dashboard.
 
@@ -172,7 +172,7 @@ The readme says that sharing the `Contracts` project of a service is a choice of
 | React client to gateway | Not shared | The client is TypeScript, so there is nothing to reference. It also keeps the demo client-agnostic. The client comes from the OpenAPI documents. |
 | Orders to Catalog (prices) | Not shared | Orders needs a price per book and nothing else. The generated Catalog client has models of its own, so Orders does not depend on the Catalog contract. |
 | Orders to Inventory (stock) | Shared | To show the other option. Orders references the `Contracts` project of Inventory and reuses its types. |
-| Orders to the payment service | Shared | The four messages `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded` live in the `Contracts` project of Payment, and Orders references it. A message has no generated client, so both sides need the same type or they must agree on the shape by hand. |
+| Orders to the payment provider | Own copy | The four messages `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded` live in the core of Orders and never leave it. The provider is outside, so it ships no contracts. Orders keeps a copy of its OpenAPI document and generates a client from it, with its own types. |
 
 What it costs:
 
@@ -198,9 +198,9 @@ Calls from one service to another forward the same token.
 A message carries a token too, because a message arrives without a request. The sender puts it in the message. The receiver checks it before it runs the handler:
 
 - A message that Orders sends while a user places an order carries the token of that user. Without a user request, such as the timeout of a saga, Orders asks Keycloak for a client credentials token of the client `cat-demo-orders`.
-- Payment answers with a token of its own, from the client `cat-demo-payment`.
+- The payment provider has no login. Orders sends an API key in the `Authorization` header of the call, and the key is a secret parameter of the AppHost.
 - Inventory sends its messages, such as the nightly low stock report, with a token of its own, from the client `cat-demo-inventory`.
-- Orders, Payment, Inventory and Notifications accept a message only from a logged in caller, with `Cat.EventProcessor.Authorization`. The receiver skips the lifetime check for a scheduled message, because the token of a scheduled message is made when it is sent and is expired when the bus delivers it.
+- Orders, Inventory and Notifications accept a message only from a logged in caller, with `Cat.EventProcessor.Authorization`. The receiver skips the lifetime check for a scheduled message, because the token of a scheduled message is made when it is sent and is expired when the bus delivers it.
 - The token sits in the queue and in the outbox table for as long as the message does. The demo uses short lived tokens.
 
 In the code:
@@ -219,8 +219,8 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 | Kind of interaction | Decoupled by | Needs an answer? |
 |---|---|---|
 | Reserve stock | An interface (`IStockReservation`), called from a workflow step | Yes |
-| Take payment | A message pair on Azure Service Bus (`TakePayment` and `PaymentProcessed`), sent and awaited by a saga step | Yes, later. The workflow stops and carries on when the answer arrives |
-| Refund a payment | A message pair on Azure Service Bus (`RefundPayment` and `PaymentRefunded`), sent by a subscriber of the cancelled event and answered to a plain receiver | Yes, later. Nobody waits. The payment shows `RefundPending` until the answer arrives |
+| Take payment | A message to a queue of Orders (`TakePayment`), sent and awaited by a saga step. A handler of Orders calls the payment provider and publishes `PaymentProcessed` | Yes, later. The workflow stops and carries on when the answer arrives |
+| Refund a payment | A message to a queue of Orders (`RefundPayment`), sent by a subscriber of the cancelled event. A handler of Orders calls the provider and publishes `PaymentRefunded` to a plain receiver | Yes, later. Nobody waits. The payment shows `RefundPending` until the answer arrives |
 | Order confirmed, order cancelled | An event on `ICatEventAggregator` | No |
 | Order confirmed, told to another service | A message on Azure Service Bus (`OrderConfirmed`) | No |
 | Low stock, told to Notifications | A message on Azure Service Bus (`LowStockReport`), published by a scheduled job of Inventory | No |
@@ -244,7 +244,7 @@ Every service has its own SQL Server database, and the demo builds them in two w
 - **Database first.** A stock database often exists already, owned by a warehouse team. So Inventory takes its schema from SQL scripts, and the entities are scaffolded from the database. The atomic update that reserves stock stays plain SQL, and the commands and responses stay the same as in the other services. The cost is two ways to build a service, which means two ways to explain, and both need care after a schema change.
 - **Plain SQL for one read.** The order overview of Orders reads with Dapper and a `.sql` file, because it is a read only query that needs only the columns it shows. The cost is that the SQL knows the table and column names of the EF Core model, so a rename in the model breaks the query at run time and no test of the demo catches it.
 
-The tables and columns of every database are in the chapters of the services: [Catalog service](#catalog-service), [Orders service](#orders-service), [Inventory service](#inventory-service) and [Notification service](#notification-service). Payment has no database.
+The tables and columns of every database are in the chapters of the services: [Catalog service](#catalog-service), [Orders service](#orders-service), [Inventory service](#inventory-service) and [Notification service](#notification-service). The payment provider has no database.
 
 ## Running it
 
@@ -275,7 +275,7 @@ Two rules keep Aspire from taking over the demo:
 
 The demo is made for a local machine. Several settings, such as the plain text secrets of Keycloak, are fine for a demo and wrong for production.
 
-The main route is the Aspire AppHost. One command starts the gateway, Catalog, Orders, the payment service, Keycloak, SQL Server and the React client, and opens the dashboard.
+The main route is the Aspire AppHost. One command starts the gateway, Catalog, Orders, the payment provider, Keycloak, SQL Server and the React client, and opens the dashboard.
 
 ### Prerequisites
 
@@ -331,7 +331,7 @@ Docker Desktop on Windows runs on WSL2. By default the WSL2 virtual machine can 
 - **Users.** Keycloak holds three users: `alice`, `bob` and `admin`. The password is the same as the name. Alice and Bob only see their own orders. The admin sees all orders and may save books. The Keycloak admin console at `http://localhost:8180` uses `admin` and `admin`. Use these settings in the demo only. A person who registers on the login page becomes a normal user, with no admin role. Keycloak does not check the email address, because the demo has no mail server for it.
 - **Tokens.** The `.http` files get a token from Keycloak with the password grant of the client `cat-demo-cli`. The gateway needs a valid token for everything except reading books and categories. The services check the token again, so a call straight to port 5101 or 5102 without a token gets a 401 too.
 - **Mails.** The confirmation mails go to Mailpit, a test mail server in a container. Open `http://localhost:8025` to read them. Alice and the others have `@example.com` addresses, and no mail leaves your machine.
-- **Payment failures.** The payment service can fail on purpose, to show the wait, the redelivery and the timeout of an order. See [Payment service](#payment-service) for the settings. `Orders:PaymentTimeoutSeconds` sets how long an order waits for the payment, 120 seconds by default.
+- **Payment failures.** The payment provider can fail on purpose, to show the wait, the retries and the timeout of an order. See [Payment service](#payment-service) for the settings. `Orders:PaymentTimeoutSeconds` sets how long an order waits for the payment, 120 seconds by default.
 - **An order is asynchronous.** `POST /orders` answers 202 with the order in status `Pending` and a `Location` header. The status changes when the payment answers. Follow it with `GET /orders/{id}`. The React client does this every 2 seconds while the status is `Pending`, and every 10 seconds while it is `Confirmed`, until the order is shipped.
 - **Currency.** All amounts are in euro.
 - **Order numbers** look like `20261105-0001`. The counter restarts every UTC day. The Scheduler removes the counters of earlier days every night. The development endpoint `POST /development/scheduler/clean-up-order-counters` does the same at once.
@@ -356,9 +356,9 @@ dotnet dev-certs https --clean
 ```
 The `--clean` command removes every ASP.NET Core development certificate of your user, also for other projects. Run `dotnet dev-certs https --trust` again when you want a trusted one.
 
-To follow one order, place it and open **Traces** in the dashboard. The call `POST /orders` shows up as one trace. It holds the gateway, Orders, Keycloak, Catalog and Inventory, so you see every HTTP hop of the order in one place. The order is already answered with 202 when the payment starts, so the rest of the order is not in this trace.
+To follow one order, place it and open **Traces** in the dashboard. The call `POST /orders` shows up as one trace. It holds the gateway, Orders, Keycloak, Catalog and Inventory, so you see every HTTP hop of the order in one place. The order is already answered with 202 when the payment starts, so the rest of the order is not in this trace. The payment provider exports no telemetry, so its calls show only as client spans of Orders, in the trace of the message that asked for them.
 
-The message hops are not part of that trace. When Payment handles `TakePayment`, Orders handles `PaymentProcessed`, Notifications handles `OrderConfirmed`, or `StockChanged` arrives, the dashboard shows it as its own trace with only that resource in it. `Cat.Messaging` does not pass the trace context along with a message yet. Match such a trace to its order by the time and the message name.
+The message hops are not part of that trace. When Orders handles `TakePayment`, Orders handles `PaymentProcessed`, Notifications handles `OrderConfirmed`, or `StockChanged` arrives, the dashboard shows it as its own trace with only that resource in it. `Cat.Messaging` does not pass the trace context along with a message yet. Match such a trace to its order by the time and the message name.
 
 ### Run the tests
 
@@ -383,8 +383,8 @@ The last question is which modules to use. CAT is a toolbox. A developer picks t
 | Infrastructure | `Cat.EFCore`, and in Orders `Cat.Messaging` with the outbox |
 | Saga | `Cat.Sagas` and `Cat.Sagas.EFCore` (Orders) |
 | Scheduler | `Cat.Scheduling` and `Cat.Scheduling.EFCore` (Orders and Inventory) |
-| EventProcessor | `Cat.EventProcessor` (Orders, Payment, Inventory and Notifications), with its inbox in Orders and `Cat.EventProcessor.Authorization` in Orders, Payment, Inventory and Notifications |
-| Messaging | `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` (Orders, Payment, Inventory and Notifications) |
+| EventProcessor | `Cat.EventProcessor` (Orders, Inventory and Notifications), with its inbox in Orders and `Cat.EventProcessor.Authorization` in Orders, Inventory and Notifications |
+| Messaging | `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` (Orders, Inventory and Notifications) |
 | Users | `Cat.Users.Abstractions` in the core service and the infrastructure, `Cat.Users` and `Cat.Users.JwtBearer` in the host |
 | Core service tests | `Cat.UnitTesting.Commands`, `Cat.UnitTesting.Queries` and `Cat.UnitTesting.NUnit` |
 | Everywhere | `Cat.Expressions` |
@@ -415,7 +415,7 @@ The [building blocks](#building-blocks) explain where each module is used and wh
 
 **Notifications** only receives. `Cat.EventProcessor` runs its handlers, and the table of sent mails shows idempotent handling without an inbox. A second receiver of `OrderConfirmed` also shows that a message has more than one reader.
 
-**Payment** is a fake partner. `Cat.Messaging` and `Cat.EventProcessor` receive the question and publish the answer, so the demo shows a slow or failing partner and how the order ends.
+**Payment** is a fake outside provider. It uses no CAT module, because a real provider would not. Orders calls it from its infrastructure, and `Cat.Messaging` and `Cat.EventProcessor` carry the request and the answer inside Orders, so the demo shows a slow or failing partner and how the order ends.
 
 **The gateway** is a small host on `Cat.Api.Gateway`. It takes the routes, the token check, the header cleaning and the rate limits from configuration. The gateway only option of the module is not used, because the services check the token themselves.
 
@@ -436,8 +436,8 @@ The chapters above tell why. The chapters below hold the facts of every block th
 | [Inventory service](#inventory-service) | Stock levels and reservations. |
 | [Notification service](#notification-service) | Sends the order confirmed mail. |
 | [Aspire ServiceDefaults](#aspire-servicedefaults) | Shared telemetry, health checks and resilience. |
-| [Payment service](#payment-service) | A separate pretend payment service. It takes a payment from a message and can fail on purpose. |
-| [Service Bus emulator](#service-bus-emulator) | The message bus. It carries `OrderConfirmed` from Orders to Inventory and Notifications, and `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded` between Orders and Payment. |
+| [Payment service](#payment-service) | A pretend outside payment provider. A plain REST API with no CAT modules, called by Orders with an API key. It can fail on purpose. |
+| [Service Bus emulator](#service-bus-emulator) | The message bus. It carries `OrderConfirmed` from Orders to Inventory and Notifications, and the four payment messages inside Orders. |
 
 ### React client
 
@@ -489,20 +489,20 @@ The chapters above tell why. The chapters below hold the facts of every block th
 
 ### Aspire AppHost and dashboard
 
-**What it is.** One project that describes the system: the gateway, Catalog, Orders, Inventory, Notifications, the payment service, Keycloak, SQL Server, the Service Bus emulator, Mailpit and the React client. The Aspire dashboard shows logs, traces, metrics and health checks.
+**What it is.** One project that describes the system: the gateway, Catalog, Orders, Inventory, Notifications, the payment provider, Keycloak, SQL Server, the Service Bus emulator, Mailpit and the React client. The Aspire dashboard shows logs, traces, metrics and health checks.
 
 **How it works.**
 - `demo/Cat.Demo.AppHost/Cat.Demo.AppHost` adds the Api project of each service. The services keep their fixed ports with no Aspire proxy: gateway 5100, Catalog 5101, Orders 5102, payment 5103, web client 5104, Inventory 5105 and Notifications 5106. Mailpit uses 1025 for SMTP and 8025 for its web inbox. The dashboard runs on 15101.
 - The AppHost adds a SQL Server container with a named data volume and the databases `catalog`, `orders`, `inventory` and `notifications`. The services wait for their database. The `inventory` database also gets its SQL scripts, see [Inventory service](#inventory-service).
 - The services read `GetConnectionString("catalog")`, `GetConnectionString("orders")`, `GetConnectionString("inventory")` and `GetConnectionString("notifications")`.
 - Orders gets the address of the gateway through service discovery. That switches on `CatalogPriceProvider` and `InventoryStockReservation`, which call Catalog and Inventory through the gateway.
-- The Azure Service Bus emulator runs next to them, see [Service Bus emulator](#service-bus-emulator). Orders, Payment, Inventory and Notifications get its connection string as `messaging`. Orders waits for Payment, which creates the queues `TakePayment` and `RefundPayment` and the topics `PaymentProcessed` and `PaymentRefunded`. Inventory and Notifications wait for Orders.
-- Payment gets the client `cat-demo-payment` of Keycloak as `Authentication__ClientId` and `Authentication__ClientSecret`, next to the client of Orders. Inventory gets the client `cat-demo-inventory` the same way. They are demo secrets.
+- The Azure Service Bus emulator runs next to them, see [Service Bus emulator](#service-bus-emulator). Orders, Inventory and Notifications get its connection string as `messaging`. Orders creates the queues `TakePayment` and `RefundPayment` and the topics `PaymentProcessed` and `PaymentRefunded` itself. Inventory and Notifications wait for Orders.
+- The payment provider has no Keycloak client. The AppHost holds the API key as the secret parameter `payment-provider-api-key`, with the demo value in its `appsettings.json`, and passes it to Payment as `Provider__ApiKey` and to Orders as `PaymentProvider__ApiKey`. Orders also gets the address of Payment as `PaymentProvider__Url`. Orders waits for Payment, and the provider has no connection to the bus. Inventory gets the client `cat-demo-inventory` of Keycloak as `Authentication__ClientId` and `Authentication__ClientSecret`, next to the client of Orders. They are demo secrets.
 - Mailpit runs as a container next to them, with the image `axllent/mailpit`. Notifications gets `Smtp:Host` and `Smtp:Port` from the AppHost and waits for Mailpit. Notifications has no route in the gateway.
 - Keycloak is a plain container on port 8180. The realm file `keycloak/cat-demo-realm.json` is mounted and imported at the start. The official Aspire Keycloak package is only a preview, so the demo does not use it.
-- The gateway runs on port 5100. It finds Catalog, Orders, the payment service and Inventory through service discovery. The AppHost gives the gateway and every service the address of the Keycloak realm.
+- The gateway runs on port 5100. It finds Catalog, Orders and Inventory through service discovery. The AppHost gives the gateway and every service the address of the Keycloak realm.
 - The React client runs with Vite on the fixed port 5104, because the gateway lists that port as an allowed CORS origin.
-- The AppHost passes the settings `Payment:Latency`, `Payment:ErrorPercentage` and `Payment:Outage` to the payment service, and `Orders:PaymentTimeoutSeconds` to the orders service. See [Payment service](#payment-service).
+- The AppHost passes the settings `Payment:Latency`, `Payment:ErrorPercentage` and `Payment:Outage` to the payment provider, and `Orders:PaymentTimeoutSeconds` to the orders service. See [Payment service](#payment-service).
 
 **CAT modules.** None. The AppHost is demo infrastructure. The modules never depend on Aspire.
 
@@ -520,13 +520,13 @@ The chapters above tell why. The chapters below hold the facts of every block th
 
 ### API Gateway
 
-**What it is.** The one door for clients. It checks the token and forwards calls to Catalog, Orders, the payment service and Inventory. It holds no business logic. The block is a small host project on top of the `Cat.Api.Gateway` module.
+**What it is.** The one door for clients. It checks the token and forwards calls to Catalog, Orders and Inventory. It holds no business logic. The block is a small host project on top of the `Cat.Api.Gateway` module.
 
 **How it works.**
 - `demo/Cat.Demo.Api.Gateway/Cat.Demo.Api.Gateway` is a web project of about twenty lines. It calls `AddCatApiGateway`, adds the Aspire service discovery for YARP, and calls `UseCatApiGateway` and `MapCatApiGateway`.
-- The `CatGateway` section of `appsettings.json` names the services `catalog`, `orders`, `payment` and `inventory`. The path of a service is its name, so `/catalog/**` goes to Catalog, `/orders/**` to Orders, `/payment/**` to the payment service and `/inventory/**` to Inventory. The services already use that prefix, so `StripPrefix` is off.
-- The AppHost sets the addresses to `http://catalog`, `http://orders`, `http://payment` and `http://inventory`, which service discovery resolves.
-- Catalog lists `GET /books/**` and `GET /categories/**` as public. Everything else needs a token, also the payment and the inventory routes. Saving a book needs a token, and the Catalog service wants the `admin` role on top.
+- The `CatGateway` section of `appsettings.json` names the services `catalog`, `orders` and `inventory`. The path of a service is its name, so `/catalog/**` goes to Catalog, `/orders/**` to Orders and `/inventory/**` to Inventory. The services already use that prefix, so `StripPrefix` is off.
+- The AppHost sets the addresses to `http://catalog`, `http://orders` and `http://inventory`, which service discovery resolves.
+- Catalog lists `GET /books/**` and `GET /categories/**` as public. Everything else needs a token, also the inventory route. Saving a book needs a token, and the Catalog service wants the `admin` role on top.
 - The gateway checks that the token comes from the Keycloak realm and has the audience `cat-gateway`. It does not look at roles. It forwards the token unchanged, and the service checks it again.
 - Identity headers a caller sends, such as `X-Demo-User`, never reach a service.
 - The `/health` and `/alive` endpoints of the gateway are mapped with `AllowAnonymous`, because the gateway is closed by default.
@@ -558,7 +558,7 @@ The gateway only option of the module is not used in the demo. The services chec
 - The AppHost starts it as a plain container on port 8180. There is no data volume, so every start imports the realm again.
 - The realm file `demo/Cat.Demo.AppHost/Cat.Demo.AppHost/keycloak/cat-demo-realm.json` holds the realm `cat-demo`, the role `admin` and the users `alice`, `bob` and `admin`. The user ids equal the user names, so the `sub` claim of a token matches the seeded data.
 - Two public clients exist. `cat-demo-web` is for the React app. It uses the authorization code flow with PKCE. Its web origin is `http://localhost:5104`, so the browser may call the token endpoint of Keycloak. `cat-demo-cli` allows the password grant, for the `.http` files only.
-- Three confidential clients exist: `cat-demo-orders`, `cat-demo-payment` and `cat-demo-inventory`. Each has a service account and the client credentials grant, so the service can get a token of its own for work without a user, such as the jobs of the Scheduler. The token has the audience `cat-gateway`, like the others. The secrets, such as `cat-demo-orders-secret`, are in the realm file and in the AppHost. Use it in the demo only. Keycloak imports the realm file at its start, so a change to the file shows after a restart of the AppHost.
+- Two confidential clients exist: `cat-demo-orders` and `cat-demo-inventory`. Each has a service account and the client credentials grant, so the service can get a token of its own for work without a user, such as the jobs of the Scheduler. The token has the audience `cat-gateway`, like the others. The secrets, such as `cat-demo-orders-secret`, are in the realm file and in the AppHost. Use it in the demo only. Keycloak imports the realm file at its start, so a change to the file shows after a restart of the AppHost.
 - Both clients add the audience `cat-gateway` and a flat `roles` claim to the access token. The web client adds the `roles` claim to the ID token too, so the React app can show the admin links.
 - The gateway and the services read the signing keys from the realm and check every token themselves. See [API Gateway](#api-gateway).
 
@@ -671,7 +671,7 @@ erDiagram
   2. Look up the price of every line and add up the total.
   3. Create the order. It gets its number and the status `Pending` in one transaction. The workflow supplies the order ID and the time before the command runs. `OrderCreateCommand` is a typed command, and it returns an `OrderCreated` with the ID and the order number, which only the database can hand out.
   4. Reserve the stock. If a book is out of stock, cancel the order and stop.
-  5. Take the payment. `SendAndWait` sends the message `TakePayment` to Payment with the order number and the total, saves the state of the workflow in the saga table and stops. The caller gets its 202 here. The answer `PaymentProcessed` resumes the workflow, also after a restart of Orders. Then it saves the payment. If it is declined, cancel the order and stop. If no answer comes within `Orders:PaymentTimeoutSeconds` (2 minutes by default), the saga timeout message resumes the workflow, which cancels the order with the reason `PaymentUnavailable` and stops. Nothing is saved then.
+  5. Take the payment. `SendAndWait` sends the message `TakePayment` to a queue of Orders with the order number and the total, saves the state of the workflow in the saga table and stops. The caller gets its 202 here. `TakePaymentHandler` receives it, calls the payment provider and publishes the answer `PaymentProcessed`, which resumes the workflow, also after a restart of Orders. Then it saves the payment. If it is declined, cancel the order and stop. If no answer comes within `Orders:PaymentTimeoutSeconds` (2 minutes by default), the saga timeout message resumes the workflow, which cancels the order with the reason `PaymentUnavailable` and stops. Nothing is saved then.
   6. Confirm the order.
 
   The error codes of a stop after step 5 (`DEM-ORD-1003` and `DEM-ORD-1006`) end up in the result of the saga, and nobody waits for that result any more. The person sees the status `Cancelled`.
@@ -679,8 +679,8 @@ erDiagram
 - `PlaceOrderRequestHandler` catches a cancelled request token once the order exists, for example when the gateway gives up on a slow first call. It publishes the cancelled event with the reason `RequestCancelled` and its own 10 second token, then rethrows. Without it the order would stay Pending for good. A crash of the service in the middle of the workflow is not covered by this. The sweep of stuck orders covers it, see **Stuck orders** below.
 - Confirming an order also tells the other services. `OrderSetStatusCommandHandler` sets the status, and when the new status is confirmed it also sets `ConfirmedAt` and publishes the message `OrderConfirmed` with `ICatMessageSender`. The message carries the order id, the order number, the total and the name and email of the customer, so Notifications needs no call back to Orders. The message type lives in the `Contracts` project of Orders, in `Messages`. The outbox is on, so the sender does not send at once. It adds a row to the `CatOutbox` table in the same `OrderDbContext`, and the one `SaveChanges` of the handler saves the status and the message together. A background service of `Cat.Messaging.Outbox` sends the rows to the bus and marks them as sent, so a crash between the save and the send loses nothing. A message can be sent twice after such a crash, and the receiver handles that.
 - At startup, in `Development`, Orders creates the topic `OrderConfirmed` on the bus.
-- Stock and price sit behind interfaces: `IStockReservation` and `IPriceProvider`. For stock, `InventoryStockReservation` uses the generated `IInventoryClient` of `Cat.Demo.InventoryService.Api.Client`, which shares the `Contracts` project of Inventory. It reserves all lines with `POST /inventory/reservations`, with the ISBN of each book, and releases with `DELETE /inventory/reservations/{orderNumber}`. A 409 or a 404 means out of stock. Any other failure or a timeout means unavailable, and the workflow cancels the order with `DEM-ORD-1007`. A failed release is logged and not thrown, and a cancel because Inventory did not answer skips the release. `FakeStockReservation` answers without a gateway address. For prices, `CatalogPriceProvider` uses the generated `ICatalogClient` of `Cat.Demo.CatalogService.Api.Client`. It calls `GET /catalog/books/prices` through the gateway when the host gives Orders the address of the gateway, as the AppHost does. Without it, `FakePriceProvider` answers. The inventory route is not anonymous, so `ForwardBearerTokenHandler` passes the token of the user on to the call. A call without a request, such as a job of the Scheduler, has no user token. `ForwardBearerTokenHandler` then asks `IClientTokenProvider` for a client credentials token of the client `cat-demo-orders`. `ClientCredentialsTokenProvider` fetches it from Keycloak and keeps it until 30 seconds before it expires. It needs the settings `Authentication:Authority`, `Authentication:ClientId` and `Authentication:ClientSecret`, which the AppHost sets. Without them, or when Keycloak does not answer, the call goes out without a token and gets a 401, which counts as unavailable. The token code lives in `Cat.Demo.ServiceDefaults` and Payment uses it too. Run `Refresh-InventoryClient.ps1` in the client project after the inventory service changes.
-- Payment is not an interface any more. The place order saga sends `TakePayment` to a queue and waits for `PaymentProcessed`. The part **The saga** below explains how.
+- Stock and price sit behind interfaces: `IStockReservation` and `IPriceProvider`. For stock, `InventoryStockReservation` uses the generated `IInventoryClient` of `Cat.Demo.InventoryService.Api.Client`, which shares the `Contracts` project of Inventory. It reserves all lines with `POST /inventory/reservations`, with the ISBN of each book, and releases with `DELETE /inventory/reservations/{orderNumber}`. A 409 or a 404 means out of stock. Any other failure or a timeout means unavailable, and the workflow cancels the order with `DEM-ORD-1007`. A failed release is logged and not thrown, and a cancel because Inventory did not answer skips the release. `FakeStockReservation` answers without a gateway address. For prices, `CatalogPriceProvider` uses the generated `ICatalogClient` of `Cat.Demo.CatalogService.Api.Client`. It calls `GET /catalog/books/prices` through the gateway when the host gives Orders the address of the gateway, as the AppHost does. Without it, `FakePriceProvider` answers. The inventory route is not anonymous, so `ForwardBearerTokenHandler` passes the token of the user on to the call. A call without a request, such as a job of the Scheduler, has no user token. `ForwardBearerTokenHandler` then asks `IClientTokenProvider` for a client credentials token of the client `cat-demo-orders`. `ClientCredentialsTokenProvider` fetches it from Keycloak and keeps it until 30 seconds before it expires. It needs the settings `Authentication:Authority`, `Authentication:ClientId` and `Authentication:ClientSecret`, which the AppHost sets. Without them, or when Keycloak does not answer, the call goes out without a token and gets a 401, which counts as unavailable. The token code lives in `Cat.Demo.ServiceDefaults`. Run `Refresh-InventoryClient.ps1` in the client project after the inventory service changes.
+- Payment sits behind the interface `IPaymentProvider`, with `ChargeAsync` and `RefundAsync`. `PaymentProviderGateway` implements it with the generated client `IPaymentProviderClient` in the folder `PaymentProvider` of the infrastructure project. The folder holds a copy of the provider OpenAPI document (`payment-provider.openapi.json`), `nswag.json`, the script `Refresh-PaymentProviderClient.ps1` and the generated `PaymentProviderClient.cs`. Run the script with the payment provider running on port 5103 to regenerate the client. The client is registered with a plain `AddHttpClient` in `AddCatDemoOrderPaymentProvider`. The address and the API key come from the settings `PaymentProvider:Url` and `PaymentProvider:ApiKey`, and the call does not go through the gateway. The resilience handler of `ServiceDefaults` adds retries and a circuit breaker. Every call carries an `Idempotency-Key` header, so a retry never charges twice. A decline is an answer of the provider with status 200. A provider that cannot answer gives the result `Unavailable`.
 - `CatalogPriceProvider` wraps the call in `CatApiCall.ExecuteAsync`, so a failure arrives as an `ICatResponse`. A 200 gives the prices and a 404 becomes `PriceUnavailable`. Any other status, a network error or a timeout becomes an error response, because Orders never trusts a half answer. The resilience handler adds retries and a circuit breaker. Catalog reads are public, so the call sends no token. The unit tests use a fake `HttpMessageHandler` under the generated client, so they need no database and no running service. Run `Refresh-CatalogClient.ps1` in the client project to regenerate the client after Catalog changes. Catalog must run on port 5101 for it.
 - `ICatUser` tells the core service who is calling. With a login `Cat.Users` reads the claims of the token (`sub`, `name` and the `admin` role), and `IUserEmail` reads the `email` claim. Orders of other users come back as not found.
 - The order overview (`GET /`) reads with plain SQL. `OrderGetListQueryHandler` inherits `CatDapperQueryHandlerBase`, runs `OrderGetListQueryHandler.sql` and returns `OrderSummaryRow` objects. The file sits next to the handler, and the source generator of `Cat.Dapper.SqlFiles` turns it into the constant `Sql`. The query joins `Order`, `OrderStatus` and `Customer` and filters on the external id of the customer. The other reads and all writes stay on EF Core. Both use the same orders database, each with its own connection.
@@ -688,16 +688,17 @@ erDiagram
 
 **The saga.** `OrderSagaExtensions` in the Api project registers it with `AddCatDemoOrderSagas`.
 - **State.** The table `CatSagas` in the orders database holds one row per placed order: the status, the state of the workflow as JSON, the wait it is stopped at and a version for concurrency. `PlaceOrderState` is plain data, so it serializes.
-- **The request.** `AddCatSagasOutbox()` puts `TakePayment` in the outbox table of the same context. The saga row and the message row are saved together, so a crash cannot leave a waiting saga without a request, or a request without a saga.
+- **The request.** `AddCatSagasOutbox()` puts `TakePayment` in the outbox table of the same context. The saga row and the message row are saved together, so a crash cannot leave a waiting saga without a request, or a request without a saga. The outbox sends it to the queue `TakePayment` of Orders, and Orders listens to that queue itself with `Receive<TakePayment>()`.
+- **The call.** `TakePaymentHandler` is a service request handler. It calls `IPaymentProvider.ChargeAsync` with the id of the saga as the idempotency key. A decline is an answer. When the provider is not available, the handler returns a failed response with `DEM-ORD-1008`, and the event processor abandons the message, so the bus delivers it again. When the provider answers, the handler runs `PaymentProcessedPublishCommand` through `ICatCurrentScopeCommandProcessor`. Its handler publishes `PaymentProcessed` with the correlation id of the request, and the one `SaveChanges` saves the outbox row and the inbox row of the request together. The message `TakePayment` is received with `UseInbox`, so a repeated delivery after the save does not call the provider again.
 - **The answer.** Orders listens with the subscription `orders`. `AddCatSagaAnswer<PaymentProcessed>()` finds the saga instance by the correlation id of the message, which is the id of the instance, and resumes the workflow. A message for an instance that is not waiting any more is ignored.
 - **The timeout.** The wait step schedules a `CatSagaTimeout` message for the end of the wait. If the answer comes first, the timeout finds nothing to do. If not, it resumes the workflow with `TimedOut`. Orders must listen to `CatSagaTimeout` itself, so it declares it with `Receive<CatSagaTimeout>()` next to `Receive<PaymentProcessed>()`.
 - **The inbox.** `PaymentProcessed` is received with `UseInbox`. The receiver adds a row to `CatInbox` in the same transaction that saves the saga, so an answer that arrives twice runs the workflow once. The receiver runs the handler in its own scope for this, through `ICatCurrentScopeServiceRequestProcessor`. A live order gave exactly one inbox row, and a test covers the second delivery.
-- **Startup.** In `Development`, Orders creates its subscription `orders` on the topics of `PaymentProcessed` and `PaymentRefunded` and the queue for `CatSagaTimeout`. Payment creates the queues `TakePayment` and `RefundPayment` and the topics `PaymentProcessed` and `PaymentRefunded` itself, which is why Orders waits for Payment in the AppHost.
+- **Startup.** In `Development`, Orders creates the queues `TakePayment`, `RefundPayment` and `CatSagaTimeout`, the topics `PaymentProcessed` and `PaymentRefunded`, and its subscription `orders` on the topics it receives. The four payment messages live in the core of Orders, in `Messages`, and `EnsureTopologyAsync` gets that assembly next to the one of the contracts.
 
 **The refund.** A cancelled order gets its money back, and it needs no saga. The place order saga ends when the order is confirmed, so it cannot hold a refund that starts later, when the person cancels.
-- **The request.** `PaymentRefundSubscriber` subscribes to `OrderCancelledEvent`, like the stock release, and runs `PaymentRefundRequestCommand`. `PaymentRefundRequestCommandHandler` looks for the payment of the order. Only a payment with the status `Approved` gets a refund. The handler sets the status `RefundPending` and sends `RefundPayment` with `ICatMessageSender`. The outbox is on, so the one `SaveChanges` saves the status and the message together. An order that was cancelled before it was paid, or after a decline, has no approved payment and gets no message.
-- **The cancel does not wait.** The order is `Cancelled` at once, and the payment shows `RefundPending` until Payment answers. A refund that never gets an answer stays `RefundPending`, and the demo accepts that.
-- **The answer.** Payment publishes `PaymentRefunded` on a topic with the same correlation id. `PaymentRefundedHandler` is a plain service request handler, and Orders receives the message with `Receive<PaymentRefunded>()` on the subscription `orders`. It runs `PaymentRefundedSaveCommand`, which sets the payment to `Refunded`. An answer with `Refunded` false means Payment had nothing to give back, and the payment keeps its status.
+- **The request.** `PaymentRefundSubscriber` subscribes to `OrderCancelledEvent`, like the stock release, and runs `PaymentRefundRequestCommand`. `PaymentRefundRequestCommandHandler` looks for the payment of the order. Only a payment with the status `Approved` gets a refund. The handler sets the status `RefundPending` and sends `RefundPayment` with `ICatMessageSender`. It goes to a queue of Orders, and `RefundPaymentHandler` calls the refund endpoint of the provider with `refund-` and the order number as the idempotency key. The outbox is on, so the one `SaveChanges` saves the status and the message together. An order that was cancelled before it was paid, or after a decline, has no approved payment and gets no message.
+- **The cancel does not wait.** The order is `Cancelled` at once, and the payment shows `RefundPending` until the provider answers. A refund that never gets an answer stays `RefundPending`, and the demo accepts that.
+- **The answer.** `RefundPaymentHandler` publishes `PaymentRefunded` on a topic with the same correlation id. `PaymentRefundedHandler` is a plain service request handler, and Orders receives the message with `Receive<PaymentRefunded>()` on the subscription `orders`. It runs `PaymentRefundedSaveCommand`, which sets the payment to `Refunded`. An answer with `Refunded` false means the provider had nothing to give back, and the payment keeps its status.
 - **The inbox.** `PaymentRefunded` is received with `UseInbox`. The handler starts its command through `ICatCurrentScopeCommandProcessor`, so the command runs in the scope of the receiver and one `SaveChanges` saves the inbox row and the payment status. `ICatCommandProcessor` would open its own scope for the command, and the row would not be saved. A live refund left one inbox row and set the payment to `Refunded`, and a second delivery with the same message ID did not run the handler again.
 - **A cancel by the sweep or the caller.** The cancelled event also comes from the stuck orders job and from the cancelled request token. The same subscriber handles them, and the same rule decides whether there is anything to refund.
 - **Not covered.** A payment that answers after the timeout is ignored by the saga and never saved in Orders, so it is not refunded. A shipped order cannot be cancelled, so it has no refund.
@@ -747,6 +748,7 @@ Edge cases:
 | `DEM-ORD-1005` | `NotAuthenticated` | `You must be logged in to do this.` |
 | `DEM-ORD-1006` | `PaymentUnavailable` | `The payment service is not available. Order {OrderNumber} was cancelled. Try again later.` |
 | `DEM-ORD-1007` | `StockUnavailable` | `The inventory service is not available. Order {OrderNumber} was cancelled. Try again later.` |
+| `DEM-ORD-1008` | `PaymentProviderUnavailable` | `The payment provider could not answer for order {OrderNumber}.` |
 
 **Database.** The `orders` database is built. It is a SQL Server database that only Orders reads. In `Development` the service applies its EF Core migrations at startup and adds the four order statuses. All tables are regular entities that inherit `CatEntityBase`. `OrderNumber` is unique. `OrderLine` refers to a book with `BookId` and has no foreign key, because the book lives in the Catalog database. `DailyOrderCounter` has no relationship with the other tables. `CatOutbox` comes from `Cat.Messaging.Outbox.EFCore`, and has none either. `CatSagas` comes from `Cat.Sagas.EFCore` and `CatInbox` from `Cat.EventProcessor.Inbox.EFCore`. They have no relationships either. The order number sits in the JSON state of the saga. `CatJobRun` comes from `Cat.Scheduling.EFCore`. It holds the run history of the Scheduler and is not in the diagram. Only `Order.ConfirmedAt`, `Payment.PaidAt`, four columns of the outbox (`SentAt`, `SessionId`, `ScheduledAt` and `PropertiesJson`) and two columns of the saga table (`Checkpoint` and `Waits`) can be empty, and the diagram marks them. Names and columns are not final.
 
@@ -846,9 +848,9 @@ erDiagram
 | `Cat.EFCore` | DataModels and Infrastructure | Entities with `Guid` ids and sequence ids. The handlers inherit the base query and command handlers. The order handler starts its own transaction. |
 | `Cat.Dapper`, `Cat.Dapper.SqlServer` and `Cat.Dapper.SqlFiles` | Infrastructure | The order overview is a read only query with plain SQL, kept in a `.sql` file. |
 | `Cat.Users` | Core service (`Cat.Users.Abstractions`) and the host | The handlers ask `ICatUser` who is calling. Customers see their own orders and an admin sees all of them. |
-| `Cat.Messaging`, `Cat.Messaging.AzureServiceBus`, `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore` | Contracts (the message), Infrastructure and Api | Publishes `OrderConfirmed` to the bus, sends `TakePayment` and `RefundPayment`, and keeps the messages in the outbox until they are sent. |
+| `Cat.Messaging`, `Cat.Messaging.AzureServiceBus`, `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore` | Contracts (the message), Infrastructure and Api | Publishes `OrderConfirmed` to the bus, sends `TakePayment` and `RefundPayment` to queues of Orders, publishes the two answers, and keeps the messages in the outbox until they are sent. |
 | `Cat.Sagas`, `Cat.Sagas.EFCore` | Core service (the workflow) and Api | The place order workflow stops at the payment and carries on with the answer, also after a restart. |
-| `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus`, `Cat.EventProcessor.Inbox.EFCore` and `Cat.EventProcessor.Authorization` | Api | Receives `PaymentProcessed`, `PaymentRefunded` and the saga timeout. The inbox makes a payment answer count once, and the authorization checks the token of the message. |
+| `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus`, `Cat.EventProcessor.Inbox.EFCore` and `Cat.EventProcessor.Authorization` | Api | Receives `TakePayment`, `RefundPayment`, `PaymentProcessed`, `PaymentRefunded` and the saga timeout. The inbox makes a request or an answer count once, and the authorization checks the token of the message. |
 | `Cat.Expressions` | Api | Compiled member access. |
 | `Cat.UnitTesting.Commands`, `Cat.UnitTesting.Queries` and `Cat.UnitTesting.NUnit` | Core service tests | The fake processors replace the database. `OrderCommandDefaults` sets the ids that the real handlers hand out, and `UnitTestBase` builds the service provider of the workflow and validation tests. |
 
@@ -856,7 +858,7 @@ erDiagram
 - The business process is one readable class.
 - The status and the message are saved in one `SaveChanges`, so an order never confirms without telling the others.
 - Events keep the status update, audit and cleanup out of the workflow.
-- A slow or stopped payment service does not block a request. The caller gets its answer at once, and the order ends by itself: confirmed, declined or timed out.
+- A slow or stopped payment provider does not block a request. The caller gets its answer at once, and the order ends by itself: confirmed, declined or timed out.
 - A restart of Orders in the middle of a payment loses nothing, because the saga state is in the database.
 - The order overview reads only the columns it shows, with no change tracking and no mapping step.
 
@@ -865,7 +867,7 @@ erDiagram
 - Subscribers live as long as the app, because the aggregator holds them with weak references. A subscriber that needs the `DbContext` opens its own scope.
 - The order does not show its refund. The order model has no refund status, so the status `RefundPending` or `Refunded` is only in the `Payment` table. A refund that never gets an answer stays `RefundPending`, with no timeout and no retry on the Orders side.
 - A payment that answers after the timeout is still not refunded. The order is cancelled already, the saga ignores the answer and Orders never saves the payment, so the money stays taken.
-- Payment remembers its payments and its refunds in memory. After a restart of Payment, a refund of an earlier payment gets the answer `Refunded` false, and the payment in Orders stays `RefundPending`.
+- The payment provider is a stand-in that remembers its payments and its refunds in memory. After a restart of Payment, a refund of an earlier payment gets the answer `nothing_to_refund`, and the payment in Orders stays `RefundPending`.
 - The caller learns the end result by asking again. The client polls every 2 seconds while the order is `Pending`, and every 10 seconds while it is `Confirmed`. Nothing pushes the result.
 - The token of a message sits in the queue and in the outbox table for as long as the message does.
 - The inbox and outbox tables have a nightly cleanup of rows older than 30 days. Until it runs, they grow.
@@ -1014,7 +1016,7 @@ erDiagram
 - Logs, metrics and traces with OpenTelemetry. The wildcard source `Cat.*` covers the CAT decorators and workflows. Data leaves the process only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set, which the AppHost does.
 - A readiness check at `/health` and a liveness check at `/alive`.
 - The token check of the services. `AddDemoJwtAuthentication` turns on JWT validation when `Authentication:Authority` is set. It also registers `Cat.Users` and `Cat.Users.JwtBearer`, so `ICatUser` comes from the token and the role policies read the same `roles` claim. `AddDemoAuthorization` holds the `admin` policy.
-- The client credentials token of a service. `AddDemoClientCredentials` registers `ClientCredentialsTokenProvider`, which fetches a token for the client in `Authentication:ClientId` from Keycloak and keeps it until shortly before it expires. Orders, Payment and Inventory use it. `AddDemoMessageTokens` registers `DemoMessageTokenProvider`, which gives a message the token of the current user, or the client credentials token of the service when there is no user request. A message with a scheduled time gets the client credentials token as well, because the token of a user is expired when the bus delivers it.
+- The client credentials token of a service. `AddDemoClientCredentials` registers `ClientCredentialsTokenProvider`, which fetches a token for the client in `Authentication:ClientId` from Keycloak and keeps it until shortly before it expires. Orders and Inventory use it. `AddDemoMessageTokens` registers `DemoMessageTokenProvider`, which gives a message the token of the current user, or the client credentials token of the service when there is no user request. A message with a scheduled time gets the client credentials token as well, because the token of a user is expired when the bus delivers it.
 - Service discovery and the standard resilience handler on every `HttpClient`: retries, timeouts and a circuit breaker. The pipeline is chosen per service address, so a failing service opens its own circuit and not the circuit of the others.
 
 **CAT modules.** Only for the token setup: it references `Cat.Users` and `Cat.Users.JwtBearer`, and `Cat.Messaging.Abstractions` for the token of a message. Nothing else is referenced. The rest works next to the modules: the tracing decorator of `Cat.ServiceRequests` shows up in the traces.
@@ -1030,29 +1032,25 @@ erDiagram
 
 ### Payment service
 
-**What it is.** A small separate service, `Cat.Demo.PaymentService`, that pretends to be a payment provider. Orders asks it for a payment, and for a refund, with a message, and it answers with a message. It has no database. It checks the token of a message like Orders does.
+**What it is.** A small separate service, `Cat.Demo.PaymentService`, that pretends to be an outside payment provider. It is a plain REST API with no CAT module, no `ServiceDefaults` and no login with Keycloak, and it sits outside the gateway. Orders calls it directly with an API key. It has no database and knows nothing about the bus.
 
 **How it works.**
-- **The question.** `TakePayment` is a command message with an order number and an amount. It goes to a queue. `TakePaymentHandler` is a service request handler, like every other handler, and `Cat.EventProcessor` runs it. It takes the payment with `PaymentProcessor`.
-- **The answer.** The handler publishes `PaymentProcessed` on a topic with the same correlation id as the request, which is the id of the saga instance in Orders. A declined payment is an answer too, with `Approved` false and no reference. An amount up to 500 euro is approved. A higher amount is declined. A request without an order number or with an amount of zero or less gets a failed response with `DEM-PAY-1000` and no answer message.
-- **Idempotency.** The order number is the idempotency key. `PaymentProcessor` remembers the answer per order number in memory. A request that arrives twice gets the same answer and nothing is charged twice.
-- **The refund.** `RefundPayment` is a command message with an order number. It goes to its own queue, and `RefundPaymentHandler` runs it with `PaymentProcessor.RefundAsync`. A payment that is in the ledger and was approved is refunded, and the order number is remembered as refunded. The handler publishes `PaymentRefunded` with the same correlation id and `Refunded` true. A declined payment, a payment that was never taken and a request after a restart of Payment get `Refunded` false. A request without an order number gets a failed response with `DEM-PAY-1002` and no answer message. The same refund twice gives the same answer.
-- **Contracts.** `Cat.Demo.PaymentService.Contracts` holds `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded`. Orders references this project, see [Sharing contracts](#sharing-contracts).
-- **Startup.** In `Development`, Payment creates the queues of `TakePayment` and `RefundPayment` and the topics of `PaymentProcessed` and `PaymentRefunded` on the bus, with `PaymentMessagingExtensions`. Orders waits for Payment in the AppHost for this reason.
-- **Tokens.** With a login, Payment accepts a message only from a logged in caller, and answers with a token from its own client `cat-demo-payment`. The code that fetches the token is shared in `Cat.Demo.ServiceDefaults`.
-- **The HTTP endpoint.** `POST /payment/payments` is still there, with the same rules and the same failure settings. The service runs on port 5103, and the gateway has a restricted route for it. Orders does not call it any more. The generated client `Cat.Demo.PaymentService.Api.Client` stays, and nothing uses it for now.
-- The `Cat.Demo.PaymentService.CoreService` project holds the rules, the handler and the failure switches. The `Api` project has the endpoint and the messaging setup.
-- The service defines two error codes with the prefix `DEM-PAY`: `DEM-PAY-1000` for a bad request and `DEM-PAY-1001` for a failure that was switched on.
+- **The API.** `POST /charges` takes a payment and `POST /refunds` gives the money back. Both want the API key in the header `Authorization: Bearer` and an `Idempotency-Key` header. A wrong or missing key answers 401, and a missing header or a bad body answers 400. `/health` has no key. In `Development` the service serves its OpenAPI document at `/openapi/v1.json`, and Orders generates its client from a copy of it.
+- **The charge.** An amount up to 500 euro is approved and gets a reference. A higher amount is declined. A decline answers 200 with `status: declined`, because a decline is an answer and nobody should retry it.
+- **Idempotency.** `PaymentProcessor` remembers the answer per idempotency key in memory. A request that arrives twice with the same key gets the same answer and nothing is charged twice. Orders uses the id of the saga as the key of a charge.
+- **The refund.** A payment that was approved is refunded, and the answer is `status: refunded`. A declined payment, a payment that was never taken and a request after a restart of the service get `status: nothing_to_refund`. The same key twice gives the same answer.
+- The `Cat.Demo.PaymentService.CoreService` project holds the rules and the failure switches. The `Api` project holds the minimal API.
+- The service has no contracts or client project, like a real provider. Orders keeps its own copy of the OpenAPI document and generates its client, see [Orders service](#orders-service). The four messages of the saga live in the core of Orders.
 
-**Failures on purpose.** The settings of the service switch them on. A call cannot ask for a failure. All are off by default. They apply to the message handler and to the HTTP endpoint.
+**Failures on purpose.** The settings of the service switch them on. A call cannot ask for a failure. All are off by default. A failure that was switched on answers 503.
 
 | Setting | What it does |
 |---|---|
 | `PaymentFailures:Latency` | Waits this long before every answer, for example `00:00:05`. A long delay shows the wait of the order. A delay longer than the payment timeout of Orders shows the timeout. |
-| `PaymentFailures:ErrorPercentage` | The share of requests, 0 to 100, that fail after the payment is taken. The handler returns a failed response, so the listener abandons the message and the bus delivers it again. A second delivery finds the answer of the first and charges nothing twice. |
-| `PaymentFailures:Outage` | `true` makes every request fail at once, and nothing is taken. No answer message is sent, so the order times out and is cancelled after its wait. In between, the listener logs a warning for every delivery (`Abandoning TakePayment ... on delivery 1: DEM-PAY-1001`). The emulator delivered the request 10 times, its default maximum, and then stopped. A message that reached the maximum goes to the dead letter queue of the queue. |
+| `PaymentFailures:ErrorPercentage` | The share of requests, 0 to 100, that fail with 503. Orders sees a failed call and asks again, or abandons the message so the bus delivers it again. A repeated key finds the answer of the first call and charges nothing twice. |
+| `PaymentFailures:Outage` | `true` makes every request fail with 503 at once, and nothing is taken. Orders cannot get an answer, so the order times out and is cancelled after its wait. In between, the event processor logs a warning for every delivery of `TakePayment`. |
 
-The settings apply to a refund as well. An outage or a random error fails the `RefundPayment` request, and the bus delivers it again. The payment in Orders stays `RefundPending` until a delivery gets through.
+The settings apply to a refund as well. An outage or a random error fails the call, and the bus delivers `RefundPayment` again. The payment in Orders stays `RefundPending` until a delivery gets through.
 
 Set `Payment:Latency`, `Payment:ErrorPercentage` or `Payment:Outage` in the configuration of the AppHost and start it again. For example:
 
@@ -1060,36 +1058,28 @@ Set `Payment:Latency`, `Payment:ErrorPercentage` or `Payment:Outage` in the conf
 dotnet user-secrets set "Payment:Outage" "true" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost
 ```
 
-Remove the secret to switch the failure off again. A running service reads a changed setting again, for the handler and for the endpoint. Place an order and watch the status in the web shop: it stays `Pending` while Payment is slow or down, and ends as `Cancelled` when the wait of Orders runs out. Set `Orders:PaymentTimeoutSeconds` to a small number, such as 20, to see that without waiting 2 minutes. Set it like the payment settings, in the configuration of the AppHost, for example `dotnet user-secrets set "Orders:PaymentTimeoutSeconds" "20" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost`, and start the AppHost again. The AppHost passes it to Orders.
+Remove the secret to switch the failure off again. A running service reads a changed setting again. Place an order and watch the status in the web shop: it stays `Pending` while the provider is slow or down, and ends as `Cancelled` when the wait of Orders runs out. Set `Orders:PaymentTimeoutSeconds` to a small number, such as 20, to see that without waiting 2 minutes. Set it like the payment settings, in the configuration of the AppHost, for example `dotnet user-secrets set "Orders:PaymentTimeoutSeconds" "20" --project demo/Cat.Demo.AppHost/Cat.Demo.AppHost`, and start the AppHost again. The AppHost passes it to Orders.
 
-**CAT modules.**
-
-| Module | Where | Why |
-|---|---|---|
-| `Cat.Messaging`, `Cat.Messaging.AzureServiceBus` | Api | Publishes `PaymentProcessed` and `PaymentRefunded`, and creates the queues and the topics at startup. |
-| `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` | Api | Receives `TakePayment` and `RefundPayment` and runs their handlers. |
-| `Cat.EventProcessor.Authorization` | Api | Checks the token of a message when there is a login. |
-| `Cat.ServiceRequests` | CoreService | `TakePaymentHandler` and `RefundPaymentHandler` are service request handlers. |
+**CAT modules.** None. The service is outside the toolkit on purpose, because a real provider does not use it either. The tests use `NUnit` only.
 
 **Pros.**
-- The demo shows a slow or failing partner and how the order ends: the request waits in a queue, nothing blocks and the saga times out by itself.
-- The failures on purpose make the timeout, the redelivery and the idempotency easy to show.
+- The demo shows a call to an outside partner: an API key, a generated client, an idempotency key and a call that does not go through the gateway.
+- The failures on purpose make the wait, the redelivery, the timeout and the idempotency easy to show.
 
 **Cons.**
 - One more project to build and run.
 - The service forgets its answers when it restarts. It is a fake, so it stays simple on purpose.
 - The service is still pretend. It proves nothing about a real provider.
-- The HTTP endpoint and its client are not used by Orders any more. They stay for now.
+- It exports no telemetry, so the dashboard shows the call only as a client span of Orders.
 
-**More.** `demo/Cat.Demo.PaymentService`, `PlaceOrderWorkflow` in `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.CoreService/Workflows`. [Orders service](#orders-service).
-
+**More.** `demo/Cat.Demo.PaymentService`, `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Infrastructure/PaymentProvider`, `PlaceOrderWorkflow` in `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.CoreService/Workflows`. [Orders service](#orders-service).
 ### Service Bus emulator
 
-**What it is.** The Azure Service Bus emulator, started by the AppHost. It carries the message `OrderConfirmed` from Orders to Inventory and Notifications, and `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded` between Orders and Payment. It runs in Docker with its own SQL Server container, so no Azure subscription is needed.
+**What it is.** The Azure Service Bus emulator, started by the AppHost. It carries the message `OrderConfirmed` from Orders to Inventory and Notifications, and the four payment messages `TakePayment`, `PaymentProcessed`, `RefundPayment` and `PaymentRefunded` inside Orders. It runs in Docker with its own SQL Server container, so no Azure subscription is needed.
 
 **How it works.**
-- The AppHost adds it with `AddAzureServiceBus("messaging").RunAsEmulator()`. The message port is fixed to 5672 and the management port to 5300. Orders, Payment, Inventory and Notifications get the connection string `messaging` and, as `Messaging:AdministrationConnectionString`, a second string for the management port.
-- The AppHost declares no queues or topics. The emulator forgets its entities at every restart, so the services create what they need at startup, in `Development`. Orders creates the topic `OrderConfirmed` and the queue of the saga timeout with `ICatServiceBusTopology.EnsureTopologyAsync`. Payment creates the queue `TakePayment` and the topic `PaymentProcessed` the same way, and Orders creates its subscription `orders` on that topic. Inventory and Notifications create their subscriptions `inventory` and `notifications` with `ICatEventProcessorTopology.EnsureSubscriptionsAsync`. Creating them takes the administration client, which talks to the management port.
+- The AppHost adds it with `AddAzureServiceBus("messaging").RunAsEmulator()`. The message port is fixed to 5672 and the management port to 5300. Orders, Inventory and Notifications get the connection string `messaging` and, as `Messaging:AdministrationConnectionString`, a second string for the management port.
+- The AppHost declares no queues or topics. The emulator forgets its entities at every restart, so the services create what they need at startup, in `Development`. Orders creates the topic `OrderConfirmed`, the queue of the saga timeout, the queues `TakePayment` and `RefundPayment` and the topics `PaymentProcessed` and `PaymentRefunded` with `ICatServiceBusTopology.EnsureTopologyAsync`, and its subscription `orders` on the topics it receives. Inventory and Notifications create their subscriptions `inventory` and `notifications` with `ICatEventProcessorTopology.EnsureSubscriptionsAsync`. Creating them takes the administration client, which talks to the management port.
 - Messages and entities are gone after a restart of the container. The limits of the emulator apply: no partitioned entities, AMQP over TCP only, and at most 50 queues and topics.
 - The password of the development key is fixed and public. Do not use these settings outside the demo.
 
@@ -1097,7 +1087,7 @@ Remove the secret to switch the failure off again. A running service reads a cha
 
 | Module | Where | Why |
 |---|---|---|
-| `Cat.Messaging.AzureServiceBus` | Orders, Payment, Inventory and Notifications | The transport and the creation of the topics and queues. The administration connection string comes from the setting `Messaging:AdministrationConnectionString`. |
+| `Cat.Messaging.AzureServiceBus` | Orders, Inventory and Notifications | The transport and the creation of the topics and queues. The administration connection string comes from the setting `Messaging:AdministrationConnectionString`. |
 
 **Pros.**
 - A real bus on your machine, with no cloud account.
@@ -1108,4 +1098,4 @@ Remove the secret to switch the failure off again. A running service reads a cha
 - Everything is gone after a restart, so a message that is not handled yet is lost with it.
 - The emulator is not the real service. It reports 0 for every message count, so the dead letter metric of `Cat.Messaging` shows 0 against it. Dead letters, sessions, scheduled messages and duplicate detection work, see the module readme of `Cat.Messaging`.
 
-**More.** `demo/Cat.Demo.AppHost/Cat.Demo.AppHost/Program.cs`. [Orders service](#orders-service), [Payment service](#payment-service) and [Inventory service](#inventory-service).
+**More.** `demo/Cat.Demo.AppHost/Cat.Demo.AppHost/Program.cs`. [Orders service](#orders-service) and [Inventory service](#inventory-service).
