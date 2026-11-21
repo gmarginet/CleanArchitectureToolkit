@@ -49,6 +49,7 @@ The module is plain .NET. It never references Aspire.
   - [Add or change a profile](#add-or-change-a-profile)
   - [Retry an unsafe method](#retry-an-unsafe-method)
   - [Protect one call that is not HTTP](#protect-one-call-that-is-not-http)
+  - [Retry a whole command or query](#retry-a-whole-command-or-query)
   - [Without Aspire](#without-aspire)
   - [Tests](#tests)
 
@@ -59,6 +60,8 @@ The module is plain .NET. It never references Aspire.
 | Package | Role | Targets | Install | Downloads |
 |---------|------|---------|---------|-----------|
 | [Cat.Resilience.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Resilience.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Resilience.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Resilience.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Resilience.Abstractions/) |
+| [Cat.Resilience.Commands](https://www.nuget.org/packages/gmarginet.Cat.Resilience.Commands/) | Optional retry around a whole command | netstandard2.0 | `dotnet add package gmarginet.Cat.Resilience.Commands` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Resilience.Commands)](https://www.nuget.org/packages/gmarginet.Cat.Resilience.Commands/) |
+| [Cat.Resilience.Queries](https://www.nuget.org/packages/gmarginet.Cat.Resilience.Queries/) | Optional retry around a whole query | netstandard2.0 | `dotnet add package gmarginet.Cat.Resilience.Queries` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Resilience.Queries)](https://www.nuget.org/packages/gmarginet.Cat.Resilience.Queries/) |
 | [Cat.Resilience](https://www.nuget.org/packages/gmarginet.Cat.Resilience/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Resilience` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Resilience)](https://www.nuget.org/packages/gmarginet.Cat.Resilience/) |
 
 <!-- region end: NuGet-->
@@ -69,6 +72,8 @@ The module is plain .NET. It never references Aspire.
 | Namespace | What it holds |
 |-----------|---------------|
 | [Cat.Resilience.Abstractions](namespaces/Cat.Resilience.Abstractions/index.md) | The profile names, the settings classes and the pipeline contracts. |
+| [Cat.Resilience.Commands](namespaces/Cat.Resilience.Commands/index.md) | The retry around the command processor, for the command types you list. |
+| [Cat.Resilience.Queries](namespaces/Cat.Resilience.Queries/index.md) | The retry around the query processor, for the query types you list. |
 | [Cat.Resilience](namespaces/Cat.Resilience/index.md) | The profiles on `HttpClient`, the pipelines for one call and the module registration. |
 
 <!-- region end: Namespaces-->
@@ -76,7 +81,12 @@ The module is plain .NET. It never references Aspire.
 ## Dependencies
 <!-- region start: Dependencies-->
 
-Cat.Resilience has no dependencies on other CAT modules.  
+| Module | Why Cat.Resilience needs it |
+|--------|-----------------------------|
+| [Cat.Commands](../Cat.Commands/README.md) | Only `Cat.Resilience.Commands` needs it, to wrap the command processor. |
+| [Cat.Queries](../Cat.Queries/README.md) | Only `Cat.Resilience.Queries` needs it, to wrap the query processor. |
+
+`Cat.Resilience` and `Cat.Resilience.Abstractions` have no dependencies on other CAT modules.
 
 <!-- region end: Dependencies-->
 
@@ -157,6 +167,34 @@ await _pipelines.Get(CatResilienceProfile.Internal)
 ```
 
 The call inside must be safe to repeat, because the pipeline can run it more than once. Never put a database write of the handler inside it. The circuit breaker state is shared by every call that uses the same profile name.
+
+### Retry a whole command or query
+Most failures are a glitch in a call to another service, and the client profile above already retries those. Use this only when a whole handler is safe to run again. It is off by default, also for queries. You list the types that get a retry, and every other handler is called once.
+
+Add `Cat.Resilience.Commands` or `Cat.Resilience.Queries`. Each needs only the abstractions of its own module, so you add the one you use. Register the commands or queries module and the resilience module first.
+
+```csharp
+services.AddCatResilienceModule();
+services.AddCatQueriesModule(typeof(GetPriceQuery));
+services.AddCatCommandsModule(typeof(ReserveStockCommand));
+
+services.AddCatQueryRetry(options => options
+    .Retry<GetPriceQuery>());                                   // the Internal profile
+
+services.AddCatCommandRetry(options => options
+    .Retry<ReserveStockCommand>(CatResilienceProfile.External,  // another profile
+        rule => rule.RetryOn<CatResponseType.Failed.Conflict>()));
+```
+
+How it works:
+- **Around the processor.** The setup replaces the registration of `ICatCommandProcessor` or `ICatQueryProcessor` with a wrapper. It is not a decorator of `Cat.Decorators`. A listed type runs inside the pipeline of its profile, and every other type passes straight through. The setup throws an `InvalidOperationException` at once when a listed type has no processor registered yet, and `Retry<T>` throws an `ArgumentException` for a type that is no command or query. A unit test that uses a `FakeCommandProcessor` or a `FakeQueryProcessor` gets no retry.
+- **A fresh scope for every try.** Every try calls the inner processor again, and that opens a new scope. A try never runs on the `DbContext` of the try that failed. `ICatCurrentScopeCommandProcessor` gets no retry, because it runs in the current scope on purpose, and a retry there would run on the entities of the failed try.
+- **Which failures count.** The same table as the event processor, see [What happens to a message](../Cat.EventProcessor/README.md#what-happens-to-a-message). `InternalServerError` and an exception are tried again. `BadRequest`, `NotFound`, `Conflict`, `Forbidden` and `Unauthorized` come back at once. `RetryOn<T>()` and `NeverRetryOn<T>()` change the table for one type.
+- **The profile.** The profile gives the number of tries, the delay, the timeouts and the circuit breaker. The settings `UseRetryAfterHeader` and `RequireIdempotencyKeyForUnsafeMethods` mean nothing for a handler and are ignored.
+- **After the last try.** The response of the last try comes back. When the pipeline itself says no, for example because its circuit is open or a try ran into the timeout, its exception comes through.
+- **A sync call.** `Process` blocks until the retries are done.
+
+One layer per call. The client profile retries an HTTP call, and the retry around the processor retries a whole handler. Do not use both for the same call. A command that calls a client with a retry of 3 and is itself retried 3 times makes up to 16 calls to the other service when it keeps failing. The module does not detect this. A handler that runs for a message of the bus is delivered again by the bus too, so a retry around that handler multiplies with the deliveries.
 
 ### Without Aspire
 The module does not need Aspire. A project without it makes the same calls in its `Program` that the demo `ServiceDefaults` makes:

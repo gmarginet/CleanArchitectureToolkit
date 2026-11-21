@@ -224,7 +224,7 @@ if (-not $Path -or $Path -like '*plans*') {
         if (Select-String -LiteralPath $planFile.FullName -Pattern '^<!-- region (start|end): StatusBadge-->' -Quiet) {
             $errors.Add("plans\$($planFile.Name): the StatusBadge region is gone from the plan template. Remove the region and the badge.")
         }
-        # A need that links to a plan names the phase, such as Cat.Resilience.md#phase-1, also when the plan has one phase.
+        # A need that links to a plan names the phase, such as Cat.Localizations.md#phase-1, also when the plan has one phase.
         $inNeeds = $false
         $needLine = 0
         foreach ($text in [System.IO.File]::ReadAllLines($planFile.FullName)) {

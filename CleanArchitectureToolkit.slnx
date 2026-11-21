@@ -194,6 +194,8 @@
   <Folder Name="/modules/Cat.Resilience/">
     <File Path="modules/Cat.Resilience/README.md" />
     <Project Path="modules/Cat.Resilience/Cat.Resilience.Abstractions/Cat.Resilience.Abstractions.csproj" />
+    <Project Path="modules/Cat.Resilience/Cat.Resilience.Commands/Cat.Resilience.Commands.csproj" />
+    <Project Path="modules/Cat.Resilience/Cat.Resilience.Queries/Cat.Resilience.Queries.csproj" />
     <Project Path="modules/Cat.Resilience/Cat.Resilience/Cat.Resilience.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.Responses/">

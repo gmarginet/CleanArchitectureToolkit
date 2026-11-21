@@ -1,0 +1,31 @@
+../../../Cat.Resilience/namespaces/Cat.Resilience.Commands/
+F:Cat.Resilience.Commands.CatCommandRetryOptions._rules|CatCommandRetryOptions._rules.md|_rules
+P:Cat.Resilience.Commands.CatCommandRetryOptions.HasRules|CatCommandRetryOptions.HasRules.md|HasRules
+M:Cat.Resilience.Commands.CatCommandRetryOptions.Retry``1(System.String,System.Action{Cat.Resilience.Commands.CatRetryRule})|CatCommandRetryOptions.Retry.U3O97J2JCUQ2AX73VGDKOA6J9.md|Retry<TCommand>(string, Action<CatRetryRule>)
+M:Cat.Resilience.Commands.CatCommandRetryOptions.TryGetRule(System.Type,Cat.Resilience.Commands.CatRetryRule@)|CatCommandRetryOptions.TryGetRule.CFP9U7YLS4XEOCUX2JZB153C1.md|TryGetRule(Type, CatRetryRule)
+M:Cat.Resilience.Commands.CatCommandRetryOptions.IsCommand(System.Type)|CatCommandRetryOptions.IsCommand.Y53UALRTGCH6XFUZ5B1171XR3.md|IsCommand(Type)
+N:Cat.Resilience.Commands|Cat.Resilience.Commands.md|Cat.Resilience.Commands
+T:Cat.Resilience.Commands.CatCommandRetryOptions|CatCommandRetryOptions.md|CatCommandRetryOptions
+M:Cat.Resilience.Commands.CatRetryCommandProcessor.#ctor(Cat.Commands.Abstractions.ICatCommandProcessor,Cat.Resilience.Abstractions.ICatResiliencePipelines,Cat.Resilience.Commands.CatCommandRetryOptions)|CatRetryCommandProcessor..ctor.E3BPF6V69ZGXL7QKN7DGWO4S9.md|CatRetryCommandProcessor(ICatCommandProcessor, ICatResiliencePipelines, CatCommandRetryOptions)
+M:Cat.Resilience.Commands.CatRetryCommandProcessor.ProcessAsync(Cat.Commands.Abstractions.ICatCommand,System.Threading.CancellationToken)|CatRetryCommandProcessor.ProcessAsync.md#Cat.Resilience.Commands.CatRetryCommandProcessor.ProcessAsync(Cat.Commands.Abstractions.ICatCommand,System.Threading.CancellationToken)|ProcessAsync(ICatCommand, CancellationToken)
+M:Cat.Resilience.Commands.CatRetryCommandProcessor.Process(Cat.Commands.Abstractions.ICatCommand)|CatRetryCommandProcessor.Process.md#Cat.Resilience.Commands.CatRetryCommandProcessor.Process(Cat.Commands.Abstractions.ICatCommand)|Process(ICatCommand)
+M:Cat.Resilience.Commands.CatRetryCommandProcessor.ProcessAsync``1(Cat.Commands.Abstractions.ICatCommand{``0},System.Threading.CancellationToken)|CatRetryCommandProcessor.ProcessAsync.md#Cat.Resilience.Commands.CatRetryCommandProcessor.ProcessAsync_TResult_(Cat.Commands.Abstractions.ICatCommand_TResult_,System.Threading.CancellationToken)|ProcessAsync<TResult>(ICatCommand<TResult>, CancellationToken)
+M:Cat.Resilience.Commands.CatRetryCommandProcessor.Process``1(Cat.Commands.Abstractions.ICatCommand{``0})|CatRetryCommandProcessor.Process.md#Cat.Resilience.Commands.CatRetryCommandProcessor.Process_TResult_(Cat.Commands.Abstractions.ICatCommand_TResult_)|Process<TResult>(ICatCommand<TResult>)
+M:Cat.Resilience.Commands.CatRetryCommandProcessor.RunAsync``1(Cat.Resilience.Commands.CatRetryRule,System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},System.Threading.CancellationToken)|CatRetryCommandProcessor.RunAsync.CQL9PKK0H5IW462N1PHT6LQMD.md|RunAsync<TResponse>(CatRetryRule, Func<CancellationToken,Task<TResponse>>, CancellationToken)
+T:Cat.Resilience.Commands.CatRetryCommandProcessor|CatRetryCommandProcessor.md|CatRetryCommandProcessor
+F:Cat.Resilience.Commands.CatRetryRule._retryOn|CatRetryRule._retryOn.md|_retryOn
+P:Cat.Resilience.Commands.CatRetryRule.Profile|CatRetryRule.Profile.md|Profile
+M:Cat.Resilience.Commands.CatRetryRule.#ctor(System.String)|CatRetryRule..ctor.PQVL5K46UQ0OC5KVADNEOFK36.md|CatRetryRule(string)
+M:Cat.Resilience.Commands.CatRetryRule.RetryOn``1|CatRetryRule.RetryOn_TFailure_().md|RetryOn<TFailure>()
+M:Cat.Resilience.Commands.CatRetryRule.NeverRetryOn``1|CatRetryRule.NeverRetryOn_TFailure_().md|NeverRetryOn<TFailure>()
+M:Cat.Resilience.Commands.CatRetryRule.ShouldRetry(Cat.Responses.Abstractions.ICatResponse)|CatRetryRule.ShouldRetry.MCASKVYJR6RKYVFRU0I5I3KQA.md|ShouldRetry(ICatResponse)
+T:Cat.Resilience.Commands.CatRetryRule|CatRetryRule.md|CatRetryRule
+M:Cat.Resilience.Commands.Extensions.ServiceCollectionExtensions.AddCatCommandRetry(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Cat.Resilience.Commands.CatCommandRetryOptions})|ServiceCollectionExtensions.AddCatCommandRetry.Q1D2KYE56X3ZON2S5SY2M4852.md|AddCatCommandRetry(this IServiceCollection, Action<CatCommandRetryOptions>)
+M:Cat.Resilience.Commands.Extensions.ServiceCollectionExtensions.CreateInner(System.IServiceProvider,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)|ServiceCollectionExtensions.CreateInner.TEJXT8U66DY2LI66O7I1S7HZ7.md|CreateInner(IServiceProvider, ServiceDescriptor)
+N:Cat.Resilience.Commands.Extensions|Cat.Resilience.Commands.Extensions.md|Cat.Resilience.Commands.Extensions
+T:Cat.Resilience.Commands.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+P:Cat.Resilience.Commands.CatRetryCommandProcessor.RetryableResponseException`1.Response|CatRetryCommandProcessor.RetryableResponseException_TResponse_.Response.md|Response
+M:Cat.Resilience.Commands.CatRetryCommandProcessor.RetryableResponseException`1.#ctor(`0)|CatRetryCommandProcessor.RetryableResponseException_TResponse_..ctor.FCUX2OS3X5EYU40CD6K3GQF66.md|RetryableResponseException(TResponse)
+T:Cat.Resilience.Commands.CatRetryCommandProcessor.RetryableResponseException`1|CatRetryCommandProcessor.RetryableResponseException_TResponse_.md|RetryableResponseException<TResponse>
+?:Cat.Resilience.Commands.CatRetryCommandProcessor.ProcessAsync|CatRetryCommandProcessor.ProcessAsync.md|ProcessAsync
+?:Cat.Resilience.Commands.CatRetryCommandProcessor.Process|CatRetryCommandProcessor.Process.md|Process

@@ -33,7 +33,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\modules\Cat.Resilience\Cat.Resilience.Abstractions\Cat.Resilience.Abstractions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Commands\Cat.Commands\Cat.Commands.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Queries\Cat.Queries\Cat.Queries.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Resilience\Cat.Resilience.Commands\Cat.Resilience.Commands.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Resilience\Cat.Resilience.Queries\Cat.Resilience.Queries.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Resilience\Cat.Resilience\Cat.Resilience.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
     </ItemGroup>
 
 </Project>

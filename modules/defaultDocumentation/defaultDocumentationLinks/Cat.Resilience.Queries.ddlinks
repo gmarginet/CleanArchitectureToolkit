@@ -1,0 +1,26 @@
+../../../Cat.Resilience/namespaces/Cat.Resilience.Queries/
+F:Cat.Resilience.Queries.CatQueryRetryOptions._rules|CatQueryRetryOptions._rules.md|_rules
+P:Cat.Resilience.Queries.CatQueryRetryOptions.HasRules|CatQueryRetryOptions.HasRules.md|HasRules
+M:Cat.Resilience.Queries.CatQueryRetryOptions.Retry``1(System.String,System.Action{Cat.Resilience.Queries.CatRetryRule})|CatQueryRetryOptions.Retry.R6E5X3SVHNCB967DKEDF2JF1B.md|Retry<TQuery>(string, Action<CatRetryRule>)
+M:Cat.Resilience.Queries.CatQueryRetryOptions.TryGetRule(System.Type,Cat.Resilience.Queries.CatRetryRule@)|CatQueryRetryOptions.TryGetRule.HMVC89UP4ZF2XIKCCWMTLPZI1.md|TryGetRule(Type, CatRetryRule)
+M:Cat.Resilience.Queries.CatQueryRetryOptions.IsQuery(System.Type)|CatQueryRetryOptions.IsQuery.FB5X94WQ4FTC7BDZVJE1DYL36.md|IsQuery(Type)
+N:Cat.Resilience.Queries|Cat.Resilience.Queries.md|Cat.Resilience.Queries
+T:Cat.Resilience.Queries.CatQueryRetryOptions|CatQueryRetryOptions.md|CatQueryRetryOptions
+M:Cat.Resilience.Queries.CatRetryQueryProcessor.#ctor(Cat.Queries.Abstractions.ICatQueryProcessor,Cat.Resilience.Abstractions.ICatResiliencePipelines,Cat.Resilience.Queries.CatQueryRetryOptions)|CatRetryQueryProcessor..ctor.MZ7A5DJ93GGP7MGJ7NFAF03U3.md|CatRetryQueryProcessor(ICatQueryProcessor, ICatResiliencePipelines, CatQueryRetryOptions)
+M:Cat.Resilience.Queries.CatRetryQueryProcessor.ProcessAsync``1(Cat.Queries.Abstractions.ICatQuery{``0},System.Threading.CancellationToken)|CatRetryQueryProcessor.ProcessAsync.PSOI8XLFKXCTQITFRIPAS2ZV3.md|ProcessAsync<TQueryResult>(ICatQuery<TQueryResult>, CancellationToken)
+M:Cat.Resilience.Queries.CatRetryQueryProcessor.Process``1(Cat.Queries.Abstractions.ICatQuery{``0})|CatRetryQueryProcessor.Process.KVIQUM54O8ZL5Y6AFNSHDT739.md|Process<TQueryResult>(ICatQuery<TQueryResult>)
+T:Cat.Resilience.Queries.CatRetryQueryProcessor|CatRetryQueryProcessor.md|CatRetryQueryProcessor
+F:Cat.Resilience.Queries.CatRetryRule._retryOn|CatRetryRule._retryOn.md|_retryOn
+P:Cat.Resilience.Queries.CatRetryRule.Profile|CatRetryRule.Profile.md|Profile
+M:Cat.Resilience.Queries.CatRetryRule.#ctor(System.String)|CatRetryRule..ctor.B80NBBCSJUPNGTTKMCPL7HQL1.md|CatRetryRule(string)
+M:Cat.Resilience.Queries.CatRetryRule.RetryOn``1|CatRetryRule.RetryOn_TFailure_().md|RetryOn<TFailure>()
+M:Cat.Resilience.Queries.CatRetryRule.NeverRetryOn``1|CatRetryRule.NeverRetryOn_TFailure_().md|NeverRetryOn<TFailure>()
+M:Cat.Resilience.Queries.CatRetryRule.ShouldRetry(Cat.Responses.Abstractions.ICatResponse)|CatRetryRule.ShouldRetry.9ERZ7PBB36GTG6LM3W3DDACX4.md|ShouldRetry(ICatResponse)
+T:Cat.Resilience.Queries.CatRetryRule|CatRetryRule.md|CatRetryRule
+M:Cat.Resilience.Queries.Extensions.ServiceCollectionExtensions.AddCatQueryRetry(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Cat.Resilience.Queries.CatQueryRetryOptions})|ServiceCollectionExtensions.AddCatQueryRetry.UNSDC50U6TTSZ7TLMQATXEMB1.md|AddCatQueryRetry(this IServiceCollection, Action<CatQueryRetryOptions>)
+M:Cat.Resilience.Queries.Extensions.ServiceCollectionExtensions.CreateInner(System.IServiceProvider,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)|ServiceCollectionExtensions.CreateInner.KHPMEM48TN306PHCUG6LWDAE2.md|CreateInner(IServiceProvider, ServiceDescriptor)
+N:Cat.Resilience.Queries.Extensions|Cat.Resilience.Queries.Extensions.md|Cat.Resilience.Queries.Extensions
+T:Cat.Resilience.Queries.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+P:Cat.Resilience.Queries.CatRetryQueryProcessor.RetryableResponseException`1.Response|CatRetryQueryProcessor.RetryableResponseException_TQueryResult_.Response.md|Response
+M:Cat.Resilience.Queries.CatRetryQueryProcessor.RetryableResponseException`1.#ctor(Cat.Responses.Abstractions.ICatResponse{`0})|CatRetryQueryProcessor.RetryableResponseException_TQueryResult_..ctor.NIMKG3WHCQKKVSD4FUACSOGH3.md|RetryableResponseException(ICatResponse<TQueryResult>)
+T:Cat.Resilience.Queries.CatRetryQueryProcessor.RetryableResponseException`1|CatRetryQueryProcessor.RetryableResponseException_TQueryResult_.md|RetryableResponseException<TQueryResult>
