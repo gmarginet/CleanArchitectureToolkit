@@ -24,10 +24,10 @@ Skills are small instruction sets for tasks we repeat in this repo. Claude loads
 | [cat-internal-verify-code](cat-internal-verify-code/SKILL.md) | Build, test, check the regenerated namespaces pages, the error code areas and the integration tests of database code, and deploy a changed generator. | `/cat-internal-verify-code` |
 | [cat-internal-template-concepts](cat-internal-template-concepts/SKILL.md) | The basic concepts of CAT templates: regions, template markers, placeholders. Other template skills load it first. | `/cat-internal-template-concepts` |
 | [cat-internal-create-header](cat-internal-create-header/SKILL.md) | Create or update the header of a template-based markdown file, and update every file that uses it. | `/cat-internal-create-header update` |
-| [cat-internal-create-plan](cat-internal-create-plan/SKILL.md) | Create, build and update a plan in `plans/` from the plan template. | `/cat-internal-create-plan create Cat.Caching` |
+| [cat-internal-create-plan](cat-internal-create-plan/SKILL.md) | Create, build and update a plan in `plans/` from the plan template. | `/cat-internal-create-plan create Cat.Localizations` |
 | [cat-internal-create-template](cat-internal-create-template/SKILL.md) | Create a new template and the skill that uses it, from two skeletons. | `/cat-internal-create-template Cat.Report a module report` |
 | [cat-internal-verify-site](cat-internal-verify-site/SKILL.md) | Crawl the published site for broken links. Only on request. | `/cat-internal-verify-site --external` |
-| [cat-internal-create-module](cat-internal-create-module/SKILL.md) | Start a new module with projects, tests, readme and table row. | `/cat-internal-create-module Cat.Caching` |
+| [cat-internal-create-module](cat-internal-create-module/SKILL.md) | Start a new module with projects, tests, readme and table row. | `/cat-internal-create-module Cat.Localizations` |
 
 ## Adding or changing a skill
 - A skill is a folder in `.claude/skills/` with a `SKILL.md`. The front matter holds the `name`, a `description` that says when to use it, and optionally an `argument-hint`.

@@ -104,5 +104,5 @@ Use this when the owner changes the template and asks to update the readme.
 - [[ReadMoreLink]]: The `ReadMoreLink` template. Empty for an item that is not built.
 - [[Priorities]], [[PhaseLinks]], [[OpenQuestions]]: The three phase columns, one line for each phase, joined with `<br>`, see [phases-column.md](phases-column.md). Empty for a stable item.
 - [[Description]]: One short sentence about what the item is used for.
-- [[PlanFile]]: The file name of the plan in `plans/`, such as `Cat.Caching.md` or `Demo.md`.
+- [[PlanFile]]: The file name of the plan in `plans/`, such as `Cat.Localizations.md` or `Demo.md`.
 - [[RootPath]]: The relative path to the root of the repository, used by the header. It is `.` for the readme.
