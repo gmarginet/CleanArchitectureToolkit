@@ -203,6 +203,7 @@
     <File Path="modules/Cat.Scheduling/README.md" />
     <Project Path="modules/Cat.Scheduling/Cat.Scheduling.Abstractions/Cat.Scheduling.Abstractions.csproj" />
     <Project Path="modules/Cat.Scheduling/Cat.Scheduling.EFCore/Cat.Scheduling.EFCore.csproj" />
+    <Project Path="modules/Cat.Scheduling/Cat.Scheduling.Resilience/Cat.Scheduling.Resilience.csproj" />
     <Project Path="modules/Cat.Scheduling/Cat.Scheduling/Cat.Scheduling.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.ServiceRequests/">

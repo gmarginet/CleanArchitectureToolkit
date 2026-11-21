@@ -41,10 +41,11 @@ Implements [ICatJobRunner](../../../Cat.Scheduling/namespaces/Cat.Scheduling.Abs
 
 | Constructors | |
 | :--- | :--- |
-| [CatJobRunner\(IServiceScopeFactory, ICatJobRegistry, CatSchedulerSettings, TimeProvider, ILogger&lt;CatJobRunner&gt;\)](CatJobRunner..ctor.CWP2T6NVTJXR72X28KA91XX36.md 'Cat\.Scheduling\.CatJobRunner\.CatJobRunner\(Microsoft\.Extensions\.DependencyInjection\.IServiceScopeFactory, Cat\.Scheduling\.Abstractions\.ICatJobRegistry, Cat\.Scheduling\.CatSchedulerSettings, System\.TimeProvider, Microsoft\.Extensions\.Logging\.ILogger\<Cat\.Scheduling\.CatJobRunner\>\)') | Creates the runner\. |
+| [CatJobRunner\(IServiceScopeFactory, ICatJobRegistry, CatSchedulerSettings, TimeProvider, ILogger&lt;CatJobRunner&gt;, ICatJobAttemptExecutor\)](CatJobRunner..ctor.0GMABD4TECFLEJB58ZC86YUGD.md 'Cat\.Scheduling\.CatJobRunner\.CatJobRunner\(Microsoft\.Extensions\.DependencyInjection\.IServiceScopeFactory, Cat\.Scheduling\.Abstractions\.ICatJobRegistry, Cat\.Scheduling\.CatSchedulerSettings, System\.TimeProvider, Microsoft\.Extensions\.Logging\.ILogger\<Cat\.Scheduling\.CatJobRunner\>, Cat\.Scheduling\.Abstractions\.ICatJobAttemptExecutor\)') | Creates the runner\. |
 
 | Fields | |
 | :--- | :--- |
+| [\_executor](CatJobRunner._executor.md 'Cat\.Scheduling\.CatJobRunner\.\_executor') | |
 | [\_logger](CatJobRunner._logger.md 'Cat\.Scheduling\.CatJobRunner\.\_logger') | |
 | [\_registry](CatJobRunner._registry.md 'Cat\.Scheduling\.CatJobRunner\.\_registry') | |
 | [\_scopeFactory](CatJobRunner._scopeFactory.md 'Cat\.Scheduling\.CatJobRunner\.\_scopeFactory') | |
@@ -54,5 +55,5 @@ Implements [ICatJobRunner](../../../Cat.Scheduling/namespaces/Cat.Scheduling.Abs
 | Methods | |
 | :--- | :--- |
 | [AttemptAsync\(CatJobRegistration, int, CancellationToken\)](CatJobRunner.AttemptAsync.Q6NQRBU2NFY2YNW8YZHG2NA11.md 'Cat\.Scheduling\.CatJobRunner\.AttemptAsync\(Cat\.Scheduling\.Abstractions\.CatJobRegistration, int, System\.Threading\.CancellationToken\)') | |
-| [RunAsync\(CatJobRegistration, CancellationToken\)](CatJobRunner.RunAsync.md#Cat.Scheduling.CatJobRunner.RunAsync(Cat.Scheduling.Abstractions.CatJobRegistration,System.Threading.CancellationToken) 'Cat\.Scheduling\.CatJobRunner\.RunAsync\(Cat\.Scheduling\.Abstractions\.CatJobRegistration, System\.Threading\.CancellationToken\)') | Runs a job, with its retries, and traces and counts the run\. |
+| [RunAsync\(CatJobRegistration, CancellationToken\)](CatJobRunner.RunAsync.md#Cat.Scheduling.CatJobRunner.RunAsync(Cat.Scheduling.Abstractions.CatJobRegistration,System.Threading.CancellationToken) 'Cat\.Scheduling\.CatJobRunner\.RunAsync\(Cat\.Scheduling\.Abstractions\.CatJobRegistration, System\.Threading\.CancellationToken\)') | Runs a job, with the tries of the registered [ICatJobAttemptExecutor](../../../Cat.Scheduling/namespaces/Cat.Scheduling.Abstractions/ICatJobAttemptExecutor.md 'Cat\.Scheduling\.Abstractions\.ICatJobAttemptExecutor') if there is one, and traces and counts the run\. |
 | [RunAsync\(string, CancellationToken\)](CatJobRunner.RunAsync.md#Cat.Scheduling.CatJobRunner.RunAsync(string,System.Threading.CancellationToken) 'Cat\.Scheduling\.CatJobRunner\.RunAsync\(string, System\.Threading\.CancellationToken\)') | Runs the job and waits for the outcome\. A job that is switched off can be run too\. |

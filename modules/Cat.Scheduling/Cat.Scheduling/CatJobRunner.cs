@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Cat.Responses.Abstractions;
 using Cat.Scheduling.Abstractions;
 using Cat.ServiceRequests.Abstractions;
 using Cat.Users.Abstractions;
@@ -22,6 +23,7 @@ internal sealed class CatJobRunner : ICatJobRunner
     private readonly CatSchedulerSettings _settings;
     private readonly TimeProvider _timeProvider;
     private readonly ILogger<CatJobRunner> _logger;
+    private readonly ICatJobAttemptExecutor? _executor;
 
     /// <summary>
     /// Creates the runner.
@@ -29,11 +31,13 @@ internal sealed class CatJobRunner : ICatJobRunner
     /// <param name="scopeFactory">Opens a scope for every attempt, because the service request processor is scoped.</param>
     /// <param name="registry">Holds the declared jobs.</param>
     /// <param name="settings">Holds the name of the system user.</param>
-    /// <param name="timeProvider">The clock, for the wait between retries.</param>
+    /// <param name="timeProvider">The clock, for the run metric.</param>
     /// <param name="logger">Logs the outcome of every attempt.</param>
+    /// <param name="executor">Runs the tries of a job and decides whether to retry. Without one, a job runs once.</param>
     public CatJobRunner(IServiceScopeFactory scopeFactory, ICatJobRegistry registry, CatSchedulerSettings settings,
-        TimeProvider timeProvider, ILogger<CatJobRunner> logger)
+        TimeProvider timeProvider, ILogger<CatJobRunner> logger, ICatJobAttemptExecutor? executor = null)
     {
+        _executor = executor;
         _scopeFactory = scopeFactory;
         _registry = registry;
         _settings = settings;
@@ -54,7 +58,7 @@ internal sealed class CatJobRunner : ICatJobRunner
     }
 
     /// <summary>
-    /// Runs a job, with its retries, and traces and counts the run.
+    /// Runs a job, with the tries of the registered <see cref="ICatJobAttemptExecutor"/> if there is one, and traces and counts the run.
     /// </summary>
     /// <param name="job">The job to run.</param>
     /// <param name="cancellationToken">Token to cancel the work.</param>
@@ -64,22 +68,18 @@ internal sealed class CatJobRunner : ICatJobRunner
         using var activity = CatSchedulingTelemetry.ActivitySource.StartActivity("Cat.Scheduling.Run " + job.Name);
         activity?.SetTag("cat.scheduling.job", job.Name);
 
-        var options = job.Options;
         var attempts = 0;
-        string? errorCode;
-        while (true)
+
+        Task<CatJobAttemptResult> Try(CancellationToken token)
         {
             attempts++;
-            errorCode = await AttemptAsync(job, attempts, cancellationToken).ConfigureAwait(false);
-            if (errorCode == null || attempts > options.MaxRetries)
-            {
-                break;
-            }
-
-            var factor = options.GrowingRetryDelay ? 1L << Math.Min(attempts - 1, 20) : 1L;
-            await TimeProviderDelay.WaitAsync(_timeProvider, TimeSpan.FromTicks(options.RetryDelay.Ticks * factor), cancellationToken)
-                .ConfigureAwait(false);
+            return AttemptAsync(job, attempts, token);
         }
+
+        var result = _executor == null
+            ? await Try(cancellationToken).ConfigureAwait(false)
+            : await _executor.ExecuteAsync(job.Name, Try, cancellationToken).ConfigureAwait(false);
+        var errorCode = result.ErrorCode;
 
         var status = errorCode == null ? CatJobRunStatus.Succeeded : CatJobRunStatus.Failed;
         activity?.SetTag("cat.scheduling.attempts", attempts);
@@ -92,7 +92,7 @@ internal sealed class CatJobRunner : ICatJobRunner
         return new CatJobRunResult(status, errorCode, attempts);
     }
 
-    private async Task<string?> AttemptAsync(CatJobRegistration job, int attempt, CancellationToken cancellationToken)
+    private async Task<CatJobAttemptResult> AttemptAsync(CatJobRegistration job, int attempt, CancellationToken cancellationToken)
     {
         using var scope = _scopeFactory.CreateScope();
 
@@ -110,12 +110,13 @@ internal sealed class CatJobRunner : ICatJobRunner
             if (response.IsSucceeded)
             {
                 _logger.LogInformation("Job {Job} succeeded on attempt {Attempt}.", job.Name, attempt);
-                return null;
+                return CatJobAttemptResult.Succeeded;
             }
 
             var codes = string.Join(", ", response.ErrorList.Select(error => error.Code));
             _logger.LogWarning("Job {Job} failed on attempt {Attempt} with the response {ErrorCodes}.", job.Name, attempt, codes);
-            return response.ErrorList.Count > 0 ? response.ErrorList[0].Code : "Failed";
+            var errorCode = response.ErrorList.Count > 0 ? response.ErrorList[0].Code : "Failed";
+            return CatJobAttemptResult.Failed(errorCode, response.Type is CatResponseType.Failed.InternalServerError);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -124,7 +125,7 @@ internal sealed class CatJobRunner : ICatJobRunner
         catch (Exception exception)
         {
             _logger.LogError(exception, "Job {Job} threw on attempt {Attempt}.", job.Name, attempt);
-            return exception.GetType().Name;
+            return CatJobAttemptResult.Failed(exception.GetType().Name, true);
         }
     }
 }

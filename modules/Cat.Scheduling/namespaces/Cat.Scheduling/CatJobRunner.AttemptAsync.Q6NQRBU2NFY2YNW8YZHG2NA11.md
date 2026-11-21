@@ -29,7 +29,7 @@
 ## CatJobRunner\.AttemptAsync\(CatJobRegistration, int, CancellationToken\) Method
 
 ```csharp
-private System.Threading.Tasks.Task<string?> AttemptAsync(Cat.Scheduling.Abstractions.CatJobRegistration job, int attempt, System.Threading.CancellationToken cancellationToken);
+private System.Threading.Tasks.Task<Cat.Scheduling.Abstractions.CatJobAttemptResult> AttemptAsync(Cat.Scheduling.Abstractions.CatJobRegistration job, int attempt, System.Threading.CancellationToken cancellationToken);
 ```
 #### Parameters
 
@@ -46,4 +46,4 @@ private System.Threading.Tasks.Task<string?> AttemptAsync(Cat.Scheduling.Abstrac
 `cancellationToken` [System\.Threading\.CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken 'System\.Threading\.CancellationToken')
 
 #### Returns
-[System\.Threading\.Tasks\.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')[System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')
+[System\.Threading\.Tasks\.Task&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')[CatJobAttemptResult](../../../Cat.Scheduling/namespaces/Cat.Scheduling.Abstractions/CatJobAttemptResult.md 'Cat\.Scheduling\.Abstractions\.CatJobAttemptResult')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1 'System\.Threading\.Tasks\.Task\`1')

@@ -123,63 +123,6 @@ public class RunnerTests
     }
 
     [Test]
-    public async Task RunAsync_Retries_RunsAgainAfterTheDelayUntilItSucceeds()
-    {
-        _state.Respond = (attempt, _) => Task.FromResult(attempt < 3 ? CatResponse.BadRequest(CatError.Create("TST-001", "No")) : CatResponse.Ok());
-        using var provider = Build(options =>
-        {
-            options.MaxRetries = 2;
-            options.RetryDelay = TimeSpan.FromSeconds(10);
-        });
-
-        var run = provider.GetRequiredService<ICatJobRunner>().RunAsync("ping");
-        await TestHost.AdvanceUntilAsync(_clock, TimeSpan.FromMinutes(2), () => run.IsCompleted);
-        var result = await run;
-
-        Assert.That(result.Status, Is.EqualTo(CatJobRunStatus.Succeeded));
-        Assert.That(result.Attempts, Is.EqualTo(3));
-        Assert.That(_clock.GetUtcNow() - TestHost.Start, Is.GreaterThanOrEqualTo(TimeSpan.FromSeconds(20)));
-    }
-
-    [Test]
-    public async Task RunAsync_GrowingDelay_DoublesTheWaitWithEveryRetry()
-    {
-        _state.Respond = (attempt, _) => Task.FromResult(attempt < 3 ? CatResponse.BadRequest(CatError.Create("TST-001", "No")) : CatResponse.Ok());
-        using var provider = Build(options =>
-        {
-            options.MaxRetries = 2;
-            options.RetryDelay = TimeSpan.FromSeconds(10);
-            options.GrowingRetryDelay = true;
-        });
-
-        var run = provider.GetRequiredService<ICatJobRunner>().RunAsync("ping");
-        await TestHost.AdvanceUntilAsync(_clock, TimeSpan.FromMinutes(2), () => run.IsCompleted);
-        var result = await run;
-
-        Assert.That(result.Attempts, Is.EqualTo(3));
-        Assert.That(_clock.GetUtcNow() - TestHost.Start, Is.GreaterThanOrEqualTo(TimeSpan.FromSeconds(30)));
-    }
-
-    [Test]
-    public async Task RunAsync_RetriesRunOut_StaysFailed()
-    {
-        _state.Respond = (_, _) => Task.FromResult(CatResponse.BadRequest(CatError.Create("TST-001", "No")));
-        using var provider = Build(options =>
-        {
-            options.MaxRetries = 2;
-            options.RetryDelay = TimeSpan.FromSeconds(1);
-        });
-
-        var run = provider.GetRequiredService<ICatJobRunner>().RunAsync("ping");
-        await TestHost.AdvanceUntilAsync(_clock, TimeSpan.FromMinutes(1), () => run.IsCompleted);
-        var result = await run;
-
-        Assert.That(result.Status, Is.EqualTo(CatJobRunStatus.Failed));
-        Assert.That(result.Attempts, Is.EqualTo(3));
-        Assert.That(_state.Calls, Is.EqualTo(3));
-    }
-
-    [Test]
     public async Task RunAsync_StartsAnActivityWithTheJobName()
     {
         var started = new List<Activity>();

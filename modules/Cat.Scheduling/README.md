@@ -66,6 +66,7 @@ A service can run several instances. Before a run, an instance claims the due ti
 | [Cat.Scheduling.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Scheduling.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Scheduling.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Scheduling.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Scheduling.Abstractions/) |
 | [Cat.Scheduling](https://www.nuget.org/packages/gmarginet.Cat.Scheduling/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Scheduling` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Scheduling)](https://www.nuget.org/packages/gmarginet.Cat.Scheduling/) |
 | [Cat.Scheduling.EFCore](https://www.nuget.org/packages/gmarginet.Cat.Scheduling.EFCore/) | Claim store and run history in the database | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Scheduling.EFCore` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Scheduling.EFCore)](https://www.nuget.org/packages/gmarginet.Cat.Scheduling.EFCore/) |
+| [Cat.Scheduling.Resilience](https://www.nuget.org/packages/gmarginet.Cat.Scheduling.Resilience/) | Optional retry through a resilience profile | netstandard2.0 | `dotnet add package gmarginet.Cat.Scheduling.Resilience` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Scheduling.Resilience)](https://www.nuget.org/packages/gmarginet.Cat.Scheduling.Resilience/) |
 
 <!-- region end: NuGet-->
 
@@ -77,6 +78,7 @@ A service can run several instances. Before a run, an instance claims the due ti
 | [Cat.Scheduling.Abstractions](namespaces/Cat.Scheduling.Abstractions/index.md) | The job settings, the job runner and the claim store contracts. |
 | [Cat.Scheduling](namespaces/Cat.Scheduling/index.md) | The scheduler loop, the cron parsing, the in-memory claim store and the telemetry. |
 | [Cat.Scheduling.EFCore](namespaces/Cat.Scheduling.EFCore/index.md) | The claim store and the run history in a database, with Entity Framework Core. |
+| [Cat.Scheduling.Resilience](namespaces/Cat.Scheduling.Resilience/index.md) | The retry of a failed run through a resilience profile. |
 
 <!-- region end: Namespaces-->
 
@@ -85,6 +87,7 @@ A service can run several instances. Before a run, an instance claims the due ti
 
 | Module | Why Cat.Scheduling needs it |
 |--------|-----------------------------|
+| [Cat.Resilience](../Cat.Resilience/README.md) | Only `Cat.Scheduling.Resilience` needs it, to run the tries of a job in a resilience profile. |
 | [Cat.Responses](../Cat.Responses/README.md) | The result of a run is the `ICatResponse` of the service request. |
 | [Cat.ServiceRequests](../Cat.ServiceRequests/README.md) | Every run becomes a service request that the processor handles. |
 | [Cat.Users](../Cat.Users/README.md) | Every run uses a named system user, so `ICatUser` always has a value. |
@@ -120,7 +123,6 @@ Both take an optional action to set the options of the job.
 ```csharp
 scheduler.Job<ImportPricesRequest>("import-prices", "*/15 * * * *", options =>
 {
-    options.MaxRetries = 3;
     options.AllowOverlap = false;
 });
 ```
@@ -135,9 +137,6 @@ A job name is unique. A duplicate or an empty name throws.
 | `MissedRuns` | `RunOnce` | What to do at startup with a due time that passed. `RunOnce` or `Skip`. |
 | `AllowOverlap` | `false` | Allows a new run while the last one is still busy. |
 | `DeadAfter` | 1 hour | After this time, a busy claim counts as dead and another run may take over. |
-| `MaxRetries` | 0 | How many times a failed run is tried again. |
-| `RetryDelay` | 30 seconds | The wait between two tries. |
-| `GrowingRetryDelay` | `false` | Doubles the delay after every try. |
 
 ### Change a job in the configuration
 The section `CatScheduling:Jobs:<job name>` overrides the options of the code. It wins over the code. Use it to change the time per environment, or to switch a job off.
@@ -182,9 +181,25 @@ Before a run, an instance inserts a row `CatJobRun` with the job name and the du
 A service with one instance needs none of this. The in-memory store is the default. To use another store, such as a blob lease, implement `ICatJobClaimStore` of the abstractions project and register it before `AddCatScheduling`.
 
 ### Retry a failed run
-A failed `ICatResponse` is logged with its error codes and counted in a metric. By default the job waits for the next due time. Set `MaxRetries` to try again.
+A failed `ICatResponse` is logged with its error codes and counted in a metric. A job runs once. When it fails, it waits for the next due time, and that run is its second chance. The span and the meter `Cat.Scheduling` still show a failed run.
 
-A retry is a new try of the same due time and uses the same claim, so two instances never retry the same job together. A run stays failed after the last try, until the next due time.
+To retry inside one due time, add `Cat.Scheduling.Resilience` and the resilience module. Every try of a job then runs in a resilience profile of [Cat.Resilience](../Cat.Resilience/README.md).
+
+```csharp
+services.AddCatResilienceModule();
+services.AddCatSchedulingResilience(options =>
+{
+    options.DefaultProfile = CatResilienceProfile.Internal;
+    options.JobProfiles["import-prices"] = "FastFail";
+});
+```
+
+- Every try gets its own scope and its own system user.
+- A response `InternalServerError` and an exception are tried again. `BadRequest`, `NotFound`, `Conflict`, `Forbidden` and `Unauthorized` are never tried again.
+- The profile sets the number of tries, the delay and the circuit breaker. A job without its own profile uses `DefaultProfile`. A circuit that is open, or a try that runs out of time, ends the run as failed.
+- The retries use the same claim, so two instances never retry the same job together. The run stays failed after the last try, until the next due time.
+- `Cat.Scheduling` never references `Cat.Resilience`. To use another retry, implement `ICatJobAttemptExecutor` of the abstractions project and register it. It gets one try as a callback and decides how often to call it.
+- The retry of the processors of `Cat.Resilience` does not reach a job, because the runner uses `ICatServiceRequestProcessor`.
 
 ### Overlap
 When a run is still busy at the next due time, the new run is skipped and a warning is logged. Set `AllowOverlap` to let them run together. A busy claim older than `DeadAfter` counts as dead, so a crashed instance does not block the job forever. The default is 1 hour. Raise it for a job that can run longer, or a second run may start while the first is still working.
@@ -196,7 +211,7 @@ When an instance starts and a due time passed, the job runs once, not once for e
 Set `TimeZoneId` per job. The cron library Cronos handles daylight saving time. Read its documentation for what a job does when a local time happens twice or not at all.
 
 ### Trigger a job by hand
-`ICatJobRunner.RunAsync(jobName)` runs a job at once, with its retry setting and the system user. It does not claim a due time. Use it in a development endpoint to try a job without waiting for the schedule.
+`ICatJobRunner.RunAsync(jobName)` runs a job at once, with its retry and the system user. It does not claim a due time. Use it in a development endpoint to try a job without waiting for the schedule.
 
 ```csharp
 app.MapPost("/development/jobs/{name}", async (string name, ICatJobRunner runner, CancellationToken token) =>

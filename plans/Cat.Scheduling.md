@@ -38,28 +38,4 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 2](#phase-2)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 2-->
-## Phase 2
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Retry of a failed scheduled run through `Cat.Resilience`.
-
-#### Decided
-- **Retry.** Retry of a failed run goes through `Cat.Resilience`, see [Cat.Resilience.md](Cat.Resilience.md). Today the module has a small retry setting per job, see the [module readme](../modules/Cat.Scheduling/README.md#retry-a-failed-run).
-- **A bridge with a pipeline of phase 1.** `CatJobRunner` gets one narrow interface of its own around one try, as the receiver of `Cat.EventProcessor` has for `ICatMessageAuthorizer`. A bridge project `Cat.Scheduling.Resilience` runs the whole try, with its new scope and its system user, inside the named pipeline of the job, from the pipelines for one call of the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md#protect-one-call-that-is-not-http). It retries the same failures as the table of [Cat.Resilience.md](Cat.Resilience.md#phase-2): `InternalServerError` and an exception, never `BadRequest`, `NotFound`, `Conflict`, `Forbidden` or `Unauthorized`. `Cat.Scheduling` never references `Cat.Resilience`. The retry around the processors of phase 2 does not reach a job, because the runner uses `ICatServiceRequestProcessor` (owner, 2026-11-21).
-- **The retry setting goes away.** `MaxRetries`, `RetryDelay` and `GrowingRetryDelay` and the loop of `CatJobRunner` are removed. A job gets its retry only from the bridge. A job without the bridge runs once, and its next run is its second chance. The span and the meter `Cat.Scheduling` still show a failed run. The module readme says so in "Retry a failed run". A breaking change is allowed while the toolkit is in alpha (owner, 2026-11-21).
-
-#### Background
-- `CatJobRunner` runs a job through `ICatServiceRequestProcessor`. Every try opens a new scope and sets the system user in it.
-- Today every failure is tried again, also `BadRequest`, with `MaxRetries`, `RetryDelay` and `GrowingRetryDelay` per job. The tries are on the span as `cat.scheduling.attempts`.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 2-->

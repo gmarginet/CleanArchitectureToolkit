@@ -42,20 +42,4 @@ public class CatJobOptions
     /// A dead run no longer blocks the next one. The default is one hour.
     /// </summary>
     public TimeSpan DeadAfter { get; set; } = TimeSpan.FromHours(1);
-
-    /// <summary>
-    /// The number of times a failed run is tried again. The default is 0: a failed run waits for the next due time.
-    /// A retry is a new attempt for the same due time. It uses the same claim, so two instances never retry the same job together.
-    /// </summary>
-    public int MaxRetries { get; set; }
-
-    /// <summary>
-    /// The wait before a retry. The default is 30 seconds.
-    /// </summary>
-    public TimeSpan RetryDelay { get; set; } = TimeSpan.FromSeconds(30);
-
-    /// <summary>
-    /// Doubles the wait with every retry when <c>true</c>. The default is <c>false</c>.
-    /// </summary>
-    public bool GrowingRetryDelay { get; set; }
 }

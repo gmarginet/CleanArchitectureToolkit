@@ -18,7 +18,6 @@ public class BuilderTests
         Assert.That(job.Options.TimeZoneId, Is.EqualTo("UTC"));
         Assert.That(job.Options.Enabled, Is.True);
         Assert.That(job.Options.MissedRuns, Is.EqualTo(CatMissedRunBehavior.RunOnce));
-        Assert.That(job.Options.MaxRetries, Is.EqualTo(0));
     }
 
     [Test]
@@ -49,13 +48,11 @@ public class BuilderTests
         {
             options.TimeZoneId = "Europe/Amsterdam";
             options.AllowOverlap = true;
-            options.MaxRetries = 3;
         });
 
         var options = builder.Registrations.Single().Options;
         Assert.That(options.TimeZoneId, Is.EqualTo("Europe/Amsterdam"));
         Assert.That(options.AllowOverlap, Is.True);
-        Assert.That(options.MaxRetries, Is.EqualTo(3));
     }
 
     [Test]
@@ -126,8 +123,6 @@ public class BuilderTests
         var configuration = TestHost.Configuration(
             ("CatScheduling:Jobs:ping:Cron", "0 3 * * *"),
             ("CatScheduling:Jobs:ping:Enabled", "false"),
-            ("CatScheduling:Jobs:ping:MaxRetries", "2"),
-            ("CatScheduling:Jobs:ping:RetryDelay", "00:00:10"),
             ("CatScheduling:Jobs:ping:MissedRuns", "Skip"));
 
         using var provider = TestHost.Build(new ProcessorState(), TestHost.NewClock(), builder => builder.Job<PingRequest>("ping", "5 0 * * *"), configuration);
@@ -135,8 +130,6 @@ public class BuilderTests
         var options = provider.GetRequiredService<ICatJobRegistry>().Jobs.Single().Options;
         Assert.That(options.Cron, Is.EqualTo("0 3 * * *"));
         Assert.That(options.Enabled, Is.False);
-        Assert.That(options.MaxRetries, Is.EqualTo(2));
-        Assert.That(options.RetryDelay, Is.EqualTo(TimeSpan.FromSeconds(10)));
         Assert.That(options.MissedRuns, Is.EqualTo(CatMissedRunBehavior.Skip));
     }
 

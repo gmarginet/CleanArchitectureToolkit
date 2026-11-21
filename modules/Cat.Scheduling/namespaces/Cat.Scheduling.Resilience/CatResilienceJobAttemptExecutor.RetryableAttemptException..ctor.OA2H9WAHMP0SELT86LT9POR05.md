@@ -24,15 +24,15 @@
 
 # Code Reference  
   
-##### >> [Cat\.Scheduling\.Abstractions Assembly](index.md 'index') >> [Cat\.Scheduling\.Abstractions Namespace](Cat.Scheduling.Abstractions.md 'Cat\.Scheduling\.Abstractions') >> [CatJobOptions Class](CatJobOptions.md 'Cat\.Scheduling\.Abstractions\.CatJobOptions')
+##### >> [Cat\.Scheduling\.Resilience Assembly](index.md 'index') >> [Cat\.Scheduling\.Resilience Namespace](Cat.Scheduling.Resilience.md 'Cat\.Scheduling\.Resilience') >> [CatResilienceJobAttemptExecutor Class](CatResilienceJobAttemptExecutor.md 'Cat\.Scheduling\.Resilience\.CatResilienceJobAttemptExecutor') >> [RetryableAttemptException Class](CatResilienceJobAttemptExecutor.RetryableAttemptException.md 'Cat\.Scheduling\.Resilience\.CatResilienceJobAttemptExecutor\.RetryableAttemptException')
 
-## CatJobOptions\.GrowingRetryDelay Property
-
-Doubles the wait with every retry when `true`\. The default is `false`\.
+## RetryableAttemptException\(CatJobAttemptResult\) Constructor
 
 ```csharp
-public bool GrowingRetryDelay { get; set; }
+public RetryableAttemptException(Cat.Scheduling.Abstractions.CatJobAttemptResult result);
 ```
+#### Parameters
 
-#### Property Value
-[System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')
+<a name='Cat.Scheduling.Resilience.CatResilienceJobAttemptExecutor.RetryableAttemptException.RetryableAttemptException(Cat.Scheduling.Abstractions.CatJobAttemptResult).result'></a>
+
+`result` [CatJobAttemptResult](../../../Cat.Scheduling/namespaces/Cat.Scheduling.Abstractions/CatJobAttemptResult.md 'Cat\.Scheduling\.Abstractions\.CatJobAttemptResult')

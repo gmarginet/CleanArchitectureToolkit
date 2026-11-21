@@ -24,15 +24,15 @@
 
 # Code Reference  
   
-##### >> [Cat\.Scheduling\.Abstractions Assembly](index.md 'index') >> [Cat\.Scheduling\.Abstractions Namespace](Cat.Scheduling.Abstractions.md 'Cat\.Scheduling\.Abstractions') >> [CatJobOptions Class](CatJobOptions.md 'Cat\.Scheduling\.Abstractions\.CatJobOptions')
+##### >> [Cat\.Scheduling\.Abstractions Assembly](index.md 'index') >> [Cat\.Scheduling\.Abstractions Namespace](Cat.Scheduling.Abstractions.md 'Cat\.Scheduling\.Abstractions') >> [CatJobAttemptResult Class](CatJobAttemptResult.md 'Cat\.Scheduling\.Abstractions\.CatJobAttemptResult')
 
-## CatJobOptions\.RetryDelay Property
+## CatJobAttemptResult\.ErrorCode Property
 
-The wait before a retry\. The default is 30 seconds\.
+Gets the code of the first error of a failed response, or the exception type name\. `null` when the try succeeded\.
 
 ```csharp
-public System.TimeSpan RetryDelay { get; set; }
+public string? ErrorCode { get; }
 ```
 
 #### Property Value
-[System\.TimeSpan](https://learn.microsoft.com/en-us/dotnet/api/system.timespan 'System\.TimeSpan')
+[System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')

@@ -24,16 +24,11 @@
 
 # Code Reference  
   
-##### >> [Cat\.Scheduling\.Abstractions Assembly](index.md 'index') >> [Cat\.Scheduling\.Abstractions Namespace](Cat.Scheduling.Abstractions.md 'Cat\.Scheduling\.Abstractions') >> [CatJobOptions Class](CatJobOptions.md 'Cat\.Scheduling\.Abstractions\.CatJobOptions')
+##### >> [Cat\.Scheduling\.Resilience Assembly](index.md 'index')
 
-## CatJobOptions\.MaxRetries Property
+## Cat\.Scheduling\.Resilience Assembly
 
-The number of times a failed run is tried again\. The default is 0: a failed run waits for the next due time\.
-A retry is a new attempt for the same due time\. It uses the same claim, so two instances never retry the same job together\.
-
-```csharp
-public int MaxRetries { get; set; }
-```
-
-#### Property Value
-[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')
+| Namespaces | |
+| :--- | :--- |
+| [Cat\.Scheduling\.Resilience](Cat.Scheduling.Resilience.md 'Cat\.Scheduling\.Resilience') | Retries a failed scheduled run through a resilience profile of Cat\.Resilience\. |
+| [Cat\.Scheduling\.Resilience\.Extensions](Cat.Scheduling.Resilience.Extensions.md 'Cat\.Scheduling\.Resilience\.Extensions') | |

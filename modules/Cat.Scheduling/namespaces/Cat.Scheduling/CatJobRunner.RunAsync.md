@@ -30,14 +30,14 @@
 
 | Overloads | |
 | :--- | :--- |
-| [RunAsync\(CatJobRegistration, CancellationToken\)](CatJobRunner.RunAsync.md#Cat.Scheduling.CatJobRunner.RunAsync(Cat.Scheduling.Abstractions.CatJobRegistration,System.Threading.CancellationToken) 'Cat\.Scheduling\.CatJobRunner\.RunAsync\(Cat\.Scheduling\.Abstractions\.CatJobRegistration, System\.Threading\.CancellationToken\)') | Runs a job, with its retries, and traces and counts the run\. |
+| [RunAsync\(CatJobRegistration, CancellationToken\)](CatJobRunner.RunAsync.md#Cat.Scheduling.CatJobRunner.RunAsync(Cat.Scheduling.Abstractions.CatJobRegistration,System.Threading.CancellationToken) 'Cat\.Scheduling\.CatJobRunner\.RunAsync\(Cat\.Scheduling\.Abstractions\.CatJobRegistration, System\.Threading\.CancellationToken\)') | Runs a job, with the tries of the registered [ICatJobAttemptExecutor](../../../Cat.Scheduling/namespaces/Cat.Scheduling.Abstractions/ICatJobAttemptExecutor.md 'Cat\.Scheduling\.Abstractions\.ICatJobAttemptExecutor') if there is one, and traces and counts the run\. |
 | [RunAsync\(string, CancellationToken\)](CatJobRunner.RunAsync.md#Cat.Scheduling.CatJobRunner.RunAsync(string,System.Threading.CancellationToken) 'Cat\.Scheduling\.CatJobRunner\.RunAsync\(string, System\.Threading\.CancellationToken\)') | Runs the job and waits for the outcome\. A job that is switched off can be run too\. |
 
 <a name='Cat.Scheduling.CatJobRunner.RunAsync(Cat.Scheduling.Abstractions.CatJobRegistration,System.Threading.CancellationToken)'></a>
 
 ## CatJobRunner\.RunAsync\(CatJobRegistration, CancellationToken\) Method
 
-Runs a job, with its retries, and traces and counts the run\.
+Runs a job, with the tries of the registered [ICatJobAttemptExecutor](../../../Cat.Scheduling/namespaces/Cat.Scheduling.Abstractions/ICatJobAttemptExecutor.md 'Cat\.Scheduling\.Abstractions\.ICatJobAttemptExecutor') if there is one, and traces and counts the run\.
 
 ```csharp
 public System.Threading.Tasks.Task<Cat.Scheduling.Abstractions.CatJobRunResult> RunAsync(Cat.Scheduling.Abstractions.CatJobRegistration job, System.Threading.CancellationToken cancellationToken);

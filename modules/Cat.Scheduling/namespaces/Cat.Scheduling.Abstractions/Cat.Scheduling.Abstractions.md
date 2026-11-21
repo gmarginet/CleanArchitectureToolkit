@@ -33,6 +33,7 @@ at once, and the claim store that makes sure only one instance of a service runs
 
 | Classes | |
 | :--- | :--- |
+| [CatJobAttemptResult](CatJobAttemptResult.md 'Cat\.Scheduling\.Abstractions\.CatJobAttemptResult') | The outcome of one try of a job, and whether a failed try is worth trying again\. |
 | [CatJobClaim](CatJobClaim.md 'Cat\.Scheduling\.Abstractions\.CatJobClaim') | The right to run a job for one due time\. The instance that holds it runs the job\. |
 | [CatJobClaimResult](CatJobClaimResult.md 'Cat\.Scheduling\.Abstractions\.CatJobClaimResult') | The outcome of asking for the claim of a job\. |
 | [CatJobOptions](CatJobOptions.md 'Cat\.Scheduling\.Abstractions\.CatJobOptions') | The settings of one scheduled job\. The code sets them when it declares the job\. The configuration section `CatScheduling:Jobs:<job name>` wins, so whoever runs the service can change a cron expression or switch a job off per environment without a build\. |
@@ -41,6 +42,7 @@ at once, and the claim store that makes sure only one instance of a service runs
 
 | Interfaces | |
 | :--- | :--- |
+| [ICatJobAttemptExecutor](ICatJobAttemptExecutor.md 'Cat\.Scheduling\.Abstractions\.ICatJobAttemptExecutor') | Runs the tries of a job\. A developer registers an implementation to add a retry, such as the one of `Cat.Scheduling.Resilience`\. Without one, a job runs once and waits for its next due time when it fails\. |
 | [ICatJobClaimStore](ICatJobClaimStore.md 'Cat\.Scheduling\.Abstractions\.ICatJobClaimStore') | Makes sure that only one instance of a service runs a job at a due time, and remembers how every run ended\. The module ships a store in memory, for a service with one instance\. The optional EF Core project keeps the claims in the database of the service\. Write your own store, for example on a blob lease, and register it before the module\. |
 | [ICatJobRegistry](ICatJobRegistry.md 'Cat\.Scheduling\.Abstractions\.ICatJobRegistry') | Holds the jobs the service declared\. |
 | [ICatJobRunner](ICatJobRunner.md 'Cat\.Scheduling\.Abstractions\.ICatJobRunner') | Runs a declared job at once, the same way the scheduler runs it at a due time\. Use it to test a job without waiting for the schedule, for example from a development endpoint\. It sends the service request as the system user of the scheduler, retries as the job says and traces the run\. It does not use the claim store, so it runs whatever the other instances do\. |
