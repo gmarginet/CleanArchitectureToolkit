@@ -70,6 +70,11 @@ public class NswagTemplateTests
     [Test]
     public void ThePackage_ShipsTheBuildFolder()
     {
+#if !NET11_0
+        // The package does not depend on the target framework of the test. Both runs would pack the same project into the
+        // same obj folder at the same time and lock each other out, so only the net11.0 run packs.
+        Assert.Ignore("Only the net11.0 run packs the project.");
+#endif
         var project = Path.Combine(_buildFolder, "..", "Cat.Api.Client.csproj");
 
         Run("pack", project, "-c", "Release", "-o", _projectFolder, "-nologo", "-v:q");
