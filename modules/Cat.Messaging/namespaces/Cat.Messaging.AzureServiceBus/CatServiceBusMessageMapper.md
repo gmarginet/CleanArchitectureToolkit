@@ -38,4 +38,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Methods | |
 | :--- | :--- |
-| [ToServiceBusMessage\(CatOutgoingMessage\)](CatServiceBusMessageMapper.ToServiceBusMessage.5DJYGY3H8CD28EEDNG6EQGNU6.md 'Cat\.Messaging\.AzureServiceBus\.CatServiceBusMessageMapper\.ToServiceBusMessage\(Cat\.Messaging\.Abstractions\.CatOutgoingMessage\)') | Maps the message\. The message ID is copied, so duplicate detection of the bus can use it\. The trace context is not added here, the Service Bus SDK puts its `Diagnostic-Id` on the message when it sends\. |
+| [ToServiceBusMessage\(CatOutgoingMessage\)](CatServiceBusMessageMapper.ToServiceBusMessage.5DJYGY3H8CD28EEDNG6EQGNU6.md 'Cat\.Messaging\.AzureServiceBus\.CatServiceBusMessageMapper\.ToServiceBusMessage\(Cat\.Messaging\.Abstractions\.CatOutgoingMessage\)') | Maps the message\. The message ID is copied, so duplicate detection of the bus can use it\. The trace context is not added here\. The Service Bus SDK puts its `Diagnostic-Id` on the message when it sends, unless the properties already hold one, as a message from the outbox does\. |

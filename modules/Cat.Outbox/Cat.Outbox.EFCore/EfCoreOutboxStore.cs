@@ -1,6 +1,7 @@
 using Cat.Outbox.Abstractions;
 using System.Text.Json;
 using Cat.Messaging.Abstractions;
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cat.Outbox.EFCore;
@@ -12,6 +13,8 @@ namespace Cat.Outbox.EFCore;
 internal sealed class EfCoreOutboxStore<TDbContext> : ICatOutboxStore
     where TDbContext : DbContext
 {
+    private const string DiagnosticIdProperty = "Diagnostic-Id";
+
     private readonly TDbContext _dbContext;
 
     /// <summary>
@@ -39,7 +42,8 @@ internal sealed class EfCoreOutboxStore<TDbContext> : ICatOutboxStore
             Subject = message.Subject,
             SessionId = message.SessionId,
             ScheduledAt = message.ScheduledAt,
-            PropertiesJson = message.Properties.Count == 0 ? null : JsonSerializer.Serialize(message.Properties)
+            PropertiesJson = message.Properties.Count == 0 ? null : JsonSerializer.Serialize(message.Properties),
+            TraceParent = CurrentTraceParent()
         });
 
         return Task.CompletedTask;
@@ -69,12 +73,30 @@ internal sealed class EfCoreOutboxStore<TDbContext> : ICatOutboxStore
                 Subject = row.Subject,
                 SessionId = row.SessionId,
                 ScheduledAt = row.ScheduledAt,
-                Properties = row.PropertiesJson is null
-                    ? new Dictionary<string, string>()
-                    : JsonSerializer.Deserialize<Dictionary<string, string>>(row.PropertiesJson)
-                      ?? new Dictionary<string, string>()
+                Properties = ReadProperties(row)
             }
         }).ToList();
+    }
+
+    private static Dictionary<string, string> ReadProperties(CatOutboxMessage row)
+    {
+        var properties = row.PropertiesJson is null
+            ? new Dictionary<string, string>()
+            : JsonSerializer.Deserialize<Dictionary<string, string>>(row.PropertiesJson)
+              ?? new Dictionary<string, string>();
+
+        if (row.TraceParent is not null && !properties.ContainsKey(DiagnosticIdProperty))
+        {
+            properties[DiagnosticIdProperty] = row.TraceParent;
+        }
+
+        return properties;
+    }
+
+    private static string? CurrentTraceParent()
+    {
+        var activity = Activity.Current;
+        return activity is { IdFormat: ActivityIdFormat.W3C } ? activity.Id : null;
     }
 
     /// <inheritdoc />

@@ -111,6 +111,38 @@ public partial class EfCoreStoreIntegrationTests
     }
 
     [Test]
+    public async Task Outbox_AddInsideAnActivity_SendsTheMessageWithTheTraceParentAsItsDiagnosticId()
+    {
+        using var activity = new System.Diagnostics.Activity("caller");
+        activity.SetIdFormat(System.Diagnostics.ActivityIdFormat.W3C);
+        activity.Start();
+        var traceParent = activity.Id;
+        await InScopeAsync(services => services.GetRequiredService<ICatOutboxStore>().AddAsync(NewMessage("traced")), save: true);
+        activity.Stop();
+
+        await InScopeAsync(async services =>
+        {
+            var pending = await services.GetRequiredService<ICatOutboxStore>().GetPendingAsync(10);
+
+            Assert.That(pending.Single().Message.Properties["Diagnostic-Id"], Is.EqualTo(traceParent));
+        });
+    }
+
+    [Test]
+    public async Task Outbox_AddOutsideAnActivity_AddsNoDiagnosticId()
+    {
+        System.Diagnostics.Activity.Current = null;
+        await InScopeAsync(services => services.GetRequiredService<ICatOutboxStore>().AddAsync(NewMessage("untraced")), save: true);
+
+        await InScopeAsync(async services =>
+        {
+            var pending = await services.GetRequiredService<ICatOutboxStore>().GetPendingAsync(10);
+
+            Assert.That(pending.Single().Message.Properties.ContainsKey("Diagnostic-Id"), Is.False);
+        });
+    }
+
+    [Test]
     public async Task Outbox_GetPending_ReturnsTheOldestFirstAndHonoursTheLimit()
     {
         foreach (var subject in new[] { "first", "second", "third" })

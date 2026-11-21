@@ -65,7 +65,7 @@ From the demo:
 From the other plans:
 - The owner decided in the Responses plan that localization is not the responsibility of `Cat.Responses`, and that `Cat.Responses` does not change because of it.
 - An optional part of a module plugs in through a bridge project and a narrow interface, as `Cat.EventProcessor.Inbox` and `Cat.Scheduling.Resilience` do, see [Cat.Inbox.md](Cat.Inbox.md#phase-1) and the [module readme of Cat.Scheduling](../modules/Cat.Scheduling/README.md#retry-a-failed-run).
-- A message carries a `CorrelationId` already. The trace context of a message is carried by `Cat.Outbox`, see [Cat.Outbox.md](Cat.Outbox.md#phase-2).
+- A message carries a `CorrelationId` already. The trace context of a message that goes through the outbox is carried by `Cat.Outbox`, see [Cat.Outbox.md](Cat.Outbox.md#phase-1).
 - The toolkit is in alpha and the demo is the only user, so a breaking change is allowed (owner, 2026-11-21).
 
 #### What exists today

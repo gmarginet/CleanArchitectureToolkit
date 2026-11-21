@@ -10,7 +10,7 @@ public static class CatServiceBusMessageMapper
 {
     /// <summary>
     /// Maps the message. The message ID is copied, so duplicate detection of the bus can use it.
-    /// The trace context is not added here, the Service Bus SDK puts its <c>Diagnostic-Id</c> on the message when it sends.
+    /// The trace context is not added here. The Service Bus SDK puts its <c>Diagnostic-Id</c> on the message when it sends, unless the properties already hold one, as a message from the outbox does.
     /// </summary>
     /// <param name="message">The message to map.</param>
     /// <returns>The Service Bus message.</returns>

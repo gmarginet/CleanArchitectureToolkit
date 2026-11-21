@@ -36,6 +36,10 @@ public class CatOutboxMessage
 
 Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') → CatOutboxMessage
 
+| Fields | |
+| :--- | :--- |
+| [TraceParentMaxLength](CatOutboxMessage.TraceParentMaxLength.md 'Cat\.Outbox\.EFCore\.CatOutboxMessage\.TraceParentMaxLength') | The length of a W3C `traceparent`, which is the format that the outbox saves\. |
+
 | Properties | |
 | :--- | :--- |
 | [Body](CatOutboxMessage.Body.md 'Cat\.Outbox\.EFCore\.CatOutboxMessage\.Body') | The serialized message\. |
@@ -51,3 +55,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 | [SentAt](CatOutboxMessage.SentAt.md 'Cat\.Outbox\.EFCore\.CatOutboxMessage\.SentAt') | When the message was sent to the transport\. Null while it is pending\. |
 | [SessionId](CatOutboxMessage.SessionId.md 'Cat\.Outbox\.EFCore\.CatOutboxMessage\.SessionId') | The session of the message, if it has one\. |
 | [Subject](CatOutboxMessage.Subject.md 'Cat\.Outbox\.EFCore\.CatOutboxMessage\.Subject') | The subject of the message\. |
+| [TraceParent](CatOutboxMessage.TraceParent.md 'Cat\.Outbox\.EFCore\.CatOutboxMessage\.TraceParent') | The W3C `traceparent` of the activity that was running when the message was stored\. The sender puts it on the message as its `Diagnostic-Id`, so the receiver continues the trace of the caller\. Null when no activity ran\. |

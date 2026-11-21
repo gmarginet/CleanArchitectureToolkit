@@ -8,6 +8,11 @@ namespace Cat.Outbox.EFCore;
 public class CatOutboxMessage
 {
     /// <summary>
+    /// The length of a W3C <c>traceparent</c>, which is the format that the outbox saves.
+    /// </summary>
+    public const int TraceParentMaxLength = 55;
+
+    /// <summary>
     /// The ID of the row.
     /// </summary>
     public Guid Id { get; set; }
@@ -71,4 +76,10 @@ public class CatOutboxMessage
     /// The extra properties of the message, as JSON. Null when there are none.
     /// </summary>
     public string? PropertiesJson { get; set; }
+
+    /// <summary>
+    /// The W3C <c>traceparent</c> of the activity that was running when the message was stored. The sender puts it on the
+    /// message as its <c>Diagnostic-Id</c>, so the receiver continues the trace of the caller. Null when no activity ran.
+    /// </summary>
+    public string? TraceParent { get; set; }
 }

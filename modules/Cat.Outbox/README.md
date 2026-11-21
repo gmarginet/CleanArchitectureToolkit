@@ -44,6 +44,7 @@ The module plugs into `Cat.Messaging` through the sink seam `ICatOutgoingMessage
 - [Usage](#usage)
   - [Turn the outbox on](#turn-the-outbox-on)
   - [Clean the outbox](#clean-the-outbox)
+  - [Keep the trace of the caller](#keep-the-trace-of-the-caller)
 
 ## NuGet packages
 <!-- region start: NuGet-->
@@ -128,4 +129,14 @@ What to know:
 - **It runs at once.** The method deletes the rows right away, with its own statement, and does not wait for a `SaveChanges`. Call it from a scope of its own, such as a job or a worker.
 - **Your own job.** You schedule the call. Any scheduler works, and `Cat.Scheduling` can run it, but the module does not need it.
 - **Other stores.** A store of your own implements the method too.
+
+### Keep the trace of the caller
+
+A message that goes through the outbox keeps the trace of the code that sent it. When the message is stored, the store saves the W3C `traceparent` of the running activity in the column `TraceParent`. When the background service sends the message, the store puts that value on it as the property `Diagnostic-Id`. A receiver that reads `Diagnostic-Id` can continue the trace of the caller. The listener of `Cat.EventProcessor` does not do that yet, so the receiving service still starts a new trace.
+
+What to know:
+- **New column.** `CatOutbox` has the column `TraceParent`, `nvarchar(55)` and nullable. Add a migration for it. A row that is already stored has no trace and is sent as before.
+- **No activity, no property.** A message stored with no running activity gets no `Diagnostic-Id`, and the Service Bus SDK puts its own on it.
+- **Your own `Diagnostic-Id` wins.** The store never replaces a `Diagnostic-Id` that you put in the properties of the message.
+- **Without the outbox.** `Cat.Messaging` leaves the trace to the Service Bus SDK, as before.
 <!-- region end: Usage-->

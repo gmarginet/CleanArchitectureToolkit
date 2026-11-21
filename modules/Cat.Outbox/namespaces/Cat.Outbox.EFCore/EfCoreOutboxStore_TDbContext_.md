@@ -52,11 +52,14 @@ Implements [ICatOutboxStore](../../../Cat.Outbox/namespaces/Cat.Outbox.Abstracti
 
 | Fields | |
 | :--- | :--- |
+| [DiagnosticIdProperty](EfCoreOutboxStore_TDbContext_.DiagnosticIdProperty.md 'Cat\.Outbox\.EFCore\.EfCoreOutboxStore\<TDbContext\>\.DiagnosticIdProperty') | |
 | [\_dbContext](EfCoreOutboxStore_TDbContext_._dbContext.md 'Cat\.Outbox\.EFCore\.EfCoreOutboxStore\<TDbContext\>\.\_dbContext') | |
 
 | Methods | |
 | :--- | :--- |
 | [AddAsync\(CatOutgoingMessage, CancellationToken\)](EfCoreOutboxStore_TDbContext_.AddAsync.HT2EO1HIC3AJRPB40QLF0OS99.md 'Cat\.Outbox\.EFCore\.EfCoreOutboxStore\<TDbContext\>\.AddAsync\(Cat\.Messaging\.Abstractions\.CatOutgoingMessage, System\.Threading\.CancellationToken\)') | Adds a message to the outbox\. It does not save by itself\. The unit of work that saves the data saves the message too, which is the whole point of the outbox\. |
+| [CurrentTraceParent\(\)](EfCoreOutboxStore_TDbContext_.CurrentTraceParent().md 'Cat\.Outbox\.EFCore\.EfCoreOutboxStore\<TDbContext\>\.CurrentTraceParent\(\)') | |
 | [DeleteOlderThanAsync\(DateTimeOffset, CancellationToken\)](EfCoreOutboxStore_TDbContext_.DeleteOlderThanAsync.3LIVI73XW5QKKG1K5MPBP9AVC.md 'Cat\.Outbox\.EFCore\.EfCoreOutboxStore\<TDbContext\>\.DeleteOlderThanAsync\(System\.DateTimeOffset, System\.Threading\.CancellationToken\)') | Deletes the rows that were sent before the given time\. A row that is not sent yet is never deleted\. It runs at once and does not wait for a `SaveChanges`\. Call it from your own job\. Keep a sent row for a while, so you can still look up a message that went missing\. |
 | [GetPendingAsync\(int, CancellationToken\)](EfCoreOutboxStore_TDbContext_.GetPendingAsync.IWIWW0FH5JWY57H83OVHJLC91.md 'Cat\.Outbox\.EFCore\.EfCoreOutboxStore\<TDbContext\>\.GetPendingAsync\(int, System\.Threading\.CancellationToken\)') | Gets the messages that are not sent yet, oldest first\. |
 | [MarkSentAsync\(Guid, CancellationToken\)](EfCoreOutboxStore_TDbContext_.MarkSentAsync.HBS768ERW4P09XF58QW3R4W0F.md 'Cat\.Outbox\.EFCore\.EfCoreOutboxStore\<TDbContext\>\.MarkSentAsync\(System\.Guid, System\.Threading\.CancellationToken\)') | Marks a message as sent and saves that\. |
+| [ReadProperties\(CatOutboxMessage\)](EfCoreOutboxStore_TDbContext_.ReadProperties.2HPN4I9SUMFFXRDWF4576L15C.md 'Cat\.Outbox\.EFCore\.EfCoreOutboxStore\<TDbContext\>\.ReadProperties\(Cat\.Outbox\.EFCore\.CatOutboxMessage\)') | |

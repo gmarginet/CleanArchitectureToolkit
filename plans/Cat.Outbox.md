@@ -38,37 +38,33 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 2](#phase-2)
+- [Phase 1](#phase-1)
 <!-- region end: Phases-->
 
-<!-- region start: Phase 2-->
-## Phase 2
+<!-- region start: Phase 1-->
+## Phase 1
 
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-A message keeps the trace context of its caller, also when it goes through the outbox, so one order is one trace across all services. This phase came over from the plan of `Cat.Messaging`.
+A message that goes through the outbox continues the trace of its caller in the receiving service, so one order is one trace across the services.
 
 #### Background
-From the code:
-- `CatServiceBusMessageMapper` of `Cat.Messaging.AzureServiceBus` adds no trace context. The Service Bus SDK puts its `Diagnostic-Id` on a message when it sends.
-- With the outbox, a background service sends the message later. At that moment the context of the caller is gone, and the outbox row does not save it. A message through the outbox starts a new trace.
-- The listener of `Cat.EventProcessor` continues the trace from the `Diagnostic-Id` of the message.
-- To check when building: whether the Service Bus SDK only traces with a switch of the Azure SDK, such as `Azure.Experimental.EnableActivitySource`.
-
-From the other plans:
-- The saga plan: tracing across the gap of a message needs the trace context in the message properties.
-- The demo shows "one order across all services" in the Aspire dashboard, see the [module readme of Cat.Telemetry](../modules/Cat.Telemetry/README.md#set-up-the-telemetry-of-a-service).
-
-#### Decided
-- **Who carries it.** The outbox carries the trace context of a message that goes through it. Without the outbox, `Cat.Messaging` leaves it to the SDK as today. `Cat.Telemetry` only lists the `Cat.Messaging` source, so no module depends on it (owner, 2026-11-21).
-- **How.** The row saves the W3C `traceparent` of the caller (`Activity.Current.Id`), and the background service sends the message with that context as its `Diagnostic-Id`. `CatOutbox` gets one more column, with a migration (owner, 2026-11-21).
-
-#### Integration tests
-The outbox with the new column on SQL Server and on PostgreSQL, in `integrationtests/`: a message saved inside an activity is sent with the `traceparent` of that activity. The outbox is plain EF Core, so PostgreSQL needs no separate code.
+- The outbox saves the W3C `traceparent` of the caller in the column `TraceParent` and sends it as the property `Diagnostic-Id`, see the [module readme of Cat.Outbox](../modules/Cat.Outbox/README.md#keep-the-trace-of-the-caller). The integration tests on SQL Server and on PostgreSQL cover that.
+- A live test on the AppHost showed that the receiving side still starts a new trace for `TakePayment`. The dashboard shows no span of the Azure Service Bus SDK at all, not on the sending side and not on the receiving side.
+- Tried without success: the source `Azure.Messaging.ServiceBus` in the traces and the switch `Azure.Experimental.EnableActivitySource` set in code with `AppContext.SetSwitch`. Both were reverted, because they changed nothing.
+- To check: how the SDK 7.21.0 and Azure.Core 1.62.0 turn on their activity source, and whether the switch must be set before the first use of Azure.Core, or as the environment variable `AZURE_EXPERIMENTAL_ENABLE_ACTIVITY_SOURCE`.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 1-->
+#### Question 1
+Who makes the receiving side continue the trace?
+- **The SDK.** Find out how to switch the Azure activity source on, and where that setting lives. `Cat.Telemetry` can set it for every service, but it then depends on the SDK internals. It costs a dependency on an experimental switch.
+- **The listener of `Cat.EventProcessor`.** The listener reads `Diagnostic-Id` itself and starts the activity of the handling with it as the parent. It costs a little code in the listener and no switch, and it works the same with another broker later.
+
+Recommendation: the listener, because it does not depend on an experimental switch of the SDK and the `Diagnostic-Id` is already on the message.
+<!-- region end: Question 1-->
 <!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 2-->
+<!-- region end: Phase 1-->

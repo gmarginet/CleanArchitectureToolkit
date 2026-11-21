@@ -16,7 +16,7 @@ partial class OrderDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261118192212_AddOrderShipping";
+    public override string LastMigrationId => "20261121092202_AddOutboxTraceParent";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -286,7 +286,7 @@ partial class OrderDbContextModelSnapshot : ModelSnapshot
                 b.ToTable("CatInbox");
             });
 
-        modelBuilder.Entity("Cat.Messaging.Outbox.EFCore.CatOutboxMessage", b =>
+        modelBuilder.Entity("Cat.Outbox.EFCore.CatOutboxMessage", b =>
             {
                 b.Property<Guid>("Id")
                     .ValueGeneratedOnAdd()
@@ -335,6 +335,10 @@ partial class OrderDbContextModelSnapshot : ModelSnapshot
                     .IsRequired()
                     .HasMaxLength(260)
                     .HasColumnType("nvarchar(260)");
+
+                b.Property<string>("TraceParent")
+                    .HasMaxLength(55)
+                    .HasColumnType("nvarchar(55)");
 
                 b.HasKey("Id");
 

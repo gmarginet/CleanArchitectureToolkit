@@ -23,6 +23,7 @@ public static class ModelBuilderExtensions
             entity.Property(row => row.ContentType).HasMaxLength(100).IsRequired();
             entity.Property(row => row.Subject).HasMaxLength(260).IsRequired();
             entity.Property(row => row.SessionId).HasMaxLength(128);
+            entity.Property(row => row.TraceParent).HasMaxLength(CatOutboxMessage.TraceParentMaxLength);
             entity.HasIndex(row => new { row.SentAt, row.CreatedAt });
         });
 
