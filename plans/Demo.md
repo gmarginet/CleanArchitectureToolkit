@@ -40,7 +40,6 @@
 <!-- no toc -->
 - [Phase 9](#phase-9)
 - [Phase 10](#phase-10)
-- [Phase 11](#phase-11)
 - [Phase 12](#phase-12)
 - [Phase 13](#phase-13)
 - [Phase 16](#phase-16)
@@ -176,37 +175,6 @@ Recommendation: yes, if the module gets a data part. Categories are the one piec
 <!-- region end: Question 18-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 10-->
-
-<!-- region start: Phase 11-->
-## Phase 11
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Show `Cat.Resilience` in the demo, as the base of the resilience in every service and with an external profile on the call to the outside payment provider.
-
-#### Background
-- `Aspire ServiceDefaults` already gives every service telemetry, health checks and the standard resilience handler. The demo uses Aspire, so it does not use `Cat.Resilience` today.
-- `Cat.Resilience` is the base for every project, and `ServiceDefaults` calls it. See the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md).
-- The demo case for `Cat.Resilience`: the internal profile on every client, and the external profile on the client of the outside payment provider, which is built, see the [demo readme](../demo/README.md#payment-service).
-
-#### What exists today
-- Orders replaces the standard resilience handler of the Inventory client with a shorter one in `UseFastFailResilience`: one retry after 500 ms, 5 seconds per try and 12 seconds in total. `FastFailResilienceTests` covers it.
-- The `ServiceDefaults` pipeline is chosen per authority with `SelectPipelineByAuthority()`. Every call to our own services goes through the gateway, so two clients on that pipeline share one circuit. Today only the Catalog client of Orders uses it, and the Inventory client has its own fast fail pipeline. The module keeps a circuit per client, see the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md).
-- `Cat.Resilience` exists, see its [module readme](../modules/Cat.Resilience/README.md). The demo does not use it yet.
-
-#### Decided
-- **Where the demo uses the module.** In every service, because `ServiceDefaults` calls `Cat.Resilience` for every `HttpClient`. The client of the payment provider in Orders gets the external profile. The demo readme then says where (owner, 2026-11-20).
-- **Split.** The move of payment to an outside provider is built, see the [demo readme](../demo/README.md#payment-service). This phase only holds the showcase of the module (owner, 2026-11-21).
-
-#### Done when
-The latency, the error percentage and the outage of the payment provider are each tried once on the direct call from Orders, through the external profile, and the demo readme says what happened (owner, 2026-11-21).
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 11-->
 
 <!-- region start: Phase 12-->
 ## Phase 12
