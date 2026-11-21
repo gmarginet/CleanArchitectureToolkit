@@ -67,5 +67,13 @@ A retry and circuit breaker around a whole command or query, for a developer who
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 1-->
+#### Question 1
+The owner decided that this phase is built only when a real case needs a retry around a whole handler. Is there such a case now?
+- Yes: name the case, and the phase is built.
+- No: the phase stays here until a case shows up.
+
+Recommendation: No. Nothing in the demo or the modules needs it today, and a retry around a whole handler multiplies with the retries of the client and the bus.
+<!-- region end: Question 1-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->
