@@ -38,41 +38,8 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 1](#phase-1)
 - [Phase 2](#phase-2)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 1-->
-## Phase 1
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-A module of its own for the outbox, next to `Cat.Inbox`, so the module list shows both.
-
-#### Background
-- The inbox moved to a module of its own, see [Cat.Inbox.md](Cat.Inbox.md#phase-1).
-- The toolkit is in alpha and the demo is the only user, so a breaking change is allowed (owner, 2026-11-21).
-
-#### What exists today
-- The outbox lives in `Cat.Messaging`, in two optional projects. `Cat.Messaging.Outbox` targets `netstandard2.0` and references `Cat.Messaging.Abstractions`. It holds `ICatOutboxStore`, `CatOutboxOptions`, `OutboxMessageSink` and the background service `OutboxSender`. `Cat.Messaging.Outbox.EFCore` targets `net10.0;net11.0` and holds the `CatOutbox` table and its store.
-- `OutboxMessageSink` plugs into the sender through `ICatOutgoingMessageSink` of `Cat.Messaging.Abstractions`, and stores a `CatOutgoingMessage`. `OutboxSender` hands the stored messages to the bus later. `Cat.Messaging` itself never references the outbox.
-- The module readme of `Cat.Sql.Cdc` points a service on PostgreSQL to `Cat.Messaging.Outbox.EFCore`.
-- The store is plain EF Core, with integration tests on SQL Server and on PostgreSQL in `integrationtests/`.
-
-#### Decided
-- **A module of its own.** `Cat.Outbox` holds the outbox. The store contract, the background sender, the `CatOutbox` table and its EF Core store move out of `Cat.Messaging`. The reason is a clear module list, with the inbox and the outbox side by side (owner, 2026-11-21).
-- **Projects.** `Cat.Outbox.Abstractions` holds `ICatOutboxStore` on `netstandard2.0`, like `Cat.Inbox.Abstractions`. `Cat.Outbox` holds the sink and the background sender on `netstandard2.0`. `Cat.Outbox.EFCore` holds the `CatOutbox` table and its store on `net10.0;net11.0`. The table keeps its name, so a database needs no migration (owner, 2026-11-21).
-- **Connection to `Cat.Messaging`.** `Cat.Outbox` references `Cat.Messaging.Abstractions`, because it stores a `CatOutgoingMessage` and hands it to the bus. The sink plugs into the sender through `ICatOutgoingMessageSink`, as today. `Cat.Messaging` never references `Cat.Outbox`, and there is no own message type and no bridge (owner, 2026-11-21).
-
-#### Integration tests
-The existing outbox tests on SQL Server and on PostgreSQL move with the store and keep passing.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 1-->
 
 <!-- region start: Phase 2-->
 ## Phase 2
@@ -81,9 +48,6 @@ The existing outbox tests on SQL Server and on PostgreSQL move with the store an
 <!-- region start: PhaseDescription-->
 #### Goal
 A message keeps the trace context of its caller, also when it goes through the outbox, so one order is one trace across all services. This phase came over from the plan of `Cat.Messaging`.
-
-#### Needs
-[Phase 1](#phase-1), built first.
 
 #### Background
 From the code:

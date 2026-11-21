@@ -105,7 +105,7 @@ EXEC sys.sp_cdc_enable_table
 ```
 
 Change data capture needs the SQL Server Agent, or a managed service that runs the capture job for you.  
-The module works on SQL Server only. PostgreSQL has no change tables. A service on PostgreSQL that owns its data uses the outbox of `Cat.Messaging.Outbox.EFCore` to hand its messages to the bus.  
+The module works on SQL Server only. PostgreSQL has no change tables. A service on PostgreSQL that owns its data uses the outbox of `Cat.Outbox.EFCore` to hand its messages to the bus.  
 More on this in the [Microsoft documentation](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/about-change-data-capture-sql-server).
 
 ### Register the reader

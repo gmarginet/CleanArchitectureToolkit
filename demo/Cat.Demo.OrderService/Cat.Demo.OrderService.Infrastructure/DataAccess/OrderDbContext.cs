@@ -1,7 +1,7 @@
 using Cat.Demo.OrderService.DataModels.Entities;
 using Cat.EFCore.Extensions.SqlServer;
 using Cat.EventProcessor.Inbox.EFCore;
-using Cat.Messaging.Outbox.EFCore;
+using Cat.Outbox.EFCore;
 using Cat.Sagas.EFCore;
 using Cat.Scheduling.EFCore;
 using Microsoft.EntityFrameworkCore;

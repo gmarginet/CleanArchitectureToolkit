@@ -1,0 +1,28 @@
+../../../Cat.Outbox/namespaces/Cat.Outbox.EFCore/
+P:Cat.Outbox.EFCore.CatOutboxMessage.Id|CatOutboxMessage.Id.md|Id
+P:Cat.Outbox.EFCore.CatOutboxMessage.CreatedAt|CatOutboxMessage.CreatedAt.md|CreatedAt
+P:Cat.Outbox.EFCore.CatOutboxMessage.SentAt|CatOutboxMessage.SentAt.md|SentAt
+P:Cat.Outbox.EFCore.CatOutboxMessage.EntityName|CatOutboxMessage.EntityName.md|EntityName
+P:Cat.Outbox.EFCore.CatOutboxMessage.Kind|CatOutboxMessage.Kind.md|Kind
+P:Cat.Outbox.EFCore.CatOutboxMessage.Body|CatOutboxMessage.Body.md|Body
+P:Cat.Outbox.EFCore.CatOutboxMessage.ContentType|CatOutboxMessage.ContentType.md|ContentType
+P:Cat.Outbox.EFCore.CatOutboxMessage.MessageId|CatOutboxMessage.MessageId.md|MessageId
+P:Cat.Outbox.EFCore.CatOutboxMessage.CorrelationId|CatOutboxMessage.CorrelationId.md|CorrelationId
+P:Cat.Outbox.EFCore.CatOutboxMessage.Subject|CatOutboxMessage.Subject.md|Subject
+P:Cat.Outbox.EFCore.CatOutboxMessage.SessionId|CatOutboxMessage.SessionId.md|SessionId
+P:Cat.Outbox.EFCore.CatOutboxMessage.ScheduledAt|CatOutboxMessage.ScheduledAt.md|ScheduledAt
+P:Cat.Outbox.EFCore.CatOutboxMessage.PropertiesJson|CatOutboxMessage.PropertiesJson.md|PropertiesJson
+N:Cat.Outbox.EFCore|Cat.Outbox.EFCore.md|Cat.Outbox.EFCore
+T:Cat.Outbox.EFCore.CatOutboxMessage|CatOutboxMessage.md|CatOutboxMessage
+F:Cat.Outbox.EFCore.EfCoreOutboxStore`1._dbContext|EfCoreOutboxStore_TDbContext_._dbContext.md|_dbContext
+M:Cat.Outbox.EFCore.EfCoreOutboxStore`1.#ctor(`0)|EfCoreOutboxStore_TDbContext_..ctor.33XNLYWYXE4DAPDQ5P6VZDCW7.md|EfCoreOutboxStore(TDbContext)
+M:Cat.Outbox.EFCore.EfCoreOutboxStore`1.AddAsync(Cat.Messaging.Abstractions.CatOutgoingMessage,System.Threading.CancellationToken)|EfCoreOutboxStore_TDbContext_.AddAsync.HT2EO1HIC3AJRPB40QLF0OS99.md|AddAsync(CatOutgoingMessage, CancellationToken)
+M:Cat.Outbox.EFCore.EfCoreOutboxStore`1.GetPendingAsync(System.Int32,System.Threading.CancellationToken)|EfCoreOutboxStore_TDbContext_.GetPendingAsync.IWIWW0FH5JWY57H83OVHJLC91.md|GetPendingAsync(int, CancellationToken)
+M:Cat.Outbox.EFCore.EfCoreOutboxStore`1.MarkSentAsync(System.Guid,System.Threading.CancellationToken)|EfCoreOutboxStore_TDbContext_.MarkSentAsync.HBS768ERW4P09XF58QW3R4W0F.md|MarkSentAsync(Guid, CancellationToken)
+M:Cat.Outbox.EFCore.EfCoreOutboxStore`1.DeleteOlderThanAsync(System.DateTimeOffset,System.Threading.CancellationToken)|EfCoreOutboxStore_TDbContext_.DeleteOlderThanAsync.3LIVI73XW5QKKG1K5MPBP9AVC.md|DeleteOlderThanAsync(DateTimeOffset, CancellationToken)
+T:Cat.Outbox.EFCore.EfCoreOutboxStore`1|EfCoreOutboxStore_TDbContext_.md|EfCoreOutboxStore<TDbContext>
+M:Cat.Outbox.EFCore.ModelBuilderExtensions.AddCatOutbox(Microsoft.EntityFrameworkCore.ModelBuilder)|ModelBuilderExtensions.AddCatOutbox.4MBVYQYL34QU6L00E6KOBZ401.md|AddCatOutbox(this ModelBuilder)
+T:Cat.Outbox.EFCore.ModelBuilderExtensions|ModelBuilderExtensions.md|ModelBuilderExtensions
+M:Cat.Outbox.EFCore.Extensions.ServiceCollectionExtensions.AddCatOutboxEfCore``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatOutboxEfCore.4KLZ0TAFRG4RLC55CG1CM8G44.md|AddCatOutboxEfCore<TDbContext>(this IServiceCollection)
+N:Cat.Outbox.EFCore.Extensions|Cat.Outbox.EFCore.Extensions.md|Cat.Outbox.EFCore.Extensions
+T:Cat.Outbox.EFCore.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

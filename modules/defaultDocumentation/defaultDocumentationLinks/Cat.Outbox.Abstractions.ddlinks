@@ -1,0 +1,10 @@
+../../../Cat.Outbox/namespaces/Cat.Outbox.Abstractions/
+P:Cat.Outbox.Abstractions.CatOutboxItem.Id|CatOutboxItem.Id.md|Id
+P:Cat.Outbox.Abstractions.CatOutboxItem.Message|CatOutboxItem.Message.md|Message
+N:Cat.Outbox.Abstractions|Cat.Outbox.Abstractions.md|Cat.Outbox.Abstractions
+T:Cat.Outbox.Abstractions.CatOutboxItem|CatOutboxItem.md|CatOutboxItem
+M:Cat.Outbox.Abstractions.ICatOutboxStore.AddAsync(Cat.Messaging.Abstractions.CatOutgoingMessage,System.Threading.CancellationToken)|ICatOutboxStore.AddAsync.57PSOWRE56DIX02KNN37FCH98.md|AddAsync(CatOutgoingMessage, CancellationToken)
+M:Cat.Outbox.Abstractions.ICatOutboxStore.GetPendingAsync(System.Int32,System.Threading.CancellationToken)|ICatOutboxStore.GetPendingAsync.4UC1ZTDL0H22ZHCG22HT14XPE.md|GetPendingAsync(int, CancellationToken)
+M:Cat.Outbox.Abstractions.ICatOutboxStore.MarkSentAsync(System.Guid,System.Threading.CancellationToken)|ICatOutboxStore.MarkSentAsync.2F803FDL0KU53NXFPHKWHKZT7.md|MarkSentAsync(Guid, CancellationToken)
+M:Cat.Outbox.Abstractions.ICatOutboxStore.DeleteOlderThanAsync(System.DateTimeOffset,System.Threading.CancellationToken)|ICatOutboxStore.DeleteOlderThanAsync.08TV8F6OJVWJDB71AKLD87UO6.md|DeleteOlderThanAsync(DateTimeOffset, CancellationToken)
+T:Cat.Outbox.Abstractions.ICatOutboxStore|ICatOutboxStore.md|ICatOutboxStore

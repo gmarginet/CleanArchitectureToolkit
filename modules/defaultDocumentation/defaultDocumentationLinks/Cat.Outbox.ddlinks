@@ -1,0 +1,19 @@
+../../../Cat.Outbox/namespaces/Cat.Outbox/
+P:Cat.Outbox.CatOutboxOptions.PollInterval|CatOutboxOptions.PollInterval.md|PollInterval
+P:Cat.Outbox.CatOutboxOptions.BatchSize|CatOutboxOptions.BatchSize.md|BatchSize
+N:Cat.Outbox|Cat.Outbox.md|Cat.Outbox
+T:Cat.Outbox.CatOutboxOptions|CatOutboxOptions.md|CatOutboxOptions
+F:Cat.Outbox.OutboxMessageSink._store|OutboxMessageSink._store.md|_store
+M:Cat.Outbox.OutboxMessageSink.#ctor(Cat.Outbox.Abstractions.ICatOutboxStore)|OutboxMessageSink..ctor.Q69O52GBKBT7H4TWZD0515JG4.md|OutboxMessageSink(ICatOutboxStore)
+M:Cat.Outbox.OutboxMessageSink.AcceptAsync(Cat.Messaging.Abstractions.CatOutgoingMessage,System.Threading.CancellationToken)|OutboxMessageSink.AcceptAsync.XRXP38UDS0TKRW9LQ4XK2S2N5.md|AcceptAsync(CatOutgoingMessage, CancellationToken)
+T:Cat.Outbox.OutboxMessageSink|OutboxMessageSink.md|OutboxMessageSink
+F:Cat.Outbox.OutboxSender._scopeFactory|OutboxSender._scopeFactory.md|_scopeFactory
+F:Cat.Outbox.OutboxSender._options|OutboxSender._options.md|_options
+F:Cat.Outbox.OutboxSender._logger|OutboxSender._logger.md|_logger
+M:Cat.Outbox.OutboxSender.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Cat.Outbox.CatOutboxOptions},Microsoft.Extensions.Logging.ILogger{Cat.Outbox.OutboxSender})|OutboxSender..ctor.51Q2E9SMD4RQ1G0XB7BY59LG1.md|OutboxSender(IServiceScopeFactory, IOptions<CatOutboxOptions>, ILogger<OutboxSender>)
+M:Cat.Outbox.OutboxSender.ExecuteAsync(System.Threading.CancellationToken)|OutboxSender.ExecuteAsync.W8IYZUY761P4FVJOWAU248NV3.md|ExecuteAsync(CancellationToken)
+M:Cat.Outbox.OutboxSender.SendPendingAsync(System.Threading.CancellationToken)|OutboxSender.SendPendingAsync.TR1Z0LR1H15UXL56SVC5WUGY1.md|SendPendingAsync(CancellationToken)
+T:Cat.Outbox.OutboxSender|OutboxSender.md|OutboxSender
+M:Cat.Outbox.Extensions.ServiceCollectionExtensions.AddCatOutbox(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Cat.Outbox.CatOutboxOptions})|ServiceCollectionExtensions.AddCatOutbox.9911AZ9IWTY2IT8LS1UCT8AP3.md|AddCatOutbox(this IServiceCollection, Action<CatOutboxOptions>)
+N:Cat.Outbox.Extensions|Cat.Outbox.Extensions.md|Cat.Outbox.Extensions
+T:Cat.Outbox.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Cat.Demo.OrderService.CoreService.Commands;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
 using Cat.EFCore.Commands;
-using Cat.Messaging.Outbox;
+using Cat.Outbox.Abstractions;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 

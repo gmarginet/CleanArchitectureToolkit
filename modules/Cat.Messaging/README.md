@@ -51,8 +51,7 @@ The outbox is optional. With it, a message is saved in the same `SaveChanges` as
   - [Names and sessions](#names-and-sessions)
   - [Create the queues and topics](#create-the-queues-and-topics)
   - [Change the options of Azure Service Bus](#change-the-options-of-azure-service-bus)
-  - [Turn the outbox on](#turn-the-outbox-on)
-  - [Clean the outbox](#clean-the-outbox)
+  - [Use the outbox](#use-the-outbox)
   - [Watch the dead letters](#watch-the-dead-letters)
   - [Where to publish from](#where-to-publish-from)
   - [The emulator](#the-emulator)
@@ -66,8 +65,6 @@ The outbox is optional. With it, a message is saved in the same `SaveChanges` as
 | [Cat.Messaging.Abstractions](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Abstractions/) | Contracts | netstandard2.0 | `dotnet add package gmarginet.Cat.Messaging.Abstractions` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging.Abstractions)](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Abstractions/) |
 | [Cat.Messaging](https://www.nuget.org/packages/gmarginet.Cat.Messaging/) | Implementation | netstandard2.0 | `dotnet add package gmarginet.Cat.Messaging` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging)](https://www.nuget.org/packages/gmarginet.Cat.Messaging/) |
 | [Cat.Messaging.AzureServiceBus](https://www.nuget.org/packages/gmarginet.Cat.Messaging.AzureServiceBus/) | Azure Service Bus transport | netstandard2.0 | `dotnet add package gmarginet.Cat.Messaging.AzureServiceBus` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging.AzureServiceBus)](https://www.nuget.org/packages/gmarginet.Cat.Messaging.AzureServiceBus/) |
-| [Cat.Messaging.Outbox](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Outbox/) | Optional outbox | netstandard2.0 | `dotnet add package gmarginet.Cat.Messaging.Outbox` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging.Outbox)](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Outbox/) |
-| [Cat.Messaging.Outbox.EFCore](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Outbox.EFCore/) | Optional outbox storage for EF Core | net10.0, net11.0 | `dotnet add package gmarginet.Cat.Messaging.Outbox.EFCore` | [![NuGet Downloads](https://img.shields.io/nuget/dt/gmarginet.Cat.Messaging.Outbox.EFCore)](https://www.nuget.org/packages/gmarginet.Cat.Messaging.Outbox.EFCore/) |
 
 <!-- region end: NuGet-->
 
@@ -79,8 +76,6 @@ The outbox is optional. With it, a message is saved in the same `SaveChanges` as
 | [Cat.Messaging.Abstractions](namespaces/Cat.Messaging.Abstractions/index.md) | The message base types, the sender, the token provider, the name convention and the transport seam. |
 | [Cat.Messaging](namespaces/Cat.Messaging/index.md) | The sender, the name convention, the JSON serializer and the module registration. |
 | [Cat.Messaging.AzureServiceBus](namespaces/Cat.Messaging.AzureServiceBus/index.md) | The Azure Service Bus transport, the topology helper and the dead letter metric. |
-| [Cat.Messaging.Outbox](namespaces/Cat.Messaging.Outbox/index.md) | The outbox store contract and the background sender. |
-| [Cat.Messaging.Outbox.EFCore](namespaces/Cat.Messaging.Outbox.EFCore/index.md) | The outbox table and store for EF Core. |
 
 <!-- region end: Namespaces-->
 
@@ -253,55 +248,9 @@ Things to know:
 - **The retry options of the client are not a redelivery delay.** They cover failed calls to the bus, such as a timeout or a busy namespace. The SDK defaults are 3 retries, exponential back-off, a base delay of 0.8 seconds and a maximum delay of 60 seconds. A message that fails in a receiver still comes back at once, see [Watch the dead letters](#watch-the-dead-letters).
 - **The event processor has its own callbacks.** The subscriptions and the processors belong to the service that receives the message, so their callbacks are in the module readme of `Cat.EventProcessor`.
 
-### Turn the outbox on
+### Use the outbox
 
-Without the outbox, a message is sent at once. When the service crashes between saving the data and sending the message, the message is lost. The outbox closes that gap. The message is saved in the same `SaveChanges` as the data, and a background service sends it afterwards.
-
-Add the `Cat.Messaging.Outbox` and `Cat.Messaging.Outbox.EFCore` packages. Map the table in your context and register the outbox after the module:
-
-```csharp
-using Cat.Messaging.Outbox.EFCore;
-using Cat.Messaging.Outbox.EFCore.Extensions;
-using Cat.Messaging.Outbox.Extensions;
-
-public class OrdersDbContext : DbContext
-{
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.AddCatOutbox();
-    }
-}
-
-builder.Services.AddCatMessagingModule();
-builder.Services.AddCatMessagingAzureServiceBus(options => options.ConnectionString = connectionString);
-builder.Services.AddCatMessagingOutboxEfCore<OrdersDbContext>();
-builder.Services.AddCatMessagingOutbox(options => options.PollInterval = TimeSpan.FromSeconds(2));
-```
-
-Add a migration afterwards, so the `CatOutbox` table exists. Your code does not change: `ICatMessageSender` now stores the message, and your own `SaveChanges` saves it with the entities.
-
-What to know:
-- The sender marks a message as sent only after the bus accepted it. A crash in between sends the message twice, never zero times. A receiver must handle a message more than once.
-- A scheduled message keeps its `scheduledAt` in the outbox and goes to the bus when the sender picks it up.
-- The sender stops at the first message that fails, so the order of the others is kept.
-- **Growth.** The sender never deletes a sent row. See [Clean the outbox](#clean-the-outbox).
-
-### Clean the outbox
-
-The table grows by one row for every message. A row holds the whole message, with its body and its token, so it is bigger than an inbox row. The module does not delete rows by itself, so you run a job that does.
-
-`ICatOutboxStore` has a method for it:
-
-```csharp
-var deleted = await outboxStore.DeleteOlderThanAsync(DateTimeOffset.UtcNow.AddDays(-30), cancellationToken);
-```
-
-What to know:
-- **Only sent rows.** The method deletes the rows with a `SentAt` before the time limit. A row that is not sent yet stays, however old it is.
-- **How long a row must live.** A sent row only helps you find a message that went missing. Keep it as long as you want that trace, and know that its token stays in the table for as long as the row does.
-- **It runs at once.** The method deletes the rows right away, with its own statement, and does not wait for a `SaveChanges`. Call it from a scope of its own, such as a job or a worker.
-- **Your own job.** You schedule the call. Any scheduler works, and `Cat.Scheduling` can run it, but the module does not need it.
-- **Other stores.** A store of your own implements the method too.
+Without the outbox, a message is sent at once, and a crash between saving the data and sending the message loses it. The outbox of the module `Cat.Outbox` closes that gap. It plugs into the sender through `ICatOutgoingMessageSink`, so your code does not change. `Cat.Messaging` never references it. See the [module readme of Cat.Outbox](../Cat.Outbox/README.md#turn-the-outbox-on).
 
 ### Watch the dead letters
 

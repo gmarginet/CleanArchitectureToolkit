@@ -195,8 +195,8 @@ An answer can therefore never arrive before its instance exists. If the process 
 With the outbox of [Cat.Messaging](../Cat.Messaging/README.md) on, `ICatMessageSender` does not send. It adds a row to the context, and the next `SaveChanges` saves it. The order above would then add the request row after the instance is saved, and nothing would save it. Tell the saga about the outbox, next to the outbox registration:
 
 ```csharp
-services.AddCatMessagingOutboxEfCore<OrdersDbContext>();
-services.AddCatMessagingOutbox();
+services.AddCatOutboxEfCore<OrdersDbContext>();
+services.AddCatOutbox();
 services.AddCatSagasModule();
 services.AddCatSagasEFCore<OrdersDbContext>();
 services.AddCatSagasOutbox();

@@ -41,7 +41,7 @@
       <ProjectReference Include="..\..\modules\Cat.EFCore\Cat.EFCore.Extensions.SqlServer\Cat.EFCore.Extensions.SqlServer.csproj" />
       <ProjectReference Include="..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Inbox.EFCore\Cat.EventProcessor.Inbox.EFCore.csproj" />
       <ProjectReference Include="..\..\modules\Cat.IntegrationTesting\Cat.IntegrationTesting.SqlServer.NUnit\Cat.IntegrationTesting.SqlServer.NUnit.csproj" />
-      <ProjectReference Include="..\..\modules\Cat.Messaging\Cat.Messaging.Outbox.EFCore\Cat.Messaging.Outbox.EFCore.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Outbox\Cat.Outbox.EFCore\Cat.Outbox.EFCore.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Sagas\Cat.Sagas.EFCore\Cat.Sagas.EFCore.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Scheduling\Cat.Scheduling.EFCore\Cat.Scheduling.EFCore.csproj" />

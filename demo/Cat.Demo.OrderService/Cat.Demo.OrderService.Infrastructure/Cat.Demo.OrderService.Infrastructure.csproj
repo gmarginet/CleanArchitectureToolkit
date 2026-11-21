@@ -15,7 +15,7 @@
       <ProjectReference Include="..\..\..\modules\Cat.EventProcessor\Cat.EventProcessor.Inbox.EFCore\Cat.EventProcessor.Inbox.EFCore.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging\Cat.Messaging.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.AzureServiceBus\Cat.Messaging.AzureServiceBus.csproj" />
-      <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.Outbox.EFCore\Cat.Messaging.Outbox.EFCore.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.Outbox\Cat.Outbox.EFCore\Cat.Outbox.EFCore.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Sagas\Cat.Sagas.EFCore\Cat.Sagas.EFCore.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Scheduling\Cat.Scheduling.EFCore\Cat.Scheduling.EFCore.csproj" />
       <ProjectReference Include="..\..\..\modules\Cat.Telemetry\Cat.Telemetry\Cat.Telemetry.csproj" />

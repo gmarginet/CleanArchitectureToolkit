@@ -8,8 +8,8 @@ using Cat.Messaging.Abstractions;
 using Cat.Messaging.AzureServiceBus;
 using Cat.Messaging.AzureServiceBus.Extensions;
 using Cat.Messaging.Extensions;
-using Cat.Messaging.Outbox.EFCore.Extensions;
-using Cat.Messaging.Outbox.Extensions;
+using Cat.Outbox.EFCore.Extensions;
+using Cat.Outbox.Extensions;
 using Cat.Sagas;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,8 +34,8 @@ public static class OrderMessagingExtensions
             options.ConnectionString = connectionString;
             options.AdministrationConnectionString = configuration["Messaging:AdministrationConnectionString"] ?? string.Empty;
         });
-        services.AddCatMessagingOutboxEfCore<OrderDbContext>();
-        services.AddCatMessagingOutbox(options => options.PollInterval = TimeSpan.FromSeconds(1));
+        services.AddCatOutboxEfCore<OrderDbContext>();
+        services.AddCatOutbox(options => options.PollInterval = TimeSpan.FromSeconds(1));
 
         return services;
     }

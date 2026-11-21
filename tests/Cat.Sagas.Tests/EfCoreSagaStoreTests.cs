@@ -24,7 +24,7 @@ public class SagaDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.AddCatSagas();
-        Cat.Messaging.Outbox.EFCore.ModelBuilderExtensions.AddCatOutbox(modelBuilder);
+        Cat.Outbox.EFCore.ModelBuilderExtensions.AddCatOutbox(modelBuilder);
         Cat.EventProcessor.Inbox.EFCore.ModelBuilderExtensions.AddCatInbox(modelBuilder);
     }
 }

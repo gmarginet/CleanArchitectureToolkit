@@ -167,13 +167,17 @@
     <File Path="modules/Cat.Messaging/README.md" />
     <Project Path="modules/Cat.Messaging/Cat.Messaging.Abstractions/Cat.Messaging.Abstractions.csproj" />
     <Project Path="modules/Cat.Messaging/Cat.Messaging.AzureServiceBus/Cat.Messaging.AzureServiceBus.csproj" />
-    <Project Path="modules/Cat.Messaging/Cat.Messaging.Outbox.EFCore/Cat.Messaging.Outbox.EFCore.csproj" />
-    <Project Path="modules/Cat.Messaging/Cat.Messaging.Outbox/Cat.Messaging.Outbox.csproj" />
     <Project Path="modules/Cat.Messaging/Cat.Messaging/Cat.Messaging.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.Minimal.Api/">
     <File Path="modules/Cat.Minimal.Api/README.md" />
     <Project Path="modules/Cat.Minimal.Api/Cat.Minimal.Api/Cat.Minimal.Api.csproj" />
+  </Folder>
+  <Folder Name="/modules/Cat.Outbox/">
+    <File Path="modules/Cat.Outbox/README.md" />
+    <Project Path="modules/Cat.Outbox/Cat.Outbox.Abstractions/Cat.Outbox.Abstractions.csproj" />
+    <Project Path="modules/Cat.Outbox/Cat.Outbox.EFCore/Cat.Outbox.EFCore.csproj" />
+    <Project Path="modules/Cat.Outbox/Cat.Outbox/Cat.Outbox.csproj" />
   </Folder>
   <Folder Name="/modules/Cat.Queries/">
     <File Path="modules/Cat.Queries/README.md" />
@@ -265,6 +269,7 @@
     <Project Path="tests/Cat.IntegrationTesting.Tests/Cat.IntegrationTesting.Tests.csproj" />
     <Project Path="tests/Cat.Messaging.Tests/Cat.Messaging.Tests.csproj" />
     <Project Path="tests/Cat.Minimal.Api.Tests/Cat.Minimal.Api.Tests.csproj" />
+    <Project Path="tests/Cat.Outbox.Tests/Cat.Outbox.Tests.csproj" />
     <Project Path="tests/Cat.Queries.Tests/Cat.Queries.Tests.csproj" />
     <Project Path="tests/Cat.Resilience.Tests/Cat.Resilience.Tests.csproj" />
     <Project Path="tests/Cat.Responses.Tests/Cat.Responses.Tests.csproj" />
