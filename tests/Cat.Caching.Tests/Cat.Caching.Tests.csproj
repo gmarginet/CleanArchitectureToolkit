@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="NUnit"/>
+        <PackageReference Include="NUnit.Analyzers">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="NUnit3TestAdapter"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="NUnit.Framework"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\modules\Cat.Caching\Cat.Caching.Abstractions\Cat.Caching.Abstractions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Caching\Cat.Caching\Cat.Caching.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Queries\Cat.Queries\Cat.Queries.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Resilience\Cat.Resilience.Abstractions\Cat.Resilience.Abstractions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Resilience\Cat.Resilience.Queries\Cat.Resilience.Queries.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Resilience\Cat.Resilience\Cat.Resilience.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Users\Cat.Users.Abstractions\Cat.Users.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

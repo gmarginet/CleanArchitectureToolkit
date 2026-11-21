@@ -125,7 +125,7 @@ public class AddCatTelemetryTests
     {
         Assert.That(CatTelemetryNames.Modules, Is.EquivalentTo(new[]
         {
-            "Cat.EventProcessor", "Cat.FluentWorkflows", "Cat.Messaging", "Cat.Scheduling", "Cat.ServiceRequests", "Cat.Sql.Cdc"
+            "Cat.Caching", "Cat.EventProcessor", "Cat.FluentWorkflows", "Cat.Messaging", "Cat.Scheduling", "Cat.ServiceRequests", "Cat.Sql.Cdc"
         }));
     }
 }

@@ -31,6 +31,12 @@
 Defines the contracts for queries: the query marker, the handlers that answer them,
 and the processor that finds the right handler and returns an [ICatResponse&lt;TResponse&gt;](../../../Cat.Responses/namespaces/Cat.Responses.Abstractions/ICatResponse_TResponse_.md 'Cat\.Responses\.Abstractions\.ICatResponse\`1')\.
 
+| Classes | |
+| :--- | :--- |
+| [CatQueryProcessorOrder](CatQueryProcessorOrder.md 'Cat\.Queries\.Abstractions\.CatQueryProcessorOrder') | The default order of the wrappers around [ICatQueryProcessor](ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor'), from the outside in\. A lower number is further out\. It runs first on the way in and last on the way out\. Every module that wraps the processor uses one of these numbers, so the order is the same whatever the sequence of the registration lines\. The numbers are spaced out in steps of 100, so a wrapper of your own can slot in between, for example 150\. |
+| [CatQueryProcessorWrapperExtensions](CatQueryProcessorWrapperExtensions.md 'Cat\.Queries\.Abstractions\.CatQueryProcessorWrapperExtensions') | Registers a wrapper around [ICatQueryProcessor](ICatQueryProcessor.md 'Cat\.Queries\.Abstractions\.ICatQueryProcessor'), such as a cache or a retry\. Wrappers from different modules go in the order of their number, see [CatQueryProcessorOrder](CatQueryProcessorOrder.md 'Cat\.Queries\.Abstractions\.CatQueryProcessorOrder'), and not in the order of the registration lines\. |
+| [CatQueryProcessorWrapperExtensions\.CatQueryProcessorWrappers](CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers.md 'Cat\.Queries\.Abstractions\.CatQueryProcessorWrapperExtensions\.CatQueryProcessorWrappers') | |
+
 | Interfaces | |
 | :--- | :--- |
 | [ICatQuery&lt;TQueryResult&gt;](ICatQuery_TQueryResult_.md 'Cat\.Queries\.Abstractions\.ICatQuery\<TQueryResult\>') | Marks a query that reads data and returns it in a response\. Handle it with [ICatQueryHandler&lt;TQuery,TQueryResult&gt;](ICatQueryHandler_TQuery,TQueryResult_.md 'Cat\.Queries\.Abstractions\.ICatQueryHandler\<TQuery,TQueryResult\>')\. |

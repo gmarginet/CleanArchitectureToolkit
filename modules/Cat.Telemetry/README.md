@@ -122,6 +122,7 @@ Every CAT module that traces or measures uses its own name for the source and fo
 
 | Name | Module | Holds |
 |------|--------|-------|
+| `Cat.Caching` | `Cat.Caching` | Meter. The counters `cat.caching.hits` and `cat.caching.misses` with the tag `query`, the short name of the query type. |
 | `Cat.EventProcessor` | `Cat.EventProcessor` | Source. The span of the handling of a message, with the trace of the sender as its parent, and the tag `messaging.message.id`. |
 | `Cat.FluentWorkflows` | `Cat.FluentWorkflows` | Source. A span for every run and every resume of a workflow. |
 | `Cat.Messaging` | `Cat.Messaging` | Meter. `cat.messaging.dead_letters`, the dead letter messages per entity. |

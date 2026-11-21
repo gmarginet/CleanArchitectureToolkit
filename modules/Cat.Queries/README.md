@@ -49,6 +49,7 @@ Handlers can be wrapped in decorators for cross-cutting work. The module ships a
   - [Write a handler](#write-a-handler)
   - [Process a query](#process-a-query)
   - [Add decorators](#add-decorators)
+  - [Wrap the processor](#wrap-the-processor)
   - [Errors and exceptions](#errors-and-exceptions)
 
 ## NuGet packages
@@ -237,6 +238,21 @@ What the logging decorator does:
 
 - **Start and end:** Logs the start and the end of every handler at debug level, with the name of the query.
 - **Failures:** A failed response logs an error line, followed by one line per error as `code: message`.
+
+### Wrap the processor
+
+A decorator wraps one handler. Some work belongs around the whole processor instead, such as a cache that answers before a scope is opened, or a retry of the whole query. [Cat.Caching](../Cat.Caching/README.md) and [Cat.Resilience](../Cat.Resilience/README.md#retry-a-whole-command-or-query) do this.
+
+Several wrappers must not depend on the order of your registration lines. `Cat.Queries.Abstractions` has one helper for it, `AddCatQueryProcessorWrapper`. The first call replaces the registration of `ICatQueryProcessor` with one that builds the processor and all the wrappers. A wrapper gets a number from `CatQueryProcessorOrder`, and a lower number is further out. The cache is 100 and the retry is 200, so a cache is always outside a retry.
+
+```csharp
+services.AddCatQueryProcessorWrapper(
+    150,
+    (provider, inner) => new AuditQueryProcessor(inner, provider.GetRequiredService<IAuditLog>()),
+    nameof(AddAuditing));
+```
+
+The function gets the service provider of the scope and the processor it wraps. The last argument is the name of your registration call, which the message of the exception uses when no processor is registered yet. Wrappers with the same number are kept in the order of the calls, and the last one is outside. A unit test that uses a `FakeQueryProcessor` gets no wrappers.
 
 ### Errors and exceptions
 

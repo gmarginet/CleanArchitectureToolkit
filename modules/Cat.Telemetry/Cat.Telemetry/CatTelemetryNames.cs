@@ -9,6 +9,9 @@ namespace Cat.Telemetry;
 /// </summary>
 public static class CatTelemetryNames
 {
+    /// <summary>The meter of <c>Cat.Caching</c>, with the number of hits and misses of the query cache.</summary>
+    public const string Caching = "Cat.Caching";
+
     /// <summary>The source of <c>Cat.EventProcessor</c>, with the handling of a message as a span in the trace of its sender.</summary>
     public const string EventProcessor = "Cat.EventProcessor";
 
@@ -44,6 +47,6 @@ public static class CatTelemetryNames
     /// </summary>
     public static IReadOnlyList<string> Modules { get; } = new[]
     {
-        EventProcessor, FluentWorkflows, Messaging, Scheduling, ServiceRequests, SqlCdc
+        Caching, EventProcessor, FluentWorkflows, Messaging, Scheduling, ServiceRequests, SqlCdc
     };
 }

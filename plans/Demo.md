@@ -38,59 +38,8 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 9](#phase-9)
 - [Phase 10](#phase-10)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 9-->
-## Phase 9
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-Show `Cat.Caching`: cached catalog queries.
-
-#### What exists today
-- `Cat.Caching` does not exist yet. Its plan is [Cat.Caching.md](Cat.Caching.md).
-
-#### Needs
-Phase 1 of the module plan [Cat.Caching.md](Cat.Caching.md#phase-1), built first.
-
-#### Done when
-The demo uses the module, and the readme says where.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 15-->
-#### Question 15
-Which Catalog queries does the demo cache? The Catalog queries are `BookGetQuery`, `BookSearchQuery`, `CategoryGetListQuery`, `BookPriceListQuery` and `CheckIsbnExistsQuery`. None of them uses the user. `BookPriceListQuery` prices an order in Orders, and `CheckIsbnExistsQuery` refuses a duplicate ISBN, so a stale answer of those two is a real bug, see question 19 of [Cat.Caching.md](Cat.Caching.md#phase-1). The options:
-- **`CategoryGetListQuery` only.** The categories hardly ever change. Cost: the effect is small, because the web client asks for the list once.
-- **`CategoryGetListQuery` and `BookSearchQuery`.** The search runs on every visit to the shop. Cost: a book that an admin changes shows up late in the search.
-- **Also `BookGetQuery`.** Cost: the same delay on the page of one book, and more entries.
-
-Recommendation: `CategoryGetListQuery` and `BookSearchQuery`. They are the reads that repeat most, and the demo readme names `BookPriceListQuery` and `CheckIsbnExistsQuery` as the queries it does not cache, and why.
-<!-- region end: Question 15-->
-
-<!-- region start: Question 16-->
-#### Question 16
-What does the demo show after an admin saves a book that a cached search holds? It depends on question 3 of [Cat.Caching.md](Cat.Caching.md#phase-1), short lifetimes or tags. The options:
-- **The old result until the lifetime ends,** with a step in the demo readme that shows the delay. Cost: the demo shows stale data on purpose.
-- **`BookSaveCommandHandler` clears the tag of the search,** so the next search is fresh. Cost: it needs tags in the first version of the module.
-
-Recommendation: follow question 3 of the module. With short lifetimes, show the delay and say why it is fine for a shop. With tags, clear the tag in `BookSaveCommandHandler`, which is the better showcase.
-<!-- region end: Question 16-->
-
-<!-- region start: Question 9-->
-#### Question 9
-Is there a query in the demo that we know is slow, or do we pick one to show the effect? The options:
-- **Use `BookSearchQuery` or the category list** in Catalog, which reads a lot and changes little. Cost: it is not slow on a small demo database.
-- **Add a delay on purpose** in a development setting, like the payment failure switches. Cost: a fake slowness, but the effect is visible.
-
-Recommendation: a cached category or book list, with the hit and miss metric of the module as the proof in the dashboard. No fake delay is needed if the metric shows the hits.
-<!-- region end: Question 9-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 9-->
 
 <!-- region start: Phase 10-->
 ## Phase 10

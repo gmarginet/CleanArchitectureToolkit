@@ -44,6 +44,7 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 
 | Fields | |
 | :--- | :--- |
+| [Caching](CatTelemetryNames.Caching.md 'Cat\.Telemetry\.CatTelemetryNames\.Caching') | The meter of `Cat.Caching`, with the number of hits and misses of the query cache\. |
 | [CorrelationIdTag](CatTelemetryNames.CorrelationIdTag.md 'Cat\.Telemetry\.CatTelemetryNames\.CorrelationIdTag') | The tag of a span or a log scope that holds the correlation id of a request or a message\. |
 | [EventProcessor](CatTelemetryNames.EventProcessor.md 'Cat\.Telemetry\.CatTelemetryNames\.EventProcessor') | The source of `Cat.EventProcessor`, with the handling of a message as a span in the trace of its sender\. |
 | [FluentWorkflows](CatTelemetryNames.FluentWorkflows.md 'Cat\.Telemetry\.CatTelemetryNames\.FluentWorkflows') | The source of the workflow processor of `Cat.FluentWorkflows`\. |

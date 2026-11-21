@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Cat.Queries.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Cat.Resilience.Abstractions;
@@ -25,37 +24,15 @@ public static class ServiceCollectionExtensions
         var options = new CatQueryRetryOptions();
         configure(options);
 
-        var descriptor = services.LastOrDefault(registration => registration.ServiceType == typeof(ICatQueryProcessor) && !registration.IsKeyedService);
-        if (descriptor == null)
+        if (!options.HasRules)
         {
-            if (options.HasRules)
-            {
-                throw new InvalidOperationException(
-                    "A query type is listed for a retry, but no ICatQueryProcessor is registered. Call AddCatQueriesModule of Cat.Queries before AddCatQueryRetry.");
-            }
-
             return services;
         }
 
-        services.Remove(descriptor);
-        services.Add(new ServiceDescriptor(typeof(ICatQueryProcessor),
-            provider => new CatRetryQueryProcessor(CreateInner(provider, descriptor), provider.GetRequiredService<ICatResiliencePipelines>(), options),
-            descriptor.Lifetime));
-        return services;
-    }
-
-    private static ICatQueryProcessor CreateInner(IServiceProvider provider, ServiceDescriptor descriptor)
-    {
-        if (descriptor.ImplementationInstance != null)
-        {
-            return (ICatQueryProcessor)descriptor.ImplementationInstance;
-        }
-
-        if (descriptor.ImplementationFactory != null)
-        {
-            return (ICatQueryProcessor)descriptor.ImplementationFactory(provider);
-        }
-
-        return (ICatQueryProcessor)ActivatorUtilities.CreateInstance(provider, descriptor.ImplementationType!);
+        // The retry sits inside a cache of Cat.Caching, whatever the order of the lines. The place comes from CatQueryProcessorOrder.
+        return services.AddCatQueryProcessorWrapper(
+            CatQueryProcessorOrder.Retry,
+            (provider, inner) => new CatRetryQueryProcessor(inner, provider.GetRequiredService<ICatResiliencePipelines>(), options),
+            nameof(AddCatQueryRetry));
     }
 }

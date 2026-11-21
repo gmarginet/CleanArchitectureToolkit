@@ -1,0 +1,49 @@
+../../../Cat.Caching/namespaces/Cat.Caching/
+F:Cat.Caching.CachedQueryResponse`1.Ok|CachedQueryResponse_T_.Ok.md|Ok
+F:Cat.Caching.CachedQueryResponse`1.Created|CachedQueryResponse_T_.Created.md|Created
+F:Cat.Caching.CachedQueryResponse`1.NoContent|CachedQueryResponse_T_.NoContent.md|NoContent
+F:Cat.Caching.CachedQueryResponse`1.Accepted|CachedQueryResponse_T_.Accepted.md|Accepted
+F:Cat.Caching.CachedQueryResponse`1.NotFound|CachedQueryResponse_T_.NotFound.md|NotFound
+P:Cat.Caching.CachedQueryResponse`1.Outcome|CachedQueryResponse_T_.Outcome.md|Outcome
+P:Cat.Caching.CachedQueryResponse`1.Value|CachedQueryResponse_T_.Value.md|Value
+P:Cat.Caching.CachedQueryResponse`1.Errors|CachedQueryResponse_T_.Errors.md|Errors
+M:Cat.Caching.CachedQueryResponse`1.IsNotFound(Cat.Responses.Abstractions.ICatResponse{`0})|CachedQueryResponse_T_.IsNotFound.BKB7AJ92K3ESQNZUMYRBJA7Y9.md|IsNotFound(ICatResponse<T>)
+M:Cat.Caching.CachedQueryResponse`1.From``1(Cat.Responses.Abstractions.ICatResponse{`0})|CachedQueryResponse_T_.From.RV4M2DSX9YW3CG6VQ6HWYPSUA.md|From<TCached>(ICatResponse<T>)
+M:Cat.Caching.CachedQueryResponse`1.ToResponse|CachedQueryResponse_T_.ToResponse().md|ToResponse()
+N:Cat.Caching|Cat.Caching.md|Cat.Caching
+T:Cat.Caching.CachedQueryResponse`1|CachedQueryResponse_T_.md|CachedQueryResponse<T>
+P:Cat.Caching.CachedError.Code|CachedError.Code.md|Code
+P:Cat.Caching.CachedError.Message|CachedError.Message.md|Message
+P:Cat.Caching.CachedError.Arguments|CachedError.Arguments.md|Arguments
+T:Cat.Caching.CachedError|CachedError.md|CachedError
+T:Cat.Caching.MutableCachedQueryResponse`1|MutableCachedQueryResponse_T_.md|MutableCachedQueryResponse<T>
+T:Cat.Caching.ImmutableCachedQueryResponse`1|ImmutableCachedQueryResponse_T_.md|ImmutableCachedQueryResponse<T>
+M:Cat.Caching.CatCachingQueryProcessor.#ctor(Cat.Queries.Abstractions.ICatQueryProcessor,Cat.Caching.Abstractions.ICatQueryCache,Cat.Caching.Abstractions.CatQueryCacheOptions,Cat.Users.Abstractions.ICatUser)|CatCachingQueryProcessor..ctor.YKF7TTXRZEN170PL2SNK3I0EB.md|CatCachingQueryProcessor(ICatQueryProcessor, ICatQueryCache, CatQueryCacheOptions, ICatUser)
+M:Cat.Caching.CatCachingQueryProcessor.ProcessAsync``1(Cat.Queries.Abstractions.ICatQuery{``0},System.Threading.CancellationToken)|CatCachingQueryProcessor.ProcessAsync.EVUJEOYSO5C7EO747UT4EB741.md|ProcessAsync<TQueryResult>(ICatQuery<TQueryResult>, CancellationToken)
+M:Cat.Caching.CatCachingQueryProcessor.Process``1(Cat.Queries.Abstractions.ICatQuery{``0})|CatCachingQueryProcessor.Process.M4FFOFNEFFAOL67YRGF0K3356.md|Process<TQueryResult>(ICatQuery<TQueryResult>)
+M:Cat.Caching.CatCachingQueryProcessor.RunAsync``2(Cat.Queries.Abstractions.ICatQuery{``0},System.String,System.String,Cat.Caching.Abstractions.CatQueryCacheRule,System.Threading.CancellationToken)|CatCachingQueryProcessor.RunAsync.JQO835YXXMNC0MIAT74YJ0LM6.md|RunAsync<TQueryResult,TCached>(ICatQuery<TQueryResult>, string, string, CatQueryCacheRule, CancellationToken)
+M:Cat.Caching.CatCachingQueryProcessor.CreateEntryOptions(Cat.Caching.Abstractions.CatQueryCacheRule,System.TimeSpan)|CatCachingQueryProcessor.CreateEntryOptions.DAOEQJZA3VGLRERPLQ8HMGU2D.md|CreateEntryOptions(CatQueryCacheRule, TimeSpan)
+T:Cat.Caching.CatCachingQueryProcessor|CatCachingQueryProcessor.md|CatCachingQueryProcessor
+F:Cat.Caching.CatCachingTelemetry.MeterName|CatCachingTelemetry.MeterName.md|MeterName
+F:Cat.Caching.CatCachingTelemetry.Meter|CatCachingTelemetry.Meter.md|Meter
+F:Cat.Caching.CatCachingTelemetry.Hits|CatCachingTelemetry.Hits.md|Hits
+F:Cat.Caching.CatCachingTelemetry.Misses|CatCachingTelemetry.Misses.md|Misses
+M:Cat.Caching.CatCachingTelemetry.Record(System.String,System.Boolean)|CatCachingTelemetry.Record.A7110CICYMJPJBSU5D8TUXNXA.md|Record(string, bool)
+M:Cat.Caching.CatCachingTelemetry.#cctor|CatCachingTelemetry.CatCachingTelemetry().md|CatCachingTelemetry()
+T:Cat.Caching.CatCachingTelemetry|CatCachingTelemetry.md|CatCachingTelemetry
+M:Cat.Caching.CatHybridQueryCache.#ctor(Microsoft.Extensions.Caching.Hybrid.HybridCache)|CatHybridQueryCache..ctor.P53SB7TFIU1AHMYFHCONAZQ5.md|CatHybridQueryCache(HybridCache)
+M:Cat.Caching.CatHybridQueryCache.GetOrCreateAsync``1(System.String,System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},Cat.Caching.Abstractions.CatQueryCacheEntryOptions,System.Threading.CancellationToken)|CatHybridQueryCache.GetOrCreateAsync.Y9UXTN7I3294FWIBBZEERPOWD.md|GetOrCreateAsync<T>(string, Func<CancellationToken,Task<T>>, CatQueryCacheEntryOptions, CancellationToken)
+M:Cat.Caching.CatHybridQueryCache.RemoveByTagAsync(System.String,System.Threading.CancellationToken)|CatHybridQueryCache.RemoveByTagAsync.QH6LIPD9IJHYSDVKPDLL01V1C.md|RemoveByTagAsync(string, CancellationToken)
+T:Cat.Caching.CatHybridQueryCache|CatHybridQueryCache.md|CatHybridQueryCache
+M:Cat.Caching.CatImmutableTypes.IsImmutable(System.Type)|CatImmutableTypes.IsImmutable.6JVI7XKQCEJQ7D5936XU6D7EE.md|IsImmutable(Type)
+T:Cat.Caching.CatImmutableTypes|CatImmutableTypes.md|CatImmutableTypes
+F:Cat.Caching.CatQueryCacheKeys.NoUser|CatQueryCacheKeys.NoUser.md|NoUser
+M:Cat.Caching.CatQueryCacheKeys.Build(System.Object,Cat.Caching.Abstractions.CatQueryCacheRule,System.String)|CatQueryCacheKeys.Build.KOP5LCF346KZTE12ADWZVWU64.md|Build(object, CatQueryCacheRule, string)
+M:Cat.Caching.CatQueryCacheKeys.Serialize(System.Object,System.Type)|CatQueryCacheKeys.Serialize.F3DCD89MV4U9UREYJ6OPCSZA.md|Serialize(object, Type)
+T:Cat.Caching.CatQueryCacheKeys|CatQueryCacheKeys.md|CatQueryCacheKeys
+M:Cat.Caching.Extensions.ServiceCollectionExtensions.AddCatQueryCaching(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Cat.Caching.Abstractions.CatQueryCacheOptions})|ServiceCollectionExtensions.AddCatQueryCaching.KZVJ693KND9553T75V57VOPOC.md|AddCatQueryCaching(this IServiceCollection, Action<CatQueryCacheOptions>)
+N:Cat.Caching.Extensions|Cat.Caching.Extensions.md|Cat.Caching.Extensions
+T:Cat.Caching.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
+P:Cat.Caching.CatCachingQueryProcessor.CatCacheBypassException`1.Response|CatCachingQueryProcessor.CatCacheBypassException_TQueryResult_.Response.md|Response
+M:Cat.Caching.CatCachingQueryProcessor.CatCacheBypassException`1.#ctor(Cat.Responses.Abstractions.ICatResponse{`0})|CatCachingQueryProcessor.CatCacheBypassException_TQueryResult_..ctor.ELZJPSSZK4MNUZR6LSEN3GYGB.md|CatCacheBypassException(ICatResponse<TQueryResult>)
+T:Cat.Caching.CatCachingQueryProcessor.CatCacheBypassException`1|CatCachingQueryProcessor.CatCacheBypassException_TQueryResult_.md|CatCacheBypassException<TQueryResult>

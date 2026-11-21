@@ -1,0 +1,32 @@
+../../../Cat.Caching/namespaces/Cat.Caching.Abstractions/
+P:Cat.Caching.Abstractions.CatQueryCacheEntryOptions.Expiration|CatQueryCacheEntryOptions.Expiration.md|Expiration
+P:Cat.Caching.Abstractions.CatQueryCacheEntryOptions.LocalExpiration|CatQueryCacheEntryOptions.LocalExpiration.md|LocalExpiration
+P:Cat.Caching.Abstractions.CatQueryCacheEntryOptions.Tags|CatQueryCacheEntryOptions.Tags.md|Tags
+N:Cat.Caching.Abstractions|Cat.Caching.Abstractions.md|Cat.Caching.Abstractions
+T:Cat.Caching.Abstractions.CatQueryCacheEntryOptions|CatQueryCacheEntryOptions.md|CatQueryCacheEntryOptions
+F:Cat.Caching.Abstractions.CatQueryCacheOptions._rules|CatQueryCacheOptions._rules.md|_rules
+P:Cat.Caching.Abstractions.CatQueryCacheOptions.DefaultExpiration|CatQueryCacheOptions.DefaultExpiration.md|DefaultExpiration
+P:Cat.Caching.Abstractions.CatQueryCacheOptions.Rules|CatQueryCacheOptions.Rules.md|Rules
+M:Cat.Caching.Abstractions.CatQueryCacheOptions.Cache``1(System.Action{Cat.Caching.Abstractions.CatQueryCacheRule{``0}})|CatQueryCacheOptions.Cache.CZDYXFEMZ0WR7XF3JC8LBBCLC.md|Cache<TQuery>(Action<CatQueryCacheRule<TQuery>>)
+M:Cat.Caching.Abstractions.CatQueryCacheOptions.IsQuery(System.Type)|CatQueryCacheOptions.IsQuery.AATWI9NRKL73MBR2V74BZICIA.md|IsQuery(Type)
+T:Cat.Caching.Abstractions.CatQueryCacheOptions|CatQueryCacheOptions.md|CatQueryCacheOptions
+F:Cat.Caching.Abstractions.CatQueryCacheRule._tags|CatQueryCacheRule._tags.md|_tags
+P:Cat.Caching.Abstractions.CatQueryCacheRule.Expiration|CatQueryCacheRule.Expiration.md|Expiration
+P:Cat.Caching.Abstractions.CatQueryCacheRule.LocalExpiration|CatQueryCacheRule.LocalExpiration.md|LocalExpiration
+P:Cat.Caching.Abstractions.CatQueryCacheRule.Tags|CatQueryCacheRule.Tags.md|Tags
+P:Cat.Caching.Abstractions.CatQueryCacheRule.IsShared|CatQueryCacheRule.IsShared.md|IsShared
+P:Cat.Caching.Abstractions.CatQueryCacheRule.NotFoundExpiration|CatQueryCacheRule.NotFoundExpiration.md|NotFoundExpiration
+P:Cat.Caching.Abstractions.CatQueryCacheRule.KeyFunction|CatQueryCacheRule.KeyFunction.md|KeyFunction
+M:Cat.Caching.Abstractions.CatQueryCacheRule.AddTags(System.Collections.Generic.IEnumerable{System.String})|CatQueryCacheRule.AddTags.MJS5OVSF62M3CY0WZT25XDIE.md|AddTags(IEnumerable<string>)
+M:Cat.Caching.Abstractions.CatQueryCacheRule.RequirePositive(System.TimeSpan,System.String)|CatQueryCacheRule.RequirePositive.4Y8E175DC153UMS30PUTBKQ2E.md|RequirePositive(TimeSpan, string)
+T:Cat.Caching.Abstractions.CatQueryCacheRule|CatQueryCacheRule.md|CatQueryCacheRule
+M:Cat.Caching.Abstractions.CatQueryCacheRule`1.Expires(System.TimeSpan)|CatQueryCacheRule_TQuery_.Expires.5Y9BFI39H8CMUDBG58YTJ19KB.md|Expires(TimeSpan)
+M:Cat.Caching.Abstractions.CatQueryCacheRule`1.ExpiresLocally(System.TimeSpan)|CatQueryCacheRule_TQuery_.ExpiresLocally.P97AO582TOKY64VXRJBOKZIB5.md|ExpiresLocally(TimeSpan)
+M:Cat.Caching.Abstractions.CatQueryCacheRule`1.Tag(System.String[])|CatQueryCacheRule_TQuery_.Tag.E6J5O0VOJLIV86OEYM3TUMTPE.md|Tag(string[])
+M:Cat.Caching.Abstractions.CatQueryCacheRule`1.Shared|CatQueryCacheRule_TQuery_.Shared().md|Shared()
+M:Cat.Caching.Abstractions.CatQueryCacheRule`1.CacheNotFound(System.TimeSpan)|CatQueryCacheRule_TQuery_.CacheNotFound.52LP042SBIAZT7OASXRTQHU09.md|CacheNotFound(TimeSpan)
+M:Cat.Caching.Abstractions.CatQueryCacheRule`1.Key(System.Func{`0,System.String})|CatQueryCacheRule_TQuery_.Key.R1ST5A8VTWGDS99O0BAVSUOLC.md|Key(Func<TQuery,string>)
+T:Cat.Caching.Abstractions.CatQueryCacheRule`1|CatQueryCacheRule_TQuery_.md|CatQueryCacheRule<TQuery>
+M:Cat.Caching.Abstractions.ICatQueryCache.GetOrCreateAsync``1(System.String,System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},Cat.Caching.Abstractions.CatQueryCacheEntryOptions,System.Threading.CancellationToken)|ICatQueryCache.GetOrCreateAsync.332ALBIV4QS7ZHE84MUYAQQWC.md|GetOrCreateAsync<T>(string, Func<CancellationToken,Task<T>>, CatQueryCacheEntryOptions, CancellationToken)
+M:Cat.Caching.Abstractions.ICatQueryCache.RemoveByTagAsync(System.String,System.Threading.CancellationToken)|ICatQueryCache.RemoveByTagAsync.Q4XVLUZIZAIKVFB9547OBLINC.md|RemoveByTagAsync(string, CancellationToken)
+T:Cat.Caching.Abstractions.ICatQueryCache|ICatQueryCache.md|ICatQueryCache

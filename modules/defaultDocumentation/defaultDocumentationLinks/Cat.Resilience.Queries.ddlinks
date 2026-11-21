@@ -18,7 +18,6 @@ M:Cat.Resilience.Queries.CatRetryRule.NeverRetryOn``1|CatRetryRule.NeverRetryOn_
 M:Cat.Resilience.Queries.CatRetryRule.ShouldRetry(Cat.Responses.Abstractions.ICatResponse)|CatRetryRule.ShouldRetry.9ERZ7PBB36GTG6LM3W3DDACX4.md|ShouldRetry(ICatResponse)
 T:Cat.Resilience.Queries.CatRetryRule|CatRetryRule.md|CatRetryRule
 M:Cat.Resilience.Queries.Extensions.ServiceCollectionExtensions.AddCatQueryRetry(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Cat.Resilience.Queries.CatQueryRetryOptions})|ServiceCollectionExtensions.AddCatQueryRetry.UNSDC50U6TTSZ7TLMQATXEMB1.md|AddCatQueryRetry(this IServiceCollection, Action<CatQueryRetryOptions>)
-M:Cat.Resilience.Queries.Extensions.ServiceCollectionExtensions.CreateInner(System.IServiceProvider,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)|ServiceCollectionExtensions.CreateInner.KHPMEM48TN306PHCUG6LWDAE2.md|CreateInner(IServiceProvider, ServiceDescriptor)
 N:Cat.Resilience.Queries.Extensions|Cat.Resilience.Queries.Extensions.md|Cat.Resilience.Queries.Extensions
 T:Cat.Resilience.Queries.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions
 P:Cat.Resilience.Queries.CatRetryQueryProcessor.RetryableResponseException`1.Response|CatRetryQueryProcessor.RetryableResponseException_TQueryResult_.Response.md|Response

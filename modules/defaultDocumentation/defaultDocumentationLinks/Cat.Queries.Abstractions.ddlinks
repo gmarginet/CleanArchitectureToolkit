@@ -1,8 +1,20 @@
 ../../../Cat.Queries/namespaces/Cat.Queries.Abstractions/
-M:Cat.Queries.Abstractions.ICatQueryHandler`2.HandleAsync(`0,System.Threading.CancellationToken)|ICatQueryHandler_TQuery,TQueryResult_.HandleAsync.569S9MAD4IYXQV8MCHY5U72UA.md|HandleAsync(TQuery, CancellationToken)
+F:Cat.Queries.Abstractions.CatQueryProcessorOrder.Caching|CatQueryProcessorOrder.Caching.md|Caching
+F:Cat.Queries.Abstractions.CatQueryProcessorOrder.Retry|CatQueryProcessorOrder.Retry.md|Retry
 N:Cat.Queries.Abstractions|Cat.Queries.Abstractions.md|Cat.Queries.Abstractions
+T:Cat.Queries.Abstractions.CatQueryProcessorOrder|CatQueryProcessorOrder.md|CatQueryProcessorOrder
+M:Cat.Queries.Abstractions.CatQueryProcessorWrapperExtensions.AddCatQueryProcessorWrapper(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Int32,System.Func{System.IServiceProvider,Cat.Queries.Abstractions.ICatQueryProcessor,Cat.Queries.Abstractions.ICatQueryProcessor},System.String)|CatQueryProcessorWrapperExtensions.AddCatQueryProcessorWrapper.QG9ADDDSU4WC6RYGXCYYJUQYA.md|AddCatQueryProcessorWrapper(this IServiceCollection, int, Func<IServiceProvider,ICatQueryProcessor,ICatQueryProcessor>, string)
+T:Cat.Queries.Abstractions.CatQueryProcessorWrapperExtensions|CatQueryProcessorWrapperExtensions.md|CatQueryProcessorWrapperExtensions
+M:Cat.Queries.Abstractions.ICatQueryHandler`2.HandleAsync(`0,System.Threading.CancellationToken)|ICatQueryHandler_TQuery,TQueryResult_.HandleAsync.569S9MAD4IYXQV8MCHY5U72UA.md|HandleAsync(TQuery, CancellationToken)
 T:Cat.Queries.Abstractions.ICatQueryHandler`2|ICatQueryHandler_TQuery,TQueryResult_.md|ICatQueryHandler<TQuery,TQueryResult>
 M:Cat.Queries.Abstractions.ICatQueryProcessor.ProcessAsync``1(Cat.Queries.Abstractions.ICatQuery{``0},System.Threading.CancellationToken)|ICatQueryProcessor.ProcessAsync.NXU8C22PI206ZIXUL4SR6VC55.md|ProcessAsync<TQueryResult>(ICatQuery<TQueryResult>, CancellationToken)
 M:Cat.Queries.Abstractions.ICatQueryProcessor.Process``1(Cat.Queries.Abstractions.ICatQuery{``0})|ICatQueryProcessor.Process.GLOZN4ERRH7J39W67F8ZXLTH6.md|Process<TQueryResult>(ICatQuery<TQueryResult>)
 T:Cat.Queries.Abstractions.ICatQueryProcessor|ICatQueryProcessor.md|ICatQueryProcessor
 T:Cat.Queries.Abstractions.ICatQuery`1|ICatQuery_TQueryResult_.md|ICatQuery<TQueryResult>
+F:Cat.Queries.Abstractions.CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers._core|CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers._core.md|_core
+F:Cat.Queries.Abstractions.CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers._wrappers|CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers._wrappers.md|_wrappers
+M:Cat.Queries.Abstractions.CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers.#ctor(Microsoft.Extensions.DependencyInjection.ServiceDescriptor)|CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers..ctor.UKEM5VXLGECA9RP2R2G9BCRM4.md|CatQueryProcessorWrappers(ServiceDescriptor)
+M:Cat.Queries.Abstractions.CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers.Add(System.Int32,System.Func{System.IServiceProvider,Cat.Queries.Abstractions.ICatQueryProcessor,Cat.Queries.Abstractions.ICatQueryProcessor})|CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers.Add.KKT0W51X8GIIAHZW1YEKV38JE.md|Add(int, Func<IServiceProvider,ICatQueryProcessor,ICatQueryProcessor>)
+M:Cat.Queries.Abstractions.CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers.Build(System.IServiceProvider)|CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers.Build.NJ9NB8WV2NTMR792ZYQXMRWS9.md|Build(IServiceProvider)
+M:Cat.Queries.Abstractions.CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers.CreateCore(System.IServiceProvider)|CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers.CreateCore.0YOIN76FY7G76FHZ2PH4GS653.md|CreateCore(IServiceProvider)
+T:Cat.Queries.Abstractions.CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers|CatQueryProcessorWrapperExtensions.CatQueryProcessorWrappers.md|CatQueryProcessorWrappers

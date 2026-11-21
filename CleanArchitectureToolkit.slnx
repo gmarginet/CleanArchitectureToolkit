@@ -84,6 +84,11 @@
     <Project Path="modules/Cat.Api.Gateway/Cat.Api.Gateway.Verification/Cat.Api.Gateway.Verification.csproj" />
     <Project Path="modules/Cat.Api.Gateway/Cat.Api.Gateway/Cat.Api.Gateway.csproj" />
   </Folder>
+  <Folder Name="/modules/Cat.Caching/">
+    <File Path="modules/Cat.Caching/README.md" />
+    <Project Path="modules/Cat.Caching/Cat.Caching.Abstractions/Cat.Caching.Abstractions.csproj" />
+    <Project Path="modules/Cat.Caching/Cat.Caching/Cat.Caching.csproj" />
+  </Folder>
   <Folder Name="/modules/Cat.Commands/">
     <File Path="modules/Cat.Commands/README.md" />
     <Project Path="modules/Cat.Commands/Cat.Commands.Abstractions/Cat.Commands.Abstractions.csproj" />
@@ -261,6 +266,7 @@
     <File Path="tests/Directory.Build.props" />
     <Project Path="tests/Cat.Api.Client.Tests/Cat.Api.Client.Tests.csproj" />
     <Project Path="tests/Cat.Api.Gateway.Tests/Cat.Api.Gateway.Tests.csproj" />
+    <Project Path="tests/Cat.Caching.Tests/Cat.Caching.Tests.csproj" />
     <Project Path="tests/Cat.Commands.Tests/Cat.Commands.Tests.csproj" />
     <Project Path="tests/Cat.Dapper.Tests/Cat.Dapper.Tests.csproj" />
     <Project Path="tests/Cat.Db.Errors.MySql.Tests/Cat.Db.Errors.MySql.Tests.csproj" />

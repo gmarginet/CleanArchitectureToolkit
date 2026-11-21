@@ -1,4 +1,5 @@
 ../../../Cat.Telemetry/namespaces/Cat.Telemetry/
+F:Cat.Telemetry.CatTelemetryNames.Caching|CatTelemetryNames.Caching.md|Caching
 F:Cat.Telemetry.CatTelemetryNames.EventProcessor|CatTelemetryNames.EventProcessor.md|EventProcessor
 F:Cat.Telemetry.CatTelemetryNames.FluentWorkflows|CatTelemetryNames.FluentWorkflows.md|FluentWorkflows
 F:Cat.Telemetry.CatTelemetryNames.Messaging|CatTelemetryNames.Messaging.md|Messaging
