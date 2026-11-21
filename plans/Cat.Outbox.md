@@ -94,7 +94,7 @@ From the code:
 
 From the other plans:
 - The saga plan: tracing across the gap of a message needs the trace context in the message properties.
-- The demo shows "one order across all services" in the Aspire dashboard, see [Cat.Telemetry.md](Cat.Telemetry.md#phase-1).
+- The demo shows "one order across all services" in the Aspire dashboard, see the [module readme of Cat.Telemetry](../modules/Cat.Telemetry/README.md#set-up-the-telemetry-of-a-service).
 
 #### Decided
 - **Who carries it.** The outbox carries the trace context of a message that goes through it. Without the outbox, `Cat.Messaging` leaves it to the SDK as today. `Cat.Telemetry` only lists the `Cat.Messaging` source, so no module depends on it (owner, 2026-11-21).

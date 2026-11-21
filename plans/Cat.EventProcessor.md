@@ -55,7 +55,7 @@ The listener adds the `CorrelationId` of a message to the log scope, so all logs
 - Every message carries a `CorrelationId`, see the [module readme of Cat.Messaging](../modules/Cat.Messaging/README.md).
 
 #### Decided
-- **Correlation id in the log scope.** The listener adds the `CorrelationId` of the message to the log scope for the whole handling of the message, with the same key as the gateway, `CorrelationId`. It is the safety net for a hop that the trace does not cover, see [Cat.Telemetry.md](Cat.Telemetry.md#phase-1) (owner, 2026-11-21).
+- **Correlation id in the log scope.** The listener adds the `CorrelationId` of the message to the log scope for the whole handling of the message, with the same key as the gateway, `CorrelationId`. It is the safety net for a hop that the trace does not cover, see the [module readme of Cat.Telemetry](../modules/Cat.Telemetry/README.md#logs-and-traces) (owner, 2026-11-21).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions

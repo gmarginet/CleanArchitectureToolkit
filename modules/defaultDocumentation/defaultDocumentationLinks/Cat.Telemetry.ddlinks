@@ -1,0 +1,23 @@
+../../../Cat.Telemetry/namespaces/Cat.Telemetry/
+F:Cat.Telemetry.CatTelemetryNames.FluentWorkflows|CatTelemetryNames.FluentWorkflows.md|FluentWorkflows
+F:Cat.Telemetry.CatTelemetryNames.Messaging|CatTelemetryNames.Messaging.md|Messaging
+F:Cat.Telemetry.CatTelemetryNames.Scheduling|CatTelemetryNames.Scheduling.md|Scheduling
+F:Cat.Telemetry.CatTelemetryNames.ServiceRequests|CatTelemetryNames.ServiceRequests.md|ServiceRequests
+F:Cat.Telemetry.CatTelemetryNames.SqlCdc|CatTelemetryNames.SqlCdc.md|SqlCdc
+F:Cat.Telemetry.CatTelemetryNames.Polly|CatTelemetryNames.Polly.md|Polly
+F:Cat.Telemetry.CatTelemetryNames.CorrelationIdTag|CatTelemetryNames.CorrelationIdTag.md|CorrelationIdTag
+P:Cat.Telemetry.CatTelemetryNames.Modules|CatTelemetryNames.Modules.md|Modules
+M:Cat.Telemetry.CatTelemetryNames.#cctor|CatTelemetryNames.CatTelemetryNames().md|CatTelemetryNames()
+N:Cat.Telemetry|Cat.Telemetry.md|Cat.Telemetry
+T:Cat.Telemetry.CatTelemetryNames|CatTelemetryNames.md|CatTelemetryNames
+F:Cat.Telemetry.CatTelemetryOptions.SectionName|CatTelemetryOptions.SectionName.md|SectionName
+P:Cat.Telemetry.CatTelemetryOptions.IgnoredPaths|CatTelemetryOptions.IgnoredPaths.md|IgnoredPaths
+P:Cat.Telemetry.CatTelemetryOptions.ServiceName|CatTelemetryOptions.ServiceName.md|ServiceName
+P:Cat.Telemetry.CatTelemetryOptions.DefaultIgnoredPaths|CatTelemetryOptions.DefaultIgnoredPaths.md|DefaultIgnoredPaths
+M:Cat.Telemetry.CatTelemetryOptions.EffectiveIgnoredPaths|CatTelemetryOptions.EffectiveIgnoredPaths().md|EffectiveIgnoredPaths()
+T:Cat.Telemetry.CatTelemetryOptions|CatTelemetryOptions.md|CatTelemetryOptions
+M:Cat.Telemetry.Extensions.HostApplicationBuilderExtensions.AddCatTelemetry``1(``0,System.Action{Cat.Telemetry.CatTelemetryOptions},System.Action{OpenTelemetry.Trace.TracerProviderBuilder},System.Action{OpenTelemetry.Metrics.MeterProviderBuilder})|HostApplicationBuilderExtensions.AddCatTelemetry.46CDPRVK3D06FNYWGAIGNOLE5.md|AddCatTelemetry<TBuilder>(this TBuilder, Action<CatTelemetryOptions>, Action<TracerProviderBuilder>, Action<MeterProviderBuilder>)
+N:Cat.Telemetry.Extensions|Cat.Telemetry.Extensions.md|Cat.Telemetry.Extensions
+T:Cat.Telemetry.Extensions.HostApplicationBuilderExtensions|HostApplicationBuilderExtensions.md|HostApplicationBuilderExtensions
+M:Cat.Telemetry.Extensions.HttpClientBuilderExtensions.AddCatTelemetryBoundary(Microsoft.Extensions.DependencyInjection.IHttpClientBuilder)|HttpClientBuilderExtensions.AddCatTelemetryBoundary.NTGWW1B9YOPG47D4T5UELB96D.md|AddCatTelemetryBoundary(this IHttpClientBuilder)
+T:Cat.Telemetry.Extensions.HttpClientBuilderExtensions|HttpClientBuilderExtensions.md|HttpClientBuilderExtensions

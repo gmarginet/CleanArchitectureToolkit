@@ -3,13 +3,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Cat.Resilience.Abstractions;
 using Cat.Resilience.Extensions;
+using Cat.Telemetry.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using OpenTelemetry;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Trace;
 
 namespace Cat.Demo.ServiceDefaults;
 
@@ -47,7 +45,7 @@ public static class Extensions
 
     /// <summary>
     /// Sets up logs, metrics and traces with OpenTelemetry.
-    /// The traces include the activity sources of the CAT modules, which all start with <c>Cat.</c>.
+    /// <c>Cat.Telemetry</c> does the work, and the traces include the activity sources of the CAT modules.
     /// The data goes to an OTLP endpoint when <c>OTEL_EXPORTER_OTLP_ENDPOINT</c> is set, such as by the Aspire AppHost.
     /// </summary>
     /// <param name="builder">The application builder of the service.</param>
@@ -56,34 +54,9 @@ public static class Extensions
     public static TBuilder ConfigureOpenTelemetry<TBuilder>(this TBuilder builder)
         where TBuilder : IHostApplicationBuilder
     {
-        builder.Logging.AddOpenTelemetry(logging =>
-        {
-            logging.IncludeFormattedMessage = true;
-            logging.IncludeScopes = true;
-        });
-
-        builder.Services.AddOpenTelemetry()
-            .WithMetrics(metrics =>
-            {
-                metrics.AddAspNetCoreInstrumentation()
-                    .AddHttpClientInstrumentation()
-                    .AddRuntimeInstrumentation();
-            })
-            .WithTracing(tracing =>
-            {
-                tracing.AddSource(builder.Environment.ApplicationName)
-                    .AddSource("Cat.*")
-                    .AddAspNetCoreInstrumentation(options =>
-                        options.Filter = context =>
-                            !context.Request.Path.StartsWithSegments(HealthEndpointPath)
-                            && !context.Request.Path.StartsWithSegments(AlivenessEndpointPath))
-                    .AddHttpClientInstrumentation();
-            });
-
-        if (!string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]))
-        {
-            builder.Services.AddOpenTelemetry().UseOtlpExporter();
-        }
+        // The module sets up logs, metrics and traces, with the sources of the CAT modules and the OTLP exporter.
+        // The health paths are left out of the traces by default, and they are the paths MapDefaultEndpoints maps.
+        builder.AddCatTelemetry();
 
         return builder;
     }

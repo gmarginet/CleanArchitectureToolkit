@@ -1,0 +1,53 @@
+<link href="../../../../resources/styles/style.css" rel="stylesheet"/>
+<table>
+    <tr>
+        <td colspan='6' style='text-align: center; font-weight: bold; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+             Clean Architecture Toolkit for .NET
+        </td>
+    </tr>
+    <tr>
+        <td colspan='5' style='padding: 0; vertical-align: middle; border: none;'>
+            Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications.<br>
+            It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.</td>
+        <td style='padding: 0; border: none;' width='220'>
+            <img src='../../../../resources/logo/CatLogo.svg' alt='' width='200' style='padding: 15px; float: right; background: #121314; border-radius: 10px'/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan='6' markdown='1' style='padding-left: 0; padding-right: 0; padding-top: 15px; padding-bottom: 0; border: none; border-top: 1px dashed #494949; border-bottom: 1px dashed #494949;'>
+
+&#124;&nbsp;&nbsp;&nbsp;[HOME](../../../../README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[REPO OVERVIEW](../../../../README.md#repo-overview)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[DEMO](../../../../demo/README.md)&nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;[CAT.TELEMETRY](../../README.md)&nbsp;&nbsp;&nbsp;&#124;
+
+</td>
+</tr>
+</table>
+
+# Code Reference  
+  
+##### >> [Cat\.Telemetry Assembly](index.md 'index') >> [Cat\.Telemetry\.Extensions Namespace](Cat.Telemetry.Extensions.md 'Cat\.Telemetry\.Extensions') >> [HttpClientBuilderExtensions Class](HttpClientBuilderExtensions.md 'Cat\.Telemetry\.Extensions\.HttpClientBuilderExtensions')
+
+## HttpClientBuilderExtensions\.AddCatTelemetryBoundary\(this IHttpClientBuilder\) Method
+
+Keeps the trace out of the requests of this client\. No `traceparent`, `tracestate` or `baggage` header
+leaves, so a third party gets no ids of ours\. The call is still a span in the trace of the caller\.
+
+```csharp
+public static Microsoft.Extensions.DependencyInjection.IHttpClientBuilder AddCatTelemetryBoundary(this Microsoft.Extensions.DependencyInjection.IHttpClientBuilder builder);
+```
+#### Parameters
+
+<a name='Cat.Telemetry.Extensions.HttpClientBuilderExtensions.AddCatTelemetryBoundary(thisMicrosoft.Extensions.DependencyInjection.IHttpClientBuilder).builder'></a>
+
+`builder` [Microsoft\.Extensions\.DependencyInjection\.IHttpClientBuilder](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.ihttpclientbuilder 'Microsoft\.Extensions\.DependencyInjection\.IHttpClientBuilder')
+
+The builder of the client\.
+
+#### Returns
+[Microsoft\.Extensions\.DependencyInjection\.IHttpClientBuilder](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.ihttpclientbuilder 'Microsoft\.Extensions\.DependencyInjection\.IHttpClientBuilder')  
+The same builder, for chaining\.
+
+### Remarks
+The headers are written by the primary handler, after every delegating handler, so this sets the propagator of the
+primary handler\. It never creates a handler of its own\. It runs after every other setup of the client, so a primary handler
+that you set, such as one with a client certificate, stays and only loses the headers\. A primary handler that is not a
+[System\.Net\.Http\.SocketsHttpHandler](https://learn.microsoft.com/en-us/dotnet/api/system.net.http.socketshttphandler 'System\.Net\.Http\.SocketsHttpHandler'), such as one of a test, is left alone\.

@@ -326,12 +326,15 @@ Logs the start and end of every handler at debug level. A failed response logs i
 
 #### ActivitySource
 
-Starts an activity on the `Cat.ServiceRequests` source around every handler, tagged with the request type. Add that source to your OpenTelemetry setup to collect the traces:
+Starts an activity on the `Cat.ServiceRequests` source around every handler, tagged with `cat.service_requests.type`, the request type. The same name is the meter. It counts the calls in `cat.service_requests.calls` and times them in `cat.service_requests.duration`, with the tags `type` and `outcome` (`success`, `failed` or `exception`). Add that source and meter to your OpenTelemetry setup to collect them:
 
 ```csharp
 builder.Services.AddOpenTelemetry()
-    .WithTracing(tracing => tracing.AddSource("Cat.ServiceRequests"));
+    .WithTracing(tracing => tracing.AddSource("Cat.ServiceRequests"))
+    .WithMetrics(metrics => metrics.AddMeter("Cat.ServiceRequests"));
 ```
+
+[Cat.Telemetry](../Cat.Telemetry/README.md) adds the source and the meter for you, with those of the other CAT modules.
 
 ### Errors and exceptions
 

@@ -60,7 +60,7 @@ From the module conventions:
 
 From the other plans:
 - The retry of [Cat.Resilience.md](Cat.Resilience.md#phase-2) also wraps `ICatQueryProcessor`, for the types a developer lists.
-- `Cat.Telemetry` decided that each module owns its meter, named after the module, with short metric tags, and that personal data stays out of tags, see [Cat.Telemetry.md](Cat.Telemetry.md#phase-1).
+- `Cat.Telemetry` decided that each module owns its meter, named after the module, with short metric tags, and that personal data stays out of tags, see the [module readme of Cat.Telemetry](../modules/Cat.Telemetry/README.md#names-of-the-sources-the-meters-and-the-tags).
 - The toolkit is in alpha and the demo is the only user, so a breaking change is allowed (owner, 2026-11-21).
 
 From the demo:

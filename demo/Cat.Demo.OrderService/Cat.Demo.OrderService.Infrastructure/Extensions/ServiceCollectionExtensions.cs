@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Cat.Resilience.Abstractions;
 using Cat.Resilience.Extensions;
+using Cat.Telemetry.Extensions;
 
 namespace Cat.Demo.OrderService.Infrastructure.Extensions;
 
@@ -86,7 +87,9 @@ public static class ServiceCollectionExtensions
                 client.BaseAddress = new Uri(url);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
             })
-            .AddCatResilience(CatResilienceProfile.External);
+            .AddCatResilience(CatResilienceProfile.External)
+            // No trace header goes to the provider. The call is still a span in the trace of Orders.
+            .AddCatTelemetryBoundary();
         services.AddScoped<IPaymentProvider, PaymentProviderGateway>();
         return services;
     }

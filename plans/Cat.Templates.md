@@ -76,7 +76,7 @@ From the repository:
 - The `cat-internal-create-demo-unit` skill describes the folder and solution rules for demo services, including `CleanArchitectureToolkit.slnx`.
 
 From the other plans:
-- `Cat.Resilience` and `Cat.Telemetry` are planned as the base that `ServiceDefaults` calls. A project without Aspire calls them in its `Program`, see the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md#without-aspire) and [Cat.Telemetry.md](Cat.Telemetry.md#phase-1).
+- Cat.Resilience and Cat.Telemetry are the base that `ServiceDefaults` calls. A project without Aspire calls them in its `Program`, see the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md#without-aspire) and the [module readme of Cat.Telemetry](../modules/Cat.Telemetry/README.md#without-aspire).
 - Health checks are out of the scope of `Cat.Telemetry`. Its module readme shows the plain ASP.NET Core lines for `/health` and `/alive`, and demo phase 18 adds `AddDbContextCheck` per service, see [Demo.md](Demo.md#phase-18).
 - The toolkit is in alpha and the demo is the only user, so a breaking change is allowed (owner, 2026-11-21).
 
@@ -133,7 +133,7 @@ Which Aspire parts, if any, may the template include? The modules never depend o
 
 Recommendation: none in the first version, and a readme in the generated service with the three lines to add. The `cat-internal-create-demo-unit` skill does the same by hand for the demo, which shows how much the wiring varies.
 
-`Cat.Resilience` and `Cat.Telemetry` are planned as the base that `ServiceDefaults` calls, and a project without Aspire calls them in its `Program`, see the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md#without-aspire) and [Cat.Telemetry.md](Cat.Telemetry.md#phase-1). A template without Aspire could then add those two calls, once the modules exist.
+`Cat.Resilience` and `Cat.Telemetry` are the base that `ServiceDefaults` calls, and a project without Aspire calls them in its `Program`, see the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md#without-aspire) and the [module readme of Cat.Telemetry](../modules/Cat.Telemetry/README.md#without-aspire). A template without Aspire could add those two calls.
 <!-- region end: Question 4-->
 
 <!-- region start: Question 5-->

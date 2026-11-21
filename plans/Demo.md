@@ -185,18 +185,14 @@ Recommendation: yes, if the module gets a data part. Categories are the one piec
 Show `Cat.Telemetry` in the demo, as the base of the telemetry in every service.
 
 #### Background
-- `Aspire ServiceDefaults` already gives every service telemetry and health checks. The demo uses Aspire, so it does not use `Cat.Telemetry` today.
-- `Cat.Telemetry` is the base for every project, and `ServiceDefaults` calls it. See the Decided list of [Cat.Telemetry.md](Cat.Telemetry.md#phase-1).
+- `Aspire ServiceDefaults` gives every service telemetry and health checks, and it calls `Cat.Telemetry` for the telemetry.
+- Cat.Telemetry is the base for every project, and `ServiceDefaults` calls it. See the [module readme of Cat.Telemetry](../modules/Cat.Telemetry/README.md).
 - The demo case for `Cat.Telemetry` is tracing one order across all services. Payment is an outside provider, see the [demo readme](../demo/README.md#payment-service), so the trace stops at the edge of Orders.
 
 #### What exists today
-- Every service has telemetry from `ServiceDefaults`.
-- `Cat.Telemetry` does not exist yet.
-- Payment is an outside provider that exports no telemetry, see the [demo readme](../demo/README.md#payment-service). Its client in Orders gets the trace boundary `AddCatTelemetryBoundary()` of [Cat.Telemetry.md](Cat.Telemetry.md#phase-1), so the dashboard shows the call as a span in Orders, with no trace on the side of the provider.
+- Every service has telemetry from `ServiceDefaults`, which calls `AddCatTelemetry` of `Cat.Telemetry`, see its [module readme](../modules/Cat.Telemetry/README.md).
+- Payment is an outside provider that exports no telemetry, see the [demo readme](../demo/README.md#payment-service). Its client in Orders has the trace boundary `AddCatTelemetryBoundary()`, so the dashboard shows the call as a span in Orders, with no trace on the side of the provider.
 - The demo stays on HTTP. The owner tested it live: `dotnet dev-certs https --trust` is optional and clears the dashboard notification "No trusted development certificate was found" on HTTP. The demo readme describes it, with the command that undoes it.
-
-#### Needs
-Phase 1 of the module plan [Cat.Telemetry.md](Cat.Telemetry.md#phase-1), answered first.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions

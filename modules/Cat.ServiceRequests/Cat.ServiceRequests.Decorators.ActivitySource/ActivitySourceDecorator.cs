@@ -36,9 +36,20 @@ internal static class ActivitySourceDecorator
             var serviceRequestType = serviceRequest.GetType();
             using (var activity = ServiceRequestActivitySource.CreateActivity($"Start handling ServiceRequest {serviceRequestType.Name}"))
             {
-                activity?.AddTag("ServiceRequestType", serviceRequestType.Name);
+                activity?.AddTag(CatServiceRequestsTelemetry.TypeTag, serviceRequestType.Name);
 
-                return await _innerHandler.HandleAsync(serviceRequest, cancellationToken).ConfigureAwait(false);
+                var start = Stopwatch.GetTimestamp();
+                var outcome = CatServiceRequestsTelemetry.ExceptionOutcome;
+                try
+                {
+                    var response = await _innerHandler.HandleAsync(serviceRequest, cancellationToken).ConfigureAwait(false);
+                    outcome = CatServiceRequestsTelemetry.OutcomeOf(response);
+                    return response;
+                }
+                finally
+                {
+                    CatServiceRequestsTelemetry.Record(serviceRequestType.Name, outcome, start);
+                }
             }
         }
     }
@@ -69,9 +80,20 @@ internal static class ActivitySourceDecorator
             var serviceRequestType = serviceRequest.GetType();
             using (var activity = ServiceRequestActivitySource.CreateActivity($"Start handling ServiceRequest {serviceRequestType.Name}"))
             {
-                activity?.AddTag("ServiceRequestType", serviceRequestType.Name);
+                activity?.AddTag(CatServiceRequestsTelemetry.TypeTag, serviceRequestType.Name);
 
-                return await _innerHandler.HandleAsync(serviceRequest, cancellationToken).ConfigureAwait(false);
+                var start = Stopwatch.GetTimestamp();
+                var outcome = CatServiceRequestsTelemetry.ExceptionOutcome;
+                try
+                {
+                    var response = await _innerHandler.HandleAsync(serviceRequest, cancellationToken).ConfigureAwait(false);
+                    outcome = CatServiceRequestsTelemetry.OutcomeOf(response);
+                    return response;
+                }
+                finally
+                {
+                    CatServiceRequestsTelemetry.Record(serviceRequestType.Name, outcome, start);
+                }
             }
         }
     }
@@ -81,7 +103,7 @@ internal static class ActivitySourceDecorator
     /// </summary>
     private static class ServiceRequestActivitySource
     {
-        private const string ActivitySourceName = "Cat.ServiceRequests";
+        private const string ActivitySourceName = CatServiceRequestsTelemetry.SourceName;
         private static readonly System.Diagnostics.ActivitySource Instance = new(ActivitySourceName);
 
         /// <summary>

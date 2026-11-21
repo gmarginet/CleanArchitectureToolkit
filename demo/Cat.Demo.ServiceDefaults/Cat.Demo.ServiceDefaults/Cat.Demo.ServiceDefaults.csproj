@@ -11,6 +11,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\modules\Cat.Messaging\Cat.Messaging.Abstractions\Cat.Messaging.Abstractions.csproj" />
         <ProjectReference Include="..\..\..\modules\Cat.Resilience\Cat.Resilience\Cat.Resilience.csproj" />
+        <ProjectReference Include="..\..\..\modules\Cat.Telemetry\Cat.Telemetry\Cat.Telemetry.csproj" />
         <ProjectReference Include="..\..\..\modules\Cat.Users\Cat.Users\Cat.Users.csproj" />
         <ProjectReference Include="..\..\..\modules\Cat.Users\Cat.Users.JwtBearer\Cat.Users.JwtBearer.csproj" />
     </ItemGroup>
@@ -19,11 +20,6 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
         <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
         <PackageReference Include="Microsoft.Extensions.ServiceDiscovery" />
-        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
-        <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
-        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
-        <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
-        <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
     </ItemGroup>
 
 </Project>

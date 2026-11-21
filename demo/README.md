@@ -356,7 +356,7 @@ dotnet dev-certs https --clean
 ```
 The `--clean` command removes every ASP.NET Core development certificate of your user, also for other projects. Run `dotnet dev-certs https --trust` again when you want a trusted one.
 
-To follow one order, place it and open **Traces** in the dashboard. The call `POST /orders` shows up as one trace. It holds the gateway, Orders, Keycloak, Catalog and Inventory, so you see every HTTP hop of the order in one place. The order is already answered with 202 when the payment starts, so the rest of the order is not in this trace. The payment provider exports no telemetry, so its calls show only as client spans of Orders, in the trace of the message that asked for them.
+To follow one order, place it and open **Traces** in the dashboard. The call `POST /orders` shows up as one trace. It holds the gateway, Orders, Keycloak, Catalog and Inventory, so you see every HTTP hop of the order in one place. The order is already answered with 202 when the payment starts, so the rest of the order is not in this trace. The payment provider exports no telemetry, and the client of Orders has a trace boundary (`AddCatTelemetryBoundary`), so no trace header reaches the provider. The call shows only as a client span of Orders, in the trace of the message that asked for it.
 
 The message hops are not part of that trace. When Orders handles `TakePayment`, Orders handles `PaymentProcessed`, Notifications handles `OrderConfirmed`, or `StockChanged` arrives, the dashboard shows it as its own trace with only that resource in it. `Cat.Messaging` does not pass the trace context along with a message yet. Match such a trace to its order by the time and the message name.
 
@@ -387,6 +387,7 @@ The last question is which modules to use. CAT is a toolbox. A developer picks t
 | Messaging | `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` (Orders, Inventory and Notifications) |
 | Users | `Cat.Users.Abstractions` in the core service and the infrastructure, `Cat.Users` and `Cat.Users.JwtBearer` in the host |
 | Core service tests | `Cat.UnitTesting.Commands`, `Cat.UnitTesting.Queries` and `Cat.UnitTesting.NUnit` |
+| Telemetry | `Cat.Telemetry` (every service, through `ServiceDefaults`, and the trace boundary on the payment client in Orders) |
 | Resilience | `Cat.Resilience` (every service, through `ServiceDefaults`, with its own profiles in Orders) |
 | Everywhere | `Cat.Expressions` |
 
@@ -1014,13 +1015,13 @@ erDiagram
 **What it is.** A shared project with the defaults every service uses. Only the demo uses it. The CAT modules never reference it.
 
 **How it works.** `AddServiceDefaults()` in the `Program.cs` of a service sets up:
-- Logs, metrics and traces with OpenTelemetry. The wildcard source `Cat.*` covers the CAT decorators and workflows. Data leaves the process only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set, which the AppHost does.
+- Logs, metrics and traces with OpenTelemetry, through `AddCatTelemetry` of `Cat.Telemetry`. It lists the sources and the meters of the CAT modules, such as the service request decorator and the workflows, and leaves the `/health` and `/alive` requests out of the traces. Data leaves the process only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set, which the AppHost does.
 - A readiness check at `/health` and a liveness check at `/alive`.
 - The token check of the services. `AddDemoJwtAuthentication` turns on JWT validation when `Authentication:Authority` is set. It also registers `Cat.Users` and `Cat.Users.JwtBearer`, so `ICatUser` comes from the token and the role policies read the same `roles` claim. `AddDemoAuthorization` holds the `admin` policy.
 - The client credentials token of a service. `AddDemoClientCredentials` registers `ClientCredentialsTokenProvider`, which fetches a token for the client in `Authentication:ClientId` from Keycloak and keeps it until shortly before it expires. Orders and Inventory use it. `AddDemoMessageTokens` registers `DemoMessageTokenProvider`, which gives a message the token of the current user, or the client credentials token of the service when there is no user request. A message with a scheduled time gets the client credentials token as well, because the token of a user is expired when the bus delivers it.
 - Service discovery and the `Internal` profile of `Cat.Resilience` on every `HttpClient`: retries, timeouts and a circuit breaker, the same defaults as the standard handler of Microsoft. The module keeps a circuit per client. A client can pick another profile with `AddCatResilience`, and the profile then replaces the default one. Orders does that for the Inventory client (`FastFail`, one retry, 5 seconds a try and 12 in total, so Orders answers before the gateway gives up) and for the payment provider (`External`).
 
-**CAT modules.** It references `Cat.Users` and `Cat.Users.JwtBearer` for the token setup, `Cat.Messaging.Abstractions` for the token of a message and `Cat.Resilience` for the pipeline of every client. Nothing else is referenced. The rest works next to the modules: the tracing decorator of `Cat.ServiceRequests` shows up in the traces.
+**CAT modules.** It references `Cat.Users` and `Cat.Users.JwtBearer` for the token setup, `Cat.Messaging.Abstractions` for the token of a message and `Cat.Resilience` for the pipeline of every client and `Cat.Telemetry` for the traces, the metrics and the logs. Nothing else is referenced. The rest works next to the modules: the tracing decorator of `Cat.ServiceRequests` shows up in the traces.
 
 **Pros.**
 - Every service gets the same setup in one line.
@@ -1087,7 +1088,7 @@ To repeat a run, set the variable in the environment of the shell that starts th
 - One more project to build and run.
 - The service forgets its answers when it restarts. It is a fake, so it stays simple on purpose.
 - The service is still pretend. It proves nothing about a real provider.
-- It exports no telemetry, so the dashboard shows the call only as a client span of Orders.
+- It exports no telemetry, so the dashboard shows the call only as a client span of Orders. The client of Orders sends no trace header to it, because of the trace boundary of `Cat.Telemetry`.
 
 **More.** `demo/Cat.Demo.PaymentService`, `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.Infrastructure/PaymentProvider`, `PlaceOrderWorkflow` in `demo/Cat.Demo.OrderService/Cat.Demo.OrderService.CoreService/Workflows`. [Orders service](#orders-service).
 ### Service Bus emulator
