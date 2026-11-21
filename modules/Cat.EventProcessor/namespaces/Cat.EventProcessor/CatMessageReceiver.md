@@ -51,5 +51,6 @@ Implements [ICatMessageReceiver](../../../Cat.EventProcessor/namespaces/Cat.Even
 
 | Methods | |
 | :--- | :--- |
+| [BeginLogScope\(IServiceProvider, CatIncomingMessage\)](CatMessageReceiver.BeginLogScope.J2OE4YR6HPJIP5OB9NT5AJBCC.md 'Cat\.EventProcessor\.CatMessageReceiver\.BeginLogScope\(System\.IServiceProvider, Cat\.EventProcessor\.Abstractions\.CatIncomingMessage\)') | |
 | [FindOptions\(Type\)](CatMessageReceiver.FindOptions.8TDFTR0NF9XO6ODARQMCYSZW1.md 'Cat\.EventProcessor\.CatMessageReceiver\.FindOptions\(System\.Type\)') | |
 | [ReceiveAsync\(Type, CatIncomingMessage, CancellationToken\)](CatMessageReceiver.ReceiveAsync.TZBJRK81OY0USJ9WUK29A6AZ9.md 'Cat\.EventProcessor\.CatMessageReceiver\.ReceiveAsync\(System\.Type, Cat\.EventProcessor\.Abstractions\.CatIncomingMessage, System\.Threading\.CancellationToken\)') | Handles one message\. It never throws for a failure of the handler\. It returns a result instead\. |

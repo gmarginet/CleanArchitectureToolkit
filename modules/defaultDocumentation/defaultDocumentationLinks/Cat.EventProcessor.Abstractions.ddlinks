@@ -13,6 +13,7 @@ T:Cat.EventProcessor.Abstractions.CatAuthorizationResult|CatAuthorizationResult.
 P:Cat.EventProcessor.Abstractions.CatIncomingMessage.Body|CatIncomingMessage.Body.md|Body
 P:Cat.EventProcessor.Abstractions.CatIncomingMessage.ContentType|CatIncomingMessage.ContentType.md|ContentType
 P:Cat.EventProcessor.Abstractions.CatIncomingMessage.MessageId|CatIncomingMessage.MessageId.md|MessageId
+P:Cat.EventProcessor.Abstractions.CatIncomingMessage.CorrelationId|CatIncomingMessage.CorrelationId.md|CorrelationId
 P:Cat.EventProcessor.Abstractions.CatIncomingMessage.DeliveryCount|CatIncomingMessage.DeliveryCount.md|DeliveryCount
 P:Cat.EventProcessor.Abstractions.CatIncomingMessage.EnqueuedTime|CatIncomingMessage.EnqueuedTime.md|EnqueuedTime
 P:Cat.EventProcessor.Abstractions.CatIncomingMessage.IsScheduled|CatIncomingMessage.IsScheduled.md|IsScheduled

@@ -24,6 +24,12 @@ public class CatIncomingMessage
     public string MessageId { get; set; } = string.Empty;
 
     /// <summary>
+    /// The correlation id of the message, as the sender set it. The listener adds it to the log scope of the handling.
+    /// Empty when the sender set none.
+    /// </summary>
+    public string CorrelationId { get; set; } = string.Empty;
+
+    /// <summary>
     /// How many times the bus delivered the message, this one included.
     /// </summary>
     public int DeliveryCount { get; set; } = 1;

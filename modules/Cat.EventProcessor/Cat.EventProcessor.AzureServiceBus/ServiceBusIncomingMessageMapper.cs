@@ -20,6 +20,7 @@ public static class ServiceBusIncomingMessageMapper
             Body = message.Body.ToArray(),
             ContentType = message.ContentType ?? string.Empty,
             MessageId = message.MessageId ?? string.Empty,
+            CorrelationId = message.CorrelationId ?? string.Empty,
             DeliveryCount = message.DeliveryCount,
             EnqueuedTime = message.EnqueuedTime == default ? null : message.EnqueuedTime,
             IsScheduled = message.ScheduledEnqueueTime != default

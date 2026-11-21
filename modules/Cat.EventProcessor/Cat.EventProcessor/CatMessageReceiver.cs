@@ -4,7 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cat.EventProcessor.Abstractions;
 using Cat.ServiceRequests.Abstractions;
+using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Cat.EventProcessor;
 
@@ -60,6 +62,9 @@ internal sealed class CatMessageReceiver : ICatMessageReceiver
         using var context = CatMessageContext.Begin(message.MessageId, message.DeliveryCount);
         using var scope = _scopeFactory.CreateScope();
 
+        // The scope has the same key as the gateway, so the logs of a flow are found with one filter. It lasts for the whole handling.
+        using var logScope = BeginLogScope(scope.ServiceProvider, message);
+
         try
         {
             // The policy runs before the inbox, so a message that is not allowed leaves no trace in the inbox.
@@ -105,6 +110,17 @@ internal sealed class CatMessageReceiver : ICatMessageReceiver
         {
             return new CatSettlementResult(CatSettlement.Abandon, exception.GetType().Name, exception.Message);
         }
+    }
+
+    private static IDisposable? BeginLogScope(IServiceProvider services, CatIncomingMessage message)
+    {
+        if (string.IsNullOrEmpty(message.CorrelationId))
+        {
+            return null;
+        }
+
+        return services.GetService<ILogger<CatMessageReceiver>>()?.BeginScope(
+            new[] { new KeyValuePair<string, object>("CorrelationId", message.CorrelationId) });
     }
 
     private CatReceiveOptions FindOptions(Type messageType)

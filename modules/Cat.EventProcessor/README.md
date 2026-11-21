@@ -57,6 +57,7 @@ The module settles every message for you. A handler that succeeds completes the 
   - [Clean the inbox](#clean-the-inbox)
   - [Competing consumers and shutdown](#competing-consumers-and-shutdown)
   - [Traces](#traces)
+  - [Log scope](#log-scope)
   - [Who sent the message and what may it do](#who-sent-the-message-and-what-may-it-do)
   - [What is not built yet](#what-is-not-built-yet)
 
@@ -342,7 +343,11 @@ When the service stops, the listener stops taking new messages and finishes the 
 
 ### Traces
 
-The trace of the sender continues in the service. The Azure Service Bus SDK reads the `Diagnostic-Id` of the message and starts the activity of the handling from it, so the second half of a flow joins the same trace. The module adds nothing for this. Register the `Azure.Messaging.ServiceBus` source in the OpenTelemetry setup of the service.
+The trace of the sender continues in the service. The Azure Service Bus SDK reads the `Diagnostic-Id` of the message and starts the activity of the handling from it, so the second half of a flow joins the same trace. The module adds nothing for this, apart from the log scope below. Register the `Azure.Messaging.ServiceBus` source in the OpenTelemetry setup of the service.
+
+### Log scope
+
+The listener opens a log scope with the key `CorrelationId` for the whole handling of a message, with the correlation id that the sender set. The gateway uses the same key for a request, so one filter on `CorrelationId` finds the logs of a whole flow. That works also for a hop that the trace does not cover. A message with no correlation id gets no scope. The scope needs an `ILogger`, so a service without logging registered gets none.
 
 ### Who sent the message and what may it do
 
