@@ -47,41 +47,54 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-`dotnet new` templates that create a new service with the project structure of the toolkit.
+`dotnet new` templates that create a new service with the project structure of the toolkit, and the single parts of a service that the skills of [Skills.md](Skills.md#phase-1) use.
 
 #### The idea
-Every service in the architecture is built from the same set of projects, wired the same way. Making a new service by hand means creating up to nine projects, setting the references right and writing the same startup code. A `dotnet new` template does it in one command.
+Every service in the architecture is built from the same set of projects, wired the same way. Making a new service by hand means creating several projects, setting the references right and writing the same startup code. A `dotnet new` template does it in one command. The skills for developers create every file through these templates, so the shape of a file has one source that the build tests.
+
+In this plan, "template" always means a `dotnet new` template. The markdown templates of the owner skills are a different thing.
 
 #### Background
 From the readme:
-- The service project structure has these projects: Api (required), Scheduler (optional), EventProcessor (optional), CoreService (required), Infrastructure (required), Contracts (required), DataModels (required), Infrastructure.DataAccessTooling (optional) and CoreService.Tests (optional).
+- The service project structure lists `ServiceName.Api`, `ServiceName.CoreService`, `ServiceName.Infrastructure`, `ServiceName.Contracts` and `ServiceName.DataModels` as required, and `ServiceName.CoreService.Tests` as optional.
+- The Api is the host that handles HTTP requests and runs the background workers, when the service has them. In development, each worker has its own endpoint group.
 - The reference rules: dependencies point inwards, the core only references the abstractions of the CAT modules, the API is the only place where everything is wired together, and Contracts stays small.
-- A service is either code first (hand written entities, migrations in Infrastructure) or database first (scaffolded entities and context through the DataAccessTooling project).
-- The Api has a development endpoint group in debug mode, with a sub group per worker.
-- `Cat.Demo.CatalogService` is a small working example of the structure.
+
+From the demo:
+- The workers run in the Api host.
+- Catalog is code first, with hand written entities in DataModels and migrations in Infrastructure.
+- Inventory is database first. Its schema comes from SQL scripts in the folder `Cat.Demo.InventoryService.Database`, which is not a project, and the AppHost runs them. Its scaffolded entities live in `Cat.Demo.InventoryService.DataModels`, and its scaffolded `InventoryDbContext` in Infrastructure.
+- Catalog and Inventory have an `Api.Client` project that other services use to call them. The readme structure does not list it. Sharing the `Contracts` of a service is the choice of the developer.
+- Orders adds workflows, sagas and message handlers, and Notifications has scheduled jobs. These are the variations a template needs.
+- The AppHost references the Api project of each service, so a new service also needs a line there.
+- `demo/Directory.Build.props` sets the language version and nullable context.
 
 From the repository:
+- The modules that exist include `Cat.Commands`, `Cat.Queries`, `Cat.ServiceRequests`, `Cat.Responses`, `Cat.Validators`, `Cat.Minimal.Api`, `Cat.EFCore`, `Cat.Messaging`, `Cat.EventProcessor`, `Cat.Scheduling`, `Cat.Sagas` and `Cat.Users`. The repo overview of the readme has the full list.
+- Package versions that follow the release of .NET come per target framework from `Directory.Packages.props`, with one group for `netstandard2.0` and `net10.0` and one for `net11.0`, see `CLAUDE.md`.
+- SQL Server code in a module gets a PostgreSQL counterpart with the same API, see `CLAUDE.md`.
 - The `cat-internal-create-demo-unit` skill describes the folder and solution rules for demo services, including `CleanArchitectureToolkit.slnx`.
-- `demo/Directory.Build.props` sets the language version and nullable context.
-- The demo services show the startup wiring: `AddServiceDefaults`, `AddCatMinimalApiModule`, `AddCatServiceRequestsModule` with the decorators, queries, commands, validators and the database registration.
 
-From the demo plan:
-- Orders adds workflows and event subscribers, Inventory is database first, and Notifications needs workers. These are the variations a template needs.
-- The AppHost references the Api project of each service, so a new service also needs a line there.
+From the other plans:
+- `Cat.Resilience` and `Cat.Telemetry` are planned as the base that `ServiceDefaults` calls. A project without Aspire calls them in its `Program`, see [Cat.Resilience.md](Cat.Resilience.md#phase-1) and [Cat.Telemetry.md](Cat.Telemetry.md#phase-1).
+- Health checks are out of the scope of `Cat.Telemetry`. Its module readme shows the plain ASP.NET Core lines for `/health` and `/alive`, and demo phase 18 adds `AddDbContextCheck` per service, see [Demo.md](Demo.md#phase-18).
+- The toolkit is in alpha and the demo is the only user, so a breaking change is allowed (owner, 2026-11-21).
 
 #### What exists today
 - The templates do not exist yet. They are listed in the repo overview of the readme as tooling with the status New.
 - The repository has no template project and no `template.json`. The demo services are the working examples to build from.
-- The `Skills` plan asks who scaffolds a new service, the template or a skill. See [Skills.md](Skills.md).
 
 #### Decided
 - **Form.** `dotnet new` templates.
 - **Content.** The service project structure of the readme.
-- **Optional parts.** Scheduler, EventProcessor, DataAccessTooling and Tests stay optional.
+- **Optional parts.** The tests project stays optional, and the workers are an option of the Api host. There is no DataAccessTooling project (owner, 2026-11-21).
+- **Database first.** It has the same projects as code first. The scaffolded entities live in DataModels, as the hand written entities of code first do. The SQL scripts sit in a folder of the service, such as `Cat.Demo.InventoryService.Database` in the demo, which is not a project (owner, 2026-11-21).
+- **The skills use the templates.** Every file that a skill for developers creates comes from a `dotnet new` template, see [Skills.md](Skills.md#phase-1). A skill does what a template cannot: pick the project and the folder, change existing files such as the registration in `Program.cs`, add the test, run the build and explain the next step (owner, 2026-11-21).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
+
 <!-- region start: Question 1-->
 #### Question 1
 Should it be one template with options, or separate templates? This is the blocking question. Questions 2, 3 and 9 follow from it. The options:
@@ -94,11 +107,11 @@ Recommendation: one template with options. `dotnet new` supports conditional con
 
 <!-- region start: Question 2-->
 #### Question 2
-Which options matter most? The parameters under discussion are the service name, code first or database first, include scheduler, include event processor, include tests, and include a first example request. The options for the first version:
-- **Service name, data approach and tests.** The workers need modules that do not exist yet (`Cat.Scheduling`, `Cat.EventProcessor`). Cost: no worker options until those exist.
-- **All of them from the start.** Cost: the worker options would produce projects that cannot do anything.
+Which options matter most? The parameters under discussion are the service name, code first or database first, include scheduled jobs, include message handlers, include tests, and include a first example request. The workers run in the Api host, and `Cat.Scheduling` and `Cat.EventProcessor` exist. The options for the first version:
+- **Service name, data approach and tests.** Cost: a developer adds the workers to the Api host by hand or with a skill.
+- **All of them from the start.** Cost: more conditions in the template, and the build test of question 13 runs for more combinations.
 
-Recommendation: service name, code first or database first, include tests, and an include-example flag. Add the scheduler and event processor options when their modules are built. The example request is useful, because it proves the template builds and runs.
+Recommendation: all of them. The worker modules exist, a worker option only adds code to the Api host and no project, and the example request proves that the template builds and runs.
 <!-- region end: Question 2-->
 
 <!-- region start: Question 3-->
@@ -159,22 +172,22 @@ Do we include a Dockerfile and deployment files for Azure Container Apps? Other 
 - **Plus a Dockerfile.** Cost: one more file that depends on the .NET version and the repository layout.
 - **Plus deployment files** (Bicep or `azd`). Cost: this is the platform of the developer, not of the toolkit.
 
-Recommendation: the readme and the `.http` file, which the demo already has. Leave the Dockerfile and deployment out, because they depend on how the developer deploys, and health endpoints come with `ServiceDefaults` or the developer's own setup.
+Recommendation: the readme and the `.http` file, which the demo already has, plus `/health` and `/alive` with the database check of demo phase 18, because `Cat.Telemetry` leaves health checks to the service. Leave the Dockerfile and deployment out, because they depend on how the developer deploys.
 <!-- region end: Question 8-->
 
 <!-- region start: Question 9-->
 #### Question 9
-Do we also need templates for single parts, such as a new service request with its handler and validator? The options:
-- **Yes, item templates** (`dotnet new cat-command`). Cost: more templates, and they overlap with the skills.
-- **No,** the skills handle single parts (see [Skills.md](Skills.md)). Cost: it needs Claude.
+Which single parts get an item template? The skills create every file through a template, so each part that a skill adds needs one, such as `dotnet new cat-command`. The options:
+- **The parts of the first skills,** a command, a query, a service request and a validator, each with its handler and test. More follow with each new skill. Cost: a template per part, each with the build test of question 13.
+- **One item template with a choice parameter** for the kind of part. Cost: one large template with many conditions.
 
-Recommendation: no, for now. A skill can add a part to an existing project, which is something a template cannot do well, so the service template and the skills split the work: template for the whole, skills for the parts.
+Recommendation: one item template per part, starting with the parts of the first skills of [Skills.md](Skills.md#phase-1). A small template is easy to test, and a skill calls exactly the one it needs.
 <!-- region end: Question 9-->
 
 <!-- region start: Question 10-->
 #### Question 10
 Should the template wait until most of the other future modules exist, so it can include them? The options:
-- **Build now** with the modules that exist (commands, queries, responses, validators, service requests, Minimal API) and add options later. Cost: updates of the template pack.
+- **Build now** with the modules that exist (see the Background) and add options later. Cost: updates of the template pack.
 - **Wait.** Cost: no template for a long time, while the structure is stable already.
 
 Recommendation: build now. The service structure is decided in the readme, and the options of question 2 let the template grow with the modules.
@@ -187,7 +200,7 @@ The template references the published NuGet packages of the CAT modules. Which v
 - **The version at the time of the template release,** and a new template pack per module release. Cost: a template release each time, which the release workflow can do.
 - **Central package management** with a `Directory.Packages.props` in the generated solution. Cost: one more file, but it gives the developer one place to update.
 
-Recommendation: central package management with the version of the day, and the template pack built from the same tag in the release workflow. A developer then updates versions in one file.
+Recommendation: central package management with the version of the day, with one group per target framework as in `Directory.Packages.props` of this repository (see question 16), and the template pack built from the same tag in the release workflow. A developer then updates versions in one file.
 <!-- region end: Question 11-->
 
 <!-- region start: Question 12-->
@@ -234,5 +247,24 @@ Which target framework does a generated service get? The modules support .NET 10
 
 Recommendation: a choice parameter with `net11.0` as the default, because the modules support both and a template that forces one framework puts the work on the developer.
 <!-- region end: Question 16-->
+
+<!-- region start: Question 17-->
+#### Question 17
+Which database does a generated service use? Every SQL Server feature of the toolkit has a PostgreSQL counterpart. The options:
+- **A choice parameter,** SQL Server or PostgreSQL, with SQL Server as the default. Cost: the build test of question 13 runs for both.
+- **SQL Server only.** Cost: a developer on PostgreSQL changes the provider and the packages by hand.
+
+Recommendation: the choice parameter. The toolkit supports both, so the template should not force one.
+<!-- region end: Question 17-->
+
+<!-- region start: Question 18-->
+#### Question 18
+Does the template create an `Api.Client` project, which other services use to call the new service? Catalog and Inventory have one, and the readme structure does not list it. The options:
+- **An option, off by default.** Cost: one more condition.
+- **Always.** Cost: a project that a service nobody calls does not need.
+- **Never.** Cost: a developer adds it by hand when another service starts to call this one.
+
+Recommendation: an option, off by default. A new service often has no callers yet, and the option gives the same project as in the demo when it does.
+<!-- region end: Question 18-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

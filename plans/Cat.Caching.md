@@ -50,16 +50,23 @@
 A new module, `Cat.Caching`, with caching for queries. The first use is the Catalog queries in the demo.
 
 #### The idea
-Many reads ask the same question again and again. A book list, a category list. A cache in front of the handler can answer and skip the database. If the cache is a decorator, the query handler stays as it is, because the decorator wraps it. Whether it is a decorator is still open, see question 16.
+Many reads ask the same question again and again. A book list, a category list. A cache in front of the query can answer and skip the database. The cache wraps the query processor, so the query handler stays as it is, and only the query types a developer lists are cached.
 
 #### Background
 From the module conventions:
-- `Cat.Queries` runs handlers through decorators from `Cat.Decorators`. A decorator is an open generic class that wraps `ICatQueryHandler<,>`. The module already ships a logging decorator you switch on only when you need it.
+- `CatQueryProcessor` opens a new scope for every call and builds the handler with its decorators from `Cat.Decorators`. `Cat.Queries.Decorators.Logging` is the optional logging decorator, switched on with `AddCatQueriesModuleLoggingDecorator`.
+- `Cat.Decorators` only wraps open generic types, such as `ICatQueryHandler<,>`. `ICatQueryProcessor` is not generic, and has one scoped registration, `AddScoped<ICatQueryProcessor, CatQueryProcessor>()` in `Cat.Queries`.
 - A query is a plain type that holds the data the handler needs. A query handler returns an `ICatResponse` with the result.
-- Decorators are applied in an order. If the cache is a decorator, its place relative to logging and tracing needs a decision.
 
-From the demo plan:
+From the other plans:
+- The retry of [Cat.Resilience.md](Cat.Resilience.md#phase-2) also wraps `ICatQueryProcessor`, for the types a developer lists.
+- `Cat.Telemetry` decided that each module owns its meter, named after the module, with short metric tags, and that personal data stays out of tags, see [Cat.Telemetry.md](Cat.Telemetry.md#phase-1).
+- The toolkit is in alpha and the demo is the only user, so a breaking change is allowed (owner, 2026-11-21).
+
+From the demo:
 - Cached catalog queries are the demo case. Catalog is mostly reads, with a small admin part.
+- The Catalog queries are `BookGetQuery`, `BookSearchQuery`, `CategoryGetListQuery`, `BookPriceListQuery` and `CheckIsbnExistsQuery`. None of them uses the user. The service request handlers call them through `ICatQueryProcessor`.
+- Orders asks Catalog for the prices of an order through `BookPriceListRequest`, whose handler calls `BookPriceListQuery`. `BookModelValidator` calls `CheckIsbnExistsQuery` to refuse a duplicate ISBN.
 - Authorization in Orders is a filter in the query: the queries get the external id of the customer, or none for an admin. A cached answer for one user must never reach another user.
 - `Cat.Responses` outcomes include errors. A failed response should not be cached by default.
 - Writes go through commands. A command that changes a book makes a cached book list stale.
@@ -69,15 +76,27 @@ From the architecture:
 
 #### What exists today
 - The module does not exist yet. It is listed in the repo overview of the readme with the status New.
-- `Cat.Queries` and `Cat.Decorators` exist, with the logging decorator for queries as the example of an optional decorator.
+- `Cat.Queries`, `Cat.Decorators` and the logging decorator for queries exist.
 - Nothing in the modules or the demo caches query results yet.
+- `Microsoft.Extensions.Caching.Hybrid` is not in `Directory.Packages.props`.
 
 #### Decided
 - **First use.** The Catalog queries in the demo.
+- **Around the query processor.** The cache wraps `ICatQueryProcessor` in the container, the same way as the retry of `Cat.Resilience`. For a listed type it answers from the cache, so a hit skips the new scope and the handler. Every other type passes straight through. It is not a decorator of `Cat.Decorators`, and `Cat.Decorators` stays unchanged (owner, 2026-11-21).
+- **Opt in per type.** A query is cached only when the registration lists it, such as `options.Cache<CategoryGetListQuery>(...)`. Nothing is cached by default. The query and the core stay free of caching, with no attribute and no marker interface (owner, 2026-11-21).
+- **Registration order.** The setup throws an `InvalidOperationException` at once when a listed query type has no query processor registered yet, and the message names the missing call. It is the same rule as in `Cat.Resilience` (owner, 2026-11-21).
+- **Metrics.** Hit and miss metrics from day one, on the meter `Cat.Caching` of the module, with short metric tags such as `query`. The cache key never goes into a tag or a log, because a key can hold personal data. No dependency on `Cat.Telemetry` (owner, 2026-11-21).
+- **Queries only.** Service requests are not cached. A service request that only reads, such as `BookPriceListRequest`, calls a query that can be cached (owner, 2026-11-21).
+- **No HTTP output caching.** Output caching of ASP.NET Core is out of scope, so the module stays about one thing. A developer uses ASP.NET Core directly (owner, 2026-11-21).
+
+#### Follows from the decisions
+- A unit test with `FakeQueryProcessor` gets no cache. The module readme says so.
+- Integration tests are needed only when the module ships database code of its own, such as a SQL Server second level, see question 6. Such code also gets a PostgreSQL counterpart.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
+
 <!-- region start: Question 1-->
 #### Question 1
 Which cache do we use as the default: memory, distributed or `HybridCache`? This is the blocking question. Questions 3, 6, 13 and 14 follow from it. A swap must be possible, whichever we pick. The options:
@@ -88,16 +107,6 @@ Which cache do we use as the default: memory, distributed or `HybridCache`? This
 
 Recommendation: the small abstraction in `Cat.Caching.Abstractions`, with `Cat.Caching` using `HybridCache` as the default. A developer without a distributed cache gets the memory part, and with one gets sharing. It also answers questions 6 and 14 for free.
 <!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-How should a query say it may be cached? The options:
-- **An attribute on the query type,** such as `[CatCached(Minutes = 5)]`. Cost: the query (in `Contracts` or core) depends on this module.
-- **A marker interface,** such as `ICatCachedQuery`. Cost: the same dependency.
-- **A registration,** such as `AddCachedQuery<BookSearchQuery>(TimeSpan.FromMinutes(5))`. Cost: the rule is far from the query, but the core stays free of caching.
-
-Recommendation: the registration, because the toolbox rule says a core only references abstractions and a developer picks modules. The settings (question 12) go with it.
-<!-- region end: Question 2-->
 
 <!-- region start: Question 3-->
 #### Question 3
@@ -138,43 +147,6 @@ Do we need to support several instances in the first version? Services run as se
 Recommendation: no, memory only in the first version, with the swap point ready. Short lifetimes (question 3) keep the difference small, and the demo has no Redis.
 <!-- region end: Question 6-->
 
-<!-- region start: Question 7-->
-#### Question 7
-If the cache is a decorator (question 16), where does it sit in the decorator order, relative to logging and validation? Cat.Decorators has numbers for tracing, logging and validation only. The options in short:
-- **After validation, before the handler.** Invalid and unauthorized requests never reach the cache. Cost: none.
-- **Before an authorization check.** Cost: a cached answer reaches a user who may not read it.
-
-Recommendation: after validation, and after an authorization check if there is one.
-<!-- region end: Question 7-->
-
-<!-- region start: Question 8-->
-#### Question 8
-Do we want hit and miss metrics from day one, and does that depend on `Cat.Telemetry`? The options:
-- **Yes, through `System.Diagnostics.Metrics`** with a source name `Cat.Caching`. No dependency on `Cat.Telemetry`, because the Aspire dashboard and OpenTelemetry pick it up. Cost: a small meter class.
-- **No, later.** Cost: a developer cannot tell whether the cache works.
-- **Debug log lines with the key.** Cost: noise, and keys can hold personal data.
-
-Recommendation: the metrics from day one, with no dependency on `Cat.Telemetry`, and the key in a debug log only. It is the same approach that `Cat.Messaging` takes for dead letters.
-<!-- region end: Question 8-->
-
-<!-- region start: Question 9-->
-#### Question 9
-Is there a query in the demo that we know is slow, or do we pick one to show the effect? The options:
-- **Use `BookSearchQuery` or the category list** in Catalog, which reads a lot and changes little. Cost: it is not slow on a small demo database.
-- **Add a delay on purpose** in a development setting, like the payment failure switches. Cost: a fake slowness, but the effect is visible.
-
-Recommendation: a cached category or book list, with the hit and miss metric (question 8) as the proof in the dashboard. No fake delay is needed if the metric shows the hits.
-<!-- region end: Question 9-->
-
-<!-- region start: Question 10-->
-#### Question 10
-Do we ever want to cache service requests, or only queries? The options:
-- **Queries only.** A query is read only by definition. Cost: a service request that only reads, such as `BookPriceListRequest`, cannot be cached.
-- **Also service requests** that are marked. Cost: a request can have side effects, so a cache could hide them.
-
-Recommendation: queries only. A service request is the unit of work and may change state, and the handler can call a cached query inside.
-<!-- region end: Question 10-->
-
 <!-- region start: Question 11-->
 #### Question 11
 How is the cache key built from a query? The options:
@@ -193,7 +165,7 @@ Is the expiry absolute or sliding? Is it set per query? The options:
 - **Sliding.** Cost: a hot item can live for ever and go stale.
 - **Both settings.**
 
-Recommendation: absolute, set in the registration (question 2), with a module default of a few minutes. Sliding is rarely right for data that changes.
+Recommendation: absolute, set in the registration of the cached type, with a module default of a few minutes. Sliding is rarely right for data that changes.
 <!-- region end: Question 12-->
 
 <!-- region start: Question 13-->
@@ -214,26 +186,34 @@ Many requests can ask for the same missing key at once. Does the module protect 
 
 Recommendation: yes, through `HybridCache` as in question 1. This is one of the reasons to prefer it.
 <!-- region end: Question 14-->
+<!-- region start: Question 17-->
+#### Question 17
+Which projects does the module get, and which target frameworks? The answer of question 1 decides the packages. The options:
+- **`Cat.Caching.Abstractions` and `Cat.Caching`.** The abstractions hold the settings and, if question 1 chooses it, `ICatQueryCache`, on `netstandard2.0`. `Cat.Caching` holds the wrapper and the default cache. Cost: none beyond question 1.
+- **One project, `Cat.Caching`.** Cost: a developer who writes an own cache has to reference the whole module.
 
-<!-- region start: Question 15-->
-#### Question 15
-HTTP output caching in `Cat.Minimal.Api` is a different layer. Is that out of scope? The options:
-- **Out of scope.** A developer uses the ASP.NET Core output caching directly. Cost: none.
-- **A helper in `Cat.Minimal.Api`** to switch it on per endpoint. Cost: it belongs in another module, and the user dependent rules must be handled again.
+To check when building: whether `Microsoft.Extensions.Caching.Hybrid` has a `netstandard2.0` build, and which version removes entries by tag. The package goes into both groups of `Directory.Packages.props`.
 
-Recommendation: out of scope. It is a different module's job and ASP.NET Core already has it.
-<!-- region end: Question 15-->
-<!-- region start: Question 16-->
-#### Question 16
-Is a decorator the way to apply caching? The owner is not sure, for the same reason as the inbox of `Cat.EventProcessor`: a decorator wraps every handler of a service type, so it is all or nothing. Question 7 assumes a decorator, so look at it again after this answer. The options:
-- **A. A decorator with a lookup per query type.** It wraps every query handler and passes the query on when the type has no cache setting. Cost: every handler is wrapped, and the decorator needs a number in the order of `Cat.Decorators`.
-- **B. A decorator that a developer switches on per query type.** It needs a condition in `Cat.Decorators`. Cost: a change in another module.
-- **C. No decorator. The handler asks a cache service.** Cost: the handler code changes, but the cache call is visible and testable without a pipeline.
-- **D. A cache around the handler, set up in the registration of the handler.** Cost: a new way to register handlers, in `Cat.Queries`.
+Recommendation: the abstractions and the module, like the other modules, with `netstandard2.0` for both if the package allows it, and `net10.0;net11.0` for `Cat.Caching` if not.
+<!-- region end: Question 17-->
 
-Recommendation: A, as question 7 assumes, because the handler stays as it is and only the queries with a setting are cached. This is the owner's call, and the discussion stays open.
+<!-- region start: Question 18-->
+#### Question 18
+The cache and the retry of `Cat.Resilience` both wrap `ICatQueryProcessor`. Which one sits outside? For example, `BookSearchQuery` is listed for both. The options:
+- **The cache outside.** A hit answers at once and never starts a retry. A miss goes to the retry, which calls the processor again for every try. Cost: both modules need one rule for the order, whatever order the developer registers them in.
+- **The retry outside.** Cost: a hit runs inside the retry pipeline for nothing, and a retry also asks the cache again.
+- **The order of registration decides.** The last one registered is outside. Cost: the behaviour changes when a developer moves a line.
 
-The same worry came up for `Cat.Resilience`. There the owner chose, for a later phase, to act only for the types a developer lists, with nothing by default. The retry there wraps the command and query processors and not the handlers, because every try needs a fresh scope, see [Cat.Resilience.md](Cat.Resilience.md#phase-2). A cache needs no fresh scope, so that reason does not apply here.
-<!-- region end: Question 16-->
+Recommendation: the cache outside, with a fixed rule that does not depend on the order of the lines.
+<!-- region end: Question 18-->
+
+<!-- region start: Question 19-->
+#### Question 19
+Which queries must never be cached, and does the module help to prevent it? A stale `BookPriceListQuery` lets Orders place an order with an old price. A stale `CheckIsbnExistsQuery` lets the validator accept a duplicate ISBN. The options:
+- **A rule in the module readme.** Never cache a query that a write or a price decision depends on. Opt in per type already keeps them out by default. Cost: nobody enforces it.
+- **A check at startup** against a list of query types that a developer marks as never cached. Cost: a second list to keep, next to the list of cached types.
+
+Recommendation: the rule in the readme, with these two queries as the examples. Opt in per type means a query is only cached when someone lists it on purpose.
+<!-- region end: Question 19-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->

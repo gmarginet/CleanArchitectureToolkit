@@ -68,6 +68,33 @@ The demo uses the module, and the readme says where.
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 15-->
+#### Question 15
+Which Catalog queries does the demo cache? The Catalog queries are `BookGetQuery`, `BookSearchQuery`, `CategoryGetListQuery`, `BookPriceListQuery` and `CheckIsbnExistsQuery`. None of them uses the user. `BookPriceListQuery` prices an order in Orders, and `CheckIsbnExistsQuery` refuses a duplicate ISBN, so a stale answer of those two is a real bug, see question 19 of [Cat.Caching.md](Cat.Caching.md#phase-1). The options:
+- **`CategoryGetListQuery` only.** The categories hardly ever change. Cost: the effect is small, because the web client asks for the list once.
+- **`CategoryGetListQuery` and `BookSearchQuery`.** The search runs on every visit to the shop. Cost: a book that an admin changes shows up late in the search.
+- **Also `BookGetQuery`.** Cost: the same delay on the page of one book, and more entries.
+
+Recommendation: `CategoryGetListQuery` and `BookSearchQuery`. They are the reads that repeat most, and the demo readme names `BookPriceListQuery` and `CheckIsbnExistsQuery` as the queries it does not cache, and why.
+<!-- region end: Question 15-->
+
+<!-- region start: Question 16-->
+#### Question 16
+What does the demo show after an admin saves a book that a cached search holds? It depends on question 3 of [Cat.Caching.md](Cat.Caching.md#phase-1), short lifetimes or tags. The options:
+- **The old result until the lifetime ends,** with a step in the demo readme that shows the delay. Cost: the demo shows stale data on purpose.
+- **`BookSaveCommandHandler` clears the tag of the search,** so the next search is fresh. Cost: it needs tags in the first version of the module.
+
+Recommendation: follow question 3 of the module. With short lifetimes, show the delay and say why it is fine for a shop. With tags, clear the tag in `BookSaveCommandHandler`, which is the better showcase.
+<!-- region end: Question 16-->
+
+<!-- region start: Question 9-->
+#### Question 9
+Is there a query in the demo that we know is slow, or do we pick one to show the effect? The options:
+- **Use `BookSearchQuery` or the category list** in Catalog, which reads a lot and changes little. Cost: it is not slow on a small demo database.
+- **Add a delay on purpose** in a development setting, like the payment failure switches. Cost: a fake slowness, but the effect is visible.
+
+Recommendation: a cached category or book list, with the hit and miss metric of the module as the proof in the dashboard. No fake delay is needed if the metric shows the hits.
+<!-- region end: Question 9-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 9-->
 
@@ -77,16 +104,16 @@ The demo uses the module, and the readme says where.
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-Languages. The demo works in more than one language: the client has a language selector, and the mails are translated. `Cat.Localizations` provides the texts.
+Languages. The demo works in more than one language: the client has a language selector, and the mails are translated. `Cat.Localizations` provides the texts of the server, and the client translates its own screens.
 
 #### Background
 - The owner moved this out of phase 2, the Notifications service. The client has no language support, so everything is in English, and translated mails alone would not show.
-- `Cat.Localizations` looks up localized texts by key. Its open points about the culture, localized data and error messages are in [Cat.Localizations.md](Cat.Localizations.md).
+- `Cat.Localizations` localizes the texts the server makes, such as mails and category names. The screens of the client are out of its scope. Its open points are in [Cat.Localizations.md](Cat.Localizations.md#phase-1).
 
 #### What exists today
 - The client and the mails of Notifications are in English.
-- Catalog does not use `Cat.Localizations`, so category names are plain text. Showing them in several languages waits until the module is stable.
-- `ICatLocalizer` has no culture parameter, so a provider must find the culture itself.
+- The web client is a React 19 app with no translation library. The order page shows the raw status code, such as `Pending`.
+- Category names are a single string in `Category.Name`. Book titles stay in one language, see the Decided list of [Cat.Localizations.md](Cat.Localizations.md#phase-1).
 
 #### Needs
 Phase 1 of the module plan [Cat.Localizations.md](Cat.Localizations.md#phase-1), answered and built.
@@ -109,6 +136,7 @@ How does the mail find the language of the customer? The `OrderConfirmed` messag
 - **Always English for jobs, the request language for mails.** Cost: two rules.
 
 Recommendation: the language in the message. The message is already the only link between the services, and it needs no new storage.
+Answer this question together with question 7 of [Cat.Localizations.md](Cat.Localizations.md#phase-1). If that question chooses the property on the message, it answers this question too.
 <!-- region end: Question 12-->
 
 <!-- region start: Question 13-->
@@ -130,6 +158,23 @@ Does the client remember the language choice, and where?
 
 Recommendation: local storage, with the browser language as the first default. It is the smallest step.
 <!-- region end: Question 14-->
+<!-- region start: Question 17-->
+#### Question 17
+How does the React client translate its own screens? `Cat.Localizations` does not cover client screens. The options:
+- **`react-i18next`,** with a JSON file per language in the client. Cost: one more package in the client, but it is the common choice and handles plurals and formats.
+- **A small dictionary of our own,** a JSON file per language and a hook. Cost: plurals, dates and numbers by hand.
+
+Recommendation: `react-i18next`. A developer who looks at the demo sees the usual way, and the client translates the status codes from the server with it too.
+<!-- region end: Question 17-->
+
+<!-- region start: Question 18-->
+#### Question 18
+Does the demo show category names in Dutch? It depends on question 4 of [Cat.Localizations.md](Cat.Localizations.md#phase-1). The options:
+- **Yes.** The admin part gets a field for the Dutch name, and the shop shows the name in the language of the user. Cost: a schema change in Catalog and a change in the admin screen.
+- **No, only the mails and the client screens.** Cost: the data part of the module is not shown.
+
+Recommendation: yes, if the module gets a data part. Categories are the one piece of reference data in the demo, so they are the only place to show it.
+<!-- region end: Question 18-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 10-->
 
