@@ -94,8 +94,6 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Puts the FastFail resilience profile on a client that a person waits for while an order is placed.
     /// With the Internal profile, a service that is down makes the order wait about 50 seconds, and the gateway gives up after 30.
-    /// Puts the FastFail resilience profile on a client that a person waits for while an order is placed.
-    /// With the Internal profile, a service that is down makes the order wait about 50 seconds, and the gateway gives up after 30.
     /// Here one retry is enough, because the calls are safe to repeat: the order number is the key. One try takes at most 5 seconds,
     /// and the whole call at most 12, so Orders answers well before the gateway does.
     /// The profile replaces the default pipeline of the ServiceDefaults, so the client has only this one.
