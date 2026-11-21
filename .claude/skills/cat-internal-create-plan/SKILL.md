@@ -18,7 +18,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 ## Creating a plan
 1. Check that no plan exists yet. Check the name against the folders in `modules/`, the files in `plans/` and the repo overview table of the readme.
 2. Read the sources, see [Where the facts come from](#where-the-facts-come-from). Search them for the module name and its idea.
-3. Copy `plan.template.md` to `plans/<PlanName>.md`. The plan file is named after the plan, such as `Cat.Messaging.md` or `Demo.md`.
+3. Copy `plan.template.md` to `plans/<PlanName>.md`. The plan file is named after the plan, such as `Cat.Caching.md` or `Demo.md`.
 4. Replace `[[PlanName]]`.
 5. Fill the `Header` region by following the `cat-internal-create-header` skill.
 6. Add phase 1 with the `Phase` template, at the end of the file, and its `PhaseListLine` in the `Phases` region. Put what you found in the `PhaseDescription` region and the unknowns in numbered open questions.
@@ -27,7 +27,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 
 ## Which plans exist
 - `Demo.md` is the plan of the demo, and `Skills.md` and `Cat.Templates.md` are plans of the tooling.
-- Every future module has a plan named after the module, such as `Cat.Messaging.md`. An existing module gets one too when it has future work, such as `Cat.EFCore.md`.
+- Every future module has a plan named after the module, such as `Cat.Caching.md`. An existing module gets one too when it has future work, such as `Cat.Resilience.md`.
 
 ## Rules for the content
 - `Decided` in a phase description holds only what the owner decided, or what the existing docs state. Name the document when it comes from one. Everything else is an open question. Never invent a decision.
@@ -121,7 +121,7 @@ Use this when the owner changes `plan.template.md` or `plan.parts.template.md` a
 ## Placeholders
 - [[PlanName]]: The name of the plan.
   - For a module plan that is the module name, for the demo plan that is Demo, and so on.
-  - The plan file is named after the plan, such as `Cat.Messaging.md` or `Demo.md`.
+  - The plan file is named after the plan, such as `Cat.Caching.md` or `Demo.md`.
 - [[PhaseNumber]]: The number of a phase.
   - It is a unique number within the plan file.
   - This number never changes, so even if a phase gets deleted after it gets built, all following phases keep their number.
