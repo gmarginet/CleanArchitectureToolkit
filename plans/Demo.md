@@ -47,11 +47,11 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-Languages. The demo works in more than one language: the client has a language selector, and the mails are translated. `Cat.Localizations` provides the texts of the server, and the client translates its own screens.
+Languages. The demo works in more than one language: the client has a language selector, and the mails are translated. The services use `IStringLocalizer` for fixed texts and `Cat.Localizations` for category names, and the client translates its own screens.
 
 #### Background
 - The owner moved this out of phase 2, the Notifications service. The client has no language support, so everything is in English, and translated mails alone would not show.
-- `Cat.Localizations` localizes the texts the server makes, such as mails and category names. The screens of the client are out of its scope. Its open points are in [Cat.Localizations.md](Cat.Localizations.md#phase-1).
+- `Cat.Localizations` translates reference data such as category names. Fixed texts such as mails use `IStringLocalizer` from .NET. The screens of the client are out of its scope. Its open points are in [Cat.Localizations.md](Cat.Localizations.md#phase-1).
 
 #### What exists today
 - The client and the mails of Notifications are in English.
@@ -59,7 +59,8 @@ Languages. The demo works in more than one language: the client has a language s
 - Category names are a single string in `Category.Name`. Book titles stay in one language, see the Decided list of [Cat.Localizations.md](Cat.Localizations.md#phase-1).
 
 #### Needs
-Phase 1 of the module plan [Cat.Localizations.md](Cat.Localizations.md#phase-1), answered and built.
+- Phase 1 of the module plan [Cat.Localizations.md](Cat.Localizations.md#phase-1), answered and built.
+- Phase 1 of the module plan [Cat.Messaging.md](Cat.Messaging.md#phase-1), for the culture on a message, answered and built.
 
 #### Done when
 A user picks a language in the client, and the order confirmed mail arrives in that language.
@@ -67,56 +68,17 @@ A user picks a language in the client, and the order confirmed mail arrives in t
 #### Decided
 - **Scope.** The phase supports translated mails and a client where the user selects the language.
 - **Languages.** Two: English as the default language and Dutch as the extra language. Two prove the mechanism, and a third adds work and nothing to learn.
+- **The mail finds the language in the message.** `Cat.Messaging` carries the culture of the sender as a message property, and the listener sets it for the handler, so `OrderConfirmed` gets no field of its own. See [Cat.Messaging.md](Cat.Messaging.md#phase-1) (owner, 2026-11-21).
+- **The client sends the language in `Accept-Language`.** The middleware in `src/api/client.ts` that sets `Authorization` also sets `Accept-Language` to the language the user picked. The gateway runs on YARP, which passes the header on as it is. Each service calls `UseRequestLocalization` with `en` and `nl`. Before the user picks a language, the language of the browser applies (owner, 2026-11-21).
+- **The client keeps the choice in local storage.** The first default is the language of the browser. The choice does not follow the user to another device, which is fine for the demo (owner, 2026-11-21).
+- **The client translates with `react-i18next`.** One JSON file per language, such as `locales/en.json` and `locales/nl.json`, holds the texts of the screens and the codes from the server, such as the order status and the error codes. A missing key falls back to English. Numbers and dates are formatted with `Intl` through i18next (owner, 2026-11-21).
+- **Category names are shown in Dutch.** Catalog gets the translation table of `Cat.Localizations`, with `Cat.Localizations.Abstractions` in `DataModels` and `Cat.Localizations.EFCore` in `Infrastructure`. The category list query reads the name in the language of the request, and the cached list has the culture in its key. The admin screen gets a field for the Dutch name. A category without a Dutch name shows its English name. Categories are the only reference data in the demo, so they are the only place to show the module (owner, 2026-11-21).
+- **A mail is one resx entry for the subject and one for the body.** The builders of Notifications read them with `IStringLocalizer` and fill the placeholders, such as `localizer["OrderConfirmed.Body", name, number, total]`. Each entry has a resx comment that says what `{0}`, `{1}` and so on hold. The low stock report has one more entry for a single line of its list. The total is formatted with the current culture, such as `{2:N2}`, so a Dutch mail shows `EUR 12,50`. A missing Dutch entry falls back to the English resx (owner, 2026-11-21).
+- **Admin mails use `AdminCulture` from the settings.** It sits next to `AdminEmail` in the settings of Notifications. A handler that mails the admin, such as the stock drop mail and the nightly low stock report, sets `CurrentUICulture` and `CurrentCulture` to it before it builds the mail. Without it, a `StockChanged` message from the order of a Dutch customer would give the admin a Dutch mail. The culture set inside an async handler does not leak back to the listener (owner, 2026-11-21).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 12-->
-#### Question 12
-How does the mail find the language of the customer? The `OrderConfirmed` message carries no language today.
-- **The language in the message.** Orders puts the language of the request in `OrderConfirmed`. Cost: the message grows a field, and Orders must know the language.
-- **A stored preference per user.** Notifications or another service keeps the language of each user. Cost: a place to store it. It also works for mails that no request triggers, such as the nightly jobs.
-- **Always English for jobs, the request language for mails.** Cost: two rules.
 
-Recommendation: the language in the message. The message is already the only link between the services, and it needs no new storage.
-Answer this question together with question 7 of [Cat.Localizations.md](Cat.Localizations.md#phase-1). If that question chooses the property on the message, it answers this question too.
-<!-- region end: Question 12-->
-
-<!-- region start: Question 13-->
-#### Question 13
-How does the client tell the services which language it wants?
-- **The `Accept-Language` header,** sent by the client on every call and passed on by the gateway. Cost: the services must read it, and the gateway must not drop it.
-- **A claim in the token.** Cost: a change needs a new login, and it ties the language to Keycloak.
-- **A query parameter.** Cost: every call and every generated client method carries it.
-
-Recommendation: the `Accept-Language` header. It is the standard way, and a service needs no extra contract.
-<!-- region end: Question 13-->
-
-<!-- region start: Question 14-->
-#### Question 14
-Does the client remember the language choice, and where?
-- **In the browser,** in local storage. Cost: the choice is lost on another device.
-- **In the user profile of Keycloak.** Cost: more setup, and a call to save it.
-- **Not at all.** The client starts in the language of the browser. Cost: a user picks the language again after each visit.
-
-Recommendation: local storage, with the browser language as the first default. It is the smallest step.
-<!-- region end: Question 14-->
-<!-- region start: Question 17-->
-#### Question 17
-How does the React client translate its own screens? `Cat.Localizations` does not cover client screens. The options:
-- **`react-i18next`,** with a JSON file per language in the client. Cost: one more package in the client, but it is the common choice and handles plurals and formats.
-- **A small dictionary of our own,** a JSON file per language and a hook. Cost: plurals, dates and numbers by hand.
-
-Recommendation: `react-i18next`. A developer who looks at the demo sees the usual way, and the client translates the status codes from the server with it too.
-<!-- region end: Question 17-->
-
-<!-- region start: Question 18-->
-#### Question 18
-Does the demo show category names in Dutch? It depends on question 4 of [Cat.Localizations.md](Cat.Localizations.md#phase-1). The options:
-- **Yes.** The admin part gets a field for the Dutch name, and the shop shows the name in the language of the user. Cost: a schema change in Catalog and a change in the admin screen.
-- **No, only the mails and the client screens.** Cost: the data part of the module is not shown.
-
-Recommendation: yes, if the module gets a data part. Categories are the one piece of reference data in the demo, so they are the only place to show it.
-<!-- region end: Question 18-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 10-->
