@@ -188,7 +188,10 @@ var ordersDb = sql.AddDatabase("orders-db", databaseName: "orders");
 catalog.WithReference(catalogDb, connectionName: "catalog").WaitFor(catalogDb);
 orders.WithReference(ordersDb, connectionName: "orders").WaitFor(ordersDb);
 
-var notificationsDb = sql.AddDatabase("notifications-db", databaseName: "notifications");
+// Notifications is the PostgreSQL showcase. It has a database server of its own.
+var postgres = builder.AddPostgres("postgres")
+    .WithDataVolume("cat-demo-postgres-data");
+var notificationsDb = postgres.AddDatabase("notifications-db", databaseName: "notifications");
 notifications.WithReference(notificationsDb, connectionName: "notifications").WaitFor(notificationsDb);
 
 // The inventory database is database first. The creation script creates the database and runs the SQL scripts

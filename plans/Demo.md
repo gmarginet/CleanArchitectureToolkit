@@ -40,7 +40,6 @@
 <!-- no toc -->
 - [Phase 9](#phase-9)
 - [Phase 10](#phase-10)
-- [Phase 13](#phase-13)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 9-->
@@ -172,41 +171,3 @@ Recommendation: yes, if the module gets a data part. Categories are the one piec
 <!-- region end: Question 18-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 10-->
-
-<!-- region start: Phase 13-->
-## Phase 13
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-The PostgreSQL showcase. The Notifications service moves from SQL Server to PostgreSQL, and shows that the modules work on another database.
-
-#### Background
-- A showcase on PostgreSQL needs the Npgsql EF Core provider. The demo is on EF Core 11. The provider has no stable release for EF Core 11 yet. The latest is `11.0.0-rc.3`, pinned to a release candidate of EF Core 11. The facts were read on 2026-11-19 from nuget.org through a web search, and nobody has tested them against this code. Check the NuGet page before pinning a version.
-- The Aspire client package for PostgreSQL, `Aspire.Npgsql.EntityFrameworkCore.PostgreSQL`, depends on Npgsql 10.0.3 or higher. Nobody has tested it with Npgsql 11.
-- The demo stays on `net11.0` and EF Core 11, while the modules support .NET 10 and EF Core 10 as well, see the target framework rule in `CLAUDE.md`. The PostgreSQL project of the modules is built and proved on EF Core 10 and EF Core 11.
-- `Cat.Db.Errors` has checks for SQL Server and MySQL, see the [module readme of Cat.Db.Errors](../modules/Cat.Db.Errors/README.md). The PostgreSQL checks are built in `Cat.Db.Errors.PostgreSQL`, see the same readme. Notifications needs them when a handler maps a database error, to check when building.
-- The module work that is left is in [Cat.EFCore.md](Cat.EFCore.md), for a provider neutral `Cat.EFCore.Extensions`.
-- Temporal tables and `Cat.Sql.Cdc` are SQL Server only. The PostgreSQL service must not use them.
-
-#### What exists today
-- Every service runs on SQL Server, and the AppHost starts it with `AddSqlServer`.
-- The outbox, the inbox and the scheduler claim store are plain EF Core code. The integration tests of [Cat.IntegrationTesting](../modules/Cat.IntegrationTesting/README.md) run them on a real PostgreSQL 17 and pass.
-
-#### Needs
-- A stable Npgsql EF Core provider for EF Core 11, with an Aspire PostgreSQL package that accepts it.
-
-#### Done when
-Notifications runs on a PostgreSQL container that the AppHost starts. The outbox, the inbox and the scheduler claim store work there, and the readme says where the demo uses PostgreSQL.
-
-#### Decided
-- **Database.** PostgreSQL is the second database of the showcase, and not MySQL (owner, 2026-11-20).
-- **Provider.** The demo waits for a stable Npgsql provider for EF Core 11, so the Aspire integration stays. A release candidate is not used (owner, 2026-11-20).
-- **Which service.** Notifications moves to PostgreSQL after it is built on SQL Server.
-- **Entities.** Notifications uses the CAT base entities and `ConfigureCatEntity`, with no temporal tables and no raw SQL Server code. The move waits for the neutral `Cat.EFCore.Extensions` of [Cat.EFCore.md](Cat.EFCore.md), and that change must keep these calls source compatible.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 13-->

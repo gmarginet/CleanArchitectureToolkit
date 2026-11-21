@@ -6,7 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Commands\Cat.EFCore.Commands.csproj" />
-      <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Extensions.SqlServer\Cat.EFCore.Extensions.SqlServer.csproj" />
+      <ProjectReference Include="..\..\..\modules\Cat.EFCore\Cat.EFCore.Extensions.PostgreSQL\Cat.EFCore.Extensions.PostgreSQL.csproj" />
       <ProjectReference Include="..\Cat.Demo.NotificationService.CoreService\Cat.Demo.NotificationService.CoreService.csproj" />
       <ProjectReference Include="..\Cat.Demo.NotificationService.DataModels\Cat.Demo.NotificationService.DataModels.csproj" />
     </ItemGroup>
@@ -16,7 +16,7 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
       <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
     </ItemGroup>
 

@@ -127,7 +127,7 @@ The admin also gets a mail at the moment a book drops below the limit, a few sec
 
 With the functions known, the team asks which technical shape carries them. The demo makes these decisions:
 
-- **Separate services that own their data.** Catalog, Orders, Inventory and Notifications each have their own database. Where one needs data of another, it asks. The cost shows in the details. Inventory knows a book by its ISBN and not by its id, and an order line holds a book id with no foreign key.
+- **Separate services that own their data.** Catalog, Orders, Inventory and Notifications each have their own database, and Notifications runs on PostgreSQL while the others run on SQL Server. Where one needs data of another, it asks. The cost shows in the details. Inventory knows a book by its ISBN and not by its id, and an order line holds a book id with no foreign key.
 - **One door for clients.** An API gateway checks the login. Clients know one address, and the token check sits in one place. The cost is one more hop and one more process.
 - **The same structure in every service.** Every use case has the same shape, so a new one is easy to add. The cost is many small types for a small service.
 - **Keycloak for the login.** Real tokens and a real login flow, with no account to create.
@@ -240,7 +240,7 @@ Orders uses two ways to stay loosely coupled. They are for different jobs.
 
 Every service has its own SQL Server database, and the demo builds them in two ways to show that CAT works with both.
 
-- **Code first.** Catalog, Orders and Notifications describe the tables in C# and apply EF Core migrations. Every entity inherits a base class from `Cat.EFCore`. Catalog uses a temporal table for the book price, so every old price stays in the history. The cost is that temporal tables tie the demo to SQL Server, so SQLite and PostgreSQL do not work.
+- **Code first.** Catalog, Orders and Notifications describe the tables in C# and apply EF Core migrations. Every entity inherits a base class from `Cat.EFCore`. Catalog uses a temporal table for the book price, so every old price stays in the history. The cost is that temporal tables tie Catalog to SQL Server, so SQLite and PostgreSQL do not work there. Notifications shows the other side, the same base entity and `ConfigureCatEntity` on PostgreSQL, with no temporal table.
 - **Database first.** A stock database often exists already, owned by a warehouse team. So Inventory takes its schema from SQL scripts, and the entities are scaffolded from the database. The atomic update that reserves stock stays plain SQL, and the commands and responses stay the same as in the other services. The cost is two ways to build a service, which means two ways to explain, and both need care after a schema change.
 - **Plain SQL for one read.** The order overview of Orders reads with Dapper and a `.sql` file, because it is a read only query that needs only the columns it shows. The cost is that the SQL knows the table and column names of the EF Core model, so a rename in the model breaks the query at run time and no test of the demo catches it.
 
@@ -491,11 +491,11 @@ The chapters above tell why. The chapters below hold the facts of every block th
 
 ### Aspire AppHost and dashboard
 
-**What it is.** One project that describes the system: the gateway, Catalog, Orders, Inventory, Notifications, the payment provider, Keycloak, SQL Server, the Service Bus emulator, Mailpit and the React client. The Aspire dashboard shows logs, traces, metrics and health checks.
+**What it is.** One project that describes the system: the gateway, Catalog, Orders, Inventory, Notifications, the payment provider, Keycloak, SQL Server, PostgreSQL, the Service Bus emulator, Mailpit and the React client. The Aspire dashboard shows logs, traces, metrics and health checks.
 
 **How it works.**
 - `demo/Cat.Demo.AppHost/Cat.Demo.AppHost` adds the Api project of each service. The services keep their fixed ports with no Aspire proxy: gateway 5100, Catalog 5101, Orders 5102, payment 5103, web client 5104, Inventory 5105 and Notifications 5106. Mailpit uses 1025 for SMTP and 8025 for its web inbox. The dashboard runs on 15101.
-- The AppHost adds a SQL Server container with a named data volume and the databases `catalog`, `orders`, `inventory` and `notifications`. The services wait for their database. The `inventory` database also gets its SQL scripts, see [Inventory service](#inventory-service).
+- The AppHost adds a SQL Server container with a named data volume and the databases `catalog`, `orders` and `inventory`, and a PostgreSQL container with a named data volume and the database `notifications`. The services wait for their database. The `inventory` database also gets its SQL scripts, see [Inventory service](#inventory-service).
 - The services read `GetConnectionString("catalog")`, `GetConnectionString("orders")`, `GetConnectionString("inventory")` and `GetConnectionString("notifications")`.
 - Orders gets the address of the gateway through service discovery. That switches on `CatalogPriceProvider` and `InventoryStockReservation`, which call Catalog and Inventory through the gateway.
 - The Azure Service Bus emulator runs next to them, see [Service Bus emulator](#service-bus-emulator). Orders, Inventory and Notifications get its connection string as `messaging`. Orders creates the queues `TakePayment` and `RefundPayment` and the topics `PaymentProcessed` and `PaymentRefunded` itself. Inventory and Notifications wait for Orders.
@@ -977,7 +977,7 @@ The service uses no entity base classes. It shows that you use only the modules 
 - It also receives `StockChanged` from Inventory, which holds one change of the stock table. `StockChangedHandler` decides what it means: only a drop from the limit or more to below the limit, in `IsDrop`, sends a mail to the admin with `StockDropMailBuilder`. Every other change is a normal case. The handler answers success and sends nothing, so the message is completed. The mail is not stored, so a message that arrives twice sends two mails, which does no harm for an alert. `StockChangedValidator` only rejects a malformed message, such as one without an ISBN or with a negative quantity. It answers `BadRequest`, which dead letters the message, because sending it again gives the same answer. The `Api` project runs the validation decorator, so the validator runs before the handler.
 - At startup, in `Development`, Notifications applies its migrations and creates its subscriptions. Orders and Inventory create the topics first, so Notifications waits for both in the AppHost. In `Development` the API has the endpoints `POST /dev/event-processor/OrderConfirmed`, `POST /dev/event-processor/LowStockReport` and `POST /dev/event-processor/StockChanged`, which run a message through the same pipeline without a bus. Without the connection string `messaging` Notifications does not listen.
 
-**Database.** The `notifications` database is built code first with EF Core migrations, like Orders. In `Development` the service applies the migrations at startup. The AppHost creates the empty database. The table `SentMail` holds one row for every mail that went out. The entity inherits `CatEntityBase` and uses `ConfigureCatEntity`, with no temporal table and no SQL Server only code.
+**Database.** The `notifications` database is built code first with EF Core migrations, like Orders. In `Development` the service applies the migrations at startup. The service runs on PostgreSQL, so it is the showcase that the modules work on another database. The AppHost starts a PostgreSQL container and creates the empty database. The table `SentMail` holds one row for every mail that went out. The entity inherits `CatEntityBase` and uses `ConfigureCatEntity` of `Cat.EFCore.Extensions.PostgreSQL`, with no temporal table and no SQL Server only code. The migration is its own, made for PostgreSQL, and `SequenceId` is `GENERATED ALWAYS AS IDENTITY`.
 
 ```mermaid
 erDiagram
@@ -997,7 +997,7 @@ erDiagram
 | Module | Where it is used | Why |
 |---|---|---|
 | `Cat.Commands` and `Cat.ServiceRequests` | Core service | The message is a service request that ends in a command. |
-| `Cat.EFCore.Commands`, `Cat.EFCore.Entities` and `Cat.EFCore.Extensions.SqlServer` | Infrastructure and DataModels | The command handler inherits the base handler. `SentMail` inherits the base entity. |
+| `Cat.EFCore.Commands`, `Cat.EFCore.Entities` and `Cat.EFCore.Extensions.PostgreSQL` | Infrastructure and DataModels | The command handler inherits the base handler. `SentMail` inherits the base entity, and the model uses the PostgreSQL extensions. |
 | `Cat.Responses` | Core service | The handlers answer with a response, and the event processor settles the message from it. |
 | `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` and `Cat.EventProcessor.Minimal.Api` | Api | Receives `OrderConfirmed`, `LowStockReport` and `StockChanged` from the bus as service requests, and adds the development endpoints and the health check. |
 | `Cat.EventProcessor.Authorization` | Api | Checks the token of all three messages when there is a login. Notifications sends no messages, so it has no client of its own. |
@@ -1007,7 +1007,7 @@ erDiagram
 
 **Pros.** A second receiver of `OrderConfirmed` shows that a message has more than one reader. The table of sent mails shows idempotent handling without an inbox.
 
-**Cons.** The mail text is built in code and only in English. A mail that is sent but not yet saved can go out twice after a crash. The test inbox shows the mail, but it does not show how a real mail provider behaves.
+**Cons.** The demo now has two database servers to start, and the Notifications data is not in the SQL Server volume. The mail text is built in code and only in English. A mail that is sent but not yet saved can go out twice after a crash. The test inbox shows the mail, but it does not show how a real mail provider behaves.
 
 **More.** Code in `demo/Cat.Demo.NotificationService`.
 

@@ -3,17 +3,17 @@ using System;
 using Cat.Demo.NotificationService.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Cat.Demo.NotificationService.Infrastructure.Migrations;
 
 [DbContext(typeof(NotificationDbContext))]
-[Migration("20261113191946_InitialCreate")]
-partial class _20261113191946_InitialCreate
+[Migration("20261121115528_InitialCreate")]
+partial class InitialCreate
 {
     /// <inheritdoc />
     protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,56 +21,52 @@ partial class _20261113191946_InitialCreate
 #pragma warning disable 612, 618
         modelBuilder
             .HasAnnotation("ProductVersion", "11.0.0")
-            .HasAnnotation("Relational:MaxIdentifierLength", 128);
+            .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-        SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+        NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
         modelBuilder.Entity("Cat.Demo.NotificationService.DataModels.Entities.SentMail", b =>
             {
                 b.Property<Guid>("Id")
                     .ValueGeneratedOnAdd()
-                    .HasColumnType("uniqueidentifier");
+                    .HasColumnType("uuid");
 
                 b.Property<string>("Kind")
                     .IsRequired()
                     .HasMaxLength(50)
-                    .HasColumnType("nvarchar(50)");
+                    .HasColumnType("character varying(50)");
 
                 b.Property<Guid>("OrderId")
-                    .HasColumnType("uniqueidentifier");
+                    .HasColumnType("uuid");
 
                 b.Property<string>("Recipient")
                     .IsRequired()
                     .HasMaxLength(320)
-                    .HasColumnType("nvarchar(320)");
+                    .HasColumnType("character varying(320)");
 
                 b.Property<DateTime>("SentAt")
-                    .HasColumnType("datetime2");
+                    .HasColumnType("timestamp with time zone");
 
                 var sequenceId = b.Property<int>("SequenceId")
                     .ValueGeneratedOnAdd()
-                    .HasColumnType("int");
+                    .HasColumnType("integer");
 
-                SqlServerPropertyBuilderExtensions.UseIdentityColumn(sequenceId);
+                NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(sequenceId);
 
                 b.Property<string>("Subject")
                     .IsRequired()
                     .HasMaxLength(200)
-                    .HasColumnType("nvarchar(200)");
+                    .HasColumnType("character varying(200)");
 
-                var key = b.HasKey("Id");
+                b.HasKey("Id");
 
-                SqlServerKeyBuilderExtensions.IsClustered(key, false);
-
-                var index = b.HasIndex("SequenceId")
+                b.HasIndex("SequenceId")
                     .IsUnique();
-
-                SqlServerIndexBuilderExtensions.IsClustered(index);
 
                 b.HasIndex("OrderId", "Kind")
                     .IsUnique();
 
-                b.ToTable("SentMail", "dbo");
+                b.ToTable("SentMail", "public");
             });
 #pragma warning restore 612, 618
     }

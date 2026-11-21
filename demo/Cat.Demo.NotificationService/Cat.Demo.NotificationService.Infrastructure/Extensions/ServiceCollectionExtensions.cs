@@ -14,12 +14,12 @@ namespace Cat.Demo.NotificationService.Infrastructure.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    /// <summary>Registers the notification database context for the given SQL Server connection string.</summary>
+    /// <summary>Registers the notification database context for the given PostgreSQL connection string.</summary>
     public static IServiceCollection AddCatDemoNotificationDatabase(this IServiceCollection services, string connectionString)
     {
         services.TryAddSingleton(TimeProvider.System);
         services.AddHealthChecks().AddDbContextCheck<NotificationDbContext>();
-        services.AddDbContext<NotificationDbContext>(options => options.UseSqlServer(connectionString));
+        services.AddDbContext<NotificationDbContext>(options => options.UseNpgsql(connectionString));
         return services;
     }
 
