@@ -1,22 +1,15 @@
-@PaymentApi_HostAddress = http://localhost:5103
-@Keycloak_HostAddress = http://localhost:8180
+@PaymentProvider_HostAddress = http://localhost:5103
+@ApiKey = demo-provider-key
 
-### Start the AppHost first. Every service checks the token, so run the login first.
-### Orders calls the payment service through the gateway, which forwards the token of the caller. These requests go straight to port 5103.
-
-### Login of alice (password: alice) => OK, with the access token for the requests below
-# @name alice
-POST {{Keycloak_HostAddress}}/realms/cat-demo/protocol/openid-connect/token
-Content-Type: application/x-www-form-urlencoded
-
-grant_type=password&client_id=cat-demo-cli&username=alice&password=alice
-
-### The order number is the idempotency key. The same number is charged once and always gets the same answer.
+### Start the AppHost first. The payment provider is a stand-in for an outside provider.
+### It knows its caller by the API key, which is a bearer token. The AppHost passes the same key to Orders.
+### The Idempotency-Key header is the id of the saga. The same key is charged once and always gets the same answer.
 ### The failures are settings of the service, not of a call. See the demo readme, chapter Payment service.
 
-### PaymentRequest => OK, approved (an amount up to 500 euro)
-POST {{PaymentApi_HostAddress}}/payment/payments HTTP/1.1
-Authorization: Bearer {{alice.response.body.$.access_token}}
+### Charge => OK, approved (an amount up to 500 euro)
+POST {{PaymentProvider_HostAddress}}/charges HTTP/1.1
+Authorization: Bearer {{ApiKey}}
+Idempotency-Key: 3f4d6a30-0000-4000-8000-000000009001
 Content-Type: application/json
 
 {
@@ -24,9 +17,10 @@ Content-Type: application/json
   "amount": 42.50
 }
 
-### PaymentRequest => OK, the same answer and the same reference as above, and nothing is charged again
-POST {{PaymentApi_HostAddress}}/payment/payments HTTP/1.1
-Authorization: Bearer {{alice.response.body.$.access_token}}
+### Charge => OK, the same answer and the same reference as above, and nothing is charged again
+POST {{PaymentProvider_HostAddress}}/charges HTTP/1.1
+Authorization: Bearer {{ApiKey}}
+Idempotency-Key: 3f4d6a30-0000-4000-8000-000000009001
 Content-Type: application/json
 
 {
@@ -34,9 +28,10 @@ Content-Type: application/json
   "amount": 42.50
 }
 
-### PaymentRequest => OK, declined (an amount above 500 euro)
-POST {{PaymentApi_HostAddress}}/payment/payments HTTP/1.1
-Authorization: Bearer {{alice.response.body.$.access_token}}
+### Charge => OK, declined (an amount above 500 euro). A decline is an answer, not an error.
+POST {{PaymentProvider_HostAddress}}/charges HTTP/1.1
+Authorization: Bearer {{ApiKey}}
+Idempotency-Key: 3f4d6a30-0000-4000-8000-000000009002
 Content-Type: application/json
 
 {
@@ -44,12 +39,44 @@ Content-Type: application/json
   "amount": 500.01
 }
 
-### PaymentRequest => Bad request, no order number and no amount
-POST {{PaymentApi_HostAddress}}/payment/payments HTTP/1.1
-Authorization: Bearer {{alice.response.body.$.access_token}}
+### Charge => Bad request, no order number and no amount
+POST {{PaymentProvider_HostAddress}}/charges HTTP/1.1
+Authorization: Bearer {{ApiKey}}
+Idempotency-Key: 3f4d6a30-0000-4000-8000-000000009003
 Content-Type: application/json
 
 {
   "orderNumber": "",
   "amount": 0
+}
+
+### Charge => Unauthorized, a wrong API key
+POST {{PaymentProvider_HostAddress}}/charges HTTP/1.1
+Authorization: Bearer not-the-key
+Idempotency-Key: 3f4d6a30-0000-4000-8000-000000009004
+Content-Type: application/json
+
+{
+  "orderNumber": "20261106-9004",
+  "amount": 10
+}
+
+### Refund => OK, refunded (the first charge above was approved)
+POST {{PaymentProvider_HostAddress}}/refunds HTTP/1.1
+Authorization: Bearer {{ApiKey}}
+Idempotency-Key: 3f4d6a30-0000-4000-8000-000000009011
+Content-Type: application/json
+
+{
+  "orderNumber": "20261106-9001"
+}
+
+### Refund => OK, nothing_to_refund (the second charge was declined)
+POST {{PaymentProvider_HostAddress}}/refunds HTTP/1.1
+Authorization: Bearer {{ApiKey}}
+Idempotency-Key: 3f4d6a30-0000-4000-8000-000000009012
+Content-Type: application/json
+
+{
+  "orderNumber": "20261106-9002"
 }

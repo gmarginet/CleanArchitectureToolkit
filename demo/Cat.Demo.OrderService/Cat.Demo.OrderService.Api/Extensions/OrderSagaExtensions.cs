@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cat.Demo.OrderService.CoreService.Workflows;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
-using Cat.Demo.PaymentService.Contracts.Messages;
+using Cat.Demo.OrderService.CoreService.Messages;
 using Cat.Demo.ServiceDefaults;
 using Cat.EventProcessor.Authorization.Extensions;
 using Cat.EventProcessor.AzureServiceBus;
@@ -51,6 +51,18 @@ public static class OrderSagaExtensions
         // A message needs a valid token of a logged in caller, and a message of Orders carries the token of the user,
         // or the client credentials token of Orders when there is no user request.
         services.AddCatEventProcessor(configuration, processor => processor
+            .Receive<TakePayment>(receive =>
+            {
+                // The handler calls the payment provider and publishes the answer in the scope of the receiver,
+                // so the answer and the inbox row are saved together.
+                receive.UseInbox = true;
+                receive.Require(policy => policy.RequireAuthenticatedUser());
+            })
+            .Receive<RefundPayment>(receive =>
+            {
+                receive.UseInbox = true;
+                receive.Require(policy => policy.RequireAuthenticatedUser());
+            })
             .Receive<PaymentProcessed>(receive =>
             {
                 receive.UseInbox = true;
@@ -75,7 +87,8 @@ public static class OrderSagaExtensions
 
     /// <summary>
     /// Creates the subscription of Orders on the topic of every message it receives. It skips what exists.
-    /// The topic of <see cref="PaymentProcessed"/> comes from Payment, which creates it at its own startup. Call this in development only.
+    /// Orders creates the topics of <see cref="PaymentProcessed"/> and <see cref="PaymentRefunded"/> itself, because the payment provider is outside.
+    /// Call this in development only.
     /// </summary>
     public static async Task InitializeOrderEventProcessorAsync(this IServiceProvider services, CancellationToken cancellationToken = default)
     {

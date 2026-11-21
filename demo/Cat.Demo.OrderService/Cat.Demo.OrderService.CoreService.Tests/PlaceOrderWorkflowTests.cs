@@ -3,7 +3,7 @@ using Cat.Demo.OrderService.CoreService.Commands;
 using Cat.Demo.OrderService.CoreService.Events;
 using Cat.Demo.OrderService.CoreService.Workflows;
 using Cat.Demo.OrderService.CoreService.Workflows.Steps;
-using Cat.Demo.PaymentService.Contracts.Messages;
+using Cat.Demo.OrderService.CoreService.Messages;
 using Cat.EventAggregators.Abstractions;
 using Cat.EventAggregators.Extensions;
 using Cat.FluentWorkflows.Commands.Extensions;

@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http.Headers;
 using Cat.Api.Client.Extensions;
 using Cat.Dapper.SqlServer.Extensions;
 using Cat.Demo.CatalogService.Api.Client;
@@ -8,6 +9,7 @@ using Cat.Demo.OrderService.Infrastructure.ApiClients;
 using Cat.Demo.OrderService.Infrastructure.Catalog;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
 using Cat.Demo.OrderService.Infrastructure.Inventory;
+using Cat.Demo.OrderService.Infrastructure.PaymentProvider;
 using Cat.Demo.ServiceDefaults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -59,6 +61,28 @@ public static class ServiceCollectionExtensions
             .AddHttpMessageHandler<ForwardBearerTokenHandler>()
             .UseFastFailResilience();
         services.AddScoped<IStockReservation, InventoryStockReservation>();
+        return services;
+    }
+
+    /// <summary>
+    /// Registers the outside payment provider. <see cref="PaymentProviderGateway"/> calls it with the generated client,
+    /// straight from the infrastructure and not through the gateway, because the provider is an integration and not one of our services.
+    /// The AppHost gives Orders the address and the API key as <c>PaymentProvider:Url</c> and <c>PaymentProvider:ApiKey</c>.
+    /// </summary>
+    public static IServiceCollection AddCatDemoOrderPaymentProvider(this IServiceCollection services, IConfiguration configuration)
+    {
+        var url = configuration["PaymentProvider:Url"]
+            ?? throw new InvalidOperationException("The setting PaymentProvider:Url is missing. Start the demo with the AppHost.");
+        var apiKey = configuration["PaymentProvider:ApiKey"]
+            ?? throw new InvalidOperationException("The setting PaymentProvider:ApiKey is missing. Start the demo with the AppHost.");
+
+        // The resilience handler of ServiceDefaults adds retries and a circuit breaker to this client.
+        services.AddHttpClient<IPaymentProviderClient, PaymentProviderClient>(client =>
+        {
+            client.BaseAddress = new Uri(url);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+        });
+        services.AddScoped<IPaymentProvider, PaymentProviderGateway>();
         return services;
     }
 

@@ -2,7 +2,7 @@ using System.Linq;
 using Cat.Demo.OrderService.CoreService.Commands;
 using Cat.Demo.OrderService.CoreService.Events;
 using Cat.Demo.OrderService.CoreService.Workflows.Steps;
-using Cat.Demo.PaymentService.Contracts.Messages;
+using Cat.Demo.OrderService.CoreService.Messages;
 using Cat.FluentWorkflows.Abstractions;
 using Cat.FluentWorkflows.Commands;
 using Cat.FluentWorkflows.Extensions;

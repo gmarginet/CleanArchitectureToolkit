@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Cat.Demo.OrderService.CoreService.Commands;
 using Cat.Demo.OrderService.DataModels.Entities;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
-using Cat.Demo.PaymentService.Contracts.Messages;
+using Cat.Demo.OrderService.CoreService.Messages;
 using Cat.EFCore.Commands;
 using Cat.Messaging.Abstractions;
 using Cat.Responses;

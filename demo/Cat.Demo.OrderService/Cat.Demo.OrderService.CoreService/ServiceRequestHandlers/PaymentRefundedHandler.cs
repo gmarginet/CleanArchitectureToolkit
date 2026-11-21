@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cat.Commands.Abstractions;
 using Cat.Demo.OrderService.CoreService.Commands;
-using Cat.Demo.PaymentService.Contracts.Messages;
+using Cat.Demo.OrderService.CoreService.Messages;
 using Cat.Responses;
 using Cat.Responses.Abstractions;
 using Cat.ServiceRequests.Abstractions;

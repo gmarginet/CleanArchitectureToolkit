@@ -1,10 +1,11 @@
 <#
-Refreshes the saved OpenAPI document of the Payment service and generates the client again.
+Refreshes the saved OpenAPI document of the payment provider and generates the client again.
 
-Start the AppHost first. The Payment service only publishes its OpenAPI document in Development, which is what the
+The payment provider is an outside system, so Orders keeps its own copy of the OpenAPI document and generates its own client.
+Start the AppHost first. The stand-in of the provider only publishes its OpenAPI document in Development, which is what the
 AppHost runs. Commit the changed document and the changed client together.
 
-Usage: .\Refresh-PaymentClient.ps1 [-ServiceUrl <address of the document>]
+Usage: .\Refresh-PaymentProviderClient.ps1 [-ServiceUrl <address of the document>]
 #>
 param(
     [string]$ServiceUrl = 'http://localhost:5103/openapi/v1.json'
@@ -14,7 +15,7 @@ $ErrorActionPreference = 'Stop'
 Set-Location $PSScriptRoot
 
 Write-Host "Downloading $ServiceUrl"
-Invoke-WebRequest -Uri $ServiceUrl -OutFile 'payment.openapi.json' -UseBasicParsing
+Invoke-WebRequest -Uri $ServiceUrl -OutFile 'payment-provider.openapi.json' -UseBasicParsing
 
 # NSwag is a local tool of the repository, see dotnet-tools.json in the root.
 dotnet tool restore

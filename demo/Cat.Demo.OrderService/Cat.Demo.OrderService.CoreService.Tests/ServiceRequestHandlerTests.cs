@@ -9,7 +9,7 @@ using Cat.Demo.OrderService.CoreService.Workflows.Steps;
 using Cat.Demo.OrderService.DataModels.Entities;
 using Cat.EventAggregators.Abstractions;
 using Cat.EventAggregators.Extensions;
-using Cat.Demo.PaymentService.Contracts.Messages;
+using Cat.Demo.OrderService.CoreService.Messages;
 using Cat.FluentWorkflows.Commands.Extensions;
 using Cat.FluentWorkflows.Extensions;
 using Cat.Messaging.Abstractions;

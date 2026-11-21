@@ -1,23 +1,51 @@
 namespace Cat.Demo.PaymentService.CoreService;
 
-/// <summary>A request to take a payment. The order number is the idempotency key: the same number is never charged twice.</summary>
-public record PaymentRequest(string OrderNumber, decimal Amount);
+/// <summary>A request to take a payment. The order number says which order the money is for.</summary>
+public record ChargeRequest(string OrderNumber, decimal Amount);
 
-/// <summary>The answer to a payment request. A declined payment is an answer, not an error.</summary>
-public record PaymentResponse(bool Approved, string? Reference);
+/// <summary>
+/// The answer to a charge. <see cref="Status"/> is <see cref="ChargeStatuses.Approved"/> or <see cref="ChargeStatuses.Declined"/>.
+/// A decline is an answer, not an error.
+/// </summary>
+public record ChargeResponse(string Status, string? Reference);
 
-/// <summary>The outcome of processing: either an answer, or a failure that was switched on on purpose.</summary>
-public record PaymentOutcome(PaymentResponse? Response, bool Failed)
+/// <summary>The two statuses of a charge.</summary>
+public static class ChargeStatuses
 {
-    public static PaymentOutcome Answer(PaymentResponse response) => new(response, false);
+    public const string Approved = "approved";
 
-    public static PaymentOutcome Failure() => new(null, true);
+    public const string Declined = "declined";
 }
 
-/// <summary>The outcome of a refund. <see cref="Refunded"/> is false when there was no approved payment to give back.</summary>
-public record RefundOutcome(bool Refunded, bool Failed)
-{
-    public static RefundOutcome Done(bool refunded) => new(refunded, false);
+/// <summary>A request to give the money of an order back.</summary>
+public record RefundRequest(string OrderNumber);
 
-    public static RefundOutcome Failure() => new(false, true);
+/// <summary>
+/// The answer to a refund. <see cref="Status"/> is <see cref="RefundStatuses.Refunded"/>, or
+/// <see cref="RefundStatuses.NothingToRefund"/> when there was no approved payment to give back.
+/// </summary>
+public record RefundResponse(string Status);
+
+/// <summary>The two statuses of a refund.</summary>
+public static class RefundStatuses
+{
+    public const string Refunded = "refunded";
+
+    public const string NothingToRefund = "nothing_to_refund";
+}
+
+/// <summary>The outcome of a charge: either an answer, or a failure that was switched on on purpose.</summary>
+public record ChargeOutcome(ChargeResponse? Response, bool Failed)
+{
+    public static ChargeOutcome Answer(ChargeResponse response) => new(response, false);
+
+    public static ChargeOutcome Failure() => new(null, true);
+}
+
+/// <summary>The outcome of a refund: either an answer, or a failure that was switched on on purpose.</summary>
+public record RefundOutcome(RefundResponse? Response, bool Failed)
+{
+    public static RefundOutcome Answer(RefundResponse response) => new(response, false);
+
+    public static RefundOutcome Failure() => new(null, true);
 }

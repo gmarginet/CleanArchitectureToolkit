@@ -2,7 +2,7 @@
   "runtime": "Net110",
   "documentGenerator": {
     "fromDocument": {
-      "json": "payment.openapi.json",
+      "json": "payment-provider.openapi.json",
       "url": "",
       "output": null
     }
@@ -13,19 +13,16 @@
       "generateClientClasses": true,
       "generateClientInterfaces": true,
       "generateDtoTypes": true,
-      "excludedTypeNames": [ "CatProblemDetails", "ICatError" ],
       "injectHttpClient": true,
       "useBaseUrl": false,
       "disposeHttpClient": false,
-      "generateExceptionClasses": false,
-      "exceptionClass": "CatApiException",
-      "additionalNamespaceUsages": [ "Cat.Api.Client" ],
+      "generateExceptionClasses": true,
       "jsonLibrary": "SystemTextJson",
       "generateNullableReferenceTypes": true,
       "operationGenerationMode": "SingleClientFromOperationId",
-      "className": "PaymentClient",
-      "namespace": "Cat.Demo.PaymentService.Api.Client",
-      "output": "PaymentClient.cs"
+      "className": "PaymentProviderClient",
+      "namespace": "Cat.Demo.OrderService.Infrastructure.PaymentProvider",
+      "output": "PaymentProviderClient.cs"
     }
   }
 }

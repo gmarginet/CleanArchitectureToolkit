@@ -1,7 +1,7 @@
 using Cat.Messaging.Abstractions;
 using Cat.ServiceRequests.Abstractions;
 
-namespace Cat.Demo.PaymentService.Contracts.Messages;
+namespace Cat.Demo.OrderService.CoreService.Messages;
 
 /// <summary>
 /// The answer to <see cref="TakePayment"/>. A declined payment is an answer too, with <see cref="Approved"/> false.

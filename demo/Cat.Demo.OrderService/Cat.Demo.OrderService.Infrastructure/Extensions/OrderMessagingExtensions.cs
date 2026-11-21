@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Cat.Demo.OrderService.Contracts.Messages;
+using Cat.Demo.OrderService.CoreService.Messages;
 using Cat.Demo.OrderService.Infrastructure.DataAccess;
 using Cat.Messaging.Abstractions;
 using Cat.Messaging.AzureServiceBus;
@@ -52,6 +53,8 @@ public static class OrderMessagingExtensions
         }
 
         // The saga module holds the timeout message. It is a command, so it gets a queue of Orders.
-        await topology.EnsureTopologyAsync([typeof(OrderConfirmed).Assembly, typeof(CatSagaTimeout).Assembly], cancellationToken);
+        // The core of Orders holds the four payment messages: two commands with a queue each, two events with a topic each.
+        await topology.EnsureTopologyAsync(
+            [typeof(OrderConfirmed).Assembly, typeof(CatSagaTimeout).Assembly, typeof(TakePayment).Assembly], cancellationToken);
     }
 }

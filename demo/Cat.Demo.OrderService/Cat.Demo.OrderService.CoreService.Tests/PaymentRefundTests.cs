@@ -5,7 +5,7 @@ using Cat.Demo.OrderService.CoreService.Events;
 using Cat.Demo.OrderService.CoreService.EventSubscribers;
 using Cat.Demo.OrderService.CoreService.Extensions;
 using Cat.Demo.OrderService.CoreService.ServiceRequestHandlers;
-using Cat.Demo.PaymentService.Contracts.Messages;
+using Cat.Demo.OrderService.CoreService.Messages;
 using Cat.EventAggregators.Abstractions;
 using Cat.EventAggregators.Extensions;
 using Cat.Responses;

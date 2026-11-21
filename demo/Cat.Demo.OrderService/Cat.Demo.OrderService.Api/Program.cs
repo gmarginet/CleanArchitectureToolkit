@@ -69,6 +69,7 @@ builder.Services.AddCatDemoOrderMessaging(builder.Configuration);
 builder.Services.AddCatDemoOrderSagas(builder.Configuration);
 builder.Services.AddCatDemoOrderPriceProvider(builder.Configuration);
 builder.Services.AddCatDemoOrderStockReservation(builder.Configuration);
+builder.Services.AddCatDemoOrderPaymentProvider(builder.Configuration);
 builder.Services.AddCatDemoOrderScheduler(builder.Configuration);
 
 // The service checks the token and reads the user from it.

@@ -1,7 +1,7 @@
 using Cat.Messaging.Abstractions;
 using Cat.ServiceRequests.Abstractions;
 
-namespace Cat.Demo.PaymentService.Contracts.Messages;
+namespace Cat.Demo.OrderService.CoreService.Messages;
 
 /// <summary>
 /// Asks the payment service to take a payment. Orders sends it from the wait step of the place order saga, and it goes to a queue.

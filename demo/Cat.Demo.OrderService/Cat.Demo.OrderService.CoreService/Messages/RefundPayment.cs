@@ -1,7 +1,7 @@
 using Cat.Messaging.Abstractions;
 using Cat.ServiceRequests.Abstractions;
 
-namespace Cat.Demo.PaymentService.Contracts.Messages;
+namespace Cat.Demo.OrderService.CoreService.Messages;
 
 /// <summary>
 /// Asks the payment service to give the money of a cancelled order back. Orders sends it through its outbox, and it goes to a queue.

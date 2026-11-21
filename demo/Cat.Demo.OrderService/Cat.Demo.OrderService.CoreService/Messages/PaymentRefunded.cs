@@ -1,7 +1,7 @@
 using Cat.Messaging.Abstractions;
 using Cat.ServiceRequests.Abstractions;
 
-namespace Cat.Demo.PaymentService.Contracts.Messages;
+namespace Cat.Demo.OrderService.CoreService.Messages;
 
 /// <summary>
 /// The answer to <see cref="RefundPayment"/>. <see cref="Refunded"/> is false when there was no approved payment to give back.

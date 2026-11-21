@@ -15,12 +15,17 @@ var catalog = builder.AddProject<Projects.Cat_Demo_CatalogService_Api>("catalog"
     .WithHttpEndpoint(port: 5101, name: "http", isProxied: false)
     .WithHttpHealthCheck("/health");
 
-// The payment service can fail on purpose. Set Payment:Latency, Payment:ErrorPercentage or Payment:Outage in the
+// The payment provider is a stand-in for an outside payment provider. It is a plain REST API with no CAT modules,
+// and it is not behind the gateway. Orders knows it by its address and an API key.
+// It can fail on purpose. Set Payment:Latency, Payment:ErrorPercentage or Payment:Outage in the
 // configuration of the AppHost (for example in the user secrets) and restart. The demo readme explains the values.
+// The API key is a secret parameter with a demo value in appsettings.json. Do not use it outside the demo.
+var providerApiKey = builder.AddParameter("payment-provider-api-key", secret: true);
 var payment = builder.AddProject<Projects.Cat_Demo_PaymentService_Api>("payment")
     .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
     .WithHttpEndpoint(port: 5103, name: "http", isProxied: false)
-    .WithHttpHealthCheck("/health");
+    .WithHttpHealthCheck("/health")
+    .WithEnvironment("Provider__ApiKey", providerApiKey);
 
 foreach (var (setting, variable) in new[]
 {
@@ -57,13 +62,15 @@ var notifications = builder.AddProject<Projects.Cat_Demo_NotificationService_Api
     .WithEnvironment("Smtp__Port", smtpPort.ToString())
     .WaitFor(mailpit);
 
-// Orders asks Catalog for prices and the payment service for payments through the gateway, so it references the gateway
-// and not the services.
+// Orders asks Catalog for prices and Inventory for stock through the gateway, so it references the gateway
+// and not the services. It calls the payment provider directly, because the provider is outside.
 // The gateway waits for Orders, so Orders must not wait for the gateway.
 var orders = builder.AddProject<Projects.Cat_Demo_OrderService_Api>("orders")
     .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
     .WithHttpEndpoint(port: 5102, name: "http", isProxied: false)
-    .WithHttpHealthCheck("/health");
+    .WithHttpHealthCheck("/health")
+    .WithEnvironment("PaymentProvider__Url", payment.GetEndpoint("http"))
+    .WithEnvironment("PaymentProvider__ApiKey", providerApiKey);
 
 // Orders waits 2 minutes for the payment. Set Orders:PaymentTimeoutSeconds in the configuration of the AppHost
 // (for example in the user secrets) and restart, to show the timeout without waiting that long.
@@ -101,11 +108,8 @@ var bus = builder.AddAzureServiceBus("messaging")
 
 // Orders publishes OrderConfirmed through its outbox. Inventory listens to it, so it waits for Orders, which creates the topic.
 // Inventory publishes the low stock report. Notifications listens to it, so it waits for Inventory, which creates that topic.
-// Payment receives TakePayment on a queue and answers with PaymentProcessed on a topic. It creates both at startup,
-// so Orders, which sends the request and listens for the answer, waits for Payment.
-payment.WithReference(bus)
-    .WaitFor(bus)
-    .WithEnvironment("Messaging__AdministrationConnectionString", serviceBusAdministrationConnection);
+// Orders sends TakePayment to a queue of its own and listens for the answer, PaymentProcessed, on a topic of its own.
+// It creates both at startup. A handler in Orders calls the payment provider, which has no connection to the bus.
 orders.WithReference(bus)
     .WaitFor(bus)
     .WaitFor(payment)
@@ -128,10 +132,6 @@ orders.WithEnvironment("Authentication__Authority", authority);
 // The secret is the one in the realm file. Do not use these settings outside the demo.
 orders.WithEnvironment("Authentication__ClientId", "cat-demo-orders");
 orders.WithEnvironment("Authentication__ClientSecret", "cat-demo-orders-secret");
-payment.WithEnvironment("Authentication__Authority", authority);
-// Payment signs its answer to a payment request with a token of its own, from its own client. Demo secret, as above.
-payment.WithEnvironment("Authentication__ClientId", "cat-demo-payment");
-payment.WithEnvironment("Authentication__ClientSecret", "cat-demo-payment-secret");
 inventory.WithEnvironment("Authentication__Authority", authority);
 // Notifications only receives messages, so it checks tokens and needs no client of its own.
 notifications.WithEnvironment("Authentication__Authority", authority);
@@ -147,16 +147,13 @@ var gateway = builder.AddProject<Projects.Cat_Demo_Api_Gateway>("gateway")
     .WithHttpEndpoint(port: gatewayPort, name: "http", isProxied: false)
     .WithReference(catalog)
     .WithReference(orders)
-    .WithReference(payment)
     .WithReference(inventory)
     .WaitFor(catalog)
     .WaitFor(orders)
-    .WaitFor(payment)
     .WaitFor(inventory)
     .WaitFor(keycloak)
     .WithEnvironment("CatGateway__Services__catalog__Address", "http://catalog")
     .WithEnvironment("CatGateway__Services__orders__Address", "http://orders")
-    .WithEnvironment("CatGateway__Services__payment__Address", "http://payment")
     .WithEnvironment("CatGateway__Services__inventory__Address", "http://inventory")
     .WithEnvironment("CatGateway__Authentication__Authority", authority)
     .WithEnvironment("CatGateway__Cors__AllowedOrigins__0", webUrl)
