@@ -15,12 +15,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Http.Resilience;
+using Cat.Resilience.Abstractions;
+using Cat.Resilience.Extensions;
 
 namespace Cat.Demo.OrderService.Infrastructure.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    private const string FastFailProfile = "FastFail";
+
     /// <summary>
     /// Registers the order database context for the given SQL Server connection string.
     /// </summary>
@@ -76,37 +79,37 @@ public static class ServiceCollectionExtensions
         var apiKey = configuration["PaymentProvider:ApiKey"]
             ?? throw new InvalidOperationException("The setting PaymentProvider:ApiKey is missing. Start the demo with the AppHost.");
 
-        // The resilience handler of ServiceDefaults adds retries and a circuit breaker to this client.
+        // The External profile of Cat.Resilience: a provider outside our system gets a longer wait, a retry that honours Retry-After
+        // and a retry of a POST only when it carries an Idempotency-Key header, which every call here does.
         services.AddHttpClient<IPaymentProviderClient, PaymentProviderClient>(client =>
-        {
-            client.BaseAddress = new Uri(url);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-        });
+            {
+                client.BaseAddress = new Uri(url);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+            })
+            .AddCatResilience(CatResilienceProfile.External);
         services.AddScoped<IPaymentProvider, PaymentProviderGateway>();
         return services;
     }
 
     /// <summary>
-    /// Replaces the standard resilience handler of a client that a person waits for while an order is placed.
-    /// With the defaults, a service that is down makes the order wait about 50 seconds, and the gateway gives up after 30.
+    /// Puts the FastFail resilience profile on a client that a person waits for while an order is placed.
+    /// With the Internal profile, a service that is down makes the order wait about 50 seconds, and the gateway gives up after 30.
+    /// Puts the FastFail resilience profile on a client that a person waits for while an order is placed.
+    /// With the Internal profile, a service that is down makes the order wait about 50 seconds, and the gateway gives up after 30.
     /// Here one retry is enough, because the calls are safe to repeat: the order number is the key. One try takes at most 5 seconds,
     /// and the whole call at most 12, so Orders answers well before the gateway does.
-    /// The default handler of the ServiceDefaults is removed first, so the client has only this one.
+    /// The profile replaces the default pipeline of the ServiceDefaults, so the client has only this one.
     /// </summary>
     private static IHttpClientBuilder UseFastFailResilience(this IHttpClientBuilder clientBuilder)
     {
-        // Marked experimental by Microsoft, but it is the supported way to drop the default handler.
-#pragma warning disable EXTEXP0001
-        clientBuilder.RemoveAllResilienceHandlers();
-#pragma warning restore EXTEXP0001
-        clientBuilder.AddStandardResilienceHandler(options =>
+        clientBuilder.Services.AddCatResilienceModule(options => options.AddProfile(FastFailProfile, profile =>
         {
-            options.Retry.MaxRetryAttempts = 1;
-            options.Retry.Delay = TimeSpan.FromMilliseconds(500);
-            options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(5);
-            options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(12);
-        });
+            profile.Retry.MaxRetryAttempts = 1;
+            profile.Retry.Delay = TimeSpan.FromMilliseconds(500);
+            profile.AttemptTimeout.Timeout = TimeSpan.FromSeconds(5);
+            profile.TotalTimeout.Timeout = TimeSpan.FromSeconds(12);
+        }));
 
-        return clientBuilder;
+        return clientBuilder.AddCatResilience(FastFailProfile);
     }
 }

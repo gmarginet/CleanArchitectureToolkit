@@ -1,10 +1,11 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Cat.Resilience.Abstractions;
+using Cat.Resilience.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
@@ -36,9 +37,8 @@ public static class Extensions
         builder.Services.AddServiceDiscovery();
         builder.Services.ConfigureHttpClientDefaults(http =>
         {
-            // One pipeline per service address. Without this every client shares one circuit breaker,
-            // and a failing payment service would break the calls to Catalog too.
-            http.AddStandardResilienceHandler().SelectPipelineByAuthority();
+            // The resilience module owns the pipeline of every client. A client with its own profile replaces this one.
+            http.AddCatResilience(CatResilienceProfile.Internal);
             http.AddServiceDiscovery();
         });
 

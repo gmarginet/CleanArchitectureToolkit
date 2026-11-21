@@ -1,6 +1,7 @@
 using System.Net;
 using Cat.Demo.OrderService.CoreService.Abstractions;
 using Cat.Demo.OrderService.Infrastructure.Extensions;
+using Cat.Resilience.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,7 +29,7 @@ public class FastFailResilienceTests
         services.AddLogging();
         services.AddHttpContextAccessor();
         // The default of AddServiceDefaults in the ServiceDefaults project.
-        services.ConfigureHttpClientDefaults(http => http.AddStandardResilienceHandler());
+        services.ConfigureHttpClientDefaults(http => http.AddCatResilience());
         services.AddCatDemoOrderStockReservation(new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
