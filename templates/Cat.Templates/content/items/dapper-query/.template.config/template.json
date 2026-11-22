@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.DapperQuery",
+  "name": "CAT Dapper query",
+  "shortName": "cat-dapper-query",
+  "description": "A query with a Dapper handler and its .sql file. The Infrastructure project needs the packages gmarginet.Cat.Dapper and gmarginet.Cat.Dapper.SqlFiles, and the line AdditionalFiles Include=\"**/*.sql\" in its project file. Run it in the folder of the solution of a service.",
+  "tags": { "language": "C#", "type": "item" },
+  "sourceName": "ItemName",
+  "preferNameDirectory": false,
+  "symbols": {
+    "ServiceName": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The full name of the service, such as Contoso.Shop.Orders.",
+      "isRequired": true,
+      "replaces": "ServiceName",
+      "fileRename": "ServiceName"
+    }
+  }
+}

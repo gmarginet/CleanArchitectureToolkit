@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.Event",
+  "name": "CAT event",
+  "shortName": "cat-event",
+  "description": "An in-process event with its subscriber and its test. The core project needs the package gmarginet.Cat.EventAggregators.Abstractions, and the test project gmarginet.Cat.UnitTesting.EventAggregators. Run it in the folder of the solution of a service.",
+  "tags": { "language": "C#", "type": "item" },
+  "sourceName": "ItemName",
+  "preferNameDirectory": false,
+  "sources": [
+    {
+      "modifiers": [
+        { "condition": "(!Tests)", "exclude": [ "ServiceName.CoreService.Tests/**" ] }
+      ]
+    }
+  ],
+  "symbols": {
+    "ServiceName": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The full name of the service, such as Contoso.Shop.Orders.",
+      "isRequired": true,
+      "replaces": "ServiceName",
+      "fileRename": "ServiceName"
+    },
+    "Tests": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add the test. Use false for a service without the project ServiceName.CoreService.Tests.",
+      "defaultValue": "true"
+    }
+  }
+}

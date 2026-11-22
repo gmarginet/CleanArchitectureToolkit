@@ -16,6 +16,7 @@
         { "condition": "(!Tests)", "exclude": [ "ServiceName.CoreService.Tests/**" ] },
         { "condition": "(!ApiClient)", "exclude": [ "ServiceName.Api.Client/**" ] },
         { "condition": "(!ExampleRequest)", "exclude": [ "**/ExampleGet*.cs", "**/ExampleModel.cs", "ServiceName.Api/ServiceName.http" ] },
+        { "condition": "(!NewSolution)", "exclude": [ "ServiceName.slnx" ] },
         { "condition": "(!Jobs)", "exclude": [ "**/ExampleJob*.cs", "ServiceName.Api/Extensions/SchedulerExtensions.cs", "ServiceName.Database/**/CatJobRun.sql" ] },
         { "condition": "(!Messages)", "exclude": [ "**/ExampleReceived*.cs", "ServiceName.CoreService/Messages/**", "ServiceName.Api/Extensions/MessageHandlerExtensions.cs", "ServiceName.Database/**/CatInbox.sql" ] },
         { "condition": "(!DatabaseFirst)", "exclude": [ "ServiceName.Database/**" ] },
@@ -60,6 +61,12 @@
         { "choice": "DatabaseFirst", "description": "The schema is SQL, and the entities are scaffolded from it" }
       ],
       "defaultValue": "CodeFirst"
+    },
+    "NewSolution": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Create a new solution file. Use false to add the projects to an existing solution at or above the output folder.",
+      "defaultValue": "true"
     },
     "Tests": {
       "type": "parameter",
@@ -128,5 +135,24 @@
       "value": "(Framework == \"net10.0\")"
     }
   },
-  "postActions": []
+  "primaryOutputs": [
+    { "path": "ServiceName.Api/ServiceName.Api.csproj" },
+    { "path": "ServiceName.Contracts/ServiceName.Contracts.csproj" },
+    { "path": "ServiceName.CoreService/ServiceName.CoreService.csproj" },
+    { "path": "ServiceName.DataModels/ServiceName.DataModels.csproj" },
+    { "path": "ServiceName.Infrastructure/ServiceName.Infrastructure.csproj" },
+    { "condition": "(Tests)", "path": "ServiceName.CoreService.Tests/ServiceName.CoreService.Tests.csproj" },
+    { "condition": "(ApiClient)", "path": "ServiceName.Api.Client/ServiceName.Api.Client.csproj" },
+    { "condition": "(DatabaseFirst && SqlServer)", "path": "ServiceName.Database/ServiceName.Database.sqlproj" }
+  ],
+  "postActions": [
+    {
+      "condition": "(!NewSolution)",
+      "description": "Add the projects of the service to the solution that holds the output folder.",
+      "manualInstructions": [ { "text": "Run dotnet sln add for each project of the service." } ],
+      "actionId": "D396686C-DE0E-4DE6-906D-291CD29FC5DE",
+      "args": { "inRoot": "true" },
+      "continueOnError": false
+    }
+  ]
 }

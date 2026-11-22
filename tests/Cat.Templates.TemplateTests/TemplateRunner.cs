@@ -23,6 +23,9 @@ public sealed class TemplateRunner
 
     public string Root { get; }
 
+    /// <summary>The template hive of the runner, for a test that runs <c>dotnet new</c> itself.</summary>
+    public string Hive => _hive;
+
     /// <summary>The pack, taken from the environment. It is null when the packs were not made, and the tests are skipped then.</summary>
     public static string? PackPath => Environment.GetEnvironmentVariable("CAT_TEMPLATE_PACK");
 
@@ -61,6 +64,35 @@ public sealed class TemplateRunner
     public async Task RunItemAsync(string folder, string shortName, string itemName, string serviceName, string options = "")
     {
         var result = await RunAsync("dotnet", $"new {shortName} -n {itemName} --ServiceName {serviceName} {options} --debug:custom-hive \"{_hive}\"", folder);
+        Assert.That(result.ExitCode, Is.EqualTo(0), result.Output);
+    }
+
+    /// <summary>Runs a project template, such as <c>cat-gateway</c>. It writes a project folder in the folder of the solution.</summary>
+    public async Task RunProjectTemplateAsync(string folder, string shortName, string name)
+    {
+        var result = await RunAsync("dotnet", $"new {shortName} -n {name} --debug:custom-hive \"{_hive}\"", folder);
+        Assert.That(result.ExitCode, Is.EqualTo(0), result.Output);
+    }
+
+    /// <summary>
+    /// Adds a CAT package to a project of the service, with the version of the solution. An item template needs the package
+    /// of its module, and the skill that runs the template adds it, so the test does the same.
+    /// </summary>
+    public async Task AddCatPackageAsync(string folder, string project, string package)
+    {
+        var props = await File.ReadAllTextAsync(Path.Combine(folder, "Directory.Packages.props"));
+        var version = System.Text.RegularExpressions.Regex.Match(props, "<CatVersion>(.+?)</CatVersion>").Groups[1].Value;
+        var projectFile = Path.Combine(folder, project, project + ".csproj");
+        var result = await RunAsync("dotnet", $"add \"{projectFile}\" package {package} --version {version}", folder);
+        Assert.That(result.ExitCode, Is.EqualTo(0), result.Output);
+    }
+
+    /// <summary>Adds a project to the <c>.slnx</c> solution of the service, as the project templates leave that to the developer.</summary>
+    public async Task AddProjectToSolutionAsync(string folder, string solutionName, string projectFolder)
+    {
+        var solution = Path.Combine(folder, solutionName + ".slnx");
+        var project = Path.Combine(folder, projectFolder, projectFolder + ".csproj");
+        var result = await RunAsync("dotnet", $"sln \"{solution}\" add \"{project}\"", folder);
         Assert.That(result.ExitCode, Is.EqualTo(0), result.Output);
     }
 

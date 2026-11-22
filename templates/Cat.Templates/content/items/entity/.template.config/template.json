@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.Entity",
+  "name": "CAT entity",
+  "shortName": "cat-entity",
+  "description": "A code first entity with its mapping. The mapping is a method on the model builder, so add a call to it in OnModelCreating, a DbSet to the context and a migration. Run it in the folder of the solution of a service.",
+  "tags": { "language": "C#", "type": "item" },
+  "sourceName": "ItemName",
+  "preferNameDirectory": false,
+  "symbols": {
+    "ServiceName": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The full name of the service, such as Contoso.Shop.Orders.",
+      "isRequired": true,
+      "replaces": "ServiceName",
+      "fileRename": "ServiceName"
+    },
+    "Database": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "The database of the service.",
+      "choices": [
+        { "choice": "SqlServer", "description": "SQL Server" },
+        { "choice": "PostgreSQL", "description": "PostgreSQL" }
+      ],
+      "defaultValue": "SqlServer"
+    },
+    "SqlServer": {
+      "type": "computed",
+      "value": "(Database == \"SqlServer\")"
+    }
+  }
+}

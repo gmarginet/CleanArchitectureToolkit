@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Web", "API", "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.Gateway",
+  "name": "CAT gateway",
+  "shortName": "cat-gateway",
+  "description": "The project ServiceName.Api.Gateway, the host of the Cat.Api.Gateway module. The name is the prefix of the system, such as Contoso.Shop. Add the project to the solution and add the package gmarginet.Cat.Api.Gateway to the package versions.",
+  "tags": { "language": "C#", "type": "project" },
+  "sourceName": "ServiceName",
+  "preferNameDirectory": false,
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "The target framework of the gateway.",
+      "choices": [
+        { "choice": "net11.0", "description": ".NET 11, the latest release" },
+        { "choice": "net10.0", "description": ".NET 10, the LTS release" }
+      ],
+      "defaultValue": "net11.0",
+      "replaces": "TARGET_FRAMEWORK"
+    }
+  }
+}

@@ -53,16 +53,13 @@ Claude Code skills for the developers who use the toolkit, shipped as a plugin t
 #### The idea
 The repository already has skills in `.claude/skills/`, but they are for the owner of the toolkit. This plan is about skills for the developers who use CAT in their own projects.
 
-A skill for a developer teaches Claude the CAT conventions inside the repository of the developer, for example "add a command with its handler, validator and test". The developer picks the skills they need, as they pick modules. A skill creates its files through a `dotnet new` template of [Cat.Templates.md](Cat.Templates.md#phase-1), and does the rest itself.
-
-#### Needs
-Phase 1 of the plan [Cat.Templates.md](Cat.Templates.md#phase-1), built first.
+A skill for a developer teaches Claude the CAT conventions inside the repository of the developer, for example "add a command with its handler, validator and test". The developer picks the skills they need, as they pick modules. A skill creates its files through a `dotnet new` template of the [template pack](../templates/README.md), and does the rest itself.
 
 #### Background
 From the repository:
 - `.claude/skills/` holds the skills for the owner, such as `cat-internal-create-module`, `cat-internal-create-module-readme`, `cat-internal-verify-docs` and `cat-internal-commit`. They are listed in `.claude/skills/README.md`.
 - The readme describes the conventions a skill would teach: the service project structure, the `Abstractions` split, handler registration, `ICatResponse` and error codes.
-- [Cat.Templates.md](Cat.Templates.md#phase-1) plans `dotnet new` templates for a service and for the single parts of a service.
+- The [template pack](../templates/README.md) has `dotnet new` templates for a service and for the single parts of a service. They are built and tested.
 - `cat-internal-verify-docs` checks all markdown in the repository, and `pages.yml` builds the GitHub Pages site from the markdown.
 - `skip-pub` goes at the end of a commit subject when no code in `modules/` changed. Files under `claudeskills/` would not be published as NuGet packages.
 
@@ -156,14 +153,14 @@ Phase 1 builds every skill on this list, with these names (owner, 2026-11-22).
 #### Decided
 - **Idea.** Create skills for the developers who use the toolkit. Plan them here and list them in the repo overview of the readme.
 - **Skill prefix.** Skills for the owner of the toolkit start with `cat-internal-`. Skills for developers who use the toolkit start with `cat-`. All existing skills for the owner already use `cat-internal-`.
-- **The skills use the templates.** Every file that a skill creates comes from a `dotnet new` template of [Cat.Templates.md](Cat.Templates.md#phase-1), a service template or an item template. A skill does what a template cannot: pick the project and the folder, change existing files such as the registration in `Program.cs`, add the test, run the build and explain the next step (owner, 2026-11-21).
-- **Who scaffolds a new service.** The service template creates the structure, and `cat-new-service` runs it. Until the template exists, the skill is not built (owner, 2026-11-21).
+- **The skills use the templates.** Every file that a skill creates comes from a `dotnet new` template of the [template pack](../templates/README.md), a service template or an item template. A skill does what a template cannot: pick the project and the folder, change existing files such as the registration in `Program.cs`, add the test, run the build and explain the next step (owner, 2026-11-21).
+- **Who scaffolds a new service.** The service template creates the structure, and `cat-new-service` runs it. The template exists now (owner, 2026-11-21).
 - **One plugin for all skills.** Every skill for developers goes in one plugin, not one per module. Claude loads a skill only when its description matches, so an unused skill costs almost nothing. The plugin can be split later if it grows too big (owner, 2026-11-22).
-- **No build order by template.** [Cat.Templates.md](Cat.Templates.md#phase-1) is built first and holds every template the skills need. This plan builds every skill it plans, not a first group (owner, 2026-11-22).
+- **No build order by template.** The [template pack](../templates/README.md) is built and holds every template the skills need. This plan builds every skill it plans, not a first group (owner, 2026-11-22).
 - **Scope of phase 1.** Phase 1 builds every skill in the list of skills, the group "More modules" too (owner, 2026-11-22).
 - **Skills of the group "More modules".** One skill per module for the main task its module readme describes, as listed. `Cat.Dapper`, `Cat.Api.Client`, `Cat.Sql.Cdc` and `Cat.Api.Gateway` get one too, so every module has a skill (owner, 2026-11-22).
 - **A skill for the solution template.** The skill that runs the solution template of [Cat.Templates.md](Cat.Templates.md#phase-2) belongs to [phase 2](#phase-2) (owner, 2026-11-22).
-- **One plan.** This plan covers every skill for developers, with no plan per skill. Its phases follow the phases of [Cat.Templates.md](Cat.Templates.md#phase-1): phase 1 holds the skills for the service template and the item templates, phase 2 the skill for the solution template (owner, 2026-11-22).
+- **One plan.** This plan covers every skill for developers, with no plan per skill. Its phases follow the template pack: phase 1 holds the skills for the service template and the item templates, phase 2 the skill for the solution template (owner, 2026-11-22).
 - **Names and folders.** The plugin is `cat` in `claudeskills/`, with its `plugin.json` in `claudeskills/.claude-plugin/` and the skills in `claudeskills/skills/`. The marketplace is `cat-toolkit` in `.claude-plugin/marketplace.json` in the root of the repository, and points to `./claudeskills`. A developer installs it with `/plugin install cat@cat-toolkit` (owner, 2026-11-22). The plugin docs allow a relative source that starts with `./`, resolved from the folder that holds `.claude-plugin/`, so `"source": "./claudeskills"` works. The `name` of the entry in `marketplace.json` must match the `name` in `plugin.json` (checked 2026-11-22).
 - **Keep the skills true.** A skill holds the workflow and as few API names as possible (owner, 2026-11-22):
   - **The readme of the package.** Phase 1 packs the module readme into each NuGet package, next to `README_NUGET.md`, with one change in `Directory.Build.props`. A skill reads the CAT version from the project of the developer and reads the module readme of that version from the NuGet cache. So the API always matches the package, and a skill needs no version of its own.

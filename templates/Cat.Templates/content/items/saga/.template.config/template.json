@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.Saga",
+  "name": "CAT saga",
+  "shortName": "cat-saga",
+  "description": "A saga with its state, its two messages and its test. The core project needs the packages gmarginet.Cat.Sagas and gmarginet.Cat.Messaging.Abstractions, and the test project gmarginet.Cat.UnitTesting.Messaging. Run it in the folder of the solution of a service.",
+  "tags": { "language": "C#", "type": "item" },
+  "sourceName": "ItemName",
+  "preferNameDirectory": false,
+  "sources": [
+    {
+      "modifiers": [
+        { "condition": "(!Tests)", "exclude": [ "ServiceName.CoreService.Tests/**" ] }
+      ]
+    }
+  ],
+  "symbols": {
+    "ServiceName": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The full name of the service, such as Contoso.Shop.Orders.",
+      "isRequired": true,
+      "replaces": "ServiceName",
+      "fileRename": "ServiceName"
+    },
+    "Tests": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add the test. Use false for a service without the project ServiceName.CoreService.Tests.",
+      "defaultValue": "true"
+    }
+  }
+}

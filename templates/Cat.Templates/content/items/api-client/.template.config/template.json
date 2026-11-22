@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.ApiClient",
+  "name": "CAT API client",
+  "shortName": "cat-api-client",
+  "description": "The project ServiceName.Api.Client for a service that other services call. The name is the full name of the service, and the template writes the project folder next to the solution. Add the project to the solution, add the package gmarginet.Cat.Api.Client to the package versions, and build once, so the NSwag settings appear.",
+  "tags": { "language": "C#", "type": "project" },
+  "sourceName": "ServiceName",
+  "preferNameDirectory": false,
+  "symbols": {}
+}

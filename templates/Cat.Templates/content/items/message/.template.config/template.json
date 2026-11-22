@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.Message",
+  "name": "CAT message",
+  "shortName": "cat-message",
+  "description": "A message that crosses the border of the service, in the Contracts project. The Contracts project needs the package gmarginet.Cat.Messaging.Abstractions. Run it in the folder of the solution of a service.",
+  "tags": { "language": "C#", "type": "item" },
+  "sourceName": "ItemName",
+  "preferNameDirectory": false,
+  "symbols": {
+    "ServiceName": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The full name of the service, such as Contoso.Shop.Orders.",
+      "isRequired": true,
+      "replaces": "ServiceName",
+      "fileRename": "ServiceName"
+    },
+    "Kind": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "The kind of the message.",
+      "choices": [
+        { "choice": "Event", "description": "Something that happened. It goes to a topic, and every interested service gets it" },
+        { "choice": "Command", "description": "A request to one service. It goes to a queue" }
+      ],
+      "defaultValue": "Event"
+    },
+    "KindBase": {
+      "type": "generated",
+      "generator": "join",
+      "parameters": {
+        "symbols": [
+          { "type": "const", "value": "Cat" },
+          { "type": "ref", "value": "Kind" },
+          { "type": "const", "value": "Message" }
+        ]
+      },
+      "replaces": "KIND_BASE"
+    }
+  }
+}

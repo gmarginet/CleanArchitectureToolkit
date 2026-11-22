@@ -89,6 +89,29 @@ public class ServiceTemplateTests
     }
 
     [Test]
+    public async Task Service_InAnExistingSolution_ShouldAddItsProjectsToThatSolution()
+    {
+        var solutionFolder = Path.Combine(_runner.Root, "ExistingSolution");
+        Directory.CreateDirectory(solutionFolder);
+        var sln = await _runner.DotnetAsync("new sln -n Shop --format slnx", solutionFolder);
+        Assert.That(sln.ExitCode, Is.EqualTo(0), sln.Output);
+
+        var create = await _runner.DotnetAsync(
+            $"new cat-service -n Contoso.Orders -o src/Orders --NewSolution false --Tests true --ApiClient true --debug:custom-hive \"{_runner.Hive}\"",
+            solutionFolder);
+        Assert.That(create.ExitCode, Is.EqualTo(0), create.Output);
+
+        var solutionText = await File.ReadAllTextAsync(Path.Combine(solutionFolder, "Shop.slnx"));
+        Assert.That(File.Exists(Path.Combine(solutionFolder, "src", "Orders", "Contoso.Orders.slnx")), Is.False, "The service made its own solution.");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(solutionText, Does.Contain("Contoso.Orders.Api.csproj"));
+            Assert.That(solutionText, Does.Contain("Contoso.Orders.CoreService.Tests.csproj"));
+            Assert.That(solutionText, Does.Contain("Contoso.Orders.Api.Client.csproj"));
+        }
+    }
+
+    [Test]
     public async Task Service_WithAPrefixedName_ShouldNameTheProjectsAfterTheFullName()
     {
         var folder = await _runner.CreateServiceAsync("Contoso.Shop.Orders", string.Empty);

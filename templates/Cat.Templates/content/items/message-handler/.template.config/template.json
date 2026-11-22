@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.MessageHandler",
+  "name": "CAT message handler",
+  "shortName": "cat-message-handler",
+  "description": "The handler of a message that the service receives, with its test. The name is the name of the message type. Add a Receive of the message to the event processor. Run it in the folder of the solution of a service.",
+  "tags": { "language": "C#", "type": "item" },
+  "sourceName": "ItemName",
+  "preferNameDirectory": false,
+  "sources": [
+    {
+      "modifiers": [
+        { "condition": "(!Tests)", "exclude": [ "ServiceName.CoreService.Tests/**" ] }
+      ]
+    }
+  ],
+  "symbols": {
+    "ServiceName": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The full name of the service, such as Contoso.Shop.Orders.",
+      "isRequired": true,
+      "replaces": "ServiceName",
+      "fileRename": "ServiceName"
+    },
+    "Tests": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add the test. Use false for a service without the project ServiceName.CoreService.Tests.",
+      "defaultValue": "true"
+    },
+    "MessageNamespace": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The namespace of the message type. The default is the namespace of the messages in the Contracts project of the service.",
+      "defaultValue": ""
+    },
+    "DefaultMessageNamespace": {
+      "type": "generated",
+      "generator": "join",
+      "parameters": {
+        "symbols": [
+          { "type": "ref", "value": "ServiceName" },
+          { "type": "const", "value": ".Contracts.Messages" }
+        ]
+      }
+    },
+    "MessageNamespaceValue": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "MessageNamespace",
+        "fallbackVariableName": "DefaultMessageNamespace"
+      },
+      "replaces": "MESSAGE_NAMESPACE"
+    }
+  }
+}
