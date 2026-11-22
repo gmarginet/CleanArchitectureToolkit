@@ -52,6 +52,7 @@
   - [ServiceName.Infrastructure](#servicenameinfrastructure)
   - [ServiceName.Contracts](#servicenamecontracts)
   - [ServiceName.DataModels](#servicenamedatamodels)
+  - [ServiceName.Api.Client](#servicenameapiclient)
   - [ServiceName.CoreService.Tests](#servicenamecoreservicetests)
   - [Reference rules](#reference-rules)
 <!-- region end: TableOfContents-->
@@ -269,6 +270,7 @@ The diagram uses `ServiceName` as a placeholder for the name of your service.
 | `ServiceName.Infrastructure`                  | Database and external integrations                   | Yes      |
 | `ServiceName.Contracts`                       | Service requests, contract models and enums          | Yes      |
 | `ServiceName.DataModels`                      | Entities and query result models                     | Yes      |
+| `ServiceName.Api.Client`                      | Typed client that other services use to call it      | Optional |
 | `ServiceName.CoreService.Tests`               | Unit tests of the business logic                     | Optional |
 
 ### ServiceName.Api
@@ -365,6 +367,19 @@ The data models project holds the data classes that come out of the database.
 
 Both the `CoreService` and the `Infrastructure` project use them.  
 They are internal to the service. Never hand them out through the API. Map them to a contract model first. We suggest the [Mapperly](https://mapperly.riok.app/) NuGet package for this.  
+
+### ServiceName.Api.Client
+
+This optional project holds a typed client that other services use to call the service through the API gateway.  
+Add it when another service starts to call this one. A service that nobody calls does not need it.  
+
+- Holds a saved copy of the OpenAPI document of the service.  
+- Holds the generator settings and the generated client code, built with the [Cat.Api.Client](./modules/Cat.Api.Client/README.md) module.  
+- Turns the outcome of a call into a response, so a failed call looks like any other failed use case.  
+
+It references only the `Cat.Api.Client` module. The generated code has its own models by default.  
+You can let it use the request and model types of the `Contracts` project instead. That is the same choice as in [Share it or not](#servicenamecontracts).  
+It needs no reference to the `Api` project, because the generator reads the saved document.  
 
 ### ServiceName.CoreService.Tests
 

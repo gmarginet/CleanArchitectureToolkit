@@ -64,7 +64,7 @@ From the demo:
 - The workers run in the Api host.
 - Catalog is code first, with hand written entities in DataModels and migrations in Infrastructure.
 - Inventory is database first. Its schema comes from SQL scripts in the folder `Cat.Demo.InventoryService.Database`, which is not a project, and the AppHost runs them. Its scaffolded entities live in `Cat.Demo.InventoryService.DataModels`, and its scaffolded `InventoryDbContext` in Infrastructure.
-- Catalog and Inventory have an `Api.Client` project that other services use to call them. The readme structure does not list it. Sharing the `Contracts` of a service is the choice of the developer.
+- Catalog and Inventory have an `Api.Client` project that other services use to call them. The readme structure lists it as an optional project. Sharing the `Contracts` of a service is the choice of the developer.
 - Orders adds workflows, sagas and message handlers, and Notifications has scheduled jobs. These are the variations a template needs.
 - The AppHost references the Api project of each service, so a new service also needs a line there.
 - `demo/Directory.Build.props` sets the language version and nullable context.
@@ -259,7 +259,7 @@ Recommendation: the choice parameter. The toolkit supports both, so the template
 
 <!-- region start: Question 18-->
 #### Question 18
-Does the template create an `Api.Client` project, which other services use to call the new service? Catalog and Inventory have one, and the readme structure does not list it. The options:
+Does the template create an `Api.Client` project, which other services use to call the new service? Catalog and Inventory have one, and the readme structure lists it as an optional project. The options:
 - **An option, off by default.** Cost: one more condition.
 - **Always.** Cost: a project that a service nobody calls does not need.
 - **Never.** Cost: a developer adds it by hand when another service starts to call this one.
