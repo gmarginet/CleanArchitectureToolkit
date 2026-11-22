@@ -26,15 +26,29 @@
         <Content Include="content\**\*" Exclude="content\**\bin\**;content\**\obj\**" PackagePath="content\%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
 
+    <!-- WriteLinesToFile is no option for the copy below. It reads its lines as items, and on Linux it turns every backslash of the JSON into a slash. -->
+    <UsingTask TaskName="CatReplaceInFile" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <Source ParameterType="System.String" Required="true" />
+            <Destination ParameterType="System.String" Required="true" />
+            <OldText ParameterType="System.String" Required="true" />
+            <NewText ParameterType="System.String" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.IO" />
+            <Code Type="Fragment" Language="cs"><![CDATA[
+                File.WriteAllText(Destination, File.ReadAllText(Source).Replace(OldText, NewText));
+            ]]></Code>
+        </Task>
+    </UsingTask>
+
     <!-- The generated solution gets the version of the CAT packages of this release as the default of the CatVersion parameter. -->
     <Target Name="CatSetTemplateVersion" BeforeTargets="_GetPackageFiles" Condition="'$(PackageVersion)' != ''">
         <PropertyGroup>
             <CatTemplateJson>$(MSBuildProjectDirectory)\content\service\.template.config\template.json</CatTemplateJson>
             <CatTemplateJsonOut>$(IntermediateOutputPath)service.template.json</CatTemplateJsonOut>
         </PropertyGroup>
-        <WriteLinesToFile File="$(CatTemplateJsonOut)"
-                          Lines="$([System.IO.File]::ReadAllText('$(CatTemplateJson)').Replace('0.0.0-local', '$(PackageVersion)'))"
-                          Overwrite="true" WriteOnlyWhenDifferent="true" />
+        <CatReplaceInFile Source="$(CatTemplateJson)" Destination="$(CatTemplateJsonOut)" OldText="0.0.0-local" NewText="$(PackageVersion)" />
         <ItemGroup>
             <Content Remove="content\service\.template.config\template.json" />
             <Content Include="$(CatTemplateJsonOut)" PackagePath="content\service\.template.config\template.json" />
