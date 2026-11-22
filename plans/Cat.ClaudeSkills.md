@@ -29,7 +29,7 @@
 <!-- Use the cat-internal-create-plan skill to update this plan.-->
 <!-- region end: TemplateSkill-->
 
-# Plans for `Cat.Skills` <!-- omit in toc -->  
+# Plans for `Cat.ClaudeSkills` <!-- omit in toc -->  
 
 <!-- region start: FirstStableVersion-->
 **First stable version:** not reached
@@ -67,7 +67,7 @@ From the repository:
 
 #### What exists today
 - No skill for developers exists yet. The folders `plugins/` and `.claude-plugin/` do not exist.
-- The readme lists the idea in the repo overview, as `Cat.Skills` with the type Tooling and the status New.
+- The readme lists the idea in the repo overview, as `Cat.ClaudeSkills` with the type Tooling and the status New.
 - The skills in `.claude/skills/` are all for the owner, and all 16 of them use the `cat-internal-` prefix now.
 - The repository has a `_plugins` folder. It belongs to the Jekyll site and is not related to this plan.
 
@@ -214,16 +214,16 @@ Where is it documented? The options:
 - **A short chapter in the readme for developers,** once the first skill exists, with the install commands. Cost: one chapter.
 - **A readme inside `plugins/cat/`.** Cost: it is not linked from the repo overview, so people miss it.
 
-Recommendation: a chapter in the readme (it also links from the Cat.Skills row), and a short readme in `plugins/cat/` that points to it. Do it when the first skill is built, since the repo overview must only describe what exists.
+Recommendation: a chapter in the readme (it also links from the Cat.ClaudeSkills row), and a short readme in `plugins/cat/` that points to it. Do it when the first skill is built, since the repo overview must only describe what exists.
 <!-- region end: Question 9-->
 
 <!-- region start: Question 10-->
 #### Question 10
 Do we write a plan for each skill, or only one for the whole idea? The options:
 - **One plan for the whole idea** (this one), with a phase per group of skills. Cost: the plan grows.
-- **A plan per skill.** Cost: a lot of small files, and the repo overview has only one row for them, `Cat.Skills`.
+- **A plan per skill.** Cost: a lot of small files, and the repo overview has only one row for them, `Cat.ClaudeSkills`.
 
-Recommendation: one plan with a phase per group (start, daily work, data, check). A skill is small, and the readme row says Cat.Skills only once.
+Recommendation: one plan with a phase per group (start, daily work, data, check). A skill is small, and the readme row says Cat.ClaudeSkills only once.
 <!-- region end: Question 10-->
 
 <!-- region start: Question 11-->

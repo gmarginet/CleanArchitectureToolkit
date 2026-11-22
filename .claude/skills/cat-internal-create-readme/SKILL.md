@@ -47,7 +47,7 @@ The `RepoOverview` region holds one table with a row for everything in the repos
 Rows, in this order. Inside a group, sort by name.
 1. **Modules.** One row per module. Type `Module`.
 2. **Demo.** One row, `Cat.Demo`. Type `Demo`.
-3. **Tooling.** Things that help a developer use the toolkit and that are not a module, such as `Cat.Skills` and `Cat.Templates`. Type `Tooling`.
+3. **Tooling.** Things that help a developer use the toolkit and that are not a module, such as `Cat.ClaudeSkills` and `Cat.Templates`. Type `Tooling`.
 
 Name column: the name is plain text, `[[Name]]`, and not a link. The anchor sits in the `Description` cell, in front of the type badge, `<a id="[[Anchor]]"></a>`. The name cell is centered vertically, so an anchor there scrolls the badges out of view. The anchor is the name in lowercase with the dots turned into hyphens, such as `cat-minimal-api`. A link without a target makes GitHub open a blank page, so the badges that have no other target link to this anchor and the reader stays where they are.
 
@@ -94,7 +94,7 @@ Use this when the owner changes the template and asks to update the readme.
 5. Run the `cat-internal-verify-docs` skill.
 
 ## Placeholders
-- [[Name]]: The name of the item, such as `Cat.Queries`, `Cat.Demo` or `Cat.Skills`.
+- [[Name]]: The name of the item, such as `Cat.Queries`, `Cat.Demo` or `Cat.ClaudeSkills`.
 - [[Anchor]]: The anchor of the row, see the name column above.
 - [[ReadmePath]]: The path of the readme of a built item, `./modules/[[Name]]/README.md` or `./demo/README.md`.
 - [[Type]]: `Module`, `Demo` or `Tooling`.

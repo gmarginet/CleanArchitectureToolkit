@@ -48,7 +48,7 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-`dotnet new` templates that create a new service with the project structure of the toolkit, and the single parts of a service that the skills of [Cat.Skills.md](Cat.Skills.md#phase-1) use.
+`dotnet new` templates that create a new service with the project structure of the toolkit, and the single parts of a service that the skills of [Cat.ClaudeSkills.md](Cat.ClaudeSkills.md#phase-1) use.
 
 #### The idea
 Every service in the architecture is built from the same set of projects, wired the same way. Making a new service by hand means creating several projects, setting the references right and writing the same startup code. A `dotnet new` template does it in one command. The skills for developers create every file through these templates, so the shape of a file has one source that the build tests.
@@ -103,7 +103,7 @@ From the module readmes:
 - **Built from the demo.** `Cat.Demo.CatalogService` is the base, with the book parts replaced by one generic example request. Database first comes from Inventory, and a PostgreSQL variant comes from Notifications (owner, 2026-11-22).
 - **Solution file.** By default the template creates a new `.slnx`. A parameter points to an existing solution instead, and a post action adds the projects to it (owner, 2026-11-22). To check before the build: the support of `.slnx` in `dotnet new` and in `dotnet sln add`.
 - **Extras.** A readme, an `.http` file for the Api, and `/health` and `/alive` with a database check, as every demo service has. No Dockerfile and no deployment files, because they depend on how the developer deploys (owner, 2026-11-22).
-- **Item templates.** One item template per part, each with its handler and its test, such as `dotnet new cat-command`. The first ones are the parts of the first skills of [Cat.Skills.md](Cat.Skills.md#phase-1): a command, a query, a service request and a validator. More follow with each new skill (owner, 2026-11-22).
+- **Item templates.** One item template per part, each with its handler and its test, such as `dotnet new cat-command`. The first ones are the parts of the first skills of [Cat.ClaudeSkills.md](Cat.ClaudeSkills.md#phase-1): a command, a query, a service request and a validator. More follow with each new skill (owner, 2026-11-22).
 - **No wait for future modules.** The templates use the modules that exist now. New modules come in later as new options in an update of the template pack (owner, 2026-11-22).
 - **Package versions.** The generated solution gets a `Directory.Packages.props` with the versions of the CAT packages of the release, and the versions of the packages that follow .NET for the chosen target framework, as in `Directory.Packages.props` of this repository. The release workflow builds the template pack from the same tag as the modules. A developer updates the versions in one file (owner, 2026-11-22).
 - **Naming.** One name parameter, and the projects follow the service project structure of the readme exactly. A prefix is part of the name: `-n Contoso.Shop.Orders` gives `Contoso.Shop.Orders.Api`, `Contoso.Shop.Orders.CoreService` and so on (owner, 2026-11-22).
@@ -115,7 +115,7 @@ From the module readmes:
 - **Optional parts.** The tests project stays optional, and the workers are an option of the Api host. There is no DataAccessTooling project (owner, 2026-11-21).
 - **Database first.** It has the same projects as code first. The scaffolded entities live in DataModels, as the hand written entities of code first do. The schema lives in an SDK-style SQL project of the service with the `Microsoft.Build.Sql` SDK, such as `Cat.Demo.InventoryService.Database` in the demo (owner, 2026-11-22).
 - **Database first on PostgreSQL.** The `Microsoft.Build.Sql` SDK only builds SQL Server schemas, so on PostgreSQL the schema lives in plain SQL scripts in a folder of the service. The developer runs them by hand, and the readme of the generated service shows the `psql` command. The generated service holds no code that applies schema changes (owner, 2026-11-22).
-- **The skills use the templates.** Every file that a skill for developers creates comes from a `dotnet new` template, see [Cat.Skills.md](Cat.Skills.md#phase-1). A skill does what a template cannot: pick the project and the folder, change existing files such as the registration in `Program.cs`, add the test, run the build and explain the next step (owner, 2026-11-21).
+- **The skills use the templates.** Every file that a skill for developers creates comes from a `dotnet new` template, see [Cat.ClaudeSkills.md](Cat.ClaudeSkills.md#phase-1). A skill does what a template cannot: pick the project and the folder, change existing files such as the registration in `Program.cs`, add the test, run the build and explain the next step (owner, 2026-11-21).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions

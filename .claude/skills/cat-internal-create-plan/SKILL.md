@@ -26,7 +26,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 8. Run the `cat-internal-verify-docs` skill.
 
 ## Which plans exist
-- `Cat.Demo.md` is the plan of the demo, and `Cat.Skills.md` and `Cat.Templates.md` are plans of the tooling.
+- `Cat.Demo.md` is the plan of the demo, and `Cat.ClaudeSkills.md` and `Cat.Templates.md` are plans of the tooling.
 - Every future module has a plan named after the module, such as `Cat.Localizations.md`. An existing module gets one too when it has future work.
 
 ## Rules for the content
