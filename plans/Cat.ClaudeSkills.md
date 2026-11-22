@@ -107,12 +107,11 @@ claudeskills/skills/...
 ```
 
 Things to check when we build it:
-- **Skills overview.** Whether the skills overview rule in `CLAUDE.md` covers the new folder, or excludes it on purpose.
 - **Commit messages.** A commit that only touches `claudeskills/` gets ` (skip-pub)`.
 - **Plugin docs.** Claude reads the current Claude Code plugin docs (manifest fields, marketplace file, install commands) at the start of the build and corrects this plan, because the publishing steps above come from memory.
 
-#### Possible skills
-Ideas only. None of them is decided. The names are suggestions.
+#### Skills
+Phase 1 builds every skill on this list, with these names (owner, 2026-11-22).
 
 **Start**
 - `cat-new-service`: run the service template of `Cat.Templates`, then explain the next steps, such as the AppHost line and the first module to add.
@@ -130,11 +129,12 @@ Ideas only. None of them is decided. The names are suggestions.
 
 **Data**
 - `cat-add-entity`: an entity on the `Cat.EFCore` base classes, with its configuration and migration, for SQL Server or PostgreSQL.
+- **Tables in a database first service.** There are no migrations. `cat-add-entity` adds a table file with the `cat-table` template to the SQL project, or to the scripts folder on PostgreSQL. After the developer deploys, it runs the scaffold for the entity, as Inventory does in the demo. The tables of the inbox, the outbox and the scheduler come the same way (owner, 2026-11-22).
 - `cat-error-codes`: define error codes with a prefix and keep them unique. See [the error code convention](../modules/Cat.Responses/README.md#the-error-code-convention).
 
 **Check and migrate**
 - `cat-review`: check a service against the conventions: references, registration, response handling.
-- `cat-upgrade`: help move to a new version of a module, using the release notes.
+- `cat-upgrade`: help move to a new version of a module. The repository has no release notes, so the skill compares the packed module readme of the old and the new version in the NuGet cache and updates the code to the new usage. A change that the readme does not show is missed, and that is accepted (owner, 2026-11-22).
 
 **More modules**
 - `cat-add-message`: declare a message and send it with `Cat.Messaging`, through the outbox when the service has one.
@@ -160,7 +160,7 @@ Ideas only. None of them is decided. The names are suggestions.
 - **Who scaffolds a new service.** The service template creates the structure, and `cat-new-service` runs it. Until the template exists, the skill is not built (owner, 2026-11-21).
 - **One plugin for all skills.** Every skill for developers goes in one plugin, not one per module. Claude loads a skill only when its description matches, so an unused skill costs almost nothing. The plugin can be split later if it grows too big (owner, 2026-11-22).
 - **No build order by template.** [Cat.Templates.md](Cat.Templates.md#phase-1) is built first and holds every template the skills need. This plan builds every skill it plans, not a first group (owner, 2026-11-22).
-- **Scope of phase 1.** Phase 1 builds every skill in the list of possible skills, the group "More modules" too (owner, 2026-11-22).
+- **Scope of phase 1.** Phase 1 builds every skill in the list of skills, the group "More modules" too (owner, 2026-11-22).
 - **Skills of the group "More modules".** One skill per module for the main task its module readme describes, as listed. `Cat.Dapper`, `Cat.Api.Client`, `Cat.Sql.Cdc` and `Cat.Api.Gateway` get one too, so every module has a skill (owner, 2026-11-22).
 - **A skill for the solution template.** The skill that runs the solution template of [Cat.Templates.md](Cat.Templates.md#phase-2) belongs to [phase 2](#phase-2) (owner, 2026-11-22).
 - **One plan.** This plan covers every skill for developers, with no plan per skill. Its phases follow the phases of [Cat.Templates.md](Cat.Templates.md#phase-1): phase 1 holds the skills for the service template and the item templates, phase 2 the skill for the solution template (owner, 2026-11-22).
@@ -176,6 +176,7 @@ Ideas only. None of them is decided. The names are suggestions.
 - **Validation before the commit.** Phase 1 adds a second rule to `cat-internal-commit`. When a commit touches `.claude-plugin/` or `claudeskills/`, the skill runs `claude plugin validate . --strict` and does not commit that block when it fails. So a broken manifest never reaches `master`, also when only the version changed. `build.yml` gets no step for it, because a failure there comes after the push is live (owner, 2026-11-22).
 - **Docs check and Pages site.** `cat-internal-verify-docs` checks the markdown in `claudeskills/`. The Pages site leaves the skill files out, with `claudeskills/skills` in the `exclude` list of `_config.yml`, and shows `claudeskills/README.md`. Jekyll already skips folders that start with a dot, such as `.claude-plugin/`. People read about the skills in that readme, not in the skill files (owner, 2026-11-22).
 - **Documentation.** `claudeskills/README.md` holds everything about the skills: the install commands, a table of the skills and how each one works. The `Cat.ClaudeSkills` row in the repo overview of the readme links to it with a Read more link, as a module row links to its module readme. It is written when phase 1 is built, because the readme describes only what exists (owner, 2026-11-22).
+- **The skills table rule.** `CLAUDE.md` gets its own rule: a change to a skill in `claudeskills/skills/` updates its row in `claudeskills/README.md` in the same change. The skills for developers stay out of `.claude/skills/README.md` and the skills table of `CLAUDE.md`, which are for the owner. `cat-internal-verify-docs` checks the rows (owner, 2026-11-22).
 - **The clone of the marketplace.** A developer who adds the marketplace clones the whole repository, and that is accepted: the repository is public and small, and one repository keeps a module and its skill in step. `claudeskills/README.md` shows the sparse command next to the normal one, `/plugin marketplace add gmarginet/CleanArchitectureToolkit --sparse .claude-plugin claudeskills` (owner, 2026-11-22).
 - **Templates not installed.** When `dotnet new list cat-` shows nothing, the skill stops and shows the install command of the template pack. Claude runs it only when the developer says yes, then goes on. A skill never writes a file without its template (owner, 2026-11-22).
 - **The plugin in this repository.** `.claude/settings.json` declares the marketplace with `extraKnownMarketplaces`, with a `directory` source, and enables the plugin with `"cat@cat-toolkit": true` in `enabledPlugins`. Every session in the repository, such as work on the demo, then has the skills. The plugin loads in place, so an edit to a skill works after `/reload-plugins` (owner, 2026-11-22). From the plugin docs: it applies after the folder is trusted, and it may need `claude plugin install cat@cat-toolkit --scope project` once per machine. To check before the build: whether a relative `path` resolves from the repository.
