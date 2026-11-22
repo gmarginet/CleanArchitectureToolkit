@@ -87,11 +87,14 @@ From the module readmes:
 - The templates do not exist yet. They are listed in the repo overview of the readme as tooling with the status New.
 - The repository has no template project and no `template.json`. The demo services are the working examples to build from.
 
+#### Needs
+- The SQL project of Inventory, see [Cat.Demo.md](Cat.Demo.md#phase-2). The database first part of the template follows it.
+
 #### Decided
 - **Form.** `dotnet new` templates.
 - **Content.** The service project structure of the readme.
 - **Optional parts.** The tests project stays optional, and the workers are an option of the Api host. There is no DataAccessTooling project (owner, 2026-11-21).
-- **Database first.** It has the same projects as code first. The scaffolded entities live in DataModels, as the hand written entities of code first do. The SQL scripts sit in a folder of the service, such as `Cat.Demo.InventoryService.Database` in the demo, which is not a project (owner, 2026-11-21).
+- **Database first.** It has the same projects as code first. The scaffolded entities live in DataModels, as the hand written entities of code first do. The schema lives in an SDK-style SQL project of the service with the `Microsoft.Build.Sql` SDK, such as `Cat.Demo.InventoryService.Database` in the demo (owner, 2026-11-22).
 - **The skills use the templates.** Every file that a skill for developers creates comes from a `dotnet new` template, see [Cat.Skills.md](Cat.Skills.md#phase-1). A skill does what a template cannot: pick the project and the folder, change existing files such as the registration in `Program.cs`, add the test, run the build and explain the next step (owner, 2026-11-21).
 <!-- region end: PhaseDescription-->
 
