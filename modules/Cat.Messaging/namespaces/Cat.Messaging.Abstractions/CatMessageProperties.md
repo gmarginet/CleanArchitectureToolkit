@@ -39,3 +39,4 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 | Fields | |
 | :--- | :--- |
 | [Authorization](CatMessageProperties.Authorization.md 'Cat\.Messaging\.Abstractions\.CatMessageProperties\.Authorization') | The property with the token of the sender\. The value is `Bearer`, a space and the token, as in HTTP\. |
+| [Culture](CatMessageProperties.Culture.md 'Cat\.Messaging\.Abstractions\.CatMessageProperties\.Culture') | The property with the culture of the sender, as a culture name such as `nl-BE`\. The sender takes it from `CultureInfo.CurrentUICulture`\. A message without it comes from a sender on the invariant culture\. |

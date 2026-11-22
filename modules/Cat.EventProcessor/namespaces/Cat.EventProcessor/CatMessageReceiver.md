@@ -41,11 +41,12 @@ Implements [ICatMessageReceiver](../../../Cat.EventProcessor/namespaces/Cat.Even
 
 | Constructors | |
 | :--- | :--- |
-| [CatMessageReceiver\(IServiceScopeFactory, ICatReceiveRegistry\)](CatMessageReceiver..ctor.VN7OKZXDRMLEW4KHL6MVCRJA.md 'Cat\.EventProcessor\.CatMessageReceiver\.CatMessageReceiver\(Microsoft\.Extensions\.DependencyInjection\.IServiceScopeFactory, Cat\.EventProcessor\.Abstractions\.ICatReceiveRegistry\)') | Creates the receiver\. |
+| [CatMessageReceiver\(IServiceScopeFactory, ICatReceiveRegistry, CatMessageCultureOptions\)](CatMessageReceiver..ctor.HAOUBR3GWAJ4B44GPAEL1A1P7.md 'Cat\.EventProcessor\.CatMessageReceiver\.CatMessageReceiver\(Microsoft\.Extensions\.DependencyInjection\.IServiceScopeFactory, Cat\.EventProcessor\.Abstractions\.ICatReceiveRegistry, Cat\.EventProcessor\.CatMessageCultureOptions\)') | Creates the receiver\. |
 
 | Fields | |
 | :--- | :--- |
 | [JsonOptions](CatMessageReceiver.JsonOptions.md 'Cat\.EventProcessor\.CatMessageReceiver\.JsonOptions') | |
+| [\_cultureOptions](CatMessageReceiver._cultureOptions.md 'Cat\.EventProcessor\.CatMessageReceiver\.\_cultureOptions') | |
 | [\_registry](CatMessageReceiver._registry.md 'Cat\.EventProcessor\.CatMessageReceiver\.\_registry') | |
 | [\_scopeFactory](CatMessageReceiver._scopeFactory.md 'Cat\.EventProcessor\.CatMessageReceiver\.\_scopeFactory') | |
 

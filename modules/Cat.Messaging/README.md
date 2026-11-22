@@ -48,6 +48,7 @@ The outbox is optional. With it, a message is saved in the same `SaveChanges` as
   - [Register the module](#register-the-module)
   - [Send a message](#send-a-message)
   - [Send the token of the caller](#send-the-token-of-the-caller)
+  - [Send the culture of the caller](#send-the-culture-of-the-caller)
   - [Send work that has no user](#send-work-that-has-no-user)
   - [Names and sessions](#names-and-sessions)
   - [Create the queues and topics](#create-the-queues-and-topics)
@@ -179,6 +180,10 @@ public class RequestTokenProvider(IHttpContextAccessor accessor, ISystemTokenSou
 ```
 
 A message with a scheduled time asks for `CatTokenSubject.System`, because a token of a user is expired when the bus delivers the message. The system token must be one that the receiving service accepts. The receiver skips the lifetime check for a scheduled message, see `Cat.EventProcessor`. The sender passes what the handler needs in the message, because the user is not known there. The token stays in the message, so it is in the queue and in the outbox table. Use short lived tokens.
+
+### Send the culture of the caller
+
+Every message carries the culture of its sender in the message property `Culture`, such as `nl-BE`. The sender takes it from `CultureInfo.CurrentUICulture` at the moment of the send, and writes nothing for the invariant culture. There is no setting. A message sent from a request gets the culture of the request, a message sent from a handler gets the culture the listener set, and a message sent from a job gets the default culture of the service. The outbox keeps the property with the message. The receiver decides what to do with it, see the module readme of `Cat.EventProcessor`.
 
 ### Send work that has no user
 

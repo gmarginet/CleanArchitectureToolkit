@@ -57,6 +57,7 @@ The module settles every message for you. A handler that succeeds completes the 
   - [Competing consumers and shutdown](#competing-consumers-and-shutdown)
   - [Traces](#traces)
   - [Log scope](#log-scope)
+  - [Culture of the sender](#culture-of-the-sender)
   - [Who sent the message and what may it do](#who-sent-the-message-and-what-may-it-do)
   - [What is not built yet](#what-is-not-built-yet)
 
@@ -339,6 +340,18 @@ The trace of the sender continues in the service. The receiver reads the `Diagno
 ### Log scope
 
 The listener opens a log scope with the key `CorrelationId` for the whole handling of a message, with the correlation id that the sender set. The gateway uses the same key for a request, so one filter on `CorrelationId` finds the logs of a whole flow. That works also for a hop that the trace does not cover. A message with no correlation id gets no scope. The scope needs an `ILogger`, so a service without logging registered gets none.
+
+### Culture of the sender
+
+A message carries the culture of its sender in the property `Culture`, see the module readme of `Cat.Messaging`. The listener ignores it unless the service asks for it. Call `ApplySenderCulture` when you declare the message types:
+
+```csharp
+services.AddCatEventProcessor(configuration, processor => processor
+    .Receive<OrderConfirmed>()
+    .ApplySenderCulture());
+```
+
+The listener then sets `CurrentCulture` and `CurrentUICulture` for the handling of each message, so `IStringLocalizer` and number formatting work in the language of the sender. The old culture comes back when the handling ends. A message without the property, or with a name .NET does not know, runs on the default culture of the service. The receiving service opts in because its formatting is what changes.
 
 ### Who sent the message and what may it do
 

@@ -43,7 +43,9 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 | Properties | |
 | :--- | :--- |
 | [Registrations](CatEventProcessorBuilder.Registrations.md 'Cat\.EventProcessor\.CatEventProcessorBuilder\.Registrations') | |
+| [SenderCultureApplied](CatEventProcessorBuilder.SenderCultureApplied.md 'Cat\.EventProcessor\.CatEventProcessorBuilder\.SenderCultureApplied') | |
 
 | Methods | |
 | :--- | :--- |
+| [ApplySenderCulture\(\)](CatEventProcessorBuilder.ApplySenderCulture().md 'Cat\.EventProcessor\.CatEventProcessorBuilder\.ApplySenderCulture\(\)') | Makes the receiver set `CurrentCulture` and `CurrentUICulture` to the culture of the sender, for the handler of every message\. The culture comes from the `Culture` property of the message, see `CatMessageProperties.Culture`\. Without this call, or for a message without the property, the handler runs on the default culture of the service\. |
 | [Receive&lt;TMessage&gt;\(Action&lt;CatReceiveOptions&gt;\)](CatEventProcessorBuilder.Receive.FO1Z0GKCKQIMQV1EOMJQ71GB2.md 'Cat\.EventProcessor\.CatEventProcessorBuilder\.Receive\<TMessage\>\(System\.Action\<Cat\.EventProcessor\.Abstractions\.CatReceiveOptions\>\)') | Declares a message type the service receives\. Every message of the type becomes this service request\. |

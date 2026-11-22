@@ -24,25 +24,29 @@
 
 # Code Reference  
   
-##### >> [Cat\.EventProcessor Assembly](index.md 'index') >> [Cat\.EventProcessor Namespace](Cat.EventProcessor.md 'Cat\.EventProcessor') >> [CatMessageReceiver Class](CatMessageReceiver.md 'Cat\.EventProcessor\.CatMessageReceiver')
+##### >> [Cat\.EventProcessor Assembly](index.md 'index') >> [Cat\.EventProcessor Namespace](Cat.EventProcessor.md 'Cat\.EventProcessor') >> [CatSenderCultureScope Class](CatSenderCultureScope.md 'Cat\.EventProcessor\.CatSenderCultureScope')
 
-## CatMessageReceiver\(IServiceScopeFactory, ICatReceiveRegistry\) Constructor
+## CatSenderCultureScope\.Begin\(bool, CatIncomingMessage\) Method
 
-Creates the receiver\.
+Starts the scope\. It does nothing when the service did not turn the option on, or when the message has no usable culture\.
 
 ```csharp
-public CatMessageReceiver(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory scopeFactory, Cat.EventProcessor.Abstractions.ICatReceiveRegistry registry);
+public static System.IDisposable Begin(bool enabled, Cat.EventProcessor.Abstractions.CatIncomingMessage message);
 ```
 #### Parameters
 
-<a name='Cat.EventProcessor.CatMessageReceiver.CatMessageReceiver(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Cat.EventProcessor.Abstractions.ICatReceiveRegistry).scopeFactory'></a>
+<a name='Cat.EventProcessor.CatSenderCultureScope.Begin(bool,Cat.EventProcessor.Abstractions.CatIncomingMessage).enabled'></a>
 
-`scopeFactory` [Microsoft\.Extensions\.DependencyInjection\.IServiceScopeFactory](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicescopefactory 'Microsoft\.Extensions\.DependencyInjection\.IServiceScopeFactory')
+`enabled` [System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')
 
-Opens a scope per message, because the service request processor is scoped\.
+True when the service applies the culture of the sender\.
 
-<a name='Cat.EventProcessor.CatMessageReceiver.CatMessageReceiver(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Cat.EventProcessor.Abstractions.ICatReceiveRegistry).registry'></a>
+<a name='Cat.EventProcessor.CatSenderCultureScope.Begin(bool,Cat.EventProcessor.Abstractions.CatIncomingMessage).message'></a>
 
-`registry` [ICatReceiveRegistry](../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/ICatReceiveRegistry.md 'Cat\.EventProcessor\.Abstractions\.ICatReceiveRegistry')
+`message` [CatIncomingMessage](../../../Cat.EventProcessor/namespaces/Cat.EventProcessor.Abstractions/CatIncomingMessage.md 'Cat\.EventProcessor\.Abstractions\.CatIncomingMessage')
 
-Holds the settings of the declared message types\.
+The incoming message\.
+
+#### Returns
+[System\.IDisposable](https://learn.microsoft.com/en-us/dotnet/api/system.idisposable 'System\.IDisposable')  
+A scope to dispose when the handling ends\.
