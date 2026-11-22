@@ -20,7 +20,7 @@ Claude needs the Aspire CLI for this: `dotnet tool install --global Aspire.Cli`.
 4. The services take a while to become healthy. Look with `aspire describe` and read the logs with `aspire logs`. Do not loop on it.
 
 ## Rules
-- Never use `--isolated`. It randomizes the ports and the user secrets, and the demo needs its fixed ports (Catalog 5101, Inventory 5103, Payment 5105, Orders 5106, the emulator on 5300).
+- Never use `--isolated`. It randomizes the ports and the user secrets, and the demo needs its fixed ports (gateway 5100, Catalog 5101, Orders 5102, payment provider 5103, web client 5104, Inventory 5105, Notifications 5106, the emulator on 5300).
 - Never run the AppHost in the foreground (`aspire run`, `dotnet run --project ...AppHost`). It blocks the shell.
 - After a change in the AppHost code, run the start command again. It replaces the previous instance.
 - The detached AppHost does not watch the source files. After a change in a service, start again.

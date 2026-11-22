@@ -38,7 +38,7 @@ Mirror the structure in `CleanArchitectureToolkit.slnx`.
 - Keep the `/demo/` folder entry with `demo/Directory.Build.props` and `demo/README.md`.
 
 ## Steps
-1. Read the Service Project structure chapter in the readme and the phase of `plans/Cat.Demo.md` that asks for the unit.
+1. Read the Service Project structure chapter in the readme and the phase of the plan that asks for the unit, such as one in `plans/Cat.Templates.md`.
 2. Decide which projects the unit needs. Start from the required ones and add optional ones only when the phase description asks for them.
 3. Create the folders and project files. Use `dotnet new` or copy a project from an existing unit.
 4. Move files with `git mv` so the history stays intact.
