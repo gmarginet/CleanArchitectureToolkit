@@ -1,5 +1,6 @@
 using Cat.Demo.CatalogService.DataModels.Entities;
 using Cat.EFCore.Extensions.SqlServer;
+using Cat.Localizations.EFCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cat.Demo.CatalogService.Infrastructure.DataAccess;
@@ -14,6 +15,9 @@ public class CatalogDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // One table holds the translations of every translatable entity. Category is the only one today.
+        modelBuilder.AddCatTranslations();
+
         modelBuilder.ConfigureCatEntity<Category>("Category", e =>
         {
             e.Property(x => x.Name).HasMaxLength(100);

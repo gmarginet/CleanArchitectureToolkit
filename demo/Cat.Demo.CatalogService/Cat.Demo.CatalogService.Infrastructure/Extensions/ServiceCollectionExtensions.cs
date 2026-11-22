@@ -1,4 +1,5 @@
 using Cat.Demo.CatalogService.Infrastructure.DataAccess;
+using Cat.Localizations.EFCore.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddHealthChecks().AddDbContextCheck<CatalogDbContext>();
         services.AddDbContext<CatalogDbContext>(options => options.UseSqlServer(connectionString));
+        services.AddCatLocalizations<CatalogDbContext>();
         return services;
     }
 }

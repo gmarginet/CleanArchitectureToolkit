@@ -27,6 +27,12 @@ public static class CatalogEndpoints
 
         catalogBuilder.MapCatGetList<CategoryGetListRequest, CategoryModel>("/categories")
             .WithName("GetCategories");
+        catalogBuilder.MapCatGet<CategoryGetRequest, CategoryEditModel>("/categories/{categoryId:guid}", CatResponseType.Ok, CatResponseType.NotFound)
+            .WithName("GetCategory")
+            .RequireAuthorization(AuthenticationExtensions.AdminPolicy);
+        catalogBuilder.MapCatPost<CategorySaveRequest>("/categories", CatResponseType.Ok)
+            .WithName("SaveCategory")
+            .RequireAuthorization(AuthenticationExtensions.AdminPolicy);
 
         return builder;
     }

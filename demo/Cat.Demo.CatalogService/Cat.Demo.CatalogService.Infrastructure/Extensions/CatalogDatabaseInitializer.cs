@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cat.Demo.CatalogService.DataModels.Entities;
 using Cat.Demo.CatalogService.Infrastructure.DataAccess;
+using Cat.Localizations.Abstractions;
 using Cat.Users.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +37,22 @@ public static class CatalogDatabaseInitializer
         var history = new Category { Name = "History" };
         var technology = new Category { Name = "Technology" };
         dbContext.Categories.AddRange(fiction, science, history, technology);
+
+        // The Dutch names of the categories. The admin can change them on the category page.
+        foreach (var (category, dutchName) in new[]
+                 {
+                     (fiction, "Fictie"), (science, "Wetenschap"), (history, "Geschiedenis"), (technology, "Technologie")
+                 })
+        {
+            dbContext.Set<CatTranslation>().Add(new CatTranslation
+            {
+                EntityType = nameof(Category),
+                EntityId = category.Id,
+                Field = nameof(Category.Name),
+                Culture = "nl",
+                Text = dutchName
+            });
+        }
 
         dbContext.Books.AddRange(
             NewBook("9780141036144", fiction, "1984", "George Orwell", 9.99m),
