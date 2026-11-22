@@ -128,7 +128,7 @@ Ideas only. None of them is decided. The names are suggestions.
 - `cat-add-decorator`: an open generic decorator and its registration, with its order number. See [Decorator order](../modules/Cat.Decorators/README.md#decorator-order).
 
 **Data**
-- `cat-add-entity`: an entity on the `Cat.EFCore` base classes, with its configuration and migration.
+- `cat-add-entity`: an entity on the `Cat.EFCore` base classes, with its configuration and migration, for SQL Server or PostgreSQL.
 - `cat-error-codes`: define error codes with a prefix and keep them unique. See [the error code convention](../modules/Cat.Responses/README.md#the-error-code-convention).
 
 **Check and migrate**
@@ -136,8 +136,9 @@ Ideas only. None of them is decided. The names are suggestions.
 - `cat-upgrade`: help move to a new version of a module, using the release notes.
 
 **Later, when the modules exist**
-- Skills for messaging, sagas, scheduling and authorization. The modules exist now, so these can come after the daily work skills.
-- Skills for the planned modules, such as `Cat.Inbox`, `Cat.Outbox`, `Cat.Resilience`, `Cat.Telemetry` and `Cat.Caching`. They wait for the modules.
+- Skills for messaging, sagas, scheduling and authorization.
+- Skills for `Cat.Inbox`, `Cat.Outbox`, `Cat.Resilience`, `Cat.Telemetry`, `Cat.Caching` and `Cat.Localizations`.
+- These modules all exist now, so the skills can come after the daily work skills.
 
 #### Decided
 - **Idea.** Create skills for the developers who use the toolkit. Plan them here and list them in the repo overview of the readme.
