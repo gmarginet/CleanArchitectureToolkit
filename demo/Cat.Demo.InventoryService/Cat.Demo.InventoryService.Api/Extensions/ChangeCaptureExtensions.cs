@@ -14,8 +14,8 @@ public static class ChangeCaptureExtensions
 
     /// <summary>
     /// Sends every change of the stock table as a <c>StockChanged</c> message, without any Inventory code publishing it.
-    /// <c>Cat.Sql.Cdc</c> reads the change table of SQL Server. Change data capture must be on for the table, see <c>005-change-capture.sql</c>,
-    /// so the AppHost runs the scripts and sets <see cref="ConfigurationKey"/> to <c>true</c>.
+    /// <c>Cat.Sql.Cdc</c> reads the change table of SQL Server. Change data capture must be on for the table, see <c>ChangeCapture.sql</c>,
+    /// so the AppHost deploys the SQL project and sets <see cref="ConfigurationKey"/> to <c>true</c>.
     /// </summary>
     /// <remarks>
     /// The reader uses the inventory connection string. The messages go through <c>ICatMessageSender</c>.

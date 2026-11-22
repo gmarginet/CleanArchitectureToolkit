@@ -18,7 +18,7 @@ public static class SchedulerExtensions
 
     /// <summary>
     /// Switches the scheduler on. Every night at 02:00 UTC it sends <see cref="LowStockReportRequest"/> as the system user <c>inventory</c>.
-    /// The runs are claimed in the inventory database, table <c>CatJobRun</c> from <c>004-scheduling.sql</c>, so two instances of Inventory never run the job twice.
+    /// The runs are claimed in the inventory database, table <c>CatJobRun</c> of the SQL project, so two instances of Inventory never run the job twice.
     /// The limit comes from <c>Inventory:LowStockLimit</c>, with <see cref="LowStockSettings.DefaultLimit"/> as the default.
     /// The development endpoint <c>POST /development/scheduler/low-stock-report</c> still triggers the request without the scheduler.
     /// </summary>

@@ -52,6 +52,26 @@ Task("Test")
         context.Information("Testing {0}", file.FullPath);
          DotNetTest(file.FullPath, settings);
      }
+
+     // The Node.js projects of the demo have their own tests. Node.js 22.18 or later is needed for the provider.
+     // On Windows npm is a script, npm.cmd, which only runs right when the command prompt starts it.
+     var npm = IsRunningOnWindows() ? "cmd" : "npm";
+     foreach (var folder in new[] { "./demo/Cat.Demo.PaymentProvider", "./demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App" })
+     {
+        foreach (var command in new[] { "ci", "test" })
+        {
+            context.Information("npm {0} in {1}", command, folder);
+            var exitCode = StartProcess(npm, new ProcessSettings
+            {
+                Arguments = IsRunningOnWindows() ? "/c npm " + command : command,
+                WorkingDirectory = folder
+            });
+            if (exitCode != 0)
+            {
+                throw new CakeException($"npm {command} failed in {folder} with exit code {exitCode}.");
+            }
+        }
+     }
 });
 
 // The integration tests start containers, so they need Docker. They never run with the Test target.

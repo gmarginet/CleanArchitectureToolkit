@@ -1,0 +1,21 @@
+{
+  "name": "cat-demo-payment-provider",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A stand-in for an outside payment provider. It shares nothing with the shop but an OpenAPI contract and an API key.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "start": "node src/server.ts",
+    "test": "tsc --noEmit && node --test"
+  },
+  "dependencies": {
+    "fastify": "^5.12.8"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2"
+  }
+}

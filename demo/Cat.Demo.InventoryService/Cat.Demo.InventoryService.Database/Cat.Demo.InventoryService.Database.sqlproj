@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.Build.Sql/2.3.0">
+
+    <PropertyGroup>
+        <Name>Cat.Demo.InventoryService.Database</Name>
+        <!-- SQL Server 2022, the version of the container image of the AppHost. -->
+        <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
+        <ModelCollation>1033, CI</ModelCollation>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- The deployment scripts are included by PostDeployment.sql, so they are not part of the schema. -->
+        <Build Remove="Scripts\**" />
+        <None Include="Scripts\**" />
+        <PostDeploy Include="Scripts\PostDeployment.sql" />
+    </ItemGroup>
+
+</Project>

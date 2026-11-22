@@ -1,7 +1,5 @@
 using System;
-using System.IO;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using Aspire.Hosting;
 using Microsoft.Extensions.Configuration;
 
@@ -23,33 +21,54 @@ if (!string.IsNullOrWhiteSpace(builder.Configuration["Catalog:QueryLatency"]))
     catalog.WithEnvironment("Catalog__QueryLatency", builder.Configuration["Catalog:QueryLatency"]);
 }
 
-// The payment provider is a stand-in for an outside payment provider. It is a plain REST API with no CAT modules,
-// and it is not behind the gateway. Orders knows it by its address and an API key.
+// The payment provider is a stand-in for an outside payment provider. It is a Node.js API with no CAT modules,
+// and it is not behind the gateway. Orders knows it by its address, an API key and the OpenAPI contract.
 // It can fail on purpose. Set Payment:Latency, Payment:ErrorPercentage or Payment:Outage in the
 // configuration of the AppHost (for example in the user secrets) and restart. The demo readme explains the values.
-// The API key is a secret parameter with a demo value in appsettings.json. Do not use it outside the demo.
+// A wrong value fails here, when the AppHost starts. The API key is a secret parameter with a demo value in appsettings.json.
+// Do not use it outside the demo.
 var providerApiKey = builder.AddParameter("payment-provider-api-key", secret: true);
-var payment = builder.AddProject<Projects.Cat_Demo_PaymentService_Api>("payment")
-    .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
-    .WithHttpEndpoint(port: 5103, name: "http", isProxied: false)
+var paymentProvider = builder.AddJavaScriptApp("payment-provider", "../../Cat.Demo.PaymentProvider", "start")
+    .WithNpm(install: true)
+    .WithHttpEndpoint(port: 5103, env: "PORT", name: "http", isProxied: false)
     .WithHttpHealthCheck("/health")
-    .WithEnvironment("Provider__ApiKey", providerApiKey);
+    .WithEnvironment("PROVIDER_API_KEY", providerApiKey);
 
-foreach (var (setting, variable) in new[]
+var paymentLatency = builder.Configuration["Payment:Latency"];
+if (!string.IsNullOrWhiteSpace(paymentLatency))
 {
-    ("Payment:Latency", "PaymentFailures__Latency"),
-    ("Payment:ErrorPercentage", "PaymentFailures__ErrorPercentage"),
-    ("Payment:Outage", "PaymentFailures__Outage")
-})
-{
-    var value = builder.Configuration[setting];
-    if (!string.IsNullOrWhiteSpace(value))
+    // The setting is a TimeSpan such as 00:00:05. The provider reads milliseconds.
+    if (!TimeSpan.TryParse(paymentLatency, CultureInfo.InvariantCulture, out var latency) || latency < TimeSpan.Zero)
     {
-        payment.WithEnvironment(variable, value);
+        throw new InvalidOperationException($"Payment:Latency must be a time such as 00:00:05, but it is '{paymentLatency}'.");
     }
+
+    paymentProvider.WithEnvironment("FAILURE_LATENCY_MS", ((long)latency.TotalMilliseconds).ToString(CultureInfo.InvariantCulture));
 }
 
-// Inventory is the database first service. Its database comes from the SQL scripts of the Database folder.
+var paymentErrorPercentage = builder.Configuration["Payment:ErrorPercentage"];
+if (!string.IsNullOrWhiteSpace(paymentErrorPercentage))
+{
+    if (!int.TryParse(paymentErrorPercentage, NumberStyles.None, CultureInfo.InvariantCulture, out var percentage) || percentage > 100)
+    {
+        throw new InvalidOperationException($"Payment:ErrorPercentage must be a whole number from 0 to 100, but it is '{paymentErrorPercentage}'.");
+    }
+
+    paymentProvider.WithEnvironment("FAILURE_ERROR_PERCENTAGE", percentage.ToString(CultureInfo.InvariantCulture));
+}
+
+var paymentOutage = builder.Configuration["Payment:Outage"];
+if (!string.IsNullOrWhiteSpace(paymentOutage))
+{
+    if (!bool.TryParse(paymentOutage, out var outage))
+    {
+        throw new InvalidOperationException($"Payment:Outage must be true or false, but it is '{paymentOutage}'.");
+    }
+
+    paymentProvider.WithEnvironment("FAILURE_OUTAGE", outage ? "true" : "false");
+}
+
+// Inventory is the database first service. Its database comes from the SQL project in the Database folder.
 var inventory = builder.AddProject<Projects.Cat_Demo_InventoryService_Api>("inventory")
     .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
     .WithHttpEndpoint(port: 5105, name: "http", isProxied: false)
@@ -77,7 +96,7 @@ var orders = builder.AddProject<Projects.Cat_Demo_OrderService_Api>("orders")
     .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
     .WithHttpEndpoint(port: 5102, name: "http", isProxied: false)
     .WithHttpHealthCheck("/health")
-    .WithEnvironment("PaymentProvider__Url", payment.GetEndpoint("http"))
+    .WithEnvironment("PaymentProvider__Url", paymentProvider.GetEndpoint("http"))
     .WithEnvironment("PaymentProvider__ApiKey", providerApiKey);
 
 // Orders waits 2 minutes for the payment. Set Orders:PaymentTimeoutSeconds in the configuration of the AppHost
@@ -120,7 +139,7 @@ var bus = builder.AddAzureServiceBus("messaging")
 // It creates both at startup. A handler in Orders calls the payment provider, which has no connection to the bus.
 orders.WithReference(bus)
     .WaitFor(bus)
-    .WaitFor(payment)
+    .WaitFor(paymentProvider)
     .WithEnvironment("Messaging__AdministrationConnectionString", serviceBusAdministrationConnection);
 inventory.WithReference(bus)
     .WaitFor(bus)
@@ -202,35 +221,13 @@ var postgres = builder.AddPostgres("postgres")
 var notificationsDb = postgres.AddDatabase("notifications-db", databaseName: "notifications");
 notifications.WithReference(notificationsDb, connectionName: "notifications").WaitFor(notificationsDb);
 
-// The inventory database is database first. The creation script creates the database and runs the SQL scripts
-// of the Database folder. The scripts only create what is missing, so they can run at every start.
-var inventoryDb = sql.AddDatabase("inventory-db", databaseName: "inventory")
-    .WithCreationScript(BuildInventoryCreationScript(builder.AppHostDirectory));
-// The scripts switch change data capture on, so Inventory may read the change table.
-inventory.WithReference(inventoryDb, connectionName: "inventory").WaitFor(inventoryDb)
+// The inventory database is database first. Its schema is the SQL project Cat.Demo.InventoryService.Database.
+// The AppHost builds the project and deploys it to the database. The post-deployment script adds the seed
+// and switches change data capture on, so Inventory may read the change table.
+var inventoryDb = sql.AddDatabase("inventory-db", databaseName: "inventory");
+var inventorySchema = builder.AddSqlProject<Projects.Cat_Demo_InventoryService_Database>("inventory-schema")
+    .WithReference(inventoryDb);
+inventory.WithReference(inventoryDb, connectionName: "inventory").WaitForCompletion(inventorySchema)
     .WithEnvironment("Inventory__ChangeCapture", "true");
 
 builder.Build().Run();
-
-// Builds one script that creates the inventory database and applies the SQL scripts of the Database folder in name order.
-// Aspire sends the script as a single batch, so the GO lines that separate batches in the files are left out.
-// A batch cannot switch to a database that it creates itself, so every file runs through EXEC, in the new database.
-static string BuildInventoryCreationScript(string appHostDirectory)
-{
-    var scriptsDirectory = Path.GetFullPath(Path.Combine(
-        appHostDirectory, "..", "..", "Cat.Demo.InventoryService", "Cat.Demo.InventoryService.Database"));
-
-    var script = new StringBuilder();
-    script.AppendLine("IF DB_ID(N'inventory') IS NULL CREATE DATABASE [inventory];");
-
-    foreach (var file in Directory.GetFiles(scriptsDirectory, "*.sql").OrderBy(path => path, StringComparer.Ordinal))
-    {
-        var content = string.Join(
-            Environment.NewLine,
-            File.ReadAllLines(file).Where(line => !line.Trim().Equals("GO", StringComparison.OrdinalIgnoreCase)));
-
-        script.AppendLine($"EXEC (N'USE [inventory];{Environment.NewLine}{content.Replace("'", "''")}');");
-    }
-
-    return script.ToString();
-}

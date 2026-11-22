@@ -2,8 +2,7 @@
 Refreshes the saved OpenAPI document of the payment provider and generates the client again.
 
 The payment provider is an outside system, so Orders keeps its own copy of the OpenAPI document and generates its own client.
-Start the AppHost first. The stand-in of the provider only publishes its OpenAPI document in Development, which is what the
-AppHost runs. Commit the changed document and the changed client together.
+Start the AppHost first. The stand-in of the provider publishes its OpenAPI document unless NODE_ENV is production. Commit the changed document and the changed client together.
 
 Usage: .\Refresh-PaymentProviderClient.ps1 [-ServiceUrl <address of the document>]
 #>

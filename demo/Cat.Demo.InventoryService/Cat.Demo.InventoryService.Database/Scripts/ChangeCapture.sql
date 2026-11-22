@@ -1,7 +1,8 @@
 -- Switches change data capture on for the database and for the stock table. Cat.Sql.Cdc reads the change table that this creates
 -- and Inventory sends every change as a StockChanged message. The capture needs the SQL Server Agent, which the AppHost starts
--- with MSSQL_AGENT_ENABLED=true. The script can run again: it only switches on what is still off.
+-- with MSSQL_AGENT_ENABLED=true. The script only switches on what is still off, and nothing switches it off.
 -- The capture instance is called dbo_StockItem. Inventory:ChangeCapture must be true for Inventory to read it.
+-- A deploy cannot change StockItem on a database that has the capture on (SQL72035). Remove the data volume for such a change.
 
 -- The Agent can start a little after SQL Server accepts connections, and the capture job needs it. Wait up to a minute.
 DECLARE @agentTries int = 0;
@@ -10,13 +11,11 @@ BEGIN
     WAITFOR DELAY '00:00:01';
     SET @agentTries += 1;
 END;
-GO
 
 IF EXISTS (SELECT 1 FROM sys.databases WHERE name = DB_NAME() AND is_cdc_enabled = 0)
 BEGIN
     EXEC sys.sp_cdc_enable_db;
 END;
-GO
 
 -- The Agent can say it runs before it can create the capture job. Then the enable fails and rolls back, so try again for up to a minute.
 -- When it still fails, the error of the last try goes up, so the AppHost shows it.
@@ -36,4 +35,3 @@ BEGIN
     END CATCH;
     SET @enableTries += 1;
 END;
-GO

@@ -33,7 +33,7 @@ builder.Services.AddCatValidatorsModule(typeof(StockReserveRequestValidator));
 builder.Services.AddCatServiceRequestsModule(typeof(StockReserveRequestHandler));
 builder.Services.AddCatCommandsModule(typeof(StockReserveCommandHandler));
 
-// The database and its schema come from the SQL scripts. This service never creates them.
+// The database and its schema come from the SQL project. This service never creates them.
 var connectionString = builder.Configuration.GetConnectionString("inventory")
     ?? throw new InvalidOperationException("Connection string 'inventory' is missing.");
 builder.Services.AddCatDemoInventoryDatabase(connectionString);

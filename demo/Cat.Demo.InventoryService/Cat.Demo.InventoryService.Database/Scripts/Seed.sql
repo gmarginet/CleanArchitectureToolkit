@@ -5,7 +5,6 @@ IF NOT EXISTS (SELECT 1 FROM dbo.Warehouse)
 BEGIN
     INSERT INTO dbo.Warehouse (Name, Location) VALUES (N'Main warehouse', N'Amsterdam');
 END;
-GO
 
 INSERT INTO dbo.StockItem (WarehouseId, Isbn, QuantityOnHand)
 SELECT w.Id, seed.Isbn, 50
@@ -21,4 +20,3 @@ CROSS JOIN (VALUES
 ) AS seed (Isbn)
 WHERE w.Name = N'Main warehouse'
   AND NOT EXISTS (SELECT 1 FROM dbo.StockItem AS s WHERE s.WarehouseId = w.Id AND s.Isbn = seed.Isbn);
-GO
