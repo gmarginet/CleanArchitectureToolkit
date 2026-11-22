@@ -65,7 +65,7 @@ From the readme:
 From the demo:
 - The workers run in the Api host.
 - Catalog is code first, with hand written entities in DataModels and migrations in Infrastructure.
-- Inventory is database first. Its schema comes from SQL scripts in the folder `Cat.Demo.InventoryService.Database`, which is not a project, and the AppHost runs them. Its scaffolded entities live in `Cat.Demo.InventoryService.DataModels`, and its scaffolded `InventoryDbContext` in Infrastructure.
+- Inventory is database first. Its schema is the SQL project `Cat.Demo.InventoryService.Database` with the `Microsoft.Build.Sql` SDK, with one file per table and a post-deployment script for the seed and the change data capture, and the AppHost deploys it with `AddSqlProject`. Its scaffolded entities live in `Cat.Demo.InventoryService.DataModels`, and its scaffolded `InventoryDbContext` in Infrastructure.
 - Catalog and Inventory have an `Api.Client` project that Orders uses to call them through the gateway. The payment provider is outside the shop, so Orders calls it with its own client in Infrastructure. Sharing the `Contracts` of a service is the choice of the developer.
 - Orders adds workflows, sagas, message handlers and scheduled jobs. Inventory has a scheduled job and turns stock changes into messages with `Cat.Sql.Cdc`. These are the variations a template needs.
 - Catalog, Orders and Inventory run on SQL Server. Notifications is code first on PostgreSQL, with the same `Cat.EFCore` base entity and no temporal table.
@@ -87,9 +87,6 @@ From the module readmes:
 #### What exists today
 - The templates do not exist yet. They are listed in the repo overview of the readme as tooling with the status New.
 - The repository has no template project and no `template.json`. The demo services are the working examples to build from.
-
-#### Needs
-- The SQL project of Inventory, see [Cat.Demo.md](Cat.Demo.md#phase-2). The database first part of the template follows it.
 
 #### Decided
 - **Form.** `dotnet new` templates.
@@ -148,7 +145,7 @@ A `dotnet new` solution template that creates a whole system in one command, as 
 - **Its own phase.** It is built after phase 1 and reuses every decision of `cat-service` (owner, 2026-11-22).
 - **Short name.** `cat-system`, which pairs with the skill `cat-new-system` as `cat-service` pairs with `cat-new-service` (owner, 2026-11-22).
 - **Parts.** An AppHost, `ServiceDefaults`, a YARP gateway like `Cat.Demo.Api.Gateway` in the demo, and a first service made with `cat-service`, wired into the AppHost and the gateway. No web client, because the front end is the choice of the developer. The template holds Aspire code, which is allowed because it is not a module (owner, 2026-11-22).
-- **PostgreSQL scripts.** For a database first service on PostgreSQL, the AppHost runs the plain SQL scripts of the service, as the demo AppHost did for Inventory (owner, 2026-11-22).
+- **PostgreSQL scripts.** For a database first service on PostgreSQL, the AppHost runs the plain SQL scripts of the service (owner, 2026-11-22).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
