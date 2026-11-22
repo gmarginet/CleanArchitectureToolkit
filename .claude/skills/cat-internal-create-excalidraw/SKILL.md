@@ -29,7 +29,9 @@ Drawings live in `resources/schemas/*.excalidraw.svg`: `CatArchitecture`, `CatSe
 - Blue `#a5d8ff` for projects and services.
 - Green `#b2f2bb` for databases.
 - Dotted `#1971c2` frames for groups.
-- Dotted boxes for optional or later parts.
+- Cross-hatched boxes for optional parts, with `fillStyle` `cross-hatch` and a solid border, as in `CatServiceProjectStructure`. In the demo drawing a cross-hatched box is a block that is not built yet, see the `cat-internal-create-demo-readme` skill.
+- Solid arrows for required references, dotted arrows for optional ones. In the demo drawing a dotted arrow is a connection that does not exist yet.
+- A drawing that uses cross-hatched boxes or dotted arrows explains them in its legend.
 - Excalifont (`fontFamily` 5), size 20, roughness 1, strokeWidth 2.
 - The SVG root has `filter="invert(93%) hue-rotate(180deg)"`.
 - Reuse the `<defs>` font block from an existing SVG in `resources/schemas`.
