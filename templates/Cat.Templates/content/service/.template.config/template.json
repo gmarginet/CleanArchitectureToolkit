@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Web", "API", "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.Service",
+  "name": "CAT service",
+  "shortName": "cat-service",
+  "description": "A service with the project structure of the Clean Architecture Toolkit.",
+  "tags": { "language": "C#", "type": "solution" },
+  "sourceName": "ServiceName",
+  "preferNameDirectory": true,
+  "defaultName": "MyService",
+  "sources": [
+    {
+      "modifiers": [
+        { "condition": "(!Tests)", "exclude": [ "ServiceName.CoreService.Tests/**" ] },
+        { "condition": "(!ApiClient)", "exclude": [ "ServiceName.Api.Client/**" ] },
+        { "condition": "(!ExampleRequest)", "exclude": [ "**/ExampleGet*.cs", "**/ExampleModel.cs", "ServiceName.Api/ServiceName.http" ] }
+      ]
+    }
+  ],
+  "forms": {
+    "shortName": { "identifier": "replace", "pattern": "^.*\\.", "replacement": "" },
+    "lower": { "identifier": "lowerCase" },
+    "lowerShortName": { "identifier": "chain", "steps": [ "shortName", "lower" ] }
+  },
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "The target framework of the service.",
+      "choices": [
+        { "choice": "net11.0", "description": ".NET 11, the latest release" },
+        { "choice": "net10.0", "description": ".NET 10, the LTS release" }
+      ],
+      "defaultValue": "net11.0",
+      "replaces": "TARGET_FRAMEWORK"
+    },
+    "Database": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "The database of the service.",
+      "choices": [
+        { "choice": "SqlServer", "description": "SQL Server" },
+        { "choice": "PostgreSQL", "description": "PostgreSQL" }
+      ],
+      "defaultValue": "SqlServer"
+    },
+    "Tests": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add the project ServiceName.CoreService.Tests.",
+      "defaultValue": "true"
+    },
+    "ApiClient": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add the project ServiceName.Api.Client for a service that other services call.",
+      "defaultValue": "false"
+    },
+    "ExampleRequest": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add one example request, with its handler, query, test and endpoint.",
+      "defaultValue": "true"
+    },
+    "CatVersion": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The version of the CAT packages. The default is the version of the template pack.",
+      "defaultValue": "0.0.0-local",
+      "replaces": "CAT_VERSION"
+    },
+    "ServiceShort": {
+      "type": "derived",
+      "valueSource": "name",
+      "valueTransform": "shortName",
+      "replaces": "ServiceShort",
+      "fileRename": "ServiceShort"
+    },
+    "ServiceLower": {
+      "type": "derived",
+      "valueSource": "name",
+      "valueTransform": "lowerShortName",
+      "replaces": "servicelower"
+    },
+    "SqlServer": {
+      "type": "computed",
+      "value": "(Database == \"SqlServer\")"
+    },
+    "PostgreSQL": {
+      "type": "computed",
+      "value": "(Database == \"PostgreSQL\")"
+    },
+    "Net10": {
+      "type": "computed",
+      "value": "(Framework == \"net10.0\")"
+    }
+  },
+  "postActions": []
+}

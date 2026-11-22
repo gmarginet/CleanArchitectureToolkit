@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>TARGET_FRAMEWORK</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
+        <PackageReference Include="gmarginet.Cat.Commands" />
+        <PackageReference Include="gmarginet.Cat.Commands.Decorators.Logging" />
+        <PackageReference Include="gmarginet.Cat.Expressions" />
+        <PackageReference Include="gmarginet.Cat.Minimal.Api" />
+        <PackageReference Include="gmarginet.Cat.Queries" />
+        <PackageReference Include="gmarginet.Cat.Queries.Decorators.Logging" />
+        <PackageReference Include="gmarginet.Cat.Resilience" />
+        <PackageReference Include="gmarginet.Cat.ServiceRequests" />
+        <PackageReference Include="gmarginet.Cat.ServiceRequests.Decorators.ActivitySource" />
+        <PackageReference Include="gmarginet.Cat.ServiceRequests.Decorators.Logging" />
+        <PackageReference Include="gmarginet.Cat.ServiceRequests.Decorators.Validation" />
+        <PackageReference Include="gmarginet.Cat.Telemetry" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ServiceName.Contracts\ServiceName.Contracts.csproj" />
+        <ProjectReference Include="..\ServiceName.CoreService\ServiceName.CoreService.csproj" />
+        <ProjectReference Include="..\ServiceName.Infrastructure\ServiceName.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

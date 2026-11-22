@@ -112,7 +112,10 @@ Task("Pack")
          }
      };
     
-     var projectFiles = GetFiles("./modules/**/*.csproj");
+     // The template pack lives in templates/. Its content has project files of its own that are no projects of the toolkit,
+     // so only the project of the pack itself is packed.
+     var projectFiles = GetFiles("./modules/**/*.csproj")
+         .Concat(GetFiles("./templates/Cat.Templates/Cat.Templates.csproj"));
      foreach (var file in projectFiles)
      {
         context.Information("Packing {0}", file.FullPath);
@@ -120,8 +123,35 @@ Task("Pack")
      }
 });
 
-Task("Publish")
+// The template tests create services from the template pack, build them against the packed modules and run their tests.
+// They need the packs that the Pack target makes, so they never run with the Test target. Publish runs them first,
+// so a template that no longer builds against a changed module is never published.
+Task("TemplateTest")
     .IsDependentOn("Pack")
+    .Does(context =>
+{
+    var templatePack = GetFiles("./artifacts/gmarginet.Cat.Templates.*.nupkg").FirstOrDefault()
+        ?? throw new CakeException("The template pack is missing in ./artifacts.");
+
+    var settings = new DotNetTestSettings
+    {
+        Configuration = configuration,
+        EnvironmentVariables = new Dictionary<string, string>
+        {
+            ["CAT_TEMPLATE_PACK"] = templatePack.FullPath,
+            ["CAT_PACKAGE_FEED"] = MakeAbsolute(Directory("./artifacts")).FullPath
+        }
+    };
+
+    foreach (var file in GetFiles("./tests/**/*.TemplateTests.csproj"))
+    {
+        context.Information("Template testing {0}", file.FullPath);
+        DotNetTest(file.FullPath, settings);
+    }
+});
+
+Task("Publish")
+    .IsDependentOn("TemplateTest")
     .Does(context =>
 {
     var apiKey =  context.EnvironmentVariable("NUGET_API_KEY");

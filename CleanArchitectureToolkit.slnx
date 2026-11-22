@@ -295,9 +295,13 @@
     <Project Path="tests/Cat.ServiceRequests.Tests/Cat.ServiceRequests.Tests.csproj" />
     <Project Path="tests/Cat.Sql.Cdc.Tests/Cat.Sql.Cdc.Tests.csproj" />
     <Project Path="tests/Cat.Telemetry.Tests/Cat.Telemetry.Tests.csproj" />
+    <Project Path="tests/Cat.Templates.TemplateTests/Cat.Templates.TemplateTests.csproj" />
     <Project Path="tests/Cat.UnitTesting.Tests/Cat.UnitTesting.Tests.csproj" />
     <Project Path="tests/Cat.Users.Tests/Cat.Users.Tests.csproj" />
     <Project Path="tests/Cat.Validators.Tests/Cat.Validators.Tests.csproj" />
+  </Folder>
+  <Folder Name="/templates/">
+    <Project Path="templates/Cat.Templates/Cat.Templates.csproj" />
   </Folder>
   <Folder Name="/tools/">
     <File Path="tools/Directory.Build.props" />

@@ -1,0 +1,78 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <CatVersion>CAT_VERSION</CatVersion>
+  </PropertyGroup>
+  <!-- The CAT packages all have the same version. Change CatVersion to update them. -->
+  <ItemGroup>
+    <PackageVersion Include="gmarginet.Cat.Commands" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Commands.Abstractions" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Commands.Decorators.Logging" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.EFCore.Commands" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.EFCore.Entities" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.EFCore.Queries" Version="$(CatVersion)" />
+    <!--#if (SqlServer)-->
+    <PackageVersion Include="gmarginet.Cat.EFCore.Entities.SqlServer" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.EFCore.Extensions.SqlServer" Version="$(CatVersion)" />
+    <!--#endif-->
+    <!--#if (PostgreSQL)-->
+    <PackageVersion Include="gmarginet.Cat.EFCore.Extensions.PostgreSQL" Version="$(CatVersion)" />
+    <!--#endif-->
+    <PackageVersion Include="gmarginet.Cat.Api.Client" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Expressions" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Minimal.Api" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Queries" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Queries.Abstractions" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Queries.Decorators.Logging" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Resilience" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Responses.Abstractions" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.ServiceRequests" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.ServiceRequests.Abstractions" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.ServiceRequests.Decorators.ActivitySource" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.ServiceRequests.Decorators.Logging" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.ServiceRequests.Decorators.Validation" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Telemetry" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Validators" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Validators.Abstractions" Version="$(CatVersion)" />
+    <!--#if (Tests)-->
+    <PackageVersion Include="gmarginet.Cat.UnitTesting.Commands" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.UnitTesting.NUnit" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.UnitTesting.Queries" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.UnitTesting.Responses.NUnit" Version="$(CatVersion)" />
+    <PackageVersion Include="coverlet.collector" Version="10.1.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
+    <PackageVersion Include="NUnit" Version="5.0.0" />
+    <PackageVersion Include="NUnit.Analyzers" Version="4.15.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="6.3.1" />
+    <!--#endif-->
+  </ItemGroup>
+  <!-- The packages that follow the release of .NET have the versions of the target framework of the service. -->
+  <!--#if (Net10)-->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.15" />
+    <PackageVersion Include="Npgsql" Version="10.0.3" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.11.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.15" />
+    <PackageVersion Include="System.Text.Json" Version="10.0.15" />
+  </ItemGroup>
+  <!--#else-->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="11.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="11.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="11.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="11.0.0" />
+    <PackageVersion Include="Npgsql" Version="11.0.0" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="11.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="11.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0" />
+    <PackageVersion Include="System.Text.Json" Version="11.0.0" />
+  </ItemGroup>
+  <!--#endif-->
+</Project>

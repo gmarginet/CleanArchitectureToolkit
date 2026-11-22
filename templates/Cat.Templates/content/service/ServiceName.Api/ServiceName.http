@@ -1,0 +1,9 @@
+@ServiceShort_HostAddress = http://localhost:5000
+
+### Start the Api first. Replace the id with an id of a row in the table ExampleItem.
+
+### ExampleGetRequest => OK, or 404 when the id does not exist
+GET {{ServiceShort_HostAddress}}/servicelower/examples/00000000-0000-0000-0000-000000000001
+
+### Health => OK
+GET {{ServiceShort_HostAddress}}/health

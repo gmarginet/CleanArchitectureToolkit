@@ -1,0 +1,13 @@
+<Solution>
+  <Project Path="ServiceName.Api/ServiceName.Api.csproj" />
+  <!--#if (ApiClient)-->
+  <Project Path="ServiceName.Api.Client/ServiceName.Api.Client.csproj" />
+  <!--#endif-->
+  <Project Path="ServiceName.Contracts/ServiceName.Contracts.csproj" />
+  <Project Path="ServiceName.CoreService/ServiceName.CoreService.csproj" />
+  <!--#if (Tests)-->
+  <Project Path="ServiceName.CoreService.Tests/ServiceName.CoreService.Tests.csproj" />
+  <!--#endif-->
+  <Project Path="ServiceName.DataModels/ServiceName.DataModels.csproj" />
+  <Project Path="ServiceName.Infrastructure/ServiceName.Infrastructure.csproj" />
+</Solution>

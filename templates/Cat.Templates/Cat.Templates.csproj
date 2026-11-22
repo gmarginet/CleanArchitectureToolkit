@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <PackageType>Template</PackageType>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <Title>Cat Templates</Title>
+        <Description>dotnet new templates for the Clean Architecture Toolkit: a service with the project structure of the toolkit and the single parts of a service.</Description>
+        <PackageTags>dotnet-new;templates;clean-architecture</PackageTags>
+        <IncludeContentInPack>true</IncludeContentInPack>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <ContentTargetFolders>content</ContentTargetFolders>
+        <EnableDefaultItems>false</EnableDefaultItems>
+        <NoWarn>$(NoWarn);NU5128</NoWarn>
+        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- The root Directory.Build.props points to the icon and the readme from a module folder, one level deeper. -->
+        <None Remove="..\..\..\resources\icon\CatIcon.png" />
+        <None Remove="..\..\..\README_NUGET.md" />
+        <None Include="..\..\resources\icon\CatIcon.png" Pack="true" PackagePath="\" />
+        <None Include="..\..\README_NUGET.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="content\**\*" Exclude="content\**\bin\**;content\**\obj\**" PackagePath="content\%(RecursiveDir)%(Filename)%(Extension)" />
+    </ItemGroup>
+
+    <!-- The generated solution gets the version of the CAT packages of this release as the default of the CatVersion parameter. -->
+    <Target Name="CatSetTemplateVersion" BeforeTargets="_GetPackageFiles" Condition="'$(PackageVersion)' != ''">
+        <PropertyGroup>
+            <CatTemplateJson>$(MSBuildProjectDirectory)\content\service\.template.config\template.json</CatTemplateJson>
+            <CatTemplateJsonOut>$(IntermediateOutputPath)service.template.json</CatTemplateJsonOut>
+        </PropertyGroup>
+        <WriteLinesToFile File="$(CatTemplateJsonOut)"
+                          Lines="$([System.IO.File]::ReadAllText('$(CatTemplateJson)').Replace('0.0.0-local', '$(PackageVersion)'))"
+                          Overwrite="true" WriteOnlyWhenDifferent="true" />
+        <ItemGroup>
+            <Content Remove="content\service\.template.config\template.json" />
+            <Content Include="$(CatTemplateJsonOut)" PackagePath="content\service\.template.config\template.json" />
+        </ItemGroup>
+    </Target>
+
+</Project>

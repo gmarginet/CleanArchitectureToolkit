@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>TARGET_FRAMEWORK</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="gmarginet.Cat.EFCore.Entities" />
+        <!--#if (SqlServer)-->
+        <PackageReference Include="gmarginet.Cat.EFCore.Entities.SqlServer" />
+        <!--#endif-->
+    </ItemGroup>
+
+</Project>

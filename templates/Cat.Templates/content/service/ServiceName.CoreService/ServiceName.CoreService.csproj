@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>TARGET_FRAMEWORK</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="gmarginet.Cat.Commands.Abstractions" />
+        <PackageReference Include="gmarginet.Cat.Queries.Abstractions" />
+        <PackageReference Include="gmarginet.Cat.Validators" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ServiceName.Contracts\ServiceName.Contracts.csproj" />
+        <ProjectReference Include="..\ServiceName.DataModels\ServiceName.DataModels.csproj" />
+    </ItemGroup>
+
+</Project>

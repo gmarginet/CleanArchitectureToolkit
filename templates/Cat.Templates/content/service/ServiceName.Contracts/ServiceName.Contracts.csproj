@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <!-- Any caller can use the contracts, so they target netstandard2.0, as the modules do. -->
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="gmarginet.Cat.ServiceRequests.Abstractions" />
+        <PackageReference Include="gmarginet.Cat.Validators.Abstractions" />
+    </ItemGroup>
+
+</Project>
