@@ -55,6 +55,7 @@ builder.AddDemoJwtAuthentication();
 
 var app = builder.Build();
 app.UseCatMinimalApiModule();
+app.UseDemoRequestLocalization();
 
 app.UseAuthentication();
 app.UseAuthorization();

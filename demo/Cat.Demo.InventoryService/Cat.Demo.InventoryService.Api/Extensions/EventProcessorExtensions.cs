@@ -41,7 +41,9 @@ public static class EventProcessorExtensions
 
         // A message needs a valid token of a logged in caller, and a message of Inventory carries the client credentials token of Inventory.
         services.AddCatEventProcessor(configuration, processor => processor.Receive<OrderConfirmed>(options =>
-            options.Require(policy => policy.RequireAuthenticatedUser())));
+            options.Require(policy => policy.RequireAuthenticatedUser()))
+            // The messages Inventory sends from a handler keep the language of the sender.
+            .ApplySenderCulture());
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
 
         services.AddDemoClientCredentials(configuration);

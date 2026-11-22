@@ -75,7 +75,9 @@ public static class OrderSagaExtensions
                 receive.UseInbox = true;
                 receive.Require(policy => policy.RequireAuthenticatedUser());
             })
-            .Receive<CatSagaTimeout>(receive => receive.Require(policy => policy.RequireAuthenticatedUser())));
+            .Receive<CatSagaTimeout>(receive => receive.Require(policy => policy.RequireAuthenticatedUser()))
+            // The messages of a saga keep the language of the user who placed the order, so OrderConfirmed reaches Notifications in it.
+            .ApplySenderCulture());
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
         services.AddCatInboxEfCore<OrderDbContext>();
         services.AddCatEventProcessorInbox();

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.NetStandard.ResXResourceReader, System.Resources.NetStandard, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.NetStandard.ResXResourceWriter, System.Resources.NetStandard, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51</value>
+  </resheader>
+  <data name="OrderConfirmed.Subject" xml:space="preserve">
+    <value>Je bestelling {0} is bevestigd</value>
+    <comment>{0} is the order number.</comment>
+  </data>
+  <data name="OrderConfirmed.Body" xml:space="preserve">
+    <value>Hallo {0},
+
+Je bestelling {1} is bevestigd. De voorraad is gereserveerd en de betaling is ontvangen.
+Het totaal is EUR {2:N2}.
+
+Bedankt voor je bestelling bij de Cat boekhandel.</value>
+    <comment>{0} is the name of the customer, {1} is the order number, {2} is the total in euro.</comment>
+  </data>
+  <data name="OrderConfirmed.UnnamedCustomer" xml:space="preserve">
+    <value>klant</value>
+    <comment>Used as {0} of OrderConfirmed.Body when the customer has no name.</comment>
+  </data>
+  <data name="StockDrop.Subject" xml:space="preserve">
+    <value>Lage voorraad: ISBN {0}</value>
+    <comment>{0} is the ISBN.</comment>
+  </data>
+  <data name="StockDrop.Body" xml:space="preserve">
+    <value>Hallo,
+
+De voorraad van ISBN {0} in magazijn {1} is gedaald naar {2}. De grens is {3}.
+
+Bestel alsjeblieft meer exemplaren.</value>
+    <comment>{0} is the ISBN, {1} is the warehouse number, {2} is the new quantity, {3} is the limit.</comment>
+  </data>
+  <data name="LowStockReport.Subject.One" xml:space="preserve">
+    <value>Lage voorraad: 1 artikel</value>
+    <comment>The subject of a report with one line.</comment>
+  </data>
+  <data name="LowStockReport.Subject.Many" xml:space="preserve">
+    <value>Lage voorraad: {0} artikelen</value>
+    <comment>The subject of a report with more lines. {0} is the number of lines.</comment>
+  </data>
+  <data name="LowStockReport.Body" xml:space="preserve">
+    <value>Hallo,
+
+Deze artikelen zitten onder de grens van {0}:
+
+{1}
+
+Bestel alsjeblieft meer exemplaren.</value>
+    <comment>{0} is the limit, {1} is the list of lines, one LowStockReport.Line for each item.</comment>
+  </data>
+  <data name="LowStockReport.Line" xml:space="preserve">
+    <value>- ISBN {0}, {1}: nog {2} over</value>
+    <comment>One line of the list. {0} is the ISBN, {1} is the name of the warehouse, {2} is the quantity on hand.</comment>
+  </data>
+</root>

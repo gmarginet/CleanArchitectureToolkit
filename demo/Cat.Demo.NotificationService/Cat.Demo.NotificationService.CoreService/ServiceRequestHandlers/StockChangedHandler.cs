@@ -18,11 +18,13 @@ public class StockChangedHandler : ICatServiceRequestHandler<StockChanged>
 {
     private readonly IMailSender _mailSender;
     private readonly NotificationSettings _settings;
+    private readonly StockDropMailBuilder _mailBuilder;
 
-    public StockChangedHandler(IMailSender mailSender, NotificationSettings settings)
+    public StockChangedHandler(IMailSender mailSender, NotificationSettings settings, StockDropMailBuilder mailBuilder)
     {
         _mailSender = mailSender;
         _settings = settings;
+        _mailBuilder = mailBuilder;
     }
 
     public async Task<ICatResponse> HandleAsync(StockChanged serviceRequest, CancellationToken cancellationToken = default)
@@ -32,7 +34,9 @@ public class StockChangedHandler : ICatServiceRequestHandler<StockChanged>
             return CatResponse.Ok();
         }
 
-        await _mailSender.SendAsync(StockDropMailBuilder.Build(_settings.AdminEmail, serviceRequest), cancellationToken);
+        // The stock change can come from the order of a Dutch customer. The admin still reads the mail in the language of the settings.
+        using var culture = _settings.UseAdminCulture();
+        await _mailSender.SendAsync(_mailBuilder.Build(_settings.AdminEmail, serviceRequest), cancellationToken);
         return CatResponse.Ok();
     }
 

@@ -21,6 +21,7 @@ namespace Cat.Demo.NotificationService.Infrastructure.CommandHandlers;
 public class SendOrderConfirmedMailCommandHandler(
     NotificationDbContext dbContext,
     IMailSender mailSender,
+    OrderConfirmedMailBuilder mailBuilder,
     TimeProvider timeProvider)
     : CatEfCommandHandlerBase<NotificationDbContext, SendOrderConfirmedMailCommand>(dbContext)
 {
@@ -34,7 +35,7 @@ public class SendOrderConfirmedMailCommandHandler(
             return CatResponse.Ok();
         }
 
-        var mail = OrderConfirmedMailBuilder.Build(command);
+        var mail = mailBuilder.Build(command);
         await mailSender.SendAsync(mail, cancellationToken);
 
         DbContext.SentMails.Add(new SentMail

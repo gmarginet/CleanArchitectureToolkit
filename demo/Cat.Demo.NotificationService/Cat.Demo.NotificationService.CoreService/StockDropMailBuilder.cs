@@ -1,17 +1,17 @@
 using Cat.Demo.InventoryService.Contracts.Messages;
 using Cat.Demo.NotificationService.CoreService.Abstractions;
+using Microsoft.Extensions.Localization;
 
 namespace Cat.Demo.NotificationService.CoreService;
 
-/// <summary>Builds the text of the mail for a stock item that just dropped below the limit. The mails are in English.</summary>
-public static class StockDropMailBuilder
+/// <summary>Builds the mail for a stock item that just dropped below the limit, in the current UI culture.</summary>
+public class StockDropMailBuilder(IStringLocalizer<MailTexts> localizer)
 {
-    public static OutgoingMail Build(string adminEmail, StockChanged change)
+    public OutgoingMail Build(string adminEmail, StockChanged change)
     {
-        var body = $"Hello,\n\n"
-                   + $"The stock of ISBN {change.Isbn} in warehouse {change.WarehouseId} dropped to {change.NewQuantity}. The limit is {change.Limit}.\n\n"
-                   + "Please order more copies.";
-
-        return new OutgoingMail(adminEmail, $"Low stock: ISBN {change.Isbn}", body);
+        return new OutgoingMail(
+            adminEmail,
+            localizer["StockDrop.Subject", change.Isbn],
+            localizer["StockDrop.Body", change.Isbn, change.WarehouseId, change.NewQuantity!, change.Limit]);
     }
 }

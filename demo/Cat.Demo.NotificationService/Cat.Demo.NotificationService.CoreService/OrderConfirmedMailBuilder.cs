@@ -1,23 +1,22 @@
-using System.Globalization;
 using Cat.Demo.NotificationService.CoreService.Abstractions;
 using Cat.Demo.NotificationService.CoreService.Commands;
+using Microsoft.Extensions.Localization;
 
 namespace Cat.Demo.NotificationService.CoreService;
 
-/// <summary>Builds the text of the order confirmed mail. The mails are in English.</summary>
-public static class OrderConfirmedMailBuilder
+/// <summary>
+/// Builds the order confirmed mail in the current UI culture. The total is formatted with the current culture,
+/// so a Dutch mail shows <c>EUR 12,50</c>.
+/// </summary>
+public class OrderConfirmedMailBuilder(IStringLocalizer<MailTexts> localizer)
 {
-    public static OutgoingMail Build(SendOrderConfirmedMailCommand command)
+    public OutgoingMail Build(SendOrderConfirmedMailCommand command)
     {
-        var name = string.IsNullOrWhiteSpace(command.CustomerName) ? "customer" : command.CustomerName;
-        var total = command.Total.ToString("0.00", CultureInfo.InvariantCulture);
+        var name = string.IsNullOrWhiteSpace(command.CustomerName) ? localizer["OrderConfirmed.UnnamedCustomer"].Value : command.CustomerName;
 
-        var body =
-            $"Hello {name},\n\n" +
-            $"Your order {command.OrderNumber} is confirmed. The stock is reserved and the payment is taken.\n" +
-            $"The total is EUR {total}.\n\n" +
-            "Thank you for ordering at the Cat bookshop.";
-
-        return new OutgoingMail(command.CustomerEmail, $"Your order {command.OrderNumber} is confirmed", body);
+        return new OutgoingMail(
+            command.CustomerEmail,
+            localizer["OrderConfirmed.Subject", command.OrderNumber],
+            localizer["OrderConfirmed.Body", name, command.OrderNumber, command.Total]);
     }
 }

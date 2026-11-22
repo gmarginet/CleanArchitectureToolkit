@@ -31,8 +31,16 @@ public static class ServiceCollectionExtensions
     {
         // The admin gets the low stock report. The address comes from Notifications:AdminEmail.
         var adminEmail = configuration["Notifications:AdminEmail"];
+        var adminCulture = configuration["Notifications:AdminCulture"];
         services.AddSingleton(new NotificationSettings(
-            string.IsNullOrWhiteSpace(adminEmail) ? NotificationSettings.DefaultAdminEmail : adminEmail));
+            string.IsNullOrWhiteSpace(adminEmail) ? NotificationSettings.DefaultAdminEmail : adminEmail,
+            string.IsNullOrWhiteSpace(adminCulture) ? NotificationSettings.DefaultAdminCulture : adminCulture));
+
+        // The texts of the mails are in MailTexts.resx and MailTexts.nl.resx. IStringLocalizer reads them in the culture of the message.
+        services.AddLocalization();
+        services.AddTransient<OrderConfirmedMailBuilder>();
+        services.AddTransient<StockDropMailBuilder>();
+        services.AddTransient<LowStockReportMailBuilder>();
 
         services.AddSingleton<IMailSender, SmtpMailSender>();
 

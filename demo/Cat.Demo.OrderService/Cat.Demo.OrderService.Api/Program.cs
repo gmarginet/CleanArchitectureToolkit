@@ -81,6 +81,7 @@ builder.Services.AddScoped<IUserEmail, TokenUserEmail>();
 
 var app = builder.Build();
 app.UseCatMinimalApiModule();
+app.UseDemoRequestLocalization();
 
 app.UseAuthentication();
 app.UseAuthorization();

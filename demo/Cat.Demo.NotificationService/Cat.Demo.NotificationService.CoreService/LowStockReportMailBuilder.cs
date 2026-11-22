@@ -1,29 +1,23 @@
-using System.Text;
+using System.Linq;
 using Cat.Demo.InventoryService.Contracts.Messages;
 using Cat.Demo.NotificationService.CoreService.Abstractions;
+using Microsoft.Extensions.Localization;
 
 namespace Cat.Demo.NotificationService.CoreService;
 
-/// <summary>Builds the text of the low stock report mail. The mails are in English.</summary>
-public static class LowStockReportMailBuilder
+/// <summary>Builds the low stock report mail, in the current UI culture.</summary>
+public class LowStockReportMailBuilder(IStringLocalizer<MailTexts> localizer)
 {
-    public static OutgoingMail Build(string adminEmail, LowStockReport report)
+    public OutgoingMail Build(string adminEmail, LowStockReport report)
     {
-        var body = new StringBuilder();
-        body.Append("Hello,\n\n");
-        body.Append($"These stock items are below the limit of {report.Limit}:\n\n");
-
-        foreach (var line in report.Lines)
-        {
-            body.Append($"- ISBN {line.Isbn}, {line.Warehouse}: {line.QuantityOnHand} left\n");
-        }
-
-        body.Append("\nPlease order more copies.");
+        var lines = string.Join(
+            "\n",
+            report.Lines.Select(line => localizer["LowStockReport.Line", line.Isbn, line.Warehouse, line.QuantityOnHand].Value));
 
         var subject = report.Lines.Count == 1
-            ? "Low stock: 1 item"
-            : $"Low stock: {report.Lines.Count} items";
+            ? localizer["LowStockReport.Subject.One"]
+            : localizer["LowStockReport.Subject.Many", report.Lines.Count];
 
-        return new OutgoingMail(adminEmail, subject, body.ToString());
+        return new OutgoingMail(adminEmail, subject, localizer["LowStockReport.Body", report.Limit, lines]);
     }
 }

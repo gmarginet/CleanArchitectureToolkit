@@ -17,11 +17,13 @@ public class LowStockReportHandler : ICatServiceRequestHandler<LowStockReport>
 {
     private readonly IMailSender _mailSender;
     private readonly NotificationSettings _settings;
+    private readonly LowStockReportMailBuilder _mailBuilder;
 
-    public LowStockReportHandler(IMailSender mailSender, NotificationSettings settings)
+    public LowStockReportHandler(IMailSender mailSender, NotificationSettings settings, LowStockReportMailBuilder mailBuilder)
     {
         _mailSender = mailSender;
         _settings = settings;
+        _mailBuilder = mailBuilder;
     }
 
     public async Task<ICatResponse> HandleAsync(LowStockReport serviceRequest, CancellationToken cancellationToken = default)
@@ -31,7 +33,9 @@ public class LowStockReportHandler : ICatServiceRequestHandler<LowStockReport>
             return CatResponse.Ok();
         }
 
-        await _mailSender.SendAsync(LowStockReportMailBuilder.Build(_settings.AdminEmail, serviceRequest), cancellationToken);
+        // The admin reads the report in the language of the settings, whatever culture the message or the job has.
+        using var culture = _settings.UseAdminCulture();
+        await _mailSender.SendAsync(_mailBuilder.Build(_settings.AdminEmail, serviceRequest), cancellationToken);
         return CatResponse.Ok();
     }
 }

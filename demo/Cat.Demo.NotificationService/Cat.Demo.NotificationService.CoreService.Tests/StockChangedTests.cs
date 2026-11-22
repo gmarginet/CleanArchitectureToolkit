@@ -17,6 +17,7 @@ public class StockChangedTests : UnitTestBase
     private const string Isbn = "9780141036144";
 
     private ICatValidatorProcessor _validatorProcessor = null!;
+    private readonly StockDropMailBuilder _builder = new(MailTestCulture.Localizer());
 
     protected override void ConfigureServices(ServiceCollection services)
     {
@@ -55,7 +56,7 @@ public class StockChangedTests : UnitTestBase
     public async Task Handle_WithADrop_ShouldMailTheAdminOfTheSettings()
     {
         var sender = new FakeMailSender();
-        var handler = new StockChangedHandler(sender, new NotificationSettings("boss@example.com"));
+        var handler = new StockChangedHandler(sender, new NotificationSettings("boss@example.com"), _builder);
 
         var response = await handler.HandleAsync(Change(12, 4));
 
@@ -71,7 +72,7 @@ public class StockChangedTests : UnitTestBase
     public async Task Handle_WithoutADrop_ShouldAnswerSuccessAndSendNothing()
     {
         var sender = new FakeMailSender();
-        var handler = new StockChangedHandler(sender, new NotificationSettings("boss@example.com"));
+        var handler = new StockChangedHandler(sender, new NotificationSettings("boss@example.com"), _builder);
 
         var response = await handler.HandleAsync(Change(20, 18));
 
@@ -85,7 +86,8 @@ public class StockChangedTests : UnitTestBase
     [Test]
     public void Build_ShouldNameTheBookTheWarehouseTheQuantityAndTheLimit()
     {
-        var mail = StockDropMailBuilder.Build("admin@example.com", Change(12, 3));
+        using var culture = MailTestCulture.Use("en");
+        var mail = _builder.Build("admin@example.com", Change(12, 3));
 
         Assert.Multiple(() =>
         {

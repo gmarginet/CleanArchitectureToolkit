@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.NetStandard.ResXResourceReader, System.Resources.NetStandard, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.NetStandard.ResXResourceWriter, System.Resources.NetStandard, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51</value>
+  </resheader>
+  <data name="OrderConfirmed.Subject" xml:space="preserve">
+    <value>Your order {0} is confirmed</value>
+    <comment>{0} is the order number.</comment>
+  </data>
+  <data name="OrderConfirmed.Body" xml:space="preserve">
+    <value>Hello {0},
+
+Your order {1} is confirmed. The stock is reserved and the payment is taken.
+The total is EUR {2:N2}.
+
+Thank you for ordering at the Cat bookshop.</value>
+    <comment>{0} is the name of the customer, {1} is the order number, {2} is the total in euro.</comment>
+  </data>
+  <data name="OrderConfirmed.UnnamedCustomer" xml:space="preserve">
+    <value>customer</value>
+    <comment>Used as {0} of OrderConfirmed.Body when the customer has no name.</comment>
+  </data>
+  <data name="StockDrop.Subject" xml:space="preserve">
+    <value>Low stock: ISBN {0}</value>
+    <comment>{0} is the ISBN.</comment>
+  </data>
+  <data name="StockDrop.Body" xml:space="preserve">
+    <value>Hello,
+
+The stock of ISBN {0} in warehouse {1} dropped to {2}. The limit is {3}.
+
+Please order more copies.</value>
+    <comment>{0} is the ISBN, {1} is the warehouse number, {2} is the new quantity, {3} is the limit.</comment>
+  </data>
+  <data name="LowStockReport.Subject.One" xml:space="preserve">
+    <value>Low stock: 1 item</value>
+    <comment>The subject of a report with one line.</comment>
+  </data>
+  <data name="LowStockReport.Subject.Many" xml:space="preserve">
+    <value>Low stock: {0} items</value>
+    <comment>The subject of a report with more lines. {0} is the number of lines.</comment>
+  </data>
+  <data name="LowStockReport.Body" xml:space="preserve">
+    <value>Hello,
+
+These stock items are below the limit of {0}:
+
+{1}
+
+Please order more copies.</value>
+    <comment>{0} is the limit, {1} is the list of lines, one LowStockReport.Line for each item.</comment>
+  </data>
+  <data name="LowStockReport.Line" xml:space="preserve">
+    <value>- ISBN {0}, {1}: {2} left</value>
+    <comment>One line of the list. {0} is the ISBN, {1} is the name of the warehouse, {2} is the quantity on hand.</comment>
+  </data>
+</root>

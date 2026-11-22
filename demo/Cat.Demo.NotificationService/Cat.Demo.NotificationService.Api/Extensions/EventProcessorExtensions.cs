@@ -40,7 +40,9 @@ public static class EventProcessorExtensions
         services.AddCatEventProcessor(configuration, processor => processor
             .Receive<OrderConfirmed>(RequireLogin)
             .Receive<LowStockReport>(RequireLogin)
-            .Receive<StockChanged>(RequireLogin));
+            .Receive<StockChanged>(RequireLogin)
+            // A mail is built in the language of the message. A mail to the admin sets its own language, see AdminCulture.
+            .ApplySenderCulture());
         services.AddCatEventProcessorAzureServiceBus(options => options.SubscriptionName = SubscriptionName);
 
         services.AddCatEventProcessorAuthorization();
