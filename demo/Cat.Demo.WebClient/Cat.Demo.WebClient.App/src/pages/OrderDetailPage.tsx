@@ -1,4 +1,5 @@
 import { useQueries } from '@tanstack/react-query'
+import { Trans, useTranslation } from 'react-i18next'
 import { useAuth } from 'react-oidc-context'
 import { Link, useParams } from 'react-router'
 import { catalogApi } from '../api/client'
@@ -10,6 +11,7 @@ import styles from './BasketPage.module.css'
 
 /** One order with its lines and a cancel button. The titles come from the catalog, one cached call per book. */
 export function OrderDetailPage() {
+  const { t } = useTranslation()
   const { id = '' } = useParams()
   const auth = useAuth()
   const order = useOrder(id, auth.isAuthenticated)
@@ -27,14 +29,14 @@ export function OrderDetailPage() {
   if (!auth.isAuthenticated) {
     return (
       <>
-        <p>Log in to see this order.</p>
+        <p>{t('orders.logInToSee')}</p>
         <button
           type="button"
           disabled={auth.isLoading}
           className="btn btn-primary"
           onClick={() => void auth.signinRedirect({ state: { returnTo: `/orders/${id}` } })}
         >
-          Log in
+          {t('nav.logIn')}
         </button>
       </>
     )
@@ -43,37 +45,41 @@ export function OrderDetailPage() {
   return (
     <>
       <p>
-        <Link to="/orders">Back to my orders</Link>
+        <Link to="/orders">{t('orders.backToOrders')}</Link>
       </p>
-      {order.isPending && <p>Loading the order</p>}
+      {order.isPending && <p>{t('orders.loadingOne')}</p>}
       {order.isError &&
         (order.error instanceof ApiError && order.error.status === 404 ? (
           <p role="alert" className="alert alert-warning">
-            We could not find that order.
+            {t('orders.notFound')}
           </p>
         ) : (
           <ErrorMessage error={order.error} />
         ))}
       {order.isSuccess && (
         <article>
-          <h1>Order {order.data.orderNumber}</h1>
+          <h1>{t('orders.heading', { number: order.data.orderNumber })}</h1>
           <p>
-            Status: <strong>{order.data.status}</strong>
+            <Trans
+              i18nKey="orders.statusLine"
+              values={{ status: t(`orderStatus.${order.data.status}`, { defaultValue: order.data.status ?? '' }) }}
+              components={{ bold: <strong /> }}
+            />
           </p>
           <table className="table">
             <thead>
               <tr>
-                <th>Book</th>
-                <th className={styles.number}>Quantity</th>
-                <th className={styles.number}>Price</th>
-                <th className={styles.number}>Line total</th>
+                <th>{t('common.book')}</th>
+                <th className={styles.number}>{t('common.quantity')}</th>
+                <th className={styles.number}>{t('common.price')}</th>
+                <th className={styles.number}>{t('orders.lineTotal')}</th>
               </tr>
             </thead>
             <tbody>
               {lines.map((line, index) => (
                 <tr key={line.bookId}>
                   <td>
-                    <Link to={`/books/${line.bookId}`}>{books[index]?.data?.title ?? 'Book'}</Link>
+                    <Link to={`/books/${line.bookId}`}>{books[index]?.data?.title ?? t('orders.bookFallback')}</Link>
                   </td>
                   <td className={styles.number}>{line.quantity}</td>
                   <td className={styles.number}>{formatAmount(line.unitPrice)}</td>
@@ -83,7 +89,7 @@ export function OrderDetailPage() {
             </tbody>
             <tfoot>
               <tr>
-                <th colSpan={3}>Total</th>
+                <th colSpan={3}>{t('common.total')}</th>
                 <th className={styles.number}>{formatAmount(order.data.total)}</th>
               </tr>
             </tfoot>
@@ -92,11 +98,11 @@ export function OrderDetailPage() {
           {cancel.isError && <ErrorMessage error={cancel.error} />}
           {cancel.isSuccess && (
             <p role="status" className="alert alert-success">
-              The order is cancelled.
+              {t('orders.cancelled')}
             </p>
           )}
           <button type="button" className="btn btn-outline-danger" disabled={cancel.isPending || !order.data.canCancel} onClick={() => cancel.mutate()}>
-            {cancel.isPending ? 'Cancelling the order' : 'Cancel order'}
+            {cancel.isPending ? t('orders.cancelling') : t('orders.cancel')}
           </button>
         </article>
       )}

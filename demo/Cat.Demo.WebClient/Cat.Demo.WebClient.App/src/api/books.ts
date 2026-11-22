@@ -35,6 +35,38 @@ export function useCategories() {
   })
 }
 
+/** One category with its English name and its Dutch name, for the admin. Only an admin can read it. */
+export function useCategory(categoryId: string) {
+  return useQuery({
+    queryKey: ['category', categoryId],
+    queryFn: () => unwrap(catalogApi.GET('/catalog/categories/{categoryId}', { params: { path: { categoryId } } })),
+    // The form for a new category has no id.
+    enabled: categoryId !== '',
+  })
+}
+
+export interface CategoryInput {
+  id?: string
+  name: string
+  nameNl?: string
+}
+
+/** Creates a category, or updates it when the id is known. The Dutch name is saved with it. */
+export function useSaveCategory() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (category: CategoryInput) =>
+      unwrap(catalogApi.POST('/catalog/categories', { body: category })),
+    onSuccess: () => {
+      // The book lists show the name of a category, so they are asked for again too.
+      void queryClient.invalidateQueries({ queryKey: ['categories'] })
+      void queryClient.invalidateQueries({ queryKey: ['category'] })
+      void queryClient.invalidateQueries({ queryKey: ['books'] })
+      void queryClient.invalidateQueries({ queryKey: ['book'] })
+    },
+  })
+}
+
 export interface BookInput {
   id?: string
   isbn: string

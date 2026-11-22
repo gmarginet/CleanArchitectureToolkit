@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next'
 import { useAuth } from 'react-oidc-context'
 import { Link, useNavigate } from 'react-router'
 import { pendingStatus, usePlaceOrder, useOrder } from '../api/orders'
@@ -15,29 +16,36 @@ type PlacedOrderData = ReturnType<typeof usePlaceOrder>['data']
  * payment in the background. The page asks for the order again until the status changes, and shows the new status.
  */
 function PlacedOrder({ placed }: { placed: NonNullable<PlacedOrderData> }) {
+  const { t } = useTranslation()
   const current = useOrder(placed.id as string, true)
   const order = current.data ?? placed
   const pending = order.status === pendingStatus
   const cancelled = order.status === 'Cancelled'
+  const status = t(`orderStatus.${order.status}`, { defaultValue: order.status ?? '' })
 
   return (
     <>
-      <h1>{cancelled ? 'Your order was cancelled' : 'Thank you for your order'}</h1>
+      <h1>{cancelled ? t('placed.cancelled') : t('placed.thanks')}</h1>
       <p role="status" className={`alert ${cancelled ? 'alert-warning' : pending ? 'alert-info' : 'alert-success'}`}>
-        Order <strong>{order.orderNumber}</strong> is <strong>{order.status}</strong>. The total is {formatAmount(order.total)}.
-        {pending && ' We are taking the payment. This page updates by itself.'}
+        <Trans
+          i18nKey="placed.summary"
+          values={{ number: order.orderNumber, status, total: formatAmount(order.total) }}
+          components={{ bold: <strong /> }}
+        />
+        {pending && ` ${t('placed.takingPayment')}`}
       </p>
       <p>
-        <Link to={`/orders/${order.id}`}>See this order</Link>
+        <Link to={`/orders/${order.id}`}>{t('placed.seeOrder')}</Link>
       </p>
       <p>
-        <Link to="/">Back to the books</Link>
+        <Link to="/">{t('common.backToBooks')}</Link>
       </p>
     </>
   )
 }
 
 export function BasketPage() {
+  const { t } = useTranslation()
   const basket = useBasket()
   const auth = useAuth()
   const placeOrder = usePlaceOrder()
@@ -62,20 +70,20 @@ export function BasketPage() {
 
   return (
     <>
-      <h1>Basket</h1>
+      <h1>{t('basket.title')}</h1>
       {basket.lines.length === 0 ? (
         <p>
-          Your basket is empty. <Link to="/">Find a book</Link>
+          {t('basket.empty')} <Link to="/">{t('basket.findBook')}</Link>
         </p>
       ) : (
         <>
           <table className="table align-middle">
             <thead>
               <tr>
-                <th>Book</th>
-                <th>Quantity</th>
-                <th className={styles.number}>Price</th>
-                <th className={styles.number}>Total</th>
+                <th>{t('common.book')}</th>
+                <th>{t('common.quantity')}</th>
+                <th className={styles.number}>{t('common.price')}</th>
+                <th className={styles.number}>{t('basket.lineTotal')}</th>
                 <th />
               </tr>
             </thead>
@@ -87,7 +95,7 @@ export function BasketPage() {
                   </td>
                   <td>
                     <QuantityInput
-                      label={`Quantity of ${line.title}`}
+                      label={t('basket.quantityOf', { title: line.title })}
                       quantity={line.quantity}
                       onChange={(quantity) => basket.setQuantity(line.bookId, quantity)}
                     />
@@ -100,7 +108,7 @@ export function BasketPage() {
                       className="btn btn-outline-danger btn-sm"
                       onClick={() => basket.remove(line.bookId)}
                     >
-                      Remove
+                      {t('basket.remove')}
                     </button>
                   </td>
                 </tr>
@@ -108,22 +116,22 @@ export function BasketPage() {
             </tbody>
             <tfoot>
               <tr>
-                <th colSpan={3}>Total</th>
+                <th colSpan={3}>{t('common.total')}</th>
                 <th className={styles.number}>{formatPrice(basket.total)}</th>
                 <td />
               </tr>
             </tfoot>
           </table>
-          <p className="form-text">The shop confirms the price when you place the order.</p>
+          <p className="form-text">{t('basket.priceNote')}</p>
 
           {placeOrder.isError && <ErrorMessage error={placeOrder.error} />}
 
           <button type="button" className="btn btn-primary" disabled={placeOrder.isPending || auth.isLoading} onClick={submit}>
             {placeOrder.isPending
-              ? 'Placing the order'
+              ? t('basket.placing')
               : auth.isAuthenticated
-                ? 'Place order'
-                : 'Log in to place your order'}
+                ? t('basket.place')
+                : t('basket.logInToPlace')}
           </button>
         </>
       )}

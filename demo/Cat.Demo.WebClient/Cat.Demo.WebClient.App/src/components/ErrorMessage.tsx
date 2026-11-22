@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { ApiError } from '../api/errors'
 
 interface ErrorMessageProps {
@@ -6,12 +7,13 @@ interface ErrorMessageProps {
 
 /** Shows the message and the code of a failed call. One component for every call. */
 export function ErrorMessage({ error }: ErrorMessageProps) {
+  const { t } = useTranslation()
   const apiError = error instanceof ApiError ? error : undefined
   const entries = apiError?.errors ?? []
 
   return (
     <div role="alert" className="alert alert-danger my-3">
-      {entries.length === 0 && <p className="fw-semibold mb-1">{apiError?.message ?? 'Something went wrong.'}</p>}
+      {entries.length === 0 && <p className="fw-semibold mb-1">{apiError?.message ?? t('common.somethingWrong')}</p>}
       {entries.length > 0 && (
         <ul className="fw-semibold mb-1">
           {entries.map((entry, index) => (
@@ -21,7 +23,7 @@ export function ErrorMessage({ error }: ErrorMessageProps) {
           ))}
         </ul>
       )}
-      {apiError?.traceId && <p className="small mb-0 opacity-75">Trace id: {apiError.traceId}</p>}
+      {apiError?.traceId && <p className="small mb-0 opacity-75">{t('common.traceId', { id: apiError.traceId })}</p>}
     </div>
   )
 }

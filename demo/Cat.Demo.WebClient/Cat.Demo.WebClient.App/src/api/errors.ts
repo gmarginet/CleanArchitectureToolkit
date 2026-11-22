@@ -1,3 +1,5 @@
+import i18n from '../i18n'
+
 /** One error of a failed answer, with its message template already filled in. */
 export interface ApiErrorEntry {
   code?: string
@@ -50,12 +52,20 @@ export function formatTemplate(template: string, args: unknown[] | null | undefi
   })
 }
 
-const fallbackMessages: Record<number, string> = {
-  0: 'The shop could not be reached. Try again in a moment.',
-  401: 'Please log in to continue.',
-  403: 'You are not allowed to do this.',
-  404: 'We could not find that.',
-  409: 'That is not possible right now.',
+const knownStatuses = [0, 401, 403, 404, 409]
+
+/** The text for a status without a better message. It comes from the locale files, in the language of the person. */
+function statusMessage(status: number): string {
+  return knownStatuses.includes(status) ? i18n.t(`errors.status.${status}`) : i18n.t('errors.status.other', { status })
+}
+
+/**
+ * The message of an error entry in the language of the person. The server sends its English message with the code,
+ * and the locale files hold the translated template of a code. A code without a translation keeps the English message.
+ */
+function entryMessage(code: string | null | undefined, template: string, args: unknown[] | null | undefined): string {
+  const translated = code ? i18n.t(`errors.codes.${code}`, { defaultValue: '' }) : ''
+  return formatTemplate(translated || template, args)
 }
 
 /**
@@ -68,14 +78,9 @@ export function toApiError(status: number, body: unknown): ApiError {
     .filter((entry) => entry.message)
     .map((entry) => ({
       code: entry.code ?? undefined,
-      message: formatTemplate(entry.message as string, entry.arguments),
+      message: entryMessage(entry.code, entry.message as string, entry.arguments),
     }))
-  const message =
-    errors[0]?.message ??
-    problem?.detail ??
-    problem?.title ??
-    fallbackMessages[status] ??
-    `Something went wrong (${status}).`
+  const message = errors[0]?.message ?? problem?.detail ?? problem?.title ?? statusMessage(status)
   return new ApiError(status, message, errors, problem?.catTraceId ?? undefined)
 }
 

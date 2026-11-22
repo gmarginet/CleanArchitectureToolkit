@@ -1,10 +1,12 @@
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from 'react-oidc-context'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router'
 import { loginPath, loginState } from '../auth/loginRoute'
 import { forgetSignedIn } from '../auth/silentSignIn'
 import { useIsAdmin } from '../auth/useIsAdmin'
 import { useBasket } from '../basket/useBasket'
+import { LanguageSelector } from './LanguageSelector'
 
 /** The refusal of a silent login, because the Keycloak session ended, is not an error to show. */
 function isSilentRefusal(error: Error): boolean {
@@ -26,28 +28,31 @@ function NavButton({ to, end, children }: { to: string; end?: boolean; children:
 }
 
 export function Layout() {
+  const { t } = useTranslation()
   const auth = useAuth()
   const basket = useBasket()
   const isAdmin = useIsAdmin()
   const location = useLocation()
   const navigate = useNavigate()
   const user = auth.user?.profile
-  const name = user?.name ?? user?.preferred_username ?? 'Signed in'
+  const name = user?.name ?? user?.preferred_username ?? t('nav.signedIn')
 
   return (
     <>
       <header className="navbar bg-body-tertiary border-bottom">
         <div className="container flex-wrap gap-2">
           <Link to="/" className="navbar-brand fw-bold">
-            CAT Bookshop
+            {t('app.name')}
           </Link>
           <nav className="d-flex flex-wrap align-items-center gap-3">
             <NavButton to="/" end>
-              Books
+              {t('nav.books')}
             </NavButton>
-            <NavButton to="/basket">Basket ({basket.count})</NavButton>
-            {auth.isAuthenticated && <NavButton to="/orders">Orders</NavButton>}
-            {isAdmin && <NavButton to="/admin/books/new">New book</NavButton>}
+            <NavButton to="/basket">{t('nav.basket', { count: basket.count })}</NavButton>
+            {auth.isAuthenticated && <NavButton to="/orders">{t('nav.orders')}</NavButton>}
+            {isAdmin && <NavButton to="/admin/books/new">{t('nav.newBook')}</NavButton>}
+            {isAdmin && <NavButton to="/admin/categories">{t('nav.categories')}</NavButton>}
+            <LanguageSelector />
             {auth.isAuthenticated ? (
               <>
                 <span className="fw-semibold">{name}</span>
@@ -59,7 +64,7 @@ export function Layout() {
                     void auth.signoutRedirect()
                   }}
                 >
-                  Log out
+                  {t('nav.logOut')}
                 </button>
               </>
             ) : (
@@ -72,7 +77,7 @@ export function Layout() {
                     void navigate(loginPath, { state: loginState(location.pathname + location.search) })
                   }
                 >
-                  Log in
+                  {t('nav.logIn')}
                 </button>
               )
             )}
@@ -82,7 +87,7 @@ export function Layout() {
       {auth.error && !isSilentRefusal(auth.error) && (
         <div className="container mt-3">
           <p role="alert" className="alert alert-danger mb-0">
-            Login failed: {auth.error.message}
+            {t('nav.loginFailed', { message: auth.error.message })}
           </p>
         </div>
       )}

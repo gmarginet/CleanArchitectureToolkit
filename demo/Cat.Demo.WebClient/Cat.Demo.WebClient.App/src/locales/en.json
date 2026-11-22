@@ -1,0 +1,134 @@
+{
+  "app": { "name": "CAT Bookshop" },
+  "nav": {
+    "books": "Books",
+    "basket": "Basket ({{count}})",
+    "orders": "Orders",
+    "newBook": "New book",
+    "categories": "Categories",
+    "logIn": "Log in",
+    "logOut": "Log out",
+    "signedIn": "Signed in",
+    "language": "Language",
+    "loginFailed": "Login failed: {{message}}"
+  },
+  "common": {
+    "backToBooks": "Back to the books",
+    "back": "Back",
+    "search": "Search",
+    "loading": "Loading",
+    "somethingWrong": "Something went wrong.",
+    "traceId": "Trace id: {{id}}",
+    "total": "Total",
+    "quantity": "Quantity",
+    "price": "Price",
+    "book": "Book",
+    "category": "Category",
+    "noPriceYet": "No price yet",
+    "pageNotFound": "That page does not exist."
+  },
+  "books": {
+    "title": "Books",
+    "searchLabel": "Search",
+    "allCategories": "All categories",
+    "loadingList": "Loading books",
+    "none": "No books found.",
+    "loadingOne": "Loading the book",
+    "notFound": "We could not find that book.",
+    "author": "Author",
+    "isbn": "ISBN",
+    "edit": "Edit this book"
+  },
+  "basket": {
+    "title": "Basket",
+    "empty": "Your basket is empty.",
+    "findBook": "Find a book",
+    "quantityOf": "Quantity of {{title}}",
+    "lineTotal": "Total",
+    "remove": "Remove",
+    "priceNote": "The shop confirms the price when you place the order.",
+    "placing": "Placing the order",
+    "place": "Place order",
+    "logInToPlace": "Log in to place your order",
+    "addToBasket": "Add to basket",
+    "noPriceTitle": "This book has no price yet"
+  },
+  "placed": {
+    "thanks": "Thank you for your order",
+    "cancelled": "Your order was cancelled",
+    "summary": "Order <bold>{{number}}</bold> is <bold>{{status}}</bold>. The total is {{total}}.",
+    "takingPayment": "We are taking the payment. This page updates by itself.",
+    "seeOrder": "See this order"
+  },
+  "orders": {
+    "title": "My orders",
+    "loading": "Loading your orders",
+    "none": "You have no orders yet.",
+    "order": "Order",
+    "placed": "Placed",
+    "status": "Status",
+    "total": "Total",
+    "backToOrders": "Back to my orders",
+    "loadingOne": "Loading the order",
+    "notFound": "We could not find that order.",
+    "heading": "Order {{number}}",
+    "statusLine": "Status: <bold>{{status}}</bold>",
+    "lineTotal": "Line total",
+    "bookFallback": "Book",
+    "cancelled": "The order is cancelled.",
+    "cancelling": "Cancelling the order",
+    "cancel": "Cancel order",
+    "logInToSee": "Log in to see this order."
+  },
+  "orderStatus": {
+    "Pending": "Pending",
+    "Confirmed": "Confirmed",
+    "Shipped": "Shipped",
+    "Cancelled": "Cancelled"
+  },
+  "login": {
+    "title": "Log in",
+    "intro": "Log in to place orders and to see your orders. The books and the basket are open to everyone.",
+    "newHere": "New here? Register, then you are logged in at once.",
+    "register": "Register"
+  },
+  "adminBook": {
+    "newTitle": "New book",
+    "editTitle": "Edit book",
+    "adminOnly": "Only an admin can save a book. The shop checks this again when you save.",
+    "isbn": "ISBN",
+    "bookTitle": "Title",
+    "author": "Author",
+    "category": "Category",
+    "chooseCategory": "Choose a category",
+    "price": "Price in euro",
+    "saving": "Saving the book",
+    "save": "Save book"
+  },
+  "adminCategory": {
+    "listTitle": "Categories",
+    "new": "New category",
+    "edit": "Edit",
+    "newTitle": "New category",
+    "editTitle": "Edit category",
+    "adminOnly": "Only an admin can save a category. The shop checks this again when you save.",
+    "name": "Name (English)",
+    "nameNl": "Name (Dutch)",
+    "nameNlHint": "Leave it empty and Dutch users see the English name.",
+    "loading": "Loading the category",
+    "saving": "Saving the category",
+    "save": "Save category",
+    "backToList": "Back to the categories"
+  },
+  "errors": {
+    "status": {
+      "0": "The shop could not be reached. Try again in a moment.",
+      "401": "Please log in to continue.",
+      "403": "You are not allowed to do this.",
+      "404": "We could not find that.",
+      "409": "That is not possible right now.",
+      "other": "Something went wrong ({{status}})."
+    },
+    "codes": {}
+  }
+}

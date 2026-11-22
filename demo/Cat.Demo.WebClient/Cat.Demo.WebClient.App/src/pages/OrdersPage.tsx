@@ -1,12 +1,14 @@
+import { useTranslation } from 'react-i18next'
 import { useAuth } from 'react-oidc-context'
 import { Link } from 'react-router'
 import { useOrders } from '../api/orders'
 import { ErrorMessage } from '../components/ErrorMessage'
-import { formatAmount } from '../format'
+import { formatAmount, formatDateTime } from '../format'
 import styles from './BasketPage.module.css'
 
 /** The orders of the logged in person, newest first. */
 export function OrdersPage() {
+  const { t } = useTranslation()
   const auth = useAuth()
   const orders = useOrders(auth.isAuthenticated)
 
@@ -14,18 +16,18 @@ export function OrdersPage() {
 
   return (
     <>
-      <h1>My orders</h1>
-      {orders.isPending && <p>Loading your orders</p>}
+      <h1>{t('orders.title')}</h1>
+      {orders.isPending && <p>{t('orders.loading')}</p>}
       {orders.isError && <ErrorMessage error={orders.error} />}
-      {orders.isSuccess && sorted.length === 0 && <p>You have no orders yet.</p>}
+      {orders.isSuccess && sorted.length === 0 && <p>{t('orders.none')}</p>}
       {sorted.length > 0 && (
         <table className="table">
           <thead>
             <tr>
-              <th>Order</th>
-              <th>Placed</th>
-              <th>Status</th>
-              <th className={styles.number}>Total</th>
+              <th>{t('orders.order')}</th>
+              <th>{t('orders.placed')}</th>
+              <th>{t('orders.status')}</th>
+              <th className={styles.number}>{t('orders.total')}</th>
             </tr>
           </thead>
           <tbody>
@@ -34,8 +36,8 @@ export function OrdersPage() {
                 <td>
                   <Link to={`/orders/${order.id}`}>{order.orderNumber}</Link>
                 </td>
-                <td>{order.placedAt ? new Date(order.placedAt).toLocaleString('en-IE') : ''}</td>
-                <td>{order.status}</td>
+                <td>{order.placedAt ? formatDateTime(order.placedAt) : ''}</td>
+                <td>{t(`orderStatus.${order.status}`, { defaultValue: order.status ?? '' })}</td>
                 <td className={styles.number}>{formatAmount(order.total)}</td>
               </tr>
             ))}

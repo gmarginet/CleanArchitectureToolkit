@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useBasket } from '../basket/useBasket'
 
 interface AddToBasketButtonProps {
@@ -6,13 +7,14 @@ interface AddToBasketButtonProps {
 
 /** Adds one copy to the basket. A book without a price cannot be bought yet. */
 export function AddToBasketButton({ book }: AddToBasketButtonProps) {
+  const { t } = useTranslation()
   const basket = useBasket()
   const { id, price } = book
 
   if (!id || price === null || price === undefined) {
     return (
-      <button type="button" className="btn btn-primary btn-sm" disabled title="This book has no price yet">
-        Add to basket
+      <button type="button" className="btn btn-primary btn-sm" disabled title={t('basket.noPriceTitle')}>
+        {t('basket.addToBasket')}
       </button>
     )
   }
@@ -23,7 +25,7 @@ export function AddToBasketButton({ book }: AddToBasketButtonProps) {
       className="btn btn-primary btn-sm"
       onClick={() => basket.add({ bookId: id, title: book.title, price })}
     >
-      Add to basket
+      {t('basket.addToBasket')}
     </button>
   )
 }
