@@ -74,9 +74,18 @@ From the repository:
 - **Node.js.** The payment provider becomes a Node.js API (owner, 2026-11-22).
 - **Name.** It is renamed to `Cat.Demo.PaymentProvider` (owner, 2026-11-22).
 - **Same contract.** It keeps the same endpoints, answers and OpenAPI document, so Orders and its generated client do not change (owner, 2026-11-22).
+- **TypeScript without a build step.** Node.js runs the `.ts` files as they are, with type stripping. `tsc --noEmit` checks the types, and `tsconfig.json` sets `erasableSyntaxOnly`, so the code uses no `enum`, `namespace` or parameter properties (owner, 2026-11-22).
+- **Fastify.** The HTTP layer is Fastify 5. JSON schemas on the routes check the body and the `Idempotency-Key` header, and one `setErrorHandler` turns every error into an `application/problem+json` answer with the `ProblemDetails` shape of the contract (owner, 2026-11-22).
+- **Design first.** The OpenAPI document is a static file, the current document with `Cat.Demo.PaymentService.Api` in the title and the tag renamed, served at `/openapi/v1.json`. Fastify takes the request schemas from it and checks every request against it, with `fastify-openapi-glue` or a small loader of our own. `format: decimal` gets a custom format. The NSwag client of Orders takes its names from the operation ids, so it does not change (owner, 2026-11-22).
+- **Node.js tests in Cake.** The `Test` target of `build.cake` also runs `npm test` for the provider and for the web client, so `dotnet cake --target=Test` and the build workflow test both. The build workflow installs Node.js with `actions/setup-node`, because type stripping needs Node.js 22.18 or later (owner, 2026-11-22).
+- **Node.js style settings.** The provider reads `PROVIDER_API_KEY`, `FAILURE_LATENCY_MS`, `FAILURE_ERROR_PERCENTAGE` and `FAILURE_OUTAGE`. The settings of the AppHost stay as they are: `Payment:Latency` is still a `TimeSpan` such as `00:00:05`, and the AppHost converts it to milliseconds, so `00:00:05` becomes `FAILURE_LATENCY_MS=5000`. A bad value fails when the AppHost starts. In the demo readme only the settings table of the provider changes (owner, 2026-11-22).
+- **No telemetry.** The provider exports no traces, logs or metrics, as today, because a real provider sends none. The Fastify logger writes one JSON line per request to stdout, which the dashboard shows as its console log, and the trace boundary of the client of Orders stays as it is (owner, 2026-11-22).
+- **`node:test`.** The 10 tests of `PaymentProcessorTests` move to the built-in `node:test`, run with `node --test`, so they run the code with type stripping, the way the AppHost runs it. Fastify's `inject` drives the requests without a port, and `mock.timers` covers the latency. The web client keeps Vitest, because it runs through Vite and needs JSX and a DOM (owner, 2026-11-22).
 
 #### To check at the build
 - The exact Aspire call for a Node.js app in `Aspire.Hosting.JavaScript` 13.6.5, and whether it runs `npm install` itself.
+- Whether `fastify-openapi-glue` reads OpenAPI 3.2. If not, a small loader of our own reads the schemas from the document.
+- Whether `node --test` finds the `*.test.ts` files with no pattern given.
 - Every place that names `PaymentService` or the resource `payment`: the AppHost, the solution, the demo readme, the demo drawing `CatDemoArchitecture.excalidraw.svg` and the `cat-internal-create-demo-unit` skill.
 
 #### What the build changes
@@ -84,65 +93,11 @@ From the repository:
 - Add the Node.js API in `demo/Cat.Demo.PaymentProvider/`.
 - Run it from the AppHost with the same port, API key, failure settings and health check.
 - Update the demo readme and the demo drawing with the `cat-internal-create-demo-readme` skill.
+- Add the `npm test` steps to the `Test` target of `build.cake` and `actions/setup-node` to `.github/workflows/build.yml`. Build files count as code, so this commit publishes.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-
-<!-- region start: Question 1-->
-#### Question 1
-Do we write it in TypeScript or in plain JavaScript? The options:
-- **TypeScript.** The same language as the web client, with types for the requests and the answers. Cost: a build or a type stripping step before it runs.
-- **Plain JavaScript.** Node runs it as it is. Cost: no types, and a second style of code next to the web client.
-
-Recommendation: TypeScript. The web client already sets the style, and the types make the contract easy to read next to the OpenAPI document.
-<!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-Which HTTP layer do we use? The options:
-- **The built-in `node:http`.** No packages at all. Cost: more code for routing, JSON and errors.
-- **Express.** The best known choice. Cost: one package, and its typing is a separate package.
-- **Fastify.** Small, fast and typed, with schema checks for the body. Cost: one package that fewer readers know.
-
-Recommendation: Fastify. It keeps the code short, it checks the request body with a schema, and it has its own types.
-<!-- region end: Question 2-->
-
-<!-- region start: Question 3-->
-#### Question 3
-Where does the OpenAPI document come from? The options:
-- **A static file,** the current document, served at `/openapi/v1.json`. Cost: a change to an endpoint also means a change to the file by hand.
-- **Generated from the route schemas,** for example with `@fastify/swagger`. Cost: the document will differ from the copy in Orders, such as the `decimal` format, and the client of Orders may change.
-
-Recommendation: the static file. It is the contract that was decided to stay the same, and the refresh script of Orders keeps working.
-<!-- region end: Question 3-->
-
-<!-- region start: Question 4-->
-#### Question 4
-Where do the tests run? The 10 tests of `PaymentProcessorTests` move to a Node.js test runner. The options:
-- **In the package only,** with `npm test`, like the web client today. Cost: `dotnet cake --target=Test` and the build workflow no longer test the provider.
-- **Also from Cake,** with a step in the `Test` target that runs `npm test` for the provider, and the web client too. Cost: a change to `build.cake` and Node.js on the build agent. A commit that changes `build.cake` publishes.
-
-Recommendation: in the package only, with Vitest like the web client, and a separate decision about Node.js tests in Cake for both. The provider is a stand-in, and the tests of Orders cover how the shop handles its answers.
-<!-- region end: Question 4-->
-
-<!-- region start: Question 5-->
-#### Question 5
-What do the settings look like? The .NET names are `Provider__ApiKey` and `PaymentFailures__Latency`, and the latency is a `TimeSpan` such as `00:00:02`. The options:
-- **Keep the names and the formats.** Cost: a Node.js app that reads .NET style settings, which hides that it is outside.
-- **Node.js style names,** such as `PROVIDER_API_KEY`, `FAILURE_LATENCY_MS`, `FAILURE_ERROR_PERCENTAGE` and `FAILURE_OUTAGE`, with the latency in milliseconds. The AppHost maps `Payment:Latency` and the others to them. Cost: the setting `Payment:Latency` in the AppHost changes to milliseconds, and the demo readme with it.
-
-Recommendation: Node.js style names, with the latency in milliseconds. A real provider has its own settings, and the AppHost is the one place that maps them.
-<!-- region end: Question 5-->
-
-<!-- region start: Question 6-->
-#### Question 6
-Does the provider export telemetry? The .NET provider exports none today, and the client of Orders stops the trace at its boundary. The options:
-- **No telemetry,** as today. Cost: the dashboard shows only its logs.
-- **OpenTelemetry for Node.js.** Cost: packages and setup, and a trace of an outside system that a real provider would never send.
-
-Recommendation: no telemetry. A real provider sends none, and the trace boundary of Orders is built for that.
-<!-- region end: Question 6-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
 
