@@ -35,6 +35,7 @@ In this chapter, "template" always means a `dotnet new` template.
 - [Install](#install)
 - [Create a service](#create-a-service)
 - [What the service holds](#what-the-service-holds)
+- [Create a system](#create-a-system)
 - [Add a part to a service](#add-a-part-to-a-service)
 - [Add a project](#add-a-project)
 - [What a developer adds after the template](#what-a-developer-adds-after-the-template)
@@ -68,7 +69,7 @@ These are the options. Every one has a default.
 | `--Jobs` | `true`, `false` | `false` | Adds the scheduler of `Cat.Scheduling` with one example job. |
 | `--Messages` | `true`, `false` | `false` | Adds message handlers with `Cat.EventProcessor`, Azure Service Bus and the inbox, with one example message. |
 | `--NewSolution` | `true`, `false` | `true` | `false` adds the projects to the `.slnx` solution at or above the output folder, and writes no solution file. |
-| `--CatVersion` | a version | the version of the pack | The version of the CAT packages in `Directory.Packages.props`. |
+| `--CatVersion` | a version | the version of the pack | The version of the CAT packages in `Directory.Packages.Cat.props`. |
 
 Run `dotnet new cat-service --help` for the same list.
 
@@ -84,11 +85,43 @@ The projects of the service project structure: `Api`, `CoreService`, `Infrastruc
 `Program.cs` wires what the example request needs: `Cat.Minimal.Api`, `Cat.ServiceRequests`, `Cat.Responses` and `Cat.Validators`, plus `Cat.Commands` and `Cat.Queries` for the handlers in Infrastructure. The worker modules are wired only when their option is on. `Cat.Resilience` and `Cat.Telemetry` are called directly, as their module readmes show for a project without Aspire.
 
 The service also gets:
-- a `Directory.Packages.props` with the package versions, see [Package versions](#package-versions),
+- a `Directory.Packages.Cat.props` with the package versions, see [Package versions](#package-versions),
 - a readme, an `.http` file for the Api, and `/health` and `/alive` with a database check,
 - no Aspire code, no Dockerfile and no deployment files, because they depend on how the developer runs and deploys it. The readme of the generated service shows the lines to add for `ServiceDefaults` and the AppHost.
 
 With `--Messages`, the connection string of the bus is empty in `appsettings.json`, so the host does not start until the developer fills it in. The readme of the generated service shows the Service Bus emulator and the AppHost line.
+
+## Create a system
+`cat-system` creates a whole system, as the demo is, in one command: an Aspire AppHost, `ServiceDefaults`, a YARP gateway and a first service made with `cat-service`.
+
+```
+dotnet new cat-system -n Contoso.Shop --FirstService Orders --Database PostgreSQL --allow-scripts yes
+```
+
+This gives `Contoso.Shop.AppHost`, `Contoso.Shop.ServiceDefaults`, `Contoso.Shop.Api.Gateway` and the service `Contoso.Shop.Orders` with its projects, flat next to the solution file `Contoso.Shop.slnx`, as in `demo/`. There is no web client, because the front end is your choice.
+
+The template runs `dotnet new cat-service` itself, as a post action, with `--NewSolution false`. That is why `dotnet new` asks to run a script, and `--allow-scripts yes` answers it. The arguments for the call are in `cat-service.rsp`. The file stays, because a template cannot delete its own files. It records the options of the first service, and the `.gitignore` of the system ignores it. A template cannot add a line to a `.gitignore` that exists already, so use `--GitIgnore false` in a folder that has one, and add the line `cat-service*.rsp` yourself.
+
+| Option | Values | Default | What it does |
+|--------|--------|---------|--------------|
+| `--FirstService` | a short name | required | The short name of the first service. Its full name is `Name.FirstService`. |
+| `--Framework`, `--Database`, `--Approach`, `--Tests`, `--ExampleRequest`, `--Jobs`, `--Messages` | as in `cat-service` | as in `cat-service` | Passed on to the first service. The AppHost follows `--Framework`. |
+| `--GitIgnore` | `true`, `false` | `true` | Writes a `.gitignore` for the argument files, `bin` and `obj`. |
+
+`--NewSolution` and `--ApiClient` are not options of the system. The system makes the solution, and the client is a choice for later.
+
+The AppHost starts what the options of the first service need, so one `dotnet run` starts the system. Docker must run.
+- A SQL Server or PostgreSQL container for `--Database`, wired to the service.
+- For database first on SQL Server, the SQL project, deployed with `AddSqlProject`.
+- For database first on PostgreSQL, the plain scripts, which PostgreSQL runs when the container starts for the first time.
+- The Azure Service Bus emulator, when `--Messages` is on.
+- The service and the gateway.
+
+The system has no Aspire code in the service. The service calls `Cat.Telemetry` and `Cat.Resilience` directly, and the gateway calls `AddServiceDefaults()`.
+
+The gateway is closed by default, and the AppHost starts no identity provider. `appsettings.json` of the gateway holds an example authority and audience. Every call is rejected until you fill in your own provider. The readme of the system says which two values to change.
+
+The system writes its own `Directory.Packages.props` and `Directory.Build.props`. The first service writes only `Directory.Packages.Cat.props`, which `Directory.Packages.props` imports, and its readme as `Name.FirstService.README.md`. Another service in the system folder, made with `cat-service -o . --NewSolution false`, merges its versions into that file, see [Package versions](#package-versions). The build test of the system only builds the AppHost and never starts it.
 
 ## Add a part to a service
 Run an item template in the folder of the solution of the service. The name is the name of the part, and `--ServiceName` is the full name of the service.
@@ -97,7 +130,7 @@ Run an item template in the folder of the solution of the service. The name is t
 dotnet new cat-command -n OrderPlace --ServiceName Contoso.Shop.Orders
 ```
 
-Every template that writes a test takes `--Tests false` for a service without a test project. Item templates cannot add packages, so the table lists the packages that a template needs. Add them to the project with `dotnet add package`, with the version of `Directory.Packages.props`.
+Every template that writes a test takes `--Tests false` for a service without a test project. Item templates cannot add packages, so the table lists the packages that a template needs. Add them to the project with `dotnet add package`, with the version of `Directory.Packages.Cat.props`.
 
 | Template | Writes | Parameters | Needs |
 |----------|--------|------------|-------|
@@ -124,18 +157,32 @@ Two templates add a project and not a file. They write the project folder in the
 
 | Template | Writes | Needs |
 |----------|--------|-------|
-| `cat-api-client` | `Name.Api.Client`, the project that holds the generated client of a service. The first build copies the NSwag settings to `nswag.json`. | The package version of `Cat.Api.Client` in `Directory.Packages.props` |
-| `cat-gateway` | `Name.Api.Gateway`, the host of `Cat.Api.Gateway`, with a `CatGateway` section in `appsettings.json`. Takes `--Framework`. | The package version of `Cat.Api.Gateway` in `Directory.Packages.props` |
+| `cat-api-client` | `Name.Api.Client`, the project that holds the generated client of a service. The first build copies the NSwag settings to `nswag.json`. | The package version of `Cat.Api.Client` in `Directory.Packages.Cat.props` |
+| `cat-gateway` | `Name.Api.Gateway`, the host of `Cat.Api.Gateway`, with a `CatGateway` section in `appsettings.json`. Takes `--Framework`. | The package version of `Cat.Api.Gateway` in `Directory.Packages.Cat.props` |
 
 ## What a developer adds after the template
 The templates stay small on purpose. They do not write registrations in `Program.cs`, they do not add packages and they do not add an endpoint. A developer or a skill adds those. An endpoint is a `MapCat` line in the endpoints file of the service, and a registration is a line in the file where the service registers its modules.
 
 ## Package versions
-The generated solution has a `Directory.Packages.props` with the versions of the CAT packages of the release, in the property `CatVersion`. It also has the versions of the packages that follow .NET, such as EF Core and ASP.NET Core, for the chosen target framework. A developer updates the versions in this one file.
+The generated service has a `Directory.Packages.Cat.props` with the versions of the CAT packages of the release, in the property `CatVersion`. It also has the versions of the packages that follow .NET, such as EF Core and ASP.NET Core, for the chosen target framework. A developer updates the versions in this one file. A new solution also gets a small `Directory.Packages.props` that turns on central management and imports it, and a `Directory.Build.props`.
+
+With `--NewSolution false` the service never writes `Directory.Packages.props` or `Directory.Build.props`, because the solution of the developer has them. It writes its versions as `Name.Packages.props` and runs the script `MergePackages.cs` with `dotnet run`, which needs the .NET 10 SDK or newer. `dotnet new` asks to run it, and `--allow-scripts yes` answers.
+- The script merges the `PackageVersion` lines into `Directory.Packages.Cat.props` in the same folder. When that file does not exist yet, the versions file of the service becomes that file.
+- A package that the file has already keeps its version. The script reports a package that has another version in the service, such as one made for another `--Framework`.
+- The script deletes `Name.Packages.props` and then itself.
+
+So several services can share one folder, and the versions of all of them are in one file. Import the file once from your `Directory.Packages.props`, with the path of the service folder:
+
+```xml
+<Import Project="$(MSBuildThisFileDirectory)src/Orders/Directory.Packages.Cat.props" Condition="Exists('$(MSBuildThisFileDirectory)src/Orders/Directory.Packages.Cat.props')" />
+```
+
+The condition lets the script run before the file exists. The readme of the service is then `Name.README.md`, so it does not replace your readme.
 
 ## How the templates are tested
 The test project `tests/Cat.Templates.TemplateTests` installs the pack into its own template hive and creates services in a temp folder. It builds them against the packed modules and runs their own tests.
-- `ServiceTemplateTests` runs every combination of database, approach and framework with every option off, then all on, and each option on alone. It also checks the `--NewSolution false` case.
+- `ServiceTemplateTests` runs every combination of database, approach and framework with every option off, then all on, and each option on alone. It also checks the `--NewSolution false` case in a solution that has its own root files, with a second service whose packages are merged.
+- `SystemTemplateTests` creates 8 systems, one for every branch of the AppHost: database, approach and messages. The other options are on in half of them, and two systems use `net10.0`. Each builds, and the ones with tests run them.
 - `ItemTemplateTests` runs every item template in a service, checks the files, builds and runs the tests, for code first and database first on both databases and for a service without tests.
 
 The tests need the packs that Cake makes, so they are skipped when the packs are missing. Run them with `dotnet cake --target=TemplateTest`. The target depends on `Pack`, and `Publish` depends on it, so a template that no longer builds against a changed module is never published.

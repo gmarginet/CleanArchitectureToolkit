@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SystemName.Api.Gateway/SystemName.Api.Gateway.csproj" />
+  <Project Path="SystemName.AppHost/SystemName.AppHost.csproj" />
+  <Project Path="SystemName.ServiceDefaults/SystemName.ServiceDefaults.csproj" />
+</Solution>

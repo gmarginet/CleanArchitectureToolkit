@@ -97,10 +97,10 @@ public class ItemTemplateTests
         // The project templates write a project folder. The developer adds it to the solution and gives it its package.
         await _runner.RunProjectTemplateAsync(folder, "cat-api-client", service);
         await _runner.AddProjectToSolutionAsync(folder, service, $"{service}.Api.Client");
-        // The client project already has its package version in Directory.Packages.props. The gateway needs one.
+        // The client project already has its package version in Directory.Packages.Cat.props. The gateway needs one.
         await _runner.RunProjectTemplateAsync(folder, "cat-gateway", service);
         await _runner.AddProjectToSolutionAsync(folder, service, $"{service}.Api.Gateway");
-        var packagesFile = Path.Combine(folder, "Directory.Packages.props");
+        var packagesFile = Path.Combine(folder, "Directory.Packages.Cat.props");
         var packagesText = await File.ReadAllTextAsync(packagesFile);
         await File.WriteAllTextAsync(
             packagesFile,

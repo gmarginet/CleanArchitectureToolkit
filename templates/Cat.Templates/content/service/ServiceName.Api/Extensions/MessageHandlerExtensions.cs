@@ -3,6 +3,7 @@ using Cat.EventProcessor.AzureServiceBus.Extensions;
 using Cat.EventProcessor.Extensions;
 using Cat.EventProcessor.Inbox.Extensions;
 using Cat.Inbox.EFCore.Extensions;
+using Cat.Messaging.AzureServiceBus;
 using Cat.Messaging.AzureServiceBus.Extensions;
 using Cat.Messaging.Extensions;
 using ServiceName.CoreService.Messages;
@@ -48,11 +49,18 @@ public static class MessageHandlerExtensions
     }
 
     /// <summary>
-    /// Creates the subscription of the service on the topic of every message it receives. It skips what exists.
-    /// The topic itself belongs to the sender. Call this in development only.
+    /// Creates the topic of every message the service receives and its subscription on it. It skips what exists. Call this in development only.
+    /// The topic belongs to the sender. In development nothing sends the example message, so the service creates its topic here,
+    /// or the subscription would find no topic. Remove the topic line when the sender of a message creates it.
     /// </summary>
     public static async Task InitializeServiceShortMessageHandlersAsync(this IServiceProvider services, CancellationToken cancellationToken = default)
     {
+        var busTopology = services.GetService<ICatServiceBusTopology>();
+        if (busTopology is not null)
+        {
+            await busTopology.EnsureTopologyAsync([typeof(ExampleReceived).Assembly], cancellationToken);
+        }
+
         var topology = services.GetService<ICatEventProcessorTopology>();
         if (topology is null)
         {

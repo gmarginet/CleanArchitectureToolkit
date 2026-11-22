@@ -1,0 +1,172 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Web", "API", "Aspire", "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.System",
+  "name": "CAT system",
+  "shortName": "cat-system",
+  "description": "A whole system: an Aspire AppHost, ServiceDefaults, a YARP gateway and a first service made with cat-service.",
+  "tags": { "language": "C#", "type": "solution" },
+  "sourceName": "SystemName",
+  "preferNameDirectory": true,
+  "defaultName": "MySystem",
+  "sources": [
+    {
+      "modifiers": [
+        { "condition": "(TemplateHive == \"\")", "exclude": [ "cat-service.hive.rsp" ] },
+        { "condition": "(!GitIgnore)", "exclude": [ ".gitignore" ] }
+      ]
+    }
+  ],
+  "forms": {
+    "underscore": { "identifier": "replace", "pattern": "\\.", "replacement": "_" },
+    "lower": { "identifier": "lowerCase" }
+  },
+  "symbols": {
+    "FirstService": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The short name of the first service, such as Orders. The service gets the full name SystemName.Orders.",
+      "isRequired": true,
+      "replaces": "ServiceShort"
+    },
+    "Framework": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "The target framework of the system.",
+      "choices": [
+        { "choice": "net11.0", "description": ".NET 11, the latest release" },
+        { "choice": "net10.0", "description": ".NET 10, the LTS release" }
+      ],
+      "defaultValue": "net11.0",
+      "replaces": "TARGET_FRAMEWORK"
+    },
+    "Database": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "The database of the first service.",
+      "choices": [
+        { "choice": "SqlServer", "description": "SQL Server" },
+        { "choice": "PostgreSQL", "description": "PostgreSQL" }
+      ],
+      "defaultValue": "SqlServer",
+      "replaces": "DATABASE_VALUE"
+    },
+    "Approach": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "Where the schema of the database comes from.",
+      "choices": [
+        { "choice": "CodeFirst", "description": "The entities are code, and EF Core migrations make the schema" },
+        { "choice": "DatabaseFirst", "description": "The schema is SQL, and the entities are scaffolded from it" }
+      ],
+      "defaultValue": "CodeFirst",
+      "replaces": "APPROACH_VALUE"
+    },
+    "Tests": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add the test project to the first service.",
+      "defaultValue": "true",
+      "replaces": "TESTS_VALUE"
+    },
+    "ExampleRequest": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add one example request to the first service.",
+      "defaultValue": "true",
+      "replaces": "EXAMPLE_VALUE"
+    },
+    "Jobs": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add the scheduler with one example job to the first service.",
+      "defaultValue": "false",
+      "replaces": "JOBS_VALUE"
+    },
+    "Messages": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add message handlers to the first service. The AppHost then starts the Azure Service Bus emulator.",
+      "defaultValue": "false",
+      "replaces": "MESSAGES_VALUE"
+    },
+    "GitIgnore": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Write a .gitignore that ignores the argument files of the first service call, bin and obj. Use false when the folder has a .gitignore already, and add the line cat-service*.rsp to it.",
+      "defaultValue": "true"
+    },
+    "TemplateHive": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The template hive for the dotnet new call of the first service. Only the tests of the templates use it.",
+      "defaultValue": "",
+      "replaces": "TEMPLATE_HIVE"
+    },
+    "ServiceLower": {
+      "type": "derived",
+      "valueSource": "FirstService",
+      "valueTransform": "lower",
+      "replaces": "servicelower"
+    },
+    "ProjectsPrefix": {
+      "type": "derived",
+      "valueSource": "name",
+      "valueTransform": "underscore",
+      "replaces": "PROJECTS_SYSTEM"
+    },
+    "ServiceFullName": {
+      "type": "generated",
+      "generator": "join",
+      "parameters": {
+        "symbols": [
+          { "type": "ref", "value": "name" },
+          { "type": "const", "value": "." },
+          { "type": "ref", "value": "FirstService" }
+        ]
+      },
+      "replaces": "SERVICE_FULL_NAME"
+    },
+    "SqlServer": {
+      "type": "computed",
+      "value": "(Database == \"SqlServer\")"
+    },
+    "PostgreSQL": {
+      "type": "computed",
+      "value": "(Database == \"PostgreSQL\")"
+    },
+    "DatabaseFirst": {
+      "type": "computed",
+      "value": "(Approach == \"DatabaseFirst\")"
+    },
+    "Net10": {
+      "type": "computed",
+      "value": "(Framework == \"net10.0\")"
+    }
+  },
+  "postActions": [
+    {
+      "condition": "(TemplateHive == \"\")",
+      "description": "Create the first service with the cat-service template in the folder of the system. The arguments are in cat-service.rsp.",
+      "manualInstructions": [ { "text": "Run: dotnet new cat-service @cat-service.rsp" } ],
+      "actionId": "3A7C4B45-1F5D-4A30-959A-51B88E82B5D2",
+      "args": {
+        "executable": "dotnet",
+        "args": "new cat-service @cat-service.rsp"
+      },
+      "continueOnError": false
+    },
+    {
+      "condition": "(TemplateHive != \"\")",
+      "description": "Create the first service with the cat-service template in the folder of the system, from the template hive of the tests.",
+      "manualInstructions": [ { "text": "Run: dotnet new cat-service @cat-service.rsp @cat-service.hive.rsp" } ],
+      "actionId": "3A7C4B45-1F5D-4A30-959A-51B88E82B5D2",
+      "args": {
+        "executable": "dotnet",
+        "args": "new cat-service @cat-service.rsp @cat-service.hive.rsp"
+      },
+      "continueOnError": false
+    }
+  ]
+}

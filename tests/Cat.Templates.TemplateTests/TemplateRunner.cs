@@ -47,6 +47,31 @@ public sealed class TemplateRunner
         var result = await RunAsync("dotnet", $"new cat-service -n {name} -o \"{folder}\" {options} --debug:custom-hive \"{_hive}\"", Root);
         Assert.That(result.ExitCode, Is.EqualTo(0), result.Output);
 
+        await WriteNuGetConfigAsync(folder);
+        return folder;
+    }
+
+    /// <summary>
+    /// Creates a system with <c>cat-system</c> in a new folder. The template runs <c>cat-service</c> itself as a post action,
+    /// so the call allows scripts and hands it the template hive of the runner.
+    /// </summary>
+    public async Task<string> CreateSystemAsync(string name, string firstService, string options)
+    {
+        var folder = Path.Combine(Root, name);
+        Directory.CreateDirectory(folder);
+        var result = await RunAsync(
+            "dotnet",
+            $"new cat-system -n {name} -o \"{folder}\" --FirstService {firstService} {options} --allow-scripts yes --TemplateHive \"{_hive}\" --debug:custom-hive \"{_hive}\"",
+            Root);
+        Assert.That(result.ExitCode, Is.EqualTo(0), result.Output);
+
+        await WriteNuGetConfigAsync(folder);
+        return folder;
+    }
+
+    /// <summary>Writes a NuGet.config that points to the packed modules, into the folder of a solution.</summary>
+    public async Task WriteNuGetConfigAsync(string folder)
+    {
         await File.WriteAllTextAsync(Path.Combine(folder, "NuGet.config"), $"""
             <?xml version="1.0" encoding="utf-8"?>
             <configuration>
@@ -57,7 +82,6 @@ public sealed class TemplateRunner
               </packageSources>
             </configuration>
             """);
-        return folder;
     }
 
     /// <summary>Runs an item template, such as <c>cat-command</c>, in the folder of the solution of a service.</summary>
@@ -80,7 +104,7 @@ public sealed class TemplateRunner
     /// </summary>
     public async Task AddCatPackageAsync(string folder, string project, string package)
     {
-        var props = await File.ReadAllTextAsync(Path.Combine(folder, "Directory.Packages.props"));
+        var props = await File.ReadAllTextAsync(Path.Combine(folder, "Directory.Packages.Cat.props"));
         var version = System.Text.RegularExpressions.Regex.Match(props, "<CatVersion>(.+?)</CatVersion>").Groups[1].Value;
         var projectFile = Path.Combine(folder, project, project + ".csproj");
         var result = await RunAsync("dotnet", $"add \"{projectFile}\" package {package} --version {version}", folder);

@@ -32,7 +32,7 @@ A service made with the `cat-service` template of the Clean Architecture Toolkit
 
 <!--#if (Messages)-->
 ## Message handlers
-`ServiceName.Api/Extensions/MessageHandlerExtensions.cs` wires `Cat.EventProcessor` with Azure Service Bus, the only transport. The service receives `ExampleReceived`, and `ExampleReceivedHandler` in the core service handles it. It does nothing yet, so replace both with your own messages. Every message type has the inbox on, so a message that arrives twice is handled once. The table `CatInbox` is in the database of the service.
+`ServiceName.Api/Extensions/MessageHandlerExtensions.cs` wires `Cat.EventProcessor` with Azure Service Bus, the only transport. The service receives `ExampleReceived`, and `ExampleReceivedHandler` in the core service handles it. It does nothing yet, so replace both with your own messages. Every message type has the inbox on, so a message that arrives twice is handled once. The table `CatInbox` is in the database of the service. The inbox row is saved together with the work of the handler, in one `SaveChanges`. The example handler saves nothing, so it leaves no row, and a handler of yours that writes to the database saves through its context.
 <!--#if (DatabaseFirst)-->
 The table `CatInbox` is one of the files of `ServiceName.Database`.
 <!--#endif-->
@@ -44,7 +44,7 @@ var messaging = builder.AddAzureServiceBus("messaging").RunAsEmulator();
 // Add .WithReference(messaging) to the line that adds this service.
 ```
 
-The sender of a message creates its topic. In development the service creates its own subscription on that topic at startup. The module readme of `Cat.EventProcessor` has the rest.
+The sender of a message creates its topic. In development the service creates its own subscription on that topic at startup, and it creates the topic of the example message too, because nothing sends that message yet. Remove that line from `InitializeServiceShortMessageHandlersAsync` when a real sender creates the topic. The module readme of `Cat.EventProcessor` has the rest.
 
 <!--#endif-->
 <!--#if (Jobs)-->
@@ -80,7 +80,7 @@ dotnet ef dbcontext scaffold "<connection string>" Npgsql.EntityFrameworkCore.Po
 
 <!--#endif-->
 ## Versions
-`Directory.Packages.props` holds the version of the CAT packages in the property `CatVersion`, and the versions of the packages that follow .NET for `TARGET_FRAMEWORK`. Change the versions in that one file.
+`Directory.Packages.Cat.props` holds the version of the CAT packages in the property `CatVersion`, and the versions of the packages that follow .NET for `TARGET_FRAMEWORK`. Change the versions in that one file. `Directory.Packages.props` imports it. A solution that already has its own `Directory.Packages.props` needs the same import line. A service made with `--NewSolution false` merges its versions into `Directory.Packages.Cat.props` with a script, see the readme of the templates.
 
 ## Without Aspire
 The template holds no Aspire code. `Program.cs` calls `Cat.Telemetry` and `Cat.Resilience` directly, as their module readmes show for a project without Aspire. Point `OTEL_EXPORTER_OTLP_ENDPOINT` at your collector to send the telemetry.

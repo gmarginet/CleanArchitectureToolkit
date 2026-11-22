@@ -96,19 +96,60 @@ public class ServiceTemplateTests
         var sln = await _runner.DotnetAsync("new sln -n Shop --format slnx", solutionFolder);
         Assert.That(sln.ExitCode, Is.EqualTo(0), sln.Output);
 
+        // The solution of the developer already has the root files. The service must not touch them.
+        const string packages = """
+            <Project>
+              <PropertyGroup>
+                <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+              </PropertyGroup>
+              <Import Project="$(MSBuildThisFileDirectory)src/Orders/Directory.Packages.Cat.props" Condition="Exists('$(MSBuildThisFileDirectory)src/Orders/Directory.Packages.Cat.props')" />
+            </Project>
+            """;
+        const string buildProps = "<Project><PropertyGroup><LangVersion>14.0</LangVersion><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings></PropertyGroup></Project>";
+        await File.WriteAllTextAsync(Path.Combine(solutionFolder, "Directory.Packages.props"), packages);
+        await File.WriteAllTextAsync(Path.Combine(solutionFolder, "Directory.Build.props"), buildProps);
+        await _runner.WriteNuGetConfigAsync(solutionFolder);
+
         var create = await _runner.DotnetAsync(
-            $"new cat-service -n Contoso.Orders -o src/Orders --NewSolution false --Tests true --ApiClient true --debug:custom-hive \"{_runner.Hive}\"",
+            $"new cat-service -n Contoso.Orders -o src/Orders --NewSolution false --Tests true --ApiClient true --allow-scripts yes --debug:custom-hive \"{_runner.Hive}\"",
             solutionFolder);
         Assert.That(create.ExitCode, Is.EqualTo(0), create.Output);
 
         var solutionText = await File.ReadAllTextAsync(Path.Combine(solutionFolder, "Shop.slnx"));
-        Assert.That(File.Exists(Path.Combine(solutionFolder, "src", "Orders", "Contoso.Orders.slnx")), Is.False, "The service made its own solution.");
+        var serviceFolder = Path.Combine(solutionFolder, "src", "Orders");
+        Assert.That(File.Exists(Path.Combine(serviceFolder, "Contoso.Orders.slnx")), Is.False, "The service made its own solution.");
         using (Assert.EnterMultipleScope())
         {
+            Assert.That(File.Exists(Path.Combine(serviceFolder, "Directory.Packages.Cat.props")), Is.True);
+            Assert.That(File.Exists(Path.Combine(serviceFolder, "Contoso.Orders.Packages.props")), Is.False, "The merge script did not remove the file of the service.");
+            Assert.That(File.Exists(Path.Combine(serviceFolder, "MergePackages.cs")), Is.False, "The merge script did not remove itself.");
+            Assert.That(File.Exists(Path.Combine(serviceFolder, "Directory.Packages.props")), Is.False);
+            Assert.That(File.Exists(Path.Combine(serviceFolder, "Directory.Build.props")), Is.False);
+            Assert.That(File.Exists(Path.Combine(serviceFolder, "Contoso.Orders.README.md")), Is.True);
+            Assert.That(await File.ReadAllTextAsync(Path.Combine(solutionFolder, "Directory.Packages.props")), Is.EqualTo(packages));
             Assert.That(solutionText, Does.Contain("Contoso.Orders.Api.csproj"));
             Assert.That(solutionText, Does.Contain("Contoso.Orders.CoreService.Tests.csproj"));
             Assert.That(solutionText, Does.Contain("Contoso.Orders.Api.Client.csproj"));
         }
+
+        // A second service in the same folder, with options that need packages the first one does not.
+        var second = await _runner.DotnetAsync(
+            $"new cat-service -n Contoso.Billing -o src/Orders --NewSolution false --Tests true --Jobs true --Messages true --allow-scripts yes --debug:custom-hive \"{_runner.Hive}\"",
+            solutionFolder);
+        Assert.That(second.ExitCode, Is.EqualTo(0), second.Output);
+
+        var versions = await File.ReadAllTextAsync(Path.Combine(serviceFolder, "Directory.Packages.Cat.props"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(versions, Does.Contain("gmarginet.Cat.Scheduling"), "The packages of the second service were not merged.");
+            Assert.That(versions, Does.Contain("gmarginet.Cat.EventProcessor"));
+            Assert.That(File.Exists(Path.Combine(serviceFolder, "Contoso.Billing.Packages.props")), Is.False);
+            Assert.That(File.Exists(Path.Combine(serviceFolder, "MergePackages.cs")), Is.False);
+            Assert.That(await File.ReadAllTextAsync(Path.Combine(solutionFolder, "Shop.slnx")), Does.Contain("Contoso.Billing.Api.csproj"));
+        }
+
+        var build = await _runner.DotnetAsync("build Shop.slnx --nologo", solutionFolder);
+        Assert.That(build.ExitCode, Is.EqualTo(0), build.Output);
     }
 
     [Test]

@@ -11,6 +11,8 @@
         <ContentTargetFolders>content</ContentTargetFolders>
         <EnableDefaultItems>false</EnableDefaultItems>
         <NoWarn>$(NoWarn);NU5128</NoWarn>
+        <!-- The pack holds files that start with a dot, such as the .gitignore of the system template. -->
+        <NoDefaultExcludes>true</NoDefaultExcludes>
         <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     </PropertyGroup>
 

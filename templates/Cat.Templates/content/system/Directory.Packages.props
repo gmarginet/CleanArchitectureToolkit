@@ -1,0 +1,35 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <!-- The first service writes this file, with the versions of the CAT packages and CatVersion. -->
+  <Import Project="$(MSBuildThisFileDirectory)Directory.Packages.Cat.props" Condition="Exists('$(MSBuildThisFileDirectory)Directory.Packages.Cat.props')" />
+  <ItemGroup>
+    <PackageVersion Include="gmarginet.Cat.Api.Gateway" Version="$(CatVersion)" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.6.5" />
+    <!--#if (Messages)-->
+    <PackageVersion Include="Aspire.Hosting.Azure.ServiceBus" Version="13.6.5" />
+    <!--#endif-->
+    <!--#if (SqlServer)-->
+    <PackageVersion Include="Aspire.Hosting.SqlServer" Version="13.6.5" />
+    <!--#if (DatabaseFirst)-->
+    <PackageVersion Include="CommunityToolkit.Aspire.Hosting.SqlDatabaseProjects" Version="13.6.1" />
+    <!--#endif-->
+    <!--#else-->
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.6.5" />
+    <!--#endif-->
+  </ItemGroup>
+  <!-- The packages that follow the release of .NET have the versions of the target framework. -->
+  <!--#if (Net10)-->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="10.11.0" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="10.11.0" />
+  </ItemGroup>
+  <!--#else-->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="11.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="11.0.0" />
+  </ItemGroup>
+  <!--#endif-->
+</Project>

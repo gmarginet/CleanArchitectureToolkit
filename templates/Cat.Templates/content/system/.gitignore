@@ -1,0 +1,7 @@
+# The arguments of the dotnet new call that made the first service. The template needs them once.
+cat-service*.rsp
+
+bin/
+obj/
+.vs/
+*.user
