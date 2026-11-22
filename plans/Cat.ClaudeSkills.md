@@ -159,7 +159,7 @@ Phase 1 builds every skill on this list, with these names (owner, 2026-11-22).
 - **No build order by template.** The [template pack](../templates/README.md) is built and holds every template the skills need. This plan builds every skill it plans, not a first group (owner, 2026-11-22).
 - **Scope of phase 1.** Phase 1 builds every skill in the list of skills, the group "More modules" too (owner, 2026-11-22).
 - **Skills of the group "More modules".** One skill per module for the main task its module readme describes, as listed. `Cat.Dapper`, `Cat.Api.Client`, `Cat.Sql.Cdc` and `Cat.Api.Gateway` get one too, so every module has a skill (owner, 2026-11-22).
-- **A skill for the solution template.** The skill that runs the solution template of [Cat.Templates.md](Cat.Templates.md#phase-2) belongs to [phase 2](#phase-2) (owner, 2026-11-22).
+- **A skill for the solution template.** The skill that runs the [solution template](../templates/README.md#create-a-system) belongs to [phase 2](#phase-2) (owner, 2026-11-22).
 - **One plan.** This plan covers every skill for developers, with no plan per skill. Its phases follow the template pack: phase 1 holds the skills for the service template and the item templates, phase 2 the skill for the solution template (owner, 2026-11-22).
 - **Names and folders.** The plugin is `cat` in `claudeskills/`, with its `plugin.json` in `claudeskills/.claude-plugin/` and the skills in `claudeskills/skills/`. The marketplace is `cat-toolkit` in `.claude-plugin/marketplace.json` in the root of the repository, and points to `./claudeskills`. A developer installs it with `/plugin install cat@cat-toolkit` (owner, 2026-11-22). The plugin docs allow a relative source that starts with `./`, resolved from the folder that holds `.claude-plugin/`, so `"source": "./claudeskills"` works. The `name` of the entry in `marketplace.json` must match the `name` in `plugin.json` (checked 2026-11-22).
 - **Keep the skills true.** A skill holds the workflow and as few API names as possible (owner, 2026-11-22):
@@ -191,14 +191,13 @@ Phase 1 builds every skill on this list, with these names (owner, 2026-11-22).
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-A skill that creates a whole system with the solution template of [Cat.Templates.md](Cat.Templates.md#phase-2), as the demo is.
+A skill that creates a whole system with the [solution template](../templates/README.md#create-a-system), as the demo is.
 
 #### Needs
-- The solution template, see [Cat.Templates.md](Cat.Templates.md#phase-2).
 - The plugin and the skills of [phase 1](#phase-1).
 
 #### Background
-- The solution template creates an AppHost, `ServiceDefaults`, a YARP gateway and a first service made with `cat-service`, see [Cat.Templates.md](Cat.Templates.md#phase-2).
+- The solution template creates an AppHost, `ServiceDefaults`, a YARP gateway and a first service made with `cat-service`, see the [templates readme](../templates/README.md#create-a-system).
 
 #### Decided
 - **A skill for the solution template.** It runs the solution template and goes in the plugin of [phase 1](#phase-1) (owner, 2026-11-22).
