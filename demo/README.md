@@ -91,16 +91,17 @@ What you can do today:
 
 - **Browse the catalog.** See the categories and the books in them. Search for a book. Open a book to see its details.
 - **See prices.** Every book has a current price in euro. The shop keeps the older prices as well.
-- **Manage the catalog.** An admin can add a book or change one.
+- **Manage the catalog.** An admin can add a book or change one. An admin can also add a category or change one, with its English name and its Dutch name.
 - **Place an order.** Pick books and quantities. The shop looks up the prices and checks that the books are in stock. It then answers at once that the order is pending, and asks the payment provider to take the payment. The order confirms when the provider answers, usually within a few seconds. The screen shows the status and updates by itself.
 - **Get an order number.** Every order gets a number like `20261105-0001`. The date is the day of the order. The counter starts again every day.
 - **Follow your orders.** See a list of your orders and open one to see its lines, its total and its status.
 - **Cancel an order.** Change your mind after ordering and cancel it, as long as the order is not shipped yet. When the order was paid, the shop gives the money back.
 - **Get your order shipped.** A confirmed order ships 5 minutes after the confirmation. A shipped order can no longer be cancelled.
-- **Get a confirmation mail.** When an order is confirmed, the customer gets a mail with the order number and the total. The mails are in English. The demo keeps them in a test inbox, so nothing leaves your machine.
+- **Get a confirmation mail.** When an order is confirmed, the customer gets a mail with the order number and the total. The mail is in the language the customer used when they placed the order, English or Dutch. The demo keeps them in a test inbox, so nothing leaves your machine.
+- **Pick a language.** The shop speaks English and Dutch. A selector in the top bar switches the screens, the category names, the order statuses, the error messages and the confirmation mail. The first language is the one of the browser, and the shop remembers the choice in the browser. A category without a Dutch name shows its English name. Book titles and authors are never translated.
 - **Log in or register.** Alice, Bob and the admin each have an account. A new user can register on the login page and is logged in at once. You need to be logged in to place or follow orders. Anyone can browse the catalog without a login.
 - **Stay private.** A customer only sees their own orders. An admin sees all of them. Only an admin can add or change a book.
-- **Use the web shop.** Open the shop in the browser, search the books by text or category, open a book and log in on the login page. A new user registers there first. Put books in a basket and place an order. Follow your orders in the browser, and cancel one. An admin can add a book and change a book.
+- **Use the web shop.** Open the shop in the browser, search the books by text or category, open a book and log in on the login page. A new user registers there first. Put books in a basket and place an order. Follow your orders in the browser, and cancel one. An admin can add a book, change a book and manage the categories.
 
 What the shop does when something goes wrong:
 
@@ -119,7 +120,7 @@ When you start the shop with Aspire, the order asks the catalog for the real pri
 
 A separate notification service sends the confirmation mail. A mail for the same order goes out once, also when the message arrives twice.
 
-Every night a job in the stock service looks for books with fewer than 10 copies left. When it finds any, the notification service mails the list to the admin. Nothing is sent when all stock is fine. The limit and the address of the admin are settings.
+Every night a job in the stock service looks for books with fewer than 10 copies left. When it finds any, the notification service mails the list to the admin. Nothing is sent when all stock is fine. The limit, the address of the admin and the language of the admin mails are settings.
 
 The admin also gets a mail at the moment a book drops below the limit, a few seconds after the stock changes. This happens for every change of the stock table, also one made by a person or a script in the database. The stock service has no code that sends it. Only the drop from the limit or more to below the limit sends a mail, so a book that stays low does not send a mail on every order.
 
@@ -443,9 +444,9 @@ The chapters above tell why. The chapters below hold the facts of every block th
 
 ### React client
 
-**What it is.** A thin web client with a book list, a basket, an order overview and an admin screen for books. It uses React with TypeScript, built with Vite.
+**What it is.** A thin web client with a book list, a basket, an order overview, admin screens for books and categories, and a language selector. It uses React with TypeScript, built with Vite.
 
-**Where it stands.** The app is in `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App`, a Vite, React and TypeScript project. The AppHost starts it as `web` on the fixed port 5104, and the gateway lists `http://localhost:5104` as an allowed CORS origin. It has six screens: the book list, the book detail, the basket, the order overview, the order detail and the book form for admins. It also has a login. The book list has a search box and a category filter, and keeps them in the address. One error component shows the message, the code and the trace id of every failed call.
+**Where it stands.** The app is in `demo/Cat.Demo.WebClient/Cat.Demo.WebClient.App`, a Vite, React and TypeScript project. The AppHost starts it as `web` on the fixed port 5104, and the gateway lists `http://localhost:5104` as an allowed CORS origin. It has eight screens: the book list, the book detail, the basket, the order overview, the order detail, the book form for admins, the category list for admins and the category form for admins. It also has a login. The book list has a search box and a category filter, and keeps them in the address. One error component shows the message, the code and the trace id of every failed call.
 
 **Work on the client.** Run these in the app folder. Node 24 or newer is needed.
 
@@ -470,6 +471,10 @@ The chapters above tell why. The chapters below hold the facts of every block th
 - The order overview lists the orders of the person, newest first. The order detail shows the lines with the book titles, which come from the catalog, and a Cancel button. The order from the service carries `canCancel`, and the button is disabled when it is false, so the client holds no list of the statuses that allow a cancel. The page asks for a `Confirmed` order every 10 seconds, so the button turns off by itself when the order ships. A cancel that is refused anyway, for example on a screen that is out of date, shows the message of the service, such as `DEM-ORD-1004`. Another person's order comes back as not found.
 - The admin screens `/admin/books/new` and `/admin/books/:id` hold a form for ISBN, title, author, category and price. The links to them show only when the ID token has the `admin` role in its `roles` claim. That only decides what the screen shows. The catalog checks the role again on every save, so a non admin who opens the address gets the 403 of the service. A duplicate ISBN shows `DEM-CTL-1000`.
 - A failed call shows its CAT errors: the code and the message with the arguments filled in, and the trace id. The validators put the field name in front of the arguments, and the client skips it. The basket stays, so the person can try again.
+- The client is in English and Dutch with eact-i18next. The texts of the screens, the order statuses and the translated error codes are in src/locales/en.json and src/locales/nl.json. A key that is missing in Dutch falls back to English. The language selector in the top bar calls setLanguage in src/i18n.ts, which keeps the choice in local storage and, before a first choice, takes the language of the browser. Numbers and dates use Intl with en-IE or 
+l-NL.
+- The middleware in src/api/client.ts sets Accept-Language on every call next to the token. The gateway passes the header on. A change of language asks for all queries again, so the category names follow. The message of a CAT error is replaced by the Dutch text of its code from errors.codes, and a code without a translation keeps the English message of the service.
+- The admin screens /admin/categories, /admin/categories/new and /admin/categories/:id list the categories and edit the English name and the Dutch name. They use GET /catalog/categories/{categoryId} and POST /catalog/categories.
 - Log out ends the Keycloak session as well.
 - It has no shared code with the services. The types come from a saved copy of the OpenAPI documents of the services.
 
@@ -478,6 +483,7 @@ The chapters above tell why. The chapters below hold the facts of every block th
 | Module | Where | Why |
 |---|---|---|
 | `Cat.Minimal.Api` | Produces the OpenAPI documents the client is built from | One description of every endpoint and every possible response. |
+| `Cat.Localizations` | Gives the names that the client shows in the language of the call | The client sends the language and the Catalog answers in it. |
 
 **Pros.**
 - The client stays independent of .NET. The services expose a normal HTTP API.
@@ -586,11 +592,15 @@ The gateway only option of the module is not used in the demo. The services chec
   - `GET /books/{bookId}` returns one book.
   - `GET /books/prices` returns the price list with the ISBN of every book. Orders uses it, and Inventory knows a book by its ISBN.
   - `POST /books` adds or changes a book.
-  - `GET /categories` lists the categories.
+  - `GET /categories` lists the categories, with the name in the language of the request.
+  - `GET /categories/{categoryId}` returns one category with its English name and its Dutch name. Only an admin can call it.
+  - `POST /categories` adds or changes a category and its Dutch name. Only an admin can call it.
 - Each endpoint maps to a service request such as `BookSearchRequest`. A handler turns it into queries and commands.
 - Entities are `Category`, `Book` and `BookPrice`. `BookPrice` is a temporal table, so every old price stays in the history.
 - `BookPrice` has a `LastUpdatedBy` column, so the history also shows who set each price. The command handler of the save fills it with the `UserId` of `ICatUser`, the id and not the name or the email. The seed prices belong to the named system user `catalog`.
 - Saving a book checks that the ISBN is unique.
+- Category names are translated with `Cat.Localizations`. `Category` implements `ICatTranslatable`, and `AddCatTranslations` adds the `Translation` table to the model. `CategorySaveCommandHandler` stores the Dutch name with `SetTextAsync` in the same `SaveChanges` as the category. The category list, the book search and the book detail read the names with `ICatTranslator` in one call, so a book never shows a name in another language than the page. A category without a Dutch name shows its English name. Titles and authors are not translated, because another language is another edition with another ISBN.
+- Each service of the demo calls `UseDemoRequestLocalization` from ServiceDefaults, with the cultures `en` and `nl`. The culture of the request is in `CurrentUICulture`, so the two cached queries have it in their key.
 - Two queries are cached with `Cat.Caching`: `CategoryGetListQuery` and `BookSearchQuery`. Both use `Shared()`, because no Catalog query depends on the user, so every user shares one entry. The default lifetime of 5 minutes applies. `BookSearchQuery` has the tag `books` (the constant `CatalogCacheTags.Books`), and `BookSaveCommandHandler` clears that tag with `ICatQueryCache.RemoveByTagAsync` after a save, so the next search shows the saved book.
 - `BookPriceListQuery` and `CheckIsbnExistsQuery` are not cached on purpose. A stale price list lets Orders take an order at an old price, and a stale ISBN check lets a duplicate book pass the validator. See [What to never cache](../modules/Cat.Caching/README.md#what-to-never-cache). A test over `CatQueryCacheOptions.Rules` fails if either query is ever listed.
 - Saving a book needs the `admin` role. A test starts the real endpoint mapping and the real `admin` policy on a local server, and checks that a call without a login gets a 401 and a user who is not an admin gets a 403. In both cases the command does not run.
@@ -608,12 +618,21 @@ The gateway only option of the module is not used in the demo. The services chec
 ```mermaid
 erDiagram
     Category ||--o{ Book : groups
+    Category ||--o{ Translation : "named in"
     Book ||--o| BookPrice : "priced by"
 
     Category {
         Guid Id PK
         int SequenceId
         string Name
+    }
+    Translation {
+        Guid Id PK
+        string EntityType UK
+        Guid EntityId UK
+        string Field UK
+        string Culture UK
+        string Text
     }
     Book {
         Guid Id PK
@@ -645,7 +664,8 @@ erDiagram
 | `Cat.Minimal.Api` | Api | Maps service requests to endpoints and documents the responses. |
 | `Cat.EFCore` | DataModels and Infrastructure | Entity base classes, and the temporal price table from the SQL Server projects. The query and command handlers inherit the base handlers, so they only hold what is special about them. |
 | `Cat.Users` | Infrastructure (`Cat.Users.Abstractions`) and the host | The save handler asks `ICatUser` for the id that goes into `LastUpdatedBy`. The `admin` policy on the endpoint is the role check. |
-| `Cat.Caching` | Api (`Cat.Caching`) and Infrastructure (`Cat.Caching.Abstractions`) | Answers the category list and the book search from a cache. The save handler clears the `books` tag. |
+| `Cat.Caching` | Api (`Cat.Caching`) and Infrastructure (`Cat.Caching.Abstractions`) | Answers the category list and the book search from a cache, with the culture in the key. The save handlers clear the `books` tag and the `categories` tag. |
+| `Cat.Localizations` | DataModels (`Cat.Localizations.Abstractions`) and Infrastructure (`Cat.Localizations.EFCore`) | The Dutch names of the categories, in a translation table next to the data. |
 | `Cat.Expressions` | Api | Compiled member access that is reused. |
 | `Cat.UnitTesting.Commands`, `Cat.UnitTesting.Queries` and `Cat.UnitTesting.NUnit` | Core service tests | `FakeCommandProcessor` and `FakeQueryProcessor` stand in for the processors, and `UnitTestBase` builds the service provider of the validation tests. |
 
@@ -657,7 +677,7 @@ erDiagram
 **Cons.**
 - Many small types for a small service: a request, a handler, a query, a query handler and a validator.
 - Temporal tables tie the demo to SQL Server.
-- Category names are plain text.
+- A category name in another language needs a translation row and one extra query per list.
 
 **See the cache work.** Set `Catalog:QueryLatency` in the configuration of the AppHost and start it again. Catalog then waits that long before the two cached queries run. The wait is a demo only wrapper around the query processor (`AddCatalogQueryLatency`, registered with `AddCatQueryProcessorWrapper` below the cache), so the handlers stay as they are and a hit never waits. For example:
 
@@ -961,7 +981,7 @@ erDiagram
 | `Cat.Api.Client` | Api.Client and Orders | The generated client and `CatApiCall` turn an HTTP answer back into a response. |
 | `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` and `Cat.EventProcessor.Minimal.Api` | Api | Receives `OrderConfirmed` from the bus as a service request, settles the message from the response, and adds the development endpoint and the health check. |
 | `Cat.EventProcessor.Authorization` | Api | Checks the token of `OrderConfirmed` when there is a login. |
-| `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` | Api | The connection to the bus and the name of the topic. |
+| `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` | Api | The connection to the bus and the name of the topic. The message carries the culture of the sender. |
 | `Cat.Scheduling` and `Cat.Scheduling.EFCore` | Api and Infrastructure | The nightly low stock report job. The runs are claimed in the table `CatJobRun`. |
 | `Cat.Sql.Cdc`, `Cat.Sql.Cdc.Abstractions` and `Cat.Sql.Cdc.Messaging` | Api and Core service | Reads the changes of the stock table from the change data capture of SQL Server and sends each as a `StockChanged` message. The core service only references the abstractions, for the change type of the mapping. |
 | `Cat.UnitTesting.Commands` and `Cat.UnitTesting.NUnit` | Core service tests | `FakeCommandProcessor` stands in for the command processor, and `UnitTestBase` builds the service provider of the validation tests. |
@@ -983,7 +1003,7 @@ The service uses no entity base classes. It shows that you use only the modules 
 - `OrderConfirmedHandler` is the service request handler of the message. A customer without an email address gets no mail, and the message counts as handled. Otherwise it runs `SendOrderConfirmedMailCommand`.
 - `SendOrderConfirmedMailCommandHandler` in `Cat.Demo.NotificationService.Infrastructure` looks for a `SentMail` row of the order and the kind `OrderConfirmed`. A row means the mail went out, and the handler does nothing. Without a row it builds the text with `OrderConfirmedMailBuilder`, sends the mail, and saves the row. The unique index on the order and the kind backs this up. The mail goes out before the row is saved, so a crash in between sends the mail twice at worst and never loses it.
 - The core service only knows `IMailSender`. `SmtpMailSender` sends over SMTP with the settings `Smtp:Host`, `Smtp:Port` and `Smtp:From`. The AppHost points them at Mailpit.
-- The mails are in English.
+- The mails are in English and Dutch. `MailTexts.resx` and `MailTexts.nl.resx` hold the subject and the body of each mail, and the builders read them with `IStringLocalizer<MailTexts>`. A missing Dutch entry falls back to English. The mail of a customer follows the language of the order: Orders, Inventory and Notifications call `ApplySenderCulture`, so the language travels in the message and `OrderConfirmedHandler` runs in it. The mails to the admin use `NotificationSettings.AdminCulture`, the setting `Notifications:AdminCulture`, English when it is not set, so a stock drop caused by a Dutch customer still mails the admin in the language of the admin.
 - It also receives `LowStockReport` from Inventory, so the `CoreService` and `Api` projects reference the `Contracts` project of Inventory. `LowStockReportHandler` mails the report to the admin with `LowStockReportMailBuilder`. The address is `NotificationSettings.AdminEmail`, which is the setting `Notifications:AdminEmail` and `admin@example.com` when it is not set. A report without items sends no mail. The report is not stored in `SentMail`, which holds mails of orders only, so a message that arrives twice sends two reports. That does no harm for a report.
 - It also receives `StockChanged` from Inventory, which holds one change of the stock table. `StockChangedHandler` decides what it means: only a drop from the limit or more to below the limit, in `IsDrop`, sends a mail to the admin with `StockDropMailBuilder`. Every other change is a normal case. The handler answers success and sends nothing, so the message is completed. The mail is not stored, so a message that arrives twice sends two mails, which does no harm for an alert. `StockChangedValidator` only rejects a malformed message, such as one without an ISBN or with a negative quantity. It answers `BadRequest`, which dead letters the message, because sending it again gives the same answer. The `Api` project runs the validation decorator, so the validator runs before the handler.
 - At startup, in `Development`, Notifications applies its migrations and creates its subscriptions. Orders and Inventory create the topics first, so Notifications waits for both in the AppHost. In `Development` the API has the endpoints `POST /dev/event-processor/OrderConfirmed`, `POST /dev/event-processor/LowStockReport` and `POST /dev/event-processor/StockChanged`, which run a message through the same pipeline without a bus. Without the connection string `messaging` Notifications does not listen.
@@ -1013,12 +1033,12 @@ erDiagram
 | `Cat.EventProcessor`, `Cat.EventProcessor.AzureServiceBus` and `Cat.EventProcessor.Minimal.Api` | Api | Receives `OrderConfirmed`, `LowStockReport` and `StockChanged` from the bus as service requests, and adds the development endpoints and the health check. |
 | `Cat.EventProcessor.Authorization` | Api | Checks the token of all three messages when there is a login. Notifications sends no messages, so it has no client of its own. |
 | `Cat.Validators` and `Cat.ServiceRequests.Decorators.Validation` | Core service and Api | Reject a malformed `StockChanged` message before the handler runs. |
-| `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` | Api | The connection to the bus and the name of the topic. |
+| `Cat.Messaging` and `Cat.Messaging.AzureServiceBus` | Api | The connection to the bus and the name of the topic. The message carries the culture of the sender. |
 | `Cat.UnitTesting.Commands` and `Cat.UnitTesting.NUnit` | Core service tests | `FakeCommandProcessor` stands in for the command processor, and `UnitTestBase` builds the service provider of the validator tests. |
 
 **Pros.** A second receiver of `OrderConfirmed` shows that a message has more than one reader. The table of sent mails shows idempotent handling without an inbox.
 
-**Cons.** The demo now has two database servers to start, and the Notifications data is not in the SQL Server volume. The mail text is built in code and only in English. A mail that is sent but not yet saved can go out twice after a crash. The test inbox shows the mail, but it does not show how a real mail provider behaves.
+**Cons.** The demo now has two database servers to start, and the Notifications data is not in the SQL Server volume. The mail texts are in resx files, so a developer who adds a language must translate every entry. A mail that is sent but not yet saved can go out twice after a crash. The test inbox shows the mail, but it does not show how a real mail provider behaves.
 
 **More.** Code in `demo/Cat.Demo.NotificationService`.
 
