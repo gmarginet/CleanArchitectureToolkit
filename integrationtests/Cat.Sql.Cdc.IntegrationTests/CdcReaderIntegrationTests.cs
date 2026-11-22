@@ -39,9 +39,31 @@ public class CdcReaderIntegrationTests : SqlServerAgentDatabaseTests
         await command.ExecuteNonQueryAsync();
     }
 
-    private async Task CreateCapturedTableAsync(string table) => await ExecuteAsync(
-        $"CREATE TABLE dbo.{table} (Id int NOT NULL PRIMARY KEY, Title nvarchar(50) NOT NULL); " +
-        $"EXEC sys.sp_cdc_enable_table @source_schema = N'dbo', @source_name = N'{table}', @role_name = NULL, @supports_net_changes = 0;");
+    /// <summary>
+    /// Creates the table and switches capture on. The container starts the Agent a little after SQL Server accepts connections,
+    /// and the first capture needs the Agent to add its job. SQL Server answers error 14258, "SQLServerAgent is starting",
+    /// until it is ready, so the call is repeated for a while. It is safe to repeat, because the enable runs only for a table that is not tracked yet.
+    /// </summary>
+    private async Task CreateCapturedTableAsync(string table)
+    {
+        await ExecuteAsync($"CREATE TABLE dbo.{table} (Id int NOT NULL PRIMARY KEY, Title nvarchar(50) NOT NULL);");
+
+        var enable = $"IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = N'{table}' AND is_tracked_by_cdc = 1) " +
+                     $"EXEC sys.sp_cdc_enable_table @source_schema = N'dbo', @source_name = N'{table}', @role_name = NULL, @supports_net_changes = 0;";
+        var until = DateTime.UtcNow + TimeSpan.FromSeconds(60);
+        while (true)
+        {
+            try
+            {
+                await ExecuteAsync(enable);
+                return;
+            }
+            catch (SqlException exception) when (DateTime.UtcNow < until && exception.ToString().Contains("SQLServerAgent is starting"))
+            {
+                await Task.Delay(1000);
+            }
+        }
+    }
 
     private async Task<(ServiceProvider Provider, RecordingSink Sink, IHostedService Reader)> StartReaderAsync(string table, TimeSpan? claimLease = null)
     {
