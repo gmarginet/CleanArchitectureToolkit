@@ -39,6 +39,7 @@
 <!-- region start: Phases-->
 <!-- no toc -->
 - [Phase 1](#phase-1)
+- [Phase 2](#phase-2)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 1-->
@@ -63,10 +64,10 @@ From the repository:
 - The readme describes the conventions a skill would teach: the service project structure, the `Abstractions` split, handler registration, `ICatResponse` and error codes.
 - [Cat.Templates.md](Cat.Templates.md#phase-1) plans `dotnet new` templates for a service and for the single parts of a service.
 - `cat-internal-verify-docs` checks all markdown in the repository, and `pages.yml` builds the GitHub Pages site from the markdown.
-- `skip-pub` goes at the end of a commit subject when no code in `modules/` changed. Files under `plugins/` would not be published as NuGet packages.
+- `skip-pub` goes at the end of a commit subject when no code in `modules/` changed. Files under `claudeskills/` would not be published as NuGet packages.
 
 #### What exists today
-- No skill for developers exists yet. The folders `plugins/` and `.claude-plugin/` do not exist.
+- No skill for developers exists yet. The folders `claudeskills/` and `.claude-plugin/` do not exist.
 - The readme lists the idea in the repo overview, as `Cat.ClaudeSkills` with the type Tooling and the status New.
 - The skills in `.claude/skills/` are all for the owner, and all 16 of them use the `cat-internal-` prefix now.
 - The repository has a `_plugins` folder. It belongs to the Jekyll site and is not related to this plan.
@@ -80,35 +81,35 @@ Why it fits:
 
 Risks:
 - **Drift.** A skill that copies API details goes stale when a module changes. Keep the skills about workflow and conventions, and link to the module readmes for the API. The files themselves come from the templates, which the build tests.
-- **Versions.** Skills and NuGet packages are versioned separately. A plugin version note per module release would help.
+- **Versions.** Skills and NuGet packages are versioned separately. See the decisions on the plugin version and the packed readme.
 - **Names.** The skills for the owner in `.claude/skills/` could clash with skills for developers of similar names. The prefixes keep them apart.
 
 #### How to publish them
-Claude wrote this from memory. Check the current plugin docs for the exact manifest fields before the build.
-
-The usual route is a Claude Code plugin in a marketplace:
+From the Claude Code plugin docs (checked 2026-11-22):
 - **Marketplace.** A `.claude-plugin/marketplace.json` in a GitHub repository. A developer runs `/plugin marketplace add <owner>/<repo>`, then `/plugin install <plugin>@<marketplace>`. Updates come through the same commands.
+- **No upload step.** The repository is the marketplace. A push to `master` publishes the change, and developers get it when the `version` in `plugin.json` changes. `build.yml` has nothing to upload, and `skip-pub` does not hold the skills back, because it only stops the NuGet packages.
+- **What a developer downloads.** `/plugin marketplace add` clones the whole repository, under `marketplaces/<name>/` on the machine of the developer. Installing the plugin copies only the plugin folder, here `claudeskills/`, into `cache/<marketplace>/<plugin>/<version>/`. The developer can limit the clone with `--sparse`, such as `--sparse .claude-plugin claudeskills`. The git history of the repository is about 11 MB today.
+- **Validation.** `claude plugin validate <path>` checks the JSON, the required fields, the names and the `plugin.json` of each plugin with a relative source. `--strict` turns warnings into failures, for CI. Exit code 0 means passed, 1 failed. It does not check that a relative source folder exists.
 - **Plugin.** A folder with `.claude-plugin/plugin.json` and a `skills/<name>/SKILL.md` per skill. It can also hold commands, hooks and an MCP config later.
 - **Fallback.** The developer copies a skill folder into `.claude/skills/` in their project or into `~/.claude/skills/`. It is simple, but has no updates.
 
-The recommendation of Claude was the plugin and marketplace route, starting with one plugin that holds all the skills, because the skills are small. One plugin per module would match the toolbox idea better but costs more to maintain.
+The skills ship as one plugin, see Decided.
 
 #### Where they live in the repository
-Keep them out of `.claude/skills/`, which is for the owner. A proposal:
+Keep them out of `.claude/skills/`, which is for the owner. The folders, see Decided:
 
 ```
-.claude-plugin/marketplace.json
-plugins/cat/.claude-plugin/plugin.json
-plugins/cat/skills/cat-add-command/SKILL.md
-plugins/cat/skills/...
+.claude-plugin/marketplace.json        (points to ./claudeskills)
+claudeskills/README.md
+claudeskills/.claude-plugin/plugin.json
+claudeskills/skills/cat-add-command/SKILL.md
+claudeskills/skills/...
 ```
 
 Things to check when we build it:
-- **Markdown checks.** `cat-internal-verify-docs` and the skills overview rule in `CLAUDE.md` need to cover the new folder, or exclude it on purpose.
-- **Pages site.** `pages.yml` builds the Jekyll site from the markdown. Decide whether the skill files should appear there.
-- **Commit messages.** A commit that only touches `plugins/` gets ` (skip-pub)`.
+- **Skills overview.** Whether the skills overview rule in `CLAUDE.md` covers the new folder, or excludes it on purpose.
+- **Commit messages.** A commit that only touches `claudeskills/` gets ` (skip-pub)`.
 - **Plugin docs.** Claude reads the current Claude Code plugin docs (manifest fields, marketplace file, install commands) at the start of the build and corrects this plan, because the publishing steps above come from memory.
-- **Plugin tests.** Whether `claude plugin eval` can run an eval suite for the skills of the plugin, see question 12.
 
 #### Possible skills
 Ideas only. None of them is decided. The names are suggestions.
@@ -118,7 +119,7 @@ Ideas only. None of them is decided. The names are suggestions.
 - `cat-add-module`: add a module to a service, with the right packages, the registration call and the project references. It keeps the core on the abstractions.
 
 **Daily work**
-- `cat-add-command`: a command, its handler, a validator and a unit test.
+- `cat-add-command`: a command, its handler, a validator and a unit test. It follows the order in [Get a result from a command](../modules/Cat.Commands/README.md#get-a-result-from-a-command): IDs the caller supplies first, a query after the command second, the typed command third.
 - `cat-add-query`: a query, its handler and a unit test.
 - `cat-add-service-request`: a service request with its handler, for use cases that call several commands or queries.
 - `cat-add-endpoint`: map a service request to a minimal API endpoint, with the response types listed.
@@ -135,115 +136,78 @@ Ideas only. None of them is decided. The names are suggestions.
 - `cat-review`: check a service against the conventions: references, registration, response handling.
 - `cat-upgrade`: help move to a new version of a module, using the release notes.
 
-**Later, when the modules exist**
-- Skills for messaging, sagas, scheduling and authorization.
-- Skills for `Cat.Inbox`, `Cat.Outbox`, `Cat.Resilience`, `Cat.Telemetry`, `Cat.Caching` and `Cat.Localizations`.
-- These modules all exist now, so the skills can come after the daily work skills.
+**More modules**
+- `cat-add-message`: declare a message and send it with `Cat.Messaging`, through the outbox when the service has one.
+- `cat-add-message-handler`: a message type, its handler, the registration and the subscription with `Cat.EventProcessor`.
+- `cat-add-saga`: the messages, the workflow, the instance store and the test of a saga with `Cat.Sagas`.
+- `cat-add-job`: a scheduled job, its configuration and its test with `Cat.Scheduling`.
+- `cat-use-user`: read the user in a handler, and set it in a worker, with `Cat.Users`.
+- `cat-add-inbox`: skip a repeated webhook or bus message with `Cat.Inbox`, with the store and the cleanup.
+- `cat-add-outbox`: turn the outbox on with `Cat.Outbox`, with the cleanup.
+- `cat-add-resilience`: put a profile on an `HttpClient`, or retry a whole command or query, with `Cat.Resilience`.
+- `cat-add-telemetry`: add an own source, meter or exporter with `Cat.Telemetry`.
+- `cat-cache-query`: cache a query and clear it with a tag with `Cat.Caching`.
+- `cat-add-translation`: mark an entity, map its table and read a text with `Cat.Localizations`.
+- `cat-add-dapper-handler`: a query or command handler with `Cat.Dapper`, with the SQL in a `.sql` file.
+- `cat-add-api-client`: generate and register the client of another service with `Cat.Api.Client`.
+- `cat-add-cdc`: map a table to a message with `Cat.Sql.Cdc`. SQL Server only, as the module is.
+- `cat-add-gateway`: set up a gateway host and describe the services with `Cat.Api.Gateway`, for a developer who does not use the solution template.
 
 #### Decided
 - **Idea.** Create skills for the developers who use the toolkit. Plan them here and list them in the repo overview of the readme.
 - **Skill prefix.** Skills for the owner of the toolkit start with `cat-internal-`. Skills for developers who use the toolkit start with `cat-`. All existing skills for the owner already use `cat-internal-`.
 - **The skills use the templates.** Every file that a skill creates comes from a `dotnet new` template of [Cat.Templates.md](Cat.Templates.md#phase-1), a service template or an item template. A skill does what a template cannot: pick the project and the folder, change existing files such as the registration in `Program.cs`, add the test, run the build and explain the next step (owner, 2026-11-21).
 - **Who scaffolds a new service.** The service template creates the structure, and `cat-new-service` runs it. Until the template exists, the skill is not built (owner, 2026-11-21).
+- **One plugin for all skills.** Every skill for developers goes in one plugin, not one per module. Claude loads a skill only when its description matches, so an unused skill costs almost nothing. The plugin can be split later if it grows too big (owner, 2026-11-22).
+- **No build order by template.** [Cat.Templates.md](Cat.Templates.md#phase-1) is built first and holds every template the skills need. This plan builds every skill it plans, not a first group (owner, 2026-11-22).
+- **Scope of phase 1.** Phase 1 builds every skill in the list of possible skills, the group "More modules" too (owner, 2026-11-22).
+- **Skills of the group "More modules".** One skill per module for the main task its module readme describes, as listed. `Cat.Dapper`, `Cat.Api.Client`, `Cat.Sql.Cdc` and `Cat.Api.Gateway` get one too, so every module has a skill (owner, 2026-11-22).
+- **A skill for the solution template.** The skill that runs the solution template of [Cat.Templates.md](Cat.Templates.md#phase-2) belongs to [phase 2](#phase-2) (owner, 2026-11-22).
+- **One plan.** This plan covers every skill for developers, with no plan per skill. Its phases follow the phases of [Cat.Templates.md](Cat.Templates.md#phase-1): phase 1 holds the skills for the service template and the item templates, phase 2 the skill for the solution template (owner, 2026-11-22).
+- **Names and folders.** The plugin is `cat` in `claudeskills/`, with its `plugin.json` in `claudeskills/.claude-plugin/` and the skills in `claudeskills/skills/`. The marketplace is `cat-toolkit` in `.claude-plugin/marketplace.json` in the root of the repository, and points to `./claudeskills`. A developer installs it with `/plugin install cat@cat-toolkit` (owner, 2026-11-22). The plugin docs allow a relative source that starts with `./`, resolved from the folder that holds `.claude-plugin/`, so `"source": "./claudeskills"` works. The `name` of the entry in `marketplace.json` must match the `name` in `plugin.json` (checked 2026-11-22).
+- **Keep the skills true.** A skill holds the workflow and as few API names as possible (owner, 2026-11-22):
+  - **The readme of the package.** Phase 1 packs the module readme into each NuGet package, next to `README_NUGET.md`, with one change in `Directory.Build.props`. A skill reads the CAT version from the project of the developer and reads the module readme of that version from the NuGet cache. So the API always matches the package, and a skill needs no version of its own.
+  - **A module referenced as a project.** For a `ProjectReference`, such as the demo has to `modules/Cat.Commands/`, there is no package in the NuGet cache. The skill follows the reference and reads the `README.md` of the module folder, such as `modules/Cat.Commands/README.md`. For a `PackageReference` it reads the packed readme. So the readme always matches the code that is built (owner, 2026-11-22).
+  - **Links in the packed readme.** The relative links, such as those to the `namespaces` pages, do not work in the packed copy. That is accepted, because the usage chapters show the code a skill needs, and Claude can read the public API from the DLL. The `namespaces` pages can be packed later if the eval suite shows that Claude misses API details.
+  - **The readme wins.** Every skill says that when the skill and the packed module readme disagree, Claude follows the readme. A developer on an older CAT version then gets the API of that version.
+  - **A name check.** Phase 1 adds a check to `cat-internal-verify-docs` that fails when a backticked name in a skill, such as `AddCatCommands`, is not in the generated `namespaces` pages. It has a list of names to skip, such as `Program.cs`.
+- **Plugin version.** The plugin has its own version in `plugin.json`, raised by hand when a skill changes. It does not follow the CAT version, so a change to the skills needs no module release (owner, 2026-11-22). From the plugin docs: a set `version` pins every developer to the cached copy until the string changes, so a skill change without a new version reaches nobody (checked 2026-11-22).
+- **A warning for the version.** Phase 1 adds a rule to `cat-internal-commit`. When `claudeskills/skills/` differs from `origin/master` and the `version` in `plugin.json` does not, the end report of the commit says so and asks whether to raise it before the push. Several skill commits can share one raise (owner, 2026-11-22).
+- **Validation before the commit.** Phase 1 adds a second rule to `cat-internal-commit`. When a commit touches `.claude-plugin/` or `claudeskills/`, the skill runs `claude plugin validate . --strict` and does not commit that block when it fails. So a broken manifest never reaches `master`, also when only the version changed. `build.yml` gets no step for it, because a failure there comes after the push is live (owner, 2026-11-22).
+- **Docs check and Pages site.** `cat-internal-verify-docs` checks the markdown in `claudeskills/`. The Pages site leaves the skill files out, with `claudeskills/skills` in the `exclude` list of `_config.yml`, and shows `claudeskills/README.md`. Jekyll already skips folders that start with a dot, such as `.claude-plugin/`. People read about the skills in that readme, not in the skill files (owner, 2026-11-22).
+- **Documentation.** `claudeskills/README.md` holds everything about the skills: the install commands, a table of the skills and how each one works. The `Cat.ClaudeSkills` row in the repo overview of the readme links to it with a Read more link, as a module row links to its module readme. It is written when phase 1 is built, because the readme describes only what exists (owner, 2026-11-22).
+- **The clone of the marketplace.** A developer who adds the marketplace clones the whole repository, and that is accepted: the repository is public and small, and one repository keeps a module and its skill in step. `claudeskills/README.md` shows the sparse command next to the normal one, `/plugin marketplace add gmarginet/CleanArchitectureToolkit --sparse .claude-plugin claudeskills` (owner, 2026-11-22).
+- **Templates not installed.** When `dotnet new list cat-` shows nothing, the skill stops and shows the install command of the template pack. Claude runs it only when the developer says yes, then goes on. A skill never writes a file without its template (owner, 2026-11-22).
+- **The plugin in this repository.** `.claude/settings.json` declares the marketplace with `extraKnownMarketplaces`, with a `directory` source, and enables the plugin with `"cat@cat-toolkit": true` in `enabledPlugins`. Every session in the repository, such as work on the demo, then has the skills. The plugin loads in place, so an edit to a skill works after `/reload-plugins` (owner, 2026-11-22). From the plugin docs: it applies after the folder is trusted, and it may need `claude plugin install cat@cat-toolkit --scope project` once per machine. To check before the build: whether a relative `path` resolves from the repository.
+- **Skill tests.** An eval suite of the plugin, run with `claude plugin eval`. Each skill runs on a service made with `cat-service`, and the suite checks the files and that `dotnet build` and `dotnet test` pass. The owner runs it by hand before a release of the plugin, not on every push, to keep the token cost down (owner, 2026-11-22). To check before the build: the format of the eval suite.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-
-<!-- region start: Question 1-->
-#### Question 1
-Do we use one plugin for all skills, or one per module? The options:
-- **One plugin for all skills.** Simple to publish and to update, and the skills are small. Cost: a developer gets skills for modules they do not use.
-- **One plugin per module.** Matches the toolbox idea. Cost: more manifests, more versions, more to maintain.
-- **One plugin with the skills grouped, and the module name in each skill name.** Cost: the same as one plugin, but Claude only loads a skill when its words match.
-
-Recommendation: one plugin for all skills. A skill is loaded by its description, so an unused skill costs almost nothing, and one plugin is far simpler to ship. Split later if the plugin grows too big.
-<!-- region end: Question 1-->
-
-<!-- region start: Question 2-->
-#### Question 2
-Which skills do we build first? The options:
-- **The suggestion:** scaffold a service, add a command or query with its handler and test, and add a validator.
-- **Only the daily work skills** (`cat-add-command`, `cat-add-query`, `cat-add-validator`). Cost: no start skill, but they need only their item templates, not the service template.
-- **The check skill first** (`cat-review`). Cost: it depends on conventions being stable.
-
-Recommendation: the daily work skills first: `cat-add-command`, `cat-add-query` and `cat-add-validator`. All three modules exist and are documented, and each needs only its item template of [Cat.Templates.md](Cat.Templates.md#phase-1). Add `cat-new-service` with the service template. The way a command returns a result is decided now, see [Get a result from a command](../modules/Cat.Commands/README.md#get-a-result-from-a-command). `cat-add-command` teaches caller supplied IDs first, a query after the command second, and the typed command third.
-<!-- region end: Question 2-->
-
-<!-- region start: Question 4-->
-#### Question 4
-What do we call the plugin and the marketplace, and which folder do they use? `plugins/cat/` and the marketplace name are a proposal. The skill prefix is decided. The options:
-- **Plugin `cat`, marketplace `cat-toolkit`,** in `plugins/cat/` and `.claude-plugin/marketplace.json`. A developer types `/plugin install cat@cat-toolkit`. Cost: none.
-- **Plugin `cleanarchitecturetoolkit`.** Cost: long to type.
-
-Recommendation: plugin `cat`, marketplace `cat-toolkit`. It is short, it matches the skill prefix `cat-`, and it matches the proposed folder.
-<!-- region end: Question 4-->
-
-<!-- region start: Question 5-->
-#### Question 5
-How do we keep the skills true when a module changes? The options:
-- **Link to the module readmes** and put only the workflow in the skill. Cost: nothing to maintain, but Claude must read the readme.
-- **A check** in `cat-internal-verify-docs` that looks for names (types, methods) in the skills and fails when one no longer exists. Cost: a script to build.
-- **A review at every release.** Cost: easy to forget.
-
-Recommendation: link to the readmes as the rule, and add the name check later when the first skills exist. It is the cheapest way that does not depend on memory.
-<!-- region end: Question 5-->
-
-<!-- region start: Question 6-->
-#### Question 6
-Does the plugin have its own version, or does it follow the module versions? The modules are versioned by MinVer from the git tags. The options:
-- **Its own version** in `plugin.json`, raised by hand. Cost: a number to remember.
-- **Follow the module versions,** the same tag. Cost: the plugin changes with every release, even when no skill changed, and a skill change would need a module release.
-
-Recommendation: its own version, and a note per module release when a skill needs to change. The two change at different speeds, and `plugins/` does not publish a NuGet package (a commit that touches only it gets `skip-pub`).
-<!-- region end: Question 6-->
-
-<!-- region start: Question 7-->
-#### Question 7
-Does `cat-internal-verify-docs` cover `plugins/`, and should the skill files appear on the Pages site? The options:
-- **Check the files, and keep them off the Pages site.** The skills are for Claude, not for a reader. Cost: a rule in the Jekyll config to exclude the folder.
-- **Check and show them.** Cost: pages that a reader may find confusing, but they also show what the skills do.
-- **Neither.** Cost: broken links in skills are not found.
-
-Recommendation: check the files, and exclude them from the site. A short chapter in the readme for developers (question 9) is the place where people read about the skills.
-<!-- region end: Question 7-->
-
-<!-- region start: Question 9-->
-#### Question 9
-Where is it documented? The options:
-- **A short chapter in the readme for developers,** once the first skill exists, with the install commands. Cost: one chapter.
-- **A readme inside `plugins/cat/`.** Cost: it is not linked from the repo overview, so people miss it.
-
-Recommendation: a chapter in the readme (it also links from the Cat.ClaudeSkills row), and a short readme in `plugins/cat/` that points to it. Do it when the first skill is built, since the repo overview must only describe what exists.
-<!-- region end: Question 9-->
-
-<!-- region start: Question 10-->
-#### Question 10
-Do we write a plan for each skill, or only one for the whole idea? The options:
-- **One plan for the whole idea** (this one), with a phase per group of skills. Cost: the plan grows.
-- **A plan per skill.** Cost: a lot of small files, and the repo overview has only one row for them, `Cat.ClaudeSkills`.
-
-Recommendation: one plan with a phase per group (start, daily work, data, check). A skill is small, and the readme row says Cat.ClaudeSkills only once.
-<!-- region end: Question 10-->
-
-<!-- region start: Question 11-->
-#### Question 11
-What does a skill do when the templates are not installed? For example, a developer asks for a new command, and `dotnet new list cat-` shows nothing. The options:
-- **Stop and show the install command,** `dotnet new install Cat.Templates`, then go on after the developer ran it. Cost: one extra step the first time.
-- **Install the templates itself.** Cost: Claude installs a package on the machine of the developer without asking.
-- **Write the files without a template.** Cost: the files drift from the templates, which is what the decision wants to avoid.
-
-Recommendation: stop and show the install command. The developer stays in control of what gets installed, and the files always come from the template.
-<!-- region end: Question 11-->
-
-<!-- region start: Question 12-->
-#### Question 12
-How do we test that a skill does what it says? For example, that `cat-add-command` adds the handler, the registration and the test, and that the service still builds. The options:
-- **An eval suite of the plugin,** run with `claude plugin eval`, that runs each skill on a service made from the service template and checks the result. Cost: a suite to write and runs that cost tokens. Whether the command fits is still to check.
-- **A manual check at release.** Cost: easy to forget.
-- **Only the build test of the templates.** Cost: it tests the files, not what the skill does with them.
-
-Recommendation: the eval suite, on a service made from the service template, run before a release of the plugin. The templates are then tested by the build, and the skills by the eval suite.
-<!-- region end: Question 12-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
+
+<!-- region start: Phase 2-->
+## Phase 2
+
+### Description
+<!-- region start: PhaseDescription-->
+#### Goal
+A skill that creates a whole system with the solution template of [Cat.Templates.md](Cat.Templates.md#phase-2), as the demo is.
+
+#### Needs
+- The solution template, see [Cat.Templates.md](Cat.Templates.md#phase-2).
+- The plugin and the skills of [phase 1](#phase-1).
+
+#### Background
+- The solution template creates an AppHost, `ServiceDefaults`, a YARP gateway and a first service made with `cat-service`, see [Cat.Templates.md](Cat.Templates.md#phase-2).
+
+#### Decided
+- **A skill for the solution template.** It runs the solution template and goes in the plugin of [phase 1](#phase-1) (owner, 2026-11-22).
+- **Name.** The skill is `cat-new-system`. It pairs with `cat-new-service`: one creates a whole system, the other adds a service to it (owner, 2026-11-22).
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 2-->
