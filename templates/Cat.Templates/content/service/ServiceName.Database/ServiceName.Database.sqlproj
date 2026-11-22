@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.Build.Sql/2.3.0">
+
+    <PropertyGroup>
+        <Name>ServiceName.Database</Name>
+        <!-- SQL Server 2022. Change it to the version of your server. -->
+        <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
+        <ModelCollation>1033, CI</ModelCollation>
+    </PropertyGroup>
+
+</Project>

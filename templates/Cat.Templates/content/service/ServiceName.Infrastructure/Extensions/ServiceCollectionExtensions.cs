@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
+#if (!DatabaseFirst)
     /// <summary>
     /// Creates the database in development. It applies the migrations when the service has some,
     /// and creates the tables from the model when it has none yet.
@@ -36,4 +37,5 @@ public static class ServiceCollectionExtensions
             await dbContext.Database.EnsureCreatedAsync(cancellationToken);
         }
     }
+#endif
 }

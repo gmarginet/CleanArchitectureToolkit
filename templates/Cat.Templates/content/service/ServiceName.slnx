@@ -8,6 +8,9 @@
   <!--#if (Tests)-->
   <Project Path="ServiceName.CoreService.Tests/ServiceName.CoreService.Tests.csproj" />
   <!--#endif-->
+  <!--#if (DatabaseFirst && SqlServer)-->
+  <Project Path="ServiceName.Database/ServiceName.Database.sqlproj" />
+  <!--#endif-->
   <Project Path="ServiceName.DataModels/ServiceName.DataModels.csproj" />
   <Project Path="ServiceName.Infrastructure/ServiceName.Infrastructure.csproj" />
 </Solution>

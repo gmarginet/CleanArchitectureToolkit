@@ -18,6 +18,18 @@
         <PackageReference Include="gmarginet.Cat.Queries" />
         <PackageReference Include="gmarginet.Cat.Queries.Decorators.Logging" />
         <PackageReference Include="gmarginet.Cat.Resilience" />
+        <!--#if (Messages)-->
+        <PackageReference Include="gmarginet.Cat.EventProcessor" />
+        <PackageReference Include="gmarginet.Cat.EventProcessor.AzureServiceBus" />
+        <PackageReference Include="gmarginet.Cat.EventProcessor.Inbox" />
+        <PackageReference Include="gmarginet.Cat.Inbox.EFCore" />
+        <PackageReference Include="gmarginet.Cat.Messaging" />
+        <PackageReference Include="gmarginet.Cat.Messaging.AzureServiceBus" />
+        <!--#endif-->
+        <!--#if (Jobs)-->
+        <PackageReference Include="gmarginet.Cat.Scheduling" />
+        <PackageReference Include="gmarginet.Cat.Scheduling.EFCore" />
+        <!--#endif-->
         <PackageReference Include="gmarginet.Cat.ServiceRequests" />
         <PackageReference Include="gmarginet.Cat.ServiceRequests.Decorators.ActivitySource" />
         <PackageReference Include="gmarginet.Cat.ServiceRequests.Decorators.Logging" />

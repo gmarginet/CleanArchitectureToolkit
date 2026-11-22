@@ -10,12 +10,13 @@ public class ServiceTemplateTests
 {
     private TemplateRunner _runner = null!;
 
-    public sealed record ServiceOptions(string Database, string Framework, bool Tests, bool ApiClient, bool ExampleRequest)
+    public sealed record ServiceOptions(string Database, string Framework, bool Tests, bool ApiClient, bool ExampleRequest, string Approach = "CodeFirst", bool Jobs = false, bool Messages = false)
     {
-        public string Name => $"S{Database}{Framework.Replace(".", "")}T{(Tests ? 1 : 0)}C{(ApiClient ? 1 : 0)}E{(ExampleRequest ? 1 : 0)}";
+        public string Name => $"S{Database}{Framework.Replace(".", "")}T{(Tests ? 1 : 0)}C{(ApiClient ? 1 : 0)}E{(ExampleRequest ? 1 : 0)}{(Approach == "DatabaseFirst" ? "D1" : "D0")}J{(Jobs ? 1 : 0)}M{(Messages ? 1 : 0)}";
 
-        public string Arguments => $"--Database {Database} --Framework {Framework} --Tests {Tests.ToString().ToLowerInvariant()} "
-                                   + $"--ApiClient {ApiClient.ToString().ToLowerInvariant()} --ExampleRequest {ExampleRequest.ToString().ToLowerInvariant()}";
+        public string Arguments => $"--Database {Database} --Framework {Framework} --Approach {Approach} --Tests {Tests.ToString().ToLowerInvariant()} "
+                                   + $"--ApiClient {ApiClient.ToString().ToLowerInvariant()} --ExampleRequest {ExampleRequest.ToString().ToLowerInvariant()} "
+                                   + $"--Jobs {Jobs.ToString().ToLowerInvariant()} --Messages {Messages.ToString().ToLowerInvariant()}";
 
         public override string ToString() => Name;
     }
@@ -31,9 +32,19 @@ public class ServiceTemplateTests
             foreach (var framework in new[] { "net10.0", "net11.0" })
             {
                 yield return new ServiceOptions(database, framework, false, false, false);
-                yield return new ServiceOptions(database, framework, true, true, true);
+                yield return new ServiceOptions(database, framework, true, true, true, "CodeFirst", true, true);
             }
         }
+
+        // Database first: the SQL project on SQL Server and the scripts folder on PostgreSQL, with the flags off and on.
+        foreach (var database in new[] { "SqlServer", "PostgreSQL" })
+        {
+            yield return new ServiceOptions(database, "net11.0", false, false, false, "DatabaseFirst");
+            yield return new ServiceOptions(database, "net10.0", true, true, true, "DatabaseFirst", true, true);
+        }
+
+        yield return new ServiceOptions("SqlServer", "net11.0", true, false, false, "CodeFirst", true);
+        yield return new ServiceOptions("SqlServer", "net11.0", true, false, false, "CodeFirst", false, true);
 
         yield return new ServiceOptions("SqlServer", "net11.0", true, false, false);
         yield return new ServiceOptions("SqlServer", "net11.0", false, true, false);

@@ -7,6 +7,12 @@
     <ItemGroup>
         <PackageReference Include="gmarginet.Cat.EFCore.Commands" />
         <PackageReference Include="gmarginet.Cat.EFCore.Queries" />
+        <!--#if (Messages)-->
+        <PackageReference Include="gmarginet.Cat.Inbox.EFCore" />
+        <!--#endif-->
+        <!--#if (Jobs)-->
+        <PackageReference Include="gmarginet.Cat.Scheduling.EFCore" />
+        <!--#endif-->
         <!--#if (SqlServer)-->
         <PackageReference Include="gmarginet.Cat.EFCore.Extensions.SqlServer" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />

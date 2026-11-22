@@ -32,6 +32,20 @@
     <PackageVersion Include="gmarginet.Cat.ServiceRequests.Decorators.ActivitySource" Version="$(CatVersion)" />
     <PackageVersion Include="gmarginet.Cat.ServiceRequests.Decorators.Logging" Version="$(CatVersion)" />
     <PackageVersion Include="gmarginet.Cat.ServiceRequests.Decorators.Validation" Version="$(CatVersion)" />
+    <!--#if (Messages)-->
+    <PackageVersion Include="gmarginet.Cat.EventProcessor" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.EventProcessor.AzureServiceBus" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.EventProcessor.Inbox" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Inbox.EFCore" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Messaging" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Messaging.Abstractions" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Messaging.AzureServiceBus" Version="$(CatVersion)" />
+    <!--#endif-->
+    <!--#if (Jobs)-->
+    <PackageVersion Include="gmarginet.Cat.Scheduling" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Scheduling.Abstractions" Version="$(CatVersion)" />
+    <PackageVersion Include="gmarginet.Cat.Scheduling.EFCore" Version="$(CatVersion)" />
+    <!--#endif-->
     <PackageVersion Include="gmarginet.Cat.Telemetry" Version="$(CatVersion)" />
     <PackageVersion Include="gmarginet.Cat.Validators" Version="$(CatVersion)" />
     <PackageVersion Include="gmarginet.Cat.Validators.Abstractions" Version="$(CatVersion)" />

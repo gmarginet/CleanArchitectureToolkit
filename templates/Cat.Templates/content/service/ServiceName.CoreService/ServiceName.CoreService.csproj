@@ -6,6 +6,9 @@
 
     <ItemGroup>
         <PackageReference Include="gmarginet.Cat.Commands.Abstractions" />
+        <!--#if (Messages)-->
+        <PackageReference Include="gmarginet.Cat.Messaging.Abstractions" />
+        <!--#endif-->
         <PackageReference Include="gmarginet.Cat.Queries.Abstractions" />
         <PackageReference Include="gmarginet.Cat.Validators" />
     </ItemGroup>

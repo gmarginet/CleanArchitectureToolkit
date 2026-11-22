@@ -15,7 +15,12 @@
       "modifiers": [
         { "condition": "(!Tests)", "exclude": [ "ServiceName.CoreService.Tests/**" ] },
         { "condition": "(!ApiClient)", "exclude": [ "ServiceName.Api.Client/**" ] },
-        { "condition": "(!ExampleRequest)", "exclude": [ "**/ExampleGet*.cs", "**/ExampleModel.cs", "ServiceName.Api/ServiceName.http" ] }
+        { "condition": "(!ExampleRequest)", "exclude": [ "**/ExampleGet*.cs", "**/ExampleModel.cs", "ServiceName.Api/ServiceName.http" ] },
+        { "condition": "(!Jobs)", "exclude": [ "**/ExampleJob*.cs", "ServiceName.Api/Extensions/SchedulerExtensions.cs", "ServiceName.Database/**/CatJobRun.sql" ] },
+        { "condition": "(!Messages)", "exclude": [ "**/ExampleReceived*.cs", "ServiceName.CoreService/Messages/**", "ServiceName.Api/Extensions/MessageHandlerExtensions.cs", "ServiceName.Database/**/CatInbox.sql" ] },
+        { "condition": "(!DatabaseFirst)", "exclude": [ "ServiceName.Database/**" ] },
+        { "condition": "(DatabaseFirst && !SqlServer)", "exclude": [ "ServiceName.Database/*.sqlproj", "ServiceName.Database/Tables/**" ] },
+        { "condition": "(DatabaseFirst && !PostgreSQL)", "exclude": [ "ServiceName.Database/Scripts/**" ] }
       ]
     }
   ],
@@ -46,6 +51,16 @@
       ],
       "defaultValue": "SqlServer"
     },
+    "Approach": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "Where the schema of the database comes from.",
+      "choices": [
+        { "choice": "CodeFirst", "description": "The entities are code, and EF Core migrations make the schema" },
+        { "choice": "DatabaseFirst", "description": "The schema is SQL, and the entities are scaffolded from it" }
+      ],
+      "defaultValue": "CodeFirst"
+    },
     "Tests": {
       "type": "parameter",
       "datatype": "bool",
@@ -63,6 +78,18 @@
       "datatype": "bool",
       "description": "Add one example request, with its handler, query, test and endpoint.",
       "defaultValue": "true"
+    },
+    "Jobs": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add the scheduler of Cat.Scheduling with one example job.",
+      "defaultValue": "false"
+    },
+    "Messages": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add message handlers: Cat.EventProcessor with Azure Service Bus and the inbox, with one example message.",
+      "defaultValue": "false"
     },
     "CatVersion": {
       "type": "parameter",
@@ -91,6 +118,10 @@
     "PostgreSQL": {
       "type": "computed",
       "value": "(Database == \"PostgreSQL\")"
+    },
+    "DatabaseFirst": {
+      "type": "computed",
+      "value": "(Approach == \"DatabaseFirst\")"
     },
     "Net10": {
       "type": "computed",

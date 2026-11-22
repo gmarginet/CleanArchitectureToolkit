@@ -40,6 +40,12 @@ builder.Services.AddCatCommandsModule(typeof(ServiceShortDbContext));
 var connectionString = builder.Configuration.GetConnectionString("servicelower")
     ?? throw new InvalidOperationException("Connection string 'servicelower' is missing.");
 builder.Services.AddServiceShortDatabase(connectionString);
+#if (Jobs)
+builder.Services.AddServiceShortScheduler(builder.Configuration);
+#endif
+#if (Messages)
+builder.Services.AddServiceShortMessageHandlers(builder.Configuration);
+#endif
 
 var app = builder.Build();
 app.UseCatMinimalApiModule();
@@ -47,7 +53,12 @@ app.UseCatMinimalApiModule();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+#if (!DatabaseFirst)
     await app.Services.InitializeServiceShortDatabaseAsync();
+#endif
+#if (Messages)
+    await app.Services.InitializeServiceShortMessageHandlersAsync();
+#endif
 }
 
 app.UseHttpsRedirection();
