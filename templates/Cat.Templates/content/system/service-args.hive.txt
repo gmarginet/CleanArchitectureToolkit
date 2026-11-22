@@ -1,0 +1,2 @@
+--debug:custom-hive
+TEMPLATE_HIVE

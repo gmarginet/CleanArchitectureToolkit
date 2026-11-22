@@ -13,8 +13,9 @@
   "sources": [
     {
       "modifiers": [
-        { "condition": "(TemplateHive == \"\")", "exclude": [ "cat-service.hive.rsp" ] },
-        { "condition": "(!GitIgnore)", "exclude": [ ".gitignore" ] }
+        { "condition": "(TemplateHive == \"\")", "exclude": [ "service-args.hive.txt" ] },
+        { "condition": "(!GitIgnore)", "exclude": [ ".gitignore" ] },
+        { "rename": { "service-args.txt": "cat-service.rsp", "service-args.hive.txt": "cat-service.hive.rsp" } }
       ]
     }
   ],
