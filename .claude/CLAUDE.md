@@ -18,7 +18,7 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 - Never create a branch on your own. The owner creates feature branches before starting work when they want one.
 - Do not push unless asked.
 - Commit one topic per commit, and only when asked. Do not mix renames, new content and tooling in one commit.
-- Always use the `cat-internal-commit` skill to commit, never a bare `git commit`. It splits the changes into logical commits and ends the subject with ` (skip-pub)` when a commit changes no code in `modules/`. Build files and `tools/` count as code.
+- Always use the `cat-internal-commit` skill to commit, never a bare `git commit`. It splits the changes into logical commits and ends the subject with ` (skip-pub)` when a commit changes no code in `modules/`. Build files, `tools/` and `templates/` count as code.
 
 ## Tools & Capabilities
 - **Roslyn MCP Connected:** Use `cwm-roslyn-navigator` tools for deep codebase indexing, finding references, tracking hierarchies, and listing symbols.
@@ -61,6 +61,7 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 - `tests/`: Module unit tests (one project per module).
 - Demo service tests live in the service folder in `demo/`, as `ServiceName.CoreService.Tests`. `dotnet cake --target=Test` runs every `*.Tests.csproj` under `tests/` and `demo/`.
 - `tools/`: Tooling projects (e.g., XML doc markdown generators).
+- `templates/`: The `dotnet new` template pack `gmarginet.Cat.Templates`. A change here publishes the pack, so it counts as code.
 - `modules/`: Contains the individual module-folders.
 - `plans/`: Plans for the demo, the tooling and the modules.
 

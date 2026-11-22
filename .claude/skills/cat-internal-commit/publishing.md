@@ -5,7 +5,7 @@ A push to `master` runs `.github/workflows/build.yml`. A commit message that con
 
 - Add ` (skip-pub)` at the end of the subject line when the commit changes no code in `modules/`.
 - Code in `modules/` is every file under `modules/` that is not markdown: C# files, project files, json and ddlinks. Generated pages and readmes (`*.md`) are not code.
-- The script also counts build files as code, because they can change the packages: `Directory.Build.props`, `Directory.Build.targets`, `Directory.Packages.props`, `build.cake`, `global.json`, `dotnet-tools.json`, anything in `tools/` and the workflows in `.github/workflows`. A commit with those gets no suffix.
+- The script also counts build files as code, because they can change the packages: `Directory.Build.props`, `Directory.Build.targets`, `Directory.Packages.props`, `build.cake`, `global.json`, `dotnet-tools.json`, anything in `tools/` or `templates/` and the workflows in `.github/workflows`. A commit with those gets no suffix.
 - Demo code (`demo/`), tests (`tests/`), plans, resources and `.claude` are not published, so a commit that only touches them gets ` (skip-pub)`.
 - The rule is per commit, not per session. Decide it for each commit from what is staged.
 - Never add `skip-ci`. It would also skip the tests of the build workflow.

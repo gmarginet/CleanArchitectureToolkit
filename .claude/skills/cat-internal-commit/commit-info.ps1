@@ -11,7 +11,7 @@ Staged:  commit-info.ps1 -Mode Staged
 
 Code in modules/ is every file under modules/ that is not a markdown file: C# files, project files, json and ddlinks.
 Build files count as code too, because they can change the packages: Directory.Build.props, Directory.Build.targets,
-Directory.Packages.props, build.cake, global.json, dotnet-tools.json, anything in tools/, and the workflows in .github/workflows.
+Directory.Packages.props, build.cake, global.json, dotnet-tools.json, anything in tools/ or templates/, and the workflows in .github/workflows.
 #>
 param(
     [Parameter(Mandatory)][ValidateSet('Status', 'Staged')][string]$Mode
@@ -35,6 +35,7 @@ function Get-Area([string]$p) {
     if ($p -match '^plans/') { return 'plans' }
     if ($p -match '^resources/') { return 'resources' }
     if ($p -match '^tools/') { return 'tools' }
+    if ($p -match '^templates/') { return 'templates' }
     if ($p -match '^\.claude/skills/([^/]+)/') { return ".claude/skills/$($Matches[1])" }
     if ($p -match '^\.claude/') { return '.claude' }
     if ($p -match '^\.github/') { return '.github' }
@@ -45,6 +46,7 @@ function Test-IsCode([string]$p) {
     $p = $p.Replace('\', '/')
     if ($p -like 'modules/*' -and $p -notlike '*.md') { return $true }
     if ($p -like 'tools/*') { return $true }
+    if ($p -like 'templates/*') { return $true }
     if ($p -like '.github/workflows/*') { return $true }
     if ($p -in 'Directory.Build.props', 'Directory.Build.targets', 'Directory.Packages.props', 'build.cake', 'global.json', 'dotnet-tools.json') { return $true }
     return $false
