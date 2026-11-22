@@ -1,4 +1,5 @@
 using System.Diagnostics.Metrics;
+using System.Globalization;
 using Cat.Caching.Abstractions;
 using Cat.Caching.Extensions;
 using Cat.Queries.Abstractions;
@@ -73,6 +74,27 @@ public class QueryCachingTests
         Assert.That(first.Value, Is.EqualTo("v1"));
         Assert.That(second.IsSucceeded, Is.True);
         Assert.That(second.Value, Is.EqualTo("v1"));
+    }
+
+    [Test]
+    public async Task Listed_TheHandlerSeesTheCultureOfTheCaller()
+    {
+        _probe.RespondString = _ => CatResponse.Ok(CultureInfo.CurrentUICulture.Name);
+        using var provider = Build(options => options.Cache<StringQuery>(rule => rule.Key(query => $"{CultureInfo.CurrentUICulture.Name}|{query.Name}")));
+        var processor = ProcessorOf(provider);
+        var before = CultureInfo.CurrentUICulture;
+
+        try
+        {
+            CultureInfo.CurrentUICulture = new CultureInfo("nl");
+            var result = await processor.ProcessAsync(new StringQuery("a"));
+
+            Assert.That(result.Value, Is.EqualTo("nl"));
+        }
+        finally
+        {
+            CultureInfo.CurrentUICulture = before;
+        }
     }
 
     [Test]

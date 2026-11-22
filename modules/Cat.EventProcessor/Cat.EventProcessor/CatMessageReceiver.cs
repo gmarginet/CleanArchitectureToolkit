@@ -20,16 +20,19 @@ internal sealed class CatMessageReceiver : ICatMessageReceiver
 
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ICatReceiveRegistry _registry;
+    private readonly CatMessageCultureOptions _cultureOptions;
 
     /// <summary>
     /// Creates the receiver.
     /// </summary>
     /// <param name="scopeFactory">Opens a scope per message, because the service request processor is scoped.</param>
     /// <param name="registry">Holds the settings of the declared message types.</param>
-    public CatMessageReceiver(IServiceScopeFactory scopeFactory, ICatReceiveRegistry registry)
+    /// <param name="cultureOptions">Tells whether the culture of the sender is applied.</param>
+    public CatMessageReceiver(IServiceScopeFactory scopeFactory, ICatReceiveRegistry registry, CatMessageCultureOptions cultureOptions)
     {
         _scopeFactory = scopeFactory;
         _registry = registry;
+        _cultureOptions = cultureOptions;
     }
 
     /// <inheritdoc />
@@ -63,6 +66,9 @@ internal sealed class CatMessageReceiver : ICatMessageReceiver
         using var activity = CatEventProcessorTelemetry.StartReceive(messageType.Name, message);
         using var context = CatMessageContext.Begin(message.MessageId, message.DeliveryCount);
         using var scope = _scopeFactory.CreateScope();
+
+        // The handler formats numbers and dates the way the sender did, when the service asked for it. The old culture comes back at the end.
+        using var cultureScope = CatSenderCultureScope.Begin(_cultureOptions.ApplySenderCulture, message);
 
         // The scope has the same key as the gateway, so the logs of a flow are found with one filter. It lasts for the whole handling.
         using var logScope = BeginLogScope(scope.ServiceProvider, message);

@@ -40,6 +40,7 @@ public static class ServiceCollectionExtensions
         }
 
         services.AddSingleton<ICatReceiveRegistry>(new ReceiveRegistry(builder.Registrations));
+        services.AddSingleton(new CatMessageCultureOptions { ApplySenderCulture = builder.SenderCultureApplied });
         services.TryAddSingleton<ICatMessageReceiver, CatMessageReceiver>();
 
         return services;

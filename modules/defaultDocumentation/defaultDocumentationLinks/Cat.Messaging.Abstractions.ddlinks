@@ -15,6 +15,7 @@ F:Cat.Messaging.Abstractions.CatMessageKind.Command|CatMessageKind.md#Cat.Messag
 F:Cat.Messaging.Abstractions.CatMessageKind.Event|CatMessageKind.md#Cat.Messaging.Abstractions.CatMessageKind.Event|Event
 T:Cat.Messaging.Abstractions.CatMessageKind|CatMessageKind.md|CatMessageKind
 F:Cat.Messaging.Abstractions.CatMessageProperties.Authorization|CatMessageProperties.Authorization.md|Authorization
+F:Cat.Messaging.Abstractions.CatMessageProperties.Culture|CatMessageProperties.Culture.md|Culture
 T:Cat.Messaging.Abstractions.CatMessageProperties|CatMessageProperties.md|CatMessageProperties
 P:Cat.Messaging.Abstractions.CatOutgoingMessage.EntityName|CatOutgoingMessage.EntityName.md|EntityName
 P:Cat.Messaging.Abstractions.CatOutgoingMessage.Kind|CatOutgoingMessage.Kind.md|Kind

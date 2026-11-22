@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Cat.Messaging.Abstractions;
@@ -66,6 +67,12 @@ internal abstract class CatMessageSenderBase
             SessionId = (message as ICatSessionMessage)?.SessionId,
             ScheduledAt = scheduledAt
         };
+
+        var culture = CultureInfo.CurrentUICulture.Name;
+        if (culture.Length > 0)
+        {
+            outgoing.Properties[CatMessageProperties.Culture] = culture;
+        }
 
         if (_tokenProvider == null)
         {

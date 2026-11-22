@@ -1,0 +1,16 @@
+../../../Cat.Localizations/namespaces/Cat.Localizations.EFCore/
+F:Cat.Localizations.EFCore.CatTranslator`1._dbContext|CatTranslator_TDbContext_._dbContext.md|_dbContext
+F:Cat.Localizations.EFCore.CatTranslator`1._logger|CatTranslator_TDbContext_._logger.md|_logger
+M:Cat.Localizations.EFCore.CatTranslator`1.#ctor(`0,Microsoft.Extensions.Logging.ILogger{Cat.Localizations.EFCore.CatTranslator{`0}})|CatTranslator_TDbContext_..ctor.PKFXB5FQ6MKTD5P0ZDYAZPRW9.md|CatTranslator(TDbContext, ILogger<CatTranslator<TDbContext>>)
+M:Cat.Localizations.EFCore.CatTranslator`1.GetTextAsync``1(System.Guid,System.String,System.String,System.Threading.CancellationToken)|CatTranslator_TDbContext_.GetTextAsync.FJY24BV8JYMTJ54HHH2J6QZT9.md|GetTextAsync<TEntity>(Guid, string, string, CancellationToken)
+M:Cat.Localizations.EFCore.CatTranslator`1.GetTextsAsync``1(System.Collections.Generic.IReadOnlyDictionary{System.Guid,System.String},System.String,System.Threading.CancellationToken)|CatTranslator_TDbContext_.GetTextsAsync.7RJM3DQRO5LRBU1FOXDUR4678.md|GetTextsAsync<TEntity>(IReadOnlyDictionary<Guid,string>, string, CancellationToken)
+M:Cat.Localizations.EFCore.CatTranslator`1.GetTranslationsAsync``1(System.Guid,System.String,System.Threading.CancellationToken)|CatTranslator_TDbContext_.GetTranslationsAsync.I03VLI5PMMIU0OLGMUUYLEGW3.md|GetTranslationsAsync<TEntity>(Guid, string, CancellationToken)
+M:Cat.Localizations.EFCore.CatTranslator`1.SetTextAsync``1(System.Guid,System.String,System.String,System.String,System.Threading.CancellationToken)|CatTranslator_TDbContext_.SetTextAsync.EWDMR8BU1S8C7564SUKNJ6T74.md|SetTextAsync<TEntity>(Guid, string, string, string, CancellationToken)
+M:Cat.Localizations.EFCore.CatTranslator`1.CultureChain(System.Globalization.CultureInfo)|CatTranslator_TDbContext_.CultureChain.372UXXMANJWXG3Y6JMQM0HBL3.md|CultureChain(CultureInfo)
+N:Cat.Localizations.EFCore|Cat.Localizations.EFCore.md|Cat.Localizations.EFCore
+T:Cat.Localizations.EFCore.CatTranslator`1|CatTranslator_TDbContext_.md|CatTranslator<TDbContext>
+M:Cat.Localizations.EFCore.ModelBuilderExtensions.AddCatTranslations(Microsoft.EntityFrameworkCore.ModelBuilder,System.String,System.String)|ModelBuilderExtensions.AddCatTranslations.NOJJP5WTGTTVOOPM9O64UUIOD.md|AddCatTranslations(this ModelBuilder, string, string)
+T:Cat.Localizations.EFCore.ModelBuilderExtensions|ModelBuilderExtensions.md|ModelBuilderExtensions
+M:Cat.Localizations.EFCore.Extensions.ServiceCollectionExtensions.AddCatLocalizations``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)|ServiceCollectionExtensions.AddCatLocalizations.03JKVG6K9NL3J1KBG57TRLXFB.md|AddCatLocalizations<TDbContext>(this IServiceCollection)
+N:Cat.Localizations.EFCore.Extensions|Cat.Localizations.EFCore.Extensions.md|Cat.Localizations.EFCore.Extensions
+T:Cat.Localizations.EFCore.Extensions.ServiceCollectionExtensions|ServiceCollectionExtensions.md|ServiceCollectionExtensions

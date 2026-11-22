@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Cat.Caching.Abstractions;
@@ -55,6 +56,9 @@ internal sealed class CatCachingQueryProcessor(
     {
         // Set when the query really ran. A call that gets its answer from the cache, or from a call that is already running, is a hit.
         var ran = false;
+        // The factory of HybridCache can run on a thread that does not carry the culture of the caller. The query must see the same culture as without the cache.
+        var culture = CultureInfo.CurrentCulture;
+        var uiCulture = CultureInfo.CurrentUICulture;
         var entryOptions = CreateEntryOptions(rule, rule.Expiration ?? options.DefaultExpiration);
 
         try
@@ -65,6 +69,8 @@ internal sealed class CatCachingQueryProcessor(
                 cached = await cache.GetOrCreateAsync<TCached>(key, async token =>
                 {
                     ran = true;
+                    CultureInfo.CurrentCulture = culture;
+                    CultureInfo.CurrentUICulture = uiCulture;
                     var response = await inner.ProcessAsync(catQuery, token).ConfigureAwait(false);
                     return response.IsSucceeded
                         ? CachedQueryResponse<TQueryResult>.From<TCached>(response)
@@ -83,6 +89,8 @@ internal sealed class CatCachingQueryProcessor(
                         notFound = await cache.GetOrCreateAsync<TCached>(key + ":notfound", async notFoundToken =>
                         {
                             ran = true;
+                            CultureInfo.CurrentCulture = culture;
+                            CultureInfo.CurrentUICulture = uiCulture;
                             var response = await inner.ProcessAsync(catQuery, notFoundToken).ConfigureAwait(false);
                             return CachedQueryResponse<TQueryResult>.IsNotFound(response)
                                 ? CachedQueryResponse<TQueryResult>.From<TCached>(response)

@@ -15,6 +15,20 @@ public sealed class CatEventProcessorBuilder
 
     internal IReadOnlyList<CatReceiveRegistration> Registrations => _registrations;
 
+    internal bool SenderCultureApplied { get; private set; }
+
+    /// <summary>
+    /// Makes the receiver set <c>CurrentCulture</c> and <c>CurrentUICulture</c> to the culture of the sender, for the handler of every message.
+    /// The culture comes from the <c>Culture</c> property of the message, see <c>CatMessageProperties.Culture</c>.
+    /// Without this call, or for a message without the property, the handler runs on the default culture of the service.
+    /// </summary>
+    /// <returns>The same builder, so calls can be chained.</returns>
+    public CatEventProcessorBuilder ApplySenderCulture()
+    {
+        SenderCultureApplied = true;
+        return this;
+    }
+
     /// <summary>
     /// Declares a message type the service receives. Every message of the type becomes this service request.
     /// </summary>

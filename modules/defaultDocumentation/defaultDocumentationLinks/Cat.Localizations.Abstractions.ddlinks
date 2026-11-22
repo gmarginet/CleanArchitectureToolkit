@@ -1,0 +1,16 @@
+../../../Cat.Localizations/namespaces/Cat.Localizations.Abstractions/
+P:Cat.Localizations.Abstractions.CatTranslation.Id|CatTranslation.Id.md|Id
+P:Cat.Localizations.Abstractions.CatTranslation.EntityType|CatTranslation.EntityType.md|EntityType
+P:Cat.Localizations.Abstractions.CatTranslation.EntityId|CatTranslation.EntityId.md|EntityId
+P:Cat.Localizations.Abstractions.CatTranslation.Field|CatTranslation.Field.md|Field
+P:Cat.Localizations.Abstractions.CatTranslation.Culture|CatTranslation.Culture.md|Culture
+P:Cat.Localizations.Abstractions.CatTranslation.Text|CatTranslation.Text.md|Text
+N:Cat.Localizations.Abstractions|Cat.Localizations.Abstractions.md|Cat.Localizations.Abstractions
+T:Cat.Localizations.Abstractions.CatTranslation|CatTranslation.md|CatTranslation
+P:Cat.Localizations.Abstractions.ICatTranslatable.Id|ICatTranslatable.Id.md|Id
+T:Cat.Localizations.Abstractions.ICatTranslatable|ICatTranslatable.md|ICatTranslatable
+M:Cat.Localizations.Abstractions.ICatTranslator.GetTextAsync``1(System.Guid,System.String,System.String,System.Threading.CancellationToken)|ICatTranslator.GetTextAsync.SPCEAAE1M52ET3REH7TES0PMD.md|GetTextAsync<TEntity>(Guid, string, string, CancellationToken)
+M:Cat.Localizations.Abstractions.ICatTranslator.GetTextsAsync``1(System.Collections.Generic.IReadOnlyDictionary{System.Guid,System.String},System.String,System.Threading.CancellationToken)|ICatTranslator.GetTextsAsync.YMOEAHKBPO4DG6INI5MPRD4S8.md|GetTextsAsync<TEntity>(IReadOnlyDictionary<Guid,string>, string, CancellationToken)
+M:Cat.Localizations.Abstractions.ICatTranslator.GetTranslationsAsync``1(System.Guid,System.String,System.Threading.CancellationToken)|ICatTranslator.GetTranslationsAsync.5F9LPJY9EH27GODR4PMN6R2J8.md|GetTranslationsAsync<TEntity>(Guid, string, CancellationToken)
+M:Cat.Localizations.Abstractions.ICatTranslator.SetTextAsync``1(System.Guid,System.String,System.String,System.String,System.Threading.CancellationToken)|ICatTranslator.SetTextAsync.CE8LOSLXTYE2AUJUNSZNC903C.md|SetTextAsync<TEntity>(Guid, string, string, string, CancellationToken)
+T:Cat.Localizations.Abstractions.ICatTranslator|ICatTranslator.md|ICatTranslator

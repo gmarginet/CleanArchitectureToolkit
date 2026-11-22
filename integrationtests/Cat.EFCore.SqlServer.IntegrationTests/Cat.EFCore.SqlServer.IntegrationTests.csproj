@@ -33,6 +33,7 @@
         <Compile Include="..\Shared\EfCoreStoreIntegrationTests.cs" Link="Shared\EfCoreStoreIntegrationTests.cs" />
         <Compile Include="..\Shared\ReceiverInboxIntegrationTests.cs" Link="Shared\ReceiverInboxIntegrationTests.cs" />
         <Compile Include="..\Shared\InboxEndpointIntegrationTests.cs" Link="Shared\InboxEndpointIntegrationTests.cs" />
+        <Compile Include="..\Shared\TranslationIntegrationTests.cs" Link="Shared\TranslationIntegrationTests.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -44,6 +45,7 @@
       <ProjectReference Include="..\..\modules\Cat.Inbox\Cat.Inbox.EFCore\Cat.Inbox.EFCore.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Inbox\Cat.Inbox.AspNetCore\Cat.Inbox.AspNetCore.csproj" />
       <ProjectReference Include="..\..\modules\Cat.IntegrationTesting\Cat.IntegrationTesting.SqlServer.NUnit\Cat.IntegrationTesting.SqlServer.NUnit.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.Localizations\Cat.Localizations.EFCore\Cat.Localizations.EFCore.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Outbox\Cat.Outbox.EFCore\Cat.Outbox.EFCore.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Sagas\Cat.Sagas.EFCore\Cat.Sagas.EFCore.csproj" />
