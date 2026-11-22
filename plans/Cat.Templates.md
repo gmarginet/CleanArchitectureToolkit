@@ -65,7 +65,7 @@ From the demo:
 - The workers run in the Api host.
 - Catalog is code first, with hand written entities in DataModels and migrations in Infrastructure.
 - Inventory is database first. Its schema comes from SQL scripts in the folder `Cat.Demo.InventoryService.Database`, which is not a project, and the AppHost runs them. Its scaffolded entities live in `Cat.Demo.InventoryService.DataModels`, and its scaffolded `InventoryDbContext` in Infrastructure.
-- Catalog, Inventory and the stand-in payment provider have an `Api.Client` project that Orders uses to call them. Sharing the `Contracts` of a service is the choice of the developer.
+- Catalog and Inventory have an `Api.Client` project that Orders uses to call them through the gateway. The payment provider is outside the shop, so Orders calls it with its own client in Infrastructure. Sharing the `Contracts` of a service is the choice of the developer.
 - Orders adds workflows, sagas, message handlers and scheduled jobs. Inventory has a scheduled job and turns stock changes into messages with `Cat.Sql.Cdc`. These are the variations a template needs.
 - Catalog, Orders and Inventory run on SQL Server. Notifications is code first on PostgreSQL, with the same `Cat.EFCore` base entity and no temporal table.
 - Every demo service adds a database check to its health check.
@@ -262,7 +262,7 @@ Recommendation: the choice parameter. The toolkit supports both, so the template
 
 <!-- region start: Question 18-->
 #### Question 18
-Does the template create an `Api.Client` project, which other services use to call the new service? Catalog, Inventory and the stand-in payment provider have one, and the readme structure lists it as an optional project. The options:
+Does the template create an `Api.Client` project, which other services use to call the new service? Catalog and Inventory have one, and the readme structure lists it as an optional project. The options:
 - **An option, off by default.** Cost: one more condition.
 - **Always.** Cost: a project that a service nobody calls does not need.
 - **Never.** Cost: a developer adds it by hand when another service starts to call this one.
