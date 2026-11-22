@@ -56,7 +56,8 @@ In this plan, "template" always means a `dotnet new` template. The markdown temp
 
 #### Background
 From the readme:
-- The service project structure lists `ServiceName.Api`, `ServiceName.CoreService`, `ServiceName.Infrastructure`, `ServiceName.Contracts` and `ServiceName.DataModels` as required, and `ServiceName.CoreService.Tests` as optional.
+- The service project structure lists `ServiceName.Api`, `ServiceName.CoreService`, `ServiceName.Infrastructure`, `ServiceName.Contracts` and `ServiceName.DataModels` as required, and `ServiceName.Api.Client` and `ServiceName.CoreService.Tests` as optional.
+- `ServiceName.Api.Client` holds the generated client that other services use to call the service. It references only the `Cat.Api.Client` module.
 - The Api is the host that handles HTTP requests and runs the background workers, when the service has them. In development, each worker has its own endpoint group.
 - The reference rules: dependencies point inwards, the core only references the abstractions of the CAT modules, the API is the only place where everything is wired together, and Contracts stays small.
 
@@ -64,18 +65,20 @@ From the demo:
 - The workers run in the Api host.
 - Catalog is code first, with hand written entities in DataModels and migrations in Infrastructure.
 - Inventory is database first. Its schema comes from SQL scripts in the folder `Cat.Demo.InventoryService.Database`, which is not a project, and the AppHost runs them. Its scaffolded entities live in `Cat.Demo.InventoryService.DataModels`, and its scaffolded `InventoryDbContext` in Infrastructure.
-- Catalog and Inventory have an `Api.Client` project that other services use to call them. The readme structure lists it as an optional project. Sharing the `Contracts` of a service is the choice of the developer.
-- Orders adds workflows, sagas and message handlers, and Notifications has scheduled jobs. These are the variations a template needs.
+- Catalog, Inventory and the stand-in payment provider have an `Api.Client` project that Orders uses to call them. Sharing the `Contracts` of a service is the choice of the developer.
+- Orders adds workflows, sagas, message handlers and scheduled jobs. Inventory has a scheduled job and turns stock changes into messages with `Cat.Sql.Cdc`. These are the variations a template needs.
+- Catalog, Orders and Inventory run on SQL Server. Notifications is code first on PostgreSQL, with the same `Cat.EFCore` base entity and no temporal table.
+- Every demo service adds a database check to its health check.
 - The AppHost references the Api project of each service, so a new service also needs a line there.
 - `demo/Directory.Build.props` sets the language version and nullable context.
 
 From the repository:
-- The modules that exist include `Cat.Commands`, `Cat.Queries`, `Cat.ServiceRequests`, `Cat.Responses`, `Cat.Validators`, `Cat.Minimal.Api`, `Cat.EFCore`, `Cat.Messaging`, `Cat.EventProcessor`, `Cat.Scheduling`, `Cat.Sagas` and `Cat.Users`. The repo overview of the readme has the full list.
+- The modules that exist include `Cat.Commands`, `Cat.Queries`, `Cat.ServiceRequests`, `Cat.Responses`, `Cat.Validators`, `Cat.Minimal.Api`, `Cat.EFCore`, `Cat.Dapper`, `Cat.Messaging`, `Cat.Inbox`, `Cat.Outbox`, `Cat.EventProcessor`, `Cat.Scheduling`, `Cat.Sagas`, `Cat.Users`, `Cat.Api.Client`, `Cat.Resilience`, `Cat.Telemetry`, `Cat.Caching` and `Cat.Localizations`. The repo overview of the readme has the full list.
 - Package versions that follow the release of .NET come per target framework from `Directory.Packages.props`, with one group for `netstandard2.0` and `net10.0` and one for `net11.0`, see `CLAUDE.md`.
-- SQL Server code in a module gets a PostgreSQL counterpart with the same API, see `CLAUDE.md`.
+- SQL Server code in a module gets a PostgreSQL counterpart with the same API, see `CLAUDE.md`. Features that PostgreSQL does not have, such as temporal tables and `Cat.Sql.Cdc`, stay SQL Server only.
 - The `cat-internal-create-demo-unit` skill describes the folder and solution rules for demo services, including `CleanArchitectureToolkit.slnx`.
 
-From the other plans:
+From the module readmes:
 - Cat.Resilience and Cat.Telemetry are the base that `ServiceDefaults` calls. A project without Aspire calls them in its `Program`, see the [module readme of Cat.Resilience](../modules/Cat.Resilience/README.md#without-aspire) and the [module readme of Cat.Telemetry](../modules/Cat.Telemetry/README.md#without-aspire).
 - Health checks are out of the scope of `Cat.Telemetry`. Its module readme shows the plain ASP.NET Core lines for `/health` and `/alive`, and the demo adds `AddDbContextCheck` per service, see the [demo readme](../demo/README.md).
 - The toolkit is in alpha and the demo is the only user, so a breaking change is allowed (owner, 2026-11-21).
@@ -152,7 +155,7 @@ Do we build it from the demo, as the first working example? The options:
 - **Yes, from `Cat.Demo.CatalogService`.** The modules came from working code, and this is the same idea. Cost: the template carries the demo's choices (names, a book example).
 - **From scratch,** guided by the readme. Cost: a new design with no proof that it works.
 
-Recommendation: yes, from Catalog, with the book parts replaced by one generic example request. Catalog has a code first structure, so the database first variant needs Inventory as a second source.
+Recommendation: yes, from Catalog, with the book parts replaced by one generic example request. Catalog has a code first structure on SQL Server, so the database first variant needs Inventory as a second source, and the PostgreSQL variant of question 17 needs Notifications.
 <!-- region end: Question 6-->
 
 <!-- region start: Question 7-->
@@ -172,7 +175,7 @@ Do we include a Dockerfile and deployment files for Azure Container Apps? Other 
 - **Plus a Dockerfile.** Cost: one more file that depends on the .NET version and the repository layout.
 - **Plus deployment files** (Bicep or `azd`). Cost: this is the platform of the developer, not of the toolkit.
 
-Recommendation: the readme and the `.http` file, which the demo already has, plus `/health` and `/alive` with the database check of demo phase 18, because `Cat.Telemetry` leaves health checks to the service. Leave the Dockerfile and deployment out, because they depend on how the developer deploys.
+Recommendation: the readme and the `.http` file, which the demo already has, plus `/health` and `/alive` with the database check that every demo service has, because `Cat.Telemetry` leaves health checks to the service. Leave the Dockerfile and deployment out, because they depend on how the developer deploys.
 <!-- region end: Question 8-->
 
 <!-- region start: Question 9-->
@@ -250,7 +253,7 @@ Recommendation: a choice parameter with `net11.0` as the default, because the mo
 
 <!-- region start: Question 17-->
 #### Question 17
-Which database does a generated service use? Every SQL Server feature of the toolkit has a PostgreSQL counterpart. The options:
+Which database does a generated service use? The SQL Server code of the toolkit has a PostgreSQL counterpart, except temporal tables and `Cat.Sql.Cdc`, and the demo runs Notifications on PostgreSQL. The options:
 - **A choice parameter,** SQL Server or PostgreSQL, with SQL Server as the default. Cost: the build test of question 13 runs for both.
 - **SQL Server only.** Cost: a developer on PostgreSQL changes the provider and the packages by hand.
 
@@ -259,7 +262,7 @@ Recommendation: the choice parameter. The toolkit supports both, so the template
 
 <!-- region start: Question 18-->
 #### Question 18
-Does the template create an `Api.Client` project, which other services use to call the new service? Catalog and Inventory have one, and the readme structure lists it as an optional project. The options:
+Does the template create an `Api.Client` project, which other services use to call the new service? Catalog, Inventory and the stand-in payment provider have one, and the readme structure lists it as an optional project. The options:
 - **An option, off by default.** Cost: one more condition.
 - **Always.** Cost: a project that a service nobody calls does not need.
 - **Never.** Cost: a developer adds it by hand when another service starts to call this one.
