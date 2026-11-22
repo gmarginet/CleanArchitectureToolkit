@@ -176,6 +176,9 @@ From the repository:
 #### Decided
 - **SQL project.** `Cat.Demo.InventoryService.Database` becomes an SDK-style SQL project with the `Microsoft.Build.Sql` SDK (owner, 2026-11-22).
 - **Deploy from the AppHost.** The AppHost deploys the project with `CommunityToolkit.Aspire.Hosting.SqlDatabaseProjects`, and `BuildInventoryCreationScript` goes (owner, 2026-11-22).
+- **Change data capture.** The post-deployment script switches change data capture on for the database and for `StockItem` when it is missing, and nothing switches it off. A rebuild of `StockItem` then gets a new capture instance at the end of the deploy. A column that a deploy adds in place is not in the capture instance until the data volume is removed, and the demo readme says so (owner, 2026-11-22).
+- **Seed.** The seed lives in the post-deployment script, next to the change data capture, and only adds what is missing. Only the AppHost deploys the project, so the seed never reaches a database that is not a demo (owner, 2026-11-22).
+- **Scheduler table.** `CatJobRun` and its index `IX_CatJobRun_JobName_Status_StartedAt` become a table of the SQL project, like the stock tables. A database first team owns every table of its database. The table copies the model of `Cat.Scheduling.EFCore` and follows it by hand, because neither the SQL build nor EF Core compares the two (owner, 2026-11-22).
 - **PostgreSQL.** No counterpart. Inventory is the SQL Server database first showcase and reads changes with `Cat.Sql.Cdc`, which PostgreSQL does not have. Notifications is the PostgreSQL showcase.
 - **Integration tests.** None. This is demo code and not database code in a module.
 
@@ -184,11 +187,13 @@ From the repository:
 - That the SQL project builds with `dotnet cake --target=Build` and on the Linux agent of the build workflow, and how Cake treats it next to the `*.Tests.csproj` and pack steps.
 - Whether `AddSqlProject<Projects.X>` needs a project reference from the AppHost, and how that reference sits in `CleanArchitectureToolkit.slnx`.
 - How DacFx handles a table that has change data capture on. A change that rebuilds `StockItem` can fail or lose the capture.
+- That dropping `StockItem` in a rebuild also drops the capture instance `dbo_StockItem`, so the post-deployment script switches it on again.
+- That a column added in place stays out of the capture instance, and what `Cat.Sql.Cdc` does when the capture instance is new and the stored position is older than its first LSN.
 - That a deploy keeps the `cdc` schema and its objects, which are not in the project.
 - That the scaffold still takes the three stock tables only.
 
 #### What the build changes
-- Add `Cat.Demo.InventoryService.Database.sqlproj` with one file per table, and the `ConfirmedAt` column in the table `StockReservation`.
+- Add `Cat.Demo.InventoryService.Database.sqlproj` with one file per table, `CatJobRun` included, and the `ConfirmedAt` column in the table `StockReservation`.
 - Turn the seed and the change data capture into deployment scripts.
 - Remove the 5 numbered scripts and `BuildInventoryCreationScript`.
 - Add the SQL project to the AppHost, and let Inventory wait until the deploy is done.
@@ -198,33 +203,5 @@ From the repository:
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-
-<!-- region start: Question 7-->
-#### Question 7
-How do we keep change data capture working when a deploy changes `StockItem`? The options:
-- **Switch it on in the post-deployment script only.** A schema change that rebuilds `StockItem` then means removing the data volume of SQL Server. Cost: a reset of the demo data after such a change, written in the demo readme.
-- **Switch it off in a pre-deployment script and on again after.** Cost: every start drops the change table, so changes that Inventory did not read yet are lost.
-- **Block a rebuild with the deploy options,** such as `BlockOnPossibleDataLoss`. Cost: a deploy that fails at the start of the AppHost until someone changes the schema by hand.
-
-Recommendation: switch it on in the post-deployment script only. The demo data is free to change, and a rebuild of `StockItem` is rare.
-<!-- region end: Question 7-->
-
-<!-- region start: Question 8-->
-#### Question 8
-Where does the seed live? The options:
-- **In the post-deployment script,** as today, safe to run again. Cost: every deploy runs the seed, also for a database that is not a demo.
-- **In a separate seed script that only the AppHost runs,** after the deploy. Cost: a second step in the AppHost next to the deploy.
-
-Recommendation: in the post-deployment script. It keeps one deploy step, and the seed only adds what is missing.
-<!-- region end: Question 8-->
-
-<!-- region start: Question 9-->
-#### Question 9
-Does the table `CatJobRun` go into the SQL project? The options:
-- **Yes, as a table of the project.** Cost: a copy of the model of `Cat.Scheduling.EFCore` that has to follow every change to that model.
-- **No, it stays a script that the post-deployment script runs.** Cost: DacFx does not know the table, and the script must stay safe to run again.
-
-Recommendation: yes. A database first team owns every table of its database, and the build then checks the table too.
-<!-- region end: Question 9-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->
