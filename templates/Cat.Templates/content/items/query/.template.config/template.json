@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.Query",
+  "name": "CAT query",
+  "shortName": "cat-query",
+  "description": "A query with its handler in the Infrastructure project. Run it in the folder of the solution of a service.",
+  "tags": { "language": "C#", "type": "item" },
+  "sourceName": "ItemName",
+  "preferNameDirectory": false,
+  "forms": {
+    "shortName": { "identifier": "replace", "pattern": "^.*\\.", "replacement": "" }
+  },
+  "symbols": {
+    "ServiceName": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The full name of the service, such as Contoso.Shop.Orders.",
+      "isRequired": true,
+      "replaces": "ServiceName",
+      "fileRename": "ServiceName"
+    },
+    "ServiceShort": {
+      "type": "derived",
+      "valueSource": "ServiceName",
+      "valueTransform": "shortName",
+      "replaces": "ServiceShort"
+    },
+    "Result": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The entity that the query returns. It needs an Id property.",
+      "defaultValue": "ExampleItem",
+      "replaces": "ResultEntity"
+    },
+    "ResultNamespace": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The namespace of the entity. The default is the entity namespace of the service.",
+      "defaultValue": ""
+    },
+    "DefaultResultNamespace": {
+      "type": "generated",
+      "generator": "join",
+      "parameters": {
+        "symbols": [
+          { "type": "ref", "value": "ServiceName" },
+          { "type": "const", "value": ".DataModels.Entities" }
+        ]
+      }
+    },
+    "ResultNamespaceValue": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "ResultNamespace",
+        "fallbackVariableName": "DefaultResultNamespace"
+      },
+      "replaces": "RESULT_NAMESPACE"
+    }
+  }
+}

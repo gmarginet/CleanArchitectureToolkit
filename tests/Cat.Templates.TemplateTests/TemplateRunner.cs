@@ -57,6 +57,13 @@ public sealed class TemplateRunner
         return folder;
     }
 
+    /// <summary>Runs an item template, such as <c>cat-command</c>, in the folder of the solution of a service.</summary>
+    public async Task RunItemAsync(string folder, string shortName, string itemName, string serviceName, string options = "")
+    {
+        var result = await RunAsync("dotnet", $"new {shortName} -n {itemName} --ServiceName {serviceName} {options} --debug:custom-hive \"{_hive}\"", folder);
+        Assert.That(result.ExitCode, Is.EqualTo(0), result.Output);
+    }
+
     public Task<ProcessResult> DotnetAsync(string arguments, string workingDirectory) => RunAsync("dotnet", arguments, workingDirectory);
 
     private static async Task<ProcessResult> RunAsync(string fileName, string arguments, string workingDirectory)

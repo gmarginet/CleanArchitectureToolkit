@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.Validator",
+  "name": "CAT validator",
+  "shortName": "cat-validator",
+  "description": "A validator for a request or a model, with its test. The name is the name of the type to validate. Run it in the folder of the solution of a service.",
+  "tags": { "language": "C#", "type": "item" },
+  "sourceName": "ItemName",
+  "preferNameDirectory": false,
+  "sources": [
+    {
+      "modifiers": [
+        { "condition": "(!Tests)", "exclude": [ "ServiceName.CoreService.Tests/**" ] }
+      ]
+    }
+  ],
+  "symbols": {
+    "ServiceName": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The full name of the service, such as Contoso.Shop.Orders.",
+      "isRequired": true,
+      "replaces": "ServiceName",
+      "fileRename": "ServiceName"
+    },
+    "Tests": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Add the test. Use false for a service without the project ServiceName.CoreService.Tests.",
+      "defaultValue": "true"
+    },
+    "TargetNamespace": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The namespace of the type to validate. The default is the namespace of the service requests of the service.",
+      "defaultValue": ""
+    },
+    "DefaultTargetNamespace": {
+      "type": "generated",
+      "generator": "join",
+      "parameters": {
+        "symbols": [
+          { "type": "ref", "value": "ServiceName" },
+          { "type": "const", "value": ".Contracts.ServiceRequests" }
+        ]
+      }
+    },
+    "TargetNamespaceValue": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "TargetNamespace",
+        "fallbackVariableName": "DefaultTargetNamespace"
+      },
+      "replaces": "TARGET_NAMESPACE"
+    }
+  }
+}
