@@ -282,7 +282,6 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
     $readme = [System.IO.File]::ReadAllLines($readmeFile)
     $moduleFolders = @(Get-ChildItem (Join-Path $root 'modules') -Directory | Where-Object { Test-Path (Join-Path $_.FullName 'README.md') } | ForEach-Object { $_.Name })
     $planFiles = @(Get-ChildItem $plansRoot -Filter '*.md' -File | ForEach-Object { $_.Name })
-    $planOf = @{ 'Cat.Demo' = 'Demo.md'; 'Cat.Skills' = 'Skills.md' }
     $start = [array]::IndexOf($readme, '<!-- region start: RepoOverview-->')
     $end = [array]::IndexOf($readme, '<!-- region end: RepoOverview-->')
     $rows = [System.Collections.Generic.List[object]]::new()
@@ -315,7 +314,7 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
         if ($seen.ContainsKey($name)) { $errors.Add("README.md repo overview: $name has more than one row."); continue }
         $seen[$name] = $true
         if ($row.Type -notin 'Module', 'Demo', 'Tooling') { $errors.Add("README.md repo overview: $name has the type $($row.Type). Use Module, Demo or Tooling."); continue }
-        $plan = if ($planOf.ContainsKey($name)) { $planOf[$name] } else { "$name.md" }
+        $plan = "$name.md"
         $hasPlan = $planFiles -contains $plan
         $built = switch ($row.Type) { 'Module' { $moduleFolders -contains $name } 'Demo' { $true } default { $row.Badge -notlike '*badge/status-New-*' } }
         # The name is plain text with an anchor. The type badge links to that anchor, so a click keeps the reader in place.
@@ -360,7 +359,7 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
             if ($cell -ne '') { $errors.Add("README.md repo overview: $name is Stable. Its Phases cell must be empty.") }
             continue
         }
-        $plan = if ($planOf.ContainsKey($name)) { $planOf[$name] } else { "$name.md" }
+        $plan = "$name.md"
         $planPath = Join-Path $plansRoot $plan
         if (-not (Test-Path $planPath)) { continue }
         $phases = Get-PlanPhases $planPath
@@ -393,7 +392,7 @@ if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
         if (-not $seen.ContainsKey($name)) { $errors.Add("README.md repo overview: the module $name has no row.") }
     }
     foreach ($plan in $planFiles) {
-        $name = if ($plan -eq 'Demo.md') { 'Cat.Demo' } elseif ($plan -eq 'Skills.md') { 'Cat.Skills' } else { [System.IO.Path]::GetFileNameWithoutExtension($plan) }
+        $name = [System.IO.Path]::GetFileNameWithoutExtension($plan)
         # A plan that says <!-- no overview row--> covers the whole repository and has no row.
         if ([System.IO.File]::ReadAllText((Join-Path $plansRoot $plan)) -match '(?m)^<!-- no overview row-->\s*$') { continue }
         if (-not $seen.ContainsKey($name)) { $errors.Add("plans\${plan}: $name has no row in the repo overview of the readme.") }

@@ -18,7 +18,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 ## Creating a plan
 1. Check that no plan exists yet. Check the name against the folders in `modules/`, the files in `plans/` and the repo overview table of the readme.
 2. Read the sources, see [Where the facts come from](#where-the-facts-come-from). Search them for the module name and its idea.
-3. Copy `plan.template.md` to `plans/<PlanName>.md`. The plan file is named after the plan, such as `Cat.Localizations.md` or `Demo.md`.
+3. Copy `plan.template.md` to `plans/<PlanName>.md`. The plan file is named after the plan, such as `Cat.Localizations.md` or `Cat.Demo.md`.
 4. Replace `[[PlanName]]`.
 5. Fill the `Header` region by following the `cat-internal-create-header` skill.
 6. Add phase 1 with the `Phase` template, at the end of the file, and its `PhaseListLine` in the `Phases` region. Put what you found in the `PhaseDescription` region and the unknowns in numbered open questions.
@@ -26,7 +26,7 @@ Load the `cat-internal-template-concepts` skill first. It explains regions, temp
 8. Run the `cat-internal-verify-docs` skill.
 
 ## Which plans exist
-- `Demo.md` is the plan of the demo, and `Skills.md` and `Cat.Templates.md` are plans of the tooling.
+- `Cat.Demo.md` is the plan of the demo, and `Cat.Skills.md` and `Cat.Templates.md` are plans of the tooling.
 - Every future module has a plan named after the module, such as `Cat.Localizations.md`. An existing module gets one too when it has future work.
 
 ## Rules for the content
@@ -50,7 +50,7 @@ Read these before you write, and search them for the module name:
 
 ## Where a module plan is linked
 Every plan is linked from the readme, and from nowhere else. A plan without a row is the exception, see the last point.
-- Every plan has a row in the repo overview table of the readme. `Demo.md` belongs to the row `Cat.Demo` and `Skills.md` to the row `Cat.Skills`.
+- Every plan has a row in the repo overview table of the readme. The plan file is the name of the row plus `.md`, such as `Cat.Demo.md` for the row `Cat.Demo`.
 - An item that is not built yet has the New badge. A built item with a plan has the Building badge, or the Growing badge when its first stable version is reached (see the `FirstStableVersion` region). The badge links to the plan in all three cases. The `cat-internal-create-readme` skill covers the table.
 - A change to a plan, an answered open question and a finished build can change the lines of the `Phases` column in the repo overview. Recalculate them with the `cat-internal-create-readme` skill.
 - When a future module is started with the `cat-internal-create-module` skill, its row changes from New to Building and gets a Readme badge and a Read more link to the module readme.
@@ -120,8 +120,8 @@ Use this when the owner changes `plan.template.md` or `plan.parts.template.md` a
 
 ## Placeholders
 - [[PlanName]]: The name of the plan.
-  - For a module plan that is the module name, for the demo plan that is Demo, and so on.
-  - The plan file is named after the plan, such as `Cat.Localizations.md` or `Demo.md`.
+  - For a module plan that is the module name, for the demo plan that is Cat.Demo, and so on.
+  - The plan file is named after the plan, such as `Cat.Localizations.md` or `Cat.Demo.md`.
 - [[PhaseNumber]]: The number of a phase.
   - It is a unique number within the plan file.
   - This number never changes, so even if a phase gets deleted after it gets built, all following phases keep their number.

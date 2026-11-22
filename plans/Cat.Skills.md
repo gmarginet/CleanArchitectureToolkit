@@ -29,7 +29,7 @@
 <!-- Use the cat-internal-create-plan skill to update this plan.-->
 <!-- region end: TemplateSkill-->
 
-# Plans for `Skills` <!-- omit in toc -->  
+# Plans for `Cat.Skills` <!-- omit in toc -->  
 
 <!-- region start: FirstStableVersion-->
 **First stable version:** not reached
@@ -220,7 +220,7 @@ Recommendation: a chapter in the readme (it also links from the Cat.Skills row),
 #### Question 10
 Do we write a plan for each skill, or only one for the whole idea? The options:
 - **One plan for the whole idea** (this one), with a phase per group of skills. Cost: the plan grows.
-- **A plan per skill.** Cost: a lot of small files, and `Skills.md` is the only plan linked from a repo overview row.
+- **A plan per skill.** Cost: a lot of small files, and the repo overview has only one row for them, `Cat.Skills`.
 
 Recommendation: one plan with a phase per group (start, daily work, data, check). A skill is small, and the readme row says Cat.Skills only once.
 <!-- region end: Question 10-->

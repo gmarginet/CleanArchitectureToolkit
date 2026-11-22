@@ -6,7 +6,7 @@ argument-hint: "[what changed in the demo, or leave empty to resync]"
 
 # Demo readme
 
-`demo/README.md` is the front door of the demo. It describes the demo as it is now. It holds no status, no plans and no future items. What we are going to build, change or add belongs to `plans/Demo.md`, and the `cat-internal-create-plan` skill owns that plan.
+`demo/README.md` is the front door of the demo. It describes the demo as it is now. It holds no status, no plans and no future items. What we are going to build, change or add belongs to `plans/Cat.Demo.md`, and the `cat-internal-create-plan` skill owns that plan.
 
 The direction is one way. When a demo phase is built, the plan skill uses this skill to bring the demo readme up to date. Updating the demo readme never changes a plan, and never triggers a plan step.
 

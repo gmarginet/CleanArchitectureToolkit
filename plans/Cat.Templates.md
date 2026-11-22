@@ -47,7 +47,7 @@
 ### Description
 <!-- region start: PhaseDescription-->
 #### Goal
-`dotnet new` templates that create a new service with the project structure of the toolkit, and the single parts of a service that the skills of [Skills.md](Skills.md#phase-1) use.
+`dotnet new` templates that create a new service with the project structure of the toolkit, and the single parts of a service that the skills of [Cat.Skills.md](Cat.Skills.md#phase-1) use.
 
 #### The idea
 Every service in the architecture is built from the same set of projects, wired the same way. Making a new service by hand means creating several projects, setting the references right and writing the same startup code. A `dotnet new` template does it in one command. The skills for developers create every file through these templates, so the shape of a file has one source that the build tests.
@@ -89,7 +89,7 @@ From the other plans:
 - **Content.** The service project structure of the readme.
 - **Optional parts.** The tests project stays optional, and the workers are an option of the Api host. There is no DataAccessTooling project (owner, 2026-11-21).
 - **Database first.** It has the same projects as code first. The scaffolded entities live in DataModels, as the hand written entities of code first do. The SQL scripts sit in a folder of the service, such as `Cat.Demo.InventoryService.Database` in the demo, which is not a project (owner, 2026-11-21).
-- **The skills use the templates.** Every file that a skill for developers creates comes from a `dotnet new` template, see [Skills.md](Skills.md#phase-1). A skill does what a template cannot: pick the project and the folder, change existing files such as the registration in `Program.cs`, add the test, run the build and explain the next step (owner, 2026-11-21).
+- **The skills use the templates.** Every file that a skill for developers creates comes from a `dotnet new` template, see [Cat.Skills.md](Cat.Skills.md#phase-1). A skill does what a template cannot: pick the project and the folder, change existing files such as the registration in `Program.cs`, add the test, run the build and explain the next step (owner, 2026-11-21).
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
@@ -117,7 +117,7 @@ Recommendation: all of them. The worker modules exist, a worker option only adds
 <!-- region start: Question 3-->
 #### Question 3
 Do we want the template to wire in all the usual modules, or only the minimum? Modules registered in `Program.cs` depend on the options. The options:
-- **The minimum:** Minimal API, service requests, responses and validators. Cost: a developer adds the rest, with the future skill (see [Skills.md](Skills.md)).
+- **The minimum:** Minimal API, service requests, responses and validators. Cost: a developer adds the rest, with the future skill (see [Cat.Skills.md](Cat.Skills.md#phase-1)).
 - **All the usual ones:** also commands, queries, decorators and logging. Cost: a developer who does not want a module has to remove it, which goes against the toolbox rule.
 - **A parameter per module.** Cost: a lot of conditions in the template.
 
@@ -181,7 +181,7 @@ Which single parts get an item template? The skills create every file through a 
 - **The parts of the first skills,** a command, a query, a service request and a validator, each with its handler and test. More follow with each new skill. Cost: a template per part, each with the build test of question 13.
 - **One item template with a choice parameter** for the kind of part. Cost: one large template with many conditions.
 
-Recommendation: one item template per part, starting with the parts of the first skills of [Skills.md](Skills.md#phase-1). A small template is easy to test, and a skill calls exactly the one it needs.
+Recommendation: one item template per part, starting with the parts of the first skills of [Cat.Skills.md](Cat.Skills.md#phase-1). A small template is easy to test, and a skill calls exactly the one it needs.
 <!-- region end: Question 9-->
 
 <!-- region start: Question 10-->
