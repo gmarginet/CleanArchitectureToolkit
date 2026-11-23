@@ -4,14 +4,18 @@ on:
   push:
     branches:
       - master
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - master
 
+# A tag such as v1.0.0-rc.1 publishes the packages with the version of the tag and creates the GitHub release.
+# The skip-ci and skip-pub words in the message of the tagged commit are ignored for a tag.
 jobs:
   integration-test:
     name: Run the integration tests
-    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    if: "startsWith(github.ref, 'refs/tags/v') || !contains(github.event.head_commit.message, 'skip-ci')"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -33,7 +37,7 @@ jobs:
   release:
     name: Publish CAT nuget packages
     needs: integration-test
-    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    if: "startsWith(github.ref, 'refs/tags/v') || !contains(github.event.head_commit.message, 'skip-ci')"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -65,14 +69,14 @@ jobs:
           options: -t v
 
       - name: NuGet login (OIDC → temp API key)
-        if: "github.event_name == 'push' && !contains(github.event.head_commit.message, 'skip-pub')"
+        if: "github.event_name == 'push' && (startsWith(github.ref, 'refs/tags/v') || !contains(github.event.head_commit.message, 'skip-pub'))"
         uses: NuGet/login@v1
         id: login
         with:
           user: ${{ secrets.NUGET_USER }}
 
       - name: Run Cake build - Test
-        if: "github.event_name == 'pull_request' || contains(github.event.head_commit.message, 'skip-pub')"
+        if: "github.event_name == 'pull_request' || (!startsWith(github.ref, 'refs/tags/v') && contains(github.event.head_commit.message, 'skip-pub'))"
         uses: cake-build/cake-action@v3
         with:
           cake-version: 7.0.0
@@ -82,7 +86,7 @@ jobs:
             semanticversion: ${{ steps.minver.outputs.version }}
 
       - name: Run Cake build - Publish
-        if: "github.event_name == 'push' && !contains(github.event.head_commit.message, 'skip-pub')"
+        if: "github.event_name == 'push' && (startsWith(github.ref, 'refs/tags/v') || !contains(github.event.head_commit.message, 'skip-pub'))"
         uses: cake-build/cake-action@v3
         env:
             NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
@@ -92,3 +96,39 @@ jobs:
           #verbosity: Diagnostic
           arguments: |
             semanticversion: ${{ steps.minver.outputs.version }}
+
+  github-release:
+    name: Create the GitHub release
+    needs: release
+    if: "startsWith(github.ref, 'refs/tags/v')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      # The notes come from the commit subjects since the previous tag, so the checkout needs the full history.
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # A version with a dash, such as 1.0.0-rc.1, is a pre-release. The first tag has no previous tag, so it gets no list of changes.
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="${TAG#v}"
+          intro="$(cat .github/release-intro.md)"
+          notes="${intro//\{version\}/$version}"
+
+          previous="$(git describe --tags --abbrev=0 --match 'v*' "${TAG}^" 2>/dev/null || true)"
+          if [ -n "$previous" ]; then
+            changes="$(git log --no-merges --pretty='format:- %s' "${previous}..${TAG}")"
+            changes="${changes// (skip-pub)/}"
+            notes="${notes}"$'\n\n'"## Changes"$'\n\n'"${changes}"$'\n\n'"**Full changelog:** https://github.com/${GITHUB_REPOSITORY}/compare/${previous}...${TAG}"
+          fi
+
+          flags=""
+          if [[ "$version" == *-* ]]; then flags="--prerelease"; fi
+
+          gh release create "$TAG" --title "$TAG" --notes "$notes" --verify-tag $flags
