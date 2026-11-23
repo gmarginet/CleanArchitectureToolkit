@@ -66,9 +66,11 @@ From the repository:
 - The plugin `cat` is built in `claudeskills/`, with the marketplace `cat-toolkit` in `.claude-plugin/`, all 30 skills of the list below, the plugin readme `claudeskills/README.md` and the settings of this repository. `claude plugin validate . --strict` and `claude plugin validate claudeskills --strict` pass.
 - The module readme goes into every NuGet package, through `Directory.Build.props`.
 - `cat-internal-verify-docs` checks the skills and their table rows, and the names of the toolkit in a skill. `cat-internal-commit` has the two rules for the plugin. `_config.yml` leaves `claudeskills/skills` and `claudeskills/evals` out of the Pages site.
-- The eval suite in `claudeskills/evals/` has one smoke case per skill. A case describes a task on an assumed service and an LLM judge scores the plan of action. A `tool_used: Skill` grader checks that the skill was loaded. Nothing builds a service yet, see question 1.
+- The eval suite in `claudeskills/evals/` has one smoke case per skill. A case describes a task on an assumed service and an LLM judge scores the plan of action. A `tool_used: Skill` grader checks that the skill was loaded. The harness of `claude plugin eval` has no check for a build, so the scaffold script for a first group of skills is not built yet, see the decision "Build checks only for a first group".
 - The repository has a `_plugins` folder. It belongs to the Jekyll site and is not related to this plan.
-- Not checked yet: that the `directory` source in `.claude/settings.json` loads the plugin in an interactive session, and that no skill has been tried on a real service.
+- The plugin has an icon, `claudeskills/icon.png`, set as `icon` in `plugin.json`. It is a PNG, because the directory holds other binary formats such as `.ico` for review. The icon is read only when the plugin is submitted to the directory, so it is not checked yet.
+- The `directory` source in `.claude/settings.json` works (checked 2026-11-23): `claude plugin validate .` passes, the marketplace `cat-toolkit` is listed, and after `/plugin install cat@cat-toolkit` the skills show as `/cat:`. `enabledPlugins` only enables a plugin that is installed, so every machine installs it once.
+- Tried on throwaway services made with `cat-service` (checked 2026-11-23): `cat-new-service`, `cat-add-entity`, `cat-add-command`, `cat-add-query`, `cat-add-validator`, `cat-add-service-request`, `cat-add-decorator`, `cat-add-message`, `cat-add-outbox`, `cat-add-message-handler`, `cat-add-job`, `cat-add-saga`, `cat-add-endpoint` and `cat-add-gateway`. `cat-add-inbox` only as far as the template wiring, and `cat-add-api-client` as far as the settings, the generation and the download of the OpenAPI document from a running service. The other skills are not tried yet.
 
 #### Why it fits and what the risks are
 This is the opinion Claude gave when the owner asked about the idea. It is not a decision.
@@ -127,7 +129,7 @@ Phase 1 builds every skill on this list, with these names (owner, 2026-11-22).
 
 **Data**
 - `cat-add-entity`: an entity on the `Cat.EFCore` base classes, with its configuration and migration, for SQL Server or PostgreSQL.
-- **Tables in a database first service.** There are no migrations. `cat-add-entity` adds a table file with the `cat-table` template to the SQL project, or to the scripts folder on PostgreSQL. After the developer deploys, it runs the scaffold for the entity, as Inventory does in the demo. The tables of the inbox, the outbox and the scheduler come the same way (owner, 2026-11-22).
+- **Tables in a database first service.** There are no migrations. `cat-add-entity` adds a table file with the `cat-table` template to the SQL project, or to the scripts folder on PostgreSQL. After the developer deploys, it runs the scaffold for the entity, as Inventory does in the demo. The tables of the modules come the same way, each from the template of its module (owner, 2026-11-22 and 2026-11-23). See the decision "A template for everything that can have one".
 - `cat-error-codes`: define error codes with a prefix and keep them unique. See [the error code convention](../modules/Cat.Responses/README.md#the-error-code-convention).
 
 **Check and migrate**
@@ -179,20 +181,14 @@ Phase 1 builds every skill on this list, with these names (owner, 2026-11-22).
 - **Templates not installed.** When `dotnet new list cat-` shows nothing, the skill stops and shows the install command of the template pack. Claude runs it only when the developer says yes, then goes on. A skill never writes a file without its template (owner, 2026-11-22).
 - **The plugin in this repository.** `.claude/settings.json` declares the marketplace with `extraKnownMarketplaces`, with a `directory` source, and enables the plugin with `"cat@cat-toolkit": true` in `enabledPlugins`. Every session in the repository, such as work on the demo, then has the skills. The plugin loads in place, so an edit to a skill works after `/reload-plugins` (owner, 2026-11-22). From the plugin docs: it applies after the folder is trusted, and it may need `claude plugin install cat@cat-toolkit --scope project` once per machine. To check before the build: whether a relative `path` resolves from the repository.
 - **Skill tests.** An eval suite of the plugin, run with `claude plugin eval`. Each skill runs on a service made with `cat-service`, and the suite checks the files and that `dotnet build` and `dotnet test` pass. The owner runs it by hand before a release of the plugin, not on every push, to keep the token cost down (owner, 2026-11-22). To check before the build: the format of the eval suite.
+- **Build checks only for a first group.** The cases of the skills that write files, such as `cat-new-service`, `cat-add-command` and `cat-add-query`, get a scaffold script: it runs `dotnet new install` of the local pack and `dotnet new cat-service`, and a grader reads the result files. The other cases stay smoke cases, which show that a skill fires and gives the right plan. The group can grow later (owner, 2026-11-23).
+- **Try the skills on throwaway services.** Each skill is tried on a service made with `cat-service`, in the scratchpad and group by group, so wrong template names, missing packages and wrong namespaces show up in a build. The fixes go back into the skills (owner, 2026-11-23).
+- **A template for everything that can have one.** A skill never writes a file by hand when a template could write it, so a developer who does not use Claude can use the templates alone. A skill keeps the edits that a template cannot make, such as a line in an existing file (owner, 2026-11-23). This adds item templates for what the skills still wrote by hand:
+  - **The tables of the modules.** One template per module, so a developer picks only what they use: `cat-inbox-table`, `cat-outbox-table`, `cat-saga-table`, `cat-translation-table` and `cat-jobrun-table`. Each takes `--Database` for SQL Server or PostgreSQL (owner, 2026-11-23).
+  - **The rest.** Templates for the telemetry source class, the CDC message mapping, the job and the tests of caching, the inbox, the outbox, translations and the user. `cat-add-endpoint` and `cat-add-resilience` only change a line in an existing file, and `cat-review`, `cat-upgrade` and `cat-add-module` write no code, so they get none.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
-<!-- region start: Question 1-->
-#### Question 1
-The decided skill tests run each skill on a service made with `cat-service` and check that `dotnet build` and `dotnet test` pass. The harness of `claude plugin eval` has no check for a build, so how do the cases get that? The first smoke run of one case scored 1.00 with the plugin and 0.00 without it.
-- **A scaffold script per case.** A bash script of the case runs `dotnet new install` of the local pack and `dotnet new cat-service`, and a grader reads the result files. It needs `--scaffold`, the .NET SDK in the sandbox and the packed templates. A run costs more and takes longer, and it is the check the owner decided.
-- **Scaffold for a first group.** The same, only for the skills that write files, such as `cat-new-service`, `cat-add-command` and `cat-add-query`. The other cases stay smoke cases.
-- **Keep the smoke cases.** Cheap, and they show that a skill fires and gives the right plan. They never build a service, so a skill that writes a broken file is not caught.
-
-Recommendation: the first group. It checks the skills that matter most for a build, and the cost stays small. The group can grow later.
-##### Answer 1
-As recommended
-<!-- region end: Question 1-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
