@@ -14,7 +14,7 @@ The gateway is the front door. It checks the token and sends each call to the se
 
 ## Steps
 1. Ask for the services behind the gateway, with their names and addresses, and for the identity provider: the authority and the audience of the tokens.
-2. Run `dotnet new cat-gateway --help`, then run the template in the folder of the solution, with `--Framework`. Add the project to the solution with `dotnet sln add`. The package version of `Cat.Api.Gateway` must be in `Directory.Packages.Cat.props`.
+2. Run `dotnet new cat-gateway --help`, then run the template in the folder of the solution, with `--Framework`. The name `-n` is the name of the system, such as `Contoso.Shop`, and the project becomes `Contoso.Shop.Api.Gateway`. Add the project to the solution with `dotnet sln add`. The package version of `Cat.Api.Gateway` must be in `Directory.Packages.Cat.props`.
 3. Fill in the `CatGateway` section of `appsettings.json`: the authentication, and one entry per service with its address. The routes follow by convention. Check whether the prefix of the service is stripped, as the readme says.
 4. Make only the endpoints public that the developer names, as "Make endpoints public" shows. The gateway is closed by default, and every call needs a token until then.
 5. Decide how the services trust the gateway. Read "Choose how services trust the gateway" and ask. Never pick it for the developer.
