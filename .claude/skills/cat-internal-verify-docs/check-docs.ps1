@@ -218,7 +218,7 @@ if (Test-Path $readmeFile) {
 
 # Every plan keeps the no toc line in its Phases region. It stops editor plugins from generating a full table of contents.
 if (-not $Path -or $Path -like '*plans*') {
-    foreach ($planFile in Get-ChildItem -LiteralPath (Join-Path $root 'plans') -Filter '*.md' -File) {
+    foreach ($planFile in @(Get-ChildItem -LiteralPath (Join-Path $root 'plans') -Filter '*.md' -File -ErrorAction SilentlyContinue)) {
         if (-not (Select-String -LiteralPath $planFile.FullName -Pattern '^<!-- no toc -->' -Quiet)) {
             $errors.Add("plans\$($planFile.Name): the Phases region has lost the line <!-- no toc -->. Copy it back from plan.template.md.")
         }
@@ -279,10 +279,10 @@ function Get-PlanPhases([string]$file) {
 
 # The repo overview table: one row per module folder and per plan, with the right badge, link and order
 $plansRoot = Join-Path $root 'plans'
-if ((Test-Path $readmeFile) -and (Test-Path $plansRoot)) {
+if (Test-Path $readmeFile) {
     $readme = [System.IO.File]::ReadAllLines($readmeFile)
     $moduleFolders = @(Get-ChildItem (Join-Path $root 'modules') -Directory | Where-Object { Test-Path (Join-Path $_.FullName 'README.md') } | ForEach-Object { $_.Name })
-    $planFiles = @(Get-ChildItem $plansRoot -Filter '*.md' -File | ForEach-Object { $_.Name })
+    $planFiles = @(Get-ChildItem $plansRoot -Filter '*.md' -File -ErrorAction SilentlyContinue | ForEach-Object { $_.Name })
     $start = [array]::IndexOf($readme, '<!-- region start: RepoOverview-->')
     $end = [array]::IndexOf($readme, '<!-- region end: RepoOverview-->')
     $rows = [System.Collections.Generic.List[object]]::new()
