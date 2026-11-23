@@ -10,7 +10,8 @@ Push a tag that starts with `v`, such as `v1.0.0-rc.1`. The build workflow `.git
 
 1. **Integration tests.** Needs Docker, which the runner has.
 2. **Release.** Runs the tests, packs and publishes every package to nuget.org. MinVer reads the tag, so the package version is the tag without the `v`.
-3. **GitHub release.** Creates the release on the homepage with `gh release create`.
+3. **Unlist alpha.** Unlists every alpha version of the packages on nuget.org. Runs next to the GitHub release, so a failure here never blocks it.
+4. **GitHub release.** Creates the release on the homepage with `gh release create`.
 
 ## Rules for a tag
 
@@ -27,6 +28,16 @@ Push a tag that starts with `v`, such as `v1.0.0-rc.1`. The build workflow `.git
 - **Changes:** the commit subjects since the previous `v` tag, without the `(skip-pub)` ending. The first tag has no previous tag, so it has no list. GitHub's generated notes list only pull requests, and the owner commits to `master` directly, so the workflow builds the list from commits.
 - **Full changelog:** a link to the comparison with the previous tag.
 - **Assets:** only the two source archives that GitHub adds to every release. The packages stay on nuget.org.
+
+## Unlisting the alpha packages
+
+- **Rule:** every listed version with `-alpha` in it is unlisted on each tag run. Rc and stable versions stay listed. nuget.org only unlists. A package stays available for an exact version reference.
+- **Script:** `.github/scripts/Unlist-AlphaPackages.ps1`. It finds the packages with the search API (owner and the id prefix `gmarginet.Cat.`) and reads the `listed` flag from the registration data.
+- **Key:** the job logs in with `NuGet/login`, like the release job. The trusted publishing policy on nuget.org has the scope All, which includes unlist. No extra secret.
+- **Time limit:** the temporary key lasts one hour, so the script stops after 50 minutes. A big backlog takes several tag runs. The script only looks at versions that are still listed, so each run continues where the last one stopped.
+- **Dry run:** `.\.github\scripts\Unlist-AlphaPackages.ps1 -Owner gmarginet -DryRun` shows what it would unlist and needs no key.
+- **A manual run:** set `NUGET_API_KEY` to a key with the unlist scope and run the script without `-DryRun`.
+- **Normal pushes to `master`:** no unlisting. They publish new alpha versions, and these stay listed until the next tag.
 
 ## Cut a release
 
