@@ -9,7 +9,7 @@ description: Cache a query and clear it with a tag using Cat.Caching. Use when t
 
 ## Before you start
 1. Find the service. It is the folder with the `*.CoreService` project. When the solution holds more than one service, ask which one.
-2. Read the chapters "Cache a query", "What the key holds", "How long an entry lives", "Clear entries with a tag", "What to never cache" and "Several instances" in the readme of `Cat.Caching`. The readme is `modules/Cat.Caching/README.md` when the solution references the module as a project. Otherwise it is `README.md` in `~/.nuget/packages/gmarginet.cat.caching/<version>/`, with the version from `CatVersion` in `Directory.Packages.Cat.props`. The readme is the truth. Follow it when it and this skill disagree.
+2. Read the chapters "Cache a query", "What the key holds", "How long an entry lives", "Clear entries with a tag", "What to never cache", "Several instances" and "Tests" in the readme of `Cat.Caching`. The readme is `modules/Cat.Caching/README.md` when the solution references the module as a project. Otherwise it is `README.md` in `~/.nuget/packages/gmarginet.cat.caching/<version>/`, with the version from `CatVersion` in `Directory.Packages.Cat.props`. The readme is the truth. Follow it when it and this skill disagree.
 
 ## Steps
 1. Ask which query to cache and how stale the answer may be. Read "What to never cache" and check the query against it. Say no when it fits there.

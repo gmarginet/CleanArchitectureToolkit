@@ -9,7 +9,7 @@ description: Read the current user in a handler, and set the user in a worker, w
 
 ## Before you start
 1. Find the service. It is the folder with the `*.CoreService` project. When the solution holds more than one service, ask which one.
-2. Read the chapters "Register the module", "Use the user in a handler", "Set the user in a worker", "Change the claim names" and "Share the role claim with JWT bearer" in the readme of `Cat.Users`. The readme is `modules/Cat.Users/README.md` when the solution references the module as a project. Otherwise it is `README.md` in `~/.nuget/packages/gmarginet.cat.users/<version>/`, with the version from `CatVersion` in `Directory.Packages.Cat.props`. The readme is the truth. Follow it when it and this skill disagree.
+2. Read the chapters "Register the module", "Use the user in a handler", "Set the user in a worker", "Change the claim names", "Share the role claim with JWT bearer" and "Tests" in the readme of `Cat.Users`. The readme is `modules/Cat.Users/README.md` when the solution references the module as a project. Otherwise it is `README.md` in `~/.nuget/packages/gmarginet.cat.users/<version>/`, with the version from `CatVersion` in `Directory.Packages.Cat.props`. The readme is the truth. Follow it when it and this skill disagree.
 
 ## Steps
 1. Ask where the user is needed: a handler of a request, or a worker such as a job or a message handler.

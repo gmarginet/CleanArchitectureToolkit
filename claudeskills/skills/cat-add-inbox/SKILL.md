@@ -9,7 +9,7 @@ The inbox remembers the messages that were handled, so one that arrives twice ru
 
 ## Before you start
 1. Find the service. It is the folder with the `*.CoreService` project. When the solution holds more than one service, ask which one.
-2. Read the chapters "Set up the store", "Skip a repeated webhook", "Skip a repeated bus message" and "Clean the inbox" in the readme of `Cat.Inbox`. The readme is `modules/Cat.Inbox/README.md` when the solution references the module as a project. Otherwise it is `README.md` in `~/.nuget/packages/gmarginet.cat.inbox/<version>/`, with the version from `CatVersion` in `Directory.Packages.Cat.props`. The readme is the truth. Follow it when it and this skill disagree.
+2. Read the chapters "Set up the store", "Skip a repeated webhook", "Skip a repeated bus message", "Clean the inbox" and "Tests" in the readme of `Cat.Inbox`. The readme is `modules/Cat.Inbox/README.md` when the solution references the module as a project. Otherwise it is `README.md` in `~/.nuget/packages/gmarginet.cat.inbox/<version>/`, with the version from `CatVersion` in `Directory.Packages.Cat.props`. The readme is the truth. Follow it when it and this skill disagree.
 
 ## Steps
 1. Ask what repeats: a webhook from outside, or a bus message. The bus case has its own path through `Cat.EventProcessor`, see `cat-add-message-handler`, and its readme chapter "The inbox".
@@ -17,7 +17,7 @@ The inbox remembers the messages that were handled, so one that arrives twice ru
 3. Add the table. A code first service gets it through a migration. A database first service gets the table file from `dotnet new cat-inbox-table --Database <SqlServer|PostgreSQL>`, run in the folder of the solution. Run `dotnet new list cat-` first. When it shows nothing, stop and show `dotnet new install gmarginet.Cat.Templates`, and run it only when the developer says yes. Say that nothing compares the table with the model of the inbox.
 4. For a webhook, wrap the handling as "Skip a repeated webhook" shows, with the id that the sender gives each delivery.
 5. Add the cleanup, as "Clean the inbox" shows, so the table does not grow without end.
-6. Add a test that sends the same message twice and checks that the work ran once.
+6. Add a test that sends the same message twice and checks that the work ran once, as "Tests" shows.
 7. Run `dotnet build` and `dotnet test`. Fix what fails.
 
 ## Rules

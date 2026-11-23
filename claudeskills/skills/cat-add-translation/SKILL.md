@@ -9,7 +9,7 @@ description: Mark an entity as translatable, map the translation table and read 
 
 ## Before you start
 1. Find the service. It is the folder with the `*.CoreService` project. When the solution holds more than one service, ask which one.
-2. Read the chapters "Mark the entity", "Map the table", "Register the translator", "Read a text", "Save a translation", "Which culture is used" and "The default culture of background work" in the readme of `Cat.Localizations`. The readme is `modules/Cat.Localizations/README.md` when the solution references the module as a project. Otherwise it is `README.md` in `~/.nuget/packages/gmarginet.cat.localizations/<version>/`, with the version from `CatVersion` in `Directory.Packages.Cat.props`. The readme is the truth. Follow it when it and this skill disagree.
+2. Read the chapters "Mark the entity", "Map the table", "Register the translator", "Read a text", "Save a translation", "Which culture is used", "The default culture of background work" and "Tests" in the readme of `Cat.Localizations`. The readme is `modules/Cat.Localizations/README.md` when the solution references the module as a project. Otherwise it is `README.md` in `~/.nuget/packages/gmarginet.cat.localizations/<version>/`, with the version from `CatVersion` in `Directory.Packages.Cat.props`. The readme is the truth. Follow it when it and this skill disagree.
 
 ## Steps
 1. Ask which entity and which fields get translations, and which cultures the service supports.
@@ -19,7 +19,7 @@ description: Mark an entity as translatable, map the translation table and read 
 5. Read the text in the handler through `ICatTranslator`, with the default text of the entity. Read many texts with one call, not one call per row.
 6. Save a translation with `SetTextAsync` and the `SaveChanges` of the entity change, so both succeed or fail together.
 7. A service with jobs or other background work sets the default culture once in `Program.cs`, as the readme shows.
-8. Add a test for a translated and a missing text.
+8. Add a test for a translated and a missing text, as "Tests" shows.
 9. Run `dotnet build` and `dotnet test`. Fix what fails.
 
 ## Rules
