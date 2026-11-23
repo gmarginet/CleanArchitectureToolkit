@@ -39,6 +39,7 @@
       <ProjectReference Include="..\..\modules\Cat.Resilience\Cat.Resilience\Cat.Resilience.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Responses\Cat.Responses\Cat.Responses.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Users\Cat.Users.Abstractions\Cat.Users.Abstractions.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.UnitTesting\Cat.UnitTesting.Users\Cat.UnitTesting.Users.csproj" />
     </ItemGroup>
 
 </Project>

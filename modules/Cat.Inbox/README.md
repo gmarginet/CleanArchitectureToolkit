@@ -140,4 +140,36 @@ What to know:
 - **It runs at once.** The method deletes the rows right away, with its own statement, and does not wait for a `SaveChanges`. Call it from a scope of its own, such as a job or a worker.
 - **Your own job.** You schedule the call. Any scheduler works, and `Cat.Scheduling` can run it, but the module does not need it.
 - **Other stores.** A store of your own implements the method too.
+### Tests
+
+The store is plain EF Core, so a test runs it against SQLite in memory. Map the table with `AddCatInbox`, register the store with `AddCatInboxEfCore`, and deliver the same id twice, each time in a scope of its own, as the bus does.
+
+```csharp
+var connection = new SqliteConnection("DataSource=:memory:");
+await connection.OpenAsync();
+
+var services = new ServiceCollection();
+services.AddDbContext<OrdersDbContext>(options => options.UseSqlite(connection));
+services.AddCatInboxEfCore<OrdersDbContext>();
+var provider = services.BuildServiceProvider();
+
+using (var scope = provider.CreateScope())
+{
+    await scope.ServiceProvider.GetRequiredService<OrdersDbContext>().Database.EnsureCreatedAsync();
+}
+
+for (var delivery = 0; delivery < 2; delivery++)
+{
+    using var scope = provider.CreateScope();
+    var handler = scope.ServiceProvider.GetRequiredService<RefundHandler>();
+
+    await handler.HandleAsync("evt-1");
+}
+
+// The work ran once, and the table has one row.
+```
+
+Keep the connection open for the whole test, because SQLite in memory drops the database when the last connection closes. A test with an id that differs must run the work again. The tests of this module hold the example in `InboxHandlingTests`.
+
+SQLite cannot translate the comparison of a `DateTimeOffset` in a query, so `DeleteOlderThanAsync` throws there. A test of the cleanup needs a real SQL Server or PostgreSQL.
 <!-- region end: Usage-->

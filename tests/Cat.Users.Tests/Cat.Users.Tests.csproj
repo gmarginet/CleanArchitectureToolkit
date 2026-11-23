@@ -34,6 +34,7 @@
       <ProjectReference Include="..\..\modules\Cat.Users\Cat.Users.Abstractions\Cat.Users.Abstractions.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Users\Cat.Users\Cat.Users.csproj" />
       <ProjectReference Include="..\..\modules\Cat.Users\Cat.Users.JwtBearer\Cat.Users.JwtBearer.csproj" />
+      <ProjectReference Include="..\..\modules\Cat.UnitTesting\Cat.UnitTesting.Users\Cat.UnitTesting.Users.csproj" />
     </ItemGroup>
 
 </Project>

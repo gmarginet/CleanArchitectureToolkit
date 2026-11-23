@@ -127,4 +127,29 @@ builder.Services.AddCatUsersJwtBearer();
 ```
 
 The setting runs after the other settings of the scheme, so it wins over a role claim type set in `AddJwtBearer`. Pass the scheme name when it is not `Bearer`. Without this package, set the same value in the token validation yourself.
+### Tests
+A handler asks for `ICatUser`, so a unit test gives it a `FakeUser` from `Cat.UnitTesting.Users`. The fake needs no token, no claims and no HTTP request.
+
+```csharp
+var user = new FakeUser { UserId = "u-1" }.InRole("admin");
+var handler = new SavePriceHandler(user);
+
+var saved = handler.Handle();
+
+Assert.That(saved, Is.True);
+Assert.That(handler.LastUpdatedBy, Is.EqualTo("u-1"));
+```
+
+A `FakeUser` is a login by default, with the id `test-user` and no roles. Add roles with `InRole`, and set `IsAuthenticated` to `false` for a caller that is not logged in. To test a worker that sets the user, give it a `FakeUserAccessor` and read the user back after the run:
+
+```csharp
+var accessor = new FakeUserAccessor();
+
+new CleanupWorker(accessor).Run();
+
+Assert.That(accessor.User.UserId, Is.EqualTo("orders"));
+Assert.That(accessor.User.IsInRole(CatUser.SystemRole), Is.True);
+```
+
+The tests of this module hold both examples in `FakeUserTests`. `Cat.UnitTesting.Users` is the only package a test needs.
 <!-- region end: Usage-->

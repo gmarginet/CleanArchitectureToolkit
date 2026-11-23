@@ -139,4 +139,37 @@ What to know:
 - **No activity, no property.** A message stored with no running activity gets no `Diagnostic-Id`, and the Service Bus SDK puts its own on it.
 - **Your own `Diagnostic-Id` wins.** The store never replaces a `Diagnostic-Id` that you put in the properties of the message.
 - **Without the outbox.** `Cat.Messaging` leaves the trace to the Service Bus SDK, as before.
+### Tests
+
+Two kinds of test cover a handler that sends a message.
+
+**The logic of the handler.** Give it a `FakeMessageSender` from `Cat.UnitTesting.Messaging`. It records what the handler published, and the outbox plays no part.
+
+```csharp
+var sender = new FakeMessageSender();
+var handler = new PlaceOrderHandler(context, sender);
+
+await handler.HandleAsync("ORD-1");
+
+Assert.That(sender.Of<OrderPlaced>().Single().OrderNumber, Is.EqualTo("ORD-1"));
+```
+
+**The message is stored with the data.** Use the real sender and the real store on SQLite in memory. Register the messaging module, a transport, `AddCatOutboxEfCore` and `AddCatOutbox`, and run the handler in a scope. After its `SaveChanges`, read the table from a second scope.
+
+```csharp
+services.AddDbContext<OrdersContext>(options => options.UseSqlite(connection));
+services.AddSingleton<ICatMessageTransport>(transport);
+services.AddCatMessagingModule();
+services.AddCatOutboxEfCore<OrdersContext>();
+services.AddCatOutbox();
+
+// Run the handler in a scope. Then, in a new scope:
+Assert.That(await context.Orders.CountAsync(), Is.EqualTo(1));
+Assert.That(await context.Set<CatOutboxMessage>().CountAsync(), Is.EqualTo(1));
+Assert.That(transport.Sent, Is.Empty);
+```
+
+The transport stays empty because only the background sender calls it, and a test that builds the provider without a host never starts that sender. A handler that forgets its `SaveChanges` leaves the table empty, and this test finds it. Keep the connection open for the whole test, because SQLite in memory drops the database when the last connection closes. The tests of this module hold both examples in `OutboxHandlerTests`.
+
+SQLite cannot sort by a `DateTimeOffset`, so `GetPendingAsync` throws there, and the cleanup compares one in a query, which SQLite cannot translate either. A test of the sender loop or the cleanup needs a real SQL Server or PostgreSQL.
 <!-- region end: Usage-->

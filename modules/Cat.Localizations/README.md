@@ -158,4 +158,40 @@ The mapping and the translator are plain EF Core, so they run on SQL Server and 
 - It does not translate the screens of a client.
 - It does not localize error codes. The server returns the code with its English message, and the client translates the code.
 - It has no Dapper project. One can follow when a developer needs it.
+### Tests
+The translator is plain EF Core, so a test runs it on SQLite in memory with the real registration. A handler that reads a translated text gets its answer from a real table, and a missing translation shows the default text.
+
+```csharp
+var connection = new SqliteConnection("DataSource=:memory:");
+await connection.OpenAsync();
+
+var services = new ServiceCollection();
+services.AddLogging();
+services.AddDbContext<ShopDbContext>(options => options.UseSqlite(connection));
+services.AddCatLocalizations<ShopDbContext>();
+var provider = services.BuildServiceProvider();
+
+var scope = provider.CreateScope();
+var db = scope.ServiceProvider.GetRequiredService<ShopDbContext>();
+await db.Database.EnsureCreatedAsync();
+var translator = scope.ServiceProvider.GetRequiredService<ICatTranslator>();
+```
+
+`ShopDbContext` calls `AddCatTranslations` in `OnModelCreating`. Save a text, set the culture, and read it back:
+
+```csharp
+await translator.SetTextAsync<Category>(id, "Name", "nl", "Boeken");
+await db.SaveChangesAsync();
+CultureInfo.CurrentUICulture = new CultureInfo("nl");
+
+var name = await translator.GetTextAsync<Category>(id, "Name", "Books");  // "Boeken"
+```
+
+Test a missing text the same way. With a culture that has no translation, the call returns the default text you pass in, `Books` here.
+
+What to know:
+- **Put the culture back.** `CultureInfo.CurrentUICulture` is a setting of the thread, so a test restores it in its `TearDown`, or a later test reads the wrong language.
+- **Keep the connection open.** SQLite in memory drops the database when the last connection closes.
+- **The example.** `ReadmeExampleTests` of this module holds it.
+- **More cases.** `TranslatorTests` of this module also cover the parent culture, `nl-BE` falling back to `nl`, the invariant culture and reading many texts with one call.
 <!-- region end: Usage-->

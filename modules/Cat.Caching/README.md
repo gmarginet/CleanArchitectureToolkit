@@ -229,6 +229,34 @@ The module has a meter named `Cat.Caching` with two counters: `cat.caching.hits`
 ### Tests
 A unit test that uses `FakeQueryProcessor` of `Cat.UnitTesting` gets no cache, because the fake replaces the processor. Test the cache with a real query processor and a real `AddCatQueryCaching`, as the tests of the module do.
 
+Register your own queries module, the caching with the rule of the query, and a counter in place of the real data source. The default key holds the user, so the provider also needs an `ICatUser`, or the rule uses `Shared()`.
+
+```csharp
+var services = new ServiceCollection();
+services.AddSingleton(probe);                  // counts how often the handler runs
+services.AddScoped<ICatUser>(_ => new FakeUser());
+services.AddCatQueriesModule(typeof(BookListQueryHandler));
+services.AddCatQueryCaching(options => options.Cache<BookListQuery>(rule => rule.Tag("books")));
+using var provider = services.BuildServiceProvider();
+
+using var scope = provider.CreateScope();
+var processor = scope.ServiceProvider.GetRequiredService<ICatQueryProcessor>();
+```
+
+Two checks cover a cached query. The second call must not reach the handler, and clearing the tag, as your command handler does, makes the next call run the handler again.
+
+```csharp
+await processor.ProcessAsync(new BookListQuery());
+await processor.ProcessAsync(new BookListQuery());
+Assert.That(probe.Calls, Is.EqualTo(1));
+
+await provider.GetRequiredService<ICatQueryCache>().RemoveByTagAsync("books");
+await processor.ProcessAsync(new BookListQuery());
+Assert.That(probe.Calls, Is.EqualTo(2));
+```
+
+`ReadmeExampleTests` of this module holds this example. `QueryCachingTests` holds more cases, such as the key per user, the lifetime and a failed response.
+
 ### What the module does not do
 - **Commands and service requests.** Only queries are cached. A service request that only reads calls a query that can be cached.
 - **HTTP output caching.** Use the output caching of ASP.NET Core directly.
