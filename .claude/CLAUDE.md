@@ -63,6 +63,7 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 - `tools/`: Tooling projects (e.g., XML doc markdown generators).
 - `templates/`: The `dotnet new` template pack `gmarginet.Cat.Templates`. A change here publishes the pack, so it counts as code.
 - `modules/`: Contains the individual module-folders.
+- `claudeskills/` and `.claude-plugin/`: The plugin `cat` with the skills for developers, and the marketplace `cat-toolkit`. See `claudeskills/README.md`.
 - `plans/`: Plans for the demo, the tooling and the modules.
 
 ## 📦 Module Folder Blueprint
@@ -82,6 +83,7 @@ Use the skill for the task and do not do its steps by hand.
 
 - Prefix `cat-internal-` is for skills for the owner of the toolkit. Prefix `cat-` is for skills for developers who use the toolkit.
 - When you add, rename, change or remove a skill in `.claude/skills/`, update its table row in `.claude/skills/README.md` and in the table below in the same change.
+- Skills for developers live in `claudeskills/skills/`, as one plugin, and never in `.claude/skills/`. When you add, change or remove one, update its row in `claudeskills/README.md` in the same change. They stay out of `.claude/skills/README.md` and the table below, which are for the owner. A name of the toolkit in a skill must be in the generated `namespaces` pages, and `cat-internal-verify-docs` checks it.
 - Plans: put only decisions the owner made in the description of a phase, and everything else is an open question. Remove a plan only when the owner agrees.
 - The demo readme describes only what exists. Plans for the demo go in `plans/Cat.Demo.md`, which exists only while the demo has planned work.
 - Template files: load `cat-internal-template-concepts` first. Never remove a region marker, and edit only inside a region.

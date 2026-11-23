@@ -22,6 +22,7 @@ Errors
 - A `Header` region that differs from the header template of the `cat-internal-create-header` skill, or has no comment line with its `RootPath`.
 - The readme lost its <!-- region start: RepoOverview--> or <!-- region end: RepoOverview--> region marker.
 - A skill folder has no SKILL.md, has a name that differs from the folder, or is missing from .claude/skills/README.md.
+- A skill for developers in claudeskills/skills has no SKILL.md, no name or description, a name that differs from the folder or starts with cat-internal-, or no table row in claudeskills/README.md. A backticked name in it that looks like a name of the toolkit, such as AddCatQueryCaching, is not in the generated namespaces pages. The script has a list of names to skip.
 
 Warnings
 - A long dash, "--" outside code, or an ellipsis in text. CLAUDE.md forbids them.
@@ -418,6 +419,61 @@ if ((Test-Path $skillsRoot) -and (Test-Path $skillsReadme)) {
             $errors.Add(".claude\skills\$($dir.Name)\SKILL.md: no name in the front matter")
         }
         if ($overview -notmatch [regex]::Escape("]($($dir.Name)/SKILL.md)")) { $errors.Add(".claude\skills\README.md: no table row for $($dir.Name)") }
+    }
+}
+
+# Skills for developers, in claudeskills/skills, and their table in claudeskills/README.md
+$devSkillsRoot = Join-Path $root 'claudeskills\skills'
+$devSkillsReadme = Join-Path $root 'claudeskills\README.md'
+if (Test-Path $devSkillsRoot) {
+    $devOverview = if (Test-Path $devSkillsReadme) { [System.IO.File]::ReadAllText($devSkillsReadme) } else { '' }
+    if (-not (Test-Path $devSkillsReadme)) { $errors.Add('claudeskills\README.md: the readme of the plugin is missing') }
+
+    # The names that a skill may use and the generated pages do not hold: settings, tables and files of the developer, and names of the .NET libraries.
+    $skipNames = @(
+        'CatVersion', 'CatGateway', 'CatInbox', 'CatOutbox', 'CatJobRun', 'CatSqlCdc', 'CatScheduling', 'CatApiClientNswagTemplate',
+        'DbContext', 'DbSet', 'HttpClient', 'ILogger', 'SaveChanges', 'SaveChangesAsync', 'ActivitySource', 'Meter',
+        'DataModels', 'CoreService', 'ServiceDefaults', 'AppHost', 'AdditionalFiles', 'OnModelCreating', 'AllowAnonymous',
+        'PackageReference', 'ProjectReference', 'Program',
+        # Example names and the values of the options of the templates.
+        'OrderPlace', 'OrderGet', 'OrderPlaceRequest', 'OrderCleanupJobRequest', 'OrderErrorDefinitions', 'OrderPlaced', 'CodeFirst', 'DatabaseFirst', 'SqlServer', 'PostgreSQL', 'Contoso.Shop'
+    )
+    # Every name that the generated pages hold, as one text, and the names of the modules and their projects.
+    $apiText = ''
+    $pageFiles = Get-ChildItem (Join-Path $root 'modules') -Directory | ForEach-Object { Join-Path $_.FullName 'namespaces' } | Where-Object { Test-Path $_ } | ForEach-Object { Get-ChildItem $_ -Recurse -Filter *.md }
+    $apiText = ($pageFiles | ForEach-Object { [System.IO.File]::ReadAllText($_.FullName) }) -join "`n"
+    $moduleNames = @{}
+    foreach ($m in Get-ChildItem (Join-Path $root 'modules') -Directory) {
+        $moduleNames[$m.Name] = $true
+        foreach ($p in Get-ChildItem $m.FullName -Directory) { $moduleNames[$p.Name] = $true }
+    }
+
+    foreach ($dir in Get-ChildItem $devSkillsRoot -Directory) {
+        $skillFile = Join-Path $dir.FullName 'SKILL.md'
+        $rel = "claudeskills\skills\$($dir.Name)\SKILL.md"
+        if (-not (Test-Path $skillFile)) { $errors.Add("claudeskills\skills\$($dir.Name): no SKILL.md"); continue }
+        $text = [System.IO.File]::ReadAllText($skillFile)
+        if ($text -match '(?m)^name:\s*(\S+)\s*$') {
+            if ($Matches[1] -ne $dir.Name) { $errors.Add("${rel}: name '$($Matches[1])' differs from the folder name") }
+        } else { $errors.Add("${rel}: no name in the front matter") }
+        if ($text -notmatch '(?m)^description:\s*\S') { $errors.Add("${rel}: no description in the front matter") }
+        if ($dir.Name -notmatch '^cat-(?!internal-)') { $errors.Add("${rel}: the name of a skill for developers starts with cat- and not with cat-internal-") }
+        if ($devOverview -notmatch "(?m)^\|\s*``$([regex]::Escape($dir.Name))``\s*\|") { $errors.Add("claudeskills\README.md: no table row for $($dir.Name)") }
+
+        # A backticked name in the skill that looks like a name of the toolkit must be in the generated pages.
+        foreach ($match in [regex]::Matches($text, '`([^`\r\n]+)`')) {
+            $token = $match.Groups[1].Value -replace '\(\)$', '' -replace '<[^>]*>$', ''
+            if ($token -cnotmatch '^[A-Z][A-Za-z0-9]*(\.[A-Z][A-Za-z0-9]*)*$') { continue }
+            if ($token -cnotmatch '[a-z][A-Z]' -and $token -notmatch '\.') { continue }
+            if ($skipNames -contains $token -or $moduleNames.ContainsKey($token)) { continue }
+            $last = ($token -split '\.')[-1]
+            if ($skipNames -contains $last) { continue }
+            if ($apiText -cnotmatch "\b$([regex]::Escape($last))\b") { $errors.Add("${rel}: the name $token is not in the generated namespaces pages. Fix the name, or add it to the skip list in check-docs.ps1 when it is not a name of the toolkit.") }
+        }
+    }
+    # A row of the table has a skill that exists.
+    foreach ($m in [regex]::Matches($devOverview, '(?m)^\|\s*`(cat-[a-z0-9-]+)`\s*\|')) {
+        if (-not (Test-Path (Join-Path $devSkillsRoot $m.Groups[1].Value))) { $errors.Add("claudeskills\README.md: the row $($m.Groups[1].Value) has no skill folder") }
     }
 }
 
