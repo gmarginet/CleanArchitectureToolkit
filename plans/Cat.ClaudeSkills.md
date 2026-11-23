@@ -39,7 +39,6 @@
 <!-- region start: Phases-->
 <!-- no toc -->
 - [Phase 1](#phase-1)
-- [Phase 2](#phase-2)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 1-->
@@ -64,10 +63,12 @@ From the repository:
 - `skip-pub` goes at the end of a commit subject when no code in `modules/` changed. Files under `claudeskills/` would not be published as NuGet packages.
 
 #### What exists today
-- No skill for developers exists yet. The folders `claudeskills/` and `.claude-plugin/` do not exist.
-- The readme lists the idea in the repo overview, as `Cat.ClaudeSkills` with the type Tooling and the status New.
-- The skills in `.claude/skills/` are all for the owner, and all 16 of them use the `cat-internal-` prefix now.
+- The plugin `cat` is built in `claudeskills/`, with the marketplace `cat-toolkit` in `.claude-plugin/`, all 30 skills of the list below, the plugin readme `claudeskills/README.md` and the settings of this repository. `claude plugin validate . --strict` and `claude plugin validate claudeskills --strict` pass.
+- The module readme goes into every NuGet package, through `Directory.Build.props`.
+- `cat-internal-verify-docs` checks the skills and their table rows, and the names of the toolkit in a skill. `cat-internal-commit` has the two rules for the plugin. `_config.yml` leaves `claudeskills/skills` and `claudeskills/evals` out of the Pages site.
+- The eval suite in `claudeskills/evals/` has one smoke case per skill. A case describes a task on an assumed service and an LLM judge scores the plan of action. A `tool_used: Skill` grader checks that the skill was loaded. Nothing builds a service yet, see question 1.
 - The repository has a `_plugins` folder. It belongs to the Jekyll site and is not related to this plan.
+- Not checked yet: that the `directory` source in `.claude/settings.json` loads the plugin in an interactive session, and that no skill has been tried on a real service.
 
 #### Why it fits and what the risks are
 This is the opinion Claude gave when the owner asked about the idea. It is not a decision.
@@ -159,8 +160,8 @@ Phase 1 builds every skill on this list, with these names (owner, 2026-11-22).
 - **No build order by template.** The [template pack](../templates/README.md) is built and holds every template the skills need. This plan builds every skill it plans, not a first group (owner, 2026-11-22).
 - **Scope of phase 1.** Phase 1 builds every skill in the list of skills, the group "More modules" too (owner, 2026-11-22).
 - **Skills of the group "More modules".** One skill per module for the main task its module readme describes, as listed. `Cat.Dapper`, `Cat.Api.Client`, `Cat.Sql.Cdc` and `Cat.Api.Gateway` get one too, so every module has a skill (owner, 2026-11-22).
-- **A skill for the solution template.** The skill that runs the [solution template](../templates/README.md#create-a-system) belongs to [phase 2](#phase-2) (owner, 2026-11-22).
-- **One plan.** This plan covers every skill for developers, with no plan per skill. Its phases follow the template pack: phase 1 holds the skills for the service template and the item templates, phase 2 the skill for the solution template (owner, 2026-11-22).
+- **A skill for the solution template.** The skill that runs the [solution template](../templates/README.md#create-a-system) is `cat-new-system`. It pairs with `cat-new-service`: one creates a whole system, the other adds a service to it. It is built (owner, 2026-11-22).
+- **One plan.** This plan covers every skill for developers, with no plan per skill. Its phases followed the template pack: phase 1 holds the skills for the service template and the item templates, and a phase 2 held the skill for the solution template. Phase 2 is built and removed (owner, 2026-11-22).
 - **Names and folders.** The plugin is `cat` in `claudeskills/`, with its `plugin.json` in `claudeskills/.claude-plugin/` and the skills in `claudeskills/skills/`. The marketplace is `cat-toolkit` in `.claude-plugin/marketplace.json` in the root of the repository, and points to `./claudeskills`. A developer installs it with `/plugin install cat@cat-toolkit` (owner, 2026-11-22). The plugin docs allow a relative source that starts with `./`, resolved from the folder that holds `.claude-plugin/`, so `"source": "./claudeskills"` works. The `name` of the entry in `marketplace.json` must match the `name` in `plugin.json` (checked 2026-11-22).
 - **Keep the skills true.** A skill holds the workflow and as few API names as possible (owner, 2026-11-22):
   - **The readme of the package.** Phase 1 packs the module readme into each NuGet package, next to `README_NUGET.md`, with one change in `Directory.Build.props`. A skill reads the CAT version from the project of the developer and reads the module readme of that version from the NuGet cache. So the API always matches the package, and a skill needs no version of its own.
@@ -182,29 +183,16 @@ Phase 1 builds every skill on this list, with these names (owner, 2026-11-22).
 
 ### Open Questions
 <!-- region start: PhaseOpenQuestions-->
+<!-- region start: Question 1-->
+#### Question 1
+The decided skill tests run each skill on a service made with `cat-service` and check that `dotnet build` and `dotnet test` pass. The harness of `claude plugin eval` has no check for a build, so how do the cases get that? The first smoke run of one case scored 1.00 with the plugin and 0.00 without it.
+- **A scaffold script per case.** A bash script of the case runs `dotnet new install` of the local pack and `dotnet new cat-service`, and a grader reads the result files. It needs `--scaffold`, the .NET SDK in the sandbox and the packed templates. A run costs more and takes longer, and it is the check the owner decided.
+- **Scaffold for a first group.** The same, only for the skills that write files, such as `cat-new-service`, `cat-add-command` and `cat-add-query`. The other cases stay smoke cases.
+- **Keep the smoke cases.** Cheap, and they show that a skill fires and gives the right plan. They never build a service, so a skill that writes a broken file is not caught.
+
+Recommendation: the first group. It checks the skills that matter most for a build, and the cost stays small. The group can grow later.
+##### Answer 1
+As recommended
+<!-- region end: Question 1-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 1-->
-
-<!-- region start: Phase 2-->
-## Phase 2
-
-### Description
-<!-- region start: PhaseDescription-->
-#### Goal
-A skill that creates a whole system with the [solution template](../templates/README.md#create-a-system), as the demo is.
-
-#### Needs
-- The plugin and the skills of [phase 1](#phase-1).
-
-#### Background
-- The solution template creates an AppHost, `ServiceDefaults`, a YARP gateway and a first service made with `cat-service`, see the [templates readme](../templates/README.md#create-a-system).
-
-#### Decided
-- **A skill for the solution template.** It runs the solution template and goes in the plugin of [phase 1](#phase-1) (owner, 2026-11-22).
-- **Name.** The skill is `cat-new-system`. It pairs with `cat-new-service`: one creates a whole system, the other adds a service to it (owner, 2026-11-22).
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 2-->

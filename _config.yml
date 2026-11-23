@@ -18,6 +18,8 @@ relative_links:
   collections: true
 exclude:
   - README_NUGET.md
+  - claudeskills/skills
+  - claudeskills/evals
   - Gemfile
   - Gemfile.lock
   - jekyll-theme

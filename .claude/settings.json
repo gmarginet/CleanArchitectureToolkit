@@ -8,6 +8,17 @@
       "Read(./.gma/**)"
     ]
   },
+  "extraKnownMarketplaces": {
+    "cat-toolkit": {
+      "source": {
+        "source": "directory",
+        "path": "."
+      }
+    }
+  },
+  "enabledPlugins": {
+    "cat@cat-toolkit": true
+  },
   "attribution": {
     "commit": "",
     "pr": "",

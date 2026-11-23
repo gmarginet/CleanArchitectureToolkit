@@ -1,0 +1,14 @@
+{
+  "name": "cat-toolkit",
+  "description": "Claude Code skills for the developers who use the Clean Architecture Toolkit.",
+  "owner": {
+    "name": "Gert Marginet"
+  },
+  "plugins": [
+    {
+      "name": "cat",
+      "source": "./claudeskills",
+      "description": "Skills for developers who use the Clean Architecture Toolkit."
+    }
+  ]
+}

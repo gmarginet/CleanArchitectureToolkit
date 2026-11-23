@@ -1,0 +1,12 @@
+{
+  "name": "cat",
+  "version": "0.1.0",
+  "description": "Skills for developers who use the Clean Architecture Toolkit: add a command, a query, an endpoint, a message handler and more, with the conventions of the toolkit.",
+  "author": {
+    "name": "Gert Marginet"
+  },
+  "homepage": "https://gmarginet.github.io/CleanArchitectureToolkit/",
+  "repository": "https://github.com/gmarginet/CleanArchitectureToolkit",
+  "license": "MIT",
+  "keywords": ["dotnet", "clean-architecture", "cat"]
+}
