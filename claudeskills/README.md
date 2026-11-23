@@ -36,6 +36,7 @@ Claude Code skills for the developers who use the toolkit. Each skill teaches Cl
 - [Test the skills](#test-the-skills)
 - [Keep the skills up to date](#keep-the-skills-up-to-date)
 - [Without the plugin](#without-the-plugin)
+- [Why it is built this way](#why-it-is-built-this-way)
 
 ## Install
 Add the marketplace once, then install the plugin:
@@ -112,3 +113,14 @@ The plugin has its own version in `claudeskills/.claude-plugin/plugin.json`. It 
 
 ## Without the plugin
 Copy the folder of a skill from `claudeskills/skills/` into `.claude/skills/` in your project, or into `~/.claude/skills/`. It works the same, but it gets no updates.
+
+## Why it is built this way
+The decisions behind the plugin, for the owner and for anyone who changes it.
+- **One plugin for all skills.** Claude loads a skill only when its description matches, so an unused skill costs almost nothing. The plugin can be split later if it grows too big.
+- **Skills use the templates.** A skill never writes a file by hand when a `dotnet new` template of the [template pack](../templates/README.md) can write it. A developer without Claude can use the templates alone. A skill does what a template cannot: pick the project and the folder, change a line in an existing file, add the test, run the build and explain the next step. When the templates are not installed, the skill stops and shows the install command, and runs it only when the developer says yes.
+- **No template for a job or for the tests of a module.** The files of a job are a service request and its handler, which the service request template creates with a test. The tests of caching, the inbox, the outbox, translations and the user come from the "Tests" chapter of each module readme, and those examples run as tests in the module test projects.
+- **The module readme is the truth.** A skill holds the workflow and as few API names as possible. It reads the readme of the module version the project uses: `modules/<Module>/README.md` for a project reference, and the readme packed into the NuGet package for a package reference. When a skill and the readme disagree, Claude follows the readme. A check in the docs check fails when a name in a skill is not in the generated `namespaces` pages.
+- **The plugin has its own version.** It is raised by hand when a skill changes and does not follow the version of the modules, so a change to a skill needs no module release. It stays `0.1.0` until the first `v` tag exists.
+- **Every skill was tried on a throwaway service.** Each skill ran on a service made with the `cat-service` or `cat-system` template, so wrong template names, missing packages and wrong namespaces showed up in a build. Fixes went back into the skills.
+- **The evals build nothing.** They show that a skill fires and gives the right plan. A build check inside `claude plugin eval` needs shell tools, which need a sandbox that native Windows does not have. That the files a skill writes build is checked by `dotnet cake --target=TemplateTest`.
+- **The whole repository is cloned.** A developer who adds the marketplace clones the repository, which is public and small. One repository keeps a module and its skill in step. The sparse command in "Install" limits the clone.
