@@ -15,7 +15,7 @@ description: Add an own source, meter or exporter to the telemetry of a service 
 1. Ask what to measure or trace, and where it goes. A service made with `cat-service` calls `Cat.Telemetry` in `Program.cs`. A service with Aspire may set it up in its `ServiceDefaults`. Find which one before you add anything.
 2. Name the source or meter by the convention of "Names of the sources, the meters and the tags". Follow the names that the module uses.
 3. Add the source, the meter or the exporter with the call that "Add your own source, meter or exporter" shows. Add it where the service sets up the telemetry, not in a handler.
-4. Use the source or the meter where the work happens. Keep the core service clean: hold the `ActivitySource` or `Meter` in a small class that the handler gets through its constructor.
+4. Use the source or the meter where the work happens. Keep the core service clean: hold the `ActivitySource` or `Meter` in a small class that the handler gets through its constructor. Run `dotnet new list cat-` first. When it shows nothing, stop and show `dotnet new install gmarginet.Cat.Templates`, and run it only when the developer says yes. Then run `dotnet new cat-telemetry -n <Name> -S <Service>`. It writes the class and a test. Register the class as a singleton, and add its `Name` to the callbacks of step 3.
 5. Add a test as "Tests" shows.
 6. Run `dotnet build` and `dotnet test`. Fix what fails.
 

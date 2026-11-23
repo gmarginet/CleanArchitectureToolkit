@@ -16,7 +16,7 @@ description: Map a SQL Server table to a message with change data capture using 
 1. Ask which table to capture and which message it becomes. A table without a mapping gives a general change message.
 2. Capture needs the SQL Server Agent, or a managed service that runs the capture job. Tell the developer, and tell them that they run `sys.sp_cdc_enable_db` and `sys.sp_cdc_enable_table` once. The module never switches capture on. Write the script and let the developer run it.
 3. Add the packages and register the reader with `AddCatSqlCdc`, the table with its capture instance name, and the sink. The message sink needs `Cat.Messaging`, see `cat-add-message`.
-4. Write the typed message and the mapping of the table, as "Map a table to a message" shows. A mapped message inherits from the event message base.
+4. Run `dotnet new list cat-`. When it shows nothing, stop and show `dotnet new install gmarginet.Cat.Templates`, and run it only when the developer says yes. Then run `dotnet new cat-cdc-mapping -n <Table> -S <Service>`. It writes the typed message, the mapping and a test. Change the properties and the column names to the table, and register the mapping with `AddTable` as "Map a table to a message" shows. A mapped message inherits from the event message base.
 5. Fill in the `CatSqlCdc` section of the settings. The connection needs the rights to create the schema `catcdc` and to read the change tables.
 6. The receiver needs the inbox, because delivery is at least once. See `cat-add-inbox`.
 7. Run `dotnet build` and `dotnet test`. A real test needs SQL Server with the agent, so say if you did not run one.
