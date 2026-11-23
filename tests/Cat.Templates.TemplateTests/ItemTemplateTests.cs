@@ -98,6 +98,11 @@ public class ItemTemplateTests
         await _runner.RunItemAsync(folder, "cat-message-handler", "OrderShipped", service, flag);
         await _runner.RunItemAsync(folder, "cat-saga", "OrderPay", service, flag);
 
+        // The mapping of a captured change needs the abstractions of Cat.Sql.Cdc in the core. The telemetry item needs no package.
+        await _runner.AddCatPackageAsync(folder, $"{service}.CoreService", "gmarginet.Cat.Sql.Cdc.Abstractions");
+        await _runner.RunItemAsync(folder, "cat-cdc-mapping", "OrderPrice", service, flag);
+        await _runner.RunItemAsync(folder, "cat-telemetry", "OrderPlace", service, flag);
+
         // The project templates write a project folder. The developer adds it to the solution and gives it its package.
         await _runner.RunProjectTemplateAsync(folder, "cat-api-client", service);
         await _runner.AddProjectToSolutionAsync(folder, service, $"{service}.Api.Client");
@@ -143,6 +148,9 @@ public class ItemTemplateTests
             $"{service}.CoreService/ServiceRequestHandlers/OrderShippedHandler.cs",
             $"{service}.CoreService/Workflows/OrderPaySaga.cs",
             $"{service}.CoreService/Messages/OrderPayRequested.cs",
+            $"{service}.Contracts/Messages/OrderPriceChanged.cs",
+            $"{service}.CoreService/Cdc/OrderPriceChangeMapper.cs",
+            $"{service}.CoreService/Telemetry/OrderPlaceTelemetry.cs",
             $"{service}.Api.Client/{service}.Api.Client.csproj",
             $"{service}.Api.Gateway/Program.cs"
         ];

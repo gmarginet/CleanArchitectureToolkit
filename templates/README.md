@@ -149,6 +149,8 @@ Every template that writes a test takes `--Tests false` for a service without a 
 | `cat-saga-table` | The table `CatSagas` of `Cat.Sagas.EFCore`. | `--Database` | |
 | `cat-translation-table` | The table `Translation` of `Cat.Localizations.EFCore`. | `--Database` | |
 | `cat-jobrun-table` | The table `CatJobRun` of `Cat.Scheduling.EFCore`. | `--Database` | |
+| `cat-telemetry` | A class that holds an own `ActivitySource` and `Meter`, and a test. Add its `Name` to the callbacks of `AddCatTelemetry`. | | |
+| `cat-cdc-mapping` | The message of a captured table change, the mapping of a `CatChange` to it and a test, for SQL Server. Register the mapping with `AddTable`. | | `Cat.Messaging.Abstractions` in Contracts, `Cat.Sql.Cdc.Abstractions` and `Cat.Messaging.Abstractions` in the core |
 | `cat-dapper-query` | A Dapper query with its handler and its `.sql` file. | | `Cat.Dapper` and `Cat.Dapper.SqlFiles` in Infrastructure, and `<AdditionalFiles Include="**/*.sql" />` in its project file |
 | `cat-dapper-command` | A Dapper command with its handler and its `.sql` file. | | The same as `cat-dapper-query` |
 | `cat-message` | A message in Contracts, an event or a command. | `--Kind` | `Cat.Messaging.Abstractions` in Contracts |
