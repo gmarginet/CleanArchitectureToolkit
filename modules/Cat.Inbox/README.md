@@ -102,9 +102,11 @@ The store is plain EF Core, so it works on SQL Server and on PostgreSQL with the
 
 ### Skip a repeated webhook
 
-Put `WithCatInbox` on the endpoint. It needs `Cat.Inbox.AspNetCore`. The id of the call is the value of a header, or a value that you read from an argument the endpoint already bound.
+Put `WithCatInbox` on the endpoint. It needs `Cat.Inbox.AspNetCore`, and the namespace `Cat.Inbox.AspNetCore.Extensions`. The id of the call is the value of a header, or a value that you read from an argument the endpoint already bound.
 
 ```csharp
+using Cat.Inbox.AspNetCore.Extensions;
+
 // The provider sends its event id in a header.
 app.MapPost("/webhooks/refund", HandleRefund).WithCatInbox(header: "webhook-id");
 
