@@ -22,6 +22,7 @@ A CAT module is a toolbox part. Add only the module the developer asked for, and
 6. Say what the module gives now and which skill uses it next. For example `cat-cache-query` for caching, `cat-add-resilience` for a profile on an `HttpClient`.
 
 ## Rules
+- Never add a package with `dotnet add package --version`. It writes a fixed version into `Directory.Packages.props`, and then `CatVersion` no longer updates that package. Add a version line with `$(CatVersion)` to `Directory.Packages.Cat.props`, and a package reference without a version to the project.
 - The core service never references an implementation project.
 - A module never forces another module on the developer. Add a second module only when the readme says that the first one cannot work without it, and say so.
 - The skills for a single task, such as `cat-add-job` or `cat-add-inbox`, do this and more for their module. Use them when one fits.

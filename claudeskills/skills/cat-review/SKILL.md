@@ -12,7 +12,7 @@ Check the service and report. Change nothing unless the developer asks for the f
 2. Find out which CAT modules the service uses. Read its `*.csproj` files and `Directory.Packages.Cat.props`. For each module that matters to a finding, read its readme, which is `modules/<Module>/README.md` for a project reference, and `README.md` in `~/.nuget/packages/gmarginet.<module in lower case>/<version>/` for a package reference. The readme is the truth.
 
 ## What to check
-1. **References.** The core service references only `Abstractions` projects of CAT modules. No project of the core references `Infrastructure`, `Api` or a database package. `Contracts` references nothing of the service.
+1. **References.** The core service references only `Abstractions` projects of CAT modules. The two exceptions are `Cat.Validators` and `Cat.FluentWorkflows`, because validators and workflows are written in the core, and the template adds them. Any other package in the core is a finding, such as `Microsoft.EntityFrameworkCore`. No project of the core references `Infrastructure`, `Api` or a database package. `Contracts` references nothing of the service.
 2. **Where code lives.** Handlers that use the database sit in `Infrastructure`. Entities sit in `DataModels`. Endpoints sit in `Api`, and hold no logic.
 3. **Registration.** Each module the service uses has its registration call, and each registration has its package. A module that is registered and never used is a finding. So is a package that is referenced and never registered.
 4. **Responses.** Handlers return responses and do not throw for an expected failure, such as a missing item. Errors come from the error definitions of the service, with a prefix that no other area uses.

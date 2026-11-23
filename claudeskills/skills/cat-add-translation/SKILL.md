@@ -14,7 +14,7 @@ description: Mark an entity as translatable, map the translation table and read 
 ## Steps
 1. Ask which entity and which fields get translations, and which cultures the service supports.
 2. Mark the entity with `ICatTranslatable`. `DataModels` needs only `Cat.Localizations.Abstractions`, so add that one there.
-3. Map the table in `OnModelCreating` of the context and register the translator, as the two chapters show. Both need `Cat.Localizations` in `Infrastructure`.
+3. Map the table in `OnModelCreating` of the context and register the translator, as the two chapters show. Both need `Cat.Localizations.EFCore` in `Infrastructure`. `AddCatTranslations` is in `Cat.Localizations.EFCore` and `AddCatLocalizations` in `Cat.Localizations.EFCore.Extensions`.
 4. Add the translation table. A code first service gets it through a migration. A database first service gets the table file from `dotnet new cat-translation-table --Database <SqlServer|PostgreSQL>`, run in the folder of the solution. Run `dotnet new list cat-` first. When it shows nothing, stop and show `dotnet new install gmarginet.Cat.Templates`, and run it only when the developer says yes. Say that nothing compares the table with the model.
 5. Read the text in the handler through `ICatTranslator`, with the default text of the entity. Read many texts with one call, not one call per row.
 6. Save a translation with `SetTextAsync` and the `SaveChanges` of the entity change, so both succeed or fail together.
