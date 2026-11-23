@@ -105,7 +105,7 @@ dotnet new install gmarginet.Cat.Templates
 claude plugin eval claudeskills --no-publish --runs 1
 ```
 
-The cases do not build a service yet. They show that a skill fires and gives the right plan, and not that the files it writes build.
+The cases build nothing. They show that a skill fires and gives the right plan. That the files a skill writes build is checked by `dotnet cake --target=TemplateTest`, because the files come from the templates.
 
 ## Keep the skills up to date
 The plugin has its own version in `claudeskills/.claude-plugin/plugin.json`. It does not follow the version of the modules. Claude Code updates the plugin when that version changes, so a change to a skill reaches you with the next version of the plugin. Update it with `/plugin marketplace update cat-toolkit` and `/plugin update cat@cat-toolkit`.
