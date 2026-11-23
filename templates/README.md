@@ -144,6 +144,11 @@ Every template that writes a test takes `--Tests false` for a service without a 
 | `cat-decorator` | A decorator for commands, queries or service requests and a test. | `--For` | `Cat.Decorators.Abstractions` in the core |
 | `cat-entity` | The entity in DataModels and its configuration in Infrastructure, for the chosen database. | `--Database` | |
 | `cat-table` | The `.sql` table file of a database first service. On SQL Server it goes in the SQL project, on PostgreSQL in the scripts folder. | `--Database` | |
+| `cat-inbox-table` | The table `CatInbox` of `Cat.Inbox.EFCore`, as a `.sql` file for a database first service. | `--Database` | |
+| `cat-outbox-table` | The table `CatOutbox` of `Cat.Outbox.EFCore`. | `--Database` | |
+| `cat-saga-table` | The table `CatSagas` of `Cat.Sagas.EFCore`. | `--Database` | |
+| `cat-translation-table` | The table `Translation` of `Cat.Localizations.EFCore`. | `--Database` | |
+| `cat-jobrun-table` | The table `CatJobRun` of `Cat.Scheduling.EFCore`. | `--Database` | |
 | `cat-dapper-query` | A Dapper query with its handler and its `.sql` file. | | `Cat.Dapper` and `Cat.Dapper.SqlFiles` in Infrastructure, and `<AdditionalFiles Include="**/*.sql" />` in its project file |
 | `cat-dapper-command` | A Dapper command with its handler and its `.sql` file. | | The same as `cat-dapper-query` |
 | `cat-message` | A message in Contracts, an event or a command. | `--Kind` | `Cat.Messaging.Abstractions` in Contracts |

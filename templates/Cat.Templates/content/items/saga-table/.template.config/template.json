@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Gert Marginet",
+  "classifications": [ "Clean Architecture" ],
+  "identity": "gmarginet.Cat.Templates.SagaTable",
+  "name": "CAT saga table",
+  "shortName": "cat-saga-table",
+  "description": "The table CatSagas of Cat.Sagas.EFCore, for a database first service. On SQL Server it goes into the SQL project, on PostgreSQL into the scripts folder. Run it in the folder of the solution of a service.",
+  "tags": { "language": "C#", "type": "item" },
+  "preferNameDirectory": false,
+  "sources": [
+    {
+      "modifiers": [
+        { "condition": "(!SqlServer)", "exclude": [ "ServiceName.Database/Tables/**" ] },
+        { "condition": "(!PostgreSQL)", "exclude": [ "ServiceName.Database/Scripts/**" ] }
+      ]
+    }
+  ],
+  "symbols": {
+    "ServiceName": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "The full name of the service, such as Contoso.Shop.Orders.",
+      "isRequired": true,
+      "replaces": "ServiceName",
+      "fileRename": "ServiceName"
+    },
+    "Database": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "The database of the service.",
+      "choices": [
+        { "choice": "SqlServer", "description": "SQL Server" },
+        { "choice": "PostgreSQL", "description": "PostgreSQL" }
+      ],
+      "defaultValue": "SqlServer"
+    },
+    "SqlServer": {
+      "type": "computed",
+      "value": "(Database == \"SqlServer\")"
+    },
+    "PostgreSQL": {
+      "type": "computed",
+      "value": "(Database == \"PostgreSQL\")"
+    }
+  }
+}

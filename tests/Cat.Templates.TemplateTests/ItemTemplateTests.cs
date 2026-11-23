@@ -78,6 +78,10 @@ public class ItemTemplateTests
         if (approach == "DatabaseFirst")
         {
             await _runner.RunItemAsync(folder, "cat-table", "Product", service, $"--Database {databaseName}");
+            foreach (var table in new[] { "inbox", "outbox", "saga", "translation", "jobrun" })
+            {
+                await _runner.RunItemAsync(folder, $"cat-{table}-table", table, service, $"--Database {databaseName}");
+            }
         }
 
         // The messaging items need the abstractions in the Contracts and the core project, the saga needs its module and its fake.
@@ -144,7 +148,13 @@ public class ItemTemplateTests
         ];
         if (approach == "DatabaseFirst")
         {
-            files = [.. files, database == "PostgreSQL" ? $"{service}.Database/Scripts/Product.sql" : $"{service}.Database/Tables/Product.sql"];
+            var tableFolder = database == "PostgreSQL" ? "Scripts" : "Tables";
+            files =
+            [
+                .. files,
+                .. new[] { "Product", "CatInbox", "CatOutbox", "CatSagas", "Translation", "CatJobRun" }
+                    .Select(table => $"{service}.Database/{tableFolder}/{table}.sql")
+            ];
         }
         foreach (var file in files)
         {
