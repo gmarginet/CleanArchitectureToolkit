@@ -152,7 +152,7 @@ using Cat.ServiceRequests.Extensions;
 builder.Services.AddCatServiceRequestsModule(typeof(OrderPlacedHandler));
 builder.Services.AddCatMessagingModule();
 builder.Services.AddCatMessagingAzureServiceBus(options =>
-    options.ConnectionString = builder.Configuration.GetConnectionString("servicebus")!);
+    options.ConnectionString = builder.Configuration.GetConnectionString("messaging")!);
 builder.Services.AddCatEventProcessor(builder.Configuration, processor => processor
     .Receive<OrderPlaced>()
     .Receive<ReserveStock>(options => options.MaxConcurrentCalls = 4));

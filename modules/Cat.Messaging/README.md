@@ -124,7 +124,7 @@ using Cat.Messaging.Extensions;
 
 builder.Services.AddCatMessagingModule();
 builder.Services.AddCatMessagingAzureServiceBus(options =>
-    options.ConnectionString = builder.Configuration.GetConnectionString("servicebus")!);
+    options.ConnectionString = builder.Configuration.GetConnectionString("messaging")!);
 ```
 
 The module serializes with System.Text.Json and sets the content type to `application/json`. It does not support another serializer.
@@ -258,7 +258,7 @@ The module starts from the defaults of Azure Service Bus and sets only what it n
 ```csharp
 builder.Services.AddCatMessagingAzureServiceBus(options =>
 {
-    options.ConnectionString = builder.Configuration.GetConnectionString("servicebus")!;
+    options.ConnectionString = builder.Configuration.GetConnectionString("messaging")!;
     options.ConfigureClient = client => client.RetryOptions.MaxRetries = 5;
     options.ConfigureQueue = queue => queue.MaxDeliveryCount = 5;
 });
