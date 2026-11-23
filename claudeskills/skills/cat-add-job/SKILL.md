@@ -14,7 +14,7 @@ A job sends a service request on a schedule as the system user. Each run claims 
 
 ## Steps
 1. Ask what the job does and how often. Turn the schedule into a cron expression and say it back in words, with the time zone.
-2. A service made with `--Jobs true` has the scheduler already, in `Extensions/SchedulerExtensions.cs`, with one example job. Otherwise switch it on as "Switch the scheduler on" says, and add the table `CatJobRun`. Database first services get it as a table file, see `cat-add-entity`.
+2. A service made with `--Jobs true` has the scheduler already, in `Extensions/SchedulerExtensions.cs`, with one example job. Otherwise switch it on as "Switch the scheduler on" says, and add the table `CatJobRun`. Database first services get it from `dotnet new cat-jobrun-table --Database <SqlServer|PostgreSQL>`, run in the folder of the solution.
 3. The work of the job is a service request with a handler. Add it with `cat-add-service-request`, and name it for the work, such as `OrderCleanupJobRequest`.
 4. Declare the job as "Declare a job" shows, following the line of the example job. Put the cron expression in `appsettings.json` under `CatScheduling:Jobs`, so it changes without a build.
 5. Add a test of the job as "Test your jobs" shows.

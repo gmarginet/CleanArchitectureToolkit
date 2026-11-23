@@ -14,7 +14,7 @@ The outbox saves the message in the same transaction as the data change. A worke
 ## Steps
 1. Check that the service has `Cat.Messaging` and an EF Core database. When it has no messaging, offer `cat-add-message` first.
 2. Add the packages and turn the outbox on with the call of "Turn the outbox on", on the context of the service. Mind the namespaces: `AddCatOutbox()` on the `ModelBuilder` is in `Cat.Outbox.EFCore`, `AddCatOutboxEfCore` is in `Cat.Outbox.EFCore.Extensions`, and `AddCatOutbox(options)` on the services is in `Cat.Outbox.Extensions`.
-3. Add the outbox table. A code first service gets it through a migration. A database first service gets a table file, see `cat-add-entity`.
+3. Add the outbox table. A code first service gets it through a migration. A database first service gets the table file from `dotnet new cat-outbox-table --Database <SqlServer|PostgreSQL>`, run in the folder of the solution. Run `dotnet new list cat-` first. When it shows nothing, stop and show `dotnet new install gmarginet.Cat.Templates`, and run it only when the developer says yes. Say that nothing compares the table with the model of the outbox.
 4. Send the messages through the sender as before. With the outbox on, the sender stores the message with the next `SaveChanges`. Check that the handler calls `SaveChanges`, because nothing is sent before it.
 5. Add the cleanup, as "Clean the outbox" shows.
 6. Add a test that checks that the row exists after the save.

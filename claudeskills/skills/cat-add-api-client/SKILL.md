@@ -15,8 +15,8 @@ The service that is called offers a client project, `Name.Api.Client`. The servi
 ## Steps for the service that offers the client
 1. A service made with `--ApiClient true` has the project already. Otherwise run `dotnet new cat-api-client --help`, then run the template in the folder of the solution, and add the project to the solution with `dotnet sln add`.
 2. The package version of `Cat.Api.Client` must be in `Directory.Packages.Cat.props`. Add it with `$(CatVersion)` when it is missing.
-3. Save the OpenAPI document of the service in the client project, and fill in the settings of `nswag.json`: the `json` file, the `className`, the `namespace` and the `output`. The first build copies the settings template to `nswag.json`.
-4. Generate the client, as "Generate the client" says. The generated code is checked in.
+3. Build the client project once. The first build copies the settings template to `nswag.json`, because both templates set `CatApiClientNswagTemplate`. Save the OpenAPI document of the service in the client project, and fill in the settings of `nswag.json`: the `json` file, the `className`, the `namespace` and the `output`.
+4. NSwag is a local tool. When the solution has no `dotnet-tools.json`, run `dotnet new tool-manifest` and `dotnet tool install nswag.consolecore` in the folder of the solution. Generate the client, as "Generate the client" says. The generated code is checked in.
 5. Say whether the client shares the `Contracts` of the service or has its own models. That is the choice of the developer. The default is its own models.
 
 ## Steps for the service that calls it

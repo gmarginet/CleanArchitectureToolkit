@@ -14,7 +14,7 @@ The inbox remembers the messages that were handled, so one that arrives twice ru
 ## Steps
 1. Ask what repeats: a webhook from outside, or a bus message. The bus case has its own path through `Cat.EventProcessor`, see `cat-add-message-handler`, and its readme chapter "The inbox".
 2. Add the packages and register the store with the call of "Set up the store". The store keeps its rows in the database of the service, in the table `CatInbox`.
-3. Add the table. A code first service gets it through a migration. A database first service gets a table file, see `cat-add-entity`, and it must match the model of the inbox. Say that nothing compares the two.
+3. Add the table. A code first service gets it through a migration. A database first service gets the table file from `dotnet new cat-inbox-table --Database <SqlServer|PostgreSQL>`, run in the folder of the solution. Run `dotnet new list cat-` first. When it shows nothing, stop and show `dotnet new install gmarginet.Cat.Templates`, and run it only when the developer says yes. Say that nothing compares the table with the model of the inbox.
 4. For a webhook, wrap the handling as "Skip a repeated webhook" shows, with the id that the sender gives each delivery.
 5. Add the cleanup, as "Clean the inbox" shows, so the table does not grow without end.
 6. Add a test that sends the same message twice and checks that the work ran once.
