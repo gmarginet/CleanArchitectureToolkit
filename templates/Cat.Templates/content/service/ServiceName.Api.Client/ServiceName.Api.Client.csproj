@@ -3,6 +3,8 @@
     <PropertyGroup>
         <!-- Any caller can use the client, so it targets netstandard2.0, as the modules do. -->
         <TargetFramework>netstandard2.0</TargetFramework>
+        <!-- The next build copies the template of the NSwag settings to nswag.json. An existing nswag.json is never overwritten. -->
+        <CatApiClientNswagTemplate>true</CatApiClientNswagTemplate>
     </PropertyGroup>
 
     <ItemGroup>
