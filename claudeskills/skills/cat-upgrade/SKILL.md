@@ -9,7 +9,7 @@ The toolkit has no release notes. The module readme that ships inside every pack
 
 ## Before you start
 1. Find the version in use: `CatVersion` in `Directory.Packages.Cat.props`, or the `Version` of the CAT packages in `Directory.Packages.props`. A project that references the modules as projects has no version. Say so and stop, because there is nothing to upgrade.
-2. Ask for the target version, or find the newest one: `dotnet package search gmarginet.Cat.Commands --exact-match`. A version does not always exist for every package. Check each CAT package of the solution with `dotnet package search <package> --exact-match --prerelease`, and name the packages that lack the target version. When restore fails with NU1102 for a CAT package, that package has no such version. Do not change the version of that package alone. Ask the developer to choose the newest version that has all of them.
+2. Ask for the target version, or find the newest one: `dotnet package search gmarginet.Cat.Commands --exact-match`. Every publish pushes all packages, one after the other, and nuget.org needs a few minutes to list them. Right after a publish the newest version can exist for some packages only. When restore fails with NU1102 for a CAT package, wait a few minutes and restore again, or use the version before. Never change the version of one package alone.
 3. Start from a clean working tree, or tell the developer to commit first. The upgrade changes many files.
 
 ## Steps
