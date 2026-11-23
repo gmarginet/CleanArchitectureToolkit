@@ -8,5 +8,6 @@
   "homepage": "https://gmarginet.github.io/CleanArchitectureToolkit/",
   "repository": "https://github.com/gmarginet/CleanArchitectureToolkit",
   "license": "MIT",
+  "icon": "./icon.png",
   "keywords": ["dotnet", "clean-architecture", "cat"]
 }
