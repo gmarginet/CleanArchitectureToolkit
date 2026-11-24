@@ -1,10 +1,18 @@
 <#
-Unlists every listed alpha version of the packages of one nuget.org owner. Rc and stable versions stay listed.
+Unlists the old pre-release versions of the packages of one nuget.org owner.
+
+What goes:
+- Every alpha version, such as 0.0.0-alpha.0.516 or 1.0.1-alpha.0.3.
+- Every in-between rc build, such as 1.0.0-rc.1.6. These are the builds of pushes to master after the tag v1.0.0-rc.1.
+- With -IncludeTaggedRc also the rc versions of a tag, such as 1.0.0-rc.1. Use it after a stable tag.
+Stable versions and the version in -Keep always stay listed.
 
 The build workflow runs it after a tag. Run it yourself with -DryRun to see what it would unlist.
 
 Parameters:
 - Owner: the nuget.org user that owns the packages.
+- IncludeTaggedRc: also unlists the rc versions of a tag. Set it after a stable release.
+- Keep: a version that is never unlisted, the one that the tag just published.
 - IdPattern: only package ids that match are touched. The default covers the modules and the template pack, which all start with gmarginet.Cat.
 - TimeLimit: stops unlisting after this time, 50 minutes by default, because the temporary key of the workflow lasts one hour.
 - DelayMilliseconds: the pause after every unlist call, one second by default, to stay under the quota of nuget.org. When nuget.org still answers with a quota error, the script stops without a failure.
@@ -15,6 +23,8 @@ Unlisting is safe to repeat. A run only looks at versions that are still listed,
 #>
 param(
     [Parameter(Mandatory)][string]$Owner,
+    [switch]$IncludeTaggedRc,
+    [string]$Keep = '',
     [string]$IdPattern = '^gmarginet\.Cat\.',
     [TimeSpan]$TimeLimit = [TimeSpan]::FromMinutes(50),
     [int]$DelayMilliseconds = 1000,
@@ -25,6 +35,10 @@ $ErrorActionPreference = 'Stop'
 
 $apiKey = $env:NUGET_API_KEY
 if (-not $DryRun -and [string]::IsNullOrWhiteSpace($apiKey)) { throw 'NUGET_API_KEY is not set.' }
+
+# An alpha, or an rc with one more number after the tag number (1.0.0-rc.1.6). A tagged rc (1.0.0-rc.1) only with -IncludeTaggedRc.
+$rcPattern = if ($IncludeTaggedRc) { '-rc\.\d+(\.\d+)?$' } else { '-rc\.\d+\.\d+$' }
+$versionPattern = "-alpha|$rcPattern"
 
 # Versions such as 0.0.0-alpha.0.516 are SemVer 2. The search hides them without semVerLevel.
 $search = Invoke-RestMethod "https://azuresearch-usnc.nuget.org/query?q=owner:$Owner&prerelease=true&semVerLevel=2.0.0&take=1000"
@@ -45,7 +59,7 @@ foreach ($id in $ids) {
 
     $versions = @($items |
         ForEach-Object { $_.catalogEntry } |
-        Where-Object { $_.listed -and $_.version -match '-alpha' } |
+        Where-Object { $_.listed -and $_.version -match $versionPattern -and $_.version -ne $Keep } |
         ForEach-Object { $_.version })
 
     foreach ($version in $versions) {

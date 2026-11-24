@@ -10,7 +10,7 @@ Push a tag that starts with `v`, such as `v1.0.0-rc.1`. The build workflow `.git
 
 1. **Integration tests.** Needs Docker, which the runner has.
 2. **Release.** Runs the tests, packs and publishes every package to nuget.org. MinVer reads the tag, so the package version is the tag without the `v`.
-3. **Unlist alpha.** Unlists every alpha version of the packages on nuget.org. Runs next to the GitHub release, so a failure here never blocks it.
+3. **Unlist old pre-releases.** Unlists the alpha versions and the in-between rc builds of the packages on nuget.org, see [Unlisting the old pre-releases](#unlisting-the-old-pre-releases). Runs next to the GitHub release, so a failure here never blocks it.
 4. **GitHub release.** Creates the release on the homepage with `gh release create`.
 
 ## Rules for a tag
@@ -29,17 +29,19 @@ Push a tag that starts with `v`, such as `v1.0.0-rc.1`. The build workflow `.git
 - **Full changelog:** a link to the comparison with the previous tag.
 - **Assets:** only the two source archives that GitHub adds to every release. The packages stay on nuget.org.
 
-## Unlisting the alpha packages
+## Unlisting the old pre-releases
 
-- **Rule:** every listed version with `-alpha` in it is unlisted on each tag run. Rc and stable versions stay listed. nuget.org only unlists. A package stays available for an exact version reference.
-- **Script:** `.github/scripts/Unlist-AlphaPackages.ps1`. It finds the packages with the search API (owner and the id prefix `gmarginet.Cat.`) and reads the `listed` flag from the registration data.
+- **Rule:** every tag leaves only the tagged versions listed. nuget.org only unlists. A package stays available for an exact version reference.
+  - **Any tag:** unlists every alpha version and every in-between rc build, such as `1.0.0-rc.1.6`. These are the builds of the pushes to `master` after a tag. The tagged versions, such as `1.0.0-rc.1`, stay listed. The version the tag just published is never unlisted.
+  - **A stable tag, such as `v1.0.0`:** also unlists the tagged rc versions. Only stable versions are left.
+- **Script:** `.github/scripts/Unlist-OldPrereleases.ps1`. It finds the packages with the search API (owner and the id prefix `gmarginet.Cat.`) and reads the `listed` flag from the registration data.
 - **Key:** the job logs in with `NuGet/login`, like the release job. The trusted publishing policy on nuget.org has the scope All, which includes unlist. No extra secret.
 - **Time limit:** the temporary key lasts one hour, so the script stops after 50 minutes. A big backlog takes several runs. The script only looks at versions that are still listed, so each run continues where the last one stopped.
 - **Quota:** nuget.org limits the unlist calls of a key. Without a pause the first run did about 250 and then got `403 (Quota Exceeded)` for the rest. The script now waits one second after every call (`-DelayMilliseconds`) and stops without a failure at the first quota error. The next run does the next batch.
 - **The next batch by hand:** see [Unlist the next batch](#unlist-the-next-batch). It needs no API key.
-- **Dry run:** `.\.github\scripts\Unlist-AlphaPackages.ps1 -Owner gmarginet -DryRun` shows what it would unlist and needs no key.
+- **Dry run:** `.\.github\scripts\Unlist-OldPrereleases.ps1 -Owner gmarginet -DryRun` shows what it would unlist and needs no key. Add `-IncludeTaggedRc` to see the list after a stable release.
 - **A run from your own machine:** set `NUGET_API_KEY` to a key with the unlist scope and run the script without `-DryRun`.
-- **Normal pushes to `master`:** no unlisting. They publish new alpha versions, and these stay listed until the next tag.
+- **Normal pushes to `master`:** no unlisting. After a tag they publish in-between builds such as `1.0.0-rc.1.6`, and these stay listed until the next tag. After a stable tag they publish alpha versions, such as `1.0.1-alpha.0.3`, which also stay listed until the next tag.
 
 ## Cut a release
 
@@ -50,13 +52,14 @@ Push a tag that starts with `v`, such as `v1.0.0-rc.1`. The build workflow `.git
 
 ## Unlist the next batch
 
-Use this to work off the backlog of alpha versions without a new tag. Each run unlists about 250 versions and stops at the quota of nuget.org.
+Use this to work off the backlog of old pre-release versions without a new tag. Each run unlists about 250 versions and stops at the quota of nuget.org.
 
-1. Count what is left: `.\.github\scripts\Unlist-AlphaPackages.ps1 -Owner gmarginet -DryRun`. It prints one `Would unlist` line for each version.
+1. Count what is left: `.\.github\scripts\Unlist-OldPrereleases.ps1 -Owner gmarginet -DryRun`. It prints one `Would unlist` line for each version.
 2. Open the Actions tab of the repository, pick the workflow "Publish CAT nuget packages" and choose **Run workflow** on `master`.
-3. Wait for the job "Unlist the alpha packages on nuget.org". The other jobs are skipped. A manual run runs no tests and publishes nothing.
-4. Read the end of the log. `Done. Unlisted N versions, 0 failed.` is a good run. A warning that the quota is exceeded is normal and stops the run without a failure.
-5. Repeat from step 2 until the dry run lists nothing. Rc and stable versions stay listed.
+3. Choose what the cleanup follows. `pre-release` is right until the first stable release. After `v1.0.0` choose `stable`, which also unlists the tagged rc versions.
+4. Wait for the job "Unlist the old pre-release packages on nuget.org". The other jobs are skipped. A manual run runs no tests and publishes nothing.
+5. Read the end of the log. `Done. Unlisted N versions, 0 failed.` is a good run. A warning that the quota is exceeded is normal and stops the run without a failure.
+6. Repeat from step 2 until the dry run lists nothing. Tagged rc versions stay listed until you choose `stable`, and stable versions always stay listed.
 
 The run uses the same temporary key as a tag run, so no API key is needed. The trusted publishing policy on nuget.org is bound to `build.yml`, which is why the manual run lives in that file. When `NuGet/login` fails, check the workflow file name in that policy.
 

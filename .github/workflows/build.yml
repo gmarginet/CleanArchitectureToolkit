@@ -9,9 +9,17 @@ on:
   pull_request:
     branches:
       - master
-  # A manual run only unlists the next batch of alpha packages. It tests and publishes nothing.
+  # A manual run only unlists the next batch of old pre-release packages. It tests and publishes nothing.
   # It lives in this file because the trusted publishing policy on nuget.org is bound to this workflow file.
   workflow_dispatch:
+    inputs:
+      after:
+        description: "Which release the cleanup follows. A stable release also unlists the tagged rc versions."
+        type: choice
+        options:
+          - pre-release
+          - stable
+        default: pre-release
 
 # A tag such as v1.0.0-rc.1 publishes the packages with the version of the tag and creates the GitHub release.
 # The skip-ci and skip-pub words in the message of the tagged commit are ignored for a tag.
@@ -103,8 +111,8 @@ jobs:
   # The temporary NuGet key lasts one hour, so this job logs in on its own and does not reuse the key of the release job.
   # The trusted publishing policy on nuget.org has all scopes, which includes unlisting.
   # After a tag it runs when the release succeeded. A manual run skips the release, so the condition looks at the event first.
-  unlist-alpha:
-    name: Unlist the alpha packages on nuget.org
+  unlist-old:
+    name: Unlist the old pre-release packages on nuget.org
     needs: release
     if: "!cancelled() && (github.event_name == 'workflow_dispatch' || (startsWith(github.ref, 'refs/tags/v') && needs.release.result == 'success'))"
     runs-on: ubuntu-latest
@@ -121,12 +129,27 @@ jobs:
         with:
           user: ${{ secrets.NUGET_USER }}
 
-      - name: Unlist the alpha versions
+      # Every tag unlists the alpha versions and the in-between rc builds. A stable tag, or a manual run with "stable", also unlists the tagged rc versions.
+      # After a tag the version of the tag stays listed. A manual run has no tag.
+      - name: Unlist the old pre-release versions
         shell: pwsh
         env:
           NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
           NUGET_USER: ${{ secrets.NUGET_USER }}
-        run: ./.github/scripts/Unlist-AlphaPackages.ps1 -Owner $env:NUGET_USER
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
+          AFTER: ${{ inputs.after }}
+        run: |
+          $options = @{ Owner = $env:NUGET_USER }
+          if ($env:EVENT_NAME -eq 'workflow_dispatch') {
+              if ($env:AFTER -eq 'stable') { $options.IncludeTaggedRc = $true }
+          }
+          else {
+              $version = $env:REF_NAME.TrimStart('v')
+              $options.Keep = $version
+              if ($version -notmatch '-') { $options.IncludeTaggedRc = $true }
+          }
+          ./.github/scripts/Unlist-OldPrereleases.ps1 @options
 
   github-release:
     name: Create the GitHub release
