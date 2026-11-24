@@ -1,0 +1,115 @@
+name: Bug report
+description: A module does not work as documented.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time. A short, exact report is the fastest to fix.
+        For a question, use [Discussions](https://github.com/gmarginet/CleanArchitectureToolkit/discussions/categories/q-a).
+        For a security problem, use [private reporting](https://github.com/gmarginet/CleanArchitectureToolkit/security/advisories/new), not an issue.
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module
+      description: The module that has the bug. Pick the closest one when it is more than one.
+      options:
+        - Cat.Api.Client
+        - Cat.Api.Gateway
+        - Cat.Caching
+        - Cat.Commands
+        - Cat.Dapper
+        - Cat.Db.Errors
+        - Cat.Decorators
+        - Cat.EFCore
+        - Cat.EventAggregators
+        - Cat.EventProcessor
+        - Cat.Expressions
+        - Cat.Extensions
+        - Cat.FluentWorkflows
+        - Cat.Inbox
+        - Cat.IntegrationTesting
+        - Cat.Localizations
+        - Cat.Messaging
+        - Cat.Minimal.Api
+        - Cat.Outbox
+        - Cat.Queries
+        - Cat.Resilience
+        - Cat.Responses
+        - Cat.Sagas
+        - Cat.Scheduling
+        - Cat.ServiceRequests
+        - Cat.Sql.Cdc
+        - Cat.Telemetry
+        - Cat.UnitTesting
+        - Cat.Users
+        - Cat.Validators
+        - Template pack (gmarginet.Cat.Templates)
+        - Claude plugin (cat)
+        - Documentation
+        - Other or not sure
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      description: The version of the package, such as 1.0.0-rc.1.
+      placeholder: 1.0.0-rc.1
+    validations:
+      required: true
+  - type: dropdown
+    id: dotnet
+    attributes:
+      label: .NET version
+      options:
+        - .NET 10
+        - .NET 11
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: database
+    attributes:
+      label: Database
+      description: Only when the bug has to do with data access.
+      options:
+        - Not used
+        - SQL Server
+        - PostgreSQL
+        - MySQL
+        - Other
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, and what you saw.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce it
+      description: The smallest code that shows the bug. A failing unit test is perfect.
+      render: csharp
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error message or log
+      description: The full message, with the error code when there is one, such as CAT-VAL-1001.
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you send
+      options:
+        - label: I searched the open and closed issues, and this bug is not reported yet.
+          required: true
