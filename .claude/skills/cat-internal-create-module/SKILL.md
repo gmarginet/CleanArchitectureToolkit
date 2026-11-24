@@ -29,11 +29,13 @@ Set up a new module so it matches the others. New modules start with the status 
 7. **Check the generated pages.** They should appear in `modules/<ModuleName>/namespaces/`. If you need to change them, change the XML docs in the code and build again.
 8. **Module readme.** Run the `cat-internal-create-module-readme` skill for the new module. It reads the generated namespace summaries, so it comes after the build. Then add `<File Path="modules/<ModuleName>/README.md" />` to the module folder in the solution file.
 9. **Readme table.** Run the `cat-internal-create-readme` skill. The row of the module in the repo overview already exists when the module has a plan, so change its status and add the Readme badge and the Read more link to the module readme. A new module without a plan gets a new row. Recalculate the priorities too, as that skill describes.
+10. **Issue forms.** Add the module name to the `Module` dropdown of `.github/ISSUE_TEMPLATE/bug_report.yml` and `.github/ISSUE_TEMPLATE/feature_request.yml`, in alphabetical order. A module that is renamed or removed changes the same two lists.
 
 ## Done when
 - All projects and the test project build and the tests pass.
 - The module has a readme with all blocks filled and a correct table of contents.
 - The readme has a row for the module with the Building badge.
 - The solution file lists the folder, the readme, the projects and the test project.
+- The module is in the `Module` dropdown of both issue forms.
 
 Do not commit unless the owner asks for it.
