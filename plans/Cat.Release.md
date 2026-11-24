@@ -41,6 +41,7 @@
 <!-- no toc -->
 - [Phase 1](#phase-1)
 - [Phase 2](#phase-2)
+- [Phase 3](#phase-3)
 <!-- region end: Phases-->
 
 <!-- region start: Phase 1-->
@@ -104,3 +105,41 @@ Make the unlist script simpler, and add a way to unlist everything below a versi
 <!-- region start: PhaseOpenQuestions-->
 <!-- region end: PhaseOpenQuestions-->
 <!-- region end: Phase 2-->
+
+<!-- region start: Phase 3-->
+## Phase 3
+
+### Description
+<!-- region start: PhaseDescription-->
+Work on a `development` branch after the first stable version, so the code on `master` is always the code of the last stable version.
+
+#### Needs
+- [Phase 1](#phase-1): the triggers of `build.yml` change once, together with the tag-only publishing.
+
+#### Decided
+- The owner wants this once the first stable version is released.
+- The owner creates the branch. Claude never creates a branch on its own.
+- A release goes through a pull request from `development` to `master`. The owner tags `master` after the merge.
+- An urgent fix starts on a `bugfix` branch from `master`, because `development` holds unfinished work.
+  - A pull request merges the fix into `master`, and the owner tags the patch release.
+  - A second pull request merges `master` back into `development`, so the tags and the fix are on both lines.
+- The release pull request is merged with a merge commit, not a squash. The release notes are built from `git log --no-merges`, so they need the single commits.
+- A push to `development` runs the tests and publishes nothing, as a push to `master` does after phase 1.
+- The GitHub Pages site is built from `master`, so it matches what developers can install.
+- Feature work on `development` stays as direct commits, with no pull request for every change.
+- Direct pushes to `master` are blocked with a GitHub ruleset. `master` only changes through a pull request with a green build, and the owner is the one exception who can bypass it in an emergency. The ruleset is set on GitHub after the first stable version, not by a workflow. A tag is a different ref, so the release tag is not blocked.
+
+#### To check
+- Whether the repository can use a ruleset with required checks, and the name of the check that the ruleset requires.
+
+#### Facts to keep in mind
+- `build.yml` and `pages.yml` trigger on a push to `master` only. `build.yml` also runs on a pull request to `master`. It needs `development` as a target too, so the tests run before a release pull request is merged.
+- Whether the trusted publishing policy on nuget.org is bound to a branch or a ref is not checked. It is bound to the workflow file `build.yml`, which is an assumption.
+- MinVer needs the tags to be reachable from the branch it builds, so `development` must contain the merges back from `master`.
+- `CLAUDE.md` says to commit to the branch that is checked out, and that releases are automatic after a push to `master`. Both change with this phase, and `.github/RELEASING.md` too.
+<!-- region end: PhaseDescription-->
+
+### Open Questions
+<!-- region start: PhaseOpenQuestions-->
+<!-- region end: PhaseOpenQuestions-->
+<!-- region end: Phase 3-->
