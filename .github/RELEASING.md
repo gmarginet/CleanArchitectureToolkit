@@ -34,9 +34,11 @@ Push a tag that starts with `v`, such as `v1.0.0-rc.1`. The build workflow `.git
 - **Rule:** every listed version with `-alpha` in it is unlisted on each tag run. Rc and stable versions stay listed. nuget.org only unlists. A package stays available for an exact version reference.
 - **Script:** `.github/scripts/Unlist-AlphaPackages.ps1`. It finds the packages with the search API (owner and the id prefix `gmarginet.Cat.`) and reads the `listed` flag from the registration data.
 - **Key:** the job logs in with `NuGet/login`, like the release job. The trusted publishing policy on nuget.org has the scope All, which includes unlist. No extra secret.
-- **Time limit:** the temporary key lasts one hour, so the script stops after 50 minutes. A big backlog takes several tag runs. The script only looks at versions that are still listed, so each run continues where the last one stopped.
+- **Time limit:** the temporary key lasts one hour, so the script stops after 50 minutes. A big backlog takes several runs. The script only looks at versions that are still listed, so each run continues where the last one stopped.
+- **Quota:** nuget.org limits the unlist calls of a key. Without a pause the first run did about 250 and then got `403 (Quota Exceeded)` for the rest. The script now waits one second after every call (`-DelayMilliseconds`) and stops without a failure at the first quota error. The next run does the next batch.
+- **The next batch by hand:** open the Actions tab, pick the workflow "Publish CAT nuget packages" and choose **Run workflow** on `master`. A manual run only unlists. It runs no tests and publishes nothing. It uses the same temporary key as a tag run, so no API key is needed. Repeat it until the dry run lists nothing. The trusted publishing policy on nuget.org is bound to `build.yml`, which is why the manual run lives in that file.
 - **Dry run:** `.\.github\scripts\Unlist-AlphaPackages.ps1 -Owner gmarginet -DryRun` shows what it would unlist and needs no key.
-- **A manual run:** set `NUGET_API_KEY` to a key with the unlist scope and run the script without `-DryRun`.
+- **A run from your own machine:** set `NUGET_API_KEY` to a key with the unlist scope and run the script without `-DryRun`.
 - **Normal pushes to `master`:** no unlisting. They publish new alpha versions, and these stay listed until the next tag.
 
 ## Cut a release
