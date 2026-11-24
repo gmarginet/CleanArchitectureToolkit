@@ -9,13 +9,16 @@ on:
   pull_request:
     branches:
       - master
+  # A manual run only unlists the next batch of alpha packages. It tests and publishes nothing.
+  # It lives in this file because the trusted publishing policy on nuget.org is bound to this workflow file.
+  workflow_dispatch:
 
 # A tag such as v1.0.0-rc.1 publishes the packages with the version of the tag and creates the GitHub release.
 # The skip-ci and skip-pub words in the message of the tagged commit are ignored for a tag.
 jobs:
   integration-test:
     name: Run the integration tests
-    if: "startsWith(github.ref, 'refs/tags/v') || !contains(github.event.head_commit.message, 'skip-ci')"
+    if: "github.event_name != 'workflow_dispatch' && (startsWith(github.ref, 'refs/tags/v') || !contains(github.event.head_commit.message, 'skip-ci'))"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -37,7 +40,7 @@ jobs:
   release:
     name: Publish CAT nuget packages
     needs: integration-test
-    if: "startsWith(github.ref, 'refs/tags/v') || !contains(github.event.head_commit.message, 'skip-ci')"
+    if: "github.event_name != 'workflow_dispatch' && (startsWith(github.ref, 'refs/tags/v') || !contains(github.event.head_commit.message, 'skip-ci'))"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -99,10 +102,11 @@ jobs:
 
   # The temporary NuGet key lasts one hour, so this job logs in on its own and does not reuse the key of the release job.
   # The trusted publishing policy on nuget.org has all scopes, which includes unlisting.
+  # After a tag it runs when the release succeeded. A manual run skips the release, so the condition looks at the event first.
   unlist-alpha:
     name: Unlist the alpha packages on nuget.org
     needs: release
-    if: "startsWith(github.ref, 'refs/tags/v')"
+    if: "!cancelled() && (github.event_name == 'workflow_dispatch' || (startsWith(github.ref, 'refs/tags/v') && needs.release.result == 'success'))"
     runs-on: ubuntu-latest
     permissions:
       contents: read
