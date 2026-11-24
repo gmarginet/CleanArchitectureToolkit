@@ -10,14 +10,18 @@ namespace Cat.Validators.Rules;
 /// Fails with <see cref="CatValidatorErrorDefinitions.Length"/> otherwise.
 /// </summary>
 /// <typeparam name="TModel">The type being validated.</typeparam>
-internal class PropertyStringLengthValidatorRule<TModel>(
+/// <typeparam name="TProperty">The type of the property, a string or a sequence of characters.</typeparam>
+internal class PropertyStringLengthValidatorRule<TModel, TProperty>(
     int min,
     int max
-) : CatValidatorPropertyRuleBase<TModel, string>
+) : CatValidatorPropertyRuleBase<TModel, TProperty>
     where TModel : class
+    where TProperty : IEnumerable<char>?
 {
-    protected override List<ICatValidatorError> Validate(string value, string fieldName, TModel model)
+    protected override List<ICatValidatorError> Validate(TProperty property, string fieldName, TModel model)
     {
+        var value = property.AsText();
+
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (value is null) return CatValidatorResult.Valid();
 

@@ -484,17 +484,19 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// A <c>null</c> string passes. The minimum must be less than the maximum.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property, <c>string</c> or <c>string?</c>.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="min">The shortest allowed length.</param>
     /// <param name="max">The longest allowed length.</param>
     /// <returns>The options of the rule.</returns>
-    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, string> Length<TModel>(
-        this ICatValidatorPropertyRuleBuilder<TModel, string> builder,
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> Length<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
         int min,
         int max)
         where TModel : class
+        where TProperty : IEnumerable<char>?
     {
-        var newRule = new PropertyStringLengthValidatorRule<TModel>(min, max);
+        var newRule = new PropertyStringLengthValidatorRule<TModel, TProperty>(min, max);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -503,17 +505,19 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// A <c>null</c> string passes. The minimum must be less than the maximum.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property, <c>string</c> or <c>string?</c>.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="minFunc">Gets the shortest allowed length from the model.</param>
     /// <param name="maxFunc">Gets the longest allowed length from the model.</param>
     /// <returns>The options of the rule.</returns>
-    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, string> Length<TModel>(
-        this ICatValidatorPropertyRuleBuilder<TModel, string> builder,
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> Length<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
         Func<TModel, int> minFunc,
         Func<TModel, int> maxFunc)
         where TModel : class
+        where TProperty : IEnumerable<char>?
     {
-        var newRule = new PropertyStringLengthWithFuncValidatorRule<TModel>(minFunc, maxFunc);
+        var newRule = new PropertyStringLengthWithFuncValidatorRule<TModel, TProperty>(minFunc, maxFunc);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -522,15 +526,17 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// A <c>null</c> string passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property, <c>string</c> or <c>string?</c>.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="exactLength">The required length.</param>
     /// <returns>The options of the rule.</returns>
-    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, string> ExactLength<TModel>(
-        this ICatValidatorPropertyRuleBuilder<TModel, string> builder,
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> ExactLength<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
         int exactLength)
         where TModel : class
+        where TProperty : IEnumerable<char>?
     {
-        var newRule = new PropertyStringExactLengthValidatorRule<TModel>(exactLength);
+        var newRule = new PropertyStringExactLengthValidatorRule<TModel, TProperty>(exactLength);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -539,15 +545,17 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// A <c>null</c> string passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property, <c>string</c> or <c>string?</c>.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="exactLengthFunc">Gets the required length from the model.</param>
     /// <returns>The options of the rule.</returns>
-    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, string> ExactLength<TModel>(
-        this ICatValidatorPropertyRuleBuilder<TModel, string> builder,
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> ExactLength<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
         Func<TModel, int> exactLengthFunc)
         where TModel : class
+        where TProperty : IEnumerable<char>?
     {
-        var newRule = new PropertyStringExactLengthWithFuncValidatorRule<TModel>(exactLengthFunc);
+        var newRule = new PropertyStringExactLengthWithFuncValidatorRule<TModel, TProperty>(exactLengthFunc);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -556,15 +564,17 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// A <c>null</c> string passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property, <c>string</c> or <c>string?</c>.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="maximumLength">The longest allowed length.</param>
     /// <returns>The options of the rule.</returns>
-    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, string> MaximumLength<TModel>(
-        this ICatValidatorPropertyRuleBuilder<TModel, string> builder,
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> MaximumLength<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
         int maximumLength)
         where TModel : class
+        where TProperty : IEnumerable<char>?
     {
-        var newRule = new PropertyStringMaximumLengthValidatorRule<TModel>(maximumLength);
+        var newRule = new PropertyStringMaximumLengthValidatorRule<TModel, TProperty>(maximumLength);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -573,15 +583,17 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// A <c>null</c> string passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property, <c>string</c> or <c>string?</c>.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="maximumLengthFunc">Gets the longest allowed length from the model.</param>
     /// <returns>The options of the rule.</returns>
-    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, string> MaximumLength<TModel>(
-        this ICatValidatorPropertyRuleBuilder<TModel, string> builder,
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> MaximumLength<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
         Func<TModel, int> maximumLengthFunc)
         where TModel : class
+        where TProperty : IEnumerable<char>?
     {
-        var newRule = new PropertyStringMaximumLengthWithFuncValidatorRule<TModel>(maximumLengthFunc);
+        var newRule = new PropertyStringMaximumLengthWithFuncValidatorRule<TModel, TProperty>(maximumLengthFunc);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -590,15 +602,17 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// A <c>null</c> string passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property, <c>string</c> or <c>string?</c>.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="minimumLength">The shortest allowed length.</param>
     /// <returns>The options of the rule.</returns>
-    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, string> MinimumLength<TModel>(
-        this ICatValidatorPropertyRuleBuilder<TModel, string> builder,
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> MinimumLength<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
         int minimumLength)
         where TModel : class
+        where TProperty : IEnumerable<char>?
     {
-        var newRule = new PropertyStringMinimumLengthValidatorRule<TModel>(minimumLength);
+        var newRule = new PropertyStringMinimumLengthValidatorRule<TModel, TProperty>(minimumLength);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -607,15 +621,17 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// A <c>null</c> string passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property, <c>string</c> or <c>string?</c>.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="minimumLengthFunc">Gets the shortest allowed length from the model.</param>
     /// <returns>The options of the rule.</returns>
-    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, string> MinimumLength<TModel>(
-        this ICatValidatorPropertyRuleBuilder<TModel, string> builder,
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> MinimumLength<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
         Func<TModel, int> minimumLengthFunc)
         where TModel : class
+        where TProperty : IEnumerable<char>?
     {
-        var newRule = new PropertyStringMinimumLengthWithFuncValidatorRule<TModel>(minimumLengthFunc);
+        var newRule = new PropertyStringMinimumLengthWithFuncValidatorRule<TModel, TProperty>(minimumLengthFunc);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -733,17 +749,19 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// A <c>null</c> string passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property, <c>string</c> or <c>string?</c>.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="regexPattern">The regular expression pattern.</param>
     /// <param name="options">The options for the regular expression.</param>
     /// <returns>The options of the rule.</returns>
-    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, string> MatchesRegex<TModel>(
-        this ICatValidatorPropertyRuleBuilder<TModel, string> builder,
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> MatchesRegex<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
         string regexPattern,
         RegexOptions options = RegexOptions.None)
         where TModel : class
+        where TProperty : IEnumerable<char>?
     {
-        var newRule = new PropertyStringMatchesRegexWithPatternValidatorRule<TModel>(regexPattern, options);
+        var newRule = new PropertyStringMatchesRegexWithPatternValidatorRule<TModel, TProperty>(regexPattern, options);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -752,17 +770,19 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// A <c>null</c> string passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property, <c>string</c> or <c>string?</c>.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="regexPatternFunc">Gets the regular expression pattern from the model.</param>
     /// <param name="options">The options for the regular expression.</param>
     /// <returns>The options of the rule.</returns>
-    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, string> MatchesRegex<TModel>(
-        this ICatValidatorPropertyRuleBuilder<TModel, string> builder,
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> MatchesRegex<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
         Func<TModel, string> regexPatternFunc,
         RegexOptions options = RegexOptions.None)
         where TModel : class
+        where TProperty : IEnumerable<char>?
     {
-        var newRule = new PropertyStringMatchesRegexWithPatternFuncValidatorRule<TModel>(regexPatternFunc, options);
+        var newRule = new PropertyStringMatchesRegexWithPatternFuncValidatorRule<TModel, TProperty>(regexPatternFunc, options);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -771,15 +791,17 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// A <c>null</c> string passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property, <c>string</c> or <c>string?</c>.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="regex">The regular expression.</param>
     /// <returns>The options of the rule.</returns>
-    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, string> MatchesRegex<TModel>(
-        this ICatValidatorPropertyRuleBuilder<TModel, string> builder,
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> MatchesRegex<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
         Regex regex)
         where TModel : class
+        where TProperty : IEnumerable<char>?
     {
-        var newRule = new PropertyStringMatchesRegexValidatorRule<TModel>(regex);
+        var newRule = new PropertyStringMatchesRegexValidatorRule<TModel, TProperty>(regex);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -788,15 +810,17 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// A <c>null</c> string passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property, <c>string</c> or <c>string?</c>.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="regexFunc">Gets the regular expression from the model.</param>
     /// <returns>The options of the rule.</returns>
-    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, string> MatchesRegex<TModel>(
-        this ICatValidatorPropertyRuleBuilder<TModel, string> builder,
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> MatchesRegex<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
         Func<TModel, Regex> regexFunc)
         where TModel : class
+        where TProperty : IEnumerable<char>?
     {
-        var newRule = new PropertyStringMatchesRegexWithFuncValidatorRule<TModel>(regexFunc);
+        var newRule = new PropertyStringMatchesRegexWithFuncValidatorRule<TModel, TProperty>(regexFunc);
         return builder.AddPropertyRule(newRule);
     }
 
