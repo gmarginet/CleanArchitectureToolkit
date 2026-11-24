@@ -55,7 +55,7 @@ Push a tag that starts with `v`, such as `v1.0.0-rc.1`. The build workflow `.git
 Use this to work off the backlog of old pre-release versions without a new tag. Each run unlists about 250 versions and stops at the quota of nuget.org.
 
 1. Count what is left: `.\.github\scripts\Unlist-OldPrereleases.ps1 -Owner gmarginet -DryRun`. It prints one `Would unlist` line for each version.
-2. Open the Actions tab of the repository, pick the workflow "Publish CAT nuget packages" and choose **Run workflow** on `master`.
+2. Open the Actions tab of the repository, pick the workflow "Publish CAT nuget packages" and choose **Run workflow** on `master`. Do not pick "Publish CAT GitHub Pages". It also has a **Run workflow** button, but it only publishes the site again and has no dropdown.
 3. Choose what the cleanup follows. `pre-release` is right until the first stable release. After `v1.0.0` choose `stable`, which also unlists the tagged rc versions.
 4. Wait for the job "Unlist the old pre-release packages on nuget.org". The other jobs are skipped. A manual run runs no tests and publishes nothing.
 5. Read the end of the log. `Done. Unlisted N versions, 0 failed.` is a good run. A warning that the quota is exceeded is normal and stops the run without a failure.
