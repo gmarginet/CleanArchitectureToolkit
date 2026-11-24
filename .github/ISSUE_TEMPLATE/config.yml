@@ -4,7 +4,7 @@ contact_links:
     url: https://github.com/gmarginet/CleanArchitectureToolkit/discussions/categories/q-a
     about: How do I use a module, or how do I combine modules? Ask in Discussions, not in an issue.
   - name: Read the documentation
-    url: https://gmarginet.github.io/CleanArchitectureToolkit/#repo-overview
+    url: https://cat.marginet.be/#repo-overview
     about: Every module and its status, with the readme of each module.
   - name: Report a security problem
     url: https://github.com/gmarginet/CleanArchitectureToolkit/security/advisories/new

@@ -8,7 +8,7 @@
 //   It skips learn.microsoft.com API pages and shields.io badges, to avoid hammering them.
 const args = process.argv.slice(2);
 const checkExternal = args.includes('--external');
-const base = args.find((a) => !a.startsWith('--')) ?? 'https://gmarginet.github.io/CleanArchitectureToolkit/';
+const base = args.find((a) => !a.startsWith('--')) ?? 'https://cat.marginet.be/';
 const origin = new URL(base).origin;
 
 const pages = new Map(); // url -> { status, ids, html }

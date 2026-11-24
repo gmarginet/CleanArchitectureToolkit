@@ -6,7 +6,7 @@
         <Authors>Gert Marginet</Authors>
         <PackageIcon>CatIcon.png</PackageIcon>
         <Copyright>MIT</Copyright>
-        <PackageProjectUrl>https://gmarginet.github.io/CleanArchitectureToolkit/</PackageProjectUrl>
+        <PackageProjectUrl>https://cat.marginet.be/</PackageProjectUrl>
         <RepositoryUrl>https://github.com/gmarginet/CleanArchitectureToolkit</RepositoryUrl>
         <RepositoryType>GitHub</RepositoryType>
         <PackageReadmeFile>README_NUGET.md</PackageReadmeFile>

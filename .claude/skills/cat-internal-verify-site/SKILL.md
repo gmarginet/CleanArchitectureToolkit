@@ -8,7 +8,7 @@ allowed-tools: Bash(node .claude/skills/cat-internal-verify-site/check-links.mjs
 
 # Link check
 
-Run the link checker against the published site at https://gmarginet.github.io/CleanArchitectureToolkit/.
+Run the link checker against the published site at https://cat.marginet.be/.
 
 ## Before you run
 - It checks what is published, not your working tree. The latest push must be published first. If there are unpushed commits, tell the owner and ask if they still want to run it.
