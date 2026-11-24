@@ -7,6 +7,7 @@ Parameters:
 - Owner: the nuget.org user that owns the packages.
 - IdPattern: only package ids that match are touched. The default covers the modules and the template pack, which all start with gmarginet.Cat.
 - TimeLimit: stops unlisting after this time, 50 minutes by default, because the temporary key of the workflow lasts one hour.
+- DelayMilliseconds: the pause after every unlist call, one second by default, to stay under the quota of nuget.org. When nuget.org still answers with a quota error, the script stops without a failure.
 - DryRun: lists the versions and unlists nothing.
 
 The API key comes from the environment variable NUGET_API_KEY. It needs the unlist scope.
@@ -16,6 +17,7 @@ param(
     [Parameter(Mandatory)][string]$Owner,
     [string]$IdPattern = '^gmarginet\.Cat\.',
     [TimeSpan]$TimeLimit = [TimeSpan]::FromMinutes(50),
+    [int]$DelayMilliseconds = 1000,
     [switch]$DryRun
 )
 
@@ -66,9 +68,17 @@ foreach ($id in $ids) {
             Write-Host "Unlisted $id $version"
         }
         catch {
+            # nuget.org limits the unlist calls of a key. Stop here, the next run continues with what is still listed.
+            if ($_.Exception.Message -match 'Quota Exceeded') {
+                Write-Warning "nuget.org says the quota is exceeded. Stopping. The next run continues with the versions that are still listed."
+                $stopped = $true
+                break
+            }
             $failed++
             Write-Warning "Could not unlist $id $version. $($_.Exception.Message)"
         }
+
+        Start-Sleep -Milliseconds $DelayMilliseconds
     }
     if ($stopped) { break }
 }
