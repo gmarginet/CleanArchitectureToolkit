@@ -1,7 +1,9 @@
 theme: cat-theme
 github_url: https://github.com/gmarginet/CleanArchitectureToolkit
-# The GoatCounter site code. The theme counts page views and shows a privacy line in the footer only when this is set.
-goatcounter: cat-toolkit
+# The address that gets the page views. The theme counts page views and shows a privacy line in the footer only when this is set.
+# It is the own proxy of the owner, which passes the count on to GoatCounter, so blockers do not stop it.
+# To send to GoatCounter directly, set goatcounter to the site code instead, such as cat-toolkit.
+goatcounter_endpoint: https://s.marginet.be/h/cat
 title: Clean Architecture Toolkit for .NET
 description: Clean Architecture Toolkit is a clean, modular architecture foundation for .NET applications. It embraces SOLID principles and focuses on maintainability, testability, and scalability through clear boundaries and pluggable design.
 markdown: kramdown

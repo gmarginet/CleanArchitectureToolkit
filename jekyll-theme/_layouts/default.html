@@ -24,13 +24,17 @@
     </main>
     <footer class="footer">
       Clean Architecture Toolkit is released under the <a href="{{ '/MIT-License.html' | relative_url }}">MIT License</a>.
-      {% if site.goatcounter %}
+      {% assign counter_endpoint = site.goatcounter_endpoint %}
+      {% if counter_endpoint == blank and site.goatcounter %}
+        {% capture counter_endpoint %}https://{{ site.goatcounter }}.goatcounter.com/count{% endcapture %}
+      {% endif %}
+      {% if counter_endpoint != blank %}
       <br>
       This site counts page views without cookies or personal data, with <a href="https://www.goatcounter.com" target="_blank" rel="noopener noreferrer">GoatCounter</a>.
       {% endif %}
     </footer>
-    {% if site.goatcounter %}
-    <script data-goatcounter="https://{{ site.goatcounter }}.goatcounter.com/count" async src="{{ '/assets/js/count.js' | relative_url }}"></script>
+    {% if counter_endpoint != blank %}
+    <script data-goatcounter="{{ counter_endpoint }}" async src="{{ '/assets/js/count.js' | relative_url }}"></script>
     {% endif %}
     <script>
       // Package links of the NuGet tables open in a new tab, so the reader keeps the documentation page.

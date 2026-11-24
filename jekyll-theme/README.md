@@ -9,14 +9,15 @@ Jekyll theme for the Clean Architecture Toolkit GitHub Pages.
 - Sets the favicon and the touch icon from `resources/icon`.
 - Opens the links to nuget.org packages in a new tab.
 - Adds a copy button to every code block and to the install command in the package tables.
-- Counts page views with GoatCounter when `goatcounter` is set in `_config.yml`. The footer then says so. Without that value the theme loads no script and shows no privacy line.
+- Counts page views with GoatCounter when `goatcounter_endpoint` or `goatcounter` is set in `_config.yml`. The footer then says so. Without one of them the theme loads no script and shows no privacy line.
 
 ## How it is used
 
 - `Gemfile` loads it as a path gem: `gem "cat-theme", path: "jekyll-theme"`.
 - `_config.yml` turns it on with `theme: cat-theme` and excludes this folder from the site.
 - The GitHub link comes from `jekyll-github-metadata`, with `github_url` in `_config.yml` as fallback.
-- `goatcounter` in `_config.yml` is the site code of the GoatCounter account, such as `cat-toolkit`. The count goes to `https://<code>.goatcounter.com/count`.
+- `goatcounter_endpoint` in `_config.yml` is the address that gets the page views, such as an own proxy that passes them on to GoatCounter. The script adds the query to it, so it has no question mark.
+- `goatcounter` in `_config.yml` is the site code of the GoatCounter account, such as `cat-toolkit`. The count goes to `https://<code>.goatcounter.com/count`. It is only used when `goatcounter_endpoint` is empty.
 - The page loads its own copy of the GoatCounter script, so no request goes to a third party for the file. GoatCounter allows this and keeps the `/count` endpoint compatible. A new version of the script is only needed for new features.
 
 ## Files
