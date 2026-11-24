@@ -128,9 +128,12 @@ Work on a `development` branch after the first stable version, so the code on `m
 - The GitHub Pages site is built from `master`, so it matches what developers can install.
 - Feature work on `development` stays as direct commits, with no pull request for every change.
 - Direct pushes to `master` are blocked with a GitHub ruleset. `master` only changes through a pull request with a green build, and the owner is the one exception who can bypass it in an emergency. The ruleset is set on GitHub after the first stable version, not by a workflow. A tag is a different ref, so the release tag is not blocked.
+- An alpha or rc tag may sit on `development`, such as `v1.2.0-rc.1`. It publishes a pre-release to nuget.org and leaves `master` alone.
+- A stable tag may only sit on `master`. The `release` job of `build.yml` gets a step that checks that the tagged commit is part of `master`, for example with `git merge-base --is-ancestor` against `origin/master`, and fails for a stable tag that is not. A ruleset cannot limit a tag to a branch, so the workflow does it. The check can only fail after the tag is pushed. A wrong stable tag is deleted and set again.
 
 #### To check
 - Whether the repository can use a ruleset with required checks, and the name of the check that the ruleset requires.
+- Whether the trusted publishing policy on nuget.org accepts a tag on `development`, or is bound to `master`.
 
 #### Facts to keep in mind
 - `build.yml` and `pages.yml` trigger on a push to `master` only. `build.yml` also runs on a pull request to `master`. It needs `development` as a target too, so the tests run before a release pull request is merged.
