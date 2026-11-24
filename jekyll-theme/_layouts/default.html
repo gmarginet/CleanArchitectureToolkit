@@ -24,7 +24,14 @@
     </main>
     <footer class="footer">
       Clean Architecture Toolkit is released under the <a href="{{ '/MIT-License.html' | relative_url }}">MIT License</a>.
+      {% if site.goatcounter %}
+      <br>
+      This site counts page views without cookies or personal data, with <a href="https://www.goatcounter.com" target="_blank" rel="noopener noreferrer">GoatCounter</a>.
+      {% endif %}
     </footer>
+    {% if site.goatcounter %}
+    <script data-goatcounter="https://{{ site.goatcounter }}.goatcounter.com/count" async src="{{ '/assets/js/count.js' | relative_url }}"></script>
+    {% endif %}
     <script>
       // Package links of the NuGet tables open in a new tab, so the reader keeps the documentation page.
       document.querySelectorAll('a[href^="https://www.nuget.org/packages/"]').forEach(function (link) {
