@@ -32,7 +32,7 @@ Passes when the value is greater than or equal to the given value\.
 Fails with [GreaterThanOrEqualTo](CatValidatorErrorDefinitions.GreaterThanOrEqualTo.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.GreaterThanOrEqualTo') otherwise\.
 
 ```csharp
-public PropertyGreaterThanOrEqualToValidatorRule(TProperty valueToCompare);
+public PropertyGreaterThanOrEqualToValidatorRule(TProperty? valueToCompare);
 ```
 #### Parameters
 

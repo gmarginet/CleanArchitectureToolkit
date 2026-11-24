@@ -32,7 +32,7 @@ Passes when the value is less than the given value\.
 Fails with [LessThan](CatValidatorErrorDefinitions.LessThan.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.LessThan') otherwise\.
 
 ```csharp
-public PropertyLessThanValidatorRule(TProperty valueToCompare);
+public PropertyLessThanValidatorRule(TProperty? valueToCompare);
 ```
 #### Parameters
 

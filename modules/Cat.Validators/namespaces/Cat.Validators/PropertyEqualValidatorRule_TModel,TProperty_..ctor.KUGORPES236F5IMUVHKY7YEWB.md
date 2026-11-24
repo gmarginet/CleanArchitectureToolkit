@@ -32,7 +32,7 @@ Passes when the value equals the given value\.
 Fails with [Equal](CatValidatorErrorDefinitions.Equal.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.Equal') otherwise\.
 
 ```csharp
-public PropertyEqualValidatorRule(TProperty valueToCompare, System.Collections.Generic.IEqualityComparer<TProperty?>? comparer=null);
+public PropertyEqualValidatorRule(TProperty? valueToCompare, System.Collections.Generic.IEqualityComparer<TProperty>? comparer=null);
 ```
 #### Parameters
 

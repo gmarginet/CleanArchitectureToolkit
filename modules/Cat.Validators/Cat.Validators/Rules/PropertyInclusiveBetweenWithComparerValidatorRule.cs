@@ -12,12 +12,12 @@ namespace Cat.Validators.Rules;
 /// <typeparam name="TModel">The type being validated.</typeparam>
 /// <typeparam name="TProperty">The type of the property.</typeparam>
 internal class PropertyInclusiveBetweenWithComparerValidatorRule<TModel, TProperty>(
-    TProperty lowerBound,
-    TProperty upperBound,
+    TProperty? lowerBound,
+    TProperty? upperBound,
     IComparer<TProperty> comparer
 ) : CatValidatorPropertyRuleBase<TModel, TProperty>
     where TModel : class
-    where TProperty : IComparable<TProperty>, IComparable
+    where TProperty : IComparable<TProperty?>?, IComparable?
 {
     protected override List<ICatValidatorError> Validate(TProperty value, string fieldName, TModel model)
     {
@@ -25,6 +25,8 @@ internal class PropertyInclusiveBetweenWithComparerValidatorRule<TModel, TProper
         upperBound.ThrowIfNull(nameof(upperBound));
         comparer.ThrowIfNull(nameof(comparer));
         lowerBound.ThrowIfGreaterThanOrEqualTo(upperBound, comparer, nameof(lowerBound), nameof(upperBound));
+
+        if (value is null) return CatValidatorResult.Valid();
 
         if (comparer.Compare(value, lowerBound) >= 0 && comparer.Compare(value, upperBound) <= 0)
             return CatValidatorResult.Valid();

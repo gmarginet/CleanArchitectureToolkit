@@ -32,7 +32,7 @@ Passes when the value doesn't equal another property of the model\.
 Fails with [NotEqual](CatValidatorErrorDefinitions.NotEqual.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.NotEqual') otherwise\.
 
 ```csharp
-public PropertyNotEqualWithFuncValidatorRule(System.Linq.Expressions.Expression<System.Func<TModel,TProperty>> expression, System.Collections.Generic.IEqualityComparer<TProperty?>? comparer=null);
+public PropertyNotEqualWithFuncValidatorRule(System.Linq.Expressions.Expression<System.Func<TModel,TProperty?>> expression, System.Collections.Generic.IEqualityComparer<TProperty>? comparer=null);
 ```
 #### Parameters
 

@@ -34,7 +34,7 @@ Fails with [ExclusiveBetween](CatValidatorErrorDefinitions.ExclusiveBetween.md '
 ```csharp
 internal class PropertyExclusiveBetweenValidatorRule<TModel,TProperty> : Cat.Validators.CatValidatorPropertyRuleBase<TModel, TProperty>
     where TModel : class
-    where TProperty : System.IComparable<TProperty>, System.IComparable
+    where TProperty : System.IComparable<TProperty?>?, System.IComparable?
 ```
 #### Type parameters
 

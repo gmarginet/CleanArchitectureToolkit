@@ -11,13 +11,15 @@ namespace Cat.Validators.Rules;
 /// <typeparam name="TModel">The type being validated.</typeparam>
 /// <typeparam name="TProperty">The type of the property.</typeparam>
 internal class PropertyLessThanOrEqualToValidatorRule<TModel, TProperty>(
-    TProperty valueToCompare
+    TProperty? valueToCompare
 ) : CatValidatorPropertyRuleBase<TModel, TProperty>
     where TModel : class
-    where TProperty : IComparable<TProperty>, IComparable
+    where TProperty : IComparable<TProperty?>?, IComparable?
 {
     protected override List<ICatValidatorError> Validate(TProperty value, string fieldName, TModel model)
     {
+        if (value is null) return CatValidatorResult.Valid();
+
         if (value.CompareTo(valueToCompare) <= 0) return CatValidatorResult.Valid();
 
         return CatValidatorResult.Invalid(

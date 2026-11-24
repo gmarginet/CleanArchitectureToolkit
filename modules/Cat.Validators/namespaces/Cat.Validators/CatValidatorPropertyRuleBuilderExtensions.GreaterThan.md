@@ -32,8 +32,8 @@
 | :--- | :--- |
 | [GreaterThan&lt;TModel,TProperty&gt;\(this ICatValidatorPropertyRuleBuilder&lt;TModel,Nullable&lt;TProperty&gt;&gt;, Expression&lt;Func&lt;TModel,Nullable&lt;TProperty&gt;&gt;&gt;\)](CatValidatorPropertyRuleBuilderExtensions.GreaterThan.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.GreaterThan_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,System.Nullable_TProperty__,System.Linq.Expressions.Expression_System.Func_TModel,System.Nullable_TProperty___) 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.GreaterThan\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,System\.Nullable\<TProperty\>\>, System\.Linq\.Expressions\.Expression\<System\.Func\<TModel,System\.Nullable\<TProperty\>\>\>\)') | The value must be greater than another property of the model\. Code `CAT-VAL-1014`\. A `null` property passes\. So does a `null` value in the other property\. |
 | [GreaterThan&lt;TModel,TProperty&gt;\(this ICatValidatorPropertyRuleBuilder&lt;TModel,Nullable&lt;TProperty&gt;&gt;, TProperty\)](CatValidatorPropertyRuleBuilderExtensions.GreaterThan.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.GreaterThan_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,System.Nullable_TProperty__,TProperty) 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.GreaterThan\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,System\.Nullable\<TProperty\>\>, TProperty\)') | The value must be greater than the given value\. Code `CAT-VAL-1014`\. A `null` property passes\. |
-| [GreaterThan&lt;TModel,TProperty&gt;\(this ICatValidatorPropertyRuleBuilder&lt;TModel,TProperty&gt;, Expression&lt;Func&lt;TModel,TProperty&gt;&gt;\)](CatValidatorPropertyRuleBuilderExtensions.GreaterThan.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.GreaterThan_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_,System.Linq.Expressions.Expression_System.Func_TModel,TProperty__) 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.GreaterThan\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>, System\.Linq\.Expressions\.Expression\<System\.Func\<TModel,TProperty\>\>\)') | The value must be greater than another property of the model\. Code `CAT-VAL-1014`\. |
-| [GreaterThan&lt;TModel,TProperty&gt;\(this ICatValidatorPropertyRuleBuilder&lt;TModel,TProperty&gt;, TProperty\)](CatValidatorPropertyRuleBuilderExtensions.GreaterThan.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.GreaterThan_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_,TProperty) 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.GreaterThan\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>, TProperty\)') | The value must be greater than the given value\. Code `CAT-VAL-1014`\. |
+| [GreaterThan&lt;TModel,TProperty&gt;\(this ICatValidatorPropertyRuleBuilder&lt;TModel,TProperty&gt;, Expression&lt;Func&lt;TModel,TProperty&gt;&gt;\)](CatValidatorPropertyRuleBuilderExtensions.GreaterThan.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.GreaterThan_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_,System.Linq.Expressions.Expression_System.Func_TModel,TProperty__) 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.GreaterThan\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>, System\.Linq\.Expressions\.Expression\<System\.Func\<TModel,TProperty\>\>\)') | The value must be greater than another property of the model\. Code `CAT-VAL-1014`\. A `null` value passes\. |
+| [GreaterThan&lt;TModel,TProperty&gt;\(this ICatValidatorPropertyRuleBuilder&lt;TModel,TProperty&gt;, TProperty\)](CatValidatorPropertyRuleBuilderExtensions.GreaterThan.md#Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.GreaterThan_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,TProperty_,TProperty) 'Cat\.Validators\.Extensions\.CatValidatorPropertyRuleBuilderExtensions\.GreaterThan\<TModel,TProperty\>\(this Cat\.Validators\.Abstractions\.ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>, TProperty\)') | The value must be greater than the given value\. Code `CAT-VAL-1014`\. A `null` value passes\. |
 
 <a name='Cat.Validators.Extensions.CatValidatorPropertyRuleBuilderExtensions.GreaterThan_TModel,TProperty_(thisCat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder_TModel,System.Nullable_TProperty__,System.Linq.Expressions.Expression_System.Func_TModel,System.Nullable_TProperty___)'></a>
 
@@ -126,11 +126,12 @@ The options of the rule\.
 ## CatValidatorPropertyRuleBuilderExtensions\.GreaterThan\<TModel,TProperty\>\(this ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>, Expression\<Func\<TModel,TProperty\>\>\) Method
 
 The value must be greater than another property of the model\. Code `CAT-VAL-1014`\.
+A `null` value passes\.
 
 ```csharp
-public static Cat.Validators.Abstractions.ICatValidatorPropertyRuleOptionsBuilder<TModel,TProperty> GreaterThan<TModel,TProperty>(this Cat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder<TModel,TProperty> builder, System.Linq.Expressions.Expression<System.Func<TModel,TProperty>> expression)
+public static Cat.Validators.Abstractions.ICatValidatorPropertyRuleOptionsBuilder<TModel,TProperty> GreaterThan<TModel,TProperty>(this Cat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder<TModel,TProperty> builder, System.Linq.Expressions.Expression<System.Func<TModel,TProperty?>> expression)
     where TModel : class
-    where TProperty : System.IComparable<TProperty>, System.IComparable;
+    where TProperty : System.IComparable<TProperty?>?, System.IComparable?;
 ```
 #### Type parameters
 
@@ -168,11 +169,12 @@ The options of the rule\.
 ## CatValidatorPropertyRuleBuilderExtensions\.GreaterThan\<TModel,TProperty\>\(this ICatValidatorPropertyRuleBuilder\<TModel,TProperty\>, TProperty\) Method
 
 The value must be greater than the given value\. Code `CAT-VAL-1014`\.
+A `null` value passes\.
 
 ```csharp
-public static Cat.Validators.Abstractions.ICatValidatorPropertyRuleOptionsBuilder<TModel,TProperty> GreaterThan<TModel,TProperty>(this Cat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder<TModel,TProperty> builder, TProperty valueToCompare)
+public static Cat.Validators.Abstractions.ICatValidatorPropertyRuleOptionsBuilder<TModel,TProperty> GreaterThan<TModel,TProperty>(this Cat.Validators.Abstractions.ICatValidatorPropertyRuleBuilder<TModel,TProperty> builder, TProperty? valueToCompare)
     where TModel : class
-    where TProperty : System.IComparable<TProperty>, System.IComparable;
+    where TProperty : System.IComparable<TProperty?>?, System.IComparable?;
 ```
 #### Type parameters
 

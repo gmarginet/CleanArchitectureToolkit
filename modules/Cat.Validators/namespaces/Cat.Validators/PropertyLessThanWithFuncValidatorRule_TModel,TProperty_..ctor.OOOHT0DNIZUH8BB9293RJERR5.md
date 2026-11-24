@@ -32,7 +32,7 @@ Passes when the value is less than another property of the model\.
 Fails with [LessThan](CatValidatorErrorDefinitions.LessThan.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.LessThan') otherwise\.
 
 ```csharp
-public PropertyLessThanWithFuncValidatorRule(System.Linq.Expressions.Expression<System.Func<TModel,TProperty>> expression);
+public PropertyLessThanWithFuncValidatorRule(System.Linq.Expressions.Expression<System.Func<TModel,TProperty?>> expression);
 ```
 #### Parameters
 

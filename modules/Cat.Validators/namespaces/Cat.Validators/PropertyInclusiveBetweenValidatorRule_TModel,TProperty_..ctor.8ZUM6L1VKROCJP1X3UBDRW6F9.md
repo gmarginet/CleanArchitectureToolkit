@@ -32,7 +32,7 @@ Passes when the value is between the bounds, bounds included\.
 Fails with [InclusiveBetween](CatValidatorErrorDefinitions.InclusiveBetween.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.InclusiveBetween') otherwise\.
 
 ```csharp
-public PropertyInclusiveBetweenValidatorRule(TProperty lowerBound, TProperty upperBound);
+public PropertyInclusiveBetweenValidatorRule(TProperty? lowerBound, TProperty? upperBound);
 ```
 #### Parameters
 

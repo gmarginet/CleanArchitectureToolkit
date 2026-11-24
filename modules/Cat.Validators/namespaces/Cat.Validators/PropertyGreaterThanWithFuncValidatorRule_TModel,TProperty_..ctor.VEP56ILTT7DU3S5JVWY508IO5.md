@@ -32,7 +32,7 @@ Passes when the value is greater than another property of the model\.
 Fails with [GreaterThan](CatValidatorErrorDefinitions.GreaterThan.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.GreaterThan') otherwise\.
 
 ```csharp
-public PropertyGreaterThanWithFuncValidatorRule(System.Linq.Expressions.Expression<System.Func<TModel,TProperty>> expression);
+public PropertyGreaterThanWithFuncValidatorRule(System.Linq.Expressions.Expression<System.Func<TModel,TProperty?>> expression);
 ```
 #### Parameters
 

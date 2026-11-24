@@ -32,7 +32,7 @@ Passes when the value is greater than the lower bound and less than the upper bo
 Fails with [ExclusiveBetween](CatValidatorErrorDefinitions.ExclusiveBetween.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.ExclusiveBetween') otherwise\.
 
 ```csharp
-public PropertyExclusiveBetweenValidatorRule(TProperty lowerBound, TProperty upperBound);
+public PropertyExclusiveBetweenValidatorRule(TProperty? lowerBound, TProperty? upperBound);
 ```
 #### Parameters
 

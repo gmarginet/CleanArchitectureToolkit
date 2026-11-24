@@ -33,7 +33,7 @@ Both bounds come from the model and your own comparer orders the values\.
 Fails with [ExclusiveBetween](CatValidatorErrorDefinitions.ExclusiveBetween.md 'Cat\.Validators\.CatValidatorErrorDefinitions\.ExclusiveBetween') otherwise\.
 
 ```csharp
-public PropertyExclusiveBetweenWithFuncAndComparerValidatorRule(System.Func<TModel,TProperty> lowerBoundFunc, System.Func<TModel,TProperty> upperBoundFunc, System.Collections.Generic.IComparer<TProperty> comparer);
+public PropertyExclusiveBetweenWithFuncAndComparerValidatorRule(System.Func<TModel,TProperty?> lowerBoundFunc, System.Func<TModel,TProperty?> upperBoundFunc, System.Collections.Generic.IComparer<TProperty> comparer);
 ```
 #### Parameters
 

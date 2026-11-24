@@ -13,12 +13,12 @@ namespace Cat.Validators.Rules;
 /// <typeparam name="TModel">The type being validated.</typeparam>
 /// <typeparam name="TProperty">The type of the property.</typeparam>
 internal class PropertyNotEqualWithFuncValidatorRule<TModel, TProperty>(
-    Expression<Func<TModel, TProperty>> expression,
-    IEqualityComparer<TProperty?>? comparer = null
+    Expression<Func<TModel, TProperty?>> expression,
+    IEqualityComparer<TProperty>? comparer = null
 ) : CatValidatorPropertyRuleBase<TModel, TProperty>
     where TModel : class
 {
-    private IEqualityComparer<TProperty?>? _comparer = comparer;
+    private IEqualityComparer<TProperty>? _comparer = comparer;
 
     protected override List<ICatValidatorError> Validate(TProperty value, string fieldName, TModel model)
     {
@@ -26,13 +26,13 @@ internal class PropertyNotEqualWithFuncValidatorRule<TModel, TProperty>(
         
         _comparer ??= value switch
         {
-            string => (IEqualityComparer<TProperty?>)StringComparer.Ordinal,
-            _ => EqualityComparer<TProperty?>.Default
+            string => (IEqualityComparer<TProperty>)StringComparer.Ordinal,
+            _ => EqualityComparer<TProperty>.Default
         };
             
         var valueToCompare = valueToCompareFunc(model);
             
-        if (_comparer.Equals(valueToCompare, value) is false) return CatValidatorResult.Valid();
+        if (_comparer.Equals(valueToCompare!, value) is false) return CatValidatorResult.Valid();
 
         return CatValidatorResult.Invalid(
             CatValidatorError.Create(

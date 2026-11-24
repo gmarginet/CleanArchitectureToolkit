@@ -88,15 +88,49 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <typeparam name="TProperty">The type of the property.</typeparam>
     /// <param name="builder">The builder to add the rule to.</param>
     /// <param name="valueToCompare">The value to compare with.</param>
+    /// <returns>The options of the rule.</returns>
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> NotEqual<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
+        TProperty? valueToCompare)
+        where TModel : class
+    {
+        var newRule = new PropertyNotEqualValidatorRule<TModel, TProperty>(valueToCompare);
+        return builder.AddPropertyRule(newRule);
+    }
+
+    /// <summary>
+    /// The value must not equal the given value. Code <c>CAT-VAL-1010</c>.
+    /// </summary>
+    /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <param name="builder">The builder to add the rule to.</param>
+    /// <param name="valueToCompare">The value to compare with.</param>
     /// <param name="comparer">Decides when two values are equal. Strings compare ordinal by default.</param>
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> NotEqual<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        TProperty valueToCompare,
-        IEqualityComparer<TProperty?>? comparer = null)
+        TProperty? valueToCompare,
+        IEqualityComparer<TProperty>? comparer)
         where TModel : class
     {
         var newRule = new PropertyNotEqualValidatorRule<TModel, TProperty>(valueToCompare, comparer);
+        return builder.AddPropertyRule(newRule);
+    }
+
+    /// <summary>
+    /// The value must not equal another property of the model. Code <c>CAT-VAL-1010</c>.
+    /// </summary>
+    /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <param name="builder">The builder to add the rule to.</param>
+    /// <param name="expression">Picks the value to compare with, like <c>m =&gt; m.OtherName</c>.</param>
+    /// <returns>The options of the rule.</returns>
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> NotEqual<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
+        Expression<Func<TModel, TProperty?>> expression)
+        where TModel : class
+    {
+        var newRule = new PropertyNotEqualWithFuncValidatorRule<TModel, TProperty>(expression);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -111,11 +145,28 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> NotEqual<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        Expression<Func<TModel, TProperty>> expression,
-        IEqualityComparer<TProperty?>? comparer = null)
+        Expression<Func<TModel, TProperty?>> expression,
+        IEqualityComparer<TProperty>? comparer)
         where TModel : class
     {
         var newRule = new PropertyNotEqualWithFuncValidatorRule<TModel, TProperty>(expression, comparer);
+        return builder.AddPropertyRule(newRule);
+    }
+
+    /// <summary>
+    /// The value must equal the given value. Code <c>CAT-VAL-1011</c>.
+    /// </summary>
+    /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <param name="builder">The builder to add the rule to.</param>
+    /// <param name="valueToCompare">The value to compare with.</param>
+    /// <returns>The options of the rule.</returns>
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> Equal<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
+        TProperty? valueToCompare)
+        where TModel : class
+    {
+        var newRule = new PropertyEqualValidatorRule<TModel, TProperty>(valueToCompare);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -130,11 +181,28 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> Equal<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        TProperty valueToCompare,
-        IEqualityComparer<TProperty?>? comparer = null)
+        TProperty? valueToCompare,
+        IEqualityComparer<TProperty>? comparer)
         where TModel : class
     {
         var newRule = new PropertyEqualValidatorRule<TModel, TProperty>(valueToCompare, comparer);
+        return builder.AddPropertyRule(newRule);
+    }
+
+    /// <summary>
+    /// The value must equal another property of the model. Code <c>CAT-VAL-1011</c>.
+    /// </summary>
+    /// <typeparam name="TModel">The type being validated.</typeparam>
+    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <param name="builder">The builder to add the rule to.</param>
+    /// <param name="expression">Picks the value to compare with, like <c>m =&gt; m.OtherName</c>.</param>
+    /// <returns>The options of the rule.</returns>
+    public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> Equal<TModel, TProperty>(
+        this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
+        Expression<Func<TModel, TProperty?>> expression)
+        where TModel : class
+    {
+        var newRule = new PropertyEqualWithFuncValidatorRule<TModel, TProperty>(expression);
         return builder.AddPropertyRule(newRule);
     }
 
@@ -149,8 +217,8 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> Equal<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        Expression<Func<TModel, TProperty>> expression,
-        IEqualityComparer<TProperty?>? comparer = null)
+        Expression<Func<TModel, TProperty?>> expression,
+        IEqualityComparer<TProperty>? comparer)
         where TModel : class
     {
         var newRule = new PropertyEqualWithFuncValidatorRule<TModel, TProperty>(expression, comparer);
@@ -159,6 +227,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be less than the given value. Code <c>CAT-VAL-1012</c>.
+    /// A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -167,9 +236,9 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> LessThan<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        TProperty valueToCompare)
+        TProperty? valueToCompare)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyLessThanValidatorRule<TModel, TProperty>(valueToCompare);
         return builder.AddPropertyRule(newRule);
@@ -177,6 +246,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be less than another property of the model. Code <c>CAT-VAL-1012</c>.
+    /// A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -185,9 +255,9 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> LessThan<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        Expression<Func<TModel, TProperty>> expression)
+        Expression<Func<TModel, TProperty?>> expression)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyLessThanWithFuncValidatorRule<TModel, TProperty>(expression);
         return builder.AddPropertyRule(newRule);
@@ -195,6 +265,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be less than or equal to the given value. Code <c>CAT-VAL-1013</c>.
+    /// A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -203,9 +274,9 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> LessThanOrEqualTo<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        TProperty valueToCompare)
+        TProperty? valueToCompare)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyLessThanOrEqualToValidatorRule<TModel, TProperty>(valueToCompare);
         return builder.AddPropertyRule(newRule);
@@ -213,6 +284,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be less than or equal to another property of the model. Code <c>CAT-VAL-1013</c>.
+    /// A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -221,9 +293,9 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> LessThanOrEqualTo<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        Expression<Func<TModel, TProperty>> expression)
+        Expression<Func<TModel, TProperty?>> expression)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyLessThanOrEqualToWithFuncValidatorRule<TModel, TProperty>(expression);
         return builder.AddPropertyRule(newRule);
@@ -231,6 +303,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be greater than the given value. Code <c>CAT-VAL-1014</c>.
+    /// A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -239,9 +312,9 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> GreaterThan<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        TProperty valueToCompare)
+        TProperty? valueToCompare)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyGreaterThanValidatorRule<TModel, TProperty>(valueToCompare);
         return builder.AddPropertyRule(newRule);
@@ -249,6 +322,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be greater than another property of the model. Code <c>CAT-VAL-1014</c>.
+    /// A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -257,9 +331,9 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> GreaterThan<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        Expression<Func<TModel, TProperty>> expression)
+        Expression<Func<TModel, TProperty?>> expression)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyGreaterThanWithFuncValidatorRule<TModel, TProperty>(expression);
         return builder.AddPropertyRule(newRule);
@@ -267,6 +341,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be greater than or equal to the given value. Code <c>CAT-VAL-1015</c>.
+    /// A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -275,9 +350,9 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> GreaterThanOrEqualTo<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        TProperty valueToCompare)
+        TProperty? valueToCompare)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyGreaterThanOrEqualToValidatorRule<TModel, TProperty>(valueToCompare);
         return builder.AddPropertyRule(newRule);
@@ -285,6 +360,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be greater than or equal to another property of the model. Code <c>CAT-VAL-1015</c>.
+    /// A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -293,9 +369,9 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty> GreaterThanOrEqualTo<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        Expression<Func<TModel, TProperty>> expression)
+        Expression<Func<TModel, TProperty?>> expression)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyGreaterThanOrEqualToWithFuncValidatorRule<TModel, TProperty>(expression);
         return builder.AddPropertyRule(newRule);
@@ -303,7 +379,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be between the bounds, bounds included. Code <c>CAT-VAL-1016</c>.
-    /// The lower bound must be less than the upper bound.
+    /// The lower bound must be less than the upper bound. A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -313,10 +389,10 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty>  InclusiveBetween<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        TProperty lowerBound,
-        TProperty upperBound)
+        TProperty? lowerBound,
+        TProperty? upperBound)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyInclusiveBetweenValidatorRule<TModel, TProperty>(lowerBound, upperBound);
         return builder.AddPropertyRule(newRule);
@@ -324,7 +400,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be between two bounds taken from the model, bounds included. Code <c>CAT-VAL-1016</c>.
-    /// The lower bound must be less than the upper bound.
+    /// The lower bound must be less than the upper bound. A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -334,10 +410,10 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty>  InclusiveBetween<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        Func<TModel, TProperty> lowerBoundFunc,
-        Func<TModel, TProperty> upperBoundFunc)
+        Func<TModel, TProperty?> lowerBoundFunc,
+        Func<TModel, TProperty?> upperBoundFunc)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyInclusiveBetweenWithFuncValidatorRule<TModel, TProperty>(lowerBoundFunc, upperBoundFunc);
         return builder.AddPropertyRule(newRule);
@@ -345,7 +421,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be between the bounds, bounds included, using your own comparer. Code <c>CAT-VAL-1016</c>.
-    /// The lower bound must be less than the upper bound.
+    /// The lower bound must be less than the upper bound. A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -356,11 +432,11 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty>  InclusiveBetween<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        TProperty lowerBound,
-        TProperty upperBound,
+        TProperty? lowerBound,
+        TProperty? upperBound,
         IComparer<TProperty> comparer)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyInclusiveBetweenWithComparerValidatorRule<TModel, TProperty>(lowerBound, upperBound, comparer);
         return builder.AddPropertyRule(newRule);
@@ -368,7 +444,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be between two bounds taken from the model, bounds included, using your own comparer.
-    /// Code <c>CAT-VAL-1016</c>. The lower bound must be less than the upper bound.
+    /// Code <c>CAT-VAL-1016</c>. The lower bound must be less than the upper bound. A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -379,11 +455,11 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty>  InclusiveBetween<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        Func<TModel, TProperty> lowerBoundFunc,
-        Func<TModel, TProperty> upperBoundFunc,
+        Func<TModel, TProperty?> lowerBoundFunc,
+        Func<TModel, TProperty?> upperBoundFunc,
         IComparer<TProperty> comparer)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyInclusiveBetweenWithFuncAndComparerValidatorRule<TModel, TProperty>(lowerBoundFunc, upperBoundFunc, comparer);
         return builder.AddPropertyRule(newRule);
@@ -391,7 +467,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be between the bounds, bounds excluded. Code <c>CAT-VAL-1017</c>.
-    /// The lower bound must be less than the upper bound.
+    /// The lower bound must be less than the upper bound. A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -401,10 +477,10 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty>  ExclusiveBetween<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        TProperty lowerBound,
-        TProperty upperBound)
+        TProperty? lowerBound,
+        TProperty? upperBound)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyExclusiveBetweenValidatorRule<TModel, TProperty>(lowerBound, upperBound);
         return builder.AddPropertyRule(newRule);
@@ -412,7 +488,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be between two bounds taken from the model, bounds excluded. Code <c>CAT-VAL-1017</c>.
-    /// The lower bound must be less than the upper bound.
+    /// The lower bound must be less than the upper bound. A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -422,10 +498,10 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty>  ExclusiveBetween<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        Func<TModel, TProperty> lowerBoundFunc,
-        Func<TModel, TProperty> upperBoundFunc)
+        Func<TModel, TProperty?> lowerBoundFunc,
+        Func<TModel, TProperty?> upperBoundFunc)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyExclusiveBetweenWithFuncValidatorRule<TModel, TProperty>(lowerBoundFunc, upperBoundFunc);
         return builder.AddPropertyRule(newRule);
@@ -433,7 +509,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be between the bounds, bounds excluded, using your own comparer. Code <c>CAT-VAL-1017</c>.
-    /// The lower bound must be less than the upper bound.
+    /// The lower bound must be less than the upper bound. A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -444,11 +520,11 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty>  ExclusiveBetween<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        TProperty lowerBound,
-        TProperty upperBound,
+        TProperty? lowerBound,
+        TProperty? upperBound,
         IComparer<TProperty> comparer)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyExclusiveBetweenWithComparerValidatorRule<TModel, TProperty>(lowerBound, upperBound, comparer);
         return builder.AddPropertyRule(newRule);
@@ -456,7 +532,7 @@ public static class CatValidatorPropertyRuleBuilderExtensions
 
     /// <summary>
     /// The value must be between two bounds taken from the model, bounds excluded, using your own comparer.
-    /// Code <c>CAT-VAL-1017</c>. The lower bound must be less than the upper bound.
+    /// Code <c>CAT-VAL-1017</c>. The lower bound must be less than the upper bound. A <c>null</c> value passes.
     /// </summary>
     /// <typeparam name="TModel">The type being validated.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -467,11 +543,11 @@ public static class CatValidatorPropertyRuleBuilderExtensions
     /// <returns>The options of the rule.</returns>
     public static ICatValidatorPropertyRuleOptionsBuilder<TModel, TProperty>  ExclusiveBetween<TModel, TProperty>(
         this ICatValidatorPropertyRuleBuilder<TModel, TProperty> builder,
-        Func<TModel, TProperty> lowerBoundFunc,
-        Func<TModel, TProperty> upperBoundFunc,
+        Func<TModel, TProperty?> lowerBoundFunc,
+        Func<TModel, TProperty?> upperBoundFunc,
         IComparer<TProperty> comparer)
         where TModel : class
-        where TProperty : IComparable<TProperty>, IComparable
+        where TProperty : IComparable<TProperty?>?, IComparable?
     {
         var newRule = new PropertyExclusiveBetweenWithFuncAndComparerValidatorRule<TModel, TProperty>(lowerBoundFunc, upperBoundFunc, comparer);
         return builder.AddPropertyRule(newRule);

@@ -34,7 +34,7 @@ Fails with [GreaterThan](CatValidatorErrorDefinitions.GreaterThan.md 'Cat\.Valid
 ```csharp
 internal class PropertyGreaterThanValidatorRule<TModel,TProperty> : Cat.Validators.CatValidatorPropertyRuleBase<TModel, TProperty>
     where TModel : class
-    where TProperty : System.IComparable<TProperty>, System.IComparable
+    where TProperty : System.IComparable<TProperty?>?, System.IComparable?
 ```
 #### Type parameters
 

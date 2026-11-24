@@ -34,7 +34,7 @@ Fails with [LessThan](CatValidatorErrorDefinitions.LessThan.md 'Cat\.Validators\
 ```csharp
 internal class PropertyLessThanValidatorRule<TModel,TProperty> : Cat.Validators.CatValidatorPropertyRuleBase<TModel, TProperty>
     where TModel : class
-    where TProperty : System.IComparable<TProperty>, System.IComparable
+    where TProperty : System.IComparable<TProperty?>?, System.IComparable?
 ```
 #### Type parameters
 

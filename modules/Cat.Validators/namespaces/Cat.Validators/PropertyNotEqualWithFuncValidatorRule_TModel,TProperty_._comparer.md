@@ -29,7 +29,7 @@
 ## PropertyNotEqualWithFuncValidatorRule\<TModel,TProperty\>\.\_comparer Field
 
 ```csharp
-private IEqualityComparer<TProperty?>? _comparer;
+private IEqualityComparer<TProperty>? _comparer;
 ```
 
 #### Field Value
