@@ -18,7 +18,7 @@ The `Test` target always runs the `Release` build, so `--configuration=Debug` on
 - Never create a branch on your own. The owner creates feature branches before starting work when they want one.
 - Do not push unless asked.
 - Commit one topic per commit, and only when asked. Do not mix renames, new content and tooling in one commit.
-- Always use the `cat-internal-commit` skill to commit, never a bare `git commit`. It splits the changes into logical commits and ends the subject with ` (skip-pub)` when a commit changes no code in `modules/`. Build files, `tools/` and `templates/` count as code.
+- Always use the `cat-internal-commit` skill to commit, never a bare `git commit`. It splits the changes into logical commits.
 
 ## Tools & Capabilities
 - **Roslyn MCP Connected:** Use `cwm-roslyn-navigator` tools for deep codebase indexing, finding references, tracking hierarchies, and listing symbols.
@@ -74,9 +74,10 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
 - To change them, change the XML docs, the generator (`tools/Cat.DefaultDocumentationPlugin/`) or the template, then follow the `cat-internal-verify-code` skill. Only a `Debug` build regenerates them.
 
 ## 🚀 Release
-- Releases are automatic after a push to `master`. `.github/workflows/build.yml` runs the tests and publishes the NuGet packages, with the version from MinVer and the `v` git tags. `.github/workflows/pages.yml` builds the GitHub Pages site from the markdown.
-- A commit message with `skip-ci` skips the build workflow. `skip-pub` runs only the tests and does not publish. The `cat-internal-commit` skill adds ` (skip-pub)` to commits without code in `modules/`.
-- This is why you never push unless asked.
+- A release happens only when the owner pushes a `v` tag, such as `v1.0.0-rc.1`. `.github/workflows/build.yml` then publishes the NuGet packages, with the version from MinVer and the tag. `.github/RELEASING.md` describes it.
+- A push to `master` runs the tests and publishes nothing. `.github/workflows/pages.yml` builds the GitHub Pages site from the markdown after that push.
+- A commit message with `skip-ci` skips the build workflow for a push to `master`. A tag ignores it.
+- Never push, and never create or push a tag, unless asked.
 
 ## 🧩 Skills
 Use the skill for the task and do not do its steps by hand.

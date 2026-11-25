@@ -34,7 +34,7 @@ The pages in `modules/*/namespaces` have the same header, but they are generated
 1. Make the same change in `CatHeaderSection.cs`. The generator builds the header lines in code, with the paths of a generated page.
 2. Follow the chapter "Changing the generator" of the `cat-internal-verify-code` skill. It deploys the generator, regenerates the pages and says what to commit together.
 3. Check the diff of the pages. Every page should differ only in the changed header line.
-4. The commit changes code in `tools/`, so it gets no ` (skip-pub)`. A push to `master` publishes the NuGet packages.
+4. The commit changes code in `tools/`. It reaches the packages with the next tag.
 
 ## The repo overview anchor
 The navigation bar links to `README.md#repo-overview`. That anchor sits in the header template, in `CatHeaderSection.cs` and in `README_NUGET.md`. When the heading of the repo overview changes, change all three and search the old anchor with `git grep`.

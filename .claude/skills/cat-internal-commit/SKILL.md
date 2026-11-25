@@ -1,6 +1,6 @@
 ---
 name: cat-internal-commit
-description: Commit the current changes to Git in logical blocks, with a clear message for each block and " (skip-pub)" at the end of the subject when no code in modules/ changed. Never pushes. Use when the owner asks to commit, and never without being asked.
+description: Commit the current changes to Git in logical blocks, with a clear message for each block. Never pushes. Use when the owner asks to commit, and never without being asked.
 argument-hint: "[optional hint about how to split or what to say]"
 ---
 
@@ -13,41 +13,35 @@ Run this skill only when the owner asks for a commit. Asking for the skill is th
 ## Rules
 - **Logical blocks.** Several small commits, never one big one. One commit has one reason. A reader of the history should see a step, such as "Add the docs-check skill" or "Rename the Saga plan".
 - **Every commit stands on its own.** Links and references in a commit must resolve in that commit. A rename goes with the fixes of its references. A new file goes before or with the file that links to it. Order the commits so that this is true.
-- **Skip the publish when there is no code.** A push to `master` publishes NuGet packages. When a commit changes no code in `modules/`, the subject line ends with ` (skip-pub)`. The `Staged` mode of the script decides it. The workflow finds the text `skip-pub` anywhere in the message, so a commit that must publish never contains it, not even in the body. Never add `skip-ci`. Details in [publishing.md](publishing.md#skip-pub).
-- **Stop after a publishing commit.** A commit without ` (skip-pub)` ends the series. Make no more commits, and ask the owner whether to push first. See [Stop after a publishing commit](#stop-after-a-publishing-commit).
+- **No publish words.** Only a `v` tag publishes packages, so a commit message needs no suffix for it. Never add `skip-ci`. It would skip the tests of the build workflow for a push to `master`.
 - **Validate the plugin.** When a block touches `.claude-plugin/` or `claudeskills/`, run `claude plugin validate . --strict` and `claude plugin validate claudeskills --strict` from the root of the repository before you commit it. Do not commit that block when one fails. A broken manifest must never reach `master`, also when only the version changed. The build workflow has no step for it, because a failure there comes after the push is live.
 - **Plugin version.** When the files in `claudeskills/skills/` differ from `origin/master` and the `version` in `claudeskills/.claude-plugin/plugin.json` does not, say so in the end report and ask whether to raise the version before the push. Several skill commits can share one raise. A developer gets a changed skill only when that version changes. Check with `git diff origin/master --stat -- claudeskills/skills` and `git diff origin/master -- claudeskills/.claude-plugin/plugin.json`.
-- **Empty commit.** Allowed when the owner asks for one. See [publishing.md](publishing.md#empty-commit).
-- **Message.** One subject line in the imperative, plain words, about 72 characters or fewer before the suffix, no full stop. Start with a verb: Add, Fix, Rename, Move, Remove, Update. Match the history: `Add the Orders demo service`, `Move the demo plan to plans and add the saga plan`. Add a short body only when the reason is not obvious. Follow the style rules in CLAUDE.md.
+- **Message.** One subject line in the imperative, plain words, about 72 characters or fewer, no full stop. Start with a verb: Add, Fix, Rename, Move, Remove, Update. Match the history: `Add the Orders demo service`, `Move the demo plan to plans and add the saga plan`. Add a short body only when the reason is not obvious. Follow the style rules in CLAUDE.md.
 - **Attribution.** End every message with the attribution line that the session instructions give.
 - **Nothing generated or private.** Never commit `bin`, `obj`, `node_modules`, `artifacts`, `*.user` files, `desktop.ini` or scratch files. If one is tracked or shows up as new, leave it out and tell the owner.
 - **No shortcuts.** Never use `--no-verify`, never skip signing, never amend, rebase or force unless the owner asks. If a hook fails, fix the cause.
 
 ## Steps
-0. Check for a publish that is waiting. Run `git log '@{u}..HEAD' --format='%h %s'`. Keep the quotes, because PowerShell reads a bare `@{u}` as a hash table and fails. These are the commits that are not pushed yet. When one of them has no ` (skip-pub)` in its subject, a push publishes only when the newest commit also has none. A new commit with ` (skip-pub)` would hide the waiting publish. So warn the owner first, before you commit anything:
-   - Name the waiting publishing commits.
-   - Ask whether to push them first, or to make the new commit a publishing one, or to accept that nothing is published.
-   - Commit only after the owner answers. Never decide this alone.
 1. Start from an empty index. `git mv` stages a rename at once, and that would leak into the wrong commit. `git restore --staged .` only unstages and is safe. A rename is found again when you stage both paths of it. Then look at the whole change.
    ```
    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/cat-internal-commit/commit-info.ps1 -Mode Status
    git diff --stat
    ```
-   Read the diff of anything you do not recognize. The `Status` mode groups files by area and marks the areas with code.
+   Read the diff of anything you do not recognize. The `Status` mode groups files by area.
 2. Check the markdown first. If any markdown, heading or file name changed, run the `cat-internal-verify-docs` skill without `-Path` and fix errors. Do not commit broken links.
 3. Plan the blocks. Write the list down before you stage anything. See [Splitting](#splitting).
-4. For each block, in order. Stop after a block whose subject has no ` (skip-pub)`, see [Stop after a publishing commit](#stop-after-a-publishing-commit):
+4. For each block, in order:
    1. Stage only its files with `git add -- <paths>`. A renamed file needs both the old path (the deletion) and the new path. Use `git add -A -- <paths>` for that.
    2. Check what is staged.
       ```
       powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/cat-internal-commit/commit-info.ps1 -Mode Staged
       git diff --cached --stat
       ```
-      It says whether to add ` (skip-pub)`, and warns about files that must not be committed.
+      It lists the areas and warns about files that must not be committed, and about a commit that mixes many areas.
    3. Commit with a here-string, so the message keeps its lines.
       ```
       git commit -m @'
-      Add the docs-check skill (skip-pub)
+      Add the docs-check skill
 
       A short body when it helps.
 
@@ -55,7 +49,7 @@ Run this skill only when the owner asks for a commit. Asking for the skill is th
       '@
       ```
 5. Finish. Run `git log --oneline -n <number of commits>` and `git status --short`. The tree should be clean, except for files you left out on purpose.
-6. Report to the owner: the list of commits with their subjects, which ones have ` (skip-pub)`, and anything left uncommitted and why. Remind the owner that nothing was pushed. When the last commit has no ` (skip-pub)`, say that it publishes and ask whether to push.
+6. Report to the owner: the list of commits with their subjects, and anything left uncommitted and why. Remind the owner that nothing was pushed.
 
 ## Splitting
 Group by reason, not by folder. Typical blocks, in a good order:
@@ -68,20 +62,9 @@ Group by reason, not by folder. Typical blocks, in a good order:
 7. **Resources.** A drawing and the text that describes it can go together.
 
 Hints:
-- Put the block with code in `modules/` last. It publishes, so it ends the series.
 - The readme often holds several topics. Put the file with the block that needs it most, and order the blocks so that links resolve. When one file really holds two separate topics, stage only the hunks you want. `git add -p` is interactive and not supported here. Save `git diff -U0 -- <file>` to the scratchpad, keep only the hunks for this block, and apply it with `git apply --cached --unidiff-zero <patch file>`. Use this only when it clearly makes the history better.
 - Do not split so far that a commit is meaningless. Do not merge unrelated work to save time.
 - A fix for something you added in this same session belongs in the commit that added it. Fix it before you commit, not in a later commit.
-
-## Skip-pub and empty commits
-Read [publishing.md](publishing.md) when the skip-pub decision of the script is not clear, or when the owner asks for an empty commit.
-
-## Stop after a publishing commit
-A commit without ` (skip-pub)` makes the next push publish, but only when it is the newest commit of that push. A later commit with ` (skip-pub)` on top would hide it.
-1. After a commit without ` (skip-pub)`, stop. Make no more commits, even when changes are left.
-2. Tell the owner that this commit publishes, and list what is still uncommitted.
-3. Ask whether to push first. The owner pushes. Never push on your own.
-4. Continue with the rest only after the owner says so.
 
 ## If something is wrong
 - Staged the wrong file: `git restore --staged -- <path>`. This is safe.

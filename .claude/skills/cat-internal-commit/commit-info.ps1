@@ -1,17 +1,12 @@
 <#
-Helps with splitting work into commits and with the (skip-pub) rule. It changes nothing.
+Helps with splitting work into commits. It changes nothing.
 
 Status:  commit-info.ps1 -Mode Status
   Lists every changed or new file, grouped by area. Use it to plan the commits.
 
 Staged:  commit-info.ps1 -Mode Staged
-  Looks at what is staged right now. It says whether the commit changes code in modules/ or a build file,
-  and so whether the subject must end with " (skip-pub)". It also warns about files that must not be committed
+  Looks at what is staged right now. It lists the areas, and warns about files that must not be committed
   and about a commit that mixes areas.
-
-Code in modules/ is every file under modules/ that is not a markdown file: C# files, project files, json and ddlinks.
-Build files count as code too, because they can change the packages: Directory.Build.props, Directory.Build.targets,
-Directory.Packages.props, build.cake, global.json, dotnet-tools.json, anything in tools/ or templates/, and the workflows in .github/workflows.
 #>
 param(
     [Parameter(Mandatory)][ValidateSet('Status', 'Staged')][string]$Mode
@@ -42,16 +37,6 @@ function Get-Area([string]$p) {
     return 'root'
 }
 
-function Test-IsCode([string]$p) {
-    $p = $p.Replace('\', '/')
-    if ($p -like 'modules/*' -and $p -notlike '*.md') { return $true }
-    if ($p -like 'tools/*') { return $true }
-    if ($p -like 'templates/*') { return $true }
-    if ($p -like '.github/workflows/*') { return $true }
-    if ($p -in 'Directory.Build.props', 'Directory.Build.targets', 'Directory.Packages.props', 'build.cake', 'global.json', 'dotnet-tools.json') { return $true }
-    return $false
-}
-
 function Test-NeverCommit([string]$p) {
     $p = $p.Replace('\', '/')
     return ($p -match '(^|/)(bin|obj|node_modules|artifacts)/' -or $p -match '\.user$' -or $p -match '(^|/)desktop\.ini$' -or $p -match '(^|/)\.vs/')
@@ -70,8 +55,7 @@ try {
         }
         if ($items.Count -eq 0) { Write-Output 'Nothing to commit.'; return }
         foreach ($group in ($items | Group-Object Area | Sort-Object Name)) {
-            $flag = if (($group.Group | Where-Object { Test-IsCode $_.Path }).Count -gt 0) { ' [code or build file]' } else { '' }
-            Write-Output "== $($group.Name) ($($group.Count))$flag"
+            Write-Output "== $($group.Name) ($($group.Count))"
             foreach ($i in $group.Group) { Write-Output ("   {0} {1}" -f $i.Status, $i.Path) }
         }
         $bad = $items | Where-Object { Test-NeverCommit $_.Path }
@@ -92,16 +76,9 @@ try {
     foreach ($p in $paths) { if (Test-NeverCommit $p) { Write-Output "WARNING do not commit: $p" } }
 
     $areas = @($paths | ForEach-Object { Get-Area $_ } | Select-Object -Unique | Sort-Object)
-    $codeFiles = @($paths | Where-Object { Test-IsCode $_ })
     Write-Output "Staged files: $($paths.Count)"
     Write-Output "Areas: $($areas -join ', ')"
     if ($areas.Count -gt 3) { Write-Output 'WARNING this commit touches many areas. Check that it is one logical block.' }
-    if ($codeFiles.Count -gt 0) {
-        Write-Output "Code or build files changed: $($codeFiles.Count). Do NOT add (skip-pub)."
-        $codeFiles | Select-Object -First 5 | ForEach-Object { Write-Output "   $_" }
-    } else {
-        Write-Output 'No code in modules/ and no build file changed. End the subject line with " (skip-pub)".'
-    }
 } finally {
     Pop-Location
 }
