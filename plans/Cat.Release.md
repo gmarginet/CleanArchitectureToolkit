@@ -39,48 +39,18 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 2](#phase-2)
 - [Phase 3](#phase-3)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 2-->
-## Phase 2
-
-### Description
-<!-- region start: PhaseDescription-->
-Make the unlist script simpler, and add a way to unlist everything below a version by hand.
-
-#### Decided
-- The owner chose one rule for a tag run: unlist every pre-release version of a lower stage than the tag. The stages go alpha, rc, stable.
-  - An alpha tag unlists nothing.
-  - An rc tag unlists the alphas.
-  - A stable tag unlists the alphas and the rcs.
-  - A version only goes when its version number is lower than the tag version too. A tag of an older line never touches a newer one.
-- Stable versions are never unlisted by the script.
-- The script keeps its name `Unlist-OldPrereleases.ps1`, and it stays in the workflow. The owner wants to keep the script.
-- A manual way to unlist everything below a certain version stays, next to the automatic rule. The automatic rule is the habit, and the manual way is for the backlog and for mistakes.
-- The old backlog is unlisted, and a push to `master` publishes nothing anymore, so the script no longer needs to recognize in-between rc builds such as `1.0.0-rc.1.6`.
-
-#### What changes
-- `Unlist-OldPrereleases.ps1`: the patterns for in-between builds go, and so do `-IncludeTaggedRc` and `-Keep`. A `-Below` parameter takes a version.
-- `build.yml`: the manual run asks for a version and has a dry run box, instead of the `after` choice. With the box checked it only lists what would go. The tag run passes the tag.
-- `.github/RELEASING.md` describes the rule and the manual way.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 2-->
 
 <!-- region start: Phase 3-->
 ## Phase 3
 
 ### Description
 <!-- region start: PhaseDescription-->
-Work on a `development` branch after the first stable version, so the code on `master` is always the code of the last stable version.
+Work on a `development` branch, so the code on `master` is always the code of the last release. Until the first stable version, that is the last release candidate.
 
 #### Decided
-- The owner wants this once the first stable version is released.
+- The owner wants to start using the `development` branch after the tag `v1.0.0-rc.2`, not after the first stable version.
 - The owner creates the branch. Claude never creates a branch on its own.
 - A release goes through a pull request from `development` to `master`. The owner tags `master` after the merge.
 - An urgent fix starts on a `bugfix` branch from `master`, because `development` holds unfinished work.
@@ -90,7 +60,7 @@ Work on a `development` branch after the first stable version, so the code on `m
 - A push to `development` runs the tests and publishes nothing, as a push to `master` does.
 - The GitHub Pages site is built from `master`, so it matches what developers can install.
 - Feature work on `development` stays as direct commits, with no pull request for every change.
-- Direct pushes to `master` are blocked with a GitHub ruleset. `master` only changes through a pull request with a green build, and the owner is the one exception who can bypass it in an emergency. The ruleset is set on GitHub after the first stable version, not by a workflow. A tag is a different ref, so the release tag is not blocked.
+- Direct pushes to `master` are blocked with a GitHub ruleset. `master` only changes through a pull request with a green build, and the owner is the one exception who can bypass it in an emergency. The ruleset is set on GitHub, not by a workflow. It is set when the `development` branch starts, after `v1.0.0-rc.2`, so a fix before the first stable version also needs a pull request. A tag is a different ref, so the release tag is not blocked.
 - An alpha or rc tag may sit on `development`, such as `v1.2.0-rc.1`. It publishes a pre-release to nuget.org and leaves `master` alone.
 - A stable tag may only sit on `master`. The `release` job of `build.yml` gets a step that checks that the tagged commit is part of `master`, for example with `git merge-base --is-ancestor` against `origin/master`, and fails for a stable tag that is not. A ruleset cannot limit a tag to a branch, so the workflow does it. The check can only fail after the tag is pushed. A wrong stable tag is deleted and set again.
 
