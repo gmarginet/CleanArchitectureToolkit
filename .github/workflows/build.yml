@@ -9,17 +9,26 @@ on:
   pull_request:
     branches:
       - master
-  # A manual run only unlists the next batch of old pre-release packages. It tests and publishes nothing.
+  # A manual run only unlists versions on nuget.org. It tests and publishes nothing.
   # It lives in this file because the trusted publishing policy on nuget.org is bound to this workflow file.
   workflow_dispatch:
     inputs:
-      after:
-        description: "Which release the cleanup follows. A stable release also unlists the tagged rc versions."
+      mode:
+        description: "cleanup applies the rule of a tag run. single unlists exactly the version below."
         type: choice
         options:
-          - pre-release
-          - stable
-        default: pre-release
+          - cleanup
+          - single
+        default: cleanup
+      version:
+        description: "cleanup: empty runs the rule for every v tag, a version runs it as if only that tag existed. single: the version to unlist, required."
+        type: string
+        required: false
+        default: ""
+      dry_run:
+        description: "Ticked: only list what would be unlisted, and every listed version. Untick it to unlist."
+        type: boolean
+        default: true
 
 # Only a tag such as v1.0.0-rc.1 publishes the packages, with the version of the tag, and creates the GitHub release.
 # A push to master and a pull request run the tests and publish nothing.
@@ -121,8 +130,11 @@ jobs:
       contents: read
       id-token: write
     steps:
+      # The rule needs the tags of the repository, so this fetches the full history.
       - name: Checkout
-        uses: codebeltnet/git-checkout@v1
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: NuGet login (OIDC → temp API key)
         uses: NuGet/login@v1
@@ -130,25 +142,29 @@ jobs:
         with:
           user: ${{ secrets.NUGET_USER }}
 
-      # Every tag unlists the alpha versions and the in-between rc builds. A stable tag, or a manual run with "stable", also unlists the tagged rc versions.
-      # After a tag the version of the tag stays listed. A manual run has no tag.
-      - name: Unlist the old pre-release versions
+      # A tag run, and a manual cleanup with no version, apply the rule for every v tag. A pre-release goes when a tag has a higher stage and a higher version.
+      # A manual cleanup with a version applies the rule as if only that tag existed. A manual single run unlists exactly one version.
+      - name: Unlist the old versions
         shell: pwsh
         env:
           NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
           NUGET_USER: ${{ secrets.NUGET_USER }}
           EVENT_NAME: ${{ github.event_name }}
-          REF_NAME: ${{ github.ref_name }}
-          AFTER: ${{ inputs.after }}
+          MODE: ${{ inputs.mode }}
+          VERSION: ${{ inputs.version }}
+          DRY_RUN: ${{ inputs.dry_run }}
         run: |
           $options = @{ Owner = $env:NUGET_USER }
+          $allTags = @(git tag --list 'v*' | ForEach-Object { $_.TrimStart('v') })
           if ($env:EVENT_NAME -eq 'workflow_dispatch') {
-              if ($env:AFTER -eq 'stable') { $options.IncludeTaggedRc = $true }
+              if ($env:DRY_RUN -eq 'true') { $options.DryRun = $true }
+              $version = "$env:VERSION".Trim().TrimStart('v')
+              if ($env:MODE -eq 'single') { $options.Version = $version }
+              elseif ($version) { $options.Tag = @($version) }
+              else { $options.Tag = $allTags }
           }
           else {
-              $version = $env:REF_NAME.TrimStart('v')
-              $options.Keep = $version
-              if ($version -notmatch '-') { $options.IncludeTaggedRc = $true }
+              $options.Tag = $allTags
           }
           ./.github/scripts/Unlist-OldPrereleases.ps1 @options
 
