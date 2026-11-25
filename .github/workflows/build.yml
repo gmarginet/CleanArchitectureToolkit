@@ -4,11 +4,13 @@ on:
   push:
     branches:
       - master
+      - development
     tags:
       - 'v*'
   pull_request:
     branches:
       - master
+      - development
   # A manual run only unlists versions on nuget.org. It tests and publishes nothing.
   # It lives in this file because the trusted publishing policy on nuget.org is bound to this workflow file.
   workflow_dispatch:
@@ -31,7 +33,8 @@ on:
         default: true
 
 # Only a tag such as v1.0.0-rc.1 publishes the packages, with the version of the tag, and creates the GitHub release.
-# A push to master and a pull request run the tests and publish nothing.
+# A push to master or development and a pull request to either run the tests and publish nothing.
+# An alpha or rc tag may sit on any branch, such as development. A stable tag may only sit on master, see the check in the release job.
 # The skip-ci word in the message of the tagged commit is ignored for a tag.
 jobs:
   integration-test:
@@ -66,6 +69,20 @@ jobs:
     steps:
       - name: Checkout
         uses: codebeltnet/git-checkout@v1
+
+      # A stable tag, such as v1.0.0 with no dash, only goes out from master. The commit of the tag must be part of master.
+      # A branch ruleset can not limit a tag to a branch, so the workflow checks it. A wrong stable tag fails here, before anything is published.
+      - name: Check that a stable tag sits on master
+        if: "startsWith(github.ref, 'refs/tags/v') && !contains(github.ref_name, '-')"
+        run: |
+          if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
+            git fetch --unshallow --no-tags origin
+          fi
+          git fetch --no-tags origin master
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" FETCH_HEAD; then
+            echo "::error title=The stable tag is not on master::The commit of $GITHUB_REF_NAME is not part of master. Merge development into master with a pull request first, then tag master. Delete the tag, then tag again."
+            exit 1
+          fi
 
       # v3 installs the current LTS and STS SDKs, which are .NET 10 and .NET 11 today. The tests run on both.
       # When a newer LTS or STS comes out, check that .NET 10 and .NET 11 are still installed.
