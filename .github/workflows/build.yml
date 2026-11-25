@@ -21,8 +21,9 @@ on:
           - stable
         default: pre-release
 
-# A tag such as v1.0.0-rc.1 publishes the packages with the version of the tag and creates the GitHub release.
-# The skip-ci and skip-pub words in the message of the tagged commit are ignored for a tag.
+# Only a tag such as v1.0.0-rc.1 publishes the packages, with the version of the tag, and creates the GitHub release.
+# A push to master and a pull request run the tests and publish nothing.
+# The skip-ci word in the message of the tagged commit is ignored for a tag.
 jobs:
   integration-test:
     name: Run the integration tests
@@ -80,14 +81,14 @@ jobs:
           options: -t v
 
       - name: NuGet login (OIDC → temp API key)
-        if: "github.event_name == 'push' && (startsWith(github.ref, 'refs/tags/v') || !contains(github.event.head_commit.message, 'skip-pub'))"
+        if: "startsWith(github.ref, 'refs/tags/v')"
         uses: NuGet/login@v1
         id: login
         with:
           user: ${{ secrets.NUGET_USER }}
 
       - name: Run Cake build - Test
-        if: "github.event_name == 'pull_request' || (!startsWith(github.ref, 'refs/tags/v') && contains(github.event.head_commit.message, 'skip-pub'))"
+        if: "!startsWith(github.ref, 'refs/tags/v')"
         uses: cake-build/cake-action@v3
         with:
           cake-version: 7.0.0
@@ -97,7 +98,7 @@ jobs:
             semanticversion: ${{ steps.minver.outputs.version }}
 
       - name: Run Cake build - Publish
-        if: "github.event_name == 'push' && (startsWith(github.ref, 'refs/tags/v') || !contains(github.event.head_commit.message, 'skip-pub'))"
+        if: "startsWith(github.ref, 'refs/tags/v')"
         uses: cake-build/cake-action@v3
         env:
             NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}

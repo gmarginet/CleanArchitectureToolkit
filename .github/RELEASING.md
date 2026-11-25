@@ -17,15 +17,15 @@ Push a tag that starts with `v`, such as `v1.0.0-rc.1`. The build workflow `.git
 
 - **Format:** `v` plus a semantic version, such as `v1.0.0-rc.1` or `v1.0.0`.
 - **Pre-release:** a version with a dash is marked pre-release on GitHub, so it never shows as the latest release.
-- **`skip-ci` and `skip-pub`:** the workflow ignores both words in the message of the tagged commit. A tag always tests and publishes.
-- **Pull requests:** they only run the tests, as before.
-- **Normal pushes to `master`:** they still publish packages with a pre-release version. They create no GitHub release.
+- **`skip-ci`:** the workflow ignores this word in the message of the tagged commit. A tag always tests and publishes.
+- **Pull requests:** they only run the tests.
+- **Normal pushes to `master`:** they run the tests and publish nothing. Only a tag publishes packages and creates a GitHub release. A pre-release tag, such as `v1.1.0-alpha.1`, is how you publish an alpha.
 
 ## What the release contains
 
 - **Title:** the tag.
 - **Intro:** `.github/release-intro.md`. `{version}` is replaced by the version. Change the file to change the text.
-- **Changes:** the commit subjects since the previous `v` tag, without the `(skip-pub)` ending. The first tag has no previous tag, so it has no list. GitHub's generated notes list only pull requests, and the owner commits to `master` directly, so the workflow builds the list from commits.
+- **Changes:** the commit subjects since the previous `v` tag, without the `(skip-pub)` ending that older commits have. The first tag has no previous tag, so it has no list. GitHub's generated notes list only pull requests, and the owner commits to `master` directly, so the workflow builds the list from commits.
 - **Full changelog:** a link to the comparison with the previous tag.
 - **Assets:** only the two source archives that GitHub adds to every release. The packages stay on nuget.org.
 
@@ -41,7 +41,7 @@ Push a tag that starts with `v`, such as `v1.0.0-rc.1`. The build workflow `.git
 - **The next batch by hand:** see [Unlist the next batch](#unlist-the-next-batch). It needs no API key.
 - **Dry run:** `.\.github\scripts\Unlist-OldPrereleases.ps1 -Owner gmarginet -DryRun` shows what it would unlist and needs no key. Add `-IncludeTaggedRc` to see the list after a stable release.
 - **A run from your own machine:** set `NUGET_API_KEY` to a key with the unlist scope and run the script without `-DryRun`.
-- **Normal pushes to `master`:** no unlisting. After a tag they publish in-between builds such as `1.0.0-rc.1.6`, and these stay listed until the next tag. After a stable tag they publish alpha versions, such as `1.0.1-alpha.0.3`, which also stay listed until the next tag.
+- **Normal pushes to `master`:** no unlisting, and no publishing. Builds from before the tag-only rule, such as `1.0.0-rc.1.6`, were unlisted by the manual runs.
 
 ## Cut a release
 
