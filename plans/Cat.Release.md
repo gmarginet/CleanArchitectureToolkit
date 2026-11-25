@@ -64,15 +64,17 @@ Work on a `development` branch, so the code on `master` is always the code of th
 - An alpha or rc tag may sit on `development`, such as `v1.2.0-rc.1`. It publishes a pre-release to nuget.org and leaves `master` alone.
 - A stable tag may only sit on `master`. The `release` job of `build.yml` gets a step that checks that the tagged commit is part of `master`, for example with `git merge-base --is-ancestor` against `origin/master`, and fails for a stable tag that is not. A ruleset cannot limit a tag to a branch, so the workflow does it. The check can only fail after the tag is pushed. A wrong stable tag is deleted and set again.
 
-#### To check
-- Whether the repository can use a ruleset with required checks, and the name of the check that the ruleset requires.
-- Whether the trusted publishing policy on nuget.org accepts a tag on `development`, or is bound to `master`.
+#### Built
+- `build.yml` runs for a push and a pull request on `master` and `development`, and has the step "Check that a stable tag sits on master" in the release job. `pages.yml` still builds from `master` only.
+- `CLAUDE.md` and `.github/RELEASING.md` describe the branches, the release by pull request, the urgent fix and the ruleset.
+
+#### Left
+- The owner creates the `development` branch and sets the ruleset on GitHub, as `.github/RELEASING.md` describes. The repository is public, so it can use a branch ruleset with required status checks. The check names to require are the job names of `build.yml`. They show in the ruleset only after a pull request has run them.
+- Test the stable tag check with a real run, and test that the trusted publishing policy on nuget.org accepts a tag on `development`. The policy is bound to the workflow file `build.yml`, which is an assumption, and a pre-release tag on `development` is the test.
+- When the phase is done, update the readme of the repository if it should describe the branches. Then remove this phase, and the plan when the owner agrees.
 
 #### Facts to keep in mind
-- `build.yml` and `pages.yml` trigger on a push to `master` only. `build.yml` also runs on a pull request to `master`. It needs `development` as a target too, so the tests run before a release pull request is merged.
-- Whether the trusted publishing policy on nuget.org is bound to a branch or a ref is not checked. It is bound to the workflow file `build.yml`, which is an assumption.
 - MinVer needs the tags to be reachable from the branch it builds, so `development` must contain the merges back from `master`.
-- `CLAUDE.md` says to commit to the branch that is checked out, and that releases are automatic after a push to `master`. Both change with this phase, and `.github/RELEASING.md` too.
 <!-- region end: PhaseDescription-->
 
 ### Open Questions
