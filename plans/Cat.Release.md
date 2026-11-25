@@ -39,40 +39,9 @@
 ## Table of contents <!-- omit in toc -->  
 <!-- region start: Phases-->
 <!-- no toc -->
-- [Phase 1](#phase-1)
 - [Phase 2](#phase-2)
 - [Phase 3](#phase-3)
 <!-- region end: Phases-->
-
-<!-- region start: Phase 1-->
-## Phase 1
-
-### Description
-<!-- region start: PhaseDescription-->
-Publish to nuget.org only for a tag. A push to `master` publishes nothing.
-
-#### Why
-- Every push to `master` publishes an alpha build, so thousands of alpha versions piled up on nuget.org.
-- nuget.org allows about 270 unlist calls per run, so the cleanup of that backlog takes many manual runs (see `.github/RELEASING.md`).
-- With a tag for every release, the number of pre-release versions stays small.
-
-#### Decided
-- The owner chose to build and publish only on tags. This plan covers the whole repository, so it has no row in the repo overview. The owner decided this.
-- An alpha release is a tag too, such as `v1.1.0-alpha.1`. The tag filter `v*` in `.github/workflows/build.yml` already accepts it.
-- Without a tag, MinVer still gives a build an alpha version. The owner sees no problem in that, because nothing is published for it. The workflow looks for a tag to decide whether to publish.
-- A push to `master` still runs the tests, with no publish.
-- The change waits until the backlog of old alpha and in-between rc versions on nuget.org is unlisted. The dry run of `.github/scripts/Unlist-OldPrereleases.ps1` must list nothing first.
-
-#### What changes
-- `build.yml`: the `release` job runs the `Test` target for a push to `master` and for a pull request, and the `Publish` target only when the ref is a `v` tag. The `NuGet login` step follows the same condition.
-- `.github/RELEASING.md` describes the new rule.
-- The `skip-pub` word in commit messages no longer has an effect on publishing. The `cat-internal-commit` skill and `CLAUDE.md` mention it, so both change in the same step. Check what else mentions it with `git grep`.
-<!-- region end: PhaseDescription-->
-
-### Open Questions
-<!-- region start: PhaseOpenQuestions-->
-<!-- region end: PhaseOpenQuestions-->
-<!-- region end: Phase 1-->
 
 <!-- region start: Phase 2-->
 ## Phase 2
@@ -80,9 +49,6 @@ Publish to nuget.org only for a tag. A push to `master` publishes nothing.
 ### Description
 <!-- region start: PhaseDescription-->
 Make the unlist script simpler, and add a way to unlist everything below a version by hand.
-
-#### Needs
-- [Phase 1](#phase-1): with tags only, there are no in-between builds anymore, so the script no longer needs to recognize them.
 
 #### Decided
 - The owner chose one rule for a tag run: unlist every pre-release version of a lower stage than the tag. The stages go alpha, rc, stable.
@@ -93,7 +59,7 @@ Make the unlist script simpler, and add a way to unlist everything below a versi
 - Stable versions are never unlisted by the script.
 - The script keeps its name `Unlist-OldPrereleases.ps1`, and it stays in the workflow. The owner wants to keep the script.
 - A manual way to unlist everything below a certain version stays, next to the automatic rule. The automatic rule is the habit, and the manual way is for the backlog and for mistakes.
-- The change waits until the backlog is unlisted, because the new script no longer recognizes the in-between rc builds such as `1.0.0-rc.1.6`.
+- The old backlog is unlisted, and a push to `master` publishes nothing anymore, so the script no longer needs to recognize in-between rc builds such as `1.0.0-rc.1.6`.
 
 #### What changes
 - `Unlist-OldPrereleases.ps1`: the patterns for in-between builds go, and so do `-IncludeTaggedRc` and `-Keep`. A `-Below` parameter takes a version.
@@ -113,9 +79,6 @@ Make the unlist script simpler, and add a way to unlist everything below a versi
 <!-- region start: PhaseDescription-->
 Work on a `development` branch after the first stable version, so the code on `master` is always the code of the last stable version.
 
-#### Needs
-- [Phase 1](#phase-1): the triggers of `build.yml` change once, together with the tag-only publishing.
-
 #### Decided
 - The owner wants this once the first stable version is released.
 - The owner creates the branch. Claude never creates a branch on its own.
@@ -124,7 +87,7 @@ Work on a `development` branch after the first stable version, so the code on `m
   - A pull request merges the fix into `master`, and the owner tags the patch release.
   - A second pull request merges `master` back into `development`, so the tags and the fix are on both lines.
 - The release pull request is merged with a merge commit, not a squash. The release notes are built from `git log --no-merges`, so they need the single commits.
-- A push to `development` runs the tests and publishes nothing, as a push to `master` does after phase 1.
+- A push to `development` runs the tests and publishes nothing, as a push to `master` does.
 - The GitHub Pages site is built from `master`, so it matches what developers can install.
 - Feature work on `development` stays as direct commits, with no pull request for every change.
 - Direct pushes to `master` are blocked with a GitHub ruleset. `master` only changes through a pull request with a green build, and the owner is the one exception who can bypass it in an emergency. The ruleset is set on GitHub after the first stable version, not by a workflow. A tag is a different ref, so the release tag is not blocked.
