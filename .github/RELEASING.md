@@ -19,7 +19,15 @@ Push a tag that starts with `v`, such as `v1.0.0-rc.1`. The build workflow `.git
 - **Pre-release:** a version with a dash is marked pre-release on GitHub, so it never shows as the latest release.
 - **`skip-ci`:** the workflow ignores this word in the message of the tagged commit. A tag always tests and publishes.
 - **Pull requests:** they only run the tests.
-- **Normal pushes to `master`:** they run the tests and publish nothing. Only a tag publishes packages and creates a GitHub release. A pre-release tag, such as `v1.1.0-alpha.1`, is how you publish an alpha.
+- **Normal pushes to `master` or `development`:** they run the tests and publish nothing. Only a tag publishes packages and creates a GitHub release. A pre-release tag, such as `v1.1.0-alpha.1`, is how you publish an alpha.
+- **Where a tag sits:** an alpha or rc tag may sit on `development`. A stable tag, such as `v1.1.0`, may only sit on `master`. The release job has the step "Check that a stable tag sits on master". It fails when the commit of the tag is not part of `master`, before anything is published. A branch ruleset can not limit a tag to a branch, so the workflow does it. When it fails, delete the tag with `git push origin :refs/tags/v1.1.0` and `git tag -d v1.1.0`, merge into `master`, then tag again.
+
+## Branches
+
+- **`development`:** the work of the owner. Commits go straight to it, and a push runs the tests. It starts after `v1.0.0-rc.2`.
+- **`master`:** the last release. It only changes through a pull request. A ruleset on GitHub blocks direct pushes, see [The ruleset on master](#the-ruleset-on-master). Until the first stable version it holds the last release candidate.
+- **`bugfix/...`:** an urgent fix, started from `master`, see [Urgent fix](#urgent-fix).
+- **The Pages site** is built from `master`, so it matches what developers can install.
 
 ## What the release contains
 
@@ -51,10 +59,32 @@ nuget.org only unlists. A package stays available for an exact version reference
 
 ## Cut a release
 
-1. Check that the last run of the build workflow on `master` is green.
-2. Create the tag on the commit to release: `git tag v1.0.0-rc.1`.
-3. Push the tag: `git push origin v1.0.0-rc.1`. Pushing is the owner's step.
-4. Watch the workflow. After the third job the release is on the homepage.
+A pre-release, an alpha or an rc, can be tagged on `development`. A stable version goes through `master`.
+
+1. Check that the last run of the build workflow on `development` is green.
+2. For a stable version, open a pull request from `development` to `master`. Wait for its checks, then merge it with a merge commit and not a squash. The release notes are built from `git log --no-merges`, so they need the single commits.
+3. Create the tag on the commit to release, on `master` for a stable version: `git tag v1.1.0`.
+4. Push the tag: `git push origin v1.1.0`. Pushing is the owner's step.
+5. Watch the workflow. After the release job the packages are on nuget.org, and the release is on the homepage.
+
+## Urgent fix
+
+Use this when `development` holds unfinished work and a fix of the released version can not wait.
+
+1. Start a branch from `master`: `git switch -c bugfix/<name> origin/master`. Fix, commit and push it.
+2. Open a pull request into `master`. Wait for its checks and merge it with a merge commit.
+3. Tag the patch release on `master`, such as `v1.1.1`, and push the tag. Alpha or rc tags of the fix can sit on the bugfix branch, because only a stable tag needs `master`.
+4. Open a second pull request from `master` into `development`, so the tags and the fix are on both lines. MinVer needs the tags to be reachable from the branch it builds.
+
+## The ruleset on master
+
+The owner sets this on GitHub when the `development` branch starts, after `v1.0.0-rc.2`. A workflow does not set it. In the repository go to Settings, Rules, Rulesets, and make a new branch ruleset:
+
+- **Target:** the branch `master`. Enforcement active.
+- **Require a pull request before merging.** The owner works alone, so no approvals are required.
+- **Require status checks to pass.** Add "Run the integration tests" and "Publish CAT nuget packages". These are the job names of `build.yml` for a pull request.
+- **Block force pushes and deletions.**
+- **Bypass:** the owner, for an emergency. A tag is a different ref, so the ruleset does not block the release tag.
 
 ## Unlist by hand
 

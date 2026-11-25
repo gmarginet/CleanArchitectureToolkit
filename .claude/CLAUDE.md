@@ -14,8 +14,9 @@ All workflows use Cake. Run these from the root of the repository:
 The `Test` target always runs the `Release` build, so `--configuration=Debug` only makes sense for `Build`. A `dotnet build` of a single project in `Debug` fails in the documentation step, so build through Cake or the solution.
 
 ## 🌿 Git Workflow
-- Commit directly to the branch that is currently checked out, even when it is `master`.
-- Never create a branch on your own. The owner creates feature branches before starting work when they want one.
+- Commit directly to the branch that is currently checked out. After `v1.0.0-rc.2` the owner works on `development`. `master` holds the last release, and a ruleset on GitHub blocks direct pushes to it.
+- `master` only changes through a pull request. A release is a pull request from `development` to `master`, merged with a merge commit, followed by a tag on `master`. An urgent fix starts on a `bugfix` branch from `master`, and a second pull request merges `master` back into `development`. `.github/RELEASING.md` describes it.
+- Never create a branch on your own. The owner creates `development`, the `bugfix` branches and any other branch before starting work.
 - Do not push unless asked.
 - Commit one topic per commit, and only when asked. Do not mix renames, new content and tooling in one commit.
 - Always use the `cat-internal-commit` skill to commit, never a bare `git commit`. It splits the changes into logical commits.
@@ -75,8 +76,9 @@ Each module directory contains its C# projects, an auto-generated `namespaces/` 
 
 ## 🚀 Release
 - A release happens only when the owner pushes a `v` tag, such as `v1.0.0-rc.1`. `.github/workflows/build.yml` then publishes the NuGet packages, with the version from MinVer and the tag. `.github/RELEASING.md` describes it.
-- A push to `master` runs the tests and publishes nothing. `.github/workflows/pages.yml` builds the GitHub Pages site from the markdown after that push.
-- A commit message with `skip-ci` skips the build workflow for a push to `master`. A tag ignores it.
+- A push to `master` or `development` runs the tests and publishes nothing. `.github/workflows/pages.yml` builds the GitHub Pages site from the markdown after a push to `master`.
+- A commit message with `skip-ci` skips the build workflow for a push to `master` or `development`. A tag ignores it.
+- An alpha or rc tag may sit on `development`. A stable tag may only sit on `master`, and the workflow fails for a stable tag that is not part of `master`.
 - Never push, and never create or push a tag, unless asked.
 
 ## 🧩 Skills
