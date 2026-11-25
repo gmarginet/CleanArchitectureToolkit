@@ -69,7 +69,7 @@ Work on a `development` branch, so the code on `master` is always the code of th
 - `CLAUDE.md` and `.github/RELEASING.md` describe the branches, the release by pull request, the urgent fix and the ruleset.
 
 #### Left
-- The owner creates the `development` branch and sets the ruleset on GitHub, as `.github/RELEASING.md` describes. The repository is public, so it can use a branch ruleset with required status checks. The check names to require are the job names of `build.yml`. They show in the ruleset only after a pull request has run them.
+- The `development` branch and the ruleset "Protect master" exist since 2026-11-25. Claude made them with the GitHub CLI at the request of the owner. The ruleset requires a pull request with no approvals, the checks "Run the integration tests" and "Publish CAT nuget packages", and blocks force pushes and deletions. The repository admin can bypass it. Test it with the first pull request from `development` to `master`.
 - Test the stable tag check with a real run, and test that the trusted publishing policy on nuget.org accepts a tag on `development`. The policy is bound to the workflow file `build.yml`, which is an assumption, and a pre-release tag on `development` is the test.
 - When the phase is done, update the readme of the repository if it should describe the branches. Then remove this phase, and the plan when the owner agrees.
 
